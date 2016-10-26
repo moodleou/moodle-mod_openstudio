@@ -1,0 +1,272 @@
+.path-mod-openstudio input[type="submit"], input[type="reset"], input[type="button"] {
+    margin: 0px;
+}
+
+.openstudio-container {
+    min-height: 500px;
+}
+
+.openstudio-nav-primary {
+    margin-top: -17px;
+}
+
+.openstudio-nav-logo-text {
+    font-size: 28px;
+    font-weight: bold;
+    color: #002158;
+}
+
+.openstudio-nav-email-subscription {
+    font-size: 14px;
+    font-weight: bold;
+    color: #002158;
+}
+
+.openstudio-nav-settings {
+    background-color: #e7f4fa;;
+    padding: 10px 0 10px 10px;
+    line-height: 16px;
+}
+
+.openstudio-bold {
+    font-weight: bolder;
+}
+
+.openstudio-subscribe-button {
+    float: right;
+    display: inline-block;
+    padding-right: 10px;
+    margin-top: -42px;
+}
+
+.openstudio-atom-button {
+    padding-right: 5px;
+    display: inline-block;
+}
+
+.openstudio-rss-box {
+    padding-top: 12px;
+    clear: right;
+}
+
+.openstudio-rss-box  a {
+    font-size: 14px;
+    color: #0b55a8;
+    cursor: pointer;
+}
+
+.openstudio-button-box {
+    float: right;
+    margin-top: -3px;
+}
+
+.openstudio-clear {
+    clear: both;
+}
+
+.openstudio-add-dashboard-button {
+    padding-top: 9px;
+    float: right;
+}
+
+.path-mod-openstudio .openstudio-nav-logo-wrapper {
+    margin-left: -9px;
+}
+
+.path-mod-openstudio .openstudio-rss-button {
+    background-image: url([[pix:openstudio|rss_rgb_32]]);
+    background-position: 4px 4px;
+    background-size: 16px 16px;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: 1px solid #002158;
+    color: #000000;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    padding-left: 27px;
+    padding-top: 1px;
+    text-align: center;
+    vertical-align: middle;
+    margin: 0px;
+}
+
+.path-mod-openstudio .openstudio-rss-button:hover, .openstudio-rss-button:focus {
+    background-image: url([[pix:openstudio|rss_rgb_32]]);
+    background-position: 4px 4px;
+    background-size: 16px 16px;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-color: #002158;
+    color: white;
+    text-decoration: none;
+    outline: none;
+}
+
+/* General navigation styles */
+.path-mod-openstudio .nav-pills > li > a {
+    height: 44px;
+    font-size: 16px;
+    color: #002158;
+    background-color: #e7f4fa;
+    line-height: 44px;
+    margin-right: 10px;
+    padding-left: 49px;
+    padding-right: 12px;
+}
+
+.path-mod-openstudio .nav-pills > li > a:hover{
+    background-color: #e7f4fa;
+}
+
+.path-mod-openstudio .nav-pills > li > a:focus{
+    background-color: #bfe2ef;
+}
+
+.path-mod-openstudio .nav-pills > .active > a {
+    background-color: #bfe2ef;
+}
+
+.path-mod-openstudio .nav .dropdown-toggle .caret {
+    margin-top: 16px;
+    border-top: none;
+}
+
+.path-mod-openstudio .nav .caret {
+    margin-right : 2px;
+}
+
+.path-mod-openstudio .caret {
+    border-left: none;
+    border-right: none;
+    background-image: url([[pix:t/collapsed]]);
+    border-left: 0 none;
+    border-right: medium none;
+    background-size: 13px 13px;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    width: 15px;
+    height: 15px;
+}
+
+.path-mod-openstudio .open .caret {
+    border-left: none;
+    border-right: none;
+    background-image: url([[pix:t/expanded]]);
+    border-left: 0 none;
+    border-right: medium none;
+    background-size: 13px 13px;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    width: 15px;
+    height: 15px;
+}
+
+.path-mod-openstudio .caret {
+    border-left: none;
+    border-right: none;
+}
+
+.path-mod-openstudio .active > a:focus {
+    background-color: #bfe2ef;
+}
+
+.path-mod-openstudio .nav > li > a:focus {
+    background-color: #bfe2ef;
+}
+
+.path-mod-openstudio .nav > li > a:hover {
+    background-color: #bfe2ef;
+}
+
+.path-mod-openstudio .nav-pills > .active >  a:hover, a:focus {
+    background-color: #bfe2ef;
+    color: #002158;
+}
+
+.path-mod-openstudio .nav-pills > a:hover, a:focus {
+    background-color: #bfe2ef;
+    color: #002158;
+}
+
+.path-mod-openstudio .nav-tabs .open .dropdown-toggle, .nav-pills .open .dropdown-toggle, .nav > li.dropdown.open.active > a:hover, .nav > li.dropdown.open.active > a:focus {
+    background-color: #bfe2ef !important;
+    border-color : #bfe2ef !important;
+    color: #002158 !important;
+}
+
+.path-mod-openstudio .dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+    background-color: #bfe2ef;
+    color: #002158;
+    text-decoration: underline;
+    background-image: none;
+    line-height: 28px;
+    height: 28px;
+}
+
+.path-mod-openstudio .dropdown-menu > li > a {
+    padding: 0px 0px 0px 15px;
+    height: 33px;
+    line-height: 33px;
+    background-color: #e7f4fa;
+    color: #002158;
+}
+
+.path-mod-openstudio .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus, .dropdown-submenu:hover > a, .dropdown-submenu:focus > a {
+    background-color: #bfe2ef;
+    color: #002158;
+    text-decoration: underline;
+    background-image: none;
+}
+
+.path-mod-openstudio .nav-pills .dropdown-menu {
+    border-radius: 3px;
+}
+
+.openstudio-navigation-icon {
+    border: 0 none;
+    margin-top: 8px;
+    margin-left: -34px;
+    position: absolute;
+    vertical-align: middle;
+    width: 28px;
+}
+
+.openstudio-navigation-notification-icon {
+    border: 0 none;
+    margin-top: 18px;
+    position: absolute;
+    vertical-align: middle;
+    width: 28px;
+}
+
+.openstudio-navigation-notification-text {
+    background: #b52a1e none repeat scroll 0 0;
+    border: 2px solid #ffffff;
+    border-radius: 20px;
+    color: #ffffff;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: 15px;
+    margin-top: 7px;
+    position: absolute;
+    text-align: center;
+    width: 18px;
+}
+
+.path-mod-openstudio .dropdown-menu {
+    padding: 1px;
+}
+
+.path-mod-openstudio .shared-content .dropdown-menu {
+    min-width: 195px;
+}
+
+.path-mod-openstudio .my-content .dropdown-menu {
+    min-width: 165px;
+}
+
+.path-mod-openstudio .administration .dropdown-menu {
+    min-width: 185px;
+}

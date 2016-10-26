@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="mod/openstudio/db" VERSION="20161025" COMMENT="OpenStudio plugin tables"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+
+
+
+    <TABLE NAME="openstudio" COMMENT="Standard module table. Holds information about a studio instance.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Studio ID"/>
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Course ID"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Name of studio"/>
+        <FIELD NAME="intro" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Introductory text that displays on the studio view page. This text is optional; if folder to null, there is no such text."/>
+        <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Text format for intro field"/>
+        <FIELD NAME="contentmaxbytes" TYPE="int" LENGTH="9" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Maximum size of content file uploaad in bytes"/>
+        <FIELD NAME="reportingemail" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Email address for reporting abusive content"/>
+        <FIELD NAME="defaultvisibility" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Default permissions when content is created"/>
+        <FIELD NAME="allowedvisibility" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Permissions to allow users to folder"/>
+        <FIELD NAME="tutorroles" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="versioning" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="1" SEQUENCE="false" COMMENT="0 to disable version, or specify number of allowed versions"/>
+        <FIELD NAME="copying" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="0 to disable copying, 1 or more to enable"/>
+        <FIELD NAME="flags" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Flags to folder on, comma seaparetd number list"/>
+        <FIELD NAME="locking" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Locking enabled for instance"/>
+        <FIELD NAME="filetypes" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="File types to allow user to upload"/>
+        <FIELD NAME="sitename" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Studio name as appearn the site web page header"/>
+        <FIELD NAME="pinboard" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="1" SEQUENCE="false" COMMENT="0 to disable pinboard, or the number of pinboard contents to allow"/>
+        <FIELD NAME="pinboardname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Currently not being used"/>
+        <FIELD NAME="pinboardfolderlimit" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="1" SEQUENCE="false" COMMENT="The number of contents to allow in a pinboard folder"/>
+        <FIELD NAME="level1name" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Currently not being used"/>
+        <FIELD NAME="level2name" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Currently not being used"/>
+        <FIELD NAME="level3name" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Currently not being used"/>
+        <FIELD NAME="thememodulename" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Currently not being used"/>
+        <FIELD NAME="themegroupname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Currently not being used"/>
+        <FIELD NAME="themestudioname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Currently not being used"/>
+        <FIELD NAME="themepinboardname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Currently not being used"/>
+        <FIELD NAME="themefeatures" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Currently not being used"/>
+        <FIELD NAME="themehomedefault" TYPE="int" LENGTH="4" NOTNULL="false" SEQUENCE="false" COMMENT="Currently not being used"/>
+        <FIELD NAME="themehelplink" TYPE="char" LENGTH="600" NOTNULL="false" SEQUENCE="false" COMMENT="Currently not being used"/>
+        <FIELD NAME="themehelpname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Currently not being used"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="course" TYPE="foreign" FIELDS="course" REFTABLE="course" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+
+
+
+    <TABLE NAME="openstudio_level1" COMMENT="Activity structure, level 1">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="openstudioid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Studio that contains this level"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Name of level (e.g. Block 1)."/>
+        <FIELD NAME="required" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Currently not being used"/>
+        <FIELD NAME="status" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Soft delete marker"/>
+        <FIELD NAME="sortorder" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Sort ordering"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="openstudioid" TYPE="foreign" FIELDS="openstudioid" REFTABLE="openstudio" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+
+
+
+    <TABLE NAME="openstudio_level2" COMMENT="Activity structure, level 2">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="level1id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Level1 structure that contains this level"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Name of activity."/>
+        <FIELD NAME="required" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Currently not being used"/>
+        <FIELD NAME="hidelevel" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Hide the level and not display it"/>
+        <FIELD NAME="status" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Soft delete marker"/>
+        <FIELD NAME="sortorder" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Sort ordering"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="level1id" TYPE="foreign" FIELDS="level1id" REFTABLE="openstudio_level1" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+
+
+
+    <TABLE NAME="openstudio_level3" COMMENT="Activity structure, level 3">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="level2id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Level2 structure that contains this level"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Name of activity."/>
+        <FIELD NAME="required" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Currently not being used"/>
+        <FIELD NAME="contenttype" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Content content type"/>
+        <FIELD NAME="status" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Soft delete marker"/>
+        <FIELD NAME="sortorder" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Sort ordering"/>
+        <FIELD NAME="lockprocessed" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="This lock has been processed"/>
+        <FIELD NAME="locktype" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="This lock has been processed"/>
+        <FIELD NAME="locktime" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Time loack added"/>
+        <FIELD NAME="unlocktime" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Time lock removed"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="level2id" TYPE="foreign" FIELDS="level2id" REFTABLE="openstudio_level2" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+
+
+
+    <TABLE NAME="openstudio_folder_templates" COMMENT="folder Activity structure">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="levelid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Level structure that contains this content"/>
+        <FIELD NAME="levelcontainer" TYPE="int" LENGTH="4" NOTNULL="true" SEQUENCE="false" COMMENT="Level structure that contains this content"/>
+        <FIELD NAME="guidance" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Optional folder guidance"/>
+        <FIELD NAME="additionalcontents" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The number of additional contents to allow in a folder"/>
+        <FIELD NAME="status" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Soft delete marker"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+
+
+
+    <TABLE NAME="openstudio_content_templates" COMMENT="folder Content Activity structure">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="foldertemplateid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Folder template id"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Name of content."/>
+        <FIELD NAME="guidance" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Optional folder guidance"/>
+        <FIELD NAME="permissions" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="folder content permissins"/>
+        <FIELD NAME="contentorder" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="folder content sort ordering"/>
+        <FIELD NAME="status" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Soft delete marker"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+
+
+
+    <TABLE NAME="openstudio_contents" COMMENT="Studio content record">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="openstudioid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Foreign key to containing studio"/>
+        <FIELD NAME="levelid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Level structure that contains this content"/>
+        <FIELD NAME="levelcontainer" TYPE="int" LENGTH="4" NOTNULL="true" SEQUENCE="false" COMMENT="Level structure that contains this content"/>
+        <FIELD NAME="contenttype" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Content content type"/>
+        <FIELD NAME="mimetype" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Name of activity."/>
+        <FIELD NAME="content" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Stores Embed code or URL Link"/>
+        <FIELD NAME="fileid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Reference to moodle file table containin the binary file"/>
+        <FIELD NAME="thumbnail" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Stores thumbnail url"/>
+        <FIELD NAME="urltitle" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="URL Link title"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Name of content."/>
+        <FIELD NAME="description" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Optional content description"/>
+        <FIELD NAME="textformat" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Description format plain text or html"/>
+        <FIELD NAME="commentformat" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Description format plain text or html"/>
+        <FIELD NAME="ownership" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Optional information of the source of the content content"/>
+        <FIELD NAME="ownershipdetail" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Optional additional ownertship data"/>
+        <FIELD NAME="showextradata" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Optional show image metadata"/>
+        <FIELD NAME="visibility" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Content permission"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Creator of content"/>
+        <FIELD NAME="deletedby" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Soft delete marker"/>
+        <FIELD NAME="deletedtime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Soft delete marker, time (in seconds since epoch)."/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Time (in seconds since epoch)."/>
+        <FIELD NAME="timeflagged" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Time (in seconds since epoch)."/>
+        <FIELD NAME="locktype" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Lock type applied enabled for instance"/>
+        <FIELD NAME="lockedby" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Lock applied by user for instance"/>
+        <FIELD NAME="lockedtime" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Time lock applied for instance"/>
+        <FIELD NAME="lockprocessed" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Time lock processed for instance"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+        <KEY NAME="openstudioid" TYPE="foreign" FIELDS="openstudioid" REFTABLE="openstudio" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="levelandtype" UNIQUE="false" FIELDS="levelcontainer, levelid, contenttype"/>
+        <INDEX NAME="timemodified" UNIQUE="false" FIELDS="timemodified"/>
+      </INDEXES>
+    </TABLE>
+
+
+
+    <TABLE NAME="openstudio_content_versions" COMMENT="A version of a content">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="contentid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Foriegn key to parent content"/>
+        <FIELD NAME="contenttype" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Content content type"/>
+        <FIELD NAME="mimetype" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Content content mimetype"/>
+        <FIELD NAME="content" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Content content"/>
+        <FIELD NAME="fileid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Content binary content referenced to moodle file table"/>
+        <FIELD NAME="thumbnail" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Stores thumbnail url"/>
+        <FIELD NAME="urltitle" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="URL Link title"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Name of content version"/>
+        <FIELD NAME="description" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Optional content description"/>
+        <FIELD NAME="textformat" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Description format plain text or html"/>
+        <FIELD NAME="deletedby" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Soft delete marker"/>
+        <FIELD NAME="deletedtime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Soft delete marker, time (in seconds since epoch)."/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Time (in seconds since epoch)."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="contentid" TYPE="foreign" FIELDS="contentid" REFTABLE="openstudio_contents" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+
+
+
+    <TABLE NAME="openstudio_content_files" COMMENT="Table holds a list of all binary files created in the Studio">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="refcount" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+
+
+
+    <TABLE NAME="openstudio_folder_contents" COMMENT="Studio collection content">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="folderid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Foreign key to content id"/>
+        <FIELD NAME="contentid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Foreign key to content id"/>
+        <FIELD NAME="contentmodified" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Reference to content last edit date (in seconds since epoch)."/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Name of content."/>
+        <FIELD NAME="description" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Optional content description"/>
+        <FIELD NAME="contentorder" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Sort position of content in collection"/>
+        <FIELD NAME="foldercontenttemplateid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Foreign key to folder content template"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Time (in seconds since epoch)."/>
+        <FIELD NAME="status" TYPE="int" LENGTH="4" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="provenanceid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="provenancestatus" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="contentid" TYPE="foreign" FIELDS="contentid" REFTABLE="openstudio_contents" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+
+
+
+    <TABLE NAME="openstudio_flags" COMMENT="Flags assocaited with contents, people or comments">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="contentid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Content associated with flag"/>
+        <FIELD NAME="personid" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Person associated with flag"/>
+        <FIELD NAME="commentid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="User who created the flag"/>
+        <FIELD NAME="flagid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Flag type"/>
+        <FIELD NAME="folderid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="folder associated with this tracking record"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Time (in seconds since epoch)."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="contentid" TYPE="foreign" FIELDS="contentid" REFTABLE="openstudio_contents" REFFIELDS="id"/>
+        <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+        <KEY NAME="commentid" TYPE="foreign" FIELDS="commentid" REFTABLE="openstudio_comments" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="personid" UNIQUE="false" FIELDS="personid"/>
+        <INDEX NAME="flagid" UNIQUE="false" FIELDS="flagid"/>
+      </INDEXES>
+    </TABLE>
+
+
+
+    <TABLE NAME="openstudio_tracking" COMMENT="User usage of studio tracking table">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="contentid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Content associated with this tracking record"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="user being tracked"/>
+        <FIELD NAME="actionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Tracking action"/>
+        <FIELD NAME="folderid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="folder associated with this tracking record"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Time (in seconds since epoch)."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="contentid" TYPE="foreign" FIELDS="contentid" REFTABLE="openstudio_contents" REFFIELDS="id"/>
+        <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="timemodified" UNIQUE="false" FIELDS="timemodified"/>
+      </INDEXES>
+    </TABLE>
+
+
+    
+    <TABLE NAME="openstudio_comments" COMMENT="Content comments">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="contentid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Content that comment is associated with"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Comment owner"/>
+        <FIELD NAME="title" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Optional, comment title"/>
+        <FIELD NAME="commenttext" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="Comment text"/>
+        <FIELD NAME="inreplyto" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="deletedby" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Soft delete marker"/>
+        <FIELD NAME="deletedtime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Soft delete marker, Time (in seconds since epoch)."/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Time (in seconds since epoch)."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="contentid" TYPE="foreign" FIELDS="contentid" REFTABLE="openstudio_contents" REFFIELDS="id"/>
+        <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="timemodified" UNIQUE="false" FIELDS="timemodified"/>
+      </INDEXES>
+    </TABLE>
+
+
+
+    <TABLE NAME="openstudio_subscriptions" COMMENT="Hold user email subscription request">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="openstudioid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Studio link to this subscription"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Owner of the subscription record"/>
+        <FIELD NAME="subscription" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Subscription type"/>
+        <FIELD NAME="frequency" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Subscription frequency"/>
+        <FIELD NAME="format" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Subscrition format, rich text or plain text"/>
+        <FIELD NAME="contentid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Content id if subscription is associated with content"/>
+        <FIELD NAME="timeprocessed" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Time (in seconds since epoch)."/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Time (in seconds since epoch)."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="openstudioid" TYPE="foreign" FIELDS="openstudioid" REFTABLE="openstudio" REFFIELDS="id"/>
+        <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="contentid" UNIQUE="false" FIELDS="contentid"/>
+      </INDEXES>
+    </TABLE>
+
+
+
+    <TABLE NAME="openstudio_honesty_checks" COMMENT="Record to record user has accepted usage policy">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="openstudioid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Studio being referred to"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="User who accepted the usage policy"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Time (in seconds since epoch)."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="openstudioid" TYPE="foreign" FIELDS="openstudioid" REFTABLE="openstudio" REFFIELDS="id"/>
+        <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+
+
+
+    <TABLE NAME="openstudio_content_items" COMMENT="Stores hashes of content content to recognise duplicates within a studio.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="contenthash" TYPE="char" LENGTH="40" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="containertype" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Flag to indicate whether this instance links to a content or content version"/>
+        <FIELD NAME="containerid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="studio_contents id or studio_content_versions id"/>
+        <FIELD NAME="timeadded" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>

@@ -1,0 +1,53 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template openstudio/search_form
+
+    Search form of the OpenStudio UI.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Example context (json):
+    {
+        "placeholdertext" : "My module",
+        "searchlink" : "https://example.com/mod/openstudio/search.php",
+        "helplink" : "https://example.com/mod/openstudio/help.php",
+        "iconsearch" : "i/search",
+    }
+
+}}
+<form action="{{ searchlink }}" method="get">
+    <div>
+        <label for="openstudio_searchquery">{{#str}} navsearchlabel, openstudio {{/str}} {{ placeholdertext }}</label>
+        <span class="helptooltip">
+        <a href="{{ helplink }}"
+        title="{{#str}} navsearchhelp, openstudio {{/str}} {{ placeholdertext }}" aria-haspopup="true" target="_blank">
+        {{#pix}} help, i {{/pix}}
+        alt="{{#str}} navsearchhelp, openstudio {{/str}} {{ placeholdertext }}" class="iconhelp" />
+        </a>
+        </span>
+        <input type="hidden" name="id" value="13" />
+        <input type="text" name="query" id="openstudio_searchquery"
+        placeholder="{{#str}} navsearchlabel, openstudio {{/str}} {{ placeholdertext }}"/>
+        <input type="image" id="ousearch_searchbutton" alt="{{#str}} navsearchlabel, openstudio {{/str}}" title="{{#str}} navsearchlabel, openstudio {{/str}}"
+        src="{{ iconsearch }}" />
+    </div>
+</form>
