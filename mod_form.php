@@ -28,7 +28,11 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
-require_once($CFG->dirroot.'/mod/openstudio/constants.php');
+
+use mod_openstudio\local\api\content;
+use mod_openstudio\local\api\flags;
+use mod_openstudio\local\util\defaults;
+use mod_openstudio\local\util\feature;
 
 /**
  * Module instance settings form
@@ -71,59 +75,59 @@ class mod_openstudio_mod_form extends moodleform_mod {
 
         $mform->addElement('text', 'sitename',
             get_string('settingsthemesitename', 'openstudio'),
-            array('size' => OPENSTUDIO_DEFAULT_SITENAME_LENGTH));
+            array('size' => defaults::SITENAME_LENGTH));
         $mform->setType('sitename', PARAM_TEXT);
         $mform->addRule('sitename', null, 'required', null, 'client');
         $mform->addRule('sitename',
-            get_string('maximumchars', '', OPENSTUDIO_DEFAULT_SITENAME_LENGTH),
-            'maxlength', OPENSTUDIO_DEFAULT_SITENAME_LENGTH, 'client');
+            get_string('maximumchars', '', defaults::SITENAME_LENGTH),
+            'maxlength', defaults::SITENAME_LENGTH, 'client');
         $mform->setDefault('sitename',
             get_string('settingsthemesitenamedefault', 'openstudio'));
 
         $themehomedefaultarray = array(
-            OPENSTUDIO_VISIBILITY_MODULE => get_string('settingsthemehomesettingsmodule', 'openstudio'),
-            OPENSTUDIO_VISIBILITY_GROUP => get_string('settingsthemehomesettingsgroup', 'openstudio'),
-            OPENSTUDIO_VISIBILITY_PRIVATE => get_string('settingsthemehomesettingsstudio', 'openstudio'),
-            OPENSTUDIO_VISIBILITY_PRIVATE_PINBOARD => get_string('settingsthemehomesettingspinboard', 'openstudio'));
+            content::VISIBILITY_MODULE => get_string('settingsthemehomesettingsmodule', 'openstudio'),
+            content::VISIBILITY_GROUP => get_string('settingsthemehomesettingsgroup', 'openstudio'),
+            content::VISIBILITY_PRIVATE => get_string('settingsthemehomesettingsstudio', 'openstudio'),
+            content::VISIBILITY_PRIVATE_PINBOARD => get_string('settingsthemehomesettingspinboard', 'openstudio'));
         $mformselect = $mform->addElement('select', 'themehomedefault',
             get_string('settingsthemehomesettings', 'openstudio'),
             $themehomedefaultarray);
 
         $mform->addElement('text', 'thememodulename',
             get_string('settingsthememodulename', 'openstudio'),
-            array('size' => OPENSTUDIO_DEFAULT_NAVITEM_LENGTH));
+            array('size' => defaults::NAVITEM_LENGTH));
         $mform->setType('thememodulename', PARAM_TEXT);
         $mform->addRule('thememodulename',
-            get_string('maximumchars', '', OPENSTUDIO_DEFAULT_NAVITEM_LENGTH),
-            'maxlength', OPENSTUDIO_DEFAULT_NAVITEM_LENGTH, 'client');
+            get_string('maximumchars', '', defaults::NAVITEM_LENGTH),
+            'maxlength', defaults::NAVITEM_LENGTH, 'client');
 
         $mform->addElement('text', 'themegroupname',
             get_string('settingsthemegroupname', 'openstudio'),
-            array('size' => OPENSTUDIO_DEFAULT_NAVITEM_LENGTH));
+            array('size' => defaults::NAVITEM_LENGTH));
         $mform->setType('themegroupname', PARAM_TEXT);
         $mform->addRule('themegroupname',
-            get_string('maximumchars', '', OPENSTUDIO_DEFAULT_NAVITEM_LENGTH),
-            'maxlength', OPENSTUDIO_DEFAULT_NAVITEM_LENGTH, 'client');
+            get_string('maximumchars', '', defaults::NAVITEM_LENGTH),
+            'maxlength', defaults::NAVITEM_LENGTH, 'client');
 
         $mform->addElement('text', 'themestudioname',
             get_string('settingsthemestudioname', 'openstudio'),
-            array('size' => OPENSTUDIO_DEFAULT_NAVITEM_LENGTH));
+            array('size' => defaults::NAVITEM_LENGTH));
         $mform->setType('themestudioname', PARAM_TEXT);
         $mform->addRule('themestudioname',
-            get_string('maximumchars', '', OPENSTUDIO_DEFAULT_NAVITEM_LENGTH),
-            'maxlength', OPENSTUDIO_DEFAULT_NAVITEM_LENGTH, 'client');
+            get_string('maximumchars', '', defaults::NAVITEM_LENGTH),
+            'maxlength', defaults::NAVITEM_LENGTH, 'client');
 
         $mform->addElement('text', 'themepinboardname',
             get_string('settingsthemepinboardname', 'openstudio'),
-            array('size' => OPENSTUDIO_DEFAULT_NAVITEM_LENGTH));
+            array('size' => defaults::NAVITEM_LENGTH));
         $mform->setType('themepinboardname', PARAM_TEXT);
         $mform->addRule('themepinboardname',
-            get_string('maximumchars', '', OPENSTUDIO_DEFAULT_NAVITEM_LENGTH),
-            'maxlength', OPENSTUDIO_DEFAULT_NAVITEM_LENGTH, 'client');
+            get_string('maximumchars', '', defaults::NAVITEM_LENGTH),
+            'maxlength', defaults::NAVITEM_LENGTH, 'client');
 
         $mform->addElement('text', 'themehelplink',
             get_string('settingsthemehelplink', 'openstudio'),
-            array('size' => OPENSTUDIO_DEFAULT_NAVITEM_LENGTH));
+            array('size' => defaults::NAVITEM_LENGTH));
         $mform->setType('themehelplink', PARAM_URL);
         $mform->addRule('themehelplink',
             get_string('maximumchars', '', 600),
@@ -131,7 +135,7 @@ class mod_openstudio_mod_form extends moodleform_mod {
 
         $mform->addElement('text', 'themehelpname',
             get_string('settingsthemehelpname', 'openstudio'),
-            array('size' => OPENSTUDIO_DEFAULT_NAVITEM_LENGTH));
+            array('size' => defaults::NAVITEM_LENGTH));
         $mform->setType('themehelpname', PARAM_TEXT);
         $mform->addRule('themehelpname',
             get_string('maximumchars', '', 25),
@@ -148,10 +152,10 @@ class mod_openstudio_mod_form extends moodleform_mod {
             get_string('settingssocial', 'openstudio'));
 
         $sharringlevelarray = array(
-            OPENSTUDIO_VISIBILITY_PRIVATE => get_string('settingssocialsharinglevelprivate', 'openstudio'),
-            OPENSTUDIO_VISIBILITY_TUTOR => get_string('settingssocialsharingleveltutor', 'openstudio'),
-            OPENSTUDIO_VISIBILITY_GROUP => get_string('settingssocialsharinglevelgroup', 'openstudio'),
-            OPENSTUDIO_VISIBILITY_MODULE => get_string('settingssocialsharinglevelcourse', 'openstudio'));
+            content::VISIBILITY_PRIVATE => get_string('settingssocialsharinglevelprivate', 'openstudio'),
+            content::VISIBILITY_TUTOR => get_string('settingssocialsharingleveltutor', 'openstudio'),
+            content::VISIBILITY_GROUP => get_string('settingssocialsharinglevelgroup', 'openstudio'),
+            content::VISIBILITY_MODULE => get_string('settingssocialsharinglevelcourse', 'openstudio'));
 
         $mformselect = $mform->addElement('select', 'enabledvisibility',
             get_string('settingsenablesocialsharing', 'openstudio'), $sharringlevelarray);
@@ -184,15 +188,15 @@ class mod_openstudio_mod_form extends moodleform_mod {
         $mform->addHelpButton('tutorrolesgroup', 'settingstutorroles', 'openstudio');
 
         $flagsarray = array(
-            OPENSTUDIO_PARTICPATION_FLAG_FAVOURITE
+            flags::FAVOURITE
             => get_string('settingssocialflagsfavourite', 'openstudio'),
-            OPENSTUDIO_PARTICPATION_FLAG_INSPIREDME
+            flags::INSPIREDME
             => get_string('settingssocialflagsinspiredme', 'openstudio'),
-            OPENSTUDIO_PARTICPATION_FLAG_MADEMELAUGH
+            flags::MADEMELAUGH
             => get_string('settingssocialflagsmademelaugh', 'openstudio'),
-            OPENSTUDIO_PARTICPATION_FLAG_NEEDHELP
+            flags::NEEDHELP
             => get_string('settingssocialflagsneedhelp', 'openstudio'),
-            OPENSTUDIO_PARTICPATION_FLAG_COMMENT_LIKE
+            flags::COMMENT_LIKE
             => get_string('settingssocialflagcommentlike', 'openstudio'));
         $mformselect = $mform->addElement('select', 'enabledflags',
             get_string('settingssocialflags', 'openstudio'), $flagsarray);
@@ -209,25 +213,25 @@ class mod_openstudio_mod_form extends moodleform_mod {
             array('group' => 1), array(0, 1));
 
         $mform->addElement('text', 'pinboard',
-            get_string('settingsenablepinboard', 'openstudio'), array('size' => OPENSTUDIO_DEFAULT_MAXPINBOARDCONTENTSLLENGTH));
+            get_string('settingsenablepinboard', 'openstudio'), array('size' => defaults::MAXPINBOARDCONTENTSLLENGTH));
         $mform->setType('pinboard', PARAM_INTEGER);
         $mform->addRule('pinboard',
             get_string('err_numeric', 'form'), 'numeric', '', 'client');
         $mform->addRule('pinboard',
-            get_string('err_maxlength', 'form', array('format' => OPENSTUDIO_DEFAULT_MAXPINBOARDCONTENTSLLENGTH)),
-            'maxlength', OPENSTUDIO_DEFAULT_MAXPINBOARDCONTENTSLLENGTH, 'client');
-        $mform->setDefault('pinboard', OPENSTUDIO_DEFAULT_MAXPINBOARDCONTENTS);
+            get_string('err_maxlength', 'form', array('format' => defaults::MAXPINBOARDCONTENTSLLENGTH)),
+            'maxlength', defaults::MAXPINBOARDCONTENTSLLENGTH, 'client');
+        $mform->setDefault('pinboard', defaults::MAXPINBOARDCONTENTS);
         $mform->addHelpButton('pinboard', 'pinboard', 'openstudio');
 
         $mform->addElement('text', 'versioning',
-            get_string('settingsenableversioning', 'openstudio'), array('size' => OPENSTUDIO_DEFAULT_MAXCONTENTVERSIONSLENGTH));
+            get_string('settingsenableversioning', 'openstudio'), array('size' => defaults::MAXCONTENTVERSIONSLENGTH));
         $mform->setType('versioning', PARAM_INTEGER);
         $mform->addRule('versioning',
             get_string('err_numeric', 'form'), 'numeric', '', 'client');
         $mform->addRule('versioning',
-            get_string('err_maxlength', 'form', array('format' => OPENSTUDIO_DEFAULT_MAXCONTENTVERSIONSLENGTH)),
-            'maxlength', OPENSTUDIO_DEFAULT_MAXCONTENTVERSIONSLENGTH, 'client');
-        $mform->setDefault('versioning', OPENSTUDIO_DEFAULT_MAXCONTENTVERSIONS);
+            get_string('err_maxlength', 'form', array('format' => defaults::MAXCONTENTVERSIONSLENGTH)),
+            'maxlength', defaults::MAXCONTENTVERSIONSLENGTH, 'client');
+        $mform->setDefault('versioning', defaults::MAXCONTENTVERSIONS);
         $mform->addHelpButton('versioning', 'versioning', 'openstudio');
 
         // Checkbox option added to Custom Features to enable/disable the locking feature.
@@ -310,14 +314,14 @@ class mod_openstudio_mod_form extends moodleform_mod {
 
         $mform->addElement('text', 'pinboardfolderlimit',
             get_string('settingspinboardfolderscontentlimit', 'openstudio'),
-            array('size' => OPENSTUDIO_DEFAULT_MAXPINBOARDFOLDERSCONTENTSLENGTH));
+            array('size' => defaults::MAXPINBOARDFOLDERSCONTENTSLENGTH));
         $mform->setType('pinboardfolderlimit', PARAM_INTEGER);
         $mform->addRule('pinboardfolderlimit',
             get_string('err_numeric', 'form'), 'numeric', '', 'client');
         $mform->addRule('pinboardfolderlimit',
-            get_string('err_maxlength', 'form', array('format' => OPENSTUDIO_DEFAULT_MAXPINBOARDFOLDERSCONTENTSLENGTH)),
-            'maxlength', OPENSTUDIO_DEFAULT_MAXPINBOARDFOLDERSCONTENTSLENGTH, 'client');
-        $mform->setDefault('pinboardfolderlimit', OPENSTUDIO_DEFAULT_MAXPINBOARDFOLDERSCONTENTS);
+            get_string('err_maxlength', 'form', array('format' => defaults::MAXPINBOARDFOLDERSCONTENTSLENGTH)),
+            'maxlength', defaults::MAXPINBOARDFOLDERSCONTENTSLENGTH, 'client');
+        $mform->setDefault('pinboardfolderlimit', defaults::MAXPINBOARDFOLDERSCONTENTS);
         $mform->addHelpButton('pinboardfolderlimit', 'settingspinboardfolderscontentlimittext', 'openstudio');
         $mform->disabledIf('pinboardfolderlimit', 'enablefolders', 'neq', 1);
 
@@ -376,11 +380,11 @@ class mod_openstudio_mod_form extends moodleform_mod {
         $mform->addElement('select', 'contentmaxbytes',
             get_string('settingscustomuploadsettingsfilesizelimit', 'openstudio'),
             $maxbytesarray);
-        if (($maxbytes <= 0) || (OPENSTUDIO_DEFAULT_MAXBYTES < $maxbytes)) {
-            $mform->setDefault('contentmaxbytes', OPENSTUDIO_DEFAULT_MAXBYTES);
+        if (($maxbytes <= 0) || (defaults::MAXBYTES < $maxbytes)) {
+            $mform->setDefault('contentmaxbytes', defaults::MAXBYTES);
         } else {
             $mform->setDefault('contentmaxbytes',
-                ((OPENSTUDIO_DEFAULT_MAXBYTES > $maxbytes) ? $maxbytes : OPENSTUDIO_DEFAULT_MAXBYTES));
+                ((defaults::MAXBYTES > $maxbytes) ? $maxbytes : defaults::MAXBYTES));
         }
 
         // -------------------------------------------------------------------------------
@@ -407,10 +411,10 @@ class mod_openstudio_mod_form extends moodleform_mod {
         if (isset($defaultvalues['allowedvisibility'])) {
             $defaultvalues['enabledvisibility'] = explode(",", $defaultvalues['allowedvisibility']);
         } else {
-            $defaultvalues['enabledvisibility'] = array(OPENSTUDIO_VISIBILITY_PRIVATE,
-                OPENSTUDIO_VISIBILITY_TUTOR,
-                OPENSTUDIO_VISIBILITY_GROUP,
-                OPENSTUDIO_VISIBILITY_MODULE);
+            $defaultvalues['enabledvisibility'] = array(content::VISIBILITY_PRIVATE,
+                    content::VISIBILITY_TUTOR,
+                    content::VISIBILITY_GROUP,
+                    content::VISIBILITY_MODULE);
         }
 
         if (isset($defaultvalues['tutorroles'])) {
@@ -434,11 +438,11 @@ class mod_openstudio_mod_form extends moodleform_mod {
         if (isset($defaultvalues['flags'])) {
             $defaultvalues['enabledflags'] = explode(",", $defaultvalues['flags']);
         } else {
-            $defaultvalues['enabledflags'] = array(OPENSTUDIO_PARTICPATION_FLAG_FAVOURITE,
-                OPENSTUDIO_PARTICPATION_FLAG_INSPIREDME,
-                OPENSTUDIO_PARTICPATION_FLAG_MADEMELAUGH,
-                OPENSTUDIO_PARTICPATION_FLAG_NEEDHELP,
-                OPENSTUDIO_PARTICPATION_FLAG_COMMENT_LIKE);
+            $defaultvalues['enabledflags'] = array(flags::FAVOURITE,
+                    flags::INSPIREDME,
+                    flags::MADEMELAUGH,
+                    flags::NEEDHELP,
+                    flags::COMMENT_LIKE);
         }
 
         if (isset($defaultvalues['filetypes'])) {
@@ -456,25 +460,25 @@ class mod_openstudio_mod_form extends moodleform_mod {
 
         if ($defaultvalues['id'] > 0) {
             $themefeatures = $DB->get_field('openstudio', 'themefeatures', array('id' => $defaultvalues['id']));
-            $defaultvalues['enablemodule'] = $themefeatures & OPENSTUDIO_FEATURE_MODULE ? 1 : 0;
-            $defaultvalues['enablecontenthtml'] = $themefeatures & OPENSTUDIO_FEATURE_CONTENTTEXTUSESHTML ? 1 : 0;
-            $defaultvalues['enablecontentcommenthtml'] = $themefeatures & OPENSTUDIO_FEATURE_CONTENTCOMMENTUSESHTML ? 1 : 0;
-            $defaultvalues['enablecontentcommentaudio'] = $themefeatures & OPENSTUDIO_FEATURE_CONTENTCOMMENTUSESAUDIO ? 1 : 0;
-            $defaultvalues['enablecontentusesfileupload'] = $themefeatures & OPENSTUDIO_FEATURE_CONTENTUSESFILEUPLOAD ? 1 : 0;
-            $defaultvalues['enablefolders'] = $themefeatures & OPENSTUDIO_FEATURE_ENABLECOLLECTIONS ? 2 : 0;
+            $defaultvalues['enablemodule'] = $themefeatures & feature::MODULE ? 1 : 0;
+            $defaultvalues['enablecontenthtml'] = 1;
+            $defaultvalues['enablecontentcommenthtml'] = 1;
+            $defaultvalues['enablecontentcommentaudio'] = $themefeatures & feature::CONTENTCOMMENTUSESAUDIO ? 1 : 0;
+            $defaultvalues['enablecontentusesfileupload'] = $themefeatures & feature::CONTENTUSESFILEUPLOAD ? 1 : 0;
+            $defaultvalues['enablefolders'] = $themefeatures & feature::ENABLECOLLECTIONS ? 2 : 0;
             if ($defaultvalues['enablefolders'] == 0) {
-                $defaultvalues['enablefolders'] = $themefeatures & OPENSTUDIO_FEATURE_ENABLEFOLDERS ? 1 : 0;
+                $defaultvalues['enablefolders'] = $themefeatures & feature::ENABLEFOLDERS ? 1 : 0;
             }
-            $defaultvalues['enablefoldersanycontent'] = $themefeatures & OPENSTUDIO_FEATURE_ENABLEFOLDERSANYCONTENT ? 1 : 0;
-            $defaultvalues['enablerss'] = $themefeatures & OPENSTUDIO_FEATURE_ENABLERSS ? 1 : 0;
-            $defaultvalues['enablesubscription'] = $themefeatures & OPENSTUDIO_FEATURE_ENABLESUBSCRIPTION ? 1 : 0;
-            $defaultvalues['enableexportimport'] = $themefeatures & OPENSTUDIO_FEATURE_ENABLEEXPORTIMPORT ? 1 : 0;
-            $defaultvalues['enablecontentusesweblink'] = $themefeatures & OPENSTUDIO_FEATURE_CONTENTUSESWEBLINK ? 1 : 0;
-            $defaultvalues['enablecontentusesembedcode'] = $themefeatures & OPENSTUDIO_FEATURE_CONTENTUSESEMBEDCODE ? 1 : 0;
-            $defaultvalues['enablecontentallownotebooks'] = $themefeatures & OPENSTUDIO_FEATURE_CONTENTALLOWNOTEBOOKS ? 1 : 0;
-            $defaultvalues['enablecontentreciprocalaccess'] = $themefeatures & OPENSTUDIO_FEATURE_CONTENTRECIPROCALACCESS ? 1 : 0;
-            $defaultvalues['enableparticipationsmiley'] = $themefeatures & OPENSTUDIO_FEATURE_PARTICIPATIONSMILEY ? 1 : 0;
-            $defaultvalues['enablelocking'] = $themefeatures & OPENSTUDIO_FEATURE_ENABLELOCK ? 1 : 0;
+            $defaultvalues['enablefoldersanycontent'] = $themefeatures & feature::ENABLEFOLDERSANYCONTENT ? 1 : 0;
+            $defaultvalues['enablerss'] = $themefeatures & feature::ENABLERSS ? 1 : 0;
+            $defaultvalues['enablesubscription'] = $themefeatures & feature::ENABLESUBSCRIPTION ? 1 : 0;
+            $defaultvalues['enableexportimport'] = $themefeatures & feature::ENABLEEXPORTIMPORT ? 1 : 0;
+            $defaultvalues['enablecontentusesweblink'] = $themefeatures & feature::CONTENTUSESWEBLINK ? 1 : 0;
+            $defaultvalues['enablecontentusesembedcode'] = $themefeatures & feature::CONTENTUSESEMBEDCODE ? 1 : 0;
+            $defaultvalues['enablecontentallownotebooks'] = $themefeatures & feature::CONTENTALLOWNOTEBOOKS ? 1 : 0;
+            $defaultvalues['enablecontentreciprocalaccess'] = $themefeatures & feature::CONTENTRECIPROCALACCESS ? 1 : 0;
+            $defaultvalues['enableparticipationsmiley'] = $themefeatures & feature::PARTICIPATIONSMILEY ? 1 : 0;
+            $defaultvalues['enablelocking'] = $themefeatures & feature::ENABLELOCK ? 1 : 0;
         } else {
             $defaultvalues['enablemodule'] = 1;
             $defaultvalues['enablecontenthtml'] = 0;

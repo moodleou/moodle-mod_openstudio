@@ -22,6 +22,9 @@
 
 namespace mod_openstudio\local;
 
+use mod_openstudio\local\api\content;
+use mod_openstudio\local\api\stream;
+
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
@@ -48,30 +51,30 @@ class renderer_utils {
         $navigationurls = (object) array();
 
         $navigationurls->strmyworkurl = $strmyworkactiveurl = new \moodle_url('/mod/openstudio/view.php',
-                    array('id' => $cmid, 'vid' => OPENSTUDIO_VISIBILITY_PRIVATE, 'fblock' => false,
+                    array('id' => $cmid, 'vid' => content::VISIBILITY_PRIVATE, 'fblock' => false,
                           'ftype' => 0, 'fflag' => 0,
-                          'fsort' => OPENSTUDIO_SORT_FLAG_ACTIVITYTITLE, 'osort' => 1));
+                          'fsort' => stream::SORT_BY_ACTIVITYTITLE, 'osort' => 1));
 
         $navigationurls->strpinboardurl = new \moodle_url('/mod/openstudio/view.php',
-                    array('id' => $cmid, 'vid' => OPENSTUDIO_VISIBILITY_PRIVATE_PINBOARD, 'fblock' => -1,
+                    array('id' => $cmid, 'vid' => content::VISIBILITY_PRIVATEPINBOARD, 'fblock' => -1,
                           'ftype' => 0, 'fflag' => 0,
-                          'ftags' => '', 'fsort' => OPENSTUDIO_SORT_FLAG_DATE, 'osort' => 0));
+                          'ftags' => '', 'fsort' => stream::SORT_BY_DATE, 'osort' => 0));
 
         $navigationurls->strmygroupurl = new \moodle_url('/mod/openstudio/view.php',
-                    array('id' => $cmid, 'vid' => OPENSTUDIO_VISIBILITY_GROUP, 'fblock' => 0,
+                    array('id' => $cmid, 'vid' => content::VISIBILITY_GROUP, 'fblock' => 0,
                           'ftype' => 0, 'fflag' => 0,
-                          'ftags' => '', 'fsort' => OPENSTUDIO_SORT_FLAG_DATE, 'osort' => 0));
+                          'ftags' => '', 'fsort' => stream::SORT_BY_DATE, 'osort' => 0));
 
         $navigationurls->strmymoduleurl = new \moodle_url('/mod/openstudio/view.php',
-                    array('id' => $cmid, 'vid' => OPENSTUDIO_VISIBILITY_MODULE, 'fblock' => 0,
+                    array('id' => $cmid, 'vid' => content::VISIBILITY_MODULE, 'fblock' => 0,
                           'ftype' => 0, 'fflag' => 0,
-                          'ftags' => '', 'fsort' => OPENSTUDIO_SORT_FLAG_DATE, 'osort' => 0));
+                          'ftags' => '', 'fsort' => stream::SORT_BY_DATE, 'osort' => 0));
 
         $navigationurls->strlistpeopleurl = new \moodle_url('/mod/openstudio/people.php', array('id' => $cmid));
         $navigationurls->strpeoplegroupurl = new \moodle_url('/mod/openstudio/people.php',
-                array('id' => $cmid, 'vid' => OPENSTUDIO_VISIBILITY_GROUP));
+                array('id' => $cmid, 'vid' => content::VISIBILITY_GROUP));
         $navigationurls->strpeoplemoduleurl = new \moodle_url('/mod/openstudio/people.php',
-                array('id' => $cmid, 'vid' => OPENSTUDIO_VISIBILITY_MODULE));
+                array('id' => $cmid, 'vid' => content::VISIBILITY_MODULE));
 
         $navigationurls->strmyworkurl = $navigationurls->strmyworkurl->out(false);
         $navigationurls->strpinboardurl = $navigationurls->strpinboardurl->out(false);

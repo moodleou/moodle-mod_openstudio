@@ -25,18 +25,20 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// Replace openstudio with the name of your module and remove this line.
+use mod_openstudio\local\api\content;
+use mod_openstudio\local\api\rss;
+use mod_openstudio\local\api\subscription;
+use mod_openstudio\local\util;
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
-require_once(dirname(__FILE__).'/locallib.php');
 
 $id = optional_param('id', 0, PARAM_INT); // Course_module ID, or
 $n  = optional_param('n', 0, PARAM_INT);  // ... openstudio instance ID - it should be named as the first character of the module.
 
 // Page init and security checks.
 
-$coursedata = openstudio_internal_render_page_init($id, array('mod/openstudio:view'));
+$coursedata = util::render_page_init($id, array('mod/openstudio:view'));
 $cm = $coursedata->cm;
 $cminstance = $coursedata->cminstance;
 $course = $coursedata->course;
@@ -62,92 +64,92 @@ if ($vuid != $USER->id) {
 }
 
 // Get page url.
-$strpageurl = openstudio_internal_getcurrenturl();
+$strpageurl = util::get_current_url();
 
 // Set stream view.
 $vidworkspaceblockdefaultset = false;
 $vid = optional_param('vid', -1, PARAM_INT);
-if (! in_array($vid, array(OPENSTUDIO_VISIBILITY_PRIVATE,
-                           OPENSTUDIO_VISIBILITY_PRIVATE_PINBOARD,
-                           OPENSTUDIO_VISIBILITY_GROUP,
-                           OPENSTUDIO_VISIBILITY_MODULE,
-                           OPENSTUDIO_VISIBILITY_WORKSPACE))) {
+if (! in_array($vid, array(content::VISIBILITY_PRIVATE,
+        content::VISIBILITY_PRIVATE_PINBOARD,
+        content::VISIBILITY_GROUP,
+        content::VISIBILITY_MODULE,
+        content::VISIBILITY_WORKSPACE))) {
     $vid = $theme->homedefault;
 }
 
-if (! in_array($vid, array(OPENSTUDIO_VISIBILITY_PRIVATE,
-                           OPENSTUDIO_VISIBILITY_PRIVATE_PINBOARD,
-                           OPENSTUDIO_VISIBILITY_GROUP,
-                           OPENSTUDIO_VISIBILITY_MODULE,
-                           OPENSTUDIO_VISIBILITY_WORKSPACE))) {
+if (! in_array($vid, array(content::VISIBILITY_PRIVATE,
+        content::VISIBILITY_PRIVATE_PINBOARD,
+        content::VISIBILITY_GROUP,
+        content::VISIBILITY_MODULE,
+        content::VISIBILITY_WORKSPACE))) {
     $vid = $theme->homedefault;
 }
 
 // If group mode is not on, then redirect request to module workspace.
-if (!$permissions->feature_group && ($vid == OPENSTUDIO_VISIBILITY_GROUP)) {
-    $vid = OPENSTUDIO_VISIBILITY_MODULE;
+if (!$permissions->feature_group && ($vid == content::VISIBILITY_GROUP)) {
+    $vid = content::VISIBILITY_MODULE;
 }
 
 // If activity mode is not on, then redirect request to module workspace.
-if (!$permissions->feature_studio && ($vid == OPENSTUDIO_VISIBILITY_PRIVATE)) {
-    $vid = OPENSTUDIO_VISIBILITY_MODULE;
+if (!$permissions->feature_studio && ($vid == content::VISIBILITY_PRIVATE)) {
+    $vid = content::VISIBILITY_MODULE;
 }
 
 // If pinboard mode is not on, then redirect request to module workspace.
-if (!$permissions->feature_pinboard && ($vid == OPENSTUDIO_VISIBILITY_PRIVATE_PINBOARD)) {
-    $vid = OPENSTUDIO_VISIBILITY_MODULE;
+if (!$permissions->feature_pinboard && ($vid == content::VISIBILITY_PRIVATE_PINBOARD)) {
+    $vid = content::VISIBILITY_MODULE;
 }
 
 $pinboardonly = false;
 
 // If module mode is not on, then redirect request to module first available workspace.
-if (!$permissions->feature_module && ($vid == OPENSTUDIO_VISIBILITY_MODULE)) {
+if (!$permissions->feature_module && ($vid == content::VISIBILITY_MODULE)) {
     $vid = $permissions->allow_visibilty_modes[0];
 }
 
 
-if ($vid == OPENSTUDIO_VISIBILITY_WORKSPACE) {
+if ($vid == content::VISIBILITY_WORKSPACE) {
     $ismember = studio_api_group_has_same_memberships
             ($permissions->groupingid, $slotowner->id, $viewuser->id, true);
     if ($ismember) {
-        $vidd = OPENSTUDIO_VISIBILITY_GROUP;
+        $vidd = content::VISIBILITY_GROUP;
     } else {
-        $vidd = OPENSTUDIO_VISIBILITY_MODULE;
+        $vidd = content::VISIBILITY_MODULE;
     }
 } else {
     $vidd = $vid;
 }
 switch ($vidd) {
-    case OPENSTUDIO_VISIBILITY_GROUP:
+    case content::VISIBILITY_GROUP:
         $strpagetitle = $strpageheading = get_string('pageheader', 'openstudio',
                 array('cname' => $course->shortname, 'cmname' => $cm->name,
                       'title' => $theme->themegroupname));
         $vidcrumbarray = array($theme->themegroupname => $strpageurl);
         $vidviewname = 'group';
-        $rssfeedtype = OPENSTUDIO_FEED_TYPE_GROUP;
-        $subscriptiontype = OPENSTUDIO_SUBSCRIPTION_GROUP;
+        $rssfeedtype = rss::GROUP;
+        $subscriptiontype = subscription::GROUP;
         break;
 
-    case OPENSTUDIO_VISIBILITY_PRIVATE:
-    case OPENSTUDIO_VISIBILITY_PRIVATE_PINBOARD:
+    case content::VISIBILITY_PRIVATE:
+    case content::VISIBILITY_PRIVATEPINBOARD:
         $strpagetitle = $strpageheading = get_string('pageheader', 'openstudio',
                 array('cname' => $course->shortname, 'cmname' => $cm->name,
                       'title' => $theme->themestudioname));
         $vidcrumbarray = array($theme->themestudioname => $strpageurl);
         $vidviewname = 'work';
-        $rssfeedtype = OPENSTUDIO_FEED_TYPE_ACTIVITY;
+        $rssfeedtype = rss::ACTIVITY;
         $subscriptiontype = null;
         break;
 
-    case OPENSTUDIO_VISIBILITY_MODULE:
+    case content::VISIBILITY_MODULE:
     default:
         $strpagetitle = $strpageheading = get_string('pageheader', 'openstudio',
                 array('cname' => $course->shortname, 'cmname' => $cm->name,
                       'title' => $theme->thememodulename));
         $vidcrumbarray = array($theme->thememodulename => $strpageurl);
         $vidviewname = 'module';
-        $rssfeedtype = OPENSTUDIO_FEED_TYPE_MODULE;
-        $subscriptiontype = OPENSTUDIO_SUBSCRIPTION_MODULE;
+        $rssfeedtype = rss::MODULE;
+        $subscriptiontype = subscription::MODULE;
         break;
 }
 if ($vuid != $USER->id) {
@@ -166,13 +168,13 @@ if ($pinboardonly) {
     if ($vuid != $USER->id) {
         $vidcrumbarray[$theme->themepinboardname] = $strpageurl;
         $strpagetitle .= ': ' . get_string('profilespinboard', 'openstudio', array('name' => $slotowner->firstname));;
-        $rssfeedtype = OPENSTUDIO_FEED_TYPE_PINBOARD;
+        $rssfeedtype = rss::PINBOARD;
     } else {
         $vidcrumbarray = array($theme->themepinboardname => $strpageurl);
         $strpagetitle = $strpageheading = get_string('pageheader', 'openstudio',
                 array('cname' => $course->shortname, 'cmname' => $cm->name,
                       'title' => $theme->themepinboardname));
-        $rssfeedtype = OPENSTUDIO_FEED_TYPE_PINBOARD;
+        $rssfeedtype = rss::PINBOARD;
     }
 } else {
     $pageview = 'activities';
@@ -191,8 +193,7 @@ $rssdata = array(
 );
 
 // Render page header and crumb trail.
-openstudio_internal_render_page_defaults(
-        $PAGE, $strpagetitle, $strpageheading, $strpageurl, $course, $cm);
+util::page_setup($PAGE, $strpagetitle, $strpageheading, $strpageurl, $course, $cm);
 
 // Generate stream html.
 $renderer = $PAGE->get_renderer('mod_openstudio');

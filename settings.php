@@ -23,35 +23,35 @@
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/mod/openstudio/lib.php');
+use mod_openstudio\local\util\defaults;
 
 if ($ADMIN->fulltree) {
-    $sitemaxbytes = isset($CFG->maxbytes) ? $CFG->maxbytes : OPENSTUDIO_DEFAULT_MAXBYTES;
+    $sitemaxbytes = isset($CFG->maxbytes) ? $CFG->maxbytes : defaults::MAXBYTES;
     $settings->add(new admin_setting_configselect(
             'openstudio/maxbytes',
             get_string('configmaxattachmentsizename', 'openstudio'),
             get_string('configmaxattachmentsizedescription', 'openstudio'),
-            OPENSTUDIO_DEFAULT_MAXBYTES,
+            defaults::MAXBYTES,
             get_max_upload_sizes($sitemaxbytes)));
 
     $settings->add(new admin_setting_configselect(
             'openstudio/exportzipfilesize',
             get_string('configexportzipfilesize', 'openstudio'),
             get_string('configexportzipfilesizedescription', 'openstudio'),
-            OPENSTUDIO_DEFAULT_MAXBYTES,
+            defaults::MAXBYTES,
             get_max_upload_sizes($sitemaxbytes)));
 
     $settings->add(new admin_setting_configtext(
             'openstudio/streampagesize',
             get_string('configstreampagesize', 'openstudio'),
             get_string('configstreampagesizedescription', 'openstudio'),
-            OPENSTUDIO_DEFAULT_STREAMPAGESIZE,
+            defaults::STREAMPAGESIZE,
             PARAM_INT));
 
     $settings->add(new admin_setting_configtext(
             'openstudio/peoplepagesize',
             get_string('configpeoplepagesize', 'openstudio'),
             get_string('configpeoplepagesizedescription', 'openstudio'),
-            OPENSTUDIO_DEFAULT_PEOPLEPAGESIZE,
+            defaults::PEOPLEPAGESIZE,
             PARAM_INT));
 }

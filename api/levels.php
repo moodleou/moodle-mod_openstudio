@@ -23,6 +23,8 @@
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
+use mod_openstudio\local\util;
+
 /*
  * Three levels can be created:
  *   level1, level2, or level3
@@ -57,7 +59,7 @@ function studio_api_levels_create($level, $data) {
                 return false;
             }
             $tablename = 'openstudio_level1';
-            $insertdata->studioid = $data->studioid;
+            $insertdata->openstudioid = $data->openstudioid;
             break;
 
         case 2:
@@ -429,7 +431,7 @@ function studio_api_levels_unpopulated_delete($level, $levelid) {
             // Cascade down from blocks.
             $sqll3 = <<<EOF
 DELETE FROM {openstudio_level3} l3
-      USING {openstudio_level2} l2, {studio_level1} l1
+      USING {openstudio_level2} l2, {openstudio_level1} l1
       WHERE l3.level2id = l2.id
         AND l2.level1id = l1.id
         AND l1.id = ?
@@ -647,7 +649,7 @@ EOF;
  */
 function studio_api_levels_delete($level, $levelid, $studioid) {
     // Get all contents.
-    $contents = studio_api_content_get_all_records($studioid);
+    $contents = mod_openstudio\local\api\content::get_all_records($studioid);
 
     if (in_array($level, range(1, 3))) {
         if ($contents) {
@@ -1120,27 +1122,27 @@ function studio_api_levels_export_xml($studioid, $returnasobject = false) {
     $xml .= "<blocks>\n";
     foreach ($blocks as $block) {
         $xml .= "    <block>\n";
-        $xml .= "        <name>" . studio_internal_xml_escape($block->name) . "</name>\n";
+        $xml .= "        <name>" . util::escape_xml($block->name) . "</name>\n";
         $xml .= "        <activities>\n";
 
         if (isset($block->activities)) {
             foreach ($block->activities as $activity) {
                 $xml .= "            <activity>\n";
-                $xml .= "                <name>" . studio_internal_xml_escape($activity->name) . "</name>\n";
+                $xml .= "                <name>" . util::escape_xml($activity->name) . "</name>\n";
                 $xml .= "                <hidelevel>" . $activity->hidelevel . "</hidelevel>\n";
                 $xml .= "                <contents>\n";
 
                 if (isset($activity->contents)) {
                     foreach ($activity->contents as $content) {
                         $xml .= "                    <content>\n";
-                        $xml .= "                        <name>" . studio_internal_xml_escape($content->name) . "</name>\n";
+                        $xml .= "                        <name>" . util::escape_xml($content->name) . "</name>\n";
                         $xml .= "                        <required>{$content->required}</required>\n";
                         $xml .= "                        <contenttype>{$content->contenttype}</contenttype>\n";
 
                         if (isset($content->template)) {
                             $xml .= "                          <template>\n";
                             $xml .= "                              <guidance>".
-                                    studio_internal_xml_escape($content->template->guidance) . "</guidance>\n";
+                                    util::escape_xml($content->template->guidance) . "</guidance>\n";
                             $xml .= "                              <additionalcontents>{$content->template->additionalcontents}" .
                                     "</additionalcontents>\n";
 
@@ -1149,9 +1151,9 @@ function studio_api_levels_export_xml($studioid, $returnasobject = false) {
                                 foreach ($content->template->contents as $contenttemplate) {
                                     $xml .= "                                   <content>\n";
                                     $xml .= "                                       <name>" .
-                                            studio_internal_xml_escape($contenttemplate->name) . "</name>\n";
+                                            util::escape_xml($contenttemplate->name) . "</name>\n";
                                     $xml .= "                                       <guidance>" .
-                                            studio_internal_xml_escape($contenttemplate->guidance) . "</guidance>\n";
+                                            util::escape_xml($contenttemplate->guidance) . "</guidance>\n";
                                     $xml .= "                                       <permissions>{$contenttemplate->permissions}" .
                                             "</permissions>\n";
                                     $xml .= "                                       <contentorder>{$contenttemplate->contentorder}" .

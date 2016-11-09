@@ -23,7 +23,8 @@
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
-use \mod_openstudio\local\renderer_utils;
+use mod_openstudio\local\api\content;
+use mod_openstudio\local\renderer_utils;
 
 /**
  * OpenStudio renderer.
@@ -48,7 +49,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      */
     public function siteheader(
             $coursedata, $permissions, $theme, $sitename = 'Design', $searchtext = '',
-            $viewmode = OPENSTUDIO_VISIBILITY_MODULE, $rssdata) {
+            $viewmode = content::VISIBILITY_MODULE, $rssdata) {
         global $OUTPUT;
 
         $cminstance = $coursedata->cminstance;
@@ -87,20 +88,20 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         // Placeholder text.
         $placeholdertext = '';
         switch ($viewmode) {
-            case OPENSTUDIO_VISIBILITY_MODULE:
+            case content::VISIBILITY_MODULE:
                 $placeholdertext = $theme->thememodulename;
                 break;
 
-            case OPENSTUDIO_VISIBILITY_GROUP:
+            case content::VISIBILITY_GROUP:
                 $placeholdertext = $theme->themegroupname;
                 break;
 
-            case OPENSTUDIO_VISIBILITY_WORKSPACE:
-            case OPENSTUDIO_VISIBILITY_PRIVATE:
+            case content::VISIBILITY_WORKSPACE:
+            case content::VISIBILITY_PRIVATE:
                 $placeholdertext = $theme->themestudioname;
                 break;
 
-            case OPENSTUDIO_VISIBILITY_PRIVATE_PINBOARD:
+            case content::VISIBILITY_PRIVATEPINBOARD:
                 $placeholdertext = $theme->themepinboardname;
                 break;
         }
@@ -349,20 +350,20 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         // Placeholder text.
         $placeholdertext = '';
         switch ($viewmode) {
-            case OPENSTUDIO_VISIBILITY_MODULE:
+            case content::VISIBILITY_MODULE:
                 $placeholdertext = $theme->thememodulename;
                 break;
 
-            case OPENSTUDIO_VISIBILITY_GROUP:
+            case content::VISIBILITY_GROUP:
                 $placeholdertext = $theme->themegroupname;
                 break;
 
-            case OPENSTUDIO_VISIBILITY_WORKSPACE:
-            case OPENSTUDIO_VISIBILITY_PRIVATE:
+            case content::VISIBILITY_WORKSPACE:
+            case visibility::PRIVATE:
                 $placeholdertext = $theme->themestudioname;
                 break;
 
-            case OPENSTUDIO_VISIBILITY_PRIVATE_PINBOARD:
+            case content::VISIBILITY_PRIVATEPINBOARD:
                 $placeholdertext = $theme->themepinboardname;
                 break;
         }
