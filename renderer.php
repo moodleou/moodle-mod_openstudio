@@ -85,6 +85,9 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $data->rssfeedurl = $rssfeedurl;
         }
 
+        // Check if enable Email subscriptions.
+        $data->enablesubscription = $permissions->feature_enablesubscription;
+
         // Placeholder text.
         $placeholdertext = '';
         switch ($viewmode) {
@@ -101,7 +104,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 $placeholdertext = $theme->themestudioname;
                 break;
 
-            case content::VISIBILITY_PRIVATEPINBOARD:
+            case content::VISIBILITY_PRIVATE_PINBOARD:
                 $placeholdertext = $theme->themepinboardname;
                 break;
         }
@@ -121,7 +124,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         if ($permissions->feature_module) {
             $submenuitem = array(
                     'name' => $theme->thememodulename,
-                    'url' => $navigationurls->strmymoduleurl
+                    'url' => $navigationurls->strmymoduleurl,
+                    'pix' => $OUTPUT->pix_url('mymodule_rgb_32px', 'openstudio')
             );
             $menuitem['hassubnavigation'] = true;
             $menuitem['subnavigation'][] = $submenuitem;
@@ -130,18 +134,32 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         if ($permissions->feature_group) {
             $submenuitem = array(
                     'name' => $theme->themegroupname,
-                    'url' => $navigationurls->strmygroupurl
+                    'url' => $navigationurls->strmygroupurl,
+                    'pix' => $OUTPUT->pix_url('group_rgb_32px', 'openstudio')
             );
             $menuitem['hassubnavigation'] = true;
             $menuitem['subnavigation'][] = $submenuitem;
         }
 
         if (!empty($menuitem['subnavigation'])) {
-            $menuitem['name'] = get_string('menusharedcontent', 'openstudio');
-            $menuitem['url'] = '#';
-            $menuitem['pix'] = $OUTPUT->pix_url('shared_content_rgb_32px', 'openstudio');
-            $menuitem['class'] = 'shared-content';
-            $data->navigation[] = $menuitem;
+            // When has one sub menu item, display sub item as main menu.
+            if (count($menuitem['subnavigation']) > 1) {
+                $menuitem['name'] = get_string('menusharedcontent', 'openstudio');
+                $menuitem['url'] = '#';
+                $menuitem['pix'] = $OUTPUT->pix_url('shared_content_rgb_32px', 'openstudio');
+                $menuitem['class'] = 'shared-content';
+                $data->navigation[] = $menuitem;
+            } else {
+                $menuitem = array(
+                    'hassubnavigation' => false,
+                    'subnavigation' => array(),
+                    'name' => $submenuitem['name'],
+                    'url' => $submenuitem['url'],
+                    'pix' => $submenuitem['pix'],
+                    'class' => 'shared-content'
+                );
+                $data->navigation[] = $menuitem;
+            }
         }
 
         // Generate people items.
@@ -158,30 +176,57 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 'subnavigation' => array()
         );
 
+        $subnavigations = array();
         if (!$permissions->feature_studio || ($permissions->activitydata->used > 0)) {
             $submenuitem = array(
                     'name' => $theme->themestudioname,
-                    'url' => $navigationurls->strmyworkurl
+                    'url' => $navigationurls->strmyworkurl,
+                    'pix' => $OUTPUT->pix_url('activity_rgb_32px', 'openstudio')
             );
             $menuitem['hassubnavigation'] = true;
-            $menuitem['subnavigation'][] = $submenuitem;
+            $subnavigations[] = $submenuitem;
         }
 
         if ($permissions->feature_pinboard || ($permissions->pinboarddata->usedandempty > 0)) {
             $submenuitem = array(
                     'name' => $theme->themepinboardname,
-                    'url' => $navigationurls->strpinboardurl
+                    'url' => $navigationurls->strpinboardurl,
+                    'pix' => $OUTPUT->pix_url('pinboard_rgb_32px', 'openstudio')
             );
             $menuitem['hassubnavigation'] = true;
-            $menuitem['subnavigation'][] = $submenuitem;
+            $subnavigations[] = $submenuitem;
         }
 
-        if (!empty($menuitem['subnavigation'])) {
-            $menuitem['name'] = get_string('menumycontent', 'openstudio');
-            $menuitem['url'] = '#';
-            $menuitem['pix'] = $OUTPUT->pix_url('openstudio_rgb_32px', 'openstudio');
-            $menuitem['class'] = 'my-content';
-            $data->navigation[] = $menuitem;
+        if (!empty($subnavigations)) {
+            // When has one sub menu item, display sub item as main menu.
+            if (count($subnavigations) > 1) {
+                $submenuitem = array(
+                        'name' => get_string('settingsthemehomesettingsall', 'openstudio'),
+                        'url' => '#'
+                );
+                $menuitem['hassubnavigation'] = true;
+                $menuitem['subnavigation'][] = $submenuitem;
+
+                foreach ($subnavigations as $sub) {
+                    $menuitem['subnavigation'][] = $sub;
+                }
+
+                $menuitem['name'] = get_string('menumycontent', 'openstudio');
+                $menuitem['url'] = '#';
+                $menuitem['pix'] = $OUTPUT->pix_url('openstudio_rgb_32px', 'openstudio');
+                $menuitem['class'] = 'my-content';
+                $data->navigation[] = $menuitem;
+            } else {
+                $menuitem = array(
+                    'hassubnavigation' => false,
+                    'subnavigation' => array(),
+                    'name' => $submenuitem['name'],
+                    'url' => $submenuitem['url'],
+                    'pix' => $submenuitem['pix'],
+                    'class' => 'my-content'
+                );
+                $data->navigation[] = $menuitem;
+            }
         }
 
         // Generate admin items.
@@ -359,7 +404,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 break;
 
             case content::VISIBILITY_WORKSPACE:
-            case visibility::PRIVATE:
+            case content::VISIBILITY_PRIVATE:
                 $placeholdertext = $theme->themestudioname;
                 break;
 

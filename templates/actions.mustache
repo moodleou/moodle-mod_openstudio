@@ -32,7 +32,7 @@
     }
 
 }}
-
+{{#enablesubscription}}
 <div class="openstudio-nav-settings" role="navigation">
     <span class="openstudio-nav-email-subscription">{{# str }} emailsubscription, mod_openstudio {{/ str }} </span><span>{{# str }} emailsubscriptionsub1, mod_openstudio {{/ str }}</span>
     <div><span>{{# str }} emailsubscriptionsub2, mod_openstudio {{/ str }}</span><span> '{{# str }} subscribetothisstudio, mod_openstudio {{/ str }} {{placeholdertext}}'.</span></div>
@@ -40,6 +40,7 @@
 <div class="openstudio-subscribe-button">
     <button type="submit" class="btn" name="subscribebutton">{{# str }} subscribetothisstudio, mod_openstudio {{/ str }} {{placeholdertext}}</button>
 </div>
+{{/enablesubscription}}
 
 {{#rssfeedurl}}
 <div class="openstudio-rss-box"><span>{{# str }} subscriberssreader, mod_openstudio {{/ str }} <a class="openstudio-rss-reader">{{# str }} rssreader, mod_openstudio {{/ str }}</a></span>

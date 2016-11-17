@@ -56,7 +56,7 @@ class renderer_utils {
                           'fsort' => stream::SORT_BY_ACTIVITYTITLE, 'osort' => 1));
 
         $navigationurls->strpinboardurl = new \moodle_url('/mod/openstudio/view.php',
-                    array('id' => $cmid, 'vid' => content::VISIBILITY_PRIVATEPINBOARD, 'fblock' => -1,
+                    array('id' => $cmid, 'vid' => content::VISIBILITY_PRIVATE_PINBOARD, 'fblock' => -1,
                           'ftype' => 0, 'fflag' => 0,
                           'ftags' => '', 'fsort' => stream::SORT_BY_DATE, 'osort' => 0));
 

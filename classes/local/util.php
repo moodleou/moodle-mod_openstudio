@@ -276,7 +276,7 @@ class util {
      * @return bool True if the feature flag is enabled, false otherwise.
      */
     public static function has_feature($studio, $feature) {
-        return (bool) $studio->themefeatures & $feature;
+        return (bool) ($studio->themefeatures & $feature);
     }
 
     /**

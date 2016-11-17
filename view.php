@@ -131,7 +131,7 @@ switch ($vidd) {
         break;
 
     case content::VISIBILITY_PRIVATE:
-    case content::VISIBILITY_PRIVATEPINBOARD:
+    case content::VISIBILITY_PRIVATE_PINBOARD:
         $strpagetitle = $strpageheading = get_string('pageheader', 'openstudio',
                 array('cname' => $course->shortname, 'cmname' => $cm->name,
                       'title' => $theme->themestudioname));

@@ -8,6 +8,8 @@
 
 .openstudio-nav-primary {
     margin-top: -17px;
+    clear: both;
+    display: inline-block;
 }
 
 .openstudio-nav-logo-text {
@@ -103,7 +105,7 @@
     outline: none;
 }
 
-/* General navigation styles */
+/* General navigation styles. */
 .path-mod-openstudio .nav-pills > li > a {
     height: 44px;
     font-size: 16px;
@@ -111,8 +113,7 @@
     background-color: #e7f4fa;
     line-height: 44px;
     margin-right: 10px;
-    padding-left: 49px;
-    padding-right: 12px;
+
 }
 
 .path-mod-openstudio .nav-pills > li > a:hover{
@@ -225,16 +226,14 @@
 
 .openstudio-navigation-icon {
     border: 0 none;
-    margin-top: 8px;
-    margin-left: -34px;
-    position: absolute;
-    vertical-align: middle;
+    margin-left: 0;
+    padding-left: 0px;
     width: 28px;
 }
 
 .openstudio-navigation-notification-icon {
     border: 0 none;
-    margin-top: 18px;
+    margin-top: 20px;
     position: absolute;
     vertical-align: middle;
     width: 28px;
@@ -257,6 +256,7 @@
 
 .path-mod-openstudio .dropdown-menu {
     padding: 1px;
+    margin-top: 2px;
 }
 
 .path-mod-openstudio .shared-content .dropdown-menu {
@@ -269,4 +269,234 @@
 
 .path-mod-openstudio .administration .dropdown-menu {
     min-width: 185px;
+}
+
+
+/* Tablet. */
+@media only screen and (max-device-width: 1023px) {
+    .openstudio-nav-settings {
+        display: none;
+    }
+
+    .openstudio-subscribe-button {
+        margin-top: 4px;
+        padding-right: 0px;
+        margin-right: -10px;
+    }
+
+    .openstudio-rss-box {
+        display: none;
+    }
+
+    .openstudio-add-dashboard-button {
+        clear: right;
+        float: right;
+        padding-top: 10px;
+        margin-right: -10px;
+    }
+
+    .openstudio-nav-primary {
+        margin-top: 19px;
+    }
+
+}
+
+/* Tablet Portrait. */
+@media screen and (max-device-width: 1023px) and (orientation: portrait){
+    .path-mod-openstudio .administration{
+        display: none;
+    }
+}
+
+
+/* Mobile. */
+@media (max-width: 767px) {
+    .path-mod-openstudio #osep-pagewrapper {
+        margin-left: 20px !important;
+        margin-right: 20px !important;
+    }
+
+    .openstudio-navigation-text {
+        display: none;
+    }
+
+    .path-mod-openstudio .nav-pills > li > a {
+
+    }
+
+    .openstudio-nav-settings {
+        display: none;
+    }
+
+
+    .openstudio-rss-box {
+        display: none;
+    }
+
+    .openstudio-subscribe-button {
+        margin-top: 0px;
+        margin-right: 10px;
+    }
+
+    .openstudio-add-dashboard-button {
+        clear: right;
+        float: right;
+        padding-top: 10px;
+        margin-right: 10px;
+    }
+
+    .openstudio-nav-primary {
+        margin-top: 19px;
+    }
+
+    .path-mod-openstudio .administration{
+        display: none;
+    }
+
+    .openstudio-navigation-icon {
+        width: 64px;
+        margin-left: 0px;
+    }
+
+    .openstudio-navigation-notification-icon {
+        width: 64px;
+        margin-top: 8px;
+    }
+
+    .path-mod-openstudio .nav .dropdown-toggle .caret {
+        display: none;
+    }
+
+    .path-mod-openstudio .nav-pills > li > a {
+        height: 78px;
+        margin: 0 20px 0 0;
+        padding: 0px 0px 0px 8px;
+        width: 72px;
+    }
+
+    .openstudio-navigation-icon {
+        border: 0 none;
+        margin-left: 0;
+        padding-left: 0px;
+        padding-top: 7px;
+        width: 64px;
+    }
+
+    .openstudio-header {
+        margin-top: 15px;
+        margin-right: -10px;
+    }
+
+    .path-mod-openstudio .openstudio-nav-logo-wrapper {
+        margin-left: 0px;
+    }
+
+    .path-mod-openstudio .osep-moduleheading {
+        margin-top: -5px !important;
+    }
+
+    .openstudio-navigation-notification-text {
+        font-size: 18px;
+        margin-left: 40px;
+        margin-top: 2px;
+        width: 27px;
+    }
+
+    .path-mod-openstudio .dropdown-menu > li > a {
+        font-size: 22px;
+        height: 50px;
+        line-height: 50px;
+        padding-left: 20px;
+    }
+
+    .path-mod-openstudio .dropdown-menu {
+        border-radius: 0px;
+        box-shadow: none;
+        border: 0px;
+    }
+
+    .path-mod-openstudio .nav-pills .dropdown-menu {
+        border-radius: 0px;
+    }
+
+    .path-mod-openstudio .shared-content .dropdown-menu {
+        margin-left: -20px;
+        width: 810px;
+    }
+
+    .path-mod-openstudio .my-content .dropdown-menu {
+        margin-left: -250px;
+        width: 810px;
+    }
+
+    .row-fluid .span4 {
+        float: left !important;
+        width: 40% !important;
+    }
+
+    .path-mod-openstudio .osep-moduleheading {
+        margin-top: -10px !important
+    }
+}
+
+
+/* Mobile small. */
+@media (max-width: 419px) {
+    .row-fluid .span4 {
+        width: 100% !important;
+    }
+
+    .path-mod-openstudio .osep-moduleheading {
+        margin-top: 0px !important
+    }
+
+    .openstudio-navigation-icon {
+        width: 48px;
+        padding-left: 6px;
+    }
+    .openstudio-navigation-notification-icon {
+        width: 48px;
+    }
+
+    .openstudio-subscribe-button {
+        float: left;
+    }
+    .openstudio-add-dashboard-button {
+        float: left;
+        clear: left;
+    }
+
+    .path-mod-openstudio .nav-pills > li > a {
+        height: 60px;
+        width: 60px;
+        padding: 0px;
+        margin: 0px;
+    }
+
+    .nav-tabs > li, .nav-pills > li {
+        float: left;
+        height: 60px;
+        margin-right: 15px;
+    }
+
+    .openstudio-navigation-notification-icon {
+        margin-top: 8px;
+    }
+
+    .openstudio-navigation-notification-text {
+        font-size: 18px;
+        margin-left: 32px;
+        margin-top: -4px;
+        width: 27px;
+    }
+
+    .path-mod-openstudio .shared-content .dropdown-menu {
+       margin-top: 4px;
+    }
+
+    .path-mod-openstudio .my-content .dropdown-menu {
+        margin-left: -157px;
+        width: 460px;
+        margin-top: 4px;
+    }
 }
