@@ -23,20 +23,29 @@
 
 namespace mod_openstudio\local\util;
 
+/**
+ * Feature flags.  Many of these are now obsolete as the feature is non-optional.
+ *
+ * TODO: Remove obsolete flags
+ *
+ * @package mod_openstudio\local\util
+ */
 class feature {
     const MODULE = 1;
     const GROUP = 2;
     const STUDIO = 4;
     const PINBOARD = 8;
+    const CONTENTTEXTUSESHTML = 16; // Obsolete
+    const CONTENCOMMENTUSESHTML = 32; // Obsolete
     const CONTENTCOMMENTUSESAUDIO = 64;
-    const CONTENTUSESFILEUPLOAD = 128;
-    const ENABLERSS = 512;
-    const ENABLESUBSCRIPTION = 1024;
-    const ENABLEEXPORTIMPORT = 2048;
-    const CONTENTUSESWEBLINK = 4096;
-    const CONTENTUSESEMBEDCODE = 8192;
-    const CONTENTRECIPROCALACCESS = 16384;
-    const ENABLELOCK = 32768;
+    const CONTENTUSESFILEUPLOAD = 128; // Obsolete
+    const ENABLERSS = 512; // Obsolete
+    const ENABLESUBSCRIPTION = 1024; // Obsolete
+    const ENABLEEXPORTIMPORT = 2048; // Obsolete
+    const CONTENTUSESWEBLINK = 4096; // Obsolete
+    const CONTENTUSESEMBEDCODE = 8192; // Obsolete
+    const CONTENTRECIPROCALACCESS = 16384; // Obsolete
+    const ENABLELOCK = 32768; // Obsolete
     const ENABLEFOLDERS = 65536;
     const CONTENTALLOWNOTEBOOKS = 131072;
     const ENABLEFOLDERSANYCONTENT = 262144;

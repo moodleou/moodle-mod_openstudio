@@ -30,6 +30,7 @@
  */
 
 use mod_openstudio\local\api\content;
+use mod_openstudio\local\util\feature;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -823,9 +824,7 @@ function openstudio_ousearch_filter_browseslots_useronly(&$result) {
  * @param int $courseid If specified, restricts to particular courseid
  */
 function openstudio_ousearch_update_all($feedback = true, $courseid = 0) {
-    global $CFG, $DB;
-
-    require_once($CFG->dirroot . '/mod/studio/lib.php');
+    global $DB;
 
     raise_memory_limit(MEMORY_EXTRA);
 
@@ -916,101 +915,101 @@ function openstudio_feature_settings($studioorid, $updatedb = false) {
         $module = $DB->get_record('modules', array('name' => 'openstudio'));
         $studiomodule = $DB->get_record('course_modules',
             array('course' => $studio->course, 'module' => $module->id, 'instance' => $studioorid));
-        $studio->enablemodule = $studio->themefeatures & \mod_openstudio\local\util\feature::MODULE;
+        $studio->enablemodule = $studio->themefeatures & feature::MODULE;
         $studio->groupmode = $studiomodule->groupmode;
         $studio->groupingid = $studiomodule->groupingid;
-        $studio->pinboard = $studio->themefeatures & \mod_openstudio\local\util\feature::PINBOARD;
+        $studio->pinboard = $studio->themefeatures & feature::PINBOARD;
         $studio->enablecontenthtml = 1;
         $studio->enablecontentcommenthtml = 1;
-        $studio->enablecontentcommentaudio = $studio->themefeatures & \mod_openstudio\local\util\feature::CONTENTCOMMENTUSESAUDIO;
-        $studio->enablecontentusesfileupload = $studio->themefeatures & \mod_openstudio\local\util\feature::CONTENTUSESFILEUPLOAD;
-        if ($studio->themefeatures & \mod_openstudio\local\util\feature::ENABLEFOLDERS) {
+        $studio->enablecontentcommentaudio = $studio->themefeatures & feature::CONTENTCOMMENTUSESAUDIO;
+        $studio->enablecontentusesfileupload = $studio->themefeatures & feature::CONTENTUSESFILEUPLOAD;
+        if ($studio->themefeatures & feature::ENABLEFOLDERS) {
             $studio->enablefolders = 1;
         } else {
             $studio->enablefolders = 0;
         }
-        $studio->enablefoldersanycontent = $studio->themefeatures & \mod_openstudio\local\util\feature::ENABLEFOLDERSANYCONTENT;
-        $studio->enablerss = $studio->themefeatures & \mod_openstudio\local\util\feature::ENABLERSS;
-        $studio->enablesubscription = $studio->themefeatures & \mod_openstudio\local\util\feature::ENABLESUBSCRIPTION;
-        $studio->enableexportimport = $studio->themefeatures & \mod_openstudio\local\util\feature::ENABLEEXPORTIMPORT;
-        $studio->enablecontentusesweblink = $studio->themefeatures & \mod_openstudio\local\util\feature::CONTENTUSESWEBLINK;
-        $studio->enablecontentusesembedcode = $studio->themefeatures & \mod_openstudio\local\util\feature::CONTENTUSESEMBEDCODE;
-        $studio->enablecontentallownotebooks = $studio->themefeatures & \mod_openstudio\local\util\feature::CONTENTALLOWNOTEBOOKS;
+        $studio->enablefoldersanycontent = $studio->themefeatures & feature::ENABLEFOLDERSANYCONTENT;
+        $studio->enablerss = $studio->themefeatures & feature::ENABLERSS;
+        $studio->enablesubscription = $studio->themefeatures & feature::ENABLESUBSCRIPTION;
+        $studio->enableexportimport = $studio->themefeatures & feature::ENABLEEXPORTIMPORT;
+        $studio->enablecontentusesweblink = $studio->themefeatures & feature::CONTENTUSESWEBLINK;
+        $studio->enablecontentusesembedcode = $studio->themefeatures & feature::CONTENTUSESEMBEDCODE;
+        $studio->enablecontentallownotebooks = $studio->themefeatures & feature::CONTENTALLOWNOTEBOOKS;
         $studio->enablecontentreciprocalaccess = \mod_openstudio\local\util::has_feature(
-                $studio, \mod_openstudio\local\util\feature::CONTENTRECIPROCALACCESS
+                $studio, feature::CONTENTRECIPROCALACCESS
         );
-        $studio->enableparticipationsmiley = $studio->themefeatures & \mod_openstudio\local\util\feature::PARTICIPATIONSMILEY;
-        $studio->enablelocking = $studio->themefeatures & \mod_openstudio\local\util\feature::ENABLELOCK;
+        $studio->enableparticipationsmiley = $studio->themefeatures & feature::PARTICIPATIONSMILEY;
+        $studio->enablelocking = $studio->themefeatures & feature::ENABLELOCK;
     }
 
-    $featuremodule = ($studio->enablemodule > 0) ? \mod_openstudio\local\util\feature::MODULE : 0;
+    $featuremodule = ($studio->enablemodule > 0) ? feature::MODULE : 0;
     $featuregroup = 0;
     if ($studio->groupmode && $studio->groupingid) {
-        $featuregroup = \mod_openstudio\local\util\feature::GROUP;
+        $featuregroup = feature::GROUP;
     }
     $featurestudio = 0;
     if (isset($studio->id) && mod_openstudio\local\api\levels::defined_for_studio($studio->id)) {
-        $featurestudio = \mod_openstudio\local\util\feature::STUDIO;
+        $featurestudio = feature::STUDIO;
     }
     $featurepinboard = 0;
     if ($studio->pinboard) {
-        $featurepinboard = \mod_openstudio\local\util\feature::PINBOARD;
+        $featurepinboard = feature::PINBOARD;
     }
-    $featurecontenttextuseshtml = 1;
-    $featurecontentcommentuseshtml = 1;
+    $featurecontenttextuseshtml = feature::CONTENTTEXTUSESHTML;
+    $featurecontentcommentuseshtml = feature::CONTENCOMMENTUSESHTML;
     $featurecontentcommentusesaudio = 0;
     if ($studio->enablecontentcommentaudio) {
-        $featurecontentcommentusesaudio = \mod_openstudio\local\util\feature::CONTENTCOMMENTUSESAUDIO;
+        $featurecontentcommentusesaudio = feature::CONTENTCOMMENTUSESAUDIO;
     }
     $featurecontentusesfileupload = 0;
     if ($studio->enablecontentusesfileupload) {
-        $featurecontentusesfileupload = \mod_openstudio\local\util\feature::CONTENTUSESFILEUPLOAD;
+        $featurecontentusesfileupload = feature::CONTENTUSESFILEUPLOAD;
     }
     $featureenablefolders = 0;
     $featureenablefoldersanycontent = 0;
     if ($studio->enablefolders == 1) {
-        $featureenablefolders = \mod_openstudio\local\util\feature::ENABLEFOLDERS;
+        $featureenablefolders = feature::ENABLEFOLDERS;
         if ($studio->enablefoldersanycontent) {
-            $featureenablefoldersanycontent = \mod_openstudio\local\util\feature::ENABLEFOLDERSANYCONTENT;
+            $featureenablefoldersanycontent = feature::ENABLEFOLDERSANYCONTENT;
         }
     }
     $featureenablerss = 0;
     if ($studio->enablerss) {
-        $featureenablerss = \mod_openstudio\local\util\feature::ENABLERSS;
+        $featureenablerss = feature::ENABLERSS;
     }
     $featureenablesubscription = 0;
     if ($studio->enablesubscription) {
-        $featureenablesubscription = \mod_openstudio\local\util\feature::ENABLESUBSCRIPTION;
+        $featureenablesubscription = feature::ENABLESUBSCRIPTION;
     }
     $featureenableexportimport = 0;
     if ($studio->enableexportimport) {
-        $featureenableexportimport = \mod_openstudio\local\util\feature::ENABLEEXPORTIMPORT;
+        $featureenableexportimport = feature::ENABLEEXPORTIMPORT;
     }
     $featurecontentusesweblink = 0;
     if ($studio->enablecontentusesweblink) {
-        $featurecontentusesweblink = \mod_openstudio\local\util\feature::CONTENTUSESWEBLINK;
+        $featurecontentusesweblink = feature::CONTENTUSESWEBLINK;
     }
     $featurecontentusesembedcode = 0;
     if ($studio->enablecontentusesembedcode) {
-        $featurecontentusesembedcode = \mod_openstudio\local\util\feature::CONTENTUSESEMBEDCODE;
+        $featurecontentusesembedcode = feature::CONTENTUSESEMBEDCODE;
     }
     $featurecontentallownotebooks = 0;
     if ($studio->enablecontentallownotebooks) {
-        $featurecontentallownotebooks = \mod_openstudio\local\util\feature::CONTENTALLOWNOTEBOOKS;
+        $featurecontentallownotebooks = feature::CONTENTALLOWNOTEBOOKS;
     }
     $featurecontentreciprocalaccess = 0;
     if ($studio->enablecontentreciprocalaccess) {
-        $featurecontentreciprocalaccess = \mod_openstudio\local\util\feature::CONTENTRECIPROCALACCESS;
+        $featurecontentreciprocalaccess = feature::CONTENTRECIPROCALACCESS;
     }
 
     $featureparticipationsmiley = 0;
     if ($studio->enableparticipationsmiley) {
-        $featureparticipationsmiley = \mod_openstudio\local\util\feature::PARTICIPATIONSMILEY;
+        $featureparticipationsmiley = feature::PARTICIPATIONSMILEY;
     }
 
     $featureenablelock = 0;
     if ($studio->enablelocking) {
-        $featureenablelock = \mod_openstudio\local\util\feature::ENABLELOCK;
+        $featureenablelock = feature::ENABLELOCK;
     }
 
     $themefeatures = $featuremodule + $featuregroup + $featurestudio + $featurepinboard;
