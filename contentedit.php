@@ -28,6 +28,7 @@ require_once($CFG->dirroot . '/mod/openstudio/api/apiloader.php');
 
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\lock;
+use mod_openstudio\local\api\levels;
 use mod_openstudio\local\api\folder;
 use mod_openstudio\local\util\defaults;
 use mod_openstudio\local\util;
@@ -88,7 +89,7 @@ if ($sid == 0) {
 // We check if the content has previously been created and if so acquire the content id
 // and redirect the user to the correct URL.
 if (($lid > 0) && ($sid <= 0)) {
-    $contentdata = studio_api_levels_get_record($cminstance->id, $userid, 3, $lid);
+    $contentdata = levels::get_record($cminstance->id, $userid, 3, $lid);
 
     // Process the level management locks.
     if ($contentdata !== false) {
@@ -125,7 +126,7 @@ $contentdataname = '';
 $contentisinpinboard = false;
 
 if ($lid > 0) {
-    $level3data = studio_api_levels_get_record(defaults::CONTENTLEVELCONTAINER, $lid);
+    $level3data = levels::get_record(defaults::CONTENTLEVELCONTAINER, $lid);
     if ($level3data === false) {
         print_error('errorinvalidcontent', 'openstudio', $returnurl->out(false));
     }
@@ -189,16 +190,16 @@ if ($sid && $foldercontentdata = studio_api_set_slot_get_by_slotid($folderid, $c
 
 if (($lid > 0) || ($folderlid > 0)) {
     $lidtemp = ($lid > 0) ? $lid : $folderlid;
-    $level3data = studio_api_levels_get_record(defaults::CONTENTLEVELCONTAINER, $lidtemp);
+    $level3data = levels::get_record(defaults::CONTENTLEVELCONTAINER, $lidtemp);
     if ($level3data === false) {
         print_error('errorinvalidcontent', 'openstudio', $returnurl->out(false));
     }
-    $level2data = studio_api_levels_get_record(
+    $level2data = levels::get_record(
         defaults::ACTIVITYLEVELCONTAINER, $level3data->level2id);
     if ($level2data === false) {
         print_error('errorinvalidcontent', 'openstudio', $returnurl->out(false));
     }
-    $level1data = studio_api_levels_get_record(
+    $level1data = levels::get_record(
         defaults::BLOCKLEVELCONTAINER, $level2data->level1id);
     if ($level1data === false) {
         print_error('errorinvalidcontent', 'openstudio', $returnurl->out(false));
@@ -271,7 +272,7 @@ if ($sid > 0) {
     $userrecord = $DB->get_record('user', array('id' => $userid), '*', MUST_EXIST);
 
     $contentdata->sid = 0;
-    $contentleveldata = studio_api_levels_get_record($contentdata->levelcontainer, $contentdata->levelid);
+    $contentleveldata = levels::get_record($contentdata->levelcontainer, $contentdata->levelid);
     // Check lock level management access.
     if ($permissions->feature_enablelock) {
         if (isset($contentleveldata->locktype) &&

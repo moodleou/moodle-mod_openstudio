@@ -29,6 +29,7 @@ use mod_openstudio\local\util;
 
 // Remove after these APIs are refactored.
 require_once($CFG->dirroot . '/mod/openstudio/api/tags.php');
+require_once($CFG->dirroot . '/mod/openstudio/api/embedcode.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/tracking.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/search.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/item.php');
@@ -1415,10 +1416,10 @@ EOF;
             // store in slot record.
             $embeddata = false;
             if (!empty($data['weblink'])) {
-                $embeddata = studio_api_embedcode_parse($data['weblink']);
+                $embeddata = \studio_api_embedcode_parse($data['weblink']);
             }
             if (($embeddata === false) && !empty($data['embedcode'])) {
-                $embeddata = studio_api_embedcode_parse($data['embedcode']);
+                $embeddata = \studio_api_embedcode_parse($data['embedcode']);
             }
             if ($embeddata !== false) {
                 $data['weblink'] = $embeddata->url;

@@ -318,7 +318,7 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
         // Change the scheduled state of the slot.
         $checkschedule = studio_api_lock_schedule($userid, $level3id, $locktype, $locktime, $unlocktime);
 
-        $scheduledl3slotdata = studio_api_levels_get_record($level, $level3id);
+        $scheduledl3slotdata = mod_openstudio\local\api\levels::get_record($level, $level3id);
         $this->assertEquals($level3id, $scheduledl3slotdata->id);
         $this->assertEquals($lockprocessed, $scheduledl3slotdata->lockprocessed);
         $this->assertEquals($lockedtype, $scheduledl3slotdata->locktype);
@@ -376,7 +376,7 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
         $this->assertEquals(true, $checkschedule);
 
         // Check the state of the now unlocked slot.
-        $scheduledl3slotdata = studio_api_levels_get_record($level, $level3id);
+        $scheduledl3slotdata = mod_openstudio\local\api\levels::get_record($level, $level3id);
         $this->assertEquals(true, $checkschedule);
         $this->assertEquals($level3id, $scheduledl3slotdata->id);
         $this->assertEquals($lockprocessed, $scheduledl3slotdata->lockprocessed);
@@ -389,7 +389,7 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
         $this->assertEquals(true, $resetslotl3schedule);
 
         // Check the state of the now unset slot.
-        $scheduledl3slotdata = studio_api_levels_get_record($level, $level3id);
+        $scheduledl3slotdata = mod_openstudio\local\api\levels::get_record($level, $level3id);
         $this->assertEquals($lockprocessed, $scheduledl3slotdata->lockprocessed);
         $this->assertEquals(0, $scheduledl3slotdata->locktype);
         $this->assertEquals(0, $scheduledl3slotdata->locktime);
@@ -447,7 +447,7 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
         $this->assertEquals(true, $checkschedule);
 
         // Check the state of the now unlocked slot.
-        $scheduledl3slotdata = studio_api_levels_get_record($level, $level3id);
+        $scheduledl3slotdata = mod_openstudio\local\api\levels::get_record($level, $level3id);
 
         // Test the system lock.
         // Create $slotdata object.

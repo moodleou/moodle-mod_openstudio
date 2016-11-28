@@ -24,7 +24,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__.'/language.php');
-require_once(__DIR__.'/levels.php');
 require_once(__DIR__.'/stream.php');
 require_once(__DIR__.'/slotversion.php');
 require_once(__DIR__.'/set.php');

@@ -149,7 +149,7 @@ class behat_mod_openstudio extends behat_base {
             $insertdata->studioid = $studio->id;
             $insertdata->name = "blockxyz{$counter}";
             $insertdata->sortorder = $counter;
-            $blocks[$blockcounter] = studio_api_levels_create(1, $insertdata);
+            $blocks[$blockcounter] = mod_openstudio\local\api\levels::create(1, $insertdata);
             $blockcounter++;
         }
 
@@ -161,7 +161,7 @@ class behat_mod_openstudio extends behat_base {
                 $insertdata->parentid = $blockid;
                 $insertdata->name = "activityxyz{$counter}";
                 $insertdata->sortorder = $counter;
-                $activities[$activitycounter] = studio_api_levels_create(2, $insertdata);
+                $activities[$activitycounter] = mod_openstudio\local\api\levels::create(2, $insertdata);
                 $activitycounter++;
             }
         }
@@ -174,7 +174,7 @@ class behat_mod_openstudio extends behat_base {
                 $insertdata->parentid = $activityid;
                 $insertdata->name = "contentxyz{$counter}";
                 $insertdata->sortorder = $counter;
-                $contents[$contentcounter] = studio_api_levels_create(3, $insertdata);
+                $contents[$contentcounter] = mod_openstudio\local\api\levels::create(3, $insertdata);
                 $contentcounter++;
             }
         }
@@ -186,7 +186,7 @@ class behat_mod_openstudio extends behat_base {
                 $insertdata->name = "contentxyz{$counter}";
                 $insertdata->required = 1;
                 $insertdata->sortorder = $counter;
-                $contents[$contentcounter] = studio_api_levels_create(3, $insertdata);
+                $contents[$contentcounter] = mod_openstudio\local\api\levels::create(3, $insertdata);
                 $contentcounter++;
             }
         }

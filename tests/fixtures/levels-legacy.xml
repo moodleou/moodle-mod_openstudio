@@ -1,0 +1,63 @@
+<!--?xml version=\"1.0\" encoding=\"UTF-8\"?-->
+<blocks>
+    <block>
+        <name>block1</name>
+        <activities>
+            <activity>
+                <name>activity1</name>
+                <hidelevel>0</hidelevel>
+                <slots>
+                    <slot>
+                        <name>slot1</name>
+                        <required>0</required>
+                        <contenttype>0</contenttype>
+                    </slot>
+                    <slot>
+                        <name>slot2</name>
+                        <required>1</required>
+                        <contenttype>100</contenttype>
+                    </slot>
+                    <slot>
+                        <name>slot3</name>
+                        <required>0</required>
+                        <contenttype>100</contenttype>
+                    </slot>
+                </slots>
+            </activity>
+        </activities>
+    </block>
+    <block>
+        <name>block2</name>
+        <activities>
+            <activity>
+                <name>activity2</name>
+                <hidelevel>1</hidelevel>
+                <slots>
+                    <slot>
+                        <name>slot4</name>
+                        <required>1</required>
+                        <contenttype>100</contenttype>
+                        <template>
+                            <guidance>Lorem ipsum dolor</guidance>
+                            <additionalslots>2</additionalslots>
+                            <slots>
+                                <slot>
+                                    <name>templateslot1</name>
+                                    <guidance></guidance>
+                                    <permissions>0</permissions>
+                                    <slotorder>1</slotorder>
+                                </slot>
+                                <slot>
+                                    <name>templateslot2</name>
+                                    <guidance>sit amet</guidance>
+                                    <permissions>1</permissions>
+                                    <slotorder>2</slotorder>
+                                </slot>
+                            </slots>
+                        </template>
+                    </slot>
+                </slots>
+            </activity>
+        </activities>
+    </block>
+</blocks>

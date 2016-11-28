@@ -453,8 +453,25 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $contentdata->favouriteicon = $OUTPUT->pix_url('favourite_rgb_32px', 'openstudio');
 
         $contentdata->contentediturl = new moodle_url('/mod/openstudio/contentedit.php',
-                                    array('id' => $cmid, 'lid' => 0, 'sid' => 0, 'type' => 0 , 'sstsid' => 0));
+                   array('id' => $cmid, 'lid' => 0, 'sid' => 0, 'type' => 0, 'sstsid' => 0));
 
         return $this->render_from_template('mod_openstudio/body', $contentdata);
+    }
+
+    /**
+     * Output level data, either as HTML for display before importing, or as raw XML for export.
+     *
+     * @param \mod_openstudio\output\levelxml $levelxml
+     * @param bool $html If true, format the data as an HTML list. Otherwise output as raw XML.
+     * @return bool|string
+     */
+    public function output_level_xml(mod_openstudio\output\levelxml $levelxml, $html = false) {
+        if ($html) {
+            $template = 'format_level_xml';
+        } else {
+            $template = 'output_level_xml';
+        }
+        $context = $levelxml->export_for_template($this->output);
+        return $this->render_from_template('mod_openstudio/' . $template, $context);
     }
 }

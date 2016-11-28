@@ -649,7 +649,7 @@ function openstudio_ousearch_filter_permission($result, $includeinsetslots = fal
         }
     }
 
-    if ($vid == content::VISIBILITY_PRIVATEPINBOARD) {
+    if ($vid == content::VISIBILITY_PRIVATE_PINBOARD) {
         $sql = <<<EOF
 SELECT DISTINCT s.id
   FROM {openstudio_contents} s
@@ -909,8 +909,6 @@ EOF;
 function openstudio_feature_settings($studioorid, $updatedb = false) {
     global $CFG, $DB;
 
-    require_once($CFG->dirroot . '/mod/openstudio/api/levels.php');
-
     if (is_object($studioorid)) {
         $studio = $studioorid;
     } else {
@@ -951,7 +949,7 @@ function openstudio_feature_settings($studioorid, $updatedb = false) {
         $featuregroup = \mod_openstudio\local\util\feature::GROUP;
     }
     $featurestudio = 0;
-    if (isset($studio->id) && studio_api_levels_is_defined($studio->id)) {
+    if (isset($studio->id) && mod_openstudio\local\api\levels::defined_for_studio($studio->id)) {
         $featurestudio = \mod_openstudio\local\util\feature::STUDIO;
     }
     $featurepinboard = 0;

@@ -1,0 +1,141 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_openstudio/output_level_xml
+
+    OpenStudio Level export XML template
+
+    Outputs level data as raw XML for export.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Context variables required for this template:
+    * blocks An array of level1 records, containing a "name" and array "activities", in turn containing "name" and array "contents". Other attributes are optional.
+
+    Example context (json):
+    {
+        "blocks": [
+            {
+                "name": "block1",
+                "activities": [
+                    {
+                        "name": "activity1",
+                        "hidelevel?": false,
+                        "contents": [
+                            {
+                                "name": "slot1",
+                                "required?": false,
+                                "contenttype": 0
+                            },
+                            {
+                                "name": "slot2",
+                                "required?": true,
+                                "contenttype": 100
+                            },
+                            {
+                                "name": "slot3",
+                                "required?": false,
+                                "contenttype": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "block2",
+                "activities": [
+                    {
+                        "name": "activity2",
+                        "hidelevel?": true,
+                        "contents": [
+                            {
+                                "name": "slot4",
+                                "required?": true,
+                                "contenttype": 100,
+                                "template": {
+                                    "guidance": "Lorem ipsum dolor",
+                                    "additionalcontents": 2,
+                                    "contents" : [
+                                        {
+                                            "name": "templateslot1",
+                                            "guidance": "",
+                                            "permissions": 0,
+                                            "contentorder": 1
+                                        },
+                                        {
+                                            "name": "templateslot2",
+                                            "guidance": "sit amet",
+                                            "permissions": 1,
+                                            "contentorder": 2
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+
+}}
+
+<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<blocks>
+    {{#blocks}}
+    <block>
+        <name>{{name}}</name>
+        <activities>
+            {{#activities}}
+            <activity>
+                <name>{{name}}</name>
+                <hidelevel>{{#hidelevel?}}1{{/hidelevel?}}{{^hidelevel?}}0{{/hidelevel?}}</hidelevel>
+                <contents>
+                    {{#contents}}
+                    <content>
+                        <name>{{name}}</name>
+                        <required>{{#required?}}1{{/required?}}{{^required?}}0{{/required?}}</required>
+                        <contenttype>{{contenttype}}</contenttype>
+                        {{#template}}
+                        <template>
+                            <guidance>{{guidance}}</guidance>
+                            <additionalslots>{{additionalcontents}}</additionalslots>
+                            <contents>
+                                {{#contents}}
+                                <content>
+                                    <name>{{name}}</name>
+                                    <guidance>{{guidance}}</guidance>
+                                    <permissions>{{permissions}}</permissions>
+                                    <contentorder>{{contentorder}}</contentorder>
+                                </content>
+                                {{/contents}}
+                            </contents>
+                        </template>
+                        {{/template}}
+                    </content>
+                    {{/contents}}
+                </contents>
+            </activity>
+        {{/activities}}
+        </activities>
+    </block>
+{{/blocks}}
+</blocks>

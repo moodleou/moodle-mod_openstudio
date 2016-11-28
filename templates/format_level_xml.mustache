@@ -1,0 +1,127 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_openstudio/format_level_xml
+
+    OpenStudio import data template
+
+    Formats level data as HTML for display.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Context variables required for this template:
+    * blocks An array of level1 records, containing a "name" and array "activities", in turn containing "name" and array "slots". Other attributes are optional.
+
+    Example context (json):
+    {
+        "blocks": [
+            {
+                "name": "block1",
+                "activities": [
+                    {
+                        "name": "activity1",
+                        "hidelevel?": false,
+                        "contents": [
+                            {
+                                "name": "slot1",
+                                "required?": false,
+                                "contenttype": 0
+                            },
+                            {
+                                "name": "slot2",
+                                "required?": true,
+                                "contenttype": 100
+                            },
+                            {
+                                "name": "slot3",
+                                "required?": false,
+                                "contenttype": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "block2",
+                "activities": [
+                    {
+                        "name": "activity2",
+                        "hidelevel?": true,
+                        "contents": [
+                            {
+                                "name": "slot4",
+                                "required?": true,
+                                "contenttype": 100,
+                                "template": {
+                                    "guidance": "Lorem ipsum dolor",
+                                    "additionalcontents": 2,
+                                    "contents" : [
+                                        {
+                                            "name": "templateslot1",
+                                            "guidance": "",
+                                            "permissions": 0,
+                                            "contentorder": 1
+                                        },
+                                        {
+                                            "name": "templateslot2",
+                                            "guidance": "sit amet",
+                                            "permissions": 1,
+                                            "contentorder": 2
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+
+}}
+
+<ul>
+    {{#blocks}}
+        <li>{{name}}
+            <ul>
+                {{#activities}}
+                    <li>{{name}}{{#hidelevel?}} (hidden){{/hidelevel?}}
+                    <ul>
+                        {{#contents}}
+                            <li><p>{{name}}{{#required?}} (required){{/required?}}{{#contenttype}} (folder){{/contenttype}}</p>
+                                {{#template}}
+                                <p>{{guidance}}</p>
+                                <p>Additional contents allowed: {{additionalcontents}}</p>
+                                <ul>
+                                    {{#contents}}
+                                    <li>{{contentorder}}: {{name}}{{#guidance}} - {{guidance}}{{/guidance}}{{#permissions}} (can re-order){{/permissions}}</li>
+                                    {{/contents}}
+                                </ul>
+                                {{/template}}
+                           </li>
+                        {{/contents}}
+                    </ul>
+                    </li>
+                {{/activities}}
+            </ul>
+        </li>
+    {{/blocks}}
+</ul>

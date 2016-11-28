@@ -433,7 +433,8 @@ class mod_openstudio_generator extends testing_module_generator {
             $leveldata['level2id'] = $leveldata['parentid'];
         }
         if (!isset($leveldata['sortorder'])) {
-            $leveldata['sortorder'] = studio_api_levels_get_latest_sortorder($leveldata['level'], $leveldata['parentid']);
+            $leveldata['sortorder'] = mod_openstudio\local\api\levels::get_latest_sortorder(
+                    $leveldata['level'], $leveldata['parentid']);
         }
         if (!isset($leveldata['hidelevel'])) {
             $leveldata['hidelevel'] = 0;

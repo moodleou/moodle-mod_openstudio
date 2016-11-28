@@ -132,7 +132,7 @@ class mod_openstudio_set_testcase extends advanced_testcase {
                     'contentid'       => $this->slots[$i]->id,
                     'timemodified' => time(),
                     'contentorder'    => $i + 1,
-                    'status'       => mod_openstudio\local\api\levels::NORMAL
+                    'status'       => mod_openstudio\local\api\levels::ACTIVE
             );
             $this->setslots[$i]->id = $DB->insert_record('openstudio_folder_contents', $this->setslots[$i]);
         }
@@ -293,7 +293,7 @@ class mod_openstudio_set_testcase extends advanced_testcase {
             $templateset = reset($settemplates);
             if (isset($templateslot->id)
                     && $templateslot->foldertemplateid == $templateset->id
-                    && $templateslot->status == mod_openstudio\local\api\levels::NORMAL
+                    && $templateslot->status == mod_openstudio\local\api\levels::ACTIVE
             ) {
                 $this->templatedsetslots[$j]->foldercontenttemplateid = $this->templateslots[$i]->id;
             }
@@ -469,7 +469,7 @@ class mod_openstudio_set_testcase extends advanced_testcase {
                 'levelid' => 0,
                 'guidance' => random_string(),
                 'additionalslots' => 0,
-                'status' => mod_openstudio\local\api\levels::NORMAL
+                'status' => mod_openstudio\local\api\levels::ACTIVE
         );
     }
 
@@ -479,7 +479,7 @@ class mod_openstudio_set_testcase extends advanced_testcase {
                 'name' => 'Dolor sit amet ' . random_string(),
                 'guidance' => random_string(),
                 'permissions' => 0,
-                'status' => mod_openstudio\local\api\levels::NORMAL,
+                'status' => mod_openstudio\local\api\levels::ACTIVE,
                 'contentorder' => $this->slottemplatecount
         );
     }
@@ -528,7 +528,7 @@ class mod_openstudio_set_testcase extends advanced_testcase {
         $params = array(
             'levelcontainer' => 3,
             'levelid'        => $levelid,
-            'status'         => mod_openstudio\local\api\levels::NORMAL
+            'status'         => mod_openstudio\local\api\levels::ACTIVE
         );
         $this->assertFalse($DB->record_exists('openstudio_folder_templates', $params));
 
@@ -1024,7 +1024,7 @@ EOF;
         $userid = $this->users->students->one->id;
 
         // Verify that the slot is currently in the set.
-        $params = array('folderid' => $set->id, 'contentid' => $slot->id, 'status' => mod_openstudio\local\api\levels::NORMAL);
+        $params = array('folderid' => $set->id, 'contentid' => $slot->id, 'status' => mod_openstudio\local\api\levels::ACTIVE);
         $this->assertTrue($DB->record_exists('openstudio_folder_contents', $params));
 
         // Remove the slot from the set.
@@ -1062,7 +1062,7 @@ EOF;
         $set = reset($this->sets);
         $userid = $this->users->students->one->id;
 
-        $params = array('folderid' => $set->id, 'status' => mod_openstudio\local\api\levels::NORMAL);
+        $params = array('folderid' => $set->id, 'status' => mod_openstudio\local\api\levels::ACTIVE);
         $slotcount = $DB->count_records('openstudio_folder_contents', $params);
 
         $this->assertEquals($slotcount, studio_api_set_empty($set->id, $userid));
@@ -1083,8 +1083,8 @@ EOF;
 
         $template = $this->settemplate;
         // Verify that the template exists and has slot templates.
-        $setparams = array('id' => $template->id, 'status' => mod_openstudio\local\api\levels::NORMAL);
-        $slotparams = array('foldertemplateid' => $template->id, 'status' => mod_openstudio\local\api\levels::NORMAL);
+        $setparams = array('id' => $template->id, 'status' => mod_openstudio\local\api\levels::ACTIVE);
+        $slotparams = array('foldertemplateid' => $template->id, 'status' => mod_openstudio\local\api\levels::ACTIVE);
         $this->assertTrue($DB->record_exists('openstudio_folder_templates', $setparams));
         $this->assertTrue($DB->record_exists('openstudio_content_templates', $slotparams));
 
@@ -1107,13 +1107,13 @@ EOF;
         global $DB;
 
         $template = reset($this->templateslots);
-        $slotparams = array('id' => $template->id, 'status' => mod_openstudio\local\api\levels::NORMAL);
+        $slotparams = array('id' => $template->id, 'status' => mod_openstudio\local\api\levels::ACTIVE);
         $this->assertTrue($DB->record_exists('openstudio_content_templates', $slotparams));
 
         // Get the other slots in the template.
         $params = array(
                 'foldertemplateid' => $template->foldertemplateid,
-                'status' => mod_openstudio\local\api\levels::NORMAL
+                'status' => mod_openstudio\local\api\levels::ACTIVE
         );
         $slottemplates = $DB->get_records('openstudio_content_templates', $params);
         unset($slottemplates[$template->id]);

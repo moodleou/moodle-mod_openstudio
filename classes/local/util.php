@@ -793,16 +793,16 @@ EOF;
                 $contentdata->l2name = '';
                 $contentdata->l3name = '';
 
-                $level3data = studio_api_levels_get_record(defaults::CONTENTLEVELCONTAINER, $contentdata->levelid);
+                $level3data = api\levels::get_record(defaults::CONTENTLEVELCONTAINER, $contentdata->levelid);
                 if ($level3data) {
                     $contentdata->l3name = $level3data->name;
                 }
-                $level2data = studio_api_levels_get_record(
+                $level2data = api\levels::get_record(
                         defaults::ACTIVITYLEVELCONTAINER, $level3data->level2id);
                 if ($level2data) {
                     $contentdata->l2name = $level2data->name;
                 }
-                $level1data = studio_api_levels_get_record(
+                $level1data = api\levels::get_record(
                         defaults::BLOCKLEVELCONTAINER, $level2data->level1id);
                 if ($level1data) {
                     $contentdata->l1name = $level1data->name;

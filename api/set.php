@@ -51,7 +51,7 @@ function studio_api_set_slot_add($setid, $slotid, $userid, $setslot = array(), $
         $set = mod_openstudio\local\api\content::get($setid);
         $slot = mod_openstudio\local\api\content::get($slotid);
         if ($set && $slot) {
-            $params = array('folderid' => $setid, 'contentid' => $slotid, 'status' => levels::NORMAL);
+            $params = array('folderid' => $setid, 'contentid' => $slotid, 'status' => levels::ACTIVE);
             if ($DB->record_exists('openstudio_folder_contents', $params)) {
                 // Don't add the same slot to the set more than once!
                 return true;
@@ -217,7 +217,7 @@ function studio_api_set_template_create($levelcontainer, $levelid, $settemplate 
     $templateinsertdata = new stdClass();
 
     try {
-        $level = studio_api_levels_get_record($levelcontainer, $levelid);
+        $level = mod_openstudio\local\api\levels::get_record($levelcontainer, $levelid);
         if ($level) {
             $templateinsertdata->levelid = $level->id;
             $templateinsertdata->levelcontainer = $levelcontainer;
@@ -228,7 +228,7 @@ function studio_api_set_template_create($levelcontainer, $levelid, $settemplate 
             if (isset($settemplate->additionalcontents)) {
                 $templateinsertdata->additionalcontents = $settemplate->additionalcontents;
             }
-            $templateinsertdata->status = levels::NORMAL;
+            $templateinsertdata->status = levels::ACTIVE;
 
             return $DB->insert_record('openstudio_folder_templates', $templateinsertdata);
         }
@@ -280,7 +280,7 @@ function studio_api_set_template_slot_create($settemplateid, $slottemplate) {
                     $templateinsertdata->contentorder = $lastslot->contentorder + 1;
                 }
             }
-            $templateinsertdata->status = levels::NORMAL;
+            $templateinsertdata->status = levels::ACTIVE;
 
             return $DB->insert_record('openstudio_content_templates', $templateinsertdata);
         }
@@ -496,7 +496,7 @@ function studio_api_set_slots_get_with_templates($setid) {
   ORDER BY sst.contentorder
 EOF;
 
-    $templates = $DB->get_records_sql($sql, array($setid, levels::NORMAL, levels::NORMAL));
+    $templates = $DB->get_records_sql($sql, array($setid, levels::ACTIVE, levels::ACTIVE));
     $sortedslots = array();
     $scale = count($templates) + count($realslots);
 
@@ -598,7 +598,7 @@ function studio_api_set_template_get($setid) {
        AND st.status >= :status
 EOF;
 
-    return $DB->get_record_sql($sql, array('folderid' => $setid, 'status' => levels::NORMAL));
+    return $DB->get_record_sql($sql, array('folderid' => $setid, 'status' => levels::ACTIVE));
 }
 
 /**
@@ -618,7 +618,7 @@ function studio_api_set_template_get_by_levelid($levelid) {
        AND st.status >= :status
 EOF;
 
-    return $DB->get_record_sql($sql, array('levelid' => $levelid, 'status' => levels::NORMAL));
+    return $DB->get_record_sql($sql, array('levelid' => $levelid, 'status' => levels::ACTIVE));
 }
 
 /**
@@ -630,7 +630,7 @@ EOF;
 function studio_api_set_template_get_by_id($templateid) {
     global $DB;
 
-    return $DB->get_record('openstudio_folder_templates', array('id' => $templateid, 'status' => levels::NORMAL));
+    return $DB->get_record('openstudio_folder_templates', array('id' => $templateid, 'status' => levels::ACTIVE));
 }
 
 /**
@@ -652,7 +652,7 @@ function studio_api_set_template_slots_get($templateid) {
   ORDER BY sst.contentorder ASC
 EOF;
 
-    return $DB->get_records_sql($sql, array($templateid, levels::NORMAL, levels::NORMAL));
+    return $DB->get_records_sql($sql, array($templateid, levels::ACTIVE, levels::ACTIVE));
 }
 
 /**
@@ -664,7 +664,7 @@ EOF;
 function studio_api_set_template_slot_get($slottemplateid) {
     global $DB;
 
-    return $DB->get_record('openstudio_content_templates', array('id' => $slottemplateid, 'status' => levels::NORMAL));
+    return $DB->get_record('openstudio_content_templates', array('id' => $slottemplateid, 'status' => levels::ACTIVE));
 }
 
 /**
@@ -683,7 +683,7 @@ function studio_api_set_template_slot_get_by_slotid($slotid) {
      WHERE ss.contentid = ?
        AND sst.status >= ?
 EOL;
-    $params = array($slotid, levels::NORMAL, levels::NORMAL);
+    $params = array($slotid, levels::ACTIVE, levels::ACTIVE);
     return $DB->get_record_sql($sql, $params);
 }
 
@@ -705,7 +705,7 @@ function studio_api_set_template_slot_get_by_slotorder($settemplateid, $slotorde
        AND sst.status >= ?
 EOL;
 
-    $params = array($settemplateid, $slotorder, levels::NORMAL);
+    $params = array($settemplateid, $slotorder, levels::ACTIVE);
     return $DB->get_record_sql($sql, $params);
 }
 
@@ -926,7 +926,7 @@ function studio_api_set_template_slot_update($slottemplate) {
 function studio_api_set_slot_remove($setid, $slotid, $userid) {
     global $DB;
 
-    $params = array('folderid' => $setid, 'contentid' => $slotid, 'status' => levels::NORMAL);
+    $params = array('folderid' => $setid, 'contentid' => $slotid, 'status' => levels::ACTIVE);
     if (!$setslot = $DB->get_record('openstudio_folder_contents', $params)) {
         throw new coding_exception(
                 '$setid and $slotid passed to studio_api_set_slot remove must exist in a record in openstudio_folder_contents');
@@ -967,7 +967,7 @@ function studio_api_set_empty($setid, $userid) {
                                     'record in openstudio_contents');
     }
 
-    $params = array('folderid' => $setid, 'status' => levels::NORMAL);
+    $params = array('folderid' => $setid, 'status' => levels::ACTIVE);
     $setslots = $DB->get_records('openstudio_folder_contents', $params);
     if (count($setslots > 0)) {
         foreach ($setslots as $setslot) {
@@ -990,7 +990,7 @@ function studio_api_set_empty($setid, $userid) {
 function studio_api_set_template_delete($templateid) {
     global $DB;
 
-    $params = array('foldertemplateid' => $templateid, 'status' => levels::NORMAL);
+    $params = array('foldertemplateid' => $templateid, 'status' => levels::ACTIVE);
     $slottemplates = $DB->get_records('openstudio_content_templates', $params);
     foreach ($slottemplates as $slottemplate) {
         studio_api_set_template_slot_delete($slottemplate->id, false);
@@ -1027,7 +1027,7 @@ EOF;
             $params = array(
                 'foldertemplateid' => $slottemplate->foldertemplateid,
                 'contentorder'     => $slottemplate->contentorder,
-                'status'        => levels::NORMAL
+                'status'        => levels::ACTIVE
             );
             $followingslots = $DB->get_records_select('openstudio_content_templates', $where, $params);
             foreach ($followingslots as $followingslot) {
@@ -1143,7 +1143,7 @@ function studio_api_set_slot_determine_provenance($sourceslotid) {
         throw new coding_exception('Source slot does not exist');
     }
 
-    $params = array('contentid' => $sourceslotid, 'status' => levels::NORMAL);
+    $params = array('contentid' => $sourceslotid, 'status' => levels::ACTIVE);
     // If we get more than one result, then it's becuase we have multiple soft-links, which will
     // all have the same provenance so we can use INGORE_MULTIPLE safely.
     $sourceslot = $DB->get_record('openstudio_folder_contents', $params, '*', IGNORE_MULTIPLE);

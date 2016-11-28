@@ -108,7 +108,7 @@ function studio_api_lock_schedule($userid, $level3id, $locktype, $locktime, $unl
 
     // Get level data from levelid.
     $level = 3;
-    $slotleveldata = studio_api_levels_get_record($level, $level3id);
+    $slotleveldata = mod_openstudio\local\api\levels::get_record($level, $level3id);
 
     $slotlevelupdatedata = (object) array();
     // Make comparisons.
@@ -125,7 +125,7 @@ function studio_api_lock_schedule($userid, $level3id, $locktype, $locktime, $unl
     if (isset($slotlevelupdatedata->locktype) || isset($slotlevelupdatedata->locktime)
             || isset($slotlevelupdatedata->unlocktime)) {
         $slotlevelupdatedata->lockprocessed = time();
-        $success = studio_api_levels_update($level, $level3id, $slotlevelupdatedata);
+        $success = mod_openstudio\local\api\levels::update($level, $level3id, $slotlevelupdatedata);
 
     }
 
@@ -145,7 +145,7 @@ function studio_api_lock_reset_schedule($userid, $level3id) {
 
     // Get level data from levelid.
     $level = 3;
-    $slotleveldata = studio_api_levels_get_record($level, $level3id);
+    $slotleveldata = mod_openstudio\local\api\levels::get_record($level, $level3id);
 
     $slotlevelresetdata = (object) array();
     $slotlevelresetdata->id = $level3id;
