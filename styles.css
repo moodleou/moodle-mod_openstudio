@@ -4,6 +4,7 @@
 
 .openstudio-container {
     min-height: 500px;
+    background-color: #bfe2ef;
 }
 
 .openstudio-nav-primary {
@@ -71,6 +72,10 @@
     float: right;
 }
 
+.path-mod-openstudio label {
+    font-weight: bold;
+}
+
 .path-mod-openstudio .openstudio-nav-logo-wrapper {
     margin-left: -9px;
 }
@@ -116,16 +121,10 @@
 
 }
 
-.path-mod-openstudio .nav-pills > li > a:hover{
-    background-color: #e7f4fa;
-}
 
-.path-mod-openstudio .nav-pills > li > a:focus{
-    background-color: #bfe2ef;
-}
-
-.path-mod-openstudio .nav-pills > .active > a {
-    background-color: #bfe2ef;
+.openstudio-content-edit-form {
+    border-top: 1px solid #cccccc;
+    padding-top: 20px;
 }
 
 .path-mod-openstudio .nav .dropdown-toggle .caret {
@@ -178,16 +177,6 @@
 
 .path-mod-openstudio .nav > li > a:hover {
     background-color: #bfe2ef;
-}
-
-.path-mod-openstudio .nav-pills > .active >  a:hover, a:focus {
-    background-color: #bfe2ef;
-    color: #002158;
-}
-
-.path-mod-openstudio .nav-pills > a:hover, a:focus {
-    background-color: #bfe2ef;
-    color: #002158;
 }
 
 .path-mod-openstudio .nav-tabs .open .dropdown-toggle, .nav-pills .open .dropdown-toggle, .nav > li.dropdown.open.active > a:hover, .nav > li.dropdown.open.active > a:focus {
@@ -254,6 +243,13 @@
     width: 18px;
 }
 
+.openstudio-create-folder-button {
+    float: right;
+}
+.openstudio-add-content-form {
+    float: left;
+}
+
 .path-mod-openstudio .dropdown-menu {
     padding: 1px;
     margin-top: 2px;
@@ -271,6 +267,148 @@
     min-width: 185px;
 }
 
+.openstudio-module-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #002158;
+    padding: 20px 20px 15px 20px;
+}
+
+.openstudio-content {
+    margin: 0px 20px 20px 20px;
+}
+
+.openstudio-add-content-block {
+    background-color: #f0f0f1;
+    border-radius: 4px;
+    float: left;
+    padding: 8px 15px 0px 15px;
+    width: 210px;
+}
+
+.openstudio-add-title-container {
+    padding-bottom: 20px;
+}
+
+.openstudio-add-title {
+    font-size: 14px;
+    color: #832884;
+    font-weight: bold;
+    background-image: url([[pix:openstudio|add_content_rgb_32px]]);
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: left;
+    display: inline-block;
+    padding-left: 25px;
+    border: none;
+}
+
+a.openstudio-add-title:hover  {
+    color: #832884;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.openstudio-upload-container {
+    height: 137px;
+    width: 100%;
+    border-radius : 4px;
+    border: 1px dashed #676463;
+    background-image: url([[pix:openstudio|uploads_rgb_32px]]);
+    background-color: #FFFFFF;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 72px 72px;
+    display: inline-block;
+    margin-bottom: 35px;
+}
+
+.openstudio-content-block {
+    background-color: #ffffff;
+    border-radius: 4px;
+    float: left;
+    padding: 10px 15px 20px 15px;
+    width: 215px;
+    margin-left: 20px;
+}
+
+.openstudio-content-title {
+    font-size: 14px;
+    color: #002158;
+    font-weight: bold;
+}
+
+.path-mod-openstudio select.visibility {
+    background-image: url([[pix:openstudio|onlyme_rgb_32px]]);
+    background-position: 5px center;
+    background-repeat: no-repeat;
+    background-size: 17px auto;
+    text-indent: 10px;
+}
+
+.path-mod-openstudio select.visibility_1 {
+    background-image: url([[pix:openstudio|onlyme_rgb_32px]]);
+    background-position: 5px center;
+    background-repeat: no-repeat;
+    background-size: 17px auto;
+    text-indent: 10px;
+}
+
+.path-mod-openstudio select.visibility_2 {
+    background-image: url([[pix:openstudio|people_rgb_32px]]);
+    background-position: 5px center;
+    background-repeat: no-repeat;
+    background-size: 17px auto;
+    text-indent: 10px;
+}
+
+.path-mod-openstudio select.visibility_3 {
+    background-image: url([[pix:openstudio|mymodule_rgb_32px]]);
+    background-position: 5px center;
+    background-repeat: no-repeat;
+    background-size: 17px auto;
+    text-indent: 10px;
+}
+
+.path-mod-openstudio .visibility_7 {
+    background-image: url([[pix:openstudio|share_with_tutor_rgb_32px]]);
+    background-position: 5px center;
+    background-repeat: no-repeat;
+    background-size: 17px auto;
+    text-indent: 10px;
+}
+
+.path-mod-openstudio .visibility option[value="1"] {
+    background-image: url([[pix:openstudio|onlyme_rgb_32px]]);
+    background-position: 3px center;
+    background-repeat: no-repeat;
+    background-size: 17px auto;
+    text-indent: 25px;
+}
+
+.path-mod-openstudio .visibility option[value="2"] {
+    background-image: url([[pix:openstudio|people_rgb_32px]]);
+    background-position: 3px center;
+    background-repeat: no-repeat;
+    background-size: 17px auto;
+    text-indent: 25px;
+}
+
+.path-mod-openstudio .visibility option[value="3"] {
+    background-image: url([[pix:openstudio|mymodule_rgb_32px]]);
+    background-position: 3px center;
+    background-repeat: no-repeat;
+    background-size: 17px auto;
+    text-indent: 25px;
+}
+
+.path-mod-openstudio .visibility option[value="7"] {
+    background-image: url([[pix:openstudio|share_with_tutor_rgb_32px]]);
+    background-position: 3px center;
+    background-repeat: no-repeat;
+    background-size: 17px auto;
+    text-indent: 25px;
+}
 
 /* Tablet. */
 @media only screen and (max-device-width: 1023px) {

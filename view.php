@@ -46,7 +46,6 @@ $mcontext = $coursedata->mcontext;
 $permissions = $coursedata->permissions;
 $theme = $coursedata->theme;
 
-
 require_login($course, true, $cm);
 
 // Need to have view or managecontent capabilities.
@@ -67,7 +66,6 @@ if ($vuid != $USER->id) {
 $strpageurl = util::get_current_url();
 
 // Set stream view.
-$vidworkspaceblockdefaultset = false;
 $vid = optional_param('vid', -1, PARAM_INT);
 if (! in_array($vid, array(content::VISIBILITY_PRIVATE,
         content::VISIBILITY_PRIVATE_PINBOARD,
@@ -100,13 +98,10 @@ if (!$permissions->feature_pinboard && ($vid == content::VISIBILITY_PRIVATE_PINB
     $vid = content::VISIBILITY_MODULE;
 }
 
-$pinboardonly = false;
-
 // If module mode is not on, then redirect request to module first available workspace.
 if (!$permissions->feature_module && ($vid == content::VISIBILITY_MODULE)) {
     $vid = $permissions->allow_visibilty_modes[0];
 }
-
 
 if ($vid == content::VISIBILITY_WORKSPACE) {
     $ismember = studio_api_group_has_same_memberships
@@ -124,10 +119,6 @@ switch ($vidd) {
         $strpagetitle = $strpageheading = get_string('pageheader', 'openstudio',
                 array('cname' => $course->shortname, 'cmname' => $cm->name,
                       'title' => $theme->themegroupname));
-        $vidcrumbarray = array($theme->themegroupname => $strpageurl);
-        $vidviewname = 'group';
-        $rssfeedtype = rss::GROUP;
-        $subscriptiontype = subscription::GROUP;
         break;
 
     case content::VISIBILITY_PRIVATE:
@@ -135,10 +126,6 @@ switch ($vidd) {
         $strpagetitle = $strpageheading = get_string('pageheader', 'openstudio',
                 array('cname' => $course->shortname, 'cmname' => $cm->name,
                       'title' => $theme->themestudioname));
-        $vidcrumbarray = array($theme->themestudioname => $strpageurl);
-        $vidviewname = 'work';
-        $rssfeedtype = rss::ACTIVITY;
-        $subscriptiontype = null;
         break;
 
     case content::VISIBILITY_MODULE:
@@ -146,51 +133,11 @@ switch ($vidd) {
         $strpagetitle = $strpageheading = get_string('pageheader', 'openstudio',
                 array('cname' => $course->shortname, 'cmname' => $cm->name,
                       'title' => $theme->thememodulename));
-        $vidcrumbarray = array($theme->thememodulename => $strpageurl);
-        $vidviewname = 'module';
-        $rssfeedtype = rss::MODULE;
-        $subscriptiontype = subscription::MODULE;
         break;
 }
 if ($vuid != $USER->id) {
-    $crumbkey = get_string('profileswork', 'openstudio', array('name' => $slotowner->firstname));
-    $vidcrumbarray[$crumbkey] = new moodle_url(
-            '/mod/openstudio/view.php',
-            array('id' => $cm->id,
-                  'vid' => $vid,
-                  'vuid' => $vuid));
-    if (! $pinboardonly) {
-        $strpagetitle .= ': ' . get_string('profileswork', 'openstudio', array('name' => $slotowner->firstname));;
-    }
+    $strpagetitle .= ': ' . get_string('profileswork', 'openstudio', array('name' => $slotowner->firstname));;
 }
-if ($pinboardonly) {
-    $pageview = 'pinboard';
-    if ($vuid != $USER->id) {
-        $vidcrumbarray[$theme->themepinboardname] = $strpageurl;
-        $strpagetitle .= ': ' . get_string('profilespinboard', 'openstudio', array('name' => $slotowner->firstname));;
-        $rssfeedtype = rss::PINBOARD;
-    } else {
-        $vidcrumbarray = array($theme->themepinboardname => $strpageurl);
-        $strpagetitle = $strpageheading = get_string('pageheader', 'openstudio',
-                array('cname' => $course->shortname, 'cmname' => $cm->name,
-                      'title' => $theme->themepinboardname));
-        $rssfeedtype = rss::PINBOARD;
-    }
-} else {
-    $pageview = 'activities';
-}
-
-// Generate user's unique RSS security key.
-$rssfeedkey = '';
-
-// Data for RSS.
-$rssdata = array(
-    'rssfeedtype' => $rssfeedtype,
-    'rssfeedkey' => $rssfeedkey,
-    'subscriptiontype' => $subscriptiontype,
-    'viewuser' => $viewuser,
-    'slotowner' => $slotowner,
-);
 
 // Render page header and crumb trail.
 util::page_setup($PAGE, $strpagetitle, $strpageheading, $strpageurl, $course, $cm);
@@ -200,7 +147,7 @@ $renderer = $PAGE->get_renderer('mod_openstudio');
 $PAGE->set_button($renderer->searchform($theme, $vid));
 
 $html = $renderer->siteheader(
-        $coursedata, $permissions, $theme, $cm->name, '', $vid, $rssdata);
+        $coursedata, $permissions, $theme, $cm->name, '', $vid);
 
 echo $OUTPUT->header(); // Header.
 

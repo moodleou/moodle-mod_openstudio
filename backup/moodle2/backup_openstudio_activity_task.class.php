@@ -49,4 +49,15 @@ class backup_openstudio_activity_task extends backup_activity_task {
     protected function define_my_steps() {
         $this->add_step(new backup_openstudio_activity_structure_step('openstudio_structure', 'openstudio.xml'));
     }
+
+    /**
+     * Code the transformations to perform in the activity in
+     * order to get transportable (encoded) links.
+     * @param string $content
+     * @return string
+     */
+    static public function encode_content_links($content) {
+        // There are no links in our exported data so we're not encoding anything.
+        return $content;
+    }
 }

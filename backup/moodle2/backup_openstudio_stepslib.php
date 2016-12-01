@@ -51,19 +51,19 @@ class backup_openstudio_activity_structure_step extends backup_activity_structur
                 'themefeatures', 'themehomedefault', 'themehelplink', 'themehelpname',
                 'locking', 'pinboardsetlimit', 'tutorroles'));
 
-        $level1 = new backup_nested_element('openstudiostudio_level1', array('id'),
-            array('openstudiostudioid', 'name', 'required', 'status', 'sortorder'));
+        $level1 = new backup_nested_element('openstudio_level1', array('id'),
+            array('openstudioid', 'name', 'required', 'status', 'sortorder'));
 
-        $level2 = new backup_nested_element('openstudiostudio_level2', array('id'),
+        $level2 = new backup_nested_element('openstudio_level2', array('id'),
             array('level1id', 'name', 'required', 'hidelevel', 'status', 'sortorder'));
 
-        $level3 = new backup_nested_element('openstudiostudio_level3', array('id'),
+        $level3 = new backup_nested_element('openstudio_level3', array('id'),
             array('level2id', 'name', 'required', 'contenttype', 'status', 'sortorder', 'locktype', 'locktime', 'unlocktime'));
 
-        $settemplate = new backup_nested_element('openstudiostudio_folder_templates', array('id'),
+        $settemplate = new backup_nested_element('openstudio_folder_templates', array('id'),
             array('levelid', 'levelcontainer', 'guidance', 'additionalcontents', 'status'));
 
-        $contenttemplate = new backup_nested_element('openstudiostudio_content_templates', array('id'),
+        $contenttemplate = new backup_nested_element('openstudio_content_templates', array('id'),
             array('foldertemplateid', 'name', 'guidance', 'permissions', 'contentorder', 'status'));
 
         // Build the tree.
@@ -74,12 +74,12 @@ class backup_openstudio_activity_structure_step extends backup_activity_structur
         $settemplate->add_child($contenttemplate);
 
         // Define sources.
-        $studio->set_source_table('openstudiostudio', array('id' => backup::VAR_ACTIVITYID));
-        $level1->set_source_table('openstudiostudio_level1', array('openstudioid' => backup::VAR_ACTIVITYID));
-        $level2->set_source_table('openstudiostudio_level2', array('level1id' => '../id'));
-        $level3->set_source_table('openstudiostudio_level3', array('level2id' => '../id'));
-        $settemplate->set_source_table('openstudiostudio_folder_templates', array('levelid' => '../id'));
-        $contenttemplate->set_source_table('openstudiostudio_content_templates', array('foldertemplateid' => '../id'));
+        $studio->set_source_table('openstudio', array('id' => backup::VAR_ACTIVITYID));
+        $level1->set_source_table('openstudio_level1', array('openstudioid' => backup::VAR_ACTIVITYID));
+        $level2->set_source_table('openstudio_level2', array('level1id' => '../id'));
+        $level3->set_source_table('openstudio_level3', array('level2id' => '../id'));
+        $settemplate->set_source_table('openstudio_folder_templates', array('levelid' => '../id'));
+        $contenttemplate->set_source_table('openstudio_content_templates', array('foldertemplateid' => '../id'));
 
         // Define id annotations.
         // We're not linking to any external content so don't need these.

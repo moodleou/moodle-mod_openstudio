@@ -22,10 +22,6 @@
 
 function xmldb_openstudio_upgrade($oldversion=0) {
 
-    // global $CFG, $THEME, $DB;
-
-    // $dbman = $DB->get_manager(); // Loads ddl manager and xmldb classes.
-
     $result = true;
 
     if ($oldversion < 2016102501) {

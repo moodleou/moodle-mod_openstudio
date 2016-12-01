@@ -55,7 +55,7 @@ EOF;
     }
     $content = '';
 
-    if ($slot->contenttype > STUDIO_CONTENTTYPE_TEXT && $slot->contenttype < STUDIO_CONTENTTYPE_COLLECTION) {
+    if ($slot->contenttype > content::TYPE_TEXT && $slot->contenttype < content::TYPE_FOLDER) {
         // If the slot contains actual content (rather than just text or other slots)
         if (empty($slot->fileid)) {
             $content = $slot->content;

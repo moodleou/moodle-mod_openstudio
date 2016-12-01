@@ -38,7 +38,7 @@ $string['openstudio'] = 'Open Studio';
 $string['pluginadministration'] = 'Open Studio administration';
 $string['pluginname'] = 'Open Studio';
 
-$string['openopenstudio:addinstance'] = 'Add a new Studio';
+$string['openstudio:addinstance'] = 'Add a new Studio';
 $string['openstudio:managelevels'] = 'Manage levels';
 $string['openstudio:deletelevels'] = 'Delete levels';
 $string['openstudio:addcontent'] = 'Add content';
@@ -67,9 +67,6 @@ $string['openstudio:canlockothers'] = 'Can lock others';
 $string['event:contentlocked'] = 'Content locked';
 $string['event:contentunlocked'] = 'Content unlocked';
 
-$string['event:collectioncreated'] = 'Collection created';
-$string['event:collectionedited'] = 'Collection edited';
-$string['event:collectionitemviewed'] = 'View collection item';
 $string['event:foldercreated'] = 'Folder created';
 $string['event:foldercontentcreated'] = 'Folder content created';
 $string['event:folderedited'] = 'Folder edited';
@@ -195,14 +192,10 @@ $string['settingsenablecontentusesembedcode'] = 'Content allows embed code';
 $string['settingsenablecontentusesembedcodedescription'] = 'Content allows embed code';
 $string['settingsenablecontentallownotebooks'] = 'Content allows notebook files';
 $string['settingsenablecontentallownotebooksdescription'] = 'Content allows upload of .nbk archives containing ipython notebooks';
-$string['settingsenablecollections'] = 'Enable Collection';
 $string['settingsenablefolders'] = 'Enable Folders';
 $string['settingsenablefoldersanycontent'] = 'Add any contents to folders';
 $string['settingsenablefoldersanycontentdescription'] = 'Allow users to add other users\' contents to their folders';
 $string['settingspinboardfolderscontentlimit'] = 'Pinboard Folders content limit';
-$string['settingsdisablefolderscollections'] = 'Disable';
-$string['settingsenablefolderscollections'] = 'Enable Folders/Collections';
-$string['settingsenablecollectionsdescription'] = 'Allow creating collections';
 $string['settingsenablerss'] = 'Enable RSS links';
 $string['settingsenablerssdescription'] = 'Enable RSS links';
 $string['settingsenablesubscription'] = 'Enable Email subscriptions';
@@ -303,7 +296,6 @@ $string['filtertypesdocuments'] = 'Documents';
 $string['filtertypespresentation'] = 'Presentation';
 $string['filtertypesspreadsheet'] = 'Spreadsheet';
 $string['filtertypesweblink'] = 'Web link';
-$string['filtertypescollection'] = 'Collection';
 $string['filtertypesfolder'] = 'Folder';
 $string['filterflagallcontents'] = 'All flags';
 $string['filtertags'] = 'Tags';
@@ -333,7 +325,6 @@ $string['contenttypelabeldocument'] = 'Document {$a->name}';
 $string['contenttypelabelpresentation'] = 'Presentation {$a->name}';
 $string['contenttypelabelspreadsheet'] = 'Spreadsheet {$a->name}';
 $string['contenttypelabelweb'] = 'Web link {$a->name}';
-$string['contenttypelabelcollection'] = 'Collection {$a->name}';
 $string['contenttypelabelfolder'] = 'Folder {$a->name}';
 $string['contenttypelabeltext'] = 'Rich text {$a->name}';
 $string['contenttypelabelnone'] = '';
@@ -384,7 +375,6 @@ $string['profilebaruserspinboard'] = '{$a->name}\'s pinboard';
 $string['profilebarlastactivedate'] = 'Last active date:';
 
 $string['contenttitlepinboard'] = 'Pinboard content';
-$string['collectiontitlepinboard'] = 'Pinboard collection';
 $string['contentmetadatatags'] = 'Tags:';
 $string['contentmetadataupdated'] = 'Updated: {$a->datetime}';
 $string['contentmetadataupdatedaccessible'] = '<span class="accesshide">Updated:</span> {$a->datetime}';
@@ -396,7 +386,7 @@ $string['contenteditformheader'] = 'Content edit form';
 
 $string['contentformheaderattachment'] = 'Block title / Activity title';
 $string['contentformname'] = 'Title';
-$string['contentformattachments'] = 'Browse file to upload';
+$string['contentformattachments'] = 'Upload content';
 $string['attachments'] = 'File upload';
 $string['attachments_help'] = "If your browser supports drag and drop, the upload box says 'You can drag and drop files here to upload them'. If you don't see this message, use the 'add' icon to attach a file instead. Delete any existing files before uploading a new one.";
 $string['contentformembedcode'] = 'Embed code';
@@ -419,7 +409,11 @@ Supported websites are
 <a href="http://www.slideshare.net/">Slideshare</a>.';
 $string['contentformweblink'] = 'Web link';
 $string['contentformweblinkerror'] = 'Web link must be a valid web URL.';
+$string['weblink'] = 'Web link';
+$string['weblink_help'] = 'Web link help';
 $string['contentformurltitle'] = 'Link title';
+$string['urltitle'] = 'Link title';
+$string['urltitle_help'] = 'Link title help';
 $string['contentformpermissions'] = 'Sharing permissions';
 $string['contentformvisibilityprivate'] = 'Only me';
 $string['contentformvisibilitytutor'] = 'My tutor';
@@ -428,6 +422,7 @@ $string['contentformvisibilitymodule'] = 'My module';
 $string['contentformmetadataexpand'] = 'Expand';
 $string['contentformmetadatacollapse'] = 'Collapse';
 
+$string['contentformcreatefolderbutton'] = 'Create folder';
 $string['contentformvisibility'] = 'Who can view this content';
 $string['contentformheadermetadata'] = 'Optional information';
 $string['contentformdescription'] = 'Description';
@@ -436,7 +431,7 @@ $string['contentformownershipmyownwork'] = 'All my own work';
 $string['contentformownershipfoundonline'] = 'Found online';
 $string['contentformownershipfoundelsewhere'] = 'Found elsewhere';
 $string['contentformownership'] = 'Ownership';
-$string['contentformownershipdetail'] = 'Found elsewhere:<br />additional information<br />(e.g. web link or reference)';
+$string['contentformownershipdetail'] = 'Found elsewhere: additional information<br />(e.g. web link or reference)';
 $string['contentformsubmitbutton'] = 'Save changes';
 
 $string['contentformshowgps'] = 'Show GPS Data';
@@ -449,8 +444,7 @@ Upload a file from your computer.';
 $string['contentformhelp2'] = 'Copy and paste a <em>website link</em> from the internet, e.g. http://www.youtube.com/';
 $string['contentformhelp3'] = 'Fill in as much information as you want, or as little as you think your readers will need. The information will be used to help people search and locate your work.';
 $string['contentformhelp4'] = 'Copy and paste the <em>embed code</em> provided by some third-party websites.';
-
-$string['contentformsaveandcollect'] = 'Enter collecting mode';
+$string['contentaddnew'] = 'Add new content';
 
 $string['contentactionpermlink'] = 'Permanent link to this page';
 $string['contentactioncopy'] = 'Copy';
@@ -494,7 +488,6 @@ $string['userfollowwithname'] = 'Follow {$a->name}';
 $string['userunfollowwithname'] = 'Unfollow {$a->name}';
 
 $string['contentownercontent'] = 'Owner of this content';
-$string['contentownercollection'] = 'Owner of this collection';
 $string['contentownerfolder'] = 'Owner of this folder';
 
 $string['contentclicktofollow'] = 'Click to track content';
@@ -581,9 +574,6 @@ $string['contentactionvisibilityprivate'] = 'Changed visibility to private.';
 $string['contentactionvisibilitymodule'] = 'Changed visibility to module.';
 $string['contentactionvisibilitygroup'] = 'Changed visiility to group.';
 $string['contentactioneditname'] = 'Edit';
-$string['contentactioncollectname'] = 'Collect';
-$string['contentactioncollectnamestart'] = 'Start collecting';
-$string['contentactioncollectnameexit'] = 'Stop collecting';
 $string['contentactionfoldermodifyname'] = 'Folder Activity';
 $string['contentactionfoldermodifydesc'] = 'Activity on contents within this folder';
 
@@ -858,7 +848,6 @@ $string['selectactivitybutton'] = 'Select Activity';
 
 $string['activecontentsheader'] = 'Active Contents';
 $string['activecontentsfoldersheader'] = 'Active Contents/Folders';
-$string['activecontentscollectionsheader'] = 'Active Contents/Collections';
 $string['activecontentsheader_help'] = 'Active usable / used contents in this studio for the chosen block and activity.';
 $string['softdeletedcontentsheader'] = 'Deleted Contents';
 $string['softdeletedcontentsheader_help'] = 'The following contents with user content have been deleted. These can be undeleted.';
@@ -871,7 +860,6 @@ $string['savechanges'] = 'Save Changes';
 $string['allgroups'] = 'All Groups';
 
 $string['requiredfortma'] = 'Required (TMA)';
-$string['typeiscollection'] = 'Is collection?';
 $string['typeisfolder'] = 'Is folder?';
 $string['levelhide'] = 'Hide level';
 $string['viewcontent'] = 'View Content';
@@ -952,23 +940,6 @@ $string['dateformattoday'] = 'Today';
 $string['dateformatyesterday'] = 'Yesterday';
 $string['dateformatdaysago'] = '{$a->daysago} days ago';
 
-$string['collectionbarhelpmsg1'] = '<strong>View any content below</strong> and choose to add to or remove it from this collection';
-$string['collectionbarhelpmsg2'] = "To add items to the collection, <strong>find and view your own or other people's work and choose Add to collection</strong> ";
-$string['collectionbarremoveitem'] = 'Remove from collection';
-$string['collectionbaradditem'] = 'Add to collection';
-$string['collectionbaredit'] = 'Edit';
-$string['collectionbarreorder'] = 'Re-order';
-$string['collectionbarviewcollection'] = 'View collection';
-$string['collectionbarsaveandexit'] = 'Save and exit';
-
-$string['contentcollectionmsg1'] = 'This item is in these collections:';
-$string['contentcollectionmsg2'] = 'This item is in my collections:';
-$string['contentcollectionmsg3'] = 'The content has recently been modified and may differ from when it was added to the collection.';
-$string['contentcollectionmsg4'] = '{$a->name}: table of content';
-$string['contentcollectionmsg5'] = 'content content ';
-$string['contentcollectionmsg6'] = 'Link to original content ';
-$string['contentcollectionmsg7'] = ' was originally part of the studio work created by the following user:';
-
 $string['streampagingtotal'] = 'Total: {$a->total}';
 $string['streampagingpeoplepaging'] = 'People per page';
 $string['streampagingcontentpaging'] = 'Items per page';
@@ -976,7 +947,6 @@ $string['streampagingfirstpage'] = '<< <span class="accesshide">Back to page 1</
 $string['streampagingrefresh'] = '&#160;Refresh';
 
 $string['pinboardnewcontent'] = 'New content';
-$string['pinboardnewcollection'] = 'New collection';
 $string['pinboardnewfolder'] = 'New folder';
 
 $string['pinboardcontentsremaining'] = 'You have {$a->available} remaining pinboard contents.';

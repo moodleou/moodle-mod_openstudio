@@ -214,7 +214,7 @@ class mod_openstudio_mod_form extends moodleform_mod {
 
         $mform->addElement('text', 'pinboard',
             get_string('settingsenablepinboard', 'openstudio'), array('size' => defaults::MAXPINBOARDCONTENTSLLENGTH));
-        $mform->setType('pinboard', PARAM_INTEGER);
+        $mform->setType('pinboard', PARAM_INT);
         $mform->addRule('pinboard',
             get_string('err_numeric', 'form'), 'numeric', '', 'client');
         $mform->addRule('pinboard',
@@ -225,7 +225,7 @@ class mod_openstudio_mod_form extends moodleform_mod {
 
         $mform->addElement('text', 'versioning',
             get_string('settingsenableversioning', 'openstudio'), array('size' => defaults::MAXCONTENTVERSIONSLENGTH));
-        $mform->setType('versioning', PARAM_INTEGER);
+        $mform->setType('versioning', PARAM_INT);
         $mform->addRule('versioning',
             get_string('err_numeric', 'form'), 'numeric', '', 'client');
         $mform->addRule('versioning',
@@ -315,7 +315,7 @@ class mod_openstudio_mod_form extends moodleform_mod {
         $mform->addElement('text', 'pinboardfolderlimit',
             get_string('settingspinboardfolderscontentlimit', 'openstudio'),
             array('size' => defaults::MAXPINBOARDFOLDERSCONTENTSLENGTH));
-        $mform->setType('pinboardfolderlimit', PARAM_INTEGER);
+        $mform->setType('pinboardfolderlimit', PARAM_INT);
         $mform->addRule('pinboardfolderlimit',
             get_string('err_numeric', 'form'), 'numeric', '', 'client');
         $mform->addRule('pinboardfolderlimit',
@@ -336,18 +336,6 @@ class mod_openstudio_mod_form extends moodleform_mod {
 
         $mform->addElement('header', 'customuploadsettings',
             get_string('settingscustomuploadsettings', 'openstudio'));
-
-        $filetypesarray = array(
-            'images' => get_string('settingscustomuploadsettingsfiletypeimages', 'openstudio'),
-            'videos' => get_string('settingscustomuploadsettingsfiletypevideos', 'openstudio'),
-            'audio' => get_string('settingscustomuploadsettingsfiletypeaudio', 'openstudio'),
-            'documents' => get_string('settingscustomuploadsettingsfiletypedocuments', 'openstudio'),
-            'presentations' => get_string('settingscustomuploadsettingsfiletypepresentations', 'openstudio'),
-            'spreadsheets' => get_string('settingscustomuploadsettingsfiletypespreadsheets', 'openstudio'));
-        $mformselect = $mform->addElement('select', 'allowedfiletypes',
-            get_string('settingscustomuploadsettingsfiletypes', 'openstudio'),
-            $filetypesarray);
-        $mform->getElement('allowedfiletypes')->setMultiple(true);
 
         // Get maxbytes from the module configuration if available,
         // otherwise from the course/site configuration if available, otherise set it to default.
@@ -445,19 +433,6 @@ class mod_openstudio_mod_form extends moodleform_mod {
                     flags::COMMENT_LIKE);
         }
 
-        if (isset($defaultvalues['filetypes'])) {
-            $defaultvalues['allowedfiletypes'] = explode(",", $defaultvalues['filetypes']);
-        } else {
-            $filetypesarray = array(
-                'images' => get_string('settingscustomuploadsettingsfiletypeimages', 'openstudio'),
-                'videos' => get_string('settingscustomuploadsettingsfiletypevideos', 'openstudio'),
-                'audio' => get_string('settingscustomuploadsettingsfiletypeaudio', 'openstudio'),
-                'documents' => get_string('settingscustomuploadsettingsfiletypedocuments', 'openstudio'),
-                'presentations' => get_string('settingscustomuploadsettingsfiletypepresentations', 'openstudio'),
-                'spreadsheets' => get_string('settingscustomuploadsettingsfiletypespreadsheets', 'openstudio'));
-            $defaultvalues['allowedfiletypes'] = array_keys($filetypesarray);
-        }
-
         if ($defaultvalues['id'] > 0) {
             $themefeatures = $DB->get_field('openstudio', 'themefeatures', array('id' => $defaultvalues['id']));
             $defaultvalues['enablemodule'] = $themefeatures & feature::MODULE ? 1 : 0;
@@ -465,10 +440,7 @@ class mod_openstudio_mod_form extends moodleform_mod {
             $defaultvalues['enablecontentcommenthtml'] = 1;
             $defaultvalues['enablecontentcommentaudio'] = $themefeatures & feature::CONTENTCOMMENTUSESAUDIO ? 1 : 0;
             $defaultvalues['enablecontentusesfileupload'] = $themefeatures & feature::CONTENTUSESFILEUPLOAD ? 1 : 0;
-            $defaultvalues['enablefolders'] = $themefeatures & feature::ENABLECOLLECTIONS ? 2 : 0;
-            if ($defaultvalues['enablefolders'] == 0) {
-                $defaultvalues['enablefolders'] = $themefeatures & feature::ENABLEFOLDERS ? 1 : 0;
-            }
+            $defaultvalues['enablefolders'] = $themefeatures & feature::ENABLEFOLDERS ? 1 : 0;
             $defaultvalues['enablefoldersanycontent'] = $themefeatures & feature::ENABLEFOLDERSANYCONTENT ? 1 : 0;
             $defaultvalues['enablerss'] = $themefeatures & feature::ENABLERSS ? 1 : 0;
             $defaultvalues['enablesubscription'] = $themefeatures & feature::ENABLESUBSCRIPTION ? 1 : 0;

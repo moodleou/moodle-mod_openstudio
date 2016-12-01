@@ -44,46 +44,18 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      * @param string $sitename Site name to display.
      * @param string $searchtext Search text to display.
      * @param int $viewmode View mode: module, group, studio, pinboard or workspace.
-     * @param array $rssdata data to generate RSS and Atom button.
      * @return string The rendered HTM fragment.
      */
     public function siteheader(
             $coursedata, $permissions, $theme, $sitename = 'Design', $searchtext = '',
-            $viewmode = content::VISIBILITY_MODULE, $rssdata) {
+            $viewmode = content::VISIBILITY_MODULE) {
         global $OUTPUT;
 
-        $cminstance = $coursedata->cminstance;
         $cm = $coursedata->cm;
         $cmid = $cm->id;
 
         $data = new stdClass();
         $data->sitename = $sitename;
-
-        // Check if Rss enabled.
-        if ($permissions->feature_enablerss) {
-            $atomfeedurl = new moodle_url('/mod/openstudio/feed.php',
-                array('id' => $cmid,
-                        'studioid' => $cminstance->id,
-                        'userid' => $rssdata['viewuser']->id,
-                        'ownerid' => $rssdata['slotowner']->id,
-                        'type' => $rssdata['rssfeedtype'],
-                        'format' => 'atom',
-                        'key' => $rssdata['rssfeedkey']
-                ));
-
-            $rssfeedurl = new moodle_url('/mod/openstudio/feed.php',
-                array('id' => $cmid,
-                        'studioid' => $cminstance->id,
-                        'userid' => $rssdata['viewuser']->id,
-                        'ownerid' => $rssdata['slotowner']->id,
-                        'type' => $rssdata['rssfeedtype'],
-                        'format' => 'rss',
-                        'key' => $rssdata['rssfeedkey']
-                ));
-
-            $data->atomfeedurl = $atomfeedurl;
-            $data->rssfeedurl = $rssfeedurl;
-        }
 
         // Check if enable Email subscriptions.
         $data->enablesubscription = $permissions->feature_enablesubscription;
@@ -408,7 +380,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 $placeholdertext = $theme->themestudioname;
                 break;
 
-            case content::VISIBILITY_PRIVATEPINBOARD:
+            case content::VISIBILITY_PRIVATE_PINBOARD:
                 $placeholdertext = $theme->themepinboardname;
                 break;
         }
@@ -419,5 +391,25 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $data->iconsearch = $OUTPUT->pix_url('i/search');
 
         return $this->render_from_template('mod_openstudio/search_form', $data);
+    }
+
+    /**
+     * This function renders the HTML fragment for the content edit form.
+     *
+     * @param string $contenteditform The content edit form fragment.
+     * @param object $data The content data.
+     * @return string The rendered HTM fragment.
+     */
+    public function content_edit($contenteditform, $data) {
+
+        if (!isset($data) || empty($data)) {
+            throw new coding_exception('Wrong data format');
+        }
+
+        $data = (object)$data;
+
+        $data->editform = $contenteditform;
+
+        return $this->render_from_template('mod_openstudio/content_edit', $data);
     }
 }

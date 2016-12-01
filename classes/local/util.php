@@ -230,21 +230,21 @@ class util {
         $permissions->feature_module = self::has_feature($cminstance, util\feature::MODULE);
 
         // Detemine studio features that have been turned on.
-        $permissions->feature_slotcommentusesaudio = self::has_feature($cminstance, util\feature::CONTENTCOMMENTUSESAUDIO);
-        $permissions->feature_slotusesfileupload = self::has_feature($cminstance, util\feature::CONTENTUSESFILEUPLOAD);
-        $permissions->feature_enablesets = self::has_feature($cminstance, util\feature::ENABLEFOLDERS);
-        $permissions->feature_enablesetsanyslot = self::has_feature($cminstance, util\feature::ENABLEFOLDERSANYCONTENT);
+        $permissions->feature_contentcommentusesaudio = self::has_feature($cminstance, util\feature::CONTENTCOMMENTUSESAUDIO);
+        $permissions->feature_contentusesfileupload = self::has_feature($cminstance, util\feature::CONTENTUSESFILEUPLOAD);
+        $permissions->feature_enablefolders = self::has_feature($cminstance, util\feature::ENABLEFOLDERS);
+        $permissions->feature_enablefoldersanycontent = self::has_feature($cminstance, util\feature::ENABLEFOLDERSANYCONTENT);
         $permissions->feature_enablerss = self::has_feature($cminstance, util\feature::ENABLERSS);
         $permissions->feature_enablesubscription = self::has_feature($cminstance, util\feature::ENABLESUBSCRIPTION);
         $permissions->feature_enableexportimport = self::has_feature($cminstance, util\feature::ENABLEEXPORTIMPORT);
-        $permissions->feature_slotusesweblink = self::has_feature($cminstance, util\feature::CONTENTUSESWEBLINK);
-        $permissions->feature_slotusesembedcode = self::has_feature($cminstance, util\feature::CONTENTUSESEMBEDCODE);
-        $permissions->feature_slotallownotebooks = self::has_feature($cminstance, util\feature::CONTENTALLOWNOTEBOOKS);
-        $permissions->feature_slotreciprocalaccess = self::has_feature($cminstance, util\feature::CONTENTRECIPROCALACCESS);
+        $permissions->feature_contentusesweblink = self::has_feature($cminstance, util\feature::CONTENTUSESWEBLINK);
+        $permissions->feature_contentusesembedcode = self::has_feature($cminstance, util\feature::CONTENTUSESEMBEDCODE);
+        $permissions->feature_contentallownotebooks = self::has_feature($cminstance, util\feature::CONTENTALLOWNOTEBOOKS);
+        $permissions->feature_contentreciprocalaccess = self::has_feature($cminstance, util\feature::CONTENTRECIPROCALACCESS);
         $permissions->feature_participationsmiley = self::has_feature($cminstance, util\feature::PARTICIPATIONSMILEY);
         $permissions->feature_enablelock = self::has_feature($cminstance, util\feature::ENABLELOCK);
         if ($permissions->managecontent) {
-            $permissions->feature_slotreciprocalaccess = false;
+            $permissions->feature_contentreciprocalaccess = false;
         }
         $permissions->allow_visibilty_modes = array();
         if ($permissions->feature_module) {
@@ -470,18 +470,18 @@ class util {
             }
         }
 
-        // Given the slot does NOT belong to the user, then need viewothers capability.
+        // Given the content does NOT belong to the user, then need viewothers capability.
         if (!$permissions->viewothers) {
             return false;
         }
 
-        // If reciprocal access restriction is on, then we only show studio work slots
-        // belonging to other users if the current user has created the same slot themselves.
+        // If reciprocal access restriction is on, then we only show studio work contents
+        // belonging to other users if the current user has created the same content themselves.
         if (self::has_feature($studio, util\feature::CONTENTRECIPROCALACCESS)) {
             if (($content->levelcontainer > 0) && ($content->levelid > 0)) {
-                $slotreciprocalaccessqsl = <<<EOF
+                $contentreciprocalaccessqsl = <<<EOF
 SELECT DISTINCT 1
-  FROM {openstudio_slots} s
+  FROM {openstudio_contents} s
  WHERE s.openstudioid = ?
    AND s.levelcontainer = ?
    AND s.levelid = ?

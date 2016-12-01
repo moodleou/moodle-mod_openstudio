@@ -82,6 +82,13 @@ class content {
     const VISIBILITY_INFOLDERONLY = 6;
     const VISIBILITY_TUTOR = 7;
 
+    const UPDATEMODE_UPDATED = 1;
+    const UPDATEMODE_CREATED = 2;
+    const UPDATEMODE_BEINGEDIT = 3;
+    const UPDATEMODE_NEWCONTENT = 4;
+    const UPDATEMODE_FOLDER = 5;
+
+
     /**
      * Gets the total number of content items allowed on the user's studio work, and the number they have created.
      *

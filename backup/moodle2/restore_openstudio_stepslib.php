@@ -51,7 +51,8 @@ class restore_openstudio_activity_structure_step extends restore_activity_struct
         $paths[] = new restore_path_element('openstudio_folder_templates',
             '/activity/openstudio/openstudio_level1/openstudio_level2/openstudio_level3/openstudio_folder_templates');
         $paths[] = new restore_path_element('openstudio_content_templates',
-            '/activity/openstudio/openstudio_level1/openstudio_level2/openstudio_level3/openstudio_folder_templates/openstudio_content_templates');
+            '/activity/openstudio/openstudio_level1/openstudio_level2/openstudio_level3/'
+            .'openstudio_folder_templates/openstudio_content_templates');
 
         // Return the paths wrapped into standard activity structure.
         return $this->prepare_activity_structure($paths);
@@ -75,6 +76,11 @@ class restore_openstudio_activity_structure_step extends restore_activity_struct
         $this->openstudioid = $newitemid;
     }
 
+    /**
+     * Process the given restore path element data for level1
+     *
+     * @param array $data parsed element data
+     */
     protected function process_openstudio_level1($data) {
         global $DB;
 
@@ -85,6 +91,11 @@ class restore_openstudio_activity_structure_step extends restore_activity_struct
         $this->set_mapping('openstudio_level1', $oldid, $newitemid);
     }
 
+    /**
+     * Process the given restore path element data for level2
+     *
+     * @param array $data parsed element data
+     */
     protected function process_openstudio_level2($data) {
         global $DB;
 
@@ -95,6 +106,11 @@ class restore_openstudio_activity_structure_step extends restore_activity_struct
         $this->set_mapping('openstudio_level2', $oldid, $newitemid);
     }
 
+    /**
+     * Process the given restore path element data for level3
+     *
+     * @param array $data parsed element data
+     */
     protected function process_openstudio_level3($data) {
         global $DB;
 
@@ -105,6 +121,11 @@ class restore_openstudio_activity_structure_step extends restore_activity_struct
         $this->set_mapping('openstudio_level3', $oldid, $newitemid);
     }
 
+    /**
+     * Process the given restore path element data for folder_templates
+     *
+     * @param array $data parsed element data
+     */
     protected function process_openstudio_folder_templates($data) {
         global $DB;
 
@@ -115,6 +136,11 @@ class restore_openstudio_activity_structure_step extends restore_activity_struct
         $this->set_mapping('openstudio_folder_templates', $oldid, $newitemid);
     }
 
+    /**
+     * Process the given restore path element data for content_templates
+     *
+     * @param array $data parsed element data
+     */
     protected function process_openstudio_content_templates($data) {
         global $DB;
 

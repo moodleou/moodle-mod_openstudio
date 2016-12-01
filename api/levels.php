@@ -1198,7 +1198,7 @@ function studio_api_levels_get_coursemodule($level3id) {
     // Get course module id from $contentid, for event.
     $contentleveltwodata = $DB->get_record('openstudio_level2', array('id' => $level3id));
     $contentlevelonedata = $DB->get_record('openstudio_level1', array('id' => $contentleveltwodata->level1id));
-    $cm = get_coursemodule_from_instance('openstudio', $contentlevelonedata->studioid);
+    $cm = get_coursemodule_from_instance('openstudio', $contentlevelonedata->openstudioid);
 
     return $cm;
 }
