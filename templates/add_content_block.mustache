@@ -15,9 +15,9 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template mod_openstudio/actions
+    @template mod_openstudio/add_content_block
 
-    Actions template of the OpenStudio UI.
+    Add content block template of the OpenStudio UI.
 
     Classes required for JS:
     * none
@@ -27,17 +27,15 @@
 
     Example context (json):
     {
-        "placeholdertext" : "My Module"
+        "contentediturl": "http://exmaple/mod/openstudio/contentedit.php?id=4&lid=0&sid=0&type=0&sstsid=0"
     }
 
 }}
-<div class="openstudio-buttons-settings">
-    <div class="openstudio-subscribe-button">
-        <button type="submit" class="btn" name="subscribebutton">
-            {{# str }} subscribetothisstudio, mod_openstudio {{/ str }} {{placeholdertext}}
-        </button>
+<div class="openstudio-add-new-container">
+    <div class="openstudio-add-new">
+        <a href="{{{ contentediturl }}}" class="openstudio-add-title">
+            {{# str }} addnewcontent, mod_openstudio {{/ str }}
+        </a>
     </div>
-    <div class="openstudio-add-dashboard-button">
-        <button type="submit" class="btn" name="rssbutton">{{# str }} addtodashboardbutton, mod_openstudio {{/ str }}</button>
-    </div>
+    <a href="{{{ contentediturl }}}"><div class="openstudio-upload-container"></div></a>
 </div>

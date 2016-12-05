@@ -139,6 +139,9 @@ if ($vuid != $USER->id) {
     $strpagetitle .= ': ' . get_string('profileswork', 'openstudio', array('name' => $slotowner->firstname));;
 }
 
+// Get stream of contents.
+$contentdata = (object) array('contents' => array(), 'total' => 0);
+
 // Render page header and crumb trail.
 util::page_setup($PAGE, $strpagetitle, $strpageheading, $strpageurl, $course, $cm);
 
@@ -152,6 +155,8 @@ $html = $renderer->siteheader(
 echo $OUTPUT->header(); // Header.
 
 echo $html;
+
+echo $renderer->body($cm->id, $theme, $vid, $contentdata); // Body.
 
 // Finish the page.
 echo $OUTPUT->footer();

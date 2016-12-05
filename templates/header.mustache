@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template openstudio/header
+    @template mod_openstudio/header
 
     Header panel of the OpenStudio UI.
 
@@ -27,24 +27,60 @@
 
     Example context (json):
     {
-        "name" : "Shared Content",
-        "url" : "https://example.com/mod/openstudio/view.php?id=4",
-        "pix" : moodle_url Object,
-        "class" : "shared-content",
-        "hassubnavigation" : "true",
-        "subnavigation" : {
-            "name" : "My Module",
-            "url" : "https://example.com/mod/openstudio/view.php?id=4&vid=3&fblock=0&ftype=0&fflag=0&ftags&fsort=1&osort=0",
-         }
+        "sitename": "Open Studio",
+        "placeholdertext" : "My Module",
+        "notificationnumber" : 10,
+        "notificationicon" : "../../../theme/image.php?theme=osep&amp;component=openstudio&amp;image=notifications_rgb_32px",
+        "navigation": [
+            {
+                "name" : "Shared Content",
+                "url" : "https://example.com/mod/openstudio/view.php?id=4",
+                "class" : "shared-content",
+                "pix" : "../../../theme/image.php?theme=osep&amp;component=openstudio&amp;image=shared_content_rgb_32px",
+                "hassubnavigation" : "true",
+                "subnavigation" : {
+                   "name" : "My Module",
+                    "url" : "https://example.com/mod/openstudio/view.php?id=4&vid=3&fblock=0&ftype=0&fflag=0&ftags&fsort=1&osort=0"
+                 }
+            },
+            {
+                "name" : "People",
+                "url" : "https://example.com/mod/openstudio/view.php?id=4",
+                "class" : "people",
+                "pix" : "../../../theme/image.php?theme=osep&amp;component=openstudio&amp;image=people_rgb_32px",
+                "hassubnavigation" : "false"
+            },
+            {
+                "name" : "My Content",
+                "url" : "https://example.com/mod/openstudio/view.php?id=4",
+                "class" : "shared-content",
+                "pix" : "../../../theme/image.php?theme=osep&amp;component=openstudio&amp;image=activity_rgb_32px",
+                "hassubnavigation" : "true",
+                "subnavigation" : {
+                   "name" : "My Activities",
+                    "url" : "https://example.com/mod/openstudio/view.php?id=4&vid=3&fblock=0&ftype=0&fflag=0&ftags&fsort=1&osort=0"
+                 }
+            },
+            {
+                "name" : "Administration",
+                "url" : "https://example.com/mod/openstudio/view.php?id=4",
+                "class" : "shared-content",
+                "pix" : "../../../theme/image.php?theme=osep&amp;component=openstudio&amp;image=administration_rgb_32px",
+                "hassubnavigation" : "true",
+                "subnavigation" : {
+                   "name" : "Edit settings",
+                    "url" : "https://example.com/mod/openstudio/view.php?id=4&vid=3&fblock=0&ftype=0&fflag=0&ftags&fsort=1&osort=0"
+                 }
+            }
+        ]
     }
-
 }}
 <div class="openstudio-header">
     <div class="row-fluid">
-        <div class="span4">
+        <div class="span8">
             {{> mod_openstudio/logo }}
         </div>
-        <div class="span8">
+        <div class="span4">
             {{> mod_openstudio/actions }}
         </div>
     </div>

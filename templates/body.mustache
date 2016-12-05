@@ -1,0 +1,124 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_openstudio/body
+
+    Body template of the OpenStudio UI.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Example context (json):
+    {
+        "placeholdertext" : "My module",
+        "contents": [
+            {
+                "firstname" : "Admin",
+                "lastname" : "User",
+                "name" : "Niagara Falls",
+                "contentlink" : "http://example.com/mod/openstudio/content.php?id=3&sid=9",
+                "contentthumbnailurl" : "../../../mod/openstudio/pix/icon.svg",
+                "timemodified" : "5/10/16, 13:27",
+                "userpictureurl" : "../../../mod/openstudio/pix/people_rgb_32px.svg",
+                "viewuserworkurl" : "http://example.com/mod/openstudio/view.php?id=3&sid=9",
+                "commentsicon" : "../../../mod/openstudio/pix/inspiration_rgb_32px.svg",
+                "inspirationicon" : "../../../mod/openstudio/pix/inspiration_rgb_32px.svg",
+                "participationicon" : "../../../mod/openstudio/pix/participation_rgb_32px.svg",
+                "favouriteicon" : "../../../mod/openstudio/pix/favourite_rgb_32px.svg",
+                "socialdata" : {
+                    "commentsnew" : 1,
+                    "inspirednew" : 2,
+                    "mademelaughnew" : 3,
+                    "favouritenew" : 0
+                 }
+            },
+            {
+                "firstname" : "Admin",
+                "lastname" : "User",
+                "name" : "Taj Mahal",
+                "contentlink" : "http://example.com/mod/openstudio/content.php?id=3&sid=9",
+                "contentthumbnailurl" : "../../../mod/openstudio/pix/icon.svg",
+                "timemodified" : "5/10/16, 13:27",
+                "userpictureurl" : "../../../mod/openstudio/pix/people_rgb_32px.svg",
+                "viewuserworkurl" : "http://example.com/mod/openstudio/view.php?id=3&sid=9",
+                "commentsicon" : "../../../mod/openstudio/pix/inspiration_rgb_32px.svg",
+                "inspirationicon" : "../../../mod/openstudio/pix/inspiration_rgb_32px.svg",
+                "participationicon" : "../../../mod/openstudio/pix/participation_rgb_32px.svg",
+                "favouriteicon" : "../../../mod/openstudio/pix/favourite_rgb_32px.svg",
+                "socialdata" : {
+                    "commentsnew" : 1,
+                    "inspirednew" : 2,
+                    "mademelaughnew" : 3,
+                    "favouritenew" : 0
+                 }
+            },
+            {
+                "firstname" : "Admin",
+                "lastname" : "User",
+                "name" : "Open Studio",
+                "contentlink" : "http://example.com/mod/openstudio/content.php?id=3&sid=9",
+                "contentthumbnailurl" : "../../../mod/openstudio/pix/icon.svg",
+                "viewuserworkurl" : "http://example.com/mod/openstudio/view.php?id=3&sid=9",
+                "timemodified" : "5/10/16, 13:27",
+                "userpictureurl" : "../../../mod/openstudio/pix/people_rgb_32px.svg",
+                "commentsicon" : "../../../mod/openstudio/pix/inspiration_rgb_32px.svg",
+                "inspirationicon" : "../../../mod/openstudio/pix/inspiration_rgb_32px.svg",
+                "participationicon" : "../../../mod/openstudio/pix/participation_rgb_32px.svg",
+                "favouriteicon" : "../../../mod/openstudio/pix/favourite_rgb_32px.svg",
+                "socialdata" : {
+                    "commentsnew" : 1,
+                    "inspirednew" : 2,
+                    "mademelaughnew" : 3,
+                    "favouritenew" : 0
+                 }
+            }
+        ]
+    }
+}}
+<div class="openstudio-container">
+    <div class="openstudio-module-title">
+        <h1>{{{ placeholdertext }}}</h1>
+    </div>
+    <div class="openstudio-filter">
+        {{> mod_openstudio/filter }}
+    </div>
+    <div class="openstudio-grid">
+        <div class="openstudio-grid-item openstudio-grid-item-add-new">{{> mod_openstudio/add_content_block }}</div>
+        {{# contents }}
+            <div class="openstudio-grid-item">{{> mod_openstudio/content_block }}</div>
+        {{/ contents }}
+    </div>
+
+</div>
+
+{{#js}}
+    requirejs( [
+    '{{{ globals.config.wwwroot }}}/mod/openstudio/amd/build/isotope.pkgd.min.js'
+    ], function( Isotope ) {
+    var iso = new Isotope( '.openstudio-grid', {
+    layoutMode: 'masonry',
+    itemSelector: '.openstudio-grid-item',
+    masonry: {
+        columnWidth: 243,
+        gutter: 23
+    }
+    });
+    });
+{{/js}}

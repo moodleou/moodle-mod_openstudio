@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template openstudio/navigation
+    @template mod_openstudio/navigation
 
     Navigation template of the OpenStudio UI.
 
@@ -27,15 +27,50 @@
 
     Example context (json):
     {
-        "name" : "Shared Content",
-        "url" : "https://example.com/mod/openstudio/view.php?id=4",
-        "pix" : moodle_url Object,
-        "class" : "shared-content",
-        "hassubnavigation" : "true",
-        "subnavigation" : {
-            "name" : "My Module",
-            "url" : "https://example.com/mod/openstudio/view.php?id=4&vid=3&fblock=0&ftype=0&fflag=0&ftags&fsort=1&osort=0",
-         }
+        "notificationnumber" : 10,
+        "notificationicon" : "../../../theme/image.php?theme=osep&amp;component=openstudio&amp;image=notifications_rgb_32px",
+        "navigation": [
+            {
+                "name" : "Shared Content",
+                "url" : "https://example.com/mod/openstudio/view.php?id=4",
+                "class" : "shared-content",
+                "pix" : "../../../theme/image.php?theme=osep&amp;component=openstudio&amp;image=shared_content_rgb_32px",
+                "hassubnavigation" : "true",
+                "subnavigation" : {
+                   "name" : "My Module",
+                    "url" : "https://example.com/mod/openstudio/view.php?id=4&vid=3&fblock=0&ftype=0&fflag=0&ftags&fsort=1&osort=0"
+                 }
+            },
+            {
+                "name" : "People",
+                "url" : "https://example.com/mod/openstudio/view.php?id=4",
+                "class" : "people",
+                "pix" : "../../../theme/image.php?theme=osep&amp;component=openstudio&amp;image=people_rgb_32px",
+                "hassubnavigation" : "false"
+            },
+            {
+                "name" : "My Content",
+                "url" : "https://example.com/mod/openstudio/view.php?id=4",
+                "class" : "shared-content",
+                "pix" : "../../../theme/image.php?theme=osep&amp;component=openstudio&amp;image=activity_rgb_32px",
+                "hassubnavigation" : "true",
+                "subnavigation" : {
+                   "name" : "My Activities",
+                    "url" : "https://example.com/mod/openstudio/view.php?id=4&vid=3&fblock=0&ftype=0&fflag=0&ftags&fsort=1&osort=0"
+                 }
+            },
+            {
+                "name" : "Administration",
+                "url" : "https://example.com/mod/openstudio/view.php?id=4",
+                "class" : "shared-content",
+                "pix" : "../../../theme/image.php?theme=osep&amp;component=openstudio&amp;image=administration_rgb_32px",
+                "hassubnavigation" : "true",
+                "subnavigation" : {
+                   "name" : "Edit settings",
+                    "url" : "https://example.com/mod/openstudio/view.php?id=4&vid=3&fblock=0&ftype=0&fflag=0&ftags&fsort=1&osort=0"
+                 }
+            }
+        ]
     }
 }}
 
@@ -44,7 +79,9 @@
         <li role="presentation" class="{{#hassubnavigation}}dropdown{{/hassubnavigation}} {{ class }}">
             {{#hassubnavigation}}
                 <a class="dropdown-toggle" data-toggle="dropdown" href="{{ url }}" role="button" aria-haspopup="true" aria-expanded="false">
-                    <span class="openstudio-navigation-img"><img src="{{ pix }}" alt="" class="openstudio-navigation-icon" /></span>
+                    <span class="openstudio-navigation-img">
+                        <img src="{{ pix }}" alt="{{ name }}" class="openstudio-navigation-icon" />
+                    </span>
                     <span class="openstudio-navigation-text">{{ name }}</span>
                     <span class="caret"></span>
                 </a>
@@ -56,7 +93,9 @@
             {{/hassubnavigation}}
             {{^hassubnavigation}}
                 <a href="{{{ url }}}">
-                    <span class="openstudio-navigation-img"><img src="{{ pix }}" alt="" class="openstudio-navigation-icon" /></span>
+                    <span class="openstudio-navigation-img">
+                        <img src="{{ pix }}" alt="{{ name }}" class="openstudio-navigation-icon" />
+                    </span>
                     <span class="openstudio-navigation-text">{{ name }}</span>
                 </a>
             {{/hassubnavigation}}
@@ -64,10 +103,14 @@
     {{/ navigation }}
     {{# notificationnumber }}
     <li>
-            <span id="openstudio_navigation_notification">
-                <span class="openstudio-navigation-img"><img src="{{ notificationicon }}" alt="" class="openstudio-navigation-notification-icon" /></span>
-                <span class="openstudio-navigation-notification-text">{{ notificationnumber }}</span>
+        <span id="openstudio_navigation_notification">
+            <span class="openstudio-navigation-img">
+                <img src="{{ notificationicon }}"
+                     alt="{{# str }} notificationlabel, mod_openstudio {{/ str }}"
+                     class="openstudio-navigation-notification-icon" />
             </span>
+            <span class="openstudio-navigation-notification-text">{{ notificationnumber }}</span>
+        </span>
     </li>
     {{/ notificationnumber }}
 </ul>

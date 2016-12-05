@@ -412,4 +412,49 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         return $this->render_from_template('mod_openstudio/content_edit', $data);
     }
+
+    /**
+     * This function renders the HTML fragment for the body content of Open Studio.
+     *
+     * @param int $cmid The course module id.
+     * @param object $theme The theme settings.
+     * @param int $viewmode View mode: module, group, studio, pinboard or workspace.
+     * @param object $contentdata The content records to display.
+     * @return string The rendered HTM fragment.
+     */
+    public function body($cmid, $theme, $viewmode = content::VISIBILITY_MODULE, $contentdata) {
+        global $OUTPUT;
+
+        $placeholdertext = '';
+        switch ($viewmode) {
+            case content::VISIBILITY_MODULE:
+                $placeholdertext = $theme->thememodulename;
+                break;
+
+            case content::VISIBILITY_GROUP:
+                $placeholdertext = $theme->themegroupname;
+                break;
+
+            case content::VISIBILITY_WORKSPACE:
+            case content::VISIBILITY_PRIVATE:
+                $placeholdertext = $theme->themestudioname;
+                break;
+
+            case content::VISIBILITY_PRIVATE_PINBOARD:
+                $placeholdertext = $theme->themepinboardname;
+                break;
+        }
+
+        $contentdata->placeholdertext = $placeholdertext;
+
+        $contentdata->commentsicon = $OUTPUT->pix_url('comments_rgb_32px', 'openstudio');
+        $contentdata->inspirationicon = $OUTPUT->pix_url('inspiration_rgb_32px', 'openstudio');
+        $contentdata->participationicon = $OUTPUT->pix_url('participation_rgb_32px', 'openstudio');
+        $contentdata->favouriteicon = $OUTPUT->pix_url('favourite_rgb_32px', 'openstudio');
+
+        $contentdata->contentediturl = new moodle_url('/mod/openstudio/contentedit.php',
+                                    array('id' => $cmid, 'lid' => 0, 'sid' => 0, 'type' => 0 , 'sstsid' => 0));
+
+        return $this->render_from_template('mod_openstudio/body', $contentdata);
+    }
 }
