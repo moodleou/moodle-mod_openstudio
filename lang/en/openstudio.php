@@ -834,6 +834,7 @@ $string['newblockposition'] = 'Position';
 $string['addanotherblock'] = 'Add another Block';
 $string['selectblock'] = 'Select a Block';
 $string['selectblockbutton'] = 'Select Block';
+$string['addablock'] = 'Add a Block';
 
 $string['activeactivitiesheader'] = 'Active Activities';
 $string['activeactivitiesheader_help'] = 'Active usable activities in this studio for the chosen block.';
@@ -845,6 +846,7 @@ $string['newactivityposition'] = 'Position';
 $string['addanotheractivity'] = 'Add another Activity';
 $string['selectactivity'] = 'Select a Activity';
 $string['selectactivitybutton'] = 'Select Activity';
+$string['addanactivity'] = 'Add an Activity';
 
 $string['activecontentsheader'] = 'Active Contents';
 $string['activecontentsfoldersheader'] = 'Active Contents/Folders';
