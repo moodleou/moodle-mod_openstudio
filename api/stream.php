@@ -441,7 +441,7 @@ EOF;
         }
 
         if ($includecount) {
-            return (object) array('slots' => $result, 'total' => $resultcount);
+            return (object) array('contents' => $result, 'total' => $resultcount);
         }
 
         return $result;

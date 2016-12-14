@@ -1136,7 +1136,7 @@ $string['menupeople'] = 'People';
 $string['menumycontent'] = 'My Content';
 $string['menuadministration'] = 'Administration';
 
-$string['subscribetothisstudio'] = 'Subscribe to ';
+$string['subscribetothisstudio'] = 'Subscribe to my studio';
 $string['emailsubscription'] = 'Email subscription';
 $string['emailsubscriptionsub1'] = 'You have no email subscription from this page.';
 $string['emailsubscriptionsub2'] = 'If you would like to, click';

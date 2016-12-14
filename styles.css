@@ -575,6 +575,16 @@ a.openstudio-add-title:hover  {
     font-family: Arial;
     color: #002158;
     padding-bottom: 14px;
+    display: inline;
+    width: 92%;
+    float: left;
+}
+
+.openstudio-grid-item-content-icon {
+    width: 16px;
+    height: 16px;
+    margin-top: 2px;
+    float: right;
 }
 
 .openstudio-grid-item-content-detail {

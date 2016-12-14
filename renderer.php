@@ -149,7 +149,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         );
 
         $subnavigations = array();
-        if (!$permissions->feature_studio || ($permissions->activitydata->used > 0)) {
+        if ($permissions->feature_studio || ($permissions->activitydata->used > 0)) {
             $submenuitem = array(
                     'name' => $theme->themestudioname,
                     'url' => $navigationurls->strmyworkurl,
@@ -203,7 +203,9 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         // Generate admin items.
         $adminmenuitem = $this->navigation_admin($coursedata, $permissions);
-        $data->navigation[] = $adminmenuitem;
+        if ($adminmenuitem['hassubnavigation']) {
+            $data->navigation[] = $adminmenuitem;
+        }
 
         $data->notificationnumber = 3;
         $data->notificationicon = $OUTPUT->pix_url('notifications_rgb_32px', 'openstudio');
@@ -426,6 +428,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         global $OUTPUT;
 
         $placeholdertext = '';
+        $groupview = false;
         switch ($viewmode) {
             case content::VISIBILITY_MODULE:
                 $placeholdertext = $theme->thememodulename;
@@ -433,6 +436,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
             case content::VISIBILITY_GROUP:
                 $placeholdertext = $theme->themegroupname;
+                $groupview = true;
                 break;
 
             case content::VISIBILITY_WORKSPACE:
@@ -446,6 +450,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         }
 
         $contentdata->placeholdertext = $placeholdertext;
+        $contentdata->groupview = $groupview;
 
         $contentdata->commentsicon = $OUTPUT->pix_url('comments_rgb_32px', 'openstudio');
         $contentdata->inspirationicon = $OUTPUT->pix_url('inspiration_rgb_32px', 'openstudio');

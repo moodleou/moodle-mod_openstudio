@@ -25,6 +25,7 @@
     Data attributes required for JS:
     * none
 
+    
     Example context (json):
     {
         "placeholdertext" : "My module",
@@ -34,6 +35,12 @@
                 "lastname" : "User",
                 "name" : "Niagara Falls",
                 "contentlink" : "http://example.com/mod/openstudio/content.php?id=3&sid=9",
+                "contenticon" : "../../../mod/openstudio/pix/icon.svg",
+                "groupview" : false,
+                "option" : {
+                    "id" : 1,
+                    "name": "Group 1"
+                },
                 "contentthumbnailurl" : "../../../mod/openstudio/pix/icon.svg",
                 "timemodified" : "5/10/16, 13:27",
                 "userpictureurl" : "../../../mod/openstudio/pix/people_rgb_32px.svg",
@@ -54,6 +61,7 @@
                 "lastname" : "User",
                 "name" : "Taj Mahal",
                 "contentlink" : "http://example.com/mod/openstudio/content.php?id=3&sid=9",
+                "contenticon" : "../../../mod/openstudio/pix/icon.svg",
                 "contentthumbnailurl" : "../../../mod/openstudio/pix/icon.svg",
                 "timemodified" : "5/10/16, 13:27",
                 "userpictureurl" : "../../../mod/openstudio/pix/people_rgb_32px.svg",
@@ -74,6 +82,7 @@
                 "lastname" : "User",
                 "name" : "Open Studio",
                 "contentlink" : "http://example.com/mod/openstudio/content.php?id=3&sid=9",
+                "contenticon" : "../../../mod/openstudio/pix/icon.svg",
                 "contentthumbnailurl" : "../../../mod/openstudio/pix/icon.svg",
                 "viewuserworkurl" : "http://example.com/mod/openstudio/view.php?id=3&sid=9",
                 "timemodified" : "5/10/16, 13:27",
@@ -92,6 +101,7 @@
         ]
     }
 }}
+                                                    
 <div class="openstudio-container">
     <div class="openstudio-module-title">
         <h1>{{{ placeholdertext }}}</h1>
@@ -110,7 +120,7 @@
 
 {{#js}}
     requirejs( [
-    '{{{ globals.config.wwwroot }}}/mod/openstudio/amd/build/isotope.pkgd.min.js'
+    'amd/build/isotope.pkgd.min.js'
     ], function( Isotope ) {
     var iso = new Isotope( '.openstudio-grid', {
     layoutMode: 'masonry',

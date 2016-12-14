@@ -25,23 +25,23 @@ defined('MOODLE_INTERNAL') || die();
 
 /*
  * This function returns the social data count for the requested list
- * of slot ids.  The counts are in the context of the given user id.
+ * of content ids.  The counts are in the context of the given user id.
  *
  * @param int $userid The user to get social data for.
- * @param array $slots List of slot ids to get social data from.
- * @return array Return array of social data for list of slots.
+ * @param array $contents List of content ids to get social data from.
+ * @return array Return array of social data for list of contents.
  */
-function studio_api_notifications_get_activities($userid, $slots) {
+function studio_api_notifications_get_activities($userid, $contents) {
 
-    // If there are no slots provided, exit now.
-    if (empty($slots)) {
+    // If there are no contents provided, exit now.
+    if (empty($contents)) {
         return false;
     }
 
     global $DB;
 
     $sql = <<<EOF
-SELECT sf.contentid AS contentid, sf.setid,
+SELECT sf.contentid AS contentid, sf.folderid,
        (        SELECT count(sc1.id)
                   FROM {openstudio_comments} sc1
                  WHERE sc1.contentid = sf.contentid
@@ -51,7 +51,7 @@ SELECT sf.contentid AS contentid, sf.setid,
                           FROM {openstudio_flags} sc1f
                          WHERE sc1f.contentid = sc1.contentid
                            AND sc1f.flagid = 6
-                           AND sc1f.userid = ?)) AS commentsnewslot,
+                           AND sc1f.userid = ?)) AS commentsnewcontent,
        (    SELECT count(sc2.id)
               FROM {openstudio_comments} sc2
              WHERE sc2.contentid = sf.contentid
@@ -82,7 +82,7 @@ SELECT sf.contentid AS contentid, sf.setid,
                           FROM {openstudio_flags} sf5_1f
                          WHERE sf5_1f.contentid = sf5_1.contentid
                            AND sf5_1f.flagid = 6
-                           AND sf5_1f.userid = ?)) AS inspirednewslot,
+                           AND sf5_1f.userid = ?)) AS inspirednewcontent,
        (    SELECT count(sf5_2.id)
               FROM {openstudio_flags} sf5_2
              WHERE sf5_2.contentid = sf.contentid
@@ -113,7 +113,7 @@ SELECT sf.contentid AS contentid, sf.setid,
                           FROM {openstudio_flags} sf5_1f
                          WHERE sf5_1f.contentid = sf5_1.contentid
                            AND sf5_1f.flagid = 6
-                           AND sf5_1f.userid = ?)) AS mademelaughnewslot,
+                           AND sf5_1f.userid = ?)) AS mademelaughnewcontent,
        (    SELECT count(sf5_2.id)
               FROM {openstudio_flags} sf5_2
              WHERE sf5_2.contentid = sf.contentid
@@ -144,7 +144,7 @@ SELECT sf.contentid AS contentid, sf.setid,
                           FROM {openstudio_flags} sf5_1f
                          WHERE sf5_1f.contentid = sf5_1.contentid
                            AND sf5_1f.flagid = 6
-                           AND sf5_1f.userid = ?)) AS favouritenewslot,
+                           AND sf5_1f.userid = ?)) AS favouritenewcontent,
        (    SELECT count(sf5_2.id)
               FROM {openstudio_flags} sf5_2
              WHERE sf5_2.contentid = sf.contentid
@@ -175,66 +175,66 @@ EOF;
         $sqlparams[] = $userid;
     }
 
-    if (!empty($slots)) {
-        list($filterslotdatasql, $filterslotdataparams) = $DB->get_in_or_equal($slots);
-        $sqlparams = array_merge($sqlparams, $filterslotdataparams);
-        $sqlparams = array_merge($sqlparams, $filterslotdataparams);
-        $sql .= " WHERE (sf.contentid {$filterslotdatasql}) OR (sf.setid {$filterslotdatasql}) ";
+    if (!empty($contents)) {
+        list($filtercontentdatasql, $filtercontentdataparams) = $DB->get_in_or_equal($contents);
+        $sqlparams = array_merge($sqlparams, $filtercontentdataparams);
+        $sqlparams = array_merge($sqlparams, $filtercontentdataparams);
+        $sql .= " WHERE (sf.contentid {$filtercontentdatasql}) OR (sf.folderid {$filtercontentdatasql}) ";
     }
-    $sql .= " GROUP BY sf.contentid, sf.setid ";
+    $sql .= " GROUP BY sf.contentid, sf.folderid ";
 
     $results = $DB->get_recordset_sql($sql, $sqlparams);
     if (!$results->valid()) {
         return false;
     }
 
-    $slotdata = array();
-    $setdata = array();
-    foreach ($results as $slot) {
-        $slotdata[$slot->slotid] = $slot;
-        $slotdata[$slot->slotid]->set = false;
+    $contentdata = array();
+    $folderdata = array();
+    foreach ($results as $content) {
+        $contentdata[$content->contentid] = $content;
+        $contentdata[$content->contentid]->folder = false;
 
-        if ($slot->setid > 0) {
-            if (array_key_exists($slot->setid, $setdata)) {
-                $setdata[$slot->setid]->slots += 1;
-                $setdata[$slot->setid]->commentsnewslot += $slot->commentsnewslot;
-                $setdata[$slot->setid]->commentsnew += $slot->commentsnew;
-                $setdata[$slot->setid]->commentsold += $slot->commentsold;
-                $setdata[$slot->setid]->inspirednewslot += $slot->inspirednewslot;
-                $setdata[$slot->setid]->inspirednew += $slot->inspirednew;
-                $setdata[$slot->setid]->inspiredold += $slot->inspiredold;
-                $setdata[$slot->setid]->mademelaughnewslot += $slot->mademelaughnewslot;
-                $setdata[$slot->setid]->mademelaughnew += $slot->mademelaughnew;
-                $setdata[$slot->setid]->mademelaughold += $slot->mademelaughold;
-                $setdata[$slot->setid]->favouritenewslot += $slot->favouritenewslot;
-                $setdata[$slot->setid]->favouritenew += $slot->favouritenew;
-                $setdata[$slot->setid]->favouriteold += $slot->favouriteold;
+        if ($content->folderid > 0) {
+            if (array_key_exists($content->folderid, $folderdata)) {
+                $folderdata[$content->folderid]->contents += 1;
+                $folderdata[$content->folderid]->commentsnewcontent += $content->commentsnewcontent;
+                $folderdata[$content->folderid]->commentsnew += $content->commentsnew;
+                $folderdata[$content->folderid]->commentsold += $content->commentsold;
+                $folderdata[$content->folderid]->inspirednewcontent += $content->inspirednewcontent;
+                $folderdata[$content->folderid]->inspirednew += $content->inspirednew;
+                $folderdata[$content->folderid]->inspiredold += $content->inspiredold;
+                $folderdata[$content->folderid]->mademelaughnewcontent += $content->mademelaughnewcontent;
+                $folderdata[$content->folderid]->mademelaughnew += $content->mademelaughnew;
+                $folderdata[$content->folderid]->mademelaughold += $content->mademelaughold;
+                $folderdata[$content->folderid]->favouritenewcontent += $content->favouritenewcontent;
+                $folderdata[$content->folderid]->favouritenew += $content->favouritenew;
+                $folderdata[$content->folderid]->favouriteold += $content->favouriteold;
             } else {
-                $setdata[$slot->setid] = (object) array();
-                $setdata[$slot->setid]->slotid = $slot->slotid;
-                $setdata[$slot->setid]->setid = $slot->setid;
-                $setdata[$slot->setid]->slots = 1;
-                $setdata[$slot->setid]->commentsnewslot = $slot->commentsnewslot;
-                $setdata[$slot->setid]->commentsnew = $slot->commentsnew;
-                $setdata[$slot->setid]->commentsold = $slot->commentsold;
-                $setdata[$slot->setid]->inspirednewslot = $slot->inspirednewslot;
-                $setdata[$slot->setid]->inspirednew = $slot->inspirednew;
-                $setdata[$slot->setid]->inspiredold = $slot->inspiredold;
-                $setdata[$slot->setid]->mademelaughnewslot = $slot->mademelaughnewslot;
-                $setdata[$slot->setid]->mademelaughnew = $slot->mademelaughnew;
-                $setdata[$slot->setid]->mademelaughold = $slot->mademelaughold;
-                $setdata[$slot->setid]->favouritenewslot = $slot->favouritenewslot;
-                $setdata[$slot->setid]->favouritenew = $slot->favouritenew;
-                $setdata[$slot->setid]->favouriteold = $slot->favouriteold;
+                $folderdata[$content->folderid] = (object) array();
+                $folderdata[$content->folderid]->contentid = $content->contentid;
+                $folderdata[$content->folderid]->folderid = $content->folderid;
+                $folderdata[$content->folderid]->contents = 1;
+                $folderdata[$content->folderid]->commentsnewcontent = $content->commentsnewcontent;
+                $folderdata[$content->folderid]->commentsnew = $content->commentsnew;
+                $folderdata[$content->folderid]->commentsold = $content->commentsold;
+                $folderdata[$content->folderid]->inspirednewcontent = $content->inspirednewcontent;
+                $folderdata[$content->folderid]->inspirednew = $content->inspirednew;
+                $folderdata[$content->folderid]->inspiredold = $content->inspiredold;
+                $folderdata[$content->folderid]->mademelaughnewcontent = $content->mademelaughnewcontent;
+                $folderdata[$content->folderid]->mademelaughnew = $content->mademelaughnew;
+                $folderdata[$content->folderid]->mademelaughold = $content->mademelaughold;
+                $folderdata[$content->folderid]->favouritenewcontent = $content->favouritenewcontent;
+                $folderdata[$content->folderid]->favouritenew = $content->favouritenew;
+                $folderdata[$content->folderid]->favouriteold = $content->favouriteold;
             }
         }
     }
 
-    foreach ($setdata as $setdataid => $setdataitem) {
-        if (array_key_exists($setdataid, $slotdata)) {
-            $slotdata[$setdataid]->set = $setdataitem;
+    foreach ($folderdata as $folderdataid => $folderdataitem) {
+        if (array_key_exists($folderdataid, $contentdata)) {
+            $contentdata[$folderdataid]->folder = $folderdataitem;
         }
     }
 
-    return $slotdata;
+    return $contentdata;
 }
