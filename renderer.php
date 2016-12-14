@@ -474,4 +474,30 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $context = $levelxml->export_for_template($this->output);
         return $this->render_from_template('mod_openstudio/' . $template, $context);
     }
+
+    /**
+     * This function renders the HTML fragment for the report usage content of Open Studio.
+     *
+     * @param array $summarydata Summary data of report usage.
+     * @param array $contentdataactivity Summary of content activities.
+     * @param array $contentdatavisbility Summary of content by sharing/visibility setting.
+     * @param array $flagdata Summary of flagging activity data for a given studio instance.
+     * @param array $storage Storage usage for a given studio instance.
+     * @param array $activitylog Logged actions.
+     * @return string The rendered HTM fragment.
+     */
+    public function reportusage($summarydata, $contentdataactivity, $contentdatavisbility, $flagdata, $storage, $activitylog) {
+        global $OUTPUT;
+
+        $data = new stdClass();
+
+        $data->summarydata = $summarydata;
+        $data->contentdataactivity = $contentdataactivity;
+        $data->contentdatavisbility = $contentdatavisbility;
+        $data->flagdata = $flagdata;
+        $data->storage = $storage;
+        $data->activitylog = $activitylog;
+
+        return $this->render_from_template('mod_openstudio/reportusage', $data);
+    }
 }
