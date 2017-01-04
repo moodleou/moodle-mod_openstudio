@@ -26,6 +26,7 @@
  */
 
 use mod_openstudio\local\api\content;
+use mod_openstudio\local\api\stream;
 use mod_openstudio\local\api\rss;
 use mod_openstudio\local\api\subscription;
 use mod_openstudio\local\util;
@@ -190,7 +191,7 @@ if ($finalviewpermissioncheck) {
         $streamdatapagesize = 0;
     }
 
-    $contentdatatemp = studio_api_stream_get_slots(
+    $contentdatatemp = stream::get_contents(
             $cminstance->id, $permissions->groupingid, $viewuser->id, $contentowner->id, $vid,
             null, null, null, null, null, null,
             null, $pagestart, $streamdatapagesize, ($fblock == -1), true,

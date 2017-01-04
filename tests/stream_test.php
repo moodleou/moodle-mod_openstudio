@@ -24,7 +24,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once($CFG->dirroot . '/mod/openstudio/api/stream.php');
 
 class mod_openstudio_stream_testcase extends advanced_testcase {
 
@@ -38,11 +37,14 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
     private $studiogroup;
     private $studiomodule;
     private $studioworkspace;
-    private $studiogeneric; // Generic studio instance with no levels or slots.
+    private $studiogeneric; // Generic studio instance with no levels or contents.
     private $studiolevels; // Generic studio instance with levels only.
-    private $totalslots;
-    private $pinboardslots;
+    private $totalcontents;
+    private $pinboardcontents;
     private $groupings;
+    private $tutorgroups;
+    private $tutorrole;
+    private $tutorrole2;
 
     /**
      * Sets up our fixtures.
@@ -52,8 +54,8 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
         $this->resetAfterTest(true);
         $this->teacherroleid = 3;
         $this->studentroleid = 5;
-        $this->totalslots = 24; // This is what the scripts below create for ONE CMID.
-        $this->pinboardslots = 3; // This is what the scripts below create for ONE CMID.
+        $this->totalcontents = 24; // This is what the scripts below create for ONE CMID.
+        $this->pinboardcontents = 3; // This is what the scripts below create for ONE CMID.
 
         // Our test data has 1 course, 2 groups, 2 teachers and 10 students.
 
@@ -160,10 +162,10 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
         // Let's create and populate our mock levels.
         $this->studioprivate->leveldata = $this->generator->create_mock_levels($this->studioprivate->id);
 
-        // Now let's create and populate some slots.
-        $this->studioprivate->slotinstances = new stdClass();
-        // Student1 is owner of 24 normal and 3 pin slots of 24 normal and 3 pin slots.
-        $this->studioprivate->slotinstances->student = $this->generator->create_mock_contents($this->studioprivate->id,
+        // Now let's create and populate some contents.
+        $this->studioprivate->contentinstances = new stdClass();
+        // Student1 is owner of 24 normal and 3 pin contents of 24 normal and 3 pin contents.
+        $this->studioprivate->contentinstances->student = $this->generator->create_mock_contents($this->studioprivate->id,
                 $this->studioprivate->leveldata, $this->users->students->one->id,
                 mod_openstudio\local\api\content::VISIBILITY_PRIVATE);
 
@@ -171,10 +173,10 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
         // Let's create and populate our mock levels.
         $this->studiomodule->leveldata = $this->generator->create_mock_levels($this->studiomodule->id);
 
-        // Now let's create and populate some slots.
-        $this->studiomodule->slotinstances = new stdClass();
-        // Student5 is owner of 24 normal and 3 pin slots of 24 normal and 3 pin slots.
-        $this->studiomodule->slotinstances->student = $this->generator->create_mock_contents($this->studiomodule->id,
+        // Now let's create and populate some contents.
+        $this->studiomodule->contentinstances = new stdClass();
+        // Student5 is owner of 24 normal and 3 pin contents of 24 normal and 3 pin contents.
+        $this->studiomodule->contentinstances->student = $this->generator->create_mock_contents($this->studiomodule->id,
                 $this->studiomodule->leveldata, $this->users->students->five->id,
                 mod_openstudio\local\api\content::VISIBILITY_MODULE);
 
@@ -183,12 +185,12 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
         // Let's create and populate our mock levels.
         $this->studiogroup->leveldata = $this->generator->create_mock_levels($this->studiogroup->id);
 
-        // Now let's create and populate some slots.
-        $this->studiogroup->slotinstances = new stdClass();
-        $this->studiogroup->slotinstances->student6 = $this->generator->create_mock_contents(
+        // Now let's create and populate some contents.
+        $this->studiogroup->contentinstances = new stdClass();
+        $this->studiogroup->contentinstances->student6 = $this->generator->create_mock_contents(
                 $this->studiogroup->id, $this->studiogroup->leveldata,
                 $this->users->students->six->id, mod_openstudio\local\api\content::VISIBILITY_GROUP);
-        $this->studiogroup->slotinstances->student8 = $this->generator->create_mock_contents(
+        $this->studiogroup->contentinstances->student8 = $this->generator->create_mock_contents(
                 $this->studiogroup->id, $this->studiogroup->leveldata,
                 $this->users->students->eight->id, mod_openstudio\local\api\content::VISIBILITY_GROUP);
 
@@ -196,25 +198,25 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
         // Let's create and populate our mock levels.
         $this->studioworkspace->leveldata = $this->generator->create_mock_levels($this->studioworkspace->id);
 
-        // Now let's create and populate some slots.
-        $this->studioworkspace->slotinstances = new stdClass();
-        $this->studioworkspace->slotinstances->student8 = $this->generator->create_mock_contents(
+        // Now let's create and populate some contents.
+        $this->studioworkspace->contentinstances = new stdClass();
+        $this->studioworkspace->contentinstances->student8 = $this->generator->create_mock_contents(
                 $this->studioworkspace->id,
                 $this->studioworkspace->leveldata,
                 $this->users->students->eight->id, mod_openstudio\local\api\content::VISIBILITY_PRIVATE);
-        $this->studioworkspace->slotinstances->student9 = $this->generator->create_mock_contents(
+        $this->studioworkspace->contentinstances->student9 = $this->generator->create_mock_contents(
                 $this->studioworkspace->id,
                 $this->studioworkspace->leveldata,
                 $this->users->students->nine->id, mod_openstudio\local\api\content::VISIBILITY_MODULE);
-        $this->studioworkspace->slotinstances->student10 = $this->generator->create_mock_contents(
+        $this->studioworkspace->contentinstances->student10 = $this->generator->create_mock_contents(
                 $this->studioworkspace->id,
                 $this->studioworkspace->leveldata,
                 $this->users->students->ten->id, mod_openstudio\local\api\content::VISIBILITY_MODULE);
-        $this->studioworkspace->slotinstances->student3 = $this->generator->create_mock_contents(
+        $this->studioworkspace->contentinstances->student3 = $this->generator->create_mock_contents(
                 $this->studioworkspace->id,
                 $this->studioworkspace->leveldata,
                 $this->users->students->four->id, mod_openstudio\local\api\content::VISIBILITY_GROUP);
-        $this->studioworkspace->slotinstances->student4 = $this->generator->create_mock_contents(
+        $this->studioworkspace->contentinstances->student4 = $this->generator->create_mock_contents(
                 $this->studioworkspace->id,
                 $this->studioworkspace->leveldata,
                 $this->users->students->three->id, mod_openstudio\local\api\content::VISIBILITY_GROUP);
@@ -238,8 +240,8 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
         $this->studiomodule = '';
         $this->studiogeneric = '';
         $this->studiolevels = '';
-        $this->totalslots = '';
-        $this->pinboardslots = '';
+        $this->totalcontents = '';
+        $this->pinboardcontents = '';
         $this->workspace = '';
     }
     /**
@@ -304,50 +306,45 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
         // Set Active User to student1.
         $this->setUser($this->users->students->one);
 
-        // Now let's check if student1 can access his/her own slots.
-        // So userid and slotownerid should be the same.
-        $result1 = studio_api_stream_get_slots(
+        // Now let's check if student1 can access his/her own contents.
+        // So userid and contentownerid should be the same.
+        $result1 = mod_openstudio\local\api\stream::get_contents(
                 $this->studioprivate->id, $this->groupings->a->id,
                 $this->users->students->one->id, $this->users->students->one->id,
                 mod_openstudio\local\api\content::VISIBILITY_PRIVATE);
 
         $this->assertNotEquals(false, $result1);
 
-        // This should bring back 24 slots, ALL owned by student1. $result2 and $result3 will
+        // This should bring back 24 contents, ALL owned by student1. $result2 will
         // be the same, so need to repeat this.
         $totalcount = 0;
-        foreach ($result1 as $slot) {
+        foreach ($result1 as $content) {
             $totalcount++;
-            // Check that the user matches PRIVATE returns for non-pinboard slots.
-            $this->assertEquals($this->users->students->one->id, $slot->userid);
+            // Check that the user matches PRIVATE returns for non-pinboard contents.
+            $this->assertEquals($this->users->students->one->id, $content->userid);
         }
 
         // Check that the total number of results is the same as those our script generates.
-        $this->assertEquals($totalcount, $this->totalslots);
+        $this->assertEquals($totalcount, $this->totalcontents);
 
         // Pinboard tested here.
-        // Let's run the query again to get pinboard only slots and see if the count matches.
-        $result2 = studio_api_stream_get_slots(
+        // Let's run the query again to get pinboard only contents and see if the count matches.
+        $result2 = mod_openstudio\local\api\stream::get_contents(
                 $this->studioprivate->id, $this->groupings->a->id,
                 $this->users->students->one->id, $this->users->students->one->id,
                 mod_openstudio\local\api\content::VISIBILITY_PRIVATE, null, null, null, null, null, null,
                 array('id' => mod_openstudio\local\api\stream::SORT_BY_DATE, 'asc' => 0), 0, 0, true);
-        $result3 = studio_api_stream_get_pinboard_slots(
-                $this->studioprivate->id,
-                $this->groupings->a->id, $this->users->students->one->id,
-                mod_openstudio\local\api\content::VISIBILITY_PRIVATE);
         $this->assertNotEquals(false, $result2);
-        $this->assertNotEquals(false, $result3);
 
-        // This should bring back 3 slots.
+        // This should bring back 3 contents.
         $pinboardcount = iterator_count($result2);
-        foreach ($result2 as $slot) {
-            // Check that the user matches, only for pinboard slots.
-            $this->assertEquals($slot->userid, $this->users->students->one->id);
+        foreach ($result2 as $content) {
+            // Check that the user matches, only for pinboard contents.
+            $this->assertEquals($content->userid, $this->users->students->one->id);
         }
 
         // Check that the total number of results is the same as those our script generates.
-        $this->assertEquals($pinboardcount, $this->pinboardslots);
+        $this->assertEquals($pinboardcount, $this->pinboardcontents);
     }
 
     /**
@@ -360,8 +357,8 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
          // Set Active User to student5.
         $this->setUser($this->users->students->five);
 
-        // Student5 viewing his own slots. Should return false as the ONLY slots belong to student5.
-        $result3 = studio_api_stream_get_slots(
+        // Student5 viewing his own contents. Should return false as the ONLY contents belong to student5.
+        $result3 = mod_openstudio\local\api\stream::get_contents(
                 $this->studiomodule->id, $this->groupings->a->id,
                 $this->users->students->five->id, $this->users->students->five->id,
                 mod_openstudio\local\api\content::VISIBILITY_MODULE);
@@ -369,7 +366,7 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
         // Only data from student5 comes back so this should NOT be false.
         $this->assertNotEquals(false, $result3);
 
-        // We must check to make sure that the expected 27 slots are given.
+        // We must check to make sure that the expected 27 contents are given.
         if ($result3 != false) {
             $this->assertEquals(27, iterator_count($result3));
         }
@@ -383,31 +380,29 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
 
         $this->setUser($this->users->students->six);
 
-        /*
-         * For this test:
-         * 1. Student6 owns 24 group visibility slots and 3 pinboard slots at group level.
-         * 2. Student8 owns 24 group visibility slots and 3 pinboard slots at group level.
-         */
+        // For this test:
+        // 1. Student6 owns 24 group visibility contents and 3 pinboard contents at group level.
+        // 2. Student8 owns 24 group visibility contents and 3 pinboard contents at group level.
 
-        $result4 = studio_api_stream_get_slots(
+        $result4 = mod_openstudio\local\api\stream::get_contents(
                 $this->studiogroup->id, $this->groupings->a->id,
                 $this->users->students->eight->id, $this->users->students->eight->id,
                 mod_openstudio\local\api\content::VISIBILITY_GROUP);
         $count = iterator_count($result4);
-        foreach ($result4 as $slot) {
+        foreach ($result4 as $content) {
             // The results should be filtered and show ONLY group visibility results ...
             // From this studio for the other user(s) in the group.
-            $this->assertNotEquals($slot->userid, $this->users->students->eight->id);
+            $this->assertNotEquals($content->userid, $this->users->students->eight->id);
 
             // In our dataset, the only other user is student6, so he should be the user on all the results.
-            $this->assertEquals($slot->userid, $this->users->students->six->id);
+            $this->assertEquals($content->userid, $this->users->students->six->id);
         }
 
         // Always 54, which means owners pinboards are also included.
-        $this->assertEquals($count, 2 * ($this->totalslots + $this->pinboardslots));
+        $this->assertEquals($count, 2 * ($this->totalcontents + $this->pinboardcontents));
 
-         // Let's test out the filters in the studio_api_stream_get_slots() function.
-        $resultblock11 = studio_api_stream_get_slots(
+         // Let's test out the filters in the mod_openstudio\local\api\stream::get_contents() function.
+        $resultblock11 = mod_openstudio\local\api\stream::get_contents(
                 $this->studiogroup->id, $this->groupings->a->id,
                 $this->users->students->eight->id, $this->users->students->eight->id,
                 mod_openstudio\local\api\content::VISIBILITY_GROUP,
@@ -417,11 +412,11 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
                 $sortorder = array('id' => mod_openstudio\local\api\stream::SORT_BY_DATE, 'asc' => 0),
                 $pagestart = 0, $pagesize = 0, $pinboardonly = false, $includecount = false,
                 $canmanagecontent = false);
-        // There should be only 6 slots in Block 11.
+        // There should be only 6 contents in Block 11.
         $this->assertEquals(12, iterator_count($resultblock11));
 
         // There are no images sho this should be false.
-        $resultblock11images = studio_api_stream_get_slots(
+        $resultblock11images = mod_openstudio\local\api\stream::get_contents(
                 $this->studiogroup->id, $this->groupings->a->id,
                 $this->users->students->eight->id, $this->users->students->eight->id,
                 mod_openstudio\local\api\content::VISIBILITY_GROUP,
@@ -433,35 +428,35 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
                 $canmanagecontent = false);
         $this->assertEquals(false, $resultblock11images);
 
-        // Let's add some flags to a slot to test scope.
+        // Let's add some flags to a content to test scope.
         // We'll use Slot ids 67, 68, 69, 71 and 72 (and not 70 delibarately).
-        // These are student 6's slots (as we are viewing the group stream).
+        // These are student 6's contents (as we are viewing the group stream).
         // NOTE: The FLAG API uses mod_openstudio\local\api\flags constants, but the STREAM API uses
         // mod_openstudio\local\api\stream::FILTER_* constants ... For identifying the SAME flags.
-        $slottoflag = array();
-        foreach ($this->studiogroup->slotinstances->student6['contents'] as $item) {
-            $slottoflag[] = $item[0];
-            if (count($slottoflag) >= 5) {
+        $contenttoflag = array();
+        foreach ($this->studiogroup->contentinstances->student6['contents'] as $item) {
+            $contenttoflag[] = $item[0];
+            if (count($contenttoflag) >= 5) {
                 break;
             }
         }
-        $this->assertEquals(true, studio_api_flags_toggle($slottoflag[0],
+        $this->assertEquals(true, studio_api_flags_toggle($contenttoflag[0],
                 mod_openstudio\local\api\flags::FAVOURITE,
                 'on', $this->users->students->nine->id));
-        $this->assertEquals(true, studio_api_flags_toggle($slottoflag[1],
+        $this->assertEquals(true, studio_api_flags_toggle($contenttoflag[1],
                 mod_openstudio\local\api\flags::FAVOURITE,
                 'on', $this->users->students->nine->id));
-        $this->assertEquals(true, studio_api_flags_toggle($slottoflag[2],
+        $this->assertEquals(true, studio_api_flags_toggle($contenttoflag[2],
                 mod_openstudio\local\api\flags::FAVOURITE,
                 'on', $this->users->students->nine->id));
-        $this->assertEquals(true, studio_api_flags_toggle($slottoflag[3],
+        $this->assertEquals(true, studio_api_flags_toggle($contenttoflag[3],
                 mod_openstudio\local\api\flags::FAVOURITE,
                 'on', $this->users->students->eight->id));
-        $this->assertEquals(true, studio_api_flags_toggle($slottoflag[4],
+        $this->assertEquals(true, studio_api_flags_toggle($contenttoflag[4],
                 mod_openstudio\local\api\flags::FAVOURITE,
                 'on', $this->users->students->eight->id));
 
-        $resultblock11everyone = studio_api_stream_get_slots($this->studiogroup->id, $this->groupings->a->id,
+        $resultblock11everyone = mod_openstudio\local\api\stream::get_contents($this->studiogroup->id, $this->groupings->a->id,
                 $this->users->students->eight->id, $this->users->students->six->id,
                 mod_openstudio\local\api\content::VISIBILITY_GROUP,
                 array($this->studiogroup->leveldata['blockslevels'][0]),
@@ -474,7 +469,7 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
                 $canmanagecontent = false, 0, 2);
         $this->assertEquals(5, iterator_count($resultblock11everyone));
 
-        $resultblock11my = studio_api_stream_get_slots($this->studiogroup->id, $this->groupings->a->id,
+        $resultblock11my = mod_openstudio\local\api\stream::get_contents($this->studiogroup->id, $this->groupings->a->id,
                 $this->users->students->eight->id, $this->users->students->six->id,
                 mod_openstudio\local\api\content::VISIBILITY_GROUP,
                 array($this->studiogroup->leveldata['blockslevels'][0]),
@@ -488,11 +483,11 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
         $this->assertEquals(2, iterator_count($resultblock11my));
 
         // Now let's add some tags to test if our tag filter works.
-        studio_api_tags_tag_slot($slottoflag[0], 'Winterfell, Targeryen');
-        studio_api_tags_tag_slot($slottoflag[1], 'Winterfell, Lannister');
-        studio_api_tags_tag_slot($slottoflag[2], 'Martell');
+        studio_api_tags_tag_slot($contenttoflag[0], 'Winterfell, Targeryen');
+        studio_api_tags_tag_slot($contenttoflag[1], 'Winterfell, Lannister');
+        studio_api_tags_tag_slot($contenttoflag[2], 'Martell');
 
-        $resultblock11tags1 = studio_api_stream_get_slots($this->studiogroup->id, $this->groupings->a->id,
+        $resultblock11tags1 = mod_openstudio\local\api\stream::get_contents($this->studiogroup->id, $this->groupings->a->id,
                 $this->users->students->eight->id, $this->users->students->six->id,
                 mod_openstudio\local\api\content::VISIBILITY_GROUP,
                 array($this->studiogroup->leveldata['blockslevels'][0]),
@@ -502,7 +497,7 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
                 $canmanagecontent = false, 0, 2);
         $this->assertEquals(2, iterator_count($resultblock11tags1));
 
-        $resultblock11tags2 = studio_api_stream_get_slots($this->studiogroup->id, $this->groupings->a->id,
+        $resultblock11tags2 = mod_openstudio\local\api\stream::get_contents($this->studiogroup->id, $this->groupings->a->id,
                 $this->users->students->eight->id, $this->users->students->six->id,
                 mod_openstudio\local\api\content::VISIBILITY_GROUP,
                 array($this->studiogroup->leveldata['blockslevels'][0]),
@@ -512,7 +507,7 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
                 $canmanagecontent = false, 0, 2);
         $this->assertEquals(1, iterator_count($resultblock11tags2));
 
-        $resultblock11tags3 = studio_api_stream_get_slots($this->studiogroup->id, $this->groupings->a->id,
+        $resultblock11tags3 = mod_openstudio\local\api\stream::get_contents($this->studiogroup->id, $this->groupings->a->id,
                 $this->users->students->eight->id, $this->users->students->six->id,
                 mod_openstudio\local\api\content::VISIBILITY_GROUP,
                 array($this->studiogroup->leveldata['blockslevels'][0]),
@@ -533,7 +528,7 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
         $this->setUser($this->users->students->eight);
 
         // Let's run it for 2 different users.
-        $result6 = studio_api_stream_get_slots(
+        $result6 = mod_openstudio\local\api\stream::get_contents(
                 $this->studioworkspace->id, $this->groupings->a->id,
                 $this->users->students->eight->id,
                 $this->users->students->nine->id, mod_openstudio\local\api\content::VISIBILITY_WORKSPACE);
@@ -541,15 +536,15 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
         // Should only bring back the results of 9.
         $this->assertNotEquals(false, $result6);
         $count = iterator_count($result6);
-        foreach ($result6 as $slot) {
-            $this->assertEquals($slot->userid, $this->users->students->nine->id);
+        foreach ($result6 as $content) {
+            $this->assertEquals($content->userid, $this->users->students->nine->id);
         }
 
         // Always 27, which means owners pinboards are also included.
-        $this->assertEquals($count, $this->totalslots + $this->pinboardslots);
+        $this->assertEquals($count, $this->totalcontents + $this->pinboardcontents);
 
         // Let's run it for 2 different users.
-        $result7 = studio_api_stream_get_slots(
+        $result7 = mod_openstudio\local\api\stream::get_contents(
                 $this->studioworkspace->id, $this->groupings->a->id,
                 $this->users->students->eight->id,
                 $this->users->students->three->id, mod_openstudio\local\api\content::VISIBILITY_WORKSPACE,
@@ -564,7 +559,7 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
         $this->setUser($this->users->students->three);
 
         // Let's run it for 2 different users in the same group.
-        $result8 = studio_api_stream_get_slots(
+        $result8 = mod_openstudio\local\api\stream::get_contents(
                 $this->studioworkspace->id, $this->groupings->a->id,
                 $this->users->students->three->id,
                 $this->users->students->four->id, mod_openstudio\local\api\content::VISIBILITY_WORKSPACE,
@@ -578,15 +573,15 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
         // Should only bring back the results of 4.
         $this->assertNotEquals(false, $result8);
         $count = iterator_count($result8);
-        foreach ($result8 as $slot) {
-            $this->assertEquals($slot->userid, $this->users->students->four->id);
+        foreach ($result8 as $content) {
+            $this->assertEquals($content->userid, $this->users->students->four->id);
         }
 
         // Always 27, which means owners pinboards are also included.
-        $this->assertEquals($count, $this->totalslots + $this->pinboardslots);
+        $this->assertEquals($count, $this->totalcontents + $this->pinboardcontents);
 
-        // Irrespective of groups, users should be able to see MODULE level slots.
-        $result9 = studio_api_stream_get_slots(
+        // Irrespective of groups, users should be able to see MODULE level contents.
+        $result9 = mod_openstudio\local\api\stream::get_contents(
                 $this->studioworkspace->id, $this->groupings->a->id,
                 $this->users->students->three->id,
                 $this->users->students->ten->id, mod_openstudio\local\api\content::VISIBILITY_WORKSPACE);
@@ -594,15 +589,15 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
         // Should only bring back the results of 10.
         $this->assertNotEquals(false, $result9);
         $count = iterator_count($result9);
-        foreach ($result9 as $slot) {
-            $this->assertEquals($slot->userid, $this->users->students->ten->id);
+        foreach ($result9 as $content) {
+            $this->assertEquals($content->userid, $this->users->students->ten->id);
         }
 
         // Always 27, which means owners pinboards are also included.
-        $this->assertEquals($count, $this->totalslots + $this->pinboardslots);
+        $this->assertEquals($count, $this->totalcontents + $this->pinboardcontents);
 
         // Finally, user 8's stream is private and should be invisible to all users.
-        $result10 = studio_api_stream_get_slots(
+        $result10 = mod_openstudio\local\api\stream::get_contents(
                 $this->studioworkspace->id, $this->groupings->a->id,
                 $this->users->students->three->id,
                 $this->users->students->eight->id, mod_openstudio\local\api\content::VISIBILITY_WORKSPACE);
@@ -611,10 +606,7 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
         $this->assertEquals(false, $result10);
     }
 
-    /**
-     * TODO: Currently fails due to an existing bug.
-     */
-    public function test_stream_api_tutor_slots() {
+    public function test_stream_api_tutor_contents() {
         global $DB;
         // Setup tutor groups.
         $this->tutorrole = $DB->get_record('role', array('shortname' => 'teacher'));
@@ -688,8 +680,8 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
                 'groupid' => $this->tutorgroups->one->id
         ));
 
-        // Create slot.
-        $tutorslotid = $this->generator->create_contents(array(
+        // Create content.
+        $tutorcontentid = $this->generator->create_contents(array(
                 'studio' => 'OS1',
                 'userid' => $this->users->students->one->id,
                 'name' => 'Test Slot',
@@ -699,8 +691,8 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
 
         $tutorroles = array($this->tutorrole->id);
 
-        // Student 1 in in the right group, but isn't a tutor, so should not see the tutor slot on the group stream.
-        $stream = studio_api_stream_get_slots(
+        // Student 1 in in the right group, but isn't a tutor, so should not see the tutor content on the group stream.
+        $stream = mod_openstudio\local\api\stream::get_contents(
                 $this->studiogeneric->id, // Studio ID.
                 $this->groupings->one->id, // Grouping ID.
                 $this->users->students->one->id, // User ID.
@@ -724,12 +716,12 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
                 false, // Can access all groups.
                 false, // In collection Mode.
                 false, // Reciprocal access.
-                array($this->tutorrole->id) // Tutor roles.
+                $tutorroles // Tutor roles.
         );
         $this->assertFalse($stream);
 
         // Student 2 isn't a tutor or in the right group.
-        $stream = studio_api_stream_get_slots(
+        $stream = mod_openstudio\local\api\stream::get_contents(
                 $this->studiogeneric->id, // Studio ID.
                 $this->groupings->one->id, // Grouping ID.
                 $this->users->students->two->id, // User ID.
@@ -753,12 +745,12 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
                 false, // Can access all groups.
                 false, // In collection Mode.
                 false, // Reciprocal access.
-                array($this->tutorrole->id) // Tutor roles.
+                $tutorroles // Tutor roles.
         );
         $this->assertFalse($stream);
 
         // Tutor 2 is a tutor, but is in the wrong group.
-        $stream = studio_api_stream_get_slots(
+        $stream = mod_openstudio\local\api\stream::get_contents(
                 $this->studiogeneric->id, // Studio ID.
                 $this->groupings->one->id, // Grouping ID.
                 $this->users->tutors->two->id, // User ID.
@@ -782,12 +774,12 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
                 true, // Can access all groups.
                 false, // In collection Mode.
                 false, // Reciprocal access.
-                array($this->tutorrole->id) // Tutor roles.
+                $tutorroles // Tutor roles.
         );
         $this->assertFalse($stream);
 
         // Tutor 1 is a tutor, and is in the right group.
-        $stream = studio_api_stream_get_slots(
+        $stream = mod_openstudio\local\api\stream::get_contents(
                 $this->studiogeneric->id, // Studio ID.
                 $this->groupings->one->id, // Grouping ID.
                 $this->users->tutors->one->id, // User ID.
@@ -811,17 +803,17 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
                 true, // Can access all groups.
                 false, // In collection Mode.
                 false, // Reciprocal access.
-                array($this->tutorrole->id) // Tutor roles.
+                $tutorroles // Tutor roles.
         );
         $this->assertEquals(1, $stream->total);
-        $streamslots = array();
-        foreach ($stream->slots as $slot) {
-            $streamslots[] = $slot->id;
+        $streamcontents = array();
+        foreach ($stream->contents as $content) {
+            $streamcontents[] = $content->id;
         }
-        $this->assertTrue(in_array($tutorslotid, $streamslots));
+        $this->assertTrue(in_array($tutorcontentid, $streamcontents));
 
         // Tutor 3 is a tutor and in a group with student1, but the group is not in the right grouping.
-        $stream = studio_api_stream_get_slots(
+        $stream = mod_openstudio\local\api\stream::get_contents(
                 $this->studiogeneric->id, // Studio ID.
                 $this->groupings->one->id, // Grouping ID.
                 $this->users->tutors->three->id, // User ID.
@@ -845,12 +837,12 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
                 true, // Can access all groups.
                 false, // In collection Mode.
                 false, // Reciprocal access.
-                array($this->tutorrole->id) // Tutor roles.
+                $tutorroles // Tutor roles.
         );
         $this->assertFalse($stream);
 
         // Tutor 4 is in the right group, but has the wrong role.
-        $stream = studio_api_stream_get_slots(
+        $stream = mod_openstudio\local\api\stream::get_contents(
                 $this->studiogeneric->id, // Studio ID.
                 $this->groupings->one->id, // Grouping ID.
                 $this->users->tutors->four->id, // User ID.
@@ -874,12 +866,12 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
                 true, // Can access all groups.
                 false, // In collection Mode.
                 false, // Reciprocal access.
-                array($this->tutorrole->id) // Tutor roles.
+                $tutorroles // Tutor roles.
         );
         $this->assertFalse($stream);
 
         // Tutor 4 is in the right group, and their role is now included in the list.
-        $stream = studio_api_stream_get_slots(
+        $stream = mod_openstudio\local\api\stream::get_contents(
                 $this->studiogeneric->id, // Studio ID.
                 $this->groupings->one->id, // Grouping ID.
                 $this->users->tutors->four->id, // User ID.
@@ -903,14 +895,35 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
                 true, // Can access all groups.
                 false, // In collection Mode.
                 false, // Reciprocal access.
-                array($this->tutorrole->id, $this->tutorrole2->id) // Tutor roles.
+                [$this->tutorrole->id, $this->tutorrole2->id] // Tutor roles.
         );
         $this->assertEquals(1, $stream->total);
-        $streamslots = array();
-        foreach ($stream->slots as $slot) {
-            $streamslots[] = $slot->id;
+        $streamcontents = array();
+        foreach ($stream->contents as $content) {
+            $streamcontents[] = $content->id;
         }
-        $this->assertTrue(in_array($tutorslotid, $streamslots));
+        $this->assertTrue(in_array($tutorcontentid, $streamcontents));
+    }
+
+    public function test_get_contents_by_ids() {
+        // Test getting a simple list of contents.
+        $contentids = $this->studiomodule->contentinstances->student['pinboard_contents'];
+        $contents = mod_openstudio\local\api\stream::get_contents_by_ids($this->users->students->five->id, $contentids);
+        $this->assertEquals(count($contentids), iterator_count($contents));
+
+        // Test reciprocal access.
+        $levelcontentids = [];
+        foreach ($this->studioworkspace->contentinstances->student8['contents'] as $level) {
+            $levelcontentids = array_merge($levelcontentids, $level);
+        }
+        // Another user who has content in the same levels should see the contents.
+        $levelcontents = mod_openstudio\local\api\stream::get_contents_by_ids(
+                $this->users->students->nine->id, $levelcontentids, true);
+        $this->assertEquals(count($levelcontentids), iterator_count($levelcontents));
+        // Another user who doesn't have content in the same levels should not see the contents.
+        $levelcontents = mod_openstudio\local\api\stream::get_contents_by_ids(
+                $this->users->students->five->id, $levelcontentids, true);
+        $this->assertFalse($levelcontents);
     }
 
 }
