@@ -496,7 +496,7 @@ EOF;
                         $permissions->activeuserid
                 );
 
-                $result = $DB->record_exists_sql($slotreciprocalaccessqsl, $params);
+                $result = $DB->record_exists_sql($contentreciprocalaccessqsl, $params);
                 if ($result === false) {
                     return false;
                 }
@@ -642,10 +642,6 @@ EOF;
                 $contenttype = 'web';
                 break;
 
-            case content::COLLECTION:
-                $contenttype = 'collection';
-                break;
-
             case content::TYPE_FOLDER:
                 $contenttype = 'set';
                 break;
@@ -773,9 +769,7 @@ EOF;
         if ($contentdata->levelid == 0) {
             if (isset($contentdata->name)) {
                 if (trim($contentdata->name) == '') {
-                    if ($contentdata->contenttype == content::COLLECTION) {
-                        $slotdataname = get_string('collectiontitlepinboard', 'openstudio');
-                    } else if ($contentdata->contenttype == content::TYPE_FOLDER) {
+                    if ($contentdata->contenttype == content::TYPE_FOLDER) {
                         $slotdataname = get_string('settitlepinboard', 'openstudio');
                     } else {
                         $slotdataname = get_string('slottitlepinboard', 'openstudio');
