@@ -22,13 +22,12 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once('openstudio_testcase.php'); // Until this is moved to generator.
 
-// Make sure this isn't being directly accessed.
-defined('MOODLE_INTERNAL') || die();
 class mod_openstudio_content_testcase extends openstudio_testcase {
 
-    private $totalcontents;
     private $pinboardcontents;
 
     /**

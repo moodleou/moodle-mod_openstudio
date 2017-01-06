@@ -36,7 +36,7 @@ class mod_openstudio_flags_testcase extends openstudio_testcase   {
         $this->resetAfterTest(true);
         $this->teacherroleid = 3;
         $this->studentroleid = 5;
-        $this->totalslots = 24; // This is what the scripts below create for ONE CMID.
+        $this->totalcontents = 24; // This is what the scripts below create for ONE CMID.
         $this->pinboardslots = 3; // This is what the scripts below create for ONE CMID.
 
         // Our test data has 1 course, 2 groups, 2 teachers and 10 students.
@@ -310,7 +310,7 @@ class mod_openstudio_flags_testcase extends openstudio_testcase   {
         ));
         // Check we get 0 when there are no flags.
         $this->assertEquals(0, studio_api_flags_get_comment_flag_total($commentid));
-        $comments = studio_api_comments_get_all($slotid);
+        $comments = mod_openstudio\local\api\comments::get_for_content($slotid);
         $this->assertEquals(0, $comments->current()->flagcount);
 
         $this->generator->create_flag(array(
@@ -320,7 +320,7 @@ class mod_openstudio_flags_testcase extends openstudio_testcase   {
         ));
         // Check we get 1 when there is a flag.
         $this->assertEquals(1, studio_api_flags_get_comment_flag_total($commentid));
-        $comments = studio_api_comments_get_all($slotid);
+        $comments = mod_openstudio\local\api\comments::get_for_content($slotid);
         $this->assertEquals(1, $comments->current()->flagcount);
 
         $this->generator->create_flag(array(
@@ -335,7 +335,7 @@ class mod_openstudio_flags_testcase extends openstudio_testcase   {
         ));
         // Check we get the correct number when there's > 1 flag.
         $this->assertEquals(3, studio_api_flags_get_comment_flag_total($commentid));
-        $comments = studio_api_comments_get_all($slotid);
+        $comments = mod_openstudio\local\api\comments::get_for_content($slotid);
         $this->assertEquals(3, $comments->current()->flagcount);
     }
 
@@ -365,19 +365,19 @@ class mod_openstudio_flags_testcase extends openstudio_testcase   {
         ));
 
         $this->assertTrue(studio_api_flags_comment_flagged_by_user($commentid, $this->users->students->one->id));
-        $comments = studio_api_comments_get_all($slotid, $this->users->students->one->id);
+        $comments = mod_openstudio\local\api\comments::get_for_content($slotid, $this->users->students->one->id);
         $this->assertTrue((bool) $comments->current()->userhasflagged);
 
         $this->assertTrue(studio_api_flags_comment_flagged_by_user($commentid, $this->users->students->three->id));
-        $comments = studio_api_comments_get_all($slotid, $this->users->students->three->id);
+        $comments = mod_openstudio\local\api\comments::get_for_content($slotid, $this->users->students->three->id);
         $this->assertTrue((bool) $comments->current()->userhasflagged);
 
         $this->assertFalse(studio_api_flags_comment_flagged_by_user($commentid, $this->users->students->two->id));
-        $comments = studio_api_comments_get_all($slotid, $this->users->students->two->id);
+        $comments = mod_openstudio\local\api\comments::get_for_content($slotid, $this->users->students->two->id);
         $this->assertFalse((bool) $comments->current()->userhasflagged);
 
         $this->assertFalse(studio_api_flags_comment_flagged_by_user($commentid, $this->users->students->four->id));
-        $comments = studio_api_comments_get_all($slotid, $this->users->students->four->id);
+        $comments = mod_openstudio\local\api\comments::get_for_content($slotid, $this->users->students->four->id);
         $this->assertFalse((bool) $comments->current()->userhasflagged);
     }
 

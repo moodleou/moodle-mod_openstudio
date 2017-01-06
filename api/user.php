@@ -20,6 +20,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_openstudio\local\api\comments;
+
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
@@ -141,7 +143,7 @@ EOF;
         }
     }
 
-    $totalpostedcomments = studio_api_comments_get_total_by_user($studioid, $userid);
+    $totalpostedcomments = comments::total_for_user($studioid, $userid);
 
     // Calculate smiley mood: happy or sad.
     //
@@ -152,7 +154,7 @@ EOF;
     // the number of photos the student has posted. The student's participation is a happy face if
     // the number_of_comments/number_of_photos >= 1.
     if ($countfilledslots > 0) {
-        $totalpostedcomments2 = studio_api_comments_get_total_by_user_excluding_own_slots($studioid, $userid);
+        $totalpostedcomments2 = comments::total_for_user($studioid, $userid, true);
         $participationlevel = $totalpostedcomments2 / $countfilledslots;
     } else {
         $participationlevel = 0;

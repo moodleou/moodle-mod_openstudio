@@ -20,6 +20,10 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_openstudio\local\api\content;
+use mod_openstudio\local\api\levels;
+use mod_openstudio\local\api\comments;
+
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
@@ -97,16 +101,16 @@ class mod_openstudio_generator extends testing_module_generator {
                             'ownership' => 0,
                             'sid' => 0 // For a new content.
                     );
-                    $contents[$contentlevelid][] = mod_openstudio\local\api\content::create(
+                    $contents[$contentlevelid][] = content::create(
                             $studioid, $userid, 3, $contentlevelid, $data); // Level 3 is for contents.
                 }
             }
         }
 
         // Let's also create a couple of pinboard contents.
-        $pinboardcontents[] = mod_openstudio\local\api\content::create_in_pinboard($studioid, $userid, $data2);
-        $pinboardcontents[] = mod_openstudio\local\api\content::create_in_pinboard($studioid, $userid, $data2);
-        $pinboardcontents[] = mod_openstudio\local\api\content::create_in_pinboard($studioid, $userid, $data2);
+        $pinboardcontents[] = content::create_in_pinboard($studioid, $userid, $data2);
+        $pinboardcontents[] = content::create_in_pinboard($studioid, $userid, $data2);
+        $pinboardcontents[] = content::create_in_pinboard($studioid, $userid, $data2);
 
         return array('contents' => $contents,
                 'pinboard_contents' => $pinboardcontents);
@@ -373,7 +377,7 @@ class mod_openstudio_generator extends testing_module_generator {
 
         $cm = $DB->get_record('course_modules', array('id' => $studio->cmid));
         // Switch the user global so we acces the correct user's draft files.
-        $contentid = mod_openstudio\local\api\content::create($studio->id, $contentdata['userid'],
+        $contentid = content::create($studio->id, $contentdata['userid'],
                 $levelcontainer, $levelid, $contentdata, $file, $context, $cm);
         $USER = $realuser;
         return $contentid;
@@ -433,7 +437,7 @@ class mod_openstudio_generator extends testing_module_generator {
             $leveldata['level2id'] = $leveldata['parentid'];
         }
         if (!isset($leveldata['sortorder'])) {
-            $leveldata['sortorder'] = mod_openstudio\local\api\levels::get_latest_sortorder(
+            $leveldata['sortorder'] = levels::get_latest_sortorder(
                     $leveldata['level'], $leveldata['parentid']);
         }
         if (!isset($leveldata['hidelevel'])) {
@@ -475,7 +479,39 @@ class mod_openstudio_generator extends testing_module_generator {
     }
 
     public function create_comment($commentdata) {
-        return studio_api_comments_create($commentdata['contentid'], $commentdata['userid'], $commentdata['comment']);
+        global $CFG, $USER, $DB;
+        $realuser = $USER;
+        if (is_object($commentdata)) {
+            $commentdata = (array) $commentdata;
+        }
+        $replyid = array_key_exists('inreplyto', $commentdata) ? $commentdata['inreplyto'] : null;
+        $context = null;
+        $file = null;
+        if (array_key_exists('filepath', $commentdata) && array_key_exists('filecontext', $commentdata)) {
+            // Switch $USER for file creation.
+            $USER = $DB->get_record('user', array('id' => $commentdata['userid']));
+            $usercontext = context_user::instance($commentdata['userid']);
+            $fs = get_file_storage();
+            $filerecord = (object) array(
+                    'userid' => $commentdata['userid'],
+                    'component' => 'user',
+                    'filearea' => 'draft',
+                    'filepath' => '/',
+                    'filename' => basename($commentdata['filepath']),
+                    'contextid' => $usercontext->id,
+                    'itemid' => file_get_unused_draft_itemid()
+            );
+            $storedfile = $fs->create_file_from_pathname($filerecord, $CFG->dirroot . '/' . $commentdata['filepath']);
+            $file = ['id' => $storedfile->get_itemid()];
+            $context = $commentdata['filecontext'];
+        }
+        $id = comments::create($commentdata['contentid'], $commentdata['userid'], $commentdata['comment'],
+                null, $file, $context, $replyid);
+        if (!empty($commentdata['deleted'])) {
+            comments::delete($id, $commentdata['userid']);
+        }
+        $USER = $realuser;
+        return $id;
     }
 
     public function create_flag($flagdata) {

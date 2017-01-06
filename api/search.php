@@ -166,7 +166,7 @@ function studio_api_search_update($cm, $slot) {
 
     // Add in comments.
     // To prevenr performance issue, we will only index the latest 25 comments.
-    $commentsdata = studio_api_comments_get_all($slot->id, null, null, 25);
+    $commentsdata = mod_openstudio\local\api\comments::get_for_content($slot->id, null, 25);
     if ($commentsdata != false) {
         $content .= ' . ';
         foreach ($commentsdata as $comment) {

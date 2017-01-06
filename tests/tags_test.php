@@ -35,7 +35,7 @@ class mod_openstudio_tags_testcase extends openstudio_testcase {
         $this->resetAfterTest(true);
         $teacherroleid = 3;
         $studentroleid = 5;
-        $this->totalslots = 24; // This is what the scripts below create for ONE CMID.
+        $this->totalcontents = 24; // This is what the scripts below create for ONE CMID.
         $this->pinboardslots = 3; // This is what the scripts below create for ONE CMID.
 
         // Our test data has 1 course, 2 groups, 2 teachers and 10 students.

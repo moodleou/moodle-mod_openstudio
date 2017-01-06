@@ -280,7 +280,7 @@ EOF;
                         case 'contentxyz5':
                             $DB->set_field('openstudio_contents', 'contenttype', content::TYPE_PRESENTATION,
                                 array('id' => $contentid));
-                            studio_api_comments_create($contentid, $user->id, 'Fire and Blood');
+                            mod_openstudio\local\api\comments::create($contentid, $user->id, 'Fire and Blood');
                             break;
 
                         case 'contentxyz6':

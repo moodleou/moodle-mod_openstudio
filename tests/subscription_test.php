@@ -39,7 +39,7 @@ class mod_openstudio_subscription_testcase extends openstudio_testcase {
         $this->resetAfterTest(true);
         $this->teacherroleid = 3;
         $this->studentroleid = 5;
-        $this->totalslots = 24; // This is what the scripts below create for ONE CMID.
+        $this->totalcontents = 24; // This is what the scripts below create for ONE CMID.
         $this->pinboardslots = 3; // This is what the scripts below create for ONE CMID.
 
         // Our test data has 1 course, 2 groups, 2 teachers and 10 students.
@@ -236,9 +236,9 @@ class mod_openstudio_subscription_testcase extends openstudio_testcase {
      */
     public function add_comments($slotid) {
         // Adds 2 comments to normal slot.
-        studio_api_comments_create($slotid, $this->users->students->four->id, 'Fire and Blood');
+        mod_openstudio\local\api\comments::create($slotid, $this->users->students->four->id, 'Fire and Blood');
         sleep(1);
-        studio_api_comments_create($slotid, $this->users->students->three->id, 'Winter is Coming');
+        mod_openstudio\local\api\comments::create($slotid, $this->users->students->three->id, 'Winter is Coming');
     }
 
     /**

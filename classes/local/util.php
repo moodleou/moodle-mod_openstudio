@@ -25,9 +25,12 @@
 namespace mod_openstudio\local;
 
 use mod_openstudio\local\api\content;
+use mod_openstudio\local\api\comments;
 use mod_openstudio\local\api\folder;
 use mod_openstudio\local\api\item;
 use mod_openstudio\local\util\defaults;
+
+defined('MOODLE_INTERNAL') || die();
 
 class util {
 
@@ -575,7 +578,7 @@ EOF;
             $contentdata->tags = array();
         }
 
-        $contentdata->comments = \studio_api_comments_get_total_by_slot($contentdata->id);
+        $contentdata->comments = comments::total_for_content($contentdata->id);
 
         // Include slot versions?
         if ($getversions > 0) {

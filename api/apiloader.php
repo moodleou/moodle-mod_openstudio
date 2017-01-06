@@ -34,7 +34,6 @@ require_once(__DIR__.'/tracking.php');
 require_once(__DIR__.'/follow.php');
 require_once(__DIR__.'/rss.php');
 require_once(__DIR__.'/subscription.php');
-require_once(__DIR__.'/comments.php');
 require_once(__DIR__.'/tags.php');
 require_once(__DIR__.'/importexport.php');
 require_once(__DIR__.'/filesystem.php');

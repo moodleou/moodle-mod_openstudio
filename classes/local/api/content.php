@@ -27,13 +27,14 @@ namespace mod_openstudio\local\api;
 use mod_openstudio\local\util\defaults;
 use mod_openstudio\local\util;
 
+defined('MOODLE_INTERNAL') || die();
+
 // Remove after these APIs are refactored.
 require_once($CFG->dirroot . '/mod/openstudio/api/tags.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/embedcode.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/tracking.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/search.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/item.php');
-require_once($CFG->dirroot . '/mod/openstudio/api/comments.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/slotversion.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/flags.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/set.php');
@@ -859,7 +860,7 @@ EOF;
                 $rs->close();
 
                 // Delete all comments associated with content.
-                \studio_api_comments_delete_all($contentid, $userid);
+                comments::delete_all($contentid, $userid);
 
                 // Delete all tags associated with content.
                 \studio_api_tags_remove_slot_tag($contentid);

@@ -24,6 +24,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 class openstudio_testcase extends advanced_testcase {
 
     protected $users;
@@ -31,7 +33,7 @@ class openstudio_testcase extends advanced_testcase {
     protected $course;
     protected $generator; // Contains mod_openstudio specific data generator functions.
     protected $studiolevels; // Generic studio instance with no levels or slots.
-    protected $totalslots;
+    protected $totalcontents;
     protected $pinboardslots;
     protected $singleentrydata;
     protected $contentdata;
