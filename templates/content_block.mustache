@@ -32,6 +32,7 @@
         "name" : "Open Studio",
         "contentlink" : "http://example.com/mod/openstudio/content.php?id=3&sid=9",
         "contenticon" : "../../../mod/openstudio/pix/icon.svg",
+        "myworkview" : false,
         "contentthumbnailurl" : "../../../mod/openstudio/pix/icon.svg",
         "viewuserworkurl" : "http://example.com/mod/openstudio/view.php?id=3&sid=9",
         "timemodified" : "5/10/16, 13:27",
@@ -66,6 +67,13 @@
             </div>
             <div>
                 <h4 class="openstudio-grid-item-content-detail-owner-name">{{{ firstname }}} {{{ lastname }}}</h4>
+                {{# myworkview }}
+                    <a class="openstudio-grid-item-content-detail-owner-view" href="{{{ viewuserworkurl }}}">
+                    {{# str }} contentitemview, mod_openstudio {{/ str }}
+                    {{{ firstname }}}’s
+                    {{# str }} contentitemwork, mod_openstudio {{/ str }}
+                    </a>
+                {{/ myworkview }}
             </div>
         </div>
         {{# socialdata }}

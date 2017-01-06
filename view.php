@@ -244,14 +244,19 @@ if ($finalviewpermissioncheck) {
                 }
             }
 
+            $visibility = (int)$content->visibility;
+            if ($visibility < 0) {
+                $visibility = content::VISIBILITY_GROUP;
+            }
+
             // Set icon for content.
-            switch(abs((int) $content->visibility)) {
+            switch ($visibility) {
                 case content::VISIBILITY_MODULE:
                     $contenticon = new moodle_url('/mod/openstudio/pix/mymodule_rgb_32px.svg');
                     break;
 
                 case content::VISIBILITY_GROUP:
-                    $contenticon = new moodle_url('/mod/openstudio/pix/shared_content_rgb_32px.svg');
+                    $contenticon = new moodle_url('/mod/openstudio/pix/group_rgb_32px.svg');
                     break;
 
                 case content::VISIBILITY_WORKSPACE:
@@ -266,6 +271,12 @@ if ($finalviewpermissioncheck) {
                 case content::VISIBILITY_TUTOR:
                     $contenticon = new moodle_url('/mod/openstudio/pix/share_with_tutor_rgb_32px.svg');
                     break;
+            }
+
+            if ($content->userid != $viewuser->id) {
+                $content->myworkview = true;
+            } else {
+                $content->myworkview = false;
             }
 
             $content->contenticon = $contenticon;
@@ -303,7 +314,7 @@ echo $OUTPUT->header(); // Header.
 
 echo $html;
 
-echo $renderer->body($cm->id, $theme, $vid, $contentdata); // Body.
+echo $renderer->body($cm->id, $theme, $vid, $permissions, $contentdata); // Body.
 
 // Finish the page.
 echo $OUTPUT->footer();

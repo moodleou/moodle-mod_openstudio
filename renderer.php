@@ -423,14 +423,16 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      * @param int $cmid The course module id.
      * @param object $theme The theme settings.
      * @param int $viewmode View mode: module, group, studio, pinboard or workspace.
+     * @param object $permissions The permission object for the given user/view.
      * @param object $contentdata The content records to display.
      * @return string The rendered HTM fragment.
      */
-    public function body($cmid, $theme, $viewmode = content::VISIBILITY_MODULE, $contentdata) {
+    public function body($cmid, $theme, $viewmode = content::VISIBILITY_MODULE, $permissions, $contentdata) {
         global $OUTPUT;
 
         $placeholdertext = '';
-        $groupview = false;
+        $selectview = false;
+        $filtername = '';
         switch ($viewmode) {
             case content::VISIBILITY_MODULE:
                 $placeholdertext = $theme->thememodulename;
@@ -438,7 +440,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
             case content::VISIBILITY_GROUP:
                 $placeholdertext = $theme->themegroupname;
-                $groupview = true;
+                $selectview = true;
                 break;
 
             case content::VISIBILITY_WORKSPACE:
@@ -451,9 +453,23 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 break;
         }
 
-        $contentdata->placeholdertext = $placeholdertext;
-        $contentdata->groupview = $groupview;
+        $grouplist = studio_api_group_list(
+                    $permissions->activecid, $permissions->groupingid,
+                    $permissions->activeuserid, 1);
 
+        $showmultigroup = false;
+        $groupitem = array();
+        if ($grouplist) {
+            foreach ($grouplist as $group) {
+                $groupitem[$group->groupid] = $group;
+            }
+            $showmultigroup = (count($groupitem) > 1);
+        }
+
+        $contentdata->groupitems = array_values($groupitem);
+        $contentdata->showmultigroup = $showmultigroup;
+        $contentdata->placeholdertext = $placeholdertext;
+        $contentdata->selectview = $selectview;
         $contentdata->commentsicon = $OUTPUT->pix_url('comments_rgb_32px', 'openstudio');
         $contentdata->inspirationicon = $OUTPUT->pix_url('inspiration_rgb_32px', 'openstudio');
         $contentdata->participationicon = $OUTPUT->pix_url('participation_rgb_32px', 'openstudio');

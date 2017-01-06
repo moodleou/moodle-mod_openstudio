@@ -27,7 +27,19 @@
 
     Example context (json):
     {
-        "total" : "1000"
+        "total" : "1000",
+        "selectview" : true,
+        "showmultigroup": true,
+        "groupitems" : [
+            {
+               "id" : "1",
+               "name" : "Group 1"
+            },
+            {
+               "id" : "2",
+               "name" : "Group 2"
+            }
+        ]
     }
 
 }}
@@ -55,3 +67,21 @@
 <span class="openstudio-filter-text">
 <span>{{# str }} filtertotal, mod_openstudio {{/ str }}: {{ total }}</span>
 </span>
+{{# selectview }}
+<span class="openstudio-filter-select">
+    <span>{{# str }} filtergroup, mod_openstudio {{/ str }}:</span>
+    {{# showmultigroup}}
+        <select>
+           <option value="0">{{# str }} filterall, mod_openstudio {{/ str }}</option>
+          {{# groupitems }}
+            <option value="{{ id }}">{{ name }}</option>
+          {{/ groupitems }}
+        </select>
+    {{/showmultigroup}}
+    {{^ showmultigroup}}
+        {{# groupitems }}
+            <span>{{ name }}</span>
+        {{/ groupitems }}
+    {{/showmultigroup}}
+</span>
+{{/ selectview }}

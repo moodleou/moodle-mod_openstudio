@@ -352,6 +352,24 @@
     line-height: 29px;
 }
 
+.openstudio-filter-select {
+    padding-left: 10px;
+    font-size: 1em;
+    color: #002158;
+    display: inline-block;
+    line-height: 29px;
+}
+
+.openstudio-filter-select select {
+    padding: 2px 0 0 0;
+    margin-bottom: 0px;
+    width: 140px;
+    font-size: 0.85714em;
+    font-family: Arial;
+    color: #000000;
+    margin-left: 3px;
+}
+
 .openstudio-filter-text-selected {
     font-weight: bold;
 }
