@@ -46,42 +46,54 @@
 <span class="openstudio-filter-devider">
 <span class="openstudio-filter-text">
     <a href="#" class="openstudio-filter-collapsed">
-        {{# str }} filterpreferences, mod_openstudio {{/ str }}
+        {{#str}} filterpreferences, mod_openstudio {{/str}}
     </a>
 </span>
 </span>
 
 <span class="openstudio-filter-sort-devider">
-<span class="openstudio-filter-sort-text ">{{# str }} filtersortby, mod_openstudio {{/ str }}
+<span class="openstudio-filter-sort-text ">{{#str}} filtersortby, mod_openstudio {{/str}}
     <a href="#" class="openstudio-filter-expanded openstudio-filter-text-selected">
-        {{# str }} filterdate, mod_openstudio {{/ str }}
+        {{#str}} filterdate, mod_openstudio {{/str}}
     </a>
 </span>
 <span class="openstudio-filter-sort-text openstudio-filter-sort-text-title">
     <a href="#" class="openstudio-filter-collapsed">
-        {{# str }} filtertitle, mod_openstudio {{/ str }}
+        {{#str}} filtertitle, mod_openstudio {{/str}}
     </a>
 </span>
 </span>
 
 <span class="openstudio-filter-text">
-<span>{{# str }} filtertotal, mod_openstudio {{/ str }}: {{ total }}</span>
+<span>{{#str}} filtertotal, mod_openstudio {{/str}}: {{total}}</span>
 </span>
-{{# selectview }}
+{{#selectview}}
 <span class="openstudio-filter-select">
-    <span>{{# str }} filtergroup, mod_openstudio {{/ str }}:</span>
-    {{# showmultigroup}}
+    <span>{{#str}} filtergroup, mod_openstudio {{/str}}:</span>
+    {{#showmultigroup}}
         <select>
-           <option value="0">{{# str }} filterall, mod_openstudio {{/ str }}</option>
-          {{# groupitems }}
-            <option value="{{ id }}">{{ name }}</option>
-          {{/ groupitems }}
+           <option value="0">{{#str}} filterall, mod_openstudio {{/str}}</option>
+          {{#groupitems}}
+            <option value="{{id}}">{{name}}</option>
+          {{/groupitems}}
         </select>
     {{/showmultigroup}}
     {{^ showmultigroup}}
-        {{# groupitems }}
-            <span>{{ name }}</span>
-        {{/ groupitems }}
+        {{#groupitems}}
+            <span>{{name}}</span>
+        {{/groupitems}}
     {{/showmultigroup}}
 </span>
-{{/ selectview }}
+{{/selectview}}
+
+{{#myactivities}}
+    <span class="openstudio-filter-select">
+    <span>{{#str}} filterwork, mod_openstudio {{/str}}:</span>
+    <select id="filter_block_activity">
+            <option value="0">{{#str}} filterall, mod_openstudio {{/str}}</option>
+        {{#blocksdata}}
+            <option value="{{id}}">{{name}}</option>
+        {{/blocksdata}}
+    </select>
+</span>
+{{/myactivities}}

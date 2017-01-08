@@ -15,9 +15,9 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template mod_openstudio/logo
+    @template mod_openstudio/add_activity_content_block
 
-    Logo template of the OpenStudio UI.
+    Add activity content block template of the OpenStudio UI.
 
     Classes required for JS:
     * none
@@ -27,10 +27,16 @@
 
     Example context (json):
     {
-        "sitename": "Open Studio"
+        "contentediturl": "http://exmaple/mod/openstudio/contentedit.php?id=4&lid=0&sid=0&type=0&sstsid=0",
+        "l3name": "Content A"
     }
 
 }}
-<h2 class="openstudio-nav-logo">
-    <span class="openstudio-nav-logo-text">{{sitename}}</span>
-</h2>
+<div class="openstudio-add-new-container">
+    <div class="openstudio-add-new">
+        <a href="{{{contentediturl}}}" class="openstudio-actvity-title">
+            {{{l3name}}}
+        </a>
+    </div>
+    <a href="{{{contentediturl}}}"><div class="openstudio-upload-container"></div></a>
+</div>

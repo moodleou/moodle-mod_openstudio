@@ -36,28 +36,28 @@
 }}
 
 <div class="openstudio-content-edit-form">
-    <h1 class="accesshide">{{# str }} contenteditformheader, mod_openstudio {{/ str }}</h1>
+    <h1 class="accesshide">{{#str}} contenteditformheader, mod_openstudio {{/str}}</h1>
 
     {{#isfolderlock}}
-        {{# str }} contentislocked, mod_openstudio {{/ str }}
+        {{#str}} contentislocked, mod_openstudio {{/str}}
     {{/isfolderlock}}
     {{^isfolderlock}}
         <div class='openstudio-add-content-form'>
-            <img src="{{ addcontenticon }}"
-                 alt="{{# str }} contentaddnew, mod_openstudio {{/ str }}"
+            <img src="{{addcontenticon}}"
+                 alt="{{#str}} contentaddnew, mod_openstudio {{/str}}"
                  class="openstudio-add-content-icon" />
             <span class="openstudio-upload-content-title">
-                {{# str }} contentaddnew, mod_openstudio {{/ str }}
+                {{#str}} contentaddnew, mod_openstudio {{/str}}
             </span>
         </div>
 
         {{#feature_enablefolders}}
             <div class="openstudio-create-folder-button">
-                <button>{{# str }} contentformcreatefolderbutton, mod_openstudio {{/ str }}</button>
+                <button>{{#str}} contentformcreatefolderbutton, mod_openstudio {{/str}}</button>
             </div>
         {{/feature_enablefolders}}
 
         <div class="openstudio-clear"></div>
-        {{{ editform }}}
+        {{{editform}}}
     {{/isfolderlock}}
 </div>

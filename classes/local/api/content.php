@@ -310,8 +310,6 @@ EOF;
             array_key_exists('urltitle', $data) ? ($insertdata['urltitle'] = $data['urltitle']) : null;
             $insertdata['name'] = $data['name'];
             array_key_exists('description', $data) ? ($insertdata['description'] = $data['description']) : null;
-            array_key_exists('textformat', $data) ? ($insertdata['textformat'] = $data['textformat']) : null;
-            array_key_exists('commentformat', $data) ? ($insertdata['commentformat'] = $data['commentformat']) : null;
             $insertdata['showextradata'] = 0;
             if (array_key_exists('showgps', $data)) {
                 $insertdata['showextradata'] = $insertdata['showextradata'] + $data['showgps'];
@@ -498,7 +496,6 @@ EOF;
                     $insertdata['urltitle'] = $contentdata->urltitle;
                     $insertdata['name'] = $contentdata->name;
                     $insertdata['description'] = $contentdata->description;
-                    $insertdata['textformat'] = $contentdata->textformat;
                     $insertdata['timemodified'] = time();
 
                     switch ($contentdata->contenttype) {
@@ -611,8 +608,6 @@ EOF;
                 }
             }
 
-            array_key_exists('textformat', $data) ? ($contentdata->textformat = $data['textformat']) : null;
-            array_key_exists('commentformat', $data) ? ($contentdata->commentformat = $data['commentformat']) : null;
             $contentdata->showextradata = 0;
             if (array_key_exists('showgps', $data)) {
                 $contentdata->showextradata = $contentdata->showextradata + $data['showgps'];
@@ -772,7 +767,6 @@ EOF;
                 $insertdata['urltitle'] = $contentdata->urltitle;
                 $insertdata['name'] = $contentdata->name;
                 $insertdata['description'] = $contentdata->description;
-                $insertdata['textformat'] = $contentdata->textformat;
                 $insertdata['timemodified'] = time();
 
                 switch ($contentdata->contenttype) {
@@ -912,7 +906,6 @@ EOF;
                 $contentdata->urltitle = $contentversiondata->urltitle;
                 $contentdata->name = $contentversiondata->name;
                 $contentdata->description = $contentversiondata->description;
-                $contentdata->textformat = $contentversiondata->textformat;
                 $contentdata->mimetype = $contentversiondata->mimetype;
                 $contentdata->fileid = $contentversiondata->fileid;
                 $contentdata->deletedby = null;
@@ -1223,7 +1216,6 @@ EOF;
             $insertdata['urltitle'] = $contentdata->urltitle;
             $insertdata['name'] = $contentdata->name;
             $insertdata['description'] = $contentdata->description;
-            $insertdata['textformat'] = $contentdata->textformat;
             $insertdata['timemodified'] = time();
 
             switch ($contentdata->contenttype) {

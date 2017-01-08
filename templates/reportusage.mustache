@@ -116,294 +116,294 @@
         }
     }
 }}
-<h1>{{# str }} navadminusagereport, mod_openstudio {{/ str }}</h1>
+<h1>{{#str}} navadminusagereport, mod_openstudio {{/str}}</h1>
 <div class="openstudio-report-usage">
-   <h2>{{# str }} reportusagetitle1, mod_openstudio {{/ str }}</h2>
-   {{# summarydata }}
+   <h2>{{#str}} reportusagetitle1, mod_openstudio {{/str}}</h2>
+   {{#summarydata}}
    <p>
-       {{# str }}
-           reportusage1section1, mod_openstudio, { "registeredusers": {{# quote }}{{registeredusers}}{{/ quote }} }
-       {{/ str }}
+       {{#str}}
+           reportusage1section1, mod_openstudio, { "registeredusers": {{#quote}}{{registeredusers}}{{/quote}} }
+       {{/str}}
    </p>
    <p>
-       {{# str }}
-           reportusage1section2, mod_openstudio, { "activeusers": {{# quote }}{{activeusers}}{{/ quote }} }
-       {{/ str }}
+       {{#str}}
+           reportusage1section2, mod_openstudio, { "activeusers": {{#quote}}{{activeusers}}{{/quote}} }
+       {{/str}}
    </p>
    <p>
-       {{# str }}
+       {{#str}}
            reportusage1section3, mod_openstudio, {
-            "averagecontentperuser": {{# quote }}{{averagecontentperuser}}{{/ quote }}
+            "averagecontentperuser": {{#quote}}{{averagecontentperuser}}{{/quote}}
            }
-       {{/ str }}
+       {{/str}}
    </p>
    <p>
-       {{# str }}
+       {{#str}}
            reportusage1section4, mod_openstudio, {
-            "averagepinboardcontentperuser": {{# quote }}{{averagepinboardcontentperuser}}{{/ quote }}
+            "averagepinboardcontentperuser": {{#quote}}{{averagepinboardcontentperuser}}{{/quote}}
            }
-       {{/ str }}
+       {{/str}}
    </p>
    <p>
-       {{# str }}
+       {{#str}}
            reportusage1section5, mod_openstudio, {
-            "averageactivitycontentperuser": {{# quote }}{{averageactivitycontentperuser}}{{/ quote }}
+            "averageactivitycontentperuser": {{#quote}}{{averageactivitycontentperuser}}{{/quote}}
            }
-       {{/ str }}
+       {{/str}}
    </p>
    <p>
-       {{# slots }}
-           {{# str }}
+       {{#slots}}
+           {{#str}}
                reportusage1section6, mod_openstudio, {
-                    "contents": {{# quote }}{{slots}}{{/ quote }},
-                    "contentsdeleted": {{# quote }}{{slotsdeleted}}{{/ quote }}
+                    "contents": {{#quote}}{{slots}}{{/quote}},
+                    "contentsdeleted": {{#quote}}{{slotsdeleted}}{{/quote}}
                }
-           {{/ str }}
-       {{/ slots }}
+           {{/str}}
+       {{/slots}}
    </p>
    <p>
-       {{# slotversions }}
-           {{# str }}
+       {{#slotversions}}
+           {{#str}}
                reportusage1section7, mod_openstudio, {
-                    "contentversions": {{# quote }}{{slotversions}}{{/ quote }},
-                    "contentversionsdeleted": {{# quote }}{{slotversionsdeleted}}{{/ quote }}
+                    "contentversions": {{#quote}}{{slotversions}}{{/quote}},
+                    "contentversionsdeleted": {{#quote}}{{slotversionsdeleted}}{{/quote}}
                }
-           {{/ str }}
-       {{/ slotversions }}
+           {{/str}}
+       {{/slotversions}}
    </p>
    <p>
-       {{# slotcomments }}
-           {{# str }}
+       {{#slotcomments}}
+           {{#str}}
                reportusage1section8, mod_openstudio, {
-                    "contentcomments": {{# quote }}{{slotcomments}}{{/ quote }},
-                    "contentcommentsdeleted": {{# quote }}{{slotcommentsdeleted}}{{/ quote }}
+                    "contentcomments": {{#quote}}{{slotcomments}}{{/quote}},
+                    "contentcommentsdeleted": {{#quote}}{{slotcommentsdeleted}}{{/quote}}
                }
-           {{/ str }}
-       {{/ slotcomments }}
+           {{/str}}
+       {{/slotcomments}}
    </p>
    <p>
-       {{# slotcomments }}
-           {{# str }}
+       {{#slotcomments}}
+           {{#str}}
                reportusage1section9, mod_openstudio, {
-                    "contentaudiocomments": {{# quote }}{{slotaudiocomments}}{{/ quote }}
+                    "contentaudiocomments": {{#quote}}{{slotaudiocomments}}{{/quote}}
                }
-           {{/ str }}
-       {{/ slotcomments }}
+           {{/str}}
+       {{/slotcomments}}
    </p>
-   {{/ summarydata }}
+   {{/summarydata}}
     <table>
-        <caption>{{# str }} reportusage2section1, mod_openstudio {{/ str }}</caption>
+        <caption>{{#str}} reportusage2section1, mod_openstudio {{/str}}</caption>
         <tr>
-            <th colspan="3">{{# str }} reportusage2section2, mod_openstudio {{/ str }}</th>
-            <th>{{# str }} reportusage2section3, mod_openstudio {{/ str }}</th>
-            <th>{{# str }} reportusage2section4, mod_openstudio {{/ str }}</th>
-            <th>{{# str }} reportusage2section5, mod_openstudio {{/ str }}</th>
+            <th colspan="3">{{#str}} reportusage2section2, mod_openstudio {{/str}}</th>
+            <th>{{#str}} reportusage2section3, mod_openstudio {{/str}}</th>
+            <th>{{#str}} reportusage2section4, mod_openstudio {{/str}}</th>
+            <th>{{#str}} reportusage2section5, mod_openstudio {{/str}}</th>
         </tr>
-        {{# contentdataactivity }}
+        {{#contentdataactivity}}
             <tr>
-                {{# levelname }}
+                {{#levelname}}
                     <td>{{level1name}}</td>
                     <td>{{level2name}}</td>
                     <td>{{level3name}}</td>
-                {{/ levelname }}
+                {{/levelname}}
                 <td>{{contenttypename}}</td>
                 <td>{{totalusers}}</td>
                 <td>{{totalcontent}}</td>
             </tr>
-        {{/ contentdataactivity }}
+        {{/contentdataactivity}}
     </table>
     <table>
-        <caption>{{# str }} reportusage3section1, mod_openstudio {{/ str }}</caption>
+        <caption>{{#str}} reportusage3section1, mod_openstudio {{/str}}</caption>
         <tr>
-            <th colspan="3">{{# str }} reportusage2section2, mod_openstudio {{/ str }}</th>
-            <th>{{# str }} reportusage3section3, mod_openstudio {{/ str }}</th>
-            <th>{{# str }} reportusage3section4, mod_openstudio {{/ str }}</th>
+            <th colspan="3">{{#str}} reportusage2section2, mod_openstudio {{/str}}</th>
+            <th>{{#str}} reportusage3section3, mod_openstudio {{/str}}</th>
+            <th>{{#str}} reportusage3section4, mod_openstudio {{/str}}</th>
         </tr>
-        {{# contentdatavisbility }}
+        {{#contentdatavisbility}}
             <tr>
-                {{# levelname }}
+                {{#levelname}}
                     <td>{{level1name}}</td>
                     <td>{{level2name}}</td>
                     <td>{{level3name}}</td>
-                {{/ levelname }}
+                {{/levelname}}
                 <td>{{visibilitytypename}}</td>
                 <td>{{totalcontent}}</td>
             </tr>
-        {{/ contentdatavisbility }}
+        {{/contentdatavisbility}}
     </table>
     <table>
-        <caption>{{# str }} reportusage4section1, mod_openstudio {{/ str }}</caption>
+        <caption>{{#str}} reportusage4section1, mod_openstudio {{/str}}</caption>
         <tr>
-            <th colspan="3">{{# str }} reportusage4section2, mod_openstudio {{/ str }}</th>
-            <th>{{# str }} reportusage4section3, mod_openstudio {{/ str }}</th>
-            <th>{{# str }} reportusage4section4, mod_openstudio {{/ str }}</th>
-            <th>{{# str }} reportusage4section5, mod_openstudio {{/ str }}</th>
+            <th colspan="3">{{#str}} reportusage4section2, mod_openstudio {{/str}}</th>
+            <th>{{#str}} reportusage4section3, mod_openstudio {{/str}}</th>
+            <th>{{#str}} reportusage4section4, mod_openstudio {{/str}}</th>
+            <th>{{#str}} reportusage4section5, mod_openstudio {{/str}}</th>
         </tr>
-        {{# flagdata }}
-            {{# flagdatacontentstop20 }}
+        {{#flagdata}}
+            {{#flagdatacontentstop20}}
                 <tr>
-                    {{# levelname }}
+                    {{#levelname}}
                         <td>{{level1name}}</td>
                         <td>{{level2name}}</td>
                         <td>{{level3name}}</td>
-                    {{/ levelname }}
+                    {{/levelname}}
                     <td>{{contentname}}</td>
                     <td>{{ownername}}</td>
                     <td>{{totalcontent}}</td>
                 </tr>
-            {{/ flagdatacontentstop20 }}
-        {{/ flagdata }}
+            {{/flagdatacontentstop20}}
+        {{/flagdata}}
     </table>
     <hr />
-    <h2>{{# str }} reportusagetitle2, mod_openstudio {{/ str }}</h2>
+    <h2>{{#str}} reportusagetitle2, mod_openstudio {{/str}}</h2>
     <table>
-        <caption>{{# str }} reportusage5section1, mod_openstudio {{/ str }}</caption>
+        <caption>{{#str}} reportusage5section1, mod_openstudio {{/str}}</caption>
         <tr>
-            <th>{{# str }} reportusage5section2, mod_openstudio {{/ str }}</th>
-            <th>{{# str }} reportusage5section3, mod_openstudio {{/ str }}</th>
-            <th>{{# str }} reportusage5section4, mod_openstudio {{/ str }}</th>
+            <th>{{#str}} reportusage5section2, mod_openstudio {{/str}}</th>
+            <th>{{#str}} reportusage5section3, mod_openstudio {{/str}}</th>
+            <th>{{#str}} reportusage5section4, mod_openstudio {{/str}}</th>
         </tr>
-        {{# flagdata }}
-            {{# people }}
+        {{#flagdata}}
+            {{#people}}
                 <tr>
-                    <td>{{# str }} reportusage5section5, mod_openstudio {{/ str }}</td>
+                    <td>{{#str}} reportusage5section5, mod_openstudio {{/str}}</td>
                     <td>{{totalusers}}</td>
                     <td>{{totalpeople}}</td>
                 </tr>
-            {{/ people }}
-        {{/ flagdata }}
+            {{/people}}
+        {{/flagdata}}
     </table>
     <table>
-        <caption>{{# str }} reportusage6section1, mod_openstudio {{/ str }}</caption>
+        <caption>{{#str}} reportusage6section1, mod_openstudio {{/str}}</caption>
         <tr>
-            <th>{{# str }} reportusage6section2, mod_openstudio {{/ str }}</th>
-            <th>{{# str }} reportusage6section3, mod_openstudio {{/ str }}</th>
+            <th>{{#str}} reportusage6section2, mod_openstudio {{/str}}</th>
+            <th>{{#str}} reportusage6section3, mod_openstudio {{/str}}</th>
         </tr>
-        {{# flagdata }}
-            {{# peopletop20 }}
+        {{#flagdata}}
+            {{#peopletop20}}
                 <tr>
                     <td>{{firstname}} {{lastname}}</td>
                     <td>{{totalusers}}</td>
                 </tr>
-            {{/ peopletop20 }}
-        {{/ flagdata }}
+            {{/peopletop20}}
+        {{/flagdata}}
     </table>
     <table>
-        <caption>{{# str }} reportusage7section1, mod_openstudio {{/ str }}</caption>
+        <caption>{{#str}} reportusage7section1, mod_openstudio {{/str}}</caption>
         <tr>
-            <th colspan="3">{{# str }} reportusage7section2, mod_openstudio {{/ str }}</th>
-            <th>{{# str }} reportusage7section3, mod_openstudio {{/ str }}</th>
-            <th>{{# str }} reportusage7section4, mod_openstudio {{/ str }}</th>
+            <th colspan="3">{{#str}} reportusage7section2, mod_openstudio {{/str}}</th>
+            <th>{{#str}} reportusage7section3, mod_openstudio {{/str}}</th>
+            <th>{{#str}} reportusage7section4, mod_openstudio {{/str}}</th>
         </tr>
-        {{# flagdata }}
-            {{# flagdatacontentstrackedtop20 }}
+        {{#flagdata}}
+            {{#flagdatacontentstrackedtop20}}
                 <tr>
-                    {{# levelname }}
+                    {{#levelname}}
                         <td>{{level1name}}</td>
                         <td>{{level2name}}</td>
                         <td>{{level3name}}</td>
-                    {{/ levelname }}
+                    {{/levelname}}
                     <td>{{contentname}}</td>
                     <td>{{totalcontent}}</td>
                 </tr>
-            {{/ flagdatacontentstrackedtop20 }}
-        {{/ flagdata }}
+            {{/flagdatacontentstrackedtop20}}
+        {{/flagdata}}
     </table>
     <hr />
-    {{# summarydata }}
+    {{#summarydata}}
         <p>
-            {{# str }}
+            {{#str}}
                 reportusage8section1, mod_openstudio, {
-                    "storagetotalmb": {{# quote }}{{storagetotalmb}}{{/ quote }},
-                    "storagetotalgb": {{# quote }}{{storagetotalgb}}{{/ quote }}
+                    "storagetotalmb": {{#quote}}{{storagetotalmb}}{{/quote}},
+                    "storagetotalgb": {{#quote}}{{storagetotalgb}}{{/quote}}
                 }
-            {{/ str }}
+            {{/str}}
         </p>
         <p>
-            {{# str }}
+            {{#str}}
                 reportusage8section2, mod_openstudio, {
-                    "storagebycontentmb": {{# quote }}{{storagebycontentmb}}{{/ quote }},
-                    "storagebycontentgb": {{# quote }}{{storagebycontentgb}}{{/ quote }}
+                    "storagebycontentmb": {{#quote}}{{storagebycontentmb}}{{/quote}},
+                    "storagebycontentgb": {{#quote}}{{storagebycontentgb}}{{/quote}}
                 }
-            {{/ str }}
+            {{/str}}
         </p>
         <p>
-            {{# str }}
+            {{#str}}
                 reportusage8section2a, mod_openstudio, {
-                    "storagebycontentmb": {{# quote }}{{storagebycontentversionmb}}{{/ quote }},
-                    "storagebycontentgb": {{# quote }}{{storagebycontentversiongb}}{{/ quote }}
+                    "storagebycontentmb": {{#quote}}{{storagebycontentversionmb}}{{/quote}},
+                    "storagebycontentgb": {{#quote}}{{storagebycontentversiongb}}{{/quote}}
                 }
-            {{/ str }}
+            {{/str}}
         </p>
         <p>
-            {{# str }}
+            {{#str}}
                 reportusage8section3, mod_openstudio, {
-                    "storagebythumbnailmb": {{# quote }}{{storagebythumbnailmb}}{{/ quote }},
-                    "storagebythumbnailgb": {{# quote }}{{storagebythumbnailgb}}{{/ quote }}
+                    "storagebythumbnailmb": {{#quote}}{{storagebythumbnailmb}}{{/quote}},
+                    "storagebythumbnailgb": {{#quote}}{{storagebythumbnailgb}}{{/quote}}
                 }
-            {{/ str }}
+            {{/str}}
         </p>
         <p>
-            {{# str }}
+            {{#str}}
                 reportusage8section4, mod_openstudio, {
-                    "storagebyaudiomb": {{# quote }}{{storagebycommentmb}}{{/ quote }},
-                    "storagebyaudiogb": {{# quote }}{{storagebycommentgb}}{{/ quote }}
+                    "storagebyaudiomb": {{#quote}}{{storagebycommentmb}}{{/quote}},
+                    "storagebyaudiogb": {{#quote}}{{storagebycommentgb}}{{/quote}}
                 }
-            {{/ str }}
+            {{/str}}
         </p>
-    {{/ summarydata }}
+    {{/summarydata}}
     <table>
-        <caption>{{# str }} reportusage9section1, mod_openstudio {{/ str }}</caption>
+        <caption>{{#str}} reportusage9section1, mod_openstudio {{/str}}</caption>
         <tr>
-            <th>{{# str }} reportusage9section2, mod_openstudio {{/ str }}</th>
-            <th>{{# str }} reportusage9section3, mod_openstudio {{/ str }}</th>
-            <th>{{# str }} reportusage9section4, mod_openstudio {{/ str }}</th>
-            <th>{{# str }} reportusage9section5, mod_openstudio {{/ str }}</th>
+            <th>{{#str}} reportusage9section2, mod_openstudio {{/str}}</th>
+            <th>{{#str}} reportusage9section3, mod_openstudio {{/str}}</th>
+            <th>{{#str}} reportusage9section4, mod_openstudio {{/str}}</th>
+            <th>{{#str}} reportusage9section5, mod_openstudio {{/str}}</th>
         </tr>
-        {{# storage }}
-            {{# storagecontentsbymimetype }}
+        {{#storage}}
+            {{#storagecontentsbymimetype}}
                 <tr>
                     <td>{{mimetype}}</td>
                     <td>{{totals}}</td>
                     <td>{{storageusedmb}}</td>
                     <td>{{storageusedgb}}</td>
                 </tr>
-            {{/ storagecontentsbymimetype }}
-        {{/ storage }}
+            {{/storagecontentsbymimetype}}
+        {{/storage}}
     </table>
     <table>
-        <caption>{{# str }} reportusage10section1, mod_openstudio {{/ str }}</caption>
+        <caption>{{#str}} reportusage10section1, mod_openstudio {{/str}}</caption>
         <tr>
-            <th>{{# str }} reportusage10section2, mod_openstudio {{/ str }}</th>
-            <th>{{# str }} reportusage10section3, mod_openstudio {{/ str }}</th>
-            <th>{{# str }} reportusage10section4, mod_openstudio {{/ str }}</th>
-            <th>{{# str }} reportusage10section5, mod_openstudio {{/ str }}</th>
+            <th>{{#str}} reportusage10section2, mod_openstudio {{/str}}</th>
+            <th>{{#str}} reportusage10section3, mod_openstudio {{/str}}</th>
+            <th>{{#str}} reportusage10section4, mod_openstudio {{/str}}</th>
+            <th>{{#str}} reportusage10section5, mod_openstudio {{/str}}</th>
         </tr>
     <tr>
-        {{# storage }}
-            {{# storagestoragebyuser }}
+        {{#storage}}
+            {{#storagestoragebyuser}}
                 <tr>
                     <td>{{owner}}</td>
                     <td>{{totals}}</td>
                     <td>{{storageusedmb}}</td>
                     <td>{{storageusedgb}}</td>
                 </tr>
-            {{/ storagestoragebyuser }}
-        {{/ storage }}
+            {{/storagestoragebyuser}}
+        {{/storage}}
         </tr>
     </table>
     <hr />
     <table>
-        <caption>{{# str }} reportusage11section1, mod_openstudio {{/ str }} </caption>
+        <caption>{{#str}} reportusage11section1, mod_openstudio {{/str}} </caption>
         <tr>
-            <th>{{# str }} reportusage11section2, mod_openstudio {{/ str }}</th>
-            <th>{{# str }} reportusage11section3, mod_openstudio {{/ str }}</th>
+            <th>{{#str}} reportusage11section2, mod_openstudio {{/str}}</th>
+            <th>{{#str}} reportusage11section3, mod_openstudio {{/str}}</th>
         </tr>
-        {{# activitylog }}
+        {{#activitylog}}
             <tr>
                 <td>{{action}}</td>
                 <td>{{totals}}</td>
             </tr>
-        {{/ activitylog }}
+        {{/activitylog}}
     </table>
 </div>

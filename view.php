@@ -143,7 +143,12 @@ if ($vuid != $USER->id) {
     $strpagetitle .= ': ' . get_string('profileswork', 'openstudio', array('name' => $contentowner->firstname));;
 }
 
-$fblock = -1;
+$fblock = optional_param('fblock', 0, PARAM_TEXT);
+if ($vid == content::VISIBILITY_PRIVATE_PINBOARD) {
+    // If its a request to view pinboard, then fblock can only be -1.
+    $fblock = -1;
+}
+
 $fblockarray = array();
 
 $finalviewpermissioncheck = true;
@@ -204,6 +209,7 @@ if ($finalviewpermissioncheck) {
     if (isset($contentdatatemp->contents)) {
         $contentslist = array();
         $contentdata->total = $contentdatatemp->total;
+        $activityitems = [];
         foreach ($contentdatatemp->contents as $content) {
             // Process content locking.
             if (($content->levelcontainer > 0) && ($content->userid == $permissions->activeuserid)) {
@@ -249,27 +255,34 @@ if ($finalviewpermissioncheck) {
                 $visibility = content::VISIBILITY_GROUP;
             }
 
+            $itemsharewith = '';
             // Set icon for content.
             switch ($visibility) {
                 case content::VISIBILITY_MODULE:
                     $contenticon = new moodle_url('/mod/openstudio/pix/mymodule_rgb_32px.svg');
+                    $itemsharewith = get_string('contentitemsharewithmymodule', 'openstudio');
                     break;
 
                 case content::VISIBILITY_GROUP:
                     $contenticon = new moodle_url('/mod/openstudio/pix/group_rgb_32px.svg');
+                    $itemsharewith = get_string('slotvisibletogroup', 'studio',
+                            studio_api_group_get_name(abs($content->visibility)));
                     break;
 
                 case content::VISIBILITY_WORKSPACE:
                 case content::VISIBILITY_PRIVATE:
                     $contenticon = new moodle_url('/mod/openstudio/pix/onlyme_rgb_32px.svg');
+                    $itemsharewith = get_string('contentitemsharewithonlyme', 'openstudio');
                     break;
 
                 case content::VISIBILITY_PRIVATE_PINBOARD:
                     $contenticon = new moodle_url('/mod/openstudio/pix/onlyme_rgb_32px.svg');
+                    $itemsharewith = get_string('contentitemsharewithonlyme', 'openstudio');
                     break;
 
                 case content::VISIBILITY_TUTOR:
                     $contenticon = new moodle_url('/mod/openstudio/pix/share_with_tutor_rgb_32px.svg');
+                    $itemsharewith = get_string('contentitemsharewithmytutor', 'openstudio');
                     break;
             }
 
@@ -280,14 +293,46 @@ if ($finalviewpermissioncheck) {
             }
 
             $content->contenticon = $contenticon;
+            $content->itemsharewith = $itemsharewith;
             $content->contentfileurl = $contentfileurl;
             $content->contentthumbnailurl = $contentthumbnailfileurl;
-            $content->datetimeupdated = date('j/m/y h:i', $content->timemodified);
-            $content->contentlink = "#";
+            $content->datetimeupdated = $content->timemodified ? date('j/m/y h:i', $content->timemodified) : null;
+            $content->contentlink = new moodle_url('/mod/openstudio/content.php',
+                                    array('id' => $id, 'sid' => $content->id));
 
             $content->userpictureurl = new moodle_url('/user/pix.php/'.$content->userid.'/f1.jpg');
+
+            if (!$content->timemodified) {
+                $content->contentediturl = new moodle_url('/mod/openstudio/contentedit.php',
+                    array('id' => $id, 'sid' => 0, 'lid' => $content->l3id));
+            } else {
+                $content->contentediturl = new moodle_url('/mod/openstudio/content.php',
+                    array('id' => $id, 'sid' => $content->id));
+            }
+
             $contentdata->contents[] = $content;
+
+            // Activity items.
+            if ($vid == content::VISIBILITY_WORKSPACE || $vid == content::VISIBILITY_PRIVATE) {
+                $activityid = $content->l2id;
+
+                if (array_key_exists($activityid, $activityitems)) {
+                    $activityitems[$activityid]->activities[] = (object) $content;
+                } else {
+                    $activityitem = (object) [
+                            'activities' => [(object) $content],
+                            'activityname' => $content->l2name,
+                            'activityid' => $activityid
+                    ];
+
+                    $activityitems[$activityid] = $activityitem;
+                }
+            }
         }
+
+        // Returns all the values from the array and indexes the array numerically.
+        // We need this because mustache requires it.
+        $contentdata->activityitems = array_values($activityitems);
 
         // Gather content social data.
         $contentsocialdata = studio_api_notifications_get_activities($permissions->activeuserid, $contentslist);
@@ -302,6 +347,8 @@ if ($finalviewpermissioncheck) {
 }
 // Render page header and crumb trail.
 util::page_setup($PAGE, $strpagetitle, $strpageheading, $strpageurl, $course, $cm);
+
+$PAGE->requires->js_call_amd('mod_openstudio/viewhelper', 'init');
 
 // Generate stream html.
 $renderer = $PAGE->get_renderer('mod_openstudio');

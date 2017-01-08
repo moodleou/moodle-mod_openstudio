@@ -296,4 +296,12 @@ EOF;
             }
         }
     }
+
+    /**
+     * @Given /^I go to content edit view$/
+     */
+    public function openstudio_go_to_contentedit() {
+         $url = str_replace('content', 'contentedit', $this->getSession()->getCurrentUrl());
+         $this->getSession()->visit($url);
+    }
 }

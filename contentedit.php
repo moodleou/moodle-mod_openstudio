@@ -89,7 +89,7 @@ if ($sid == 0) {
 // We check if the content has previously been created and if so acquire the content id
 // and redirect the user to the correct URL.
 if (($lid > 0) && ($sid <= 0)) {
-    $contentdata = levels::get_record($cminstance->id, $userid, 3, $lid);
+    $contentdata = content::get_record_via_levels($cminstance->id, $userid, 3, $lid);
 
     // Process the level management locks.
     if ($contentdata !== false) {
@@ -550,10 +550,7 @@ if ($contentform->is_cancelled()) {
     $contentformdatadescription = $contentformdata->description;
     if (is_array($contentformdata->description)) {
         $contentformdata->description = $contentformdata->description['text'];
-        $contentformdata->textformat = 1;
     }
-
-    $contentformdata->commentformat = 1;
 
     if ($contentformdata->sid > 0) {
         $contentupdatemode = content::UPDATEMODE_UPDATED;
@@ -748,11 +745,6 @@ if ($contentform->is_cancelled()) {
         // Content always uses rich text editor.
         $contentdatadescription = array('text' => $contentdata->description, 'format' => 1);
         $contentdata->description = $contentdatadescription;
-        $contentdata->textformat = 1;
-
-        if (($permissions->feature_contentcommentuseshtml || ((int) $contentdata->commentformat === 1))) {
-            $contentdata->commentformat = 1;
-        }
 
         if ($folderid && $foldercontentdata) {
             if ($foldercontentdata->provenanceid != null && $foldercontentdata->provenancestatus == folder::PROVENANCE_EDITED) {

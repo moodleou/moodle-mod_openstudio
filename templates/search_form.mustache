@@ -34,20 +34,20 @@
     }
 
 }}
-<form action="{{ searchlink }}" method="get">
+<form action="{{searchlink}}" method="get">
     <div>
-        <label for="openstudio_searchquery">{{#str}} navsearchlabel, openstudio {{/str}} {{ placeholdertext }}</label>
+        <label for="openstudio_searchquery">{{#str}} navsearchlabel, openstudio {{/str}} {{placeholdertext}}</label>
         <span class="helptooltip">
-        <a href="{{ helplink }}"
-        title="{{#str}} navsearchhelp, openstudio {{/str}} {{ placeholdertext }}" aria-haspopup="true" target="_blank">
+        <a href="{{helplink}}"
+        title="{{#str}} navsearchhelp, openstudio {{/str}} {{placeholdertext}}" aria-haspopup="true" target="_blank">
         {{#pix}} help, i {{/pix}}
-        alt="{{#str}} navsearchhelp, openstudio {{/str}} {{ placeholdertext }}" class="iconhelp" />
+        alt="{{#str}} navsearchhelp, openstudio {{/str}} {{placeholdertext}}" class="iconhelp" />
         </a>
         </span>
         <input type="hidden" name="id" value="13" />
         <input type="text" name="query" id="openstudio_searchquery"
-        placeholder="{{#str}} navsearchlabel, openstudio {{/str}} {{ placeholdertext }}"/>
+        placeholder="{{#str}} navsearchlabel, openstudio {{/str}} {{placeholdertext}}"/>
         <input type="image" id="ousearch_searchbutton" alt="{{#str}} navsearchlabel, openstudio {{/str}}" title="{{#str}} navsearchlabel, openstudio {{/str}}"
-        src="{{ iconsearch }}" />
+        src="{{iconsearch}}" />
     </div>
 </form>

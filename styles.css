@@ -730,7 +730,7 @@ a.openstudio-add-title:hover  {
 /* Grid Content. */
 
 .openstudio-grid {
-    margin: 20px;
+    margin: 20px 20px 0px 20px;
 }
 
 .openstudio-grid-item {
@@ -836,6 +836,58 @@ a.openstudio-add-title:hover  {
     margin-left: 3px;
 }
 
+/* Activity. */
+.openstudio-activity-title {
+    font-size: 1.28571em;
+    font-weight: bold;
+    color: #002158;
+    line-height: 18px;
+    margin: 0 20px 15px 20px;
+}
+
+.openstudio-activity-title:nth-child(n+4) {
+    border-top: 1px solid #ffffff;
+    padding-top: 20px;
+}
+
+.openstudio-actvity-title {
+    font-size: 1em;
+    color: #002158;
+    font-weight: bold;
+    display: inline-block;
+    border: none;
+}
+
+a.openstudio-actvity-title:hover  {
+    color: #002158;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.openstudio-filter-select {
+    color: #002158;
+    padding-left: 15px;
+}
+
+.openstudio-grid-item-add-new-required {
+    float: left;
+    width: 244px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    background-color: #fff6e2;
+}
+
+.openstudio-grid-item-content-subtitle {
+    font-size: 0.92857em;
+    font-weight: bold;
+    font-family: Arial;
+    color: #002158;
+    padding-top: 5px;
+    display: inline;
+    float: left;
+    width: 100%;
+}
+
 .openstudio-grid-item-content-detail-owner-view {
     font-size: 0.85714em;
     color: #0b55a8;
@@ -850,6 +902,10 @@ a.openstudio-add-title:hover  {
     display: inline-block;
     padding-right: 16px;
 
+}
+
+.openstudio-grid-item-content .tooltip > .tooltip-inner {
+    width: 120px;
 }
 
 /* Tablet. */

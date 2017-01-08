@@ -24,6 +24,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 use mod_openstudio\local\api\content;
+use mod_openstudio\local\api\levels;
 use mod_openstudio\local\renderer_utils;
 
 /**
@@ -435,7 +436,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         $placeholdertext = '';
         $selectview = false;
-        $filtername = '';
+        $myactivities = false;
+        $blocksdata = array();
         switch ($viewmode) {
             case content::VISIBILITY_MODULE:
                 $placeholdertext = $theme->thememodulename;
@@ -449,6 +451,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             case content::VISIBILITY_WORKSPACE:
             case content::VISIBILITY_PRIVATE:
                 $placeholdertext = $theme->themestudioname;
+                $myactivities = true;
+                $blocksdata = levels::get_records(1, $permissions->activecminstanceid);
                 break;
 
             case content::VISIBILITY_PRIVATE_PINBOARD:
@@ -473,6 +477,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $contentdata->showmultigroup = $showmultigroup;
         $contentdata->placeholdertext = $placeholdertext;
         $contentdata->selectview = $selectview;
+        $contentdata->myactivities = $myactivities;
+        $contentdata->blocksdata = $blocksdata;
         $contentdata->commentsicon = $OUTPUT->pix_url('comments_rgb_32px', 'openstudio');
         $contentdata->inspirationicon = $OUTPUT->pix_url('inspiration_rgb_32px', 'openstudio');
         $contentdata->participationicon = $OUTPUT->pix_url('participation_rgb_32px', 'openstudio');

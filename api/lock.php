@@ -230,7 +230,7 @@ EOF;
         // If there are no schedules enabled.
         if (($schedule->locktime == 0) && ($schedule->unlocktime == 0)) {
             if ((($slot->locktype > lock::NONE) && ($slot->lockedby == 0))
-                    || ($schedule->slotlockprocessed < $schedule->lockprocessed)) {
+                    || ($schedule->contentlockprocessed < $schedule->lockprocessed)) {
                 // The slot must be unlocked.
                 studio_api_lock_slot_system($userid, $schedule->id, lock::NONE);
                 $slot->locktype = lock::NONE;
@@ -289,8 +289,8 @@ EOF;
             return $slot;
         }
 
-        if (($schedule->slotlockprocessed < $scheduletime)
-                || ($schedule->slotlockprocessed < $schedule->lockprocessed)) {
+        if (($schedule->contentlockprocessed < $scheduletime)
+                || ($schedule->contentlockprocessed < $schedule->lockprocessed)) {
 
             $success = false;
             if ($scheduleislock) {

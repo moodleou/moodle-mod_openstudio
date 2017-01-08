@@ -278,7 +278,7 @@ class mod_openstudio_content_form extends moodleform {
         $mform->disabledIf('ownershipdetail', 'ownership', 'neq', '2');
 
         $mform->addElement('tags', 'tags', get_string('tags'),
-                array('itemtype' => 'openstudio_contents', 'component' => 'mod_studio'));
+                array('itemtype' => 'openstudio_contents', 'component' => 'mod_openstudio'));
         $mform->addHelpButton('tags', 'tags', 'openstudio');
 
         $mform->addElement('html', html_writer::end_tag('div'));
@@ -291,10 +291,6 @@ class mod_openstudio_content_form extends moodleform {
         $mform->setType('levelcontainer', PARAM_INT);
         $mform->addElement('hidden', 'checksum');
         $mform->setType('checksum', PARAM_TEXT);
-        $mform->addElement('hidden', 'textformat');
-        $mform->setType('textformat', PARAM_INT);
-        $mform->addElement('hidden', 'commentformat');
-        $mform->setType('commentformat', PARAM_INT);
 
         $mform->addElement('html', html_writer::start_tag('div',
                 array('class' => 'openstudio-content-form-submit-buttons')));

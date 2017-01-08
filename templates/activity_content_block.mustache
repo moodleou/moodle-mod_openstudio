@@ -15,9 +15,9 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template mod_openstudio/content_block
+    @template mod_openstudio/activity_content_block
 
-    Content block template of the OpenStudio UI.
+    Activity Content block template of the OpenStudio UI.
 
     Classes required for JS:
     * none
@@ -33,6 +33,7 @@
         "contentlink" : "http://example.com/mod/openstudio/content.php?id=3&sid=9",
         "contenticon" : "../../../mod/openstudio/pix/icon.svg",
         "myworkview" : false,
+        "selectview" : false,
         "contentthumbnailurl" : "../../../mod/openstudio/pix/icon.svg",
         "viewuserworkurl" : "http://example.com/mod/openstudio/view.php?id=3&sid=9",
         "timemodified" : "5/10/16, 13:27",
@@ -50,13 +51,19 @@
      }
 }}
 <div class="openstudio-grid-item-content">
-    <div class="openstudio-grid-item-content-title">{{{name}}}</div>
-    <img class="openstudio-grid-item-content-icon" src="{{{contenticon}}}" alt="{{{name}}}">
+    <div class="openstudio-grid-item-content-title">{{{l3name}}}</div>
+    <img data-toggle="tooltip" data-placement="bottom"
+            title="{{itemsharewith}}, {{datetimeupdated}}"
+            class="openstudio-grid-item-content-icon" src="{{{contenticon}}}" alt="{{{name}}}" >
     <div class="openstudio-grid-item-content-preview">
         <a href="{{{contentlink}}}">
             <img class="" src="{{{contentthumbnailurl}}}" alt="{{{name}}}">
         </a>
     </div>
+
+    {{#name}}
+        <div class="openstudio-grid-item-content-subtitle">{{{name}}}</div>
+    {{/name}}
     <div class="openstudio-grid-item-content-detail">
         <div class="openstudio-grid-item-content-detail-updated">{{datetimeupdated}}</div>
         <div class="openstudio-grid-item-content-detail-owner">
@@ -67,13 +74,6 @@
             </div>
             <div>
                 <h4 class="openstudio-grid-item-content-detail-owner-name">{{{firstname}}} {{{lastname}}}</h4>
-                {{#myworkview}}
-                    <a class="openstudio-grid-item-content-detail-owner-view" href="{{{viewuserworkurl}}}">
-                    {{#str}} contentitemview, mod_openstudio {{/str}}
-                    {{{firstname}}}’s
-                    {{#str}} contentitemwork, mod_openstudio {{/str}}
-                    </a>
-                {{/myworkview}}
             </div>
         </div>
         {{#socialdata}}
@@ -88,7 +88,7 @@
                         {{#commentsnew}} {{commentsnew}} {{/commentsnew}}
                     </span>
                </span>
-               <span class="openstudio-grid-item-content-detail-info-box">
+                <span class="openstudio-grid-item-content-detail-info-box">
                     <span>
                         <img src="{{inspirationicon}}"
                              alt="{{#str}} inspirationlabel, openstudio {{/str}}"
@@ -98,7 +98,7 @@
                         {{#inspirednew}} {{inspirednew}} {{/inspirednew}}
                     </span>
                </span>
-               <span class="openstudio-grid-item-content-detail-info-box">
+                <span class="openstudio-grid-item-content-detail-info-box">
                     <span>
                         <img src="{{participationicon}}"
                              alt="{{#str}} participationlabel, openstudio {{/str}}"
@@ -108,7 +108,7 @@
                         {{#mademelaughnew}} {{mademelaughnew}} {{/mademelaughnew}}
                     </span>
                </span>
-               <span class="openstudio-grid-item-content-detail-info-box">
+                <span class="openstudio-grid-item-content-detail-info-box">
                     <span>
                         <img src="{{favouriteicon}}"
                              alt="{{#str}} favouritelabel, openstudio {{/str}}"

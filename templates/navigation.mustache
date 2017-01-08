@@ -75,42 +75,42 @@
 }}
 
 <ul class="nav nav-pills">
-    {{# navigation }}
-        <li role="presentation" class="{{#hassubnavigation}}dropdown{{/hassubnavigation}} {{ class }}">
+    {{#navigation}}
+        <li role="presentation" class="{{#hassubnavigation}}dropdown{{/hassubnavigation}} {{class}}">
             {{#hassubnavigation}}
-                <a class="dropdown-toggle" data-toggle="dropdown" href="{{ url }}" role="button" aria-haspopup="true" aria-expanded="false">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="{{url}}" role="button" aria-haspopup="true" aria-expanded="false">
                     <span class="openstudio-navigation-img">
-                        <img src="{{ pix }}" alt="{{ name }}" class="openstudio-navigation-icon" />
+                        <img src="{{pix}}" alt="{{name}}" class="openstudio-navigation-icon" />
                     </span>
-                    <span class="openstudio-navigation-text">{{ name }}</span>
+                    <span class="openstudio-navigation-text">{{name}}</span>
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    {{# subnavigation }}
-                       <li><a href="{{{ url }}}">{{ name }}</a></li>
-                    {{/ subnavigation }}
+                    {{#subnavigation}}
+                       <li><a href="{{{url}}}">{{name}}</a></li>
+                    {{/subnavigation}}
                 </ul>
             {{/hassubnavigation}}
             {{^hassubnavigation}}
-                <a href="{{{ url }}}">
+                <a href="{{{url}}}">
                     <span class="openstudio-navigation-img">
-                        <img src="{{ pix }}" alt="{{ name }}" class="openstudio-navigation-icon" />
+                        <img src="{{pix}}" alt="{{name}}" class="openstudio-navigation-icon" />
                     </span>
-                    <span class="openstudio-navigation-text">{{ name }}</span>
+                    <span class="openstudio-navigation-text">{{name}}</span>
                 </a>
             {{/hassubnavigation}}
         </li>
-    {{/ navigation }}
-    {{# notificationnumber }}
+    {{/navigation}}
+    {{#notificationnumber}}
     <li>
         <span id="openstudio_navigation_notification">
             <span class="openstudio-navigation-img">
-                <img src="{{ notificationicon }}"
-                     alt="{{# str }} notificationlabel, mod_openstudio {{/ str }}"
+                <img src="{{notificationicon}}"
+                     alt="{{#str}} notificationlabel, mod_openstudio {{/str}}"
                      class="openstudio-navigation-notification-icon" />
             </span>
-            <span class="openstudio-navigation-notification-text">{{ notificationnumber }}</span>
+            <span class="openstudio-navigation-notification-text">{{notificationnumber}}</span>
         </span>
     </li>
-    {{/ notificationnumber }}
+    {{/notificationnumber}}
 </ul>
