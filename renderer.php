@@ -49,7 +49,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
     public function siteheader(
             $coursedata, $permissions, $theme, $sitename = 'Design', $searchtext = '',
             $viewmode = content::VISIBILITY_MODULE) {
-        global $OUTPUT;
+        global $OUTPUT, $PAGE;
 
         $cm = $coursedata->cm;
         $cmid = $cm->id;
@@ -209,6 +209,9 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         $data->notificationnumber = 3;
         $data->notificationicon = $OUTPUT->pix_url('notifications_rgb_32px', 'openstudio');
+
+        $addtodashboard = block_externaldashboard_backend::render_favourites_button($PAGE->cm, false);
+        $data->addtodashboard = $addtodashboard;
 
         return $this->render_from_template('mod_openstudio/header', $data);
 
