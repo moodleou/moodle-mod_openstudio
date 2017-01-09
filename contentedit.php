@@ -95,7 +95,7 @@ if (($lid > 0) && ($sid <= 0)) {
     if ($contentdata !== false) {
         $contentdata = studio_api_lock_determine_lock_status($contentdata);
         $redirecturl = new moodle_url('/mod/openstudio/contentedit.php',
-            array('id' => $cm->id, 'sid' => $contentdata->id, 'userid' => $userid));
+                array('id' => $cm->id, 'sid' => $contentdata->id, 'userid' => $userid));
         redirect($redirecturl->out(false));
         return;
     }
@@ -823,6 +823,8 @@ ob_start();
 $contentform->display();
 $contenthtmlform = ob_get_contents();
 ob_end_clean();
+
+$PAGE->requires->js_call_amd('mod_openstudio/contentedit', 'init');
 
 // Generate HTML.
 $renderer = $PAGE->get_renderer('mod_openstudio');

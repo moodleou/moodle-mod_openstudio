@@ -403,6 +403,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      * @return string The rendered HTM fragment.
      */
     public function content_edit($contenteditform, $data) {
+        global $OUTPUT;
 
         if (!isset($data) || empty($data)) {
             throw new coding_exception('Wrong data format');
@@ -410,6 +411,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         $data = (object)$data;
 
+        $data->addcontenticon = $OUTPUT->pix_url('add_content_rgb_32px', 'openstudio');
         $data->editform = $contenteditform;
 
         return $this->render_from_template('mod_openstudio/content_edit', $data);

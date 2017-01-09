@@ -409,8 +409,8 @@ Supported websites are
 <a href="http://www.slideshare.net/">Slideshare</a>.';
 $string['contentformweblink'] = 'Web link';
 $string['contentformweblinkerror'] = 'Web link must be a valid web URL.';
-$string['weblink'] = 'Web link';
-$string['weblink_help'] = 'Web link help';
+$string['weblink'] = 'Add web/embed link';
+$string['weblink_help'] = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.';
 $string['contentformurltitle'] = 'Link title';
 $string['urltitle'] = 'Link title';
 $string['urltitle_help'] = 'Link title help';
@@ -431,13 +431,15 @@ $string['contentformownershipmyownwork'] = 'All my own work';
 $string['contentformownershipfoundonline'] = 'Found online';
 $string['contentformownershipfoundelsewhere'] = 'Found elsewhere';
 $string['contentformownership'] = 'Ownership';
-$string['contentformownershipdetail'] = 'Found elsewhere: additional information<br />(e.g. web link or reference)';
-$string['contentformsubmitbutton'] = 'Save changes';
+$string['contentformownershipdetail'] = 'Details';
+$string['contentformsubmitbutton'] = 'Save';
 
 $string['contentformshowgps'] = 'Show GPS Data';
 $string['contentformshowgpsdescription'] = 'Show GPS location of where image was taken if available';
+$string['contentformshowgps_help'] = 'Show GPS location of where image was taken if available';
 $string['contentformshowimagedata'] = 'Show Image Data';
 $string['contentformshowimagedatadescription'] = 'Show metadata embedded in the image if available';
+$string['contentformshowimagedata_help'] = 'Show metadata embedded in the image if available';
 
 $string['contentformhelp1'] = '
 Upload a file from your computer.';
@@ -1159,3 +1161,24 @@ $string['commentslabel'] = 'Comments';
 $string['inspirationlabel']= 'Inspiration';
 $string['participationlabel'] = 'Participation';
 $string['favouritelabel']= 'Favourite';
+$string['addfilebutton'] = 'Add file';
+$string['addfilebutton_help'] = "If your browser supports drag and drop, the upload box says 'You can drag and drop files here to upload them'. If you don't see this message, use the 'add' icon to attach a file instead. Delete any existing files before uploading a new one.";
+$string['addlinkbutton'] = 'Add web/embed link';
+$string['addlinkbutton_help'] = 'Embed code is mainly used for embedding video and pictures from third-party websites onto the web page.
+Instructions for acquiring the embed code to copy and paste into this form vary from website to website and you are instructed to
+visit those websites for help and instructions.
+Supported websites are
+<a href="http://www.youtube.com/">YouTube</a>,
+<a href="https://www.khanacademy.org/">Khan Academy</a>,
+<a href="http://www.ted.com/">TED</a>,
+<a href="http://pinterest.com/">Pinterest</a>,
+<a href="https://vimeo.com/">Vimeo</a>,
+<a href="http://screen.yahoo.com/">Yahoo Video</a>,
+<a href="http://www.videojug.com/">Videojug</a>,
+<a href="http://www.flickr.com/">Flickr</a>,
+<a href="http://500px.com/">500px</a>,
+<a href="http://imageshack.us/">Imageshack</a>,
+<a href="http://photobucket.com/">Photobucket</a>, and
+<a href="http://www.slideshare.net/">Slideshare</a>.';
+$string['tags'] = 'Tags';
+$string['tags_help'] = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.';

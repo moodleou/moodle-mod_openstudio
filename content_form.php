@@ -38,7 +38,7 @@ use mod_openstudio\local\api\content;
 class mod_openstudio_content_form extends moodleform {
 
     protected function definition() {
-        global $CFG, $USER, $DB, $PAGE, $OUTPUT;
+        global $CFG, $USER, $DB;
 
         $mform = $this->_form;
 
@@ -87,7 +87,7 @@ class mod_openstudio_content_form extends moodleform {
                                     $firsttutorgroupid = $tutorgroupid;
                                 }
                                 $options[$tutorgroupid] = get_string('viewgroupname', 'openstudio',
-                                    array('name' => $tutorgroup->name));
+                                        array('name' => $tutorgroup->name));
                             }
                         }
                         if ($this->_customdata['defaultvisibility'] == content::VISIBILITY_GROUP) {
@@ -106,10 +106,14 @@ class mod_openstudio_content_form extends moodleform {
             } else {
                 $this->_customdata['defaultvisibility'] = content::VISIBILITY_PRIVATE;
             }
+
+            $mform->addElement('html', html_writer::start_tag('div',
+                    array('class' => 'openstudio-content-form-visibility')));
             $mform->addElement('select', 'visibility',
                     get_string('contentformvisibility', 'openstudio'),
-                    $options, array('class' => 'visibility'));
+                    $options, array('class' => 'openstudio-content-form-select-visibility'));
             $mform->setDefault('visibility', $this->_customdata['defaultvisibility']);
+            $mform->addElement('html', html_writer::end_tag('div'));
         }
 
         $mform->addElement('text', 'name',
@@ -120,6 +124,7 @@ class mod_openstudio_content_form extends moodleform {
                 get_string('contentformdescription', 'openstudio'));
         $mform->setType('description', PARAM_RAW);
 
+        $defaultcontentuploadtype = '';
         if (in_array((int) $this->_customdata['contenttype'],
                 array(content::TYPE_FOLDER), true)) {
             $mform->addElement('hidden', 'weblink');
@@ -134,6 +139,50 @@ class mod_openstudio_content_form extends moodleform {
 
         } else {
 
+            $mform->addElement('html', html_writer::start_tag('div',
+                    array('class' => 'openstudio-upload-content-buttons')));
+            $mform->addElement('hidden', 'urltitle');
+            $mform->setType('urltitle', PARAM_TEXT);
+            $contenttype = $this->_customdata['contenttype'];
+
+            $buttonaddfileactive = '';
+            $buttonaddlinkactive = '';
+            if ($contenttype > content::TYPE_TEXT && $contenttype < content::TYPE_URL) {
+                $defaultcontentuploadtype = 'addfile';
+                $buttonaddfileactive = 'openstudio-button-active';
+            }
+
+            if ($contenttype >= content::TYPE_URL) {
+                $defaultcontentuploadtype = 'addlink';
+                $buttonaddlinkactive = 'openstudio-button-active';
+            }
+
+            $mform->addElement('html', html_writer::start_tag('div',
+                    array('class' => 'openstudio-add-file-button')));
+
+            $mform->addElement('button', 'addfilebutton',
+                    get_string('addfilebutton', 'openstudio'), array('class' => $buttonaddfileactive));
+            $mform->addHelpButton('addfilebutton', 'addfilebutton', 'openstudio');
+            $mform->addElement('html', html_writer::end_tag('div'));
+
+            $mform->addElement('html', html_writer::start_tag('div',
+                    array('class' => 'openstudio-add-link-button')));
+            $mform->addElement('button', 'addlinkbutton',
+                    get_string('addlinkbutton', 'openstudio'), array('class' => $buttonaddlinkactive));
+            $mform->addHelpButton('addlinkbutton', 'addlinkbutton', 'openstudio');
+            $mform->addElement('html', html_writer::end_tag('div'));
+
+            $mform->addElement('hidden', 'contentuploadtype');
+            $mform->setType('contentuploadtype', PARAM_TEXT);
+            $mform->setDefault('contentuploadtype', $defaultcontentuploadtype);
+
+            $mform->addElement('html', html_writer::end_tag('div'));
+
+            $mform->addElement('html', html_writer::start_tag('div',
+                    array('id' => 'openstudio_upload_content_add_file',
+                    'class' => $defaultcontentuploadtype &&
+                    $defaultcontentuploadtype == 'addfile' ? '' : 'openstudio-hidden')));
+
             if ($this->_customdata['feature_contentusesfileupload']) {
 
                 if ($this->_customdata['max_bytes']) {
@@ -142,97 +191,78 @@ class mod_openstudio_content_form extends moodleform {
                     $maxbytes = (isset($CFG->maxbytes) ? $CFG->maxbytes : \mod_openstudio\local\util\defaults::MAXBYTES);
                 }
 
-                $mform->addElement('filemanager', 'attachments',
-                        get_string('contentformattachments', 'openstudio'), null,
+                $mform->addElement('filemanager', 'attachments', get_string('contentformattachments', 'openstudio'), null,
                         array('maxbytes' => $maxbytes, 'subdirs' => false,
                               'maxfiles' => 1, 'accepted_types' => '*'));
-                $mform->addHelpButton('attachments', 'attachments', 'openstudio');
+
             }
 
-            if ($this->_customdata['feature_contentusesweblink']) {
-
-                $mform->addElement('text', 'weblink',
-                        get_string('contentformweblink', 'openstudio'));
-                $mform->setType('weblink', PARAM_URL);
-                $mform->addRule(
-                        'weblink',
-                        get_string('contentformweblinkerror', 'openstudio'),
-                        'regex',
-                        '/(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/',
-                        'client');
-                $mform->addHelpButton('weblink', 'weblink', 'openstudio');
-                $mform->addElement('text', 'urltitle',
-                        get_string('contentformurltitle', 'openstudio'));
-                $mform->setType('urltitle', PARAM_TEXT);
-                $mform->addHelpButton('urltitle', 'urltitle', 'openstudio');
+            if (!$this->_customdata['feature_contentusesfileupload'] ||
+                    (((int) $this->_customdata['contenttype']) === content::TYPE_FOLDER)) {
+                $mform->addElement('hidden', 'showgps');
+                $mform->setType('showgps', PARAM_INT);
+                $mform->setDefault('showgps', 0);
+                $mform->addElement('hidden', 'showimagedata');
+                $mform->setType('showimagedata', PARAM_INT);
+                $mform->setDefault('showimagedata', 0);
             } else {
-                $mform->addElement('hidden', 'weblink');
-                $mform->setType('weblink', PARAM_URL);
-                $mform->setDefault('weblink', '');
-                $mform->addElement('hidden', 'urltitle');
-                $mform->setType('urltitle', PARAM_TEXT);
-                $mform->setDefault('weblink', '');
+
+                $mform->addElement('html', html_writer::start_tag('div',
+                        array('class' => 'openstudio-showgps-box')));
+
+                $showgpsarray = array();
+                $showgpsarray[] = $mform->createElement('advcheckbox', 'showgps', '',
+                                  get_string('contentformshowgps', 'openstudio'),
+                                  array('group' => 1), array(0, content::INFO_GPSDATA));
+
+                $showgpsarray[] = $mform->createElement('advcheckbox', 'showimagedata', '',
+                        get_string('contentformshowimagedata', 'openstudio'),
+                        array('group' => 1), array(0, content::INFO_IMAGEDATA));
+                $mform->addGroup($showgpsarray, 'showgpsarray', '',  array(' '), false);
+                $mform->setDefault('showgps', 0);
+                $mform->setDefault('showimagedata', 0);
+                $mform->addElement('html', html_writer::end_tag('div'));
+
+                if ($this->_customdata['contentid']) {
+                    $showextradata = $DB->get_field('openstudio_contents', 'showextradata',
+                            array('id' => $this->_customdata['contentid']));
+                    if ($showextradata & content::INFO_GPSDATA) {
+                        $mform->setDefault('showgps', content::INFO_GPSDATA);
+                    }
+                    if ($showextradata & content::INFO_IMAGEDATA) {
+                        $mform->setDefault('showimagedata', content::INFO_IMAGEDATA);
+                    }
+                }
             }
 
-            if ($this->_customdata['feature_contentusesembedcode']) {
+            $mform->addElement('html', html_writer::end_tag('div'));
+            $mform->addElement('html', html_writer::start_tag('div',
+                    array('id' => 'openstudio_upload_content_add_link',
+                    'class' => $defaultcontentuploadtype && $defaultcontentuploadtype == 'addlink' ? '' : 'openstudio-hidden')));
 
-                $mform->addElement('textarea', 'embedcode',
-                        get_string('contentformembedcode', 'openstudio'),
-                        'rows="2" cols="100"');
-                $mform->addHelpButton('embedcode', 'embedcode', 'openstudio');
-            } else {
-                $mform->addElement('hidden', 'embedcode');
-                $mform->setType('embedcode', PARAM_TEXT);
-                $mform->setDefault('embedcode', '');
-            }
+            $mform->addElement('text', 'weblink', get_string('weblink', 'openstudio'));
+
+            $mform->setType('weblink', PARAM_URL);
+            $mform->addRule(
+                    'weblink',
+                    get_string('contentformweblinkerror', 'openstudio'),
+                    'regex',
+                    '/(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/',
+                    'client');
+            $mform->addHelpButton('weblink', 'addlinkbutton', 'openstudio');
+
+            $mform->addElement('html', html_writer::end_tag('div'));
 
         }
 
-        $mform->addElement('tags', 'tags', get_string('tags'), array(
-            'itemtype' => 'openstudio_contents',
-            'component' => 'mod_studio'
-        ));
-
-        if (!$this->_customdata['feature_contentusesfileupload'] ||
-                (((int) $this->_customdata['contenttype']) === content::TYPE_FOLDER)) {
-            $mform->addElement('hidden', 'showgps');
-            $mform->setType('showgps', PARAM_INT);
-            $mform->setDefault('showgps', 0);
-            $mform->addElement('hidden', 'showimagedata');
-            $mform->setType('showimagedata', PARAM_INT);
-            $mform->setDefault('showimagedata', 0);
-        } else {
-            $mform->addElement('advcheckbox', 'showgps',
-                    get_string('contentformshowgps', 'openstudio'),
-                    get_string('contentformshowgpsdescription', 'openstudio'),
-                    array('group' => 1), array(0, content::INFO_GPSDATA));
-            $mform->setDefault('showgps', 0);
-
-            $mform->addElement('advcheckbox', 'showimagedata',
-                    get_string('contentformshowimagedata', 'openstudio'),
-                    get_string('contentformshowimagedatadescription', 'openstudio'),
-                    array('group' => 1), array(0, content::INFO_IMAGEDATA));
-            $mform->setDefault('showimagedata', 0);
-
-            if ($this->_customdata['contentid']) {
-                $showextradata = $DB->get_field('openstudio_contents', 'showextradata',
-                    array('id' => $this->_customdata['contentid']));
-                if ($showextradata & content::INFO_GPSDATA) {
-                    $mform->setDefault('showgps', content::INFO_GPSDATA);
-                }
-                if ($showextradata & content::INFO_IMAGEDATA) {
-                    $mform->setDefault('showimagedata', content::INFO_IMAGEDATA);
-                }
-            }
-        }
+        $mform->addElement('html', html_writer::start_tag('div',
+                array('id' => 'contentformoptionalmetadata',
+                'class' => $defaultcontentuploadtype ? '' : 'openstudio-hidden')));
 
         $radioarray = array();
         $radioarray[] = $mform->createElement('radio', 'ownership', '',
                 get_string('contentformownershipmyownwork', 'openstudio'),
                 content::OWNERSHIP_MYOWNWORK);
-        $radioarray[] = $mform->createElement('radio', 'ownership', '',
-                get_string('contentformownershipfoundonline', 'openstudio'),
-                content::OWNERSHIP_FOUNDONLINE);
         $radioarray[] = $mform->createElement('radio', 'ownership', '',
                 get_string('contentformownershipfoundelsewhere', 'openstudio'),
                 content::OWNERSHIP_FOUNDELSEWHERE);
@@ -244,6 +274,14 @@ class mod_openstudio_content_form extends moodleform {
                 'ownershipdetail',
                 get_string('contentformownershipdetail', 'openstudio'));
         $mform->setType('ownershipdetail', PARAM_TEXT);
+
+        $mform->disabledIf('ownershipdetail', 'ownership', 'neq', '2');
+
+        $mform->addElement('tags', 'tags', get_string('tags'),
+                array('itemtype' => 'openstudio_contents', 'component' => 'mod_studio'));
+        $mform->addHelpButton('tags', 'tags', 'openstudio');
+
+        $mform->addElement('html', html_writer::end_tag('div'));
 
         $mform->addElement('hidden', 'sid');
         $mform->setType('sid', PARAM_INT);
@@ -258,6 +296,9 @@ class mod_openstudio_content_form extends moodleform {
         $mform->addElement('hidden', 'commentformat');
         $mform->setType('commentformat', PARAM_INT);
 
+        $mform->addElement('html', html_writer::start_tag('div',
+                array('class' => 'openstudio-content-form-submit-buttons')));
+
         $buttonarray = array();
         $buttonarray[] = $mform->createElement('submit', 'submitbutton',
                 get_string('contentformsubmitbutton', 'openstudio'),
@@ -267,11 +308,12 @@ class mod_openstudio_content_form extends moodleform {
                 '', array('id' => 'id_cancel'));
         $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
         $mform->closeHeaderBefore('buttonar');
+        $mform->addElement('html', html_writer::end_tag('div'));
 
     }
 
     public function validation($data, $files) {
-        global $DB, $USER;
+        global $USER;
         $errors = parent::validation($data, $files);
         if (!empty($data['attachments'])) {
             $fs = get_file_storage();

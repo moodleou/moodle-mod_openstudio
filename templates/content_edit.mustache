@@ -27,6 +27,7 @@
 
     Example context (json):
     {
+        "addcontenticon" : "../../../theme/image.php?theme=osep&amp;component=openstudio&amp;image=add_content_rgb_32px",
         "editform" : "<form></form>",
         "isfolderlock" : true,
         "feature_enablefolders" : true
@@ -34,7 +35,7 @@
 
 }}
 
-<div class="studio-content-edit-form">
+<div class="openstudio-content-edit-form">
     <h1 class="accesshide">{{# str }} contenteditformheader, mod_openstudio {{/ str }}</h1>
 
     {{#isfolderlock}}
@@ -42,9 +43,12 @@
     {{/isfolderlock}}
     {{^isfolderlock}}
         <div class='openstudio-add-content-form'>
-            <a href="#" class="openstudio-add-title">
+            <img src="{{ addcontenticon }}"
+                 alt="{{# str }} contentaddnew, mod_openstudio {{/ str }}"
+                 class="openstudio-add-content-icon" />
+            <span class="openstudio-upload-content-title">
                 {{# str }} contentaddnew, mod_openstudio {{/ str }}
-            </a>
+            </span>
         </div>
 
         {{#feature_enablefolders}}
