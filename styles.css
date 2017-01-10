@@ -468,7 +468,8 @@ a.openstudio-add-title:hover  {
 /* Add/Edit Content. */
 
 .openstudio-upload-content-buttons {
-    padding-top: 30px;
+    padding-top: 4px;
+    display: inline-block;
 }
 
 .openstudio-add-content-icon {
@@ -557,28 +558,29 @@ a.openstudio-add-title:hover  {
 }
 
 .openstudio-add-file-button {
+    float: left;
+}
+
+.openstudio-add-file-button .helptooltip,
+.openstudio-add-link-button .helptooltip {
+    margin-top: 26px;
     position: absolute;
 }
 
-.openstudio-add-file-button .helptooltip {
-    margin-right: -321px;
-}
-
 .openstudio-add-link-button {
-    margin-left: 118px;
-}
-
-.openstudio-add-link-button .helptooltip {
-    margin-right: -412px;
+    margin: 0 0 0 118px;
+    padding: 0;
 }
 
 .mform .openstudio-upload-content-buttons .fitem div.fitemtitle {
-    width: 40px;
+    float: right;
+    text-align: left;
+    width: 10px;
 }
 
 .path-mod-openstudio .openstudio-content-edit-form #fgroup_id_buttonar {
     margin: 0;
-    padding-top: 30px;
+    padding-top: 20px;
 }
 
 .path-mod-openstudio .openstudio-content-edit-form #fgroup_id_ownershiparray {
@@ -1112,6 +1114,10 @@ a.openstudio-add-title:hover  {
         margin-top: -85px;
         margin-right: 0px;
     }
+
+    .path-mod-openstudio .openstudio-content-edit-form #fgroup_id_buttonar {
+        padding-left: 0px;
+    }
 }
 
 /* Mobile small. */
@@ -1195,5 +1201,34 @@ a.openstudio-add-title:hover  {
     .openstudio-buttons-settings {
         margin-top: 0px;
         margin-right: 0px;
+    }
+
+    .openstudio-create-folder-button {
+        float: left;
+        padding-top: 18px;
+        margin-bottom: -10px;
+    }
+
+    .openstudio-add-file-button .fitemtitle,
+    .openstudio-add-link-button .fitemtitle {
+        display: none;
+    }
+
+    .openstudio-add-link-button {
+        margin-left: 90px;
+    }
+
+    .path-mod-openstudio #fgroup_id_ownershiparray span:nth-child(2) {
+        padding-left: 0px;
+    }
+
+    .openstudio-upload-content-buttons {
+        padding-top: 30px;
+    }
+
+    .path-mod-openstudio .mform .fcheckbox > span,
+    .path-mod-openstudio .mform .fradio > span,
+    .path-mod-openstudio .mform .fgroup > span {
+        display: block;
     }
 }
