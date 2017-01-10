@@ -25,6 +25,7 @@ defined('MOODLE_INTERNAL') || die();
 
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\levels;
+use mod_openstudio\local\api\subscription;
 use mod_openstudio\local\renderer_utils;
 use mod_openstudio\local\api\flags;
 
@@ -216,6 +217,31 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         $addtodashboard = block_externaldashboard_backend::render_favourites_button($PAGE->cm, false);
         $data->addtodashboard = $addtodashboard;
+
+        // Subscription.
+        $subscriptionconstant = array(
+                "FORMAT_HTML" => subscription::FORMAT_HTML,
+                "FORMAT_PLAIN" => subscription::FORMAT_PLAIN,
+                "FREQUENCY_HOURLY" => subscription::FREQUENCY_HOURLY,
+                "FREQUENCY_DAILY" => subscription::FREQUENCY_DAILY);
+
+        $this->page->requires->js_call_amd('mod_openstudio/subscribe', 'init', [[
+                'constants' => $subscriptionconstant,
+                'openstudioid' => $coursedata->cminstance->id,
+                'userid' => $permissions->activeuserid,
+                'cmid' => $cmid]]);
+
+        require_once(__DIR__.'/api/subscription.php');
+        $subscriptiondata = studio_api_notification_getdata(
+                $permissions->activeuserid,
+                $permissions->activecminstanceid,
+                $type = subscription::MODULE);
+
+        if ($subscriptiondata) {
+            $data->subscriptionid = $subscriptiondata[subscription::MODULE]->id;
+        } else {
+            $data->subscriptionid = false;
+        }
 
         return $this->render_from_template('mod_openstudio/header', $data);
 

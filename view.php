@@ -27,8 +27,6 @@
 
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\stream;
-use mod_openstudio\local\api\rss;
-use mod_openstudio\local\api\subscription;
 use mod_openstudio\local\util;
 use mod_openstudio\local\util\defaults;
 

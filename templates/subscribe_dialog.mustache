@@ -1,0 +1,74 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_openstudio/subscribe_dialog
+
+    Subscription diaglog template of the OpenStudio UI.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Example context (json):
+    {
+        "FORMAT_HTML": "1",
+        "FORMAT_PLAIN": "2",
+        "FREQUENCY_HOURLY": "1",
+        "FREQUENCY_DAILY": "2"
+    }
+
+}}
+<div class="openstudio-fd-subscription">
+    <div class="openstudio-fd-subscription-table">
+        <div class="openstudio-fd-subscription-tablerow">
+            <div class="openstudio-fd-subscription-tableheader">
+                <div class="openstudio-fd-subscription-tablecell">
+                    {{#str}} modulejsdialogsubscriptionformtext2, mod_openstudio {{/str}}
+                </div>
+                <div class="openstudio-fd-subscription-tablecell">
+                    <select name="openstudio-subscription-email-format" class="openstudio-subscription-selection">
+                        <option value="{{FORMAT_PLAIN}}">
+                            {{#str}} modulejsdialogsubscriptionformtext3, mod_openstudio {{/str}}
+                        </option>
+                        <option value="{{FORMAT_HTML}}">
+                            {{#str}} modulejsdialogsubscriptionformtext4, mod_openstudio {{/str}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="openstudio-fd-subscription-tablerow">
+            <div class="openstudio-fd-subscription-tableheader">
+                <div class="openstudio-fd-subscription-tablecell">
+                    {{#str}} modulejsdialogsubscriptionformtext5, mod_openstudio {{/str}}
+                </div>
+                <div class="openstudio-fd-subscription-tablecell">
+                    <select name="openstudio-subscription-email-frequency" class="openstudio-subscription-selection">
+                        <option value="{{FREQUENCY_DAILY}}">
+                            {{#str}} modulejsdialogsubscriptionformtext6, mod_openstudio {{/str}}
+                        </option>
+                        <option value="{{FREQUENCY_HOURLY}}">
+                            {{#str}} modulejsdialogsubscriptionformtext7, mod_openstudio {{/str}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

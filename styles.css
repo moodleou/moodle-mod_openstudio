@@ -33,6 +33,7 @@
 
 .openstudio-buttons-settings {
     margin-right: -10px;
+    position: relative;
 }
 
 .openstudio-bold {
@@ -76,6 +77,97 @@
     float: right;
     clear: right;
 }
+
+/**
+ * Subscription feature
+ */
+
+ /* Header */
+.moodle-dialogue-base .openstudio-subscribe-dialog-container .moodle-dialogue-wrap .moodle-dialogue-hd, 
+.moodle-dialogue-base .openstudio-subscribe-dialog-container .moodle-dialogue-wrap .moodle-dialogue-hd.yui3-widget-hd {
+    height: 48px;
+    padding: 0px;
+}
+
+.moodle-dialogue-base .openstudio-subscribe-dialog-container .openstudio-subscription-header {
+    padding: 13px 15px;
+    display: inline-block;
+    font-family: Arial;
+}
+
+/* Footer */
+.moodle-dialogue-base .openstudio-subscribe-dialog-container.moodle-dialogue .moodle-dialogue-content .moodle-dialogue-ft {
+    text-align: left;
+}
+
+.moodle-dialogue-base .openstudio-subscribe-dialog-container.moodle-dialogue .moodle-dialogue-content .moodle-dialogue-ft {
+    margin: 0px;
+    padding: 20px 10px 30px 10px;
+    border-top: 1px solid #bfe2ef;
+}
+
+.openstudio-subscribe-dialog-container .moodle-dialogue-ft .openstudio-cancel-btn {
+    float: left;
+}
+
+.openstudio-subscribe-dialog-container .moodle-dialogue-ft .openstudio-subscript-btn {
+    float: right;
+}
+
+.yui3-skin-sam .yui3-panel.openstudio-subscribe-dialog-container .yui3-widget-ft .yui3-button {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.moodle-dialogue-base .openstudio-subscribe-dialog-container .yui3-button.closebutton {
+    padding: 3px 3px;
+    margin: 0px 12px;
+}
+
+.moodle-dialogue-base .openstudio-subscribe-dialog-container .yui3-button.closebutton:before {
+    height: 30px;
+    display: block;
+}
+
+/* Body */
+.moodle-dialogue-base .openstudio-subscribe-dialog-container.moodle-dialogue .moodle-dialogue-bd {
+    padding: 0px;
+}
+
+.openstudio-fd-subscription {
+    margin: 20px 0px;
+}
+
+.openstudio-subscription-selection {
+    height: 20px;
+    font-size: 0.8571em; /* 12px */
+    padding: 1.5px 3px;
+    margin: 0px;
+    color: #000;
+}
+
+.openstudio-fd-subscription-table {
+    display: table;
+    width: 100%;
+    margin: 0px 11.5px;
+}
+
+.openstudio-fd-subscription-tableheader {
+    display: table-cell;
+}
+
+.openstudio-fd-subscription-tablerow {
+    display: table-row;
+}
+
+.openstudio-fd-subscription-tablecell{
+    display: table-cell;
+    padding: 3px 4.5px;
+}
+
+/**
+ * End Subscription feature.
+ */
 
 .path-mod-openstudio .openstudio-nav-logo-wrapper {
     margin-left: -9px;

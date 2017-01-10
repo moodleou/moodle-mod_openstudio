@@ -27,18 +27,24 @@
 
     Example context (json):
     {
-        "placeholdertext" : "My Module"
+        "subscriptionid": "1"
     }
 
 }}
 <div class="openstudio-buttons-settings">
-    {{#enablesubscription}}
-        <div class="openstudio-subscribe-button">
-            <button type="submit" class="btn" name="subscribebutton">
-                {{#str}} subscribetothisstudio, mod_openstudio {{/str}} {{placeholdertext}}
-            </button>
-        </div>
-    {{/enablesubscription}}
+    <div class="openstudio-subscribe-button">
+        <button type="submit" class="btn" name="subscribebutton"
+            {{#subscriptionid}}
+                subscriptionid="{{subscriptionid}}"
+            {{/subscriptionid}}>
+            {{#subscriptionid}}
+                {{#str}} unsubscribe, mod_openstudio {{/str}}
+            {{/subscriptionid}}
+            {{^subscriptionid}}
+                {{#str}} subscribetothisstudio, mod_openstudio {{/str}}
+            {{/subscriptionid}}
+        </button>
+    </div>
     <div class="openstudio-add-dashboard-button">
      {{{addtodashboard}}}
     </div>
