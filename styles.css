@@ -937,6 +937,13 @@ a.openstudio-actvity-title:hover  {
 
 }
 
+.openstudio-paging {
+    text-align: center;
+    font-size: 16px;
+    font-family: Arial;
+    padding-bottom: 74px;
+}
+
 /* Tablet Portrait. */
 @media screen and (max-device-width: 1023px) and (orientation: portrait){
     .path-mod-openstudio .administration{

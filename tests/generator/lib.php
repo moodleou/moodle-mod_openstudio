@@ -166,7 +166,7 @@ class mod_openstudio_generator extends testing_module_generator {
             throw new coding_exception('module generator requires $record->course');
         }
         if (!isset($record->name)) {
-            $record->name = get_string('pluginname', 'studio') . ' ' . $i;
+            $record->name = get_string('pluginname', 'openstudio') . ' ' . $i;
         }
         if (!isset($record->intro)) {
             $record->intro = 'Test Studio for phpunit test '.$i;
@@ -317,7 +317,7 @@ class mod_openstudio_generator extends testing_module_generator {
         $realuser = $USER;
         $USER = $DB->get_record('user', array('id' => $contentdata['userid']));
 
-        $studio = $this->get_studio_by_idnumber($contentdata['studio']);
+        $studio = $this->get_studio_by_idnumber($contentdata['openstudio']);
         $context = context_module::instance($studio->cmid);
 
         if (isset($contentdata['levelid'])) {

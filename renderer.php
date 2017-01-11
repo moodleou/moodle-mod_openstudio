@@ -31,7 +31,7 @@ use mod_openstudio\local\renderer_utils;
  * OpenStudio renderer.
  *
  * @package mod_openstudio
- * @copyright 2016 The Open University
+ * @copyright 2017 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_openstudio_renderer extends plugin_renderer_base {
@@ -97,7 +97,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         if ($permissions->feature_module) {
             $submenuitem = array(
                     'name' => $theme->thememodulename,
-                    'url' => $navigationurls->strmymoduleurl,
+                    'url' => $navigationurls->mymoduleurl,
                     'pix' => $OUTPUT->pix_url('mymodule_rgb_32px', 'openstudio')
             );
             $menuitem['hassubnavigation'] = true;
@@ -107,7 +107,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         if ($permissions->feature_group) {
             $submenuitem = array(
                     'name' => $theme->themegroupname,
-                    'url' => $navigationurls->strmygroupurl,
+                    'url' => $navigationurls->mygroupurl,
                     'pix' => $OUTPUT->pix_url('group_rgb_32px', 'openstudio')
             );
             $menuitem['hassubnavigation'] = true;
@@ -137,7 +137,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         // Generate people items.
         $menuitem['name'] = get_string('menupeople', 'openstudio');
-        $menuitem['url'] = $navigationurls->strpeoplemoduleurl;
+        $menuitem['url'] = $navigationurls->peoplemoduleurl;
         $menuitem['pix'] = $OUTPUT->pix_url('people_rgb_32px', 'openstudio');
         $menuitem['class'] = 'people';
         $menuitem['hassubnavigation'] = false;
@@ -153,7 +153,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         if ($permissions->feature_studio || ($permissions->activitydata->used > 0)) {
             $submenuitem = array(
                     'name' => $theme->themestudioname,
-                    'url' => $navigationurls->strmyworkurl,
+                    'url' => $navigationurls->myworkurl,
                     'pix' => $OUTPUT->pix_url('activity_rgb_32px', 'openstudio')
             );
             $menuitem['hassubnavigation'] = true;
@@ -163,7 +163,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         if ($permissions->feature_pinboard || ($permissions->pinboarddata->usedandempty > 0)) {
             $submenuitem = array(
                     'name' => $theme->themepinboardname,
-                    'url' => $navigationurls->strpinboardurl,
+                    'url' => $navigationurls->pinboardurl,
                     'pix' => $OUTPUT->pix_url('pinboard_rgb_32px', 'openstudio')
             );
             $menuitem['hassubnavigation'] = true;
@@ -486,6 +486,12 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         $contentdata->contentediturl = new moodle_url('/mod/openstudio/contentedit.php',
                    array('id' => $cmid, 'lid' => 0, 'sid' => 0, 'type' => 0, 'sstsid' => 0));
+
+        if ($contentdata->contents) {
+            $paging = $OUTPUT->paging_bar($contentdata->total, $contentdata->pagestart,
+                    $contentdata->streamdatapagesize, $contentdata->pageurl);
+            $contentdata->paging = $paging;
+        }
 
         return $this->render_from_template('mod_openstudio/body', $contentdata);
     }

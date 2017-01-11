@@ -21,7 +21,7 @@
  * if you like, and it can span multiple lines.
  *
  * @package    mod_openstudio
- * @copyright  2016 The Open University
+ * @copyright  2017 The Open University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -67,7 +67,7 @@ if ($vuid != $USER->id) {
 }
 
 // Get page url.
-$strpageurl = util::get_current_url();
+$pageurl = util::get_current_url();
 
 // Set stream view.
 $vid = optional_param('vid', -1, PARAM_INT);
@@ -120,27 +120,27 @@ if ($vid == content::VISIBILITY_WORKSPACE) {
 }
 switch ($vidd) {
     case content::VISIBILITY_GROUP:
-        $strpagetitle = $strpageheading = get_string('pageheader', 'openstudio',
+        $pagetitle = $pageheading = get_string('pageheader', 'openstudio',
                 array('cname' => $course->shortname, 'cmname' => $cm->name,
                       'title' => $theme->themegroupname));
         break;
 
     case content::VISIBILITY_PRIVATE:
     case content::VISIBILITY_PRIVATE_PINBOARD:
-        $strpagetitle = $strpageheading = get_string('pageheader', 'openstudio',
+        $pagetitle = $pageheading = get_string('pageheader', 'openstudio',
                 array('cname' => $course->shortname, 'cmname' => $cm->name,
                       'title' => $theme->themestudioname));
         break;
 
     case content::VISIBILITY_MODULE:
     default:
-        $strpagetitle = $strpageheading = get_string('pageheader', 'openstudio',
+        $pagetitle = $pageheading = get_string('pageheader', 'openstudio',
                 array('cname' => $course->shortname, 'cmname' => $cm->name,
                       'title' => $theme->thememodulename));
         break;
 }
 if ($vuid != $USER->id) {
-    $strpagetitle .= ': ' . get_string('profileswork', 'openstudio', array('name' => $contentowner->firstname));;
+    $pagetitle .= ': ' . get_string('profileswork', 'openstudio', array('name' => $contentowner->firstname));;
 }
 
 $fblock = optional_param('fblock', 0, PARAM_TEXT);
@@ -156,6 +156,13 @@ if ((($vid == content::VISIBILITY_MODULE) || ($vid == content::VISIBILITY_GROUP)
     && !$permissions->managecontent) {
     $finalviewpermissioncheck = $permissions->viewothers;
 }
+
+// Sort options.
+$fsortdefault = defaults::OPENSTUDIO_SORT_FLAG_DATE;
+$osortdefault = defaults::OPENSTUDIO_SORT_DESC;
+$fsort = optional_param('fsort', $fsortdefault, PARAM_INT);
+$osort = optional_param('osort', $osortdefault, PARAM_INT);
+$sortflag = array('id' => $fsort, 'asc' => $osort);
 
 // Pagination settings.
 $pagedefault = 0;
@@ -199,7 +206,7 @@ if ($finalviewpermissioncheck) {
     $contentdatatemp = stream::get_contents(
             $cminstance->id, $permissions->groupingid, $viewuser->id, $contentowner->id, $vid,
             null, null, null, null, null, null,
-            null, $pagestart, $streamdatapagesize, ($fblock == -1), true,
+            $sortflag, $pagestart, $streamdatapagesize, ($fblock == -1), true,
             $permissions->managecontent, $groupid, $permissions->groupmode,
             false,
             $permissions->accessallgroups,
@@ -334,6 +341,10 @@ if ($finalviewpermissioncheck) {
         // We need this because mustache requires it.
         $contentdata->activityitems = array_values($activityitems);
 
+        $contentdata->pagestart = $pagestart;
+        $contentdata->streamdatapagesize = $streamdatapagesize;
+        $contentdata->pageurl = $pageurl;
+
         // Gather content social data.
         $contentsocialdata = studio_api_notifications_get_activities($permissions->activeuserid, $contentslist);
         if ($contentsocialdata) {
@@ -346,7 +357,7 @@ if ($finalviewpermissioncheck) {
     }
 }
 // Render page header and crumb trail.
-util::page_setup($PAGE, $strpagetitle, $strpageheading, $strpageurl, $course, $cm);
+util::page_setup($PAGE, $pagetitle, $pageheading, $pageurl, $course, $cm);
 
 $PAGE->requires->js_call_amd('mod_openstudio/viewhelper', 'init');
 

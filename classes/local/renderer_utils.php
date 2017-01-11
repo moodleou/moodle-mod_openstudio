@@ -16,7 +16,7 @@
 
 /**
  * @package mod_openstudio
- * @copyright The Open University
+ * @copyright 2017 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -34,7 +34,7 @@ defined('MOODLE_INTERNAL') || die();
  * Static Utility methods to support the Open Studio module.
  *
  * @package mod_openstudio
- * @copyright 2016 The Open University
+ * @copyright 2017 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class renderer_utils {
@@ -50,38 +50,38 @@ class renderer_utils {
 
         $navigationurls = (object) array();
 
-        $navigationurls->strmyworkurl = $strmyworkactiveurl = new \moodle_url('/mod/openstudio/view.php',
+        $navigationurls->myworkurl = new \moodle_url('/mod/openstudio/view.php',
                     array('id' => $cmid, 'vid' => content::VISIBILITY_PRIVATE, 'fblock' => false,
                           'ftype' => 0, 'fflag' => 0,
                           'fsort' => stream::SORT_BY_ACTIVITYTITLE, 'osort' => 1));
 
-        $navigationurls->strpinboardurl = new \moodle_url('/mod/openstudio/view.php',
+        $navigationurls->pinboardurl = new \moodle_url('/mod/openstudio/view.php',
                     array('id' => $cmid, 'vid' => content::VISIBILITY_PRIVATE_PINBOARD, 'fblock' => -1,
                           'ftype' => 0, 'fflag' => 0,
                           'ftags' => '', 'fsort' => stream::SORT_BY_DATE, 'osort' => 0));
 
-        $navigationurls->strmygroupurl = new \moodle_url('/mod/openstudio/view.php',
+        $navigationurls->mygroupurl = new \moodle_url('/mod/openstudio/view.php',
                     array('id' => $cmid, 'vid' => content::VISIBILITY_GROUP, 'fblock' => 0,
                           'ftype' => 0, 'fflag' => 0,
                           'ftags' => '', 'fsort' => stream::SORT_BY_DATE, 'osort' => 0));
 
-        $navigationurls->strmymoduleurl = new \moodle_url('/mod/openstudio/view.php',
+        $navigationurls->mymoduleurl = new \moodle_url('/mod/openstudio/view.php',
                     array('id' => $cmid, 'vid' => content::VISIBILITY_MODULE, 'fblock' => 0,
                           'ftype' => 0, 'fflag' => 0,
                           'ftags' => '', 'fsort' => stream::SORT_BY_DATE, 'osort' => 0));
 
-        $navigationurls->strlistpeopleurl = new \moodle_url('/mod/openstudio/people.php', array('id' => $cmid));
-        $navigationurls->strpeoplegroupurl = new \moodle_url('/mod/openstudio/people.php',
+        $navigationurls->listpeopleurl = new \moodle_url('/mod/openstudio/people.php', array('id' => $cmid));
+        $navigationurls->peoplegroupurl = new \moodle_url('/mod/openstudio/people.php',
                 array('id' => $cmid, 'vid' => content::VISIBILITY_GROUP));
-        $navigationurls->strpeoplemoduleurl = new \moodle_url('/mod/openstudio/people.php',
+        $navigationurls->peoplemoduleurl = new \moodle_url('/mod/openstudio/people.php',
                 array('id' => $cmid, 'vid' => content::VISIBILITY_MODULE));
 
-        $navigationurls->strmyworkurl = $navigationurls->strmyworkurl->out(false);
-        $navigationurls->strpinboardurl = $navigationurls->strpinboardurl->out(false);
-        $navigationurls->strmymoduleurl = $navigationurls->strmymoduleurl->out(false);
-        $navigationurls->strpeoplemoduleurl = $navigationurls->strpeoplemoduleurl->out(false);
-        $navigationurls->strmygroupurl = $navigationurls->strmygroupurl->out(false);
-        $navigationurls->strpeoplegroupurl = $navigationurls->strpeoplegroupurl->out(false);
+        $navigationurls->myworkurl = $navigationurls->myworkurl->out(false);
+        $navigationurls->pinboardurl = $navigationurls->pinboardurl->out(false);
+        $navigationurls->mymoduleurl = $navigationurls->mymoduleurl->out(false);
+        $navigationurls->peoplemoduleurl = $navigationurls->peoplemoduleurl->out(false);
+        $navigationurls->mygroupurl = $navigationurls->mygroupurl->out(false);
+        $navigationurls->peoplegroupurl = $navigationurls->peoplegroupurl->out(false);
 
         return $navigationurls;
 

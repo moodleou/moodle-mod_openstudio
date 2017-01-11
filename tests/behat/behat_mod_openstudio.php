@@ -27,6 +27,8 @@ require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\flags;
 
+use Behat\Gherkin\Node\TableNode as TableNode,
+    Behat\Mink\Exception\ExpectationException as ExpectationException;
 /**
  * Open Studio-related steps definitions.
  *
@@ -303,5 +305,100 @@ EOF;
     public function openstudio_go_to_contentedit() {
          $url = str_replace('content', 'contentedit', $this->getSession()->getCurrentUrl());
          $this->getSession()->visit($url);
+    }
+
+    /**
+     * @Given /^the following open studio "(?P<slottype_string>(?:[^"]|\\")*)" exist:$/
+     * @param string $elementname "folders" or "contents"
+     * @param TableNode $data
+     */
+    public function the_following_studio_exist($elementname, TableNode $data) {
+        // Now that we need them require the data generators.
+        require_once(__DIR__ . '/../generator/lib.php');
+
+        if (empty(self::$elements[$elementname])) {
+            throw new ExpectationException($elementname . ' data generator is not implemented');
+        }
+
+        $this->datagenerator = testing_util::get_data_generator();
+        $this->plugingenerator = $this->datagenerator->get_plugin_generator('mod_openstudio');
+
+        $elementdatagenerator = self::$elements[$elementname]['datagenerator'];
+        $requiredfields = self::$elements[$elementname]['required'];
+        if (!empty(self::$elements[$elementname]['switchids'])) {
+            $switchids = self::$elements[$elementname]['switchids'];
+        }
+
+        foreach ($data->getHash() as $elementdata) {
+
+            // Check if all the required fields are there.
+            foreach ($requiredfields as $requiredfield) {
+                if (!isset($elementdata[$requiredfield])) {
+                    throw new Exception($elementname . ' requires the field ' . $requiredfield . ' to be specified');
+                }
+            }
+
+            // Switch from human-friendly references to ids.
+            if (isset($switchids)) {
+                foreach ($switchids as $element => $field) {
+                    $methodname = 'get_' . $element . '_id';
+
+                    // Not all the switch fields are required, default vars will be assigned by data generators.
+                    if (isset($elementdata[$element])) {
+                        // Temp $id var to avoid problems when $element == $field.
+                        $id = $this->{$methodname}($elementdata[$element]);
+                        unset($elementdata[$element]);
+                        $elementdata[$field] = $id;
+                    }
+                }
+            }
+
+            // Preprocess the entities that requires a special treatment.
+            if (method_exists($this, 'preprocess_' . $elementdatagenerator)) {
+                $elementdata = $this->{'preprocess_' . $elementdatagenerator}($elementdata);
+            }
+
+            // Creates element.
+            $methodname = 'create_' . $elementdatagenerator;
+            if (method_exists($this->plugingenerator, $methodname)) {
+                // Using data generators directly.
+                $this->plugingenerator->{$methodname}($elementdata);
+
+            } else if (method_exists($this, 'process_' . $elementdatagenerator)) {
+                // Using an alternative to the direct data generator call.
+                $this->{'process_' . $elementdatagenerator}($elementdata);
+            } else {
+                throw new ExpectationException($elementname . ' data generator is not implemented');
+            }
+        }
+    }
+
+    /**
+     * Gets the user id from it's username.
+     * @throws Exception
+     * @param string $username
+     * @return int
+     */
+    protected function get_user_id($username) {
+        global $DB;
+
+        if (!$id = $DB->get_field('user', 'id', array('username' => $username))) {
+            throw new Exception('The specified user with username "' . $username . '" does not exist');
+        }
+        return $id;
+    }
+
+    /**
+     * Gets the visibility id from visibility id.
+     * @throws Exception
+     * @param string $visibility
+     * @return int
+     */
+    protected function get_visibility_id($visibility) {
+        $constantname = content::class.'::VISIBILITY_' . strtoupper(trim($visibility));
+        if (!defined($constantname)) {
+            throw new Exception('The visibility constant "' . $constantname . '" does not exist');
+        }
+        return constant($constantname);
     }
 }
