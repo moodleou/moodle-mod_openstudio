@@ -114,12 +114,14 @@ $returnurl = new moodle_url('/mod/openstudio/view.php',
         array('id' => $cm->id, 'vid' => content::VISIBILITY_PRIVATE));
 
 $contentdata = new stdClass();
+$contenttype = content::TYPE_NONE;
 if ($sid > 0) {
     $contentdata = content::get_record($userid, $sid);
     if ($contentdata === false) {
         print_error('errorinvalidcontent', 'openstudio', $returnurl->out(false));
     }
     $lid = $contentdata->levelid;
+    $contenttype = $contentdata->contenttype;
 }
 
 $contentdataname = '';
@@ -165,7 +167,7 @@ if (($type == content::TYPE_FOLDER_CONTENT) && ($sid == 0)) {
 }
 
 // Check if we are processing a folder and get information if so.
-if (isset($contentdata->contenttype) && ($contentdata->contenttype == content::TYPE_FOLDER)) {
+if (isset($contenttype) && ($contenttype == content::TYPE_FOLDER)) {
     $type = content::TYPE_FOLDER;
     $folderid = $contentdata->id;
     $folderdata = content::get($folderid);
@@ -485,7 +487,7 @@ $options = array(
         'allowedvisibility' => $allowedvisibility,
         'allowedfiletypes' => explode(",", $cminstance->filetypes),
         'contentid' => $contentdata->sid,
-        'contenttype' => $contentdata->contenttype,
+        'contenttype' => $contenttype,
         'contentname' => $formcontentname,
         'isfoldercontent' => ($type == content::TYPE_FOLDER_CONTENT) ? true : false,
         'isfolderlock' => $isfolderlock,
@@ -554,6 +556,25 @@ if ($contentform->is_cancelled()) {
 
     if ($contentformdata->sid > 0) {
         $contentupdatemode = content::UPDATEMODE_UPDATED;
+
+        // Update data base on upload type.
+        // Upload type: none, add file or add embed/link.
+        if (isset($contentformdata->contentuploadtype)) {
+            switch ($contentformdata->contentuploadtype) {
+                case'addfile':
+                    $contentformdata->weblink = null;
+                    break;
+                case 'addlink':
+                    $contentformdata->attachments = null;
+                    $contentformfile = null;
+                    break;
+                default:
+                    $contentformdata->weblink = null;
+                    $contentformdata->attachments = null;
+                    $contentformfile = null;
+                    break;
+            }
+        }
 
         $contentid = content::update(
                 $userid,
@@ -702,12 +723,12 @@ if ($contentform->is_cancelled()) {
     $contentformdata->description = $contentformdatadescription;
 
 } else {
-    if (!isset($contentdata->attachments) && isset($contentdata->contenttype)) {
+    if (!isset($contentdata->attachments) && isset($contenttype)) {
         // Check if the content contains uploaded file, if so, then load
         // the uploaded file into the draft area for the moodle form.
         $context = context_module::instance($cm->id);
         $draftitemid = 0;
-        switch ($contentdata->contenttype) {
+        switch ($contenttype) {
             case content::TYPE_IMAGE:
             case content::TYPE_VIDEO:
             case content::TYPE_AUDIO:

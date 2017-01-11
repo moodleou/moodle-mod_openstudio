@@ -413,8 +413,10 @@ EOF;
                         $shouldversion = true;
                     } else {
                         // Normalize the content fields for comparison.
-                        $dataembedcode = preg_replace('/\s+/', '', str_replace(' ', '', trim($data['embedcode'])));
-                        $dataweblink = preg_replace('/\s+/', '', str_replace(' ', '', trim($data['weblink'])));
+                        $dataembedcode = isset($data['embedcode']) ? preg_replace('/\s+/',
+                                '', str_replace(' ', '', trim($data['embedcode']))) : '';
+                        $dataweblink = isset($data['weblink']) ? preg_replace('/\s+/',
+                                '', str_replace(' ', '', trim($data['weblink']))) : '';
                         $oldcontent = preg_replace('/\s+/', '', str_replace(' ', '', trim($contentdata->content)));
 
                         // If the embed code has changed, then we should version.

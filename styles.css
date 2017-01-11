@@ -272,6 +272,7 @@
 .openstudio-content-edit-form {
     border-top: 1px solid #cccccc;
     padding-top: 20px;
+    margin-top: 30px;
 }
 
 .openstudio-create-folder-button {
@@ -906,6 +907,19 @@ a.openstudio-actvity-title:hover  {
 
 .openstudio-grid-item-content .tooltip > .tooltip-inner {
     width: 120px;
+}
+
+/* IE */
+@media screen\0 {
+    .openstudio-add-file-button {
+        margin-top: 26px;
+
+    }
+
+    .openstudio-add-file-button .helptooltip {
+        margin-top: 0px;
+        margin-left: -10px;
+    }
 }
 
 /* Tablet. */
