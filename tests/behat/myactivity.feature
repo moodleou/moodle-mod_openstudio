@@ -31,14 +31,15 @@ Feature: My Activity
     And I follow "Course 1"
     And I turn editing mode on
     And I add a "Open Studio" to section "1" and I fill the form with:
-      | Name | Test Open Studio name 1 |
-      | Description | Test Open Studio description |
-      | Group mode | Visible groups |
-      | Grouping | grouping1 |
-      | Enable pinboard | 99 |
-      | Enable Folders  | 1 |
-      | Abuse reports are emailed to | teacher1@asd.com |
-      | ID number                    | OS1              |
+      | Name                         | Test Open Studio name 1      |
+      | Description                  | Test Open Studio description |
+      | Group mode                   | Visible groups               |
+      | Grouping                     | grouping1                    |
+      | Enable pinboard              | 99                           |
+      | Enable Folders               | 1                            |
+      | Abuse reports are emailed to | teacher1@asd.com             |
+      | ID number                    | OS1                          |
+    And all users have accepted the plagarism statement for "OS1" openstudio
     And I follow "Test Open Studio name 1"
     And I click on "li.administration" "css_element"
     And I follow "Manage levels"
@@ -98,10 +99,10 @@ Feature: My Activity
     And I follow "Content 1.1 Required"
     And I press "Add file"
     And I set the following fields to these values:
-      | Who can view this content | My module |
-      | Title | Test My Activities View 2|
-      | Description | My Activities Description 2|
-      | Upload content | mod/openstudio/tests/importfiles/test1.jpg |
+      | Who can view this content | My module                                  |
+      | Title                     | Test My Activities View 2                  |
+      | Description               | My Activities Description 2                |
+      | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
     And I press "Save"
     And I click on "li.my-content" "css_element"
     And I follow "My Activities"
@@ -116,10 +117,10 @@ Feature: My Activity
     And I follow "Content 1.1 Required"
     And I press "Add web/embed link"
     And I set the following fields to these values:
-      | Who can view this content | My module |
-      | Title | Test My Activities View 3 |
-      | Description | Test My Activities View 3 Add web/embed link |
-      | Add web/embed link | https://www.youtube.com/watch?v=ktAnpf_nu5c |
+      | Who can view this content | My module                                    |
+      | Title                     | Test My Activities View 3                    |
+      | Description               | Test My Activities View 3 Add web/embed link |
+      | Add web/embed link        | https://www.youtube.com/watch?v=ktAnpf_nu5c  |
     And I press "Save"
     And I click on "li.my-content" "css_element"
     And I follow "My Activities"
@@ -134,10 +135,10 @@ Feature: My Activity
     And I follow "Content 1.1 Required"
     And I press "Add file"
     And I set the following fields to these values:
-      | Who can view this content | My module |
-      | Title | Test My Activities View 4|
-      | Description | My Activities Description 4|
-      | Upload content | mod/openstudio/tests/importfiles/test2.jpg |
+      | Who can view this content | My module                                  |
+      | Title                     | Test My Activities View 4                  |
+      | Description               | My Activities Description 4                |
+      | Upload content            | mod/openstudio/tests/importfiles/test2.jpg |
     And I press "Save"
     And I click on "li.my-content" "css_element"
     And I follow "My Activities"
@@ -145,10 +146,10 @@ Feature: My Activity
     And I go to content edit view
     And I press "Add file"
     And I set the following fields to these values:
-      | Who can view this content | My module |
-      | Title | Test My Activities View 5|
-      | Description | My Activities Description 5|
-      | Upload content | mod/openstudio/tests/importfiles/test3.jpg |
+      | Who can view this content | My module                                  |
+      | Title                     | Test My Activities View 5                  |
+      | Description               | My Activities Description 5                |
+      | Upload content            | mod/openstudio/tests/importfiles/test3.jpg |
     And I press "Save"
     And I click on "li.my-content" "css_element"
     And I follow "My Activities"

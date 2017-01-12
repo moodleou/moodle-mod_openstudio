@@ -16,7 +16,7 @@
 
 /**
  * @package mod_studio
- * @copyright The Open University
+ * @copyright 2017 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -33,8 +33,8 @@ defined('MOODLE_INTERNAL') || die();
 function studio_api_tandc_get($studioid, $userid) {
     global $DB;
 
-    $result = $DB->get_record('studio_honesty_checks',
-            array('studioid' => (int) $studioid, 'userid' => (int) $userid), '*');
+    $result = $DB->get_record('openstudio_honesty_checks',
+            array('openstudioid' => (int) $studioid, 'userid' => (int) $userid), '*');
 
     return $result;
 }
@@ -53,23 +53,24 @@ function studio_api_tandc_set($studioid, $userid, $seton = true) {
         $result = $data = studio_api_tandc_get($studioid, $userid);
         if ($result == false) {
             $data = (object) array();
-            $data->studioid = (int) $studioid;
+            $data->openstudioid = (int) $studioid;
             $data->userid = (int) $userid;
         }
         $data->timemodified = time();
 
         if ($seton) {
             if ($result == false) {
-                return $DB->insert_record('studio_honesty_checks', $data);
+                return $DB->insert_record('openstudio_honesty_checks', $data);
             } else {
-                return $DB->update_record('studio_honesty_checks', $data);
+                return $DB->update_record('openstudio_honesty_checks', $data);
             }
         } else {
-            return $DB->delete_records('studio_honesty_checks',
-                    array('studioid' => $studioid, 'userid' => $userid));
+            return $DB->delete_records('openstudio_honesty_checks',
+                    array('openstudioid' => $studioid, 'userid' => $userid));
         }
     } catch (Exception $e) {
         // Defaults to returning false.
+        return false;
     }
 
     return false;

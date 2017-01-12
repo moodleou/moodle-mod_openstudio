@@ -52,6 +52,9 @@ $theme = $coursedata->theme;
 
 require_login($course, true, $cm);
 
+// Terms and conditions check.
+util::tandc_check($id);
+
 // Need to have view or managecontent capabilities.
 if (!$permissions->managecontent) {
     require_capability('mod/openstudio:view', $mcontext);

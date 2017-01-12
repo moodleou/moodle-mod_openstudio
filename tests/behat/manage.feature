@@ -40,6 +40,7 @@ Feature: Manage open studio folders
       | Enable Folders  | 1 |
       | Abuse reports are emailed to | teacher1@asd.com |
       | ID number                    | OS1              |
+    And all users have accepted the plagarism statement for "OS1" openstudio
 
   @javascript
   Scenario: Manage set templates
@@ -54,7 +55,6 @@ Feature: Manage open studio folders
     And I set the field "Activity Name" to "Activity 1"
     And I press "Save Changes"
     And I follow "Activity 1"
-
 
     When I press "Add another Content"
     Then "Content Name" "field" should exist
@@ -90,12 +90,12 @@ Feature: Manage open studio folders
     And "Number of additional contents allowed" "field" should exist
 
     When I set the following fields to these values:
-      | Folder guidance text             | Lorem ipsum dolor sit amet |
-      | Number of additional contents allowed    | 2                  |
+      | Folder guidance text                     | Lorem ipsum dolor sit amet |
+      | Number of additional contents allowed    | 2                          |
     And I press "Save Changes"
     Then the following fields match these values:
-      | Folder guidance text             | Lorem ipsum dolor sit amet |
-      | Number of additional contents allowed    | 2                  |
+      | Folder guidance text                     | Lorem ipsum dolor sit amet |
+      | Number of additional contents allowed    | 2                          |
 
     When I press "Add another Content"
     Then I should see "Content 1" in the "div.fstatic h3" "css_element"
@@ -104,13 +104,13 @@ Feature: Manage open studio folders
     And "Prevent re-ordering?" "field" should exist
 
     When I set the following fields to these values:
-      | Name                  | Set Content 1                     |
-      | Folder guidance text    | Nunc sagittis sit amet mauris. |
+      | Name                  | Set Content 1                  |
+      | Folder guidance text  | Nunc sagittis sit amet mauris. |
       | Prevent re-ordering?  | 1                              |
     And I press "Save Changes"
     Then the following fields match these values:
-      | Name                  | Set Content 1                     |
-      | Folder guidance text    | Nunc sagittis sit amet mauris. |
+      | Name                  | Set Content 1                  |
+      | Folder guidance text  | Nunc sagittis sit amet mauris. |
       | Prevent re-ordering?  | 1                              |
 
     When I press "Add another Content"

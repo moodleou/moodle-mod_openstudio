@@ -60,6 +60,7 @@ Feature: Create and edit contents
             | Abuse reports are emailed to | teacher1@asd.com |
             | ID number                    | OS1              |
         And Open Studio test instance is configured for "Test Open Studio name 1"
+        And all users have accepted the plagarism statement for "OS1" openstudio
 
     @javascript
     Scenario: Test Open Studio My Pinboard View

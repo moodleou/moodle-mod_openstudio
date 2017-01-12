@@ -107,6 +107,22 @@ class behat_mod_openstudio extends behat_base {
             )
     );
 
+    private function get_openstudio_by_idnumber($idnumber) {
+        global $DB;
+
+        $select = 'SELECT s.*, cm.id as cmid ';
+        $from = 'FROM {openstudio} s
+                 JOIN {course_modules} cm ON s.id = cm.instance AND s.course = cm.course
+                 JOIN {modules} m ON cm.module = m.id ';
+        $where = "WHERE m.name = 'openstudio'
+                    AND cm.idnumber = ?";
+        $studio = $DB->get_record_sql($select . $from . $where, array($idnumber));
+        if (!$studio) {
+            throw new Exception('There is no studio instance with idnumber ' . $idnumber);
+        }
+        return $studio;
+    }
+
     /**
      * @Given /^Open Studio test instance is configured for "(?P<studioname_string>(?:[^"]|\\")*)"$/
      */
@@ -305,6 +321,27 @@ EOF;
     public function openstudio_go_to_contentedit() {
          $url = str_replace('content', 'contentedit', $this->getSession()->getCurrentUrl());
          $this->getSession()->visit($url);
+    }
+
+    /**
+     * @Given /^all users have accepted the plagarism statement for "(?P<openstudioname_string>(?:[^"]|\\")*)" openstudio$/
+     * @param $openstudioidnumber
+     */
+    public function all_users_have_accepted_plagarism_for($openstudioidnumber) {
+        global $DB;
+        $users = $DB->get_records('user');
+        $openstudio = $this->get_openstudio_by_idnumber($openstudioidnumber);
+        if (!$openstudio) {
+            throw new ExpectationException('Open Studio idnumber provided does not exist', $this->getSession());
+        }
+        foreach ($users as $user) {
+            $honestycheck = (object) array(
+                'openstudioid' => $openstudio->cmid,
+                'userid' => $user->id,
+                'timemodified' => time()
+            );
+            $DB->insert_record('openstudio_honesty_checks', $honestycheck, true, true);
+        }
     }
 
     /**
