@@ -96,7 +96,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         // Generate shared content items.
         if ($permissions->feature_module) {
             $submenuitem = array(
-                    'name' => $theme->thememodulename,
+                    'name' => get_string('settingsthemehomesettingsmodule', 'openstudio'),
                     'url' => $navigationurls->mymoduleurl,
                     'pix' => $OUTPUT->pix_url('mymodule_rgb_32px', 'openstudio')
             );
@@ -106,7 +106,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         if ($permissions->feature_group) {
             $submenuitem = array(
-                    'name' => $theme->themegroupname,
+                    'name' => get_string('settingsthemehomesettingsgroup', 'openstudio'),
                     'url' => $navigationurls->mygroupurl,
                     'pix' => $OUTPUT->pix_url('group_rgb_32px', 'openstudio')
             );
@@ -126,22 +126,24 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 $menuitem = array(
                     'hassubnavigation' => false,
                     'subnavigation' => array(),
-                    'name' => $submenuitem['name'],
+                    'name' => get_string('menusharedcontent', 'openstudio'),
                     'url' => $submenuitem['url'],
-                    'pix' => $submenuitem['pix'],
+                    'pix' => $OUTPUT->pix_url('shared_content_rgb_32px', 'openstudio'),
                     'class' => 'shared-content'
                 );
                 $data->navigation[] = $menuitem;
             }
         }
 
-        // Generate people items.
-        $menuitem['name'] = get_string('menupeople', 'openstudio');
-        $menuitem['url'] = $navigationurls->peoplemoduleurl;
-        $menuitem['pix'] = $OUTPUT->pix_url('people_rgb_32px', 'openstudio');
-        $menuitem['class'] = 'people';
-        $menuitem['hassubnavigation'] = false;
-        $data->navigation[] = $menuitem;
+        if ($permissions->feature_module || $permissions->feature_group) {
+            // Generate people items.
+            $menuitem['name'] = get_string('menupeople', 'openstudio');
+            $menuitem['url'] = $navigationurls->peoplemoduleurl;
+            $menuitem['pix'] = $OUTPUT->pix_url('people_rgb_32px', 'openstudio');
+            $menuitem['class'] = 'people';
+            $menuitem['hassubnavigation'] = false;
+            $data->navigation[] = $menuitem;
+        }
 
         // Generate my content items.
         $menuitem = array(
@@ -152,7 +154,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $subnavigations = array();
         if ($permissions->feature_studio || ($permissions->activitydata->used > 0)) {
             $submenuitem = array(
-                    'name' => $theme->themestudioname,
+                    'name' => get_string('settingsthemehomesettingsstudio', 'openstudio'),
                     'url' => $navigationurls->myworkurl,
                     'pix' => $OUTPUT->pix_url('activity_rgb_32px', 'openstudio')
             );
@@ -162,7 +164,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         if ($permissions->feature_pinboard || ($permissions->pinboarddata->usedandempty > 0)) {
             $submenuitem = array(
-                    'name' => $theme->themepinboardname,
+                    'name' => get_string('settingsthemehomesettingspinboard', 'openstudio'),
                     'url' => $navigationurls->pinboardurl,
                     'pix' => $OUTPUT->pix_url('pinboard_rgb_32px', 'openstudio')
             );
@@ -193,9 +195,9 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 $menuitem = array(
                     'hassubnavigation' => false,
                     'subnavigation' => array(),
-                    'name' => $submenuitem['name'],
+                    'name' => get_string('menumycontent', 'openstudio'),
                     'url' => $submenuitem['url'],
-                    'pix' => $submenuitem['pix'],
+                    'pix' => $OUTPUT->pix_url('openstudio_rgb_32px', 'openstudio'),
                     'class' => 'my-content'
                 );
                 $data->navigation[] = $menuitem;

@@ -791,6 +791,7 @@ a.openstudio-add-title:hover  {
 .openstudio-grid-item-content-detail-owner-img {
     float: left;
     margin-right: 5px;
+    padding-bottom: 17px;
 }
 
 .openstudio-grid-item-content-detail-owner-img img {

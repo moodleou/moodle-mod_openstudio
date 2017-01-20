@@ -120,7 +120,7 @@ class mod_openstudio_mod_form extends moodleform_mod {
                 content::VISIBILITY_MODULE => get_string('settingssocialsharinglevelcourse', 'openstudio'));
 
         $mform->addElement('select', 'enabledvisibility', get_string('settingsenablesocialsharing', 'openstudio'),
-            $sharringlevelarray);
+                $sharringlevelarray);
         $mform->getElement('enabledvisibility')->setMultiple(true);
 
         if ($this->_cm) {
@@ -155,7 +155,7 @@ class mod_openstudio_mod_form extends moodleform_mod {
                 => get_string('settingssocialflagsneedhelp', 'openstudio'),
                 flags::COMMENT_LIKE
                 => get_string('settingssocialflagcommentlike', 'openstudio'));
-        $mformselect = $mform->addElement('select', 'enabledflags',
+        $mform->addElement('select', 'enabledflags',
                 get_string('settingssocialflags', 'openstudio'), $flagsarray);
         $mform->getElement('enabledflags')->setMultiple(true);
 

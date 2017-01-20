@@ -47,7 +47,7 @@ class defaults {
     const PEOPLEPAGESIZE = 10;
     const CONTENTVERSIONSTOSHOW = 4;
     const EXPORTPAGESIZE = 10;
-    const MAXPINBOARDCONTENTS = 10;
+    const MAXPINBOARDCONTENTS = 100;
     const MAXCONTENTVERSIONS = 5;
     const MAXPINBOARDCONTENTSLLENGTH = 3; // 3 = 999 maximum.
     const MAXCONTENTVERSIONSLENGTH = 2; // 2 = 99 maximum.
