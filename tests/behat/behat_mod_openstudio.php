@@ -26,6 +26,7 @@
 require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\flags;
+use mod_openstudio\local\api\lock;
 
 use Behat\Gherkin\Node\TableNode as TableNode,
     Behat\Mink\Exception\ExpectationException as ExpectationException;
@@ -411,6 +412,94 @@ EOF;
     }
 
     /**
+     * Check level exist and get level 1/2 ID.
+     * @throws Exception
+     * @param TableNode $leveldata
+     * @return TableNode
+     */
+    protected function preprocess_levels($leveldata) {
+        global $DB;
+
+        if (isset($leveldata['level1'])) {
+            $leveldata['level'] = 2;
+            try {
+                if (!$leveldata['parentid'] = $DB->get_field('openstudio_level1', 'id', array('name' => $leveldata['level1']))) {
+                    throw new Exception('The specified level1 with name "' . $leveldata['level1'] . '" does not exist');
+                }
+            } catch (dml_multiple_records_exception $e) {
+                throw new exception('more than one level1 was found with the name ' . $leveldata['level1']
+                        .'. For simplicity, please use unique level names in behat tests.');
+            }
+        } else if (isset($leveldata['level2'])) {
+            $leveldata['level'] = 3;
+            try {
+                if (!$leveldata['parentid'] = $DB->get_field('openstudio_level2', 'id', array('name' => $leveldata['level2']))) {
+                    throw new Exception('The specified level2 with name "' . $leveldata['level2'] . '" does not exist');
+                }
+            } catch (dml_multiple_records_exception $e) {
+                throw new exception('more than one level1 was found with the name ' . $leveldata['level2']
+                        .'. For simplicity, please use unique level names in behat tests.');
+            }
+
+            if (isset($leveldata['lockprocessed'])) {
+                if (empty($leveldata['lockprocessed'])) {
+                    unset($leveldata['lockprocessed']);
+                } else {
+                    $leveldata['lockprocessed'] = strtotime($leveldata['lockprocessed']);
+                }
+            }
+            if (isset($leveldata['unlocktime'])) {
+                if (empty($leveldata['unlocktime'])) {
+                    unset($leveldata['unlocktime']);
+                } else {
+                    $leveldata['unlocktime'] = strtotime($leveldata['unlocktime']);
+                }
+            }
+            if (isset($leveldata['locktime'])) {
+                if (empty($leveldata['locktime'])) {
+                    unset($leveldata['locktime']);
+                } else {
+                    $leveldata['locktime'] = strtotime($leveldata['locktime']);
+                }
+            }
+        } else {
+            $leveldata['level'] = 1;
+        }
+        return $leveldata;
+    }
+
+    /**
+     * Gets the lock type constant from lock type name.
+     * @throws Exception
+     * @param string $locktype
+     * @return int
+     */
+    protected function get_locktype_id($locktype) {
+        if (empty($locktype)) {
+            return null;
+        }
+        $constantname = lock::class . '::'. strtoupper($locktype);
+        if (!defined($constantname)) {
+            throw new Exception('The lock type constant "' . $constantname . '" does not exist');
+        }
+        return constant($constantname);
+    }
+
+    /**
+     * Gets the content type constant from it's name.
+     * @throws Exception
+     * @param string $contenttype
+     * @return int
+     */
+    protected function get_contenttype_id ($contenttype) {
+        $constantname = content::class.'::TYPE_' . strtoupper($contenttype);
+        if (!defined($constantname)) {
+            throw new Exception('The content type constant "' . $constantname . '" does not exist');
+        }
+        return constant($constantname);
+    }
+
+    /**
      * Gets the user id from it's username.
      * @throws Exception
      * @param string $username
@@ -437,5 +526,19 @@ EOF;
             throw new Exception('The visibility constant "' . $constantname . '" does not exist');
         }
         return constant($constantname);
+    }
+
+    /**
+     * Gets the visibility group ID from group name.
+     * @throws Exception
+     * @param string $group
+     * @return int
+     */
+    protected function get_visibilitygroup_id($group) {
+        global $DB;
+        if (!$id = $DB->get_field('groups', 'id', array('idnumber' => $group))) {
+            throw new Exception('The group with idnumber "' . $group . '" does not exist');
+        }
+        return (0 - $id);
     }
 }

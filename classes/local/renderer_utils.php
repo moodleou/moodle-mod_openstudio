@@ -133,6 +133,8 @@ class renderer_utils {
         $contentdata->flagscontentread = $flagscontentread;
         $contentdata->totalpostedcomments = $userprogressdata['totalpostedcomments'];
         $contentdata->userpictureurl = new \moodle_url('/user/pix.php/'.$contentowner->id.'/f1.jpg');
+        $contentdata->viewuserworkurl = new \moodle_url('/mod/openstudio/view.php',
+                    array('id' => $openstudioid, 'vuid' => $contentowner->id, 'vid' => content::VISIBILITY_PRIVATE));
         return $contentdata;
     }
 }
