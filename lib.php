@@ -30,7 +30,11 @@
  */
 
 use mod_openstudio\local\api\content;
+use mod_openstudio\local\util;
 use mod_openstudio\local\util\feature;
+use mod_openstudio\local\util\defaults;
+use mod_openstudio\local\api\comments;
+use mod_openstudio\local\api\levels;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -497,7 +501,7 @@ EOF;
                                     'itemid' => $record->fileid,
                                     'filename' => $record->content),
                             'filesize', MUST_EXIST);
-                    if ($filerecord->filesize > mod_openstudio\local\util\defaults::CONTENTVIEWIMAGESIZELIMIT) {
+                    if ($filerecord->filesize > defaults::CONTENTVIEWIMAGESIZELIMIT) {
                         $filearea = 'contentthumbnail';
                     }
                 }
@@ -541,7 +545,7 @@ function openstudio_ousearch_get_document($document) {
     global $CFG, $USER;
 
     $slotid = $document->intref1;
-    $slot = mod_openstudio\local\api\content::get_record($USER->id, $slotid);
+    $slot = content::get_record($USER->id, $slotid);
     if ($slot == false) {
         return false;
     }
@@ -585,7 +589,7 @@ function openstudio_ousearch_get_document($document) {
 
     // Add in comments.
     // To prevenr performance issue, we will only index the latest 25 comments.
-    $commentsdata = mod_openstudio\local\api\comments::get_for_content($slot->id, null, 25);
+    $commentsdata = comments::get_for_content($slot->id, null, 25);
     if ($commentsdata != false) {
         $content .= ' . ';
         foreach ($commentsdata as $comment) {
@@ -633,19 +637,19 @@ function openstudio_ousearch_filter_permission($result, $includeinsetslots = fal
 
     // Check view context to filter by.
     $vid = content::VISIBILITY_MODULE;
-    if (mod_openstudio\local\util::cache_check('search_view_context')) {
-        $vid = mod_openstudio\local\util::cache_get('search_view_context');
+    if (util::cache_check('search_view_context')) {
+        $vid = util::cache_get('search_view_context');
     }
 
     // Check groupmode to filter by.
     $groupmode = 0;
-    if (mod_openstudio\local\util::cache_check('search_view_groupmode')) {
-        $groupmode = mod_openstudio\local\util::cache_get('search_view_groupmode');
+    if (util::cache_check('search_view_groupmode')) {
+        $groupmode = util::cache_get('search_view_groupmode');
     }
 
     // Check capability to see I can view other people's slots.
-    if (mod_openstudio\local\util::cache_check('search_viewothers_capability')) {
-        if (!mod_openstudio\local\util::cache_get('search_viewothers_capability')) {
+    if (util::cache_check('search_viewothers_capability')) {
+        if (!util::cache_get('search_viewothers_capability')) {
             return false;
         }
     }
@@ -739,7 +743,7 @@ EOF;
     }
 
     if (!$includeinsetslots) {
-        $slotdata = mod_openstudio\local\api\content::get($result->intref1);
+        $slotdata = content::get($result->intref1);
         if ($slotdata->visibility == content::VISIBILITY_INFOLDERONLY) {
             return false;
         }
@@ -798,7 +802,7 @@ EOF;
 
 function openstudio_ousearch_filter_browseslots(&$result) {
     if (openstudio_ousearch_filter_permission($result, true)) {
-        $result = mod_openstudio\local\api\content::get($result->intref1);
+        $result = content::get($result->intref1);
         if ($result->contenttype == content::TYPE_FOLDER) {
             return false;
         }
@@ -843,7 +847,7 @@ EOF;
             return false;
         }
 
-        $slots = mod_openstudio\local\api\content::get_all_records($cm->instance);
+        $slots = content::get_all_records($cm->instance);
         if ($slots != false) {
             $counter = 0;
             foreach ($slots as $slotdata) {
@@ -875,7 +879,7 @@ EOF;
         }
 
         foreach ($cms as $cm) {
-            $slots = mod_openstudio\local\api\content::get_all_records($cm->instance);
+            $slots = content::get_all_records($cm->instance);
             if ($slots != false) {
                 $counter = 0;
                 foreach ($slots as $slotdata) {
@@ -935,7 +939,7 @@ function openstudio_feature_settings($studioorid, $updatedb = false) {
         $studio->enablecontentusesweblink = $studio->themefeatures & feature::CONTENTUSESWEBLINK;
         $studio->enablecontentusesembedcode = $studio->themefeatures & feature::CONTENTUSESEMBEDCODE;
         $studio->enablecontentallownotebooks = $studio->themefeatures & feature::CONTENTALLOWNOTEBOOKS;
-        $studio->enablecontentreciprocalaccess = \mod_openstudio\local\util::has_feature(
+        $studio->enablecontentreciprocalaccess = util::has_feature(
                 $studio, feature::CONTENTRECIPROCALACCESS
         );
         $studio->enableparticipationsmiley = $studio->themefeatures & feature::PARTICIPATIONSMILEY;
@@ -948,7 +952,7 @@ function openstudio_feature_settings($studioorid, $updatedb = false) {
         $featuregroup = feature::GROUP;
     }
     $featurestudio = 0;
-    if (isset($studio->id) && mod_openstudio\local\api\levels::defined_for_studio($studio->id)) {
+    if (isset($studio->id) && levels::defined_for_studio($studio->id)) {
         $featurestudio = feature::STUDIO;
     }
     $featurepinboard = 0;
@@ -973,26 +977,6 @@ function openstudio_feature_settings($studioorid, $updatedb = false) {
             $featureenablefoldersanycontent = feature::ENABLEFOLDERSANYCONTENT;
         }
     }
-    $featureenablerss = 0;
-    if ($studio->enablerss) {
-        $featureenablerss = feature::ENABLERSS;
-    }
-    $featureenablesubscription = 0;
-    if ($studio->enablesubscription) {
-        $featureenablesubscription = feature::ENABLESUBSCRIPTION;
-    }
-    $featureenableexportimport = 0;
-    if ($studio->enableexportimport) {
-        $featureenableexportimport = feature::ENABLEEXPORTIMPORT;
-    }
-    $featurecontentusesweblink = 0;
-    if ($studio->enablecontentusesweblink) {
-        $featurecontentusesweblink = feature::CONTENTUSESWEBLINK;
-    }
-    $featurecontentusesembedcode = 0;
-    if ($studio->enablecontentusesembedcode) {
-        $featurecontentusesembedcode = feature::CONTENTUSESEMBEDCODE;
-    }
     $featurecontentallownotebooks = 0;
     if ($studio->enablecontentallownotebooks) {
         $featurecontentallownotebooks = feature::CONTENTALLOWNOTEBOOKS;
@@ -1007,17 +991,11 @@ function openstudio_feature_settings($studioorid, $updatedb = false) {
         $featureparticipationsmiley = feature::PARTICIPATIONSMILEY;
     }
 
-    $featureenablelock = 0;
-    if ($studio->enablelocking) {
-        $featureenablelock = feature::ENABLELOCK;
-    }
-
     $themefeatures = $featuremodule + $featuregroup + $featurestudio + $featurepinboard;
     $themefeatures += $featurecontenttextuseshtml + $featurecontentcommentuseshtml;
     $themefeatures += $featurecontentcommentusesaudio + $featurecontentusesfileupload + $featureenablefolders;
-    $themefeatures += $featureenablerss + $featureenablesubscription + $featureenableexportimport;
-    $themefeatures += $featurecontentusesweblink + $featurecontentusesembedcode + $featurecontentallownotebooks;
-    $themefeatures += $featurecontentreciprocalaccess + $featureenablelock + $featureenablefoldersanycontent;
+    $themefeatures += $featurecontentallownotebooks;
+    $themefeatures += $featurecontentreciprocalaccess + $featureenablefoldersanycontent;
     $themefeatures += $featureparticipationsmiley;
 
     if (isset($studio->id) && $updatedb) {
