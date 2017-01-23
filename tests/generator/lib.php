@@ -395,7 +395,7 @@ class mod_openstudio_generator extends testing_module_generator {
     public function create_folder_contents($foldercontentdata) {
         global $DB;
 
-        $studio = $this->get_studio_by_idnumber($foldercontentdata['studio']);
+        $studio = $this->get_studio_by_idnumber($foldercontentdata['openstudio']);
         $contentparams = array('openstudioid' => $studio->id, 'name' => $foldercontentdata['content']);
         $content = $DB->get_record('openstudio_contents', $contentparams);
 
@@ -412,7 +412,7 @@ class mod_openstudio_generator extends testing_module_generator {
 
     public function create_collected_folder_contents($contentdata) {
         global $DB;
-        $studio = $this->get_studio_by_idnumber($contentdata['studio']);
+        $studio = $this->get_studio_by_idnumber($contentdata['openstudio']);
         $contentparams = array('openstudioid' => $studio->id, 'name' => $contentdata['content']);
         $content = $DB->get_record('openstudio_contents', $contentparams);
 
@@ -428,7 +428,7 @@ class mod_openstudio_generator extends testing_module_generator {
     public function create_levels($leveldata) {
         global $DB;
         if ($leveldata['level'] == 1) {
-            $studio = $this->get_studio_by_idnumber($leveldata['studio']);
+            $studio = $this->get_studio_by_idnumber($leveldata['openstudio']);
             $leveldata['openstudioid'] = $studio->id;
             $leveldata['parentid'] = $studio->id;
         } else if ($leveldata['level'] == 2 && !isset($leveldata['level1id'])) {

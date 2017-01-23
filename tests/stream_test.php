@@ -682,7 +682,7 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
 
         // Create content.
         $tutorcontentid = $this->generator->create_contents(array(
-                'studio' => 'OS1',
+                'openstudio' => 'OS1',
                 'userid' => $this->users->students->one->id,
                 'name' => 'Test Slot',
                 'description' => 'Test Slot',

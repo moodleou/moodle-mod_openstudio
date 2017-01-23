@@ -217,13 +217,13 @@ class mod_openstudio_comments_testcase extends openstudio_testcase  {
     public function test_studio_api_comments_replies() {
         $this->resetAfterTest(true);
         $contentid1 = $this->generator->create_contents(array(
-            'studio' => 'OS1',
+            'openstudio' => 'OS1',
             'userid' => $this->users->students->one->id,
             'name' => 'Slot1',
             'description' => random_string()
         ));
         $contentid2 = $this->generator->create_contents(array(
-            'studio' => 'OS1',
+            'openstudio' => 'OS1',
             'userid' => $this->users->students->two->id,
             'name' => 'Slot2',
             'description' => random_string()
@@ -299,13 +299,13 @@ class mod_openstudio_comments_testcase extends openstudio_testcase  {
         $this->resetAfterTest(true);
         $studio2 = $this->generator->create_instance(array('course' => $this->course->id, 'idnumber' => 'OS2'));
         $contentid1 = $this->generator->create_contents(array(
-                'studio' => 'OS1',
+                'openstudio' => 'OS1',
                 'userid' => $this->users->students->one->id,
                 'name' => 'Content 1',
                 'description' => random_string()
         ));
         $contentid2 = $this->generator->create_contents(array(
-                'studio' => 'OS1',
+                'openstudio' => 'OS1',
                 'userid' => $this->users->students->two->id,
                 'name' => 'Content 2',
                 'description' => random_string()

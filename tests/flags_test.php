@@ -226,13 +226,13 @@ class mod_openstudio_flags_testcase extends openstudio_testcase   {
     public function test_set_flags_api_toggle() {
         global $DB;
         $setid = $this->generator->create_folders(array(
-            'studio' => 'OS1',
+            'openstudio' => 'OS1',
             'name' => 'TestSet',
             'description' => 'foo',
             'userid' => $this->users->students->one->id));
 
         $slotid = $this->generator->create_contents(array(
-            'studio' => 'OS1',
+            'openstudio' => 'OS1',
             'name' => 'TestSlot',
             'description' => 'foo',
             'file' => 'mod/openstudio/tests/importfiles/test1.jpg',
@@ -240,7 +240,7 @@ class mod_openstudio_flags_testcase extends openstudio_testcase   {
         ));
 
         $this->generator->create_folder_contents(array(
-            'studio' => 'OS1',
+            'openstudio' => 'OS1',
             'content' => 'TestSlot',
             'folder' => 'TestSet',
             'userid' => $this->users->students->one->id
@@ -273,7 +273,7 @@ class mod_openstudio_flags_testcase extends openstudio_testcase   {
         global $DB;
         $this->resetAfterTest(true);
         $slotid = $this->generator->create_contents(array(
-            'studio' => 'OS1',
+            'openstudio' => 'OS1',
             'name' => 'Test Slot',
             'file' => 'mod/openstudio/tests/importfiles/test1.jpg',
             'userid' => $this->users->students->one->id
@@ -298,7 +298,7 @@ class mod_openstudio_flags_testcase extends openstudio_testcase   {
     public function test_flags_comment_count() {
         $this->resetAfterTest(true);
         $slotid = $this->generator->create_contents(array(
-            'studio' => 'OS1',
+            'openstudio' => 'OS1',
             'name' => 'Test Slot',
             'file' => 'mod/openstudio/tests/importfiles/test1.jpg',
             'userid' => $this->users->students->one->id
@@ -342,7 +342,7 @@ class mod_openstudio_flags_testcase extends openstudio_testcase   {
     public function test_flags_comment_flagged_by_user() {
         $this->resetAfterTest(true);
         $slotid = $this->generator->create_contents(array(
-            'studio' => 'OS1',
+            'openstudio' => 'OS1',
             'name' => 'Test Slot',
             'file' => 'mod/openstudio/tests/importfiles/test1.jpg',
             'userid' => $this->users->students->one->id

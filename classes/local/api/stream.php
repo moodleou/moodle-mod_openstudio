@@ -70,7 +70,7 @@ class stream {
        s.id, s.contenttype, s.mimetype, s.content, s.thumbnail, s.urltitle,
        s.name, s.description, s.ownership, s.ownershipdetail,
        s.visibility, s.userid, s.timemodified, s.timeflagged,
-       s.levelid, s.levelcontainer, s.openstudioid, s.locktype, s.lockedby';
+       s.levelid, s.levelcontainer, s.openstudioid, s.locktype, s.lockedby, s.fileid';
 
     /**
      * Returns the SQL chunk and parameter to restrict results by group membership when in visible groups mode.

@@ -919,6 +919,7 @@ $string['contentimportfailed'] = 'Unable to create content for imported file.';
 $string['exportemptyqueue'] = 'Empty Queue';
 $string['exportdownload'] = 'Download';
 $string['exportqueuemessage'] = 'content(s) queued for download.';
+$string['exportwronguser'] = 'Selected content ${a} does not belong to the current user.';
 
 $string['allowed_imports'] = 'Pinboard Contents Used: {$a->usedpbcontents} | Pinboard Contents Allowed: {$a->allowedpbcontents} | Pinboard Contents Remaining: {$a->remainingpbcontents}';
 $string['import_limit_exceeded'] = 'You cannot import any more files / contents.';

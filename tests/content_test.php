@@ -416,7 +416,7 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
 
         // Create content.
         $tutorcontentid = $this->generator->create_contents(array(
-                'studio' => 'OS1',
+                'openstudio' => 'OS1',
                 'userid' => $this->users->students->one->id,
                 'name' => 'Test Slot',
                 'description' => 'Test Slot'
@@ -453,7 +453,7 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
     public function test_get() {
 
         $contentdata = array(
-                'studio' => 'OS1',
+                'openstudio' => 'OS1',
                 'userid' => $this->users->students->one->id,
                 'name' => random_string(),
                 'description' => random_string()
@@ -470,7 +470,7 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
         $contentcount = rand(10, 20);
         for ($i = 1; $i <= $contentcount; $i++) {
             $contentdata = array(
-                    'studio' => 'OS1',
+                    'openstudio' => 'OS1',
                     'userid' => $this->users->students->one->id,
                     'name' => random_string(),
                     'description' => random_string()
@@ -486,7 +486,7 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
         $contentcount2 = rand(10, 20);
         for ($i = 1; $i <= $contentcount2; $i++) {
             $contentdata = array(
-                    'studio' => 'OS2',
+                    'openstudio' => 'OS2',
                     'userid' => $this->users->students->one->id,
                     'name' => random_string(),
                     'description' => random_string()
@@ -508,7 +508,7 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
         $level3 = reset($level2);
 
         $contentdata = array(
-                'studio' => 'OS1',
+                'openstudio' => 'OS1',
                 'userid' => $this->users->students->one->id,
                 'name' => random_string(),
                 'description' => random_string(),
@@ -532,7 +532,7 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
 
         foreach ($level2 as $level3) {
             $contentdata = array(
-                    'studio' => 'OS1',
+                    'openstudio' => 'OS1',
                     'userid' => $this->users->students->one->id,
                     'name' => random_string(),
                     'description' => random_string(),
@@ -541,7 +541,7 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
             );
             $this->generator->create_contents($contentdata);
             $contentdata = array(
-                    'studio' => 'OS1',
+                    'openstudio' => 'OS1',
                     'userid' => $this->users->students->two->id,
                     'name' => random_string(),
                     'description' => random_string(),
@@ -568,7 +568,7 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
         $pinboardused = rand(2, 9);
         for ($i = 1; $i <= $pinboardused; $i++) {
             $contentdata = array(
-                    'studio' => 'OS2',
+                    'openstudio' => 'OS2',
                     'userid' => $this->users->students->one->id,
                     'name' => random_string(),
                     'description' => random_string(),

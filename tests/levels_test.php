@@ -260,7 +260,7 @@ class mod_openstudio_levels_testcase extends advanced_testcase {
                 3, array('parentid' => $level2id, 'name' => 'slot', 'sortorder' => 1));
 
         $this->generator->create_contents([
-                'studio' => 'OS1',
+                'openstudio' => 'OS1',
                 'name' => random_string(),
                 'description' => random_string(),
                 'levelcontainer' => 3,
@@ -599,7 +599,7 @@ class mod_openstudio_levels_testcase extends advanced_testcase {
         foreach ($contentscounts as $key => $contentscount) {
             for ($i = 1; $i <= $contentscount; $i++) {
                 $this->generator->create_contents([
-                        'studio' => 'OS1',
+                        'openstudio' => 'OS1',
                         'name' => random_string(),
                         'description' => random_string(),
                         'levelcontainer' => 3,

@@ -1344,7 +1344,7 @@ EOF;
      */
     public function test_set_addition_limit_empty_pinboard_set() {
         $setdata = array(
-            'studio' => 'OS1',
+            'openstudio' => 'OS1',
             'name' => 'empty_pinboard_folder',
             'levelid' => 0,
             'levelcontainer' => 0,
@@ -1361,7 +1361,7 @@ EOF;
      */
     public function test_set_addition_limit_populated_pinboard_set() {
         $setdata = array(
-            'studio' => 'OS1',
+            'openstudio' => 'OS1',
             'name' => 'populated_pinboard_folder',
             'levelid' => 0,
             'levelcontainer' => 0,
@@ -1371,7 +1371,7 @@ EOF;
         $popcount = rand(1, \mod_openstudio\local\util\defaults::MAXPINBOARDFOLDERSCONTENTS);
         for ($i = 1; $i <= $popcount; $i++) {
             $slotdata = array(
-                'studio' => 'OS1',
+                'openstudio' => 'OS1',
                 'visibility' => mod_openstudio\local\api\content::VISIBILITY_INFOLDERONLY,
                 'userid' => $setdata['userid'],
                 'name' => 'folder_content_' . $i,
@@ -1381,7 +1381,7 @@ EOF;
             $slotid = $this->generator->create_contents($slotdata);
             $slot = mod_openstudio\local\api\content::get($slotid);
             $this->generator->create_folder_contents(array(
-                'studio' => 'OS1',
+                'openstudio' => 'OS1',
                 'folder' => $setdata['name'],
                 'content' => $slot->name,
                 'userid' => $this->users->students->one->id));
@@ -1396,7 +1396,7 @@ EOF;
      * @group mod_openstudio_set_addition_limit
      */
     public function test_set_addition_limit_new_predefined_set() {
-        $level1data = array('studio' => 'OS1', 'level' => 1, 'name' => 'predefined_folder_level1');
+        $level1data = array('openstudio' => 'OS1', 'level' => 1, 'name' => 'predefined_folder_level1');
         $level2data = array(
             'level' => 2,
             'name' => 'predefined_folder_level2',
@@ -1425,7 +1425,7 @@ EOF;
      * @group mod_openstudio_set_addition_limit
      */
     public function test_set_addition_limit_empty_predefined_set() {
-        $level1data = array('studio' => 'OS1', 'level' => 1, 'name' => 'predefined_folder_level1');
+        $level1data = array('openstudio' => 'OS1', 'level' => 1, 'name' => 'predefined_folder_level1');
         $level2data = array(
             'level' => 2,
             'name' => 'predefined_folder_level2',
@@ -1443,7 +1443,7 @@ EOF;
         );
         $this->generator->create_folder_template($settemplatedata);
         $setdata = array(
-            'studio' => 'OS1',
+            'openstudio' => 'OS1',
             'name' => 'empty_predefined_folder',
             'levelid' => $level3id,
             'levelcontainer' => 3,
@@ -1461,7 +1461,7 @@ EOF;
      * @group mod_openstudio_set_addition_limit
      */
     public function test_set_addition_limit_populated_predefined_set() {
-        $level1data = array('studio' => 'OS1', 'level' => 1, 'name' => 'predefined_folder_level1');
+        $level1data = array('openstudio' => 'OS1', 'level' => 1, 'name' => 'predefined_folder_level1');
         $level2data = array(
             'level' => 2,
             'name' => 'predefined_folder_level2',
@@ -1480,7 +1480,7 @@ EOF;
         $this->generator->create_folder_template($settemplatedata);
 
         $setdata = array(
-            'studio' => 'OS1',
+            'openstudio' => 'OS1',
             'name' => 'empty_predefined_folder',
             'levelid' => $level3id,
             'levelcontainer' => 3,
@@ -1490,7 +1490,7 @@ EOF;
         $popcount = rand(1, $settemplatedata['additionalcontents']);
         for ($i = 1; $i <= $popcount; $i++) {
             $slotdata = array(
-                'studio' => 'OS1',
+                'openstudio' => 'OS1',
                 'visibility' => mod_openstudio\local\api\content::VISIBILITY_INFOLDERONLY,
                 'userid' => $setdata['userid'],
                 'name' => 'folder_content_' . $i,
@@ -1500,7 +1500,7 @@ EOF;
             $slotid = $this->generator->create_contents($slotdata);
             $slot = mod_openstudio\local\api\content::get($slotid);
             $setslotdata = array(
-                'studio' => 'OS1',
+                'openstudio' => 'OS1',
                 'folder' => $setdata['name'],
                 'content' => $slot->name,
                 'contentorder' => $i,
@@ -1519,7 +1519,7 @@ EOF;
      * @group mod_openstudio_set_addition_limit
      */
     public function test_set_addition_limit_empty_predefined_set_with_slot_templates() {
-        $level1data = array('studio' => 'OS1', 'level' => 1, 'name' => 'predefined_folder_level1');
+        $level1data = array('openstudio' => 'OS1', 'level' => 1, 'name' => 'predefined_folder_level1');
         $level2data = array(
             'level' => 2,
             'name' => 'predefined_folder_level2',
@@ -1539,7 +1539,7 @@ EOF;
         $this->generator->create_folder_content_template(array('foldertemplateid' => $settemplateid));
         $this->generator->create_folder_content_template(array('foldertemplateid' => $settemplateid));
         $setdata = array(
-            'studio' => 'OS1',
+            'openstudio' => 'OS1',
             'name' => 'empty_predefined_folder_with_slot_templates',
             'levelid' => $level3id,
             'levelcontainer' => 3,
@@ -1557,7 +1557,7 @@ EOF;
      * @group mod_openstudio_set_addition_limit
      */
     public function test_set_addition_limit_populated_predefined_set_with_slot_templates() {
-        $level1data = array('studio' => 'OS1', 'level' => 1, 'name' => 'predefined_folder_level1');
+        $level1data = array('openstudio' => 'OS1', 'level' => 1, 'name' => 'predefined_folder_level1');
         $level2data = array(
             'level' => 2,
             'name' => 'predefined_folder_level2',
@@ -1578,7 +1578,7 @@ EOF;
         $this->generator->create_folder_content_template(array('foldertemplateid' => $settemplateid));
 
         $setdata = array(
-            'studio' => 'OS1',
+            'openstudio' => 'OS1',
             'name' => 'empty_predefined_folder',
             'levelid' => $level3id,
             'levelcontainer' => 3,
@@ -1588,7 +1588,7 @@ EOF;
         $popcount = rand(1, $settemplatedata['additionalcontents']);
         for ($i = 1; $i <= $popcount; $i++) {
             $slotdata = array(
-                'studio' => 'OS1',
+                'openstudio' => 'OS1',
                 'visibility' => mod_openstudio\local\api\content::VISIBILITY_INFOLDERONLY,
                 'userid' => $setdata['userid'],
                 'name' => 'folder_content_' . $i,
@@ -1598,7 +1598,7 @@ EOF;
             $slotid = $this->generator->create_contents($slotdata);
             $slot = mod_openstudio\local\api\content::get($slotid);
             $this->generator->create_folder_contents(array(
-                    'studio' => 'OS1',
+                    'openstudio' => 'OS1',
                     'folder' => $setdata['name'],
                     'content' => $slot->name,
                     'userid' => $this->users->students->one->id));
@@ -1615,7 +1615,7 @@ EOF;
      * @group mod_openstudio_set_addition_limit
      */
     public function test_set_addition_limit_populated_predefined_set_with_populated_slot_templates() {
-        $level1data = array('studio' => 'OS1', 'level' => 1, 'name' => 'predefined_folder_level1');
+        $level1data = array('openstudio' => 'OS1', 'level' => 1, 'name' => 'predefined_folder_level1');
         $level2data = array(
             'level' => 2,
             'name' => 'predefined_folder_level2',
@@ -1636,7 +1636,7 @@ EOF;
         $slottemplateid2 = $this->generator->create_folder_content_template(array('foldertemplateid' => $settemplateid));
 
         $setdata = array(
-            'studio' => 'OS1',
+            'openstudio' => 'OS1',
             'name' => 'populated_predefined_folder',
             'levelid' => $level3id,
             'levelcontainer' => 3,
@@ -1644,7 +1644,7 @@ EOF;
         );
         $setid = $this->generator->create_folders($setdata);
         $templatedslotdata = array(
-            'studio' => 'OS1',
+            'openstudio' => 'OS1',
             'visibility' => mod_openstudio\local\api\content::VISIBILITY_INFOLDERONLY,
             'userid' => $setdata['userid'],
             'contenttype' => mod_openstudio\local\api\content::TYPE_TEXT,
@@ -1655,7 +1655,7 @@ EOF;
         $this->generator->create_contents($templatedslot1data);
         $this->generator->create_contents($templatedslot2data);
         $setslotdata = array(
-            'studio' => 'OS1',
+            'openstudio' => 'OS1',
             'folder' => $setdata['name'],
             'userid' => $setdata['userid']
         );
@@ -1669,7 +1669,7 @@ EOF;
         $popcount = rand(1, $settemplatedata['additionalcontents']);
         for ($i = 1; $i <= $popcount; $i++) {
             $slotdata = array(
-                'studio' => 'OS1',
+                'openstudio' => 'OS1',
                 'visibility' => mod_openstudio\local\api\content::VISIBILITY_INFOLDERONLY,
                 'userid' => $setdata['userid'],
                 'name' => 'folder_content_' . $i,
@@ -1679,7 +1679,7 @@ EOF;
             $slotid = $this->generator->create_contents($slotdata);
             $slot = mod_openstudio\local\api\content::get($slotid);
             $this->generator->create_folder_contents(array(
-                'studio' => 'OS1',
+                'openstudio' => 'OS1',
                 'folder' => $setdata['name'],
                 'content' => $slot->name,
                 'userid' => $setdata['userid']
@@ -1695,7 +1695,7 @@ EOF;
      * @group mod_openstudio_set_addition_limit
      */
     public function test_set_addition_limit_new_predefined_set_slot_template() {
-        $level1data = array('studio' => 'OS1', 'level' => 1, 'name' => 'predefined_folder_level1');
+        $level1data = array('openstudio' => 'OS1', 'level' => 1, 'name' => 'predefined_folder_level1');
         $level2data = array(
             'level' => 2,
             'name' => 'predefined_folder_level2',
@@ -1724,7 +1724,7 @@ EOF;
      * @group mod_openstudio_set_addition_limit
      */
     public function test_set_addition_limit_empty_predefined_set_slot_template() {
-        $level1data = array('studio' => 'OS1', 'level' => 1, 'name' => 'predefined_folder_level1');
+        $level1data = array('openstudio' => 'OS1', 'level' => 1, 'name' => 'predefined_folder_level1');
         $level2data = array(
             'level' => 2,
             'name' => 'predefined_folder_level2',
@@ -1744,7 +1744,7 @@ EOF;
         $slottemplateid = $this->generator->create_folder_content_template(array('foldertemplateid' => $settemplateid));
 
         $setdata = array(
-            'studio' => 'OS1',
+            'openstudio' => 'OS1',
             'name' => 'empty_predefined_folder',
             'levelid' => $level3id,
             'levelcontainer' => 3,
@@ -1762,7 +1762,7 @@ EOF;
      * @group mod_openstudio_set_addition_limit
      */
     public function test_set_addition_limit_new_predefined_set_notemplate() {
-        $level1data = array('studio' => 'OS1', 'level' => 1, 'name' => 'predefined_folder_level1');
+        $level1data = array('openstudio' => 'OS1', 'level' => 1, 'name' => 'predefined_folder_level1');
         $level2data = array(
             'level' => 2,
             'name' => 'predefined_folder_level2',
@@ -1787,7 +1787,7 @@ EOF;
      * @group mod_openstudio_set_addition_limit
      */
     public function test_set_addition_limit_empty_predefined_set_notemplate() {
-        $level1data = array('studio' => 'OS1', 'level' => 1, 'name' => 'predefined_folder_level1');
+        $level1data = array('openstudio' => 'OS1', 'level' => 1, 'name' => 'predefined_folder_level1');
         $level2data = array(
             'level' => 2,
             'name' => 'predefined_folder_level2',
@@ -1800,7 +1800,7 @@ EOF;
         );
         $level3id = $this->generator->create_levels($level3data);
         $setdata = array(
-            'studio' => 'OS1',
+            'openstudio' => 'OS1',
             'name' => 'empty_predefined_folder',
             'levelid' => $level3id,
             'levelcontainer' => 3,
@@ -1820,7 +1820,7 @@ EOF;
      * @group mod_openstudio_set_addition_limit
      */
     public function test_set_addition_limit_populated_predefined_set_notemplate() {
-        $level1data = array('studio' => 'OS1', 'level' => 1, 'name' => 'predefined_folder_level1');
+        $level1data = array('openstudio' => 'OS1', 'level' => 1, 'name' => 'predefined_folder_level1');
         $level2data = array(
                 'level' => 2,
                 'name' => 'predefined_folder_level2',
@@ -1833,7 +1833,7 @@ EOF;
         );
         $level3id = $this->generator->create_levels($level3data);
         $setdata = array(
-            'studio' => 'OS1',
+            'openstudio' => 'OS1',
             'name' => 'populated_predefined_folder',
             'levelid' => $level3id,
             'levelcontainer' => 3,
@@ -1844,7 +1844,7 @@ EOF;
         $popcount = rand(1, \mod_openstudio\local\util\defaults::FOLDERTEMPLATEADDITIONALCONTENTS);
         for ($i = 1; $i <= $popcount; $i++) {
             $slotdata = array(
-                'studio' => 'OS1',
+                'openstudio' => 'OS1',
                 'visibility' => mod_openstudio\local\api\content::VISIBILITY_INFOLDERONLY,
                 'userid' => $setdata['userid'],
                 'name' => 'folder_content_' . $i,
@@ -1854,7 +1854,7 @@ EOF;
             $slotid = $this->generator->create_contents($slotdata);
             $slot = mod_openstudio\local\api\content::get($slotid);
             $this->generator->create_folder_contents(array(
-                'studio' => 'OS1',
+                'openstudio' => 'OS1',
                 'folder' => $setdata['name'],
                 'content' => $slot->name,
                 'userid' => $setdata['userid']
