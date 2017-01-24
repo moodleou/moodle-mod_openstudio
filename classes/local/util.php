@@ -42,15 +42,15 @@ class util {
      * @param int $studioid Module instance id.
      * @return bool Return true or redirect user to terms and conditions page
      */
-    public static function tandc_check($studioid) {
+    public static function honesty_check($studioid) {
         global $USER;
 
-        $result = \studio_api_tandc_get($studioid, $USER->id);
+        $result = api\honesty::get($studioid, $USER->id);
         if ($result) {
             return true;
         }
 
-        $url = new \moodle_url('/mod/openstudio/tandc.php', array('id' => $studioid));
+        $url = new \moodle_url('/mod/openstudio/honesty.php', array('id' => $studioid));
         \redirect($url->out(false));
         return false;
     }

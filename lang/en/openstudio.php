@@ -925,9 +925,9 @@ $string['allowed_imports'] = 'Pinboard Contents Used: {$a->usedpbcontents} | Pin
 $string['import_limit_exceeded'] = 'You cannot import any more files / contents.';
 $string['import_limit_hit'] = 'You cannot import all these files as it will put you over the allowance. Please go back and remove some files and try again.';
 
-$string['tandccrumb'] = 'Plagiarism statement';
-$string['tandcacccept'] = 'Accept';
-$string['tandctext'] = "
+$string['honestycrumb'] = 'Plagiarism statement';
+$string['honestyacccept'] = 'Accept';
+$string['honestytext'] = "
 <p>
 The University has to ensure as far as possible that any work submitted by students is their own and does not contain any unreferenced material from other sources. When using the Open Studio, you must ensure that you appropriately reference any material that has been shared with you. The University statement 'What constitutes plagiarism or cheating?' appears in your Student/Assessment Handbook and you are expected to have familiarised yourself with it.
 </p>
@@ -1149,13 +1149,13 @@ $string['atombutton'] = 'Atom';
 $string['rssbutton'] = 'RSS';
 $string['addtodashboardbutton'] = 'Add to dashboard';
 $string['filterpreferences'] = 'Preferences';
-$string['filterview']= 'View';
+$string['filterview'] = 'View';
 $string['filterdate'] = 'Date';
 $string['filtertitle'] = 'Title';
 $string['filtersortby'] = 'Sort by:';
 $string['filtertotal'] = 'Total';
-$string['filtergroup']= 'Group';
-$string['filterall']= 'All';
+$string['filtergroup'] = 'Group';
+$string['filterall'] = 'All';
 $string['filterwork'] = 'Work';
 $string['addnewcontent'] = 'Add new content';
 $string['contentitemsharewithgroup'] = 'Share with Group - {$a}';
@@ -1167,9 +1167,9 @@ $string['contentitemwork'] = 'work';
 $string['contentitempicture'] = 'Picture of';
 $string['notificationlabel'] = 'Notification';
 $string['commentslabel'] = 'Comments';
-$string['inspirationlabel']= 'Inspiration';
+$string['inspirationlabel'] = 'Inspiration';
 $string['participationlabel'] = 'Participation';
-$string['favouritelabel']= 'Favourite';
+$string['favouritelabel'] = 'Favourite';
 $string['addfilebutton'] = 'Add file';
 $string['addfilebutton_help'] = "If your browser supports drag and drop, the upload box says 'You can drag and drop files here to upload them'. If you don't see this message, use the 'add' icon to attach a file instead. Delete any existing files before uploading a new one.";
 $string['addlinkbutton'] = 'Add web/embed link';

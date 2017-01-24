@@ -23,24 +23,21 @@
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
-global $CFG;
-require_once($CFG->dirroot . '/mod/openstudio/api/tandc.php');
-
-class mod_openstudio_tandc_testcase extends advanced_testcase  {
+class mod_openstudio_honesty_testcase extends advanced_testcase  {
 
     /**
-     * Tests the tandc api.
+     * Tests the honesty api.
      */
-    public function test_tandc() {
+    public function test_honesty() {
         $this->resetAfterTest(true);
         $mockstudioid = 2;
         $mockuserid = 7;
 
-        $this->assertEquals(false, studio_api_tandc_get($mockstudioid, $mockuserid));
-        $this->assertEquals(true, studio_api_tandc_set($mockstudioid, $mockuserid, true));
-        $this->assertNotEquals(true, studio_api_tandc_get($mockstudioid, $mockuserid));
-        $this->assertEquals(true, studio_api_tandc_set($mockstudioid, $mockuserid, false));
-        $this->assertEquals(false, studio_api_tandc_get($mockstudioid, $mockuserid));
+        $this->assertEquals(false, mod_openstudio\local\api\honesty::get($mockstudioid, $mockuserid));
+        $this->assertEquals(true, mod_openstudio\local\api\honesty::set($mockstudioid, $mockuserid, true));
+        $this->assertNotEquals(true, mod_openstudio\local\api\honesty::get($mockstudioid, $mockuserid));
+        $this->assertEquals(true, mod_openstudio\local\api\honesty::set($mockstudioid, $mockuserid, false));
+        $this->assertEquals(false, mod_openstudio\local\api\honesty::get($mockstudioid, $mockuserid));
     }
 
 }

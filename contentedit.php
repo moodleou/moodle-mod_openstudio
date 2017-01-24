@@ -74,7 +74,7 @@ $permissions = $coursedata->permissions;
 $theme = $coursedata->theme;
 
 // Terms and conditions check.
-util::tandc_check($id);
+util::honesty_check($id);
 
 // If folders feature is disabled, then we do not allow new pinboard folders to be created.
 if ($sid == 0) {

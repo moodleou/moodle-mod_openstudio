@@ -1,8 +1,8 @@
-@ou @ou_vle @mod @mod_openstudio @mod_openstudio_test_content @_file_upload @javascript
-Feature: Create and edit contents
-    When using Open Studio with other users
-    As a teacher
-    I need to create a content and upload a file
+@ou @ou_vle @mod @mod_openstudio @mod_openstudio_test_honesty
+Feature: Accept plagarism statement
+    In order to confirm I am not going to plagarise other peoples' work
+    As a student
+    I need to confirm acceptance of a statement before using open studio.
 
     Background: Setup course and studio
         Given the following "users" exist:
@@ -48,7 +48,7 @@ Feature: Create and edit contents
             | ID number                    | OS1                          |
         And Open Studio test instance is configured for "Test Open Studio name 1"
 
-    Scenario: Test Open Studio instance creation and applying settings
+    Scenario: Test acceptance of honesty check
         When I follow "Test Open Studio name 1"
         Then I should see "Plagiarism statement"
 

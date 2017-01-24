@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Open Studio tandc form
+ * Open Studio honesty check form
  *
  * @package mod_openstudio
  * @copyright 2017 The Open University
@@ -36,24 +36,23 @@ require_once($CFG->libdir . '/formslib.php');
  * @copyright 2016 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class tandc_form extends \moodleform {
+class honesty_form extends \moodleform {
 
     protected function definition() {
-        global $CFG;
 
         $mform = $this->_form;
 
-        $mform->addElement('header', 'attachment', get_string('tandccrumb', 'openstudio'));
+        $mform->addElement('header', 'attachment', get_string('honestycrumb', 'openstudio'));
 
-        $tandchtml = \html_writer::start_tag('div');
-        $tandchtml .= get_string('tandctext', 'openstudio');
-        $tandchtml .= \html_writer::end_tag('div');
+        $honestyhtml = \html_writer::start_tag('div');
+        $honestyhtml .= get_string('honestytext', 'openstudio');
+        $honestyhtml .= \html_writer::end_tag('div');
 
-        $mform->addElement('html', $tandchtml);
+        $mform->addElement('html', $honestyhtml);
 
         $buttonarray = array();
         $buttonarray[] = $mform->createElement('submit', 'submitbutton',
-                get_string('tandcacccept', 'openstudio'),
+                get_string('honestyacccept', 'openstudio'),
                 array('id' => 'id_submitbutton'));
         $buttonarray[] = $mform->createElement('cancel', 'cancelbutton',
                 '',

@@ -45,7 +45,7 @@ $studioid = $coursedata->cminstance->id;
 define('STUDIO_SLOT_MAXBYTES', $cminstance->slotmaxbytes);
 
 // Terms and conditions check.
-studio_internal_tandc_check($id);
+util::honesty_check($id);
 
 if (!$permissions->feature_enableexportimport) {
     $returnurliferror = new moodle_url('/mod/studio/view.php', array('id' => $cm->id));

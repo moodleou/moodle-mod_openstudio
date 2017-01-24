@@ -53,7 +53,7 @@ $theme = $coursedata->theme;
 require_login($course, true, $cm);
 
 // Terms and conditions check.
-util::tandc_check($id);
+util::honesty_check($id);
 
 // Need to have view or managecontent capabilities.
 if (!$permissions->managecontent) {

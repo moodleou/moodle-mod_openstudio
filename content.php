@@ -44,7 +44,7 @@ require_login($course, true, $cm);
 require_capability('mod/openstudio:view', $mcontext);
 
 // Terms and conditions check.
-util::tandc_check($id);
+util::honesty_check($id);
 
 // Get page url.
 $pageurl = util::get_current_url();
