@@ -25,6 +25,7 @@ namespace mod_openstudio\output;
 
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\levels;
+use mod_openstudio\local\api\template;
 use renderer_base;
 
 defined('MOODLE_INTERNAL') || die();
@@ -47,9 +48,6 @@ class levelxml implements \templatable {
      * @param int $studioid The ID of the studio to search for level records.
      */
     public function create_from_data($studioid) {
-        global $CFG;
-        require_once($CFG->dirroot . '/mod/openstudio/api/set.php'); // TODO: Remove once this API is refactored.
-
         $this->levels = array('blocks' => array());
 
         $blockrecords = levels::get_records(1, $studioid);
@@ -72,14 +70,14 @@ class levelxml implements \templatable {
                         'contenttype' => $contentrecord->contenttype
                     ];
                     if ($contentrecord->contenttype == content::TYPE_FOLDER) {
-                        $templaterecord = studio_api_set_template_get_by_levelid($contentrecord->id);
+                        $templaterecord = template::get_by_levelid($contentrecord->id);
                         if ($templaterecord) {
                             $template = [
                                 'guidance' => $templaterecord->guidance,
                                 'additionalcontents' => $templaterecord->additionalcontents,
                                 'contents' => array()
                             ];
-                            $templatecontentrecords = studio_api_set_template_slots_get($template->id);
+                            $templatecontentrecords = template::get_contents($template->id);
                             if (!empty($templatecontentrecords)) {
                                 foreach ($templatecontentrecords as $templatecontentrecord) {
                                     $template->contents[] = [

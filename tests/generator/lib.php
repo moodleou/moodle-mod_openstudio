@@ -23,6 +23,8 @@
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\levels;
 use mod_openstudio\local\api\comments;
+use mod_openstudio\local\api\folder;
+use mod_openstudio\local\api\template;
 
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
@@ -407,7 +409,7 @@ class mod_openstudio_generator extends testing_module_generator {
             $foldercontentdata['provenanceid'] = $DB->get_field('openstudio_contents', 'id', $provparams);
         }
 
-        return studio_api_set_slot_add($folder->id, $content->id, $foldercontentdata['userid'], $foldercontentdata);
+        return folder::add_content($folder->id, $content->id, $foldercontentdata['userid'], $foldercontentdata);
     }
 
     public function create_collected_folder_contents($contentdata) {
@@ -419,9 +421,9 @@ class mod_openstudio_generator extends testing_module_generator {
         $folderparams = array('openstudioid' => $studio->id, 'name' => $contentdata['folder']);
         $folder = $DB->get_record('openstudio_contents', $folderparams);
         if ($folder->userid == $content->userid) {
-            studio_api_set_slot_collect($folder->id, $content->id, $folder->userid, null, true);
+            folder::collect_content($folder->id, $content->id, $folder->userid, null, true);
         } else {
-            studio_api_set_slot_collect($folder->id, $content->id, $folder->userid);
+            folder::collect_content($folder->id, $content->id, $folder->userid);
         }
     }
 
@@ -471,11 +473,11 @@ class mod_openstudio_generator extends testing_module_generator {
     }
 
     public function create_folder_template($templatedata) {
-        return studio_api_set_template_create(3, $templatedata['levelid'], $templatedata);
+        return template::create($templatedata['levelid'], $templatedata);
     }
 
     public function create_folder_content_template($templatedata) {
-        return studio_api_set_template_slot_create($templatedata['foldertemplateid'], $templatedata);
+        return template::create_content($templatedata['foldertemplateid'], $templatedata);
     }
 
     public function create_comment($commentdata) {

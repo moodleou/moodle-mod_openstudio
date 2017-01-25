@@ -25,6 +25,7 @@
 require_once(__DIR__ . '/../../config.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/apiloader.php');
 
+use mod_openstudio\local\api\template;
 use mod_openstudio\local\util;
 use mod_openstudio\local\api\folder;
 use mod_openstudio\local\api\levels;
@@ -50,10 +51,10 @@ require_capability('mod/openstudio:managelevels', $context);
 // Process and Generate HTML.
 $renderer = $PAGE->get_renderer('mod_openstudio');
 
-$settemplate = studio_api_set_template_get_by_levelid($l3id);
+$settemplate = template::get_by_levelid($l3id);
 $contenttemplates = array();
 if ($settemplate) {
-    $contenttemplates = studio_api_set_template_slots_get($settemplate->id);
+    $contenttemplates = template::get_contents($settemplate->id);
 }
 
 $options = array('contentcount' => count($contenttemplates));
@@ -76,33 +77,33 @@ if ($mform->is_submitted()) {
                 $contenttemplate = $contenttemplates[array_keys($contenttemplates)[key($contentmoveup)]];
                 $firsttemplate = reset($contenttemplates);
                 if ($contenttemplate->contentorder > $firsttemplate->contentorder) {
-                    if ($prevcontenttemplate = studio_api_set_template_slot_get_by_slotorder($settemplate->id,
-                                                                                          $contenttemplate->contentorder - 1)) {
+                    $prevorder = $contenttemplate->contentorder - 1;
+                    if ($prevcontenttemplate = template::get_content_by_contentorder($settemplate->id, $prevorder)) {
                         $tempcontentorder = $contenttemplate->contentorder;
                         $contenttemplate->contentorder = $prevcontenttemplate->contentorder;
                         $prevcontenttemplate->contentorder = $tempcontentorder;
-                        studio_api_set_template_slot_update($contenttemplate);
-                        studio_api_set_template_slot_update($prevcontenttemplate);
+                        template::update_content($contenttemplate);
+                        template::update_content($prevcontenttemplate);
                     }
                 }
             } else {
                 $contenttemplate = $contenttemplates[array_keys($contenttemplates)[key($contentmovedown)]];
                 $lasttemplate = end($contenttemplates);
                 if ($contenttemplate->contentorder < $lasttemplate->contentorder) {
-                    if ($nextcontenttemplate = studio_api_set_template_slot_get_by_slotorder($settemplate->id,
-                                                                                          $contenttemplate->contentorder + 1)) {
+                    $nextorder = $contenttemplate->contentorder + 1;
+                    if ($nextcontenttemplate = template::get_content_by_contentorder($settemplate->id, $nextorder)) {
                         $tempcontentorder = $contenttemplate->contentorder;
                         $contenttemplate->contentorder = $nextcontenttemplate->contentorder;
                         $nextcontenttemplate->contentorder = $tempcontentorder;
-                        studio_api_set_template_slot_update($contenttemplate);
-                        studio_api_set_template_slot_update($nextcontenttemplate);
+                        template::update_content($contenttemplate);
+                        template::update_content($nextcontenttemplate);
                     }
                 }
             }
             redirect($PAGE->url);
         } else if ($settemplate && (!empty($contentdelete))) {
             $contenttemplate = $contenttemplates[array_keys($contenttemplates)[key($contentdelete)]];
-            studio_api_set_template_slot_delete($contenttemplate->id);
+            template::delete_content($contenttemplate->id);
             redirect($PAGE->url);
         } else {
             try {
@@ -110,18 +111,17 @@ if ($mform->is_submitted()) {
                     // Update the existing template.
                     $settemplate->guidance = $data->setguidance['text'];
                     $settemplate->additionalcontents = $data->additionalcontents;
-                    studio_api_set_template_update($settemplate);
+                    template::update($settemplate);
                 } else {
                     // Create a new template.
                     $settemplate = (object) array(
                         'guidance'        => $data->setguidance['text'],
                         'additionalcontents' => $data->additionalcontents
                     );
-                    $settemplate->id = studio_api_set_template_create(3, $l3id, $settemplate);
+                    $settemplate->id = template::create($l3id, $settemplate);
                 }
                 if (!empty($data->contentcount)) {
                     foreach ($data->contentid as $key => $contentid) {
-                        var_dump($contentid);
                         $permissions = 0;
                         if (!$data->contentpreventreorder[$key]) {
                             $permissions = $permissions | folder::PERMISSION_REORDER;
@@ -131,7 +131,7 @@ if ($mform->is_submitted()) {
                             $contenttemplate->name = $data->contentname[$key];
                             $contenttemplate->guidance = $data->contentguidance[$key]['text'];
                             $contenttemplate->permissions = $permissions;
-                            studio_api_set_template_slot_update($contenttemplate);
+                            template::update_content($contenttemplate);
                             // Update the content template.
                         } else {
                             // Create a new content template.
@@ -140,7 +140,7 @@ if ($mform->is_submitted()) {
                                 'guidance'      => $data->contentguidance[$key]['text'],
                                 'permissions'   => $permissions,
                             );
-                            studio_api_set_template_slot_create($settemplate->id, $contenttemplate);
+                            template::create_content($settemplate->id, $contenttemplate);
                         }
                     }
                 }

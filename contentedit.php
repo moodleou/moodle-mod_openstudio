@@ -30,6 +30,7 @@ use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\lock;
 use mod_openstudio\local\api\levels;
 use mod_openstudio\local\api\folder;
+use mod_openstudio\local\api\template;
 use mod_openstudio\local\util\defaults;
 use mod_openstudio\local\util;
 
@@ -181,7 +182,7 @@ if (isset($contenttype) && ($contenttype == content::TYPE_FOLDER)) {
 }
 
 // Check if we are processing a folder content and get information if so.
-if ($sid && $foldercontentdata = studio_api_set_slot_get_by_slotid($folderid, $contentdata->id)) {
+if ($sid && $foldercontentdata = folder::get_content($folderid, $contentdata->id)) {
     if ($foldercontentdata) {
         $folderid = $foldercontentdata->folderid;
         $type = content::TYPE_FOLDER_CONTENT;
@@ -348,7 +349,8 @@ if (($folderdatalevelid == 0) && ($contentdata->sid == 0) && ($contentdata->leve
     $returnurl = new moodle_url('/mod/openstudio/view.php',
             array('id' => $cm->id, 'vid' => content::VISIBILITY_PRIVATE_PINBOARD, 'fblock' => -1));
     if ($type === content::TYPE_FOLDER_CONTENT && $folderid > 0) {
-        if ($sid == 0 && empty($foldertemplatecontentid) && !studio_api_set_can_add_more_slots($folderid, $permissions, $lid)) {
+        if ($sid == 0 && empty($foldertemplatecontentid)
+                && folder::get_addition_limit($permissions->pinboardfolderlimit, $folderid, $lid) < 1) {
             print_error('errorpinboardfolderexceedlimit', 'openstudio', $returnurl->out(false));
         }
     } else {
@@ -361,7 +363,8 @@ if (($folderdatalevelid > 0) && ($contentdata->sid == 0) && ($contentdata->level
     $returnurl = new moodle_url('/mod/openstudio/view.php',
             array('id' => $cm->id, 'vid' => content::VISIBILITY_PRIVATE_PINBOARD, 'fblock' => -1));
     if ($type === content::TYPE_FOLDER_CONTENT && $folderid > 0) {
-        if ($sid == 0 && empty($foldertemplatecontentid) && !studio_api_set_can_add_more_slots($folderid, $permissions, $lid)) {
+        if ($sid == 0 && empty($foldertemplatecontentid)
+                && folder::get_addition_limit($permissions->pinboardfolderlimit, $folderid, $lid) < 1) {
             print_error('errorpinboardfolderexceedlimit', 'openstudio', $returnurl->out(false));
         }
     }
@@ -609,7 +612,7 @@ if ($contentform->is_cancelled()) {
 
         if ($type === content::TYPE_FOLDER_CONTENT) {
             if ($foldertemplatecontentid > 0) {
-                $foldercontenttemplate = studio_api_set_template_slot_get($foldertemplatecontentid);
+                $foldercontenttemplate = template::get_content($foldertemplatecontentid);
                 $foldercontenttemplate->foldercontenttemplateid = $foldercontenttemplate->id;
                 $foldercontenttemplate = (array) $foldercontenttemplate;
                 $foldertitle = '';
@@ -655,7 +658,7 @@ if ($contentform->is_cancelled()) {
                 $folderid = content::create($cminstance->id, $userid, $levelcontainer,
                         $lid, $folderdata, null, $context, $cm);
             }
-            if (!studio_api_set_slot_add($folderid, $contentid, $userid, $foldercontenttemplate)) {
+            if (!folder::add_content($folderid, $contentid, $userid, $foldercontenttemplate)) {
                 $returnurl = new moodle_url('/mod/openstudio/view.php',
                         array('id' => $cm->id, 'vid' => content::VISIBILITY_PRIVATE_PINBOARD));
                 print_error('errornopermissiontoaddcontent', 'openstudio', $returnurl->out(false));
@@ -772,11 +775,11 @@ if ($contentform->is_cancelled()) {
 
         if ($folderid && $foldercontentdata) {
             if ($foldercontentdata->provenanceid != null && $foldercontentdata->provenancestatus == folder::PROVENANCE_EDITED) {
-                if (!empty($foldercontentdata->foldercontentname)) {
-                    $contentdata->name = $foldercontentdata->foldercontentname;
+                if (!empty($foldercontentdata->fcname)) {
+                    $contentdata->name = $foldercontentdata->fcname;
                 }
-                if (!empty($foldercontentdata->foldercontentdescription)) {
-                    $contentdata->description = $foldercontentdata->foldercontentdescription;
+                if (!empty($foldercontentdata->fcdescription)) {
+                    $contentdata->description = $foldercontentdata->fcdescription;
                 }
             }
         }

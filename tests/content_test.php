@@ -580,7 +580,7 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
         $contentdata['description'] = '';
         $contentdata['contenttype'] = mod_openstudio\local\api\content::TYPE_NONE;
         $contentdata['id'] = $lastid;
-        unset($contentdata['studio']);
+        unset($contentdata['openstudio']);
         $DB->update_record('openstudio_contents', (object)$contentdata);
 
         $totals = \mod_openstudio\local\api\content::get_pinboard_total($studio2->id,

@@ -443,15 +443,15 @@ class util {
 
         // If it is a set slot, then the set permission has priority, so check the set instead of slot.
         if ($folderid > 0) {
-            $slotold = $content;
-            // Check set exists.
-            $content = api\content::get($folderid);
+            $contentold = $content;
+            // Check folder exists.
+            $content = api\folder::get($folderid);
             if ($content == false) {
                 return false;
             }
-            // Check set slot exists.
-            $setslotexists = studio_api_set_slot_get_by_slotid($folderid, $slotold->id);
-            if (!$setslotexists) {
+            // Check folder content exists.
+            $foldercontentexists = api\folder::get_content($folderid, $contentold->id);
+            if (!$foldercontentexists) {
                 return false;
             }
         }

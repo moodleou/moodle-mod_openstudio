@@ -25,6 +25,7 @@
 require_once(__DIR__ . '/../../config.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/apiloader.php');
 
+use mod_openstudio\local\api\template;
 use mod_openstudio\local\util;
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\lock;
@@ -252,8 +253,8 @@ if ($studioid > 0) {
         $contentid = key($deletecontent);
         levels::delete(3, $contentid, $studioid);
         $islevelupdated = true;
-        if ($template = studio_api_set_template_get_by_levelid($contentid)) {
-            studio_api_set_template_delete($template->id);
+        if ($template = template::get_by_levelid($contentid)) {
+            template::delete($template->id);
         }
 
         // Clean up sortorder.

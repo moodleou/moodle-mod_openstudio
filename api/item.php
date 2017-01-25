@@ -19,8 +19,13 @@
  * @copyright 2015 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+// Make sure this isn't being directly accessed.
+defined('MOODLE_INTERNAL') || die();
+
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\item;
+use mod_openstudio\local\api\folder;
 
 /**
  * Generate a hash based on the contents's content type and content
@@ -48,7 +53,7 @@ function studio_api_item_generate_hash($slotid) {
 
 EOF;
     $params = array(CONTEXT_MODULE, $slotid);
-    // Ensure that the slot exists, and get required data for generating the hash
+    // Ensure that the slot exists, and get required data for generating the hash.
     $slot = $DB->get_record_sql($sql, $params);
     if (!$slot) {
         throw new coding_exception('Slot does not exist.');
@@ -56,7 +61,7 @@ EOF;
     $content = '';
 
     if ($slot->contenttype > content::TYPE_TEXT && $slot->contenttype < content::TYPE_FOLDER) {
-        // If the slot contains actual content (rather than just text or other slots)
+        // If the slot contains actual content (rather than just text or other slots).
         if (empty($slot->fileid)) {
             $content = $slot->content;
         } else {
@@ -68,7 +73,7 @@ EOF;
             }
         }
     } else {
-        if ($provenance = \studio_api_set_slot_get_provenance(0, $slot->id)) {
+        if ($provenance = folder::get_content_provenance(0, $slot->id)) {
             // If ths slot is a copy of another slot, hash with the provenance ID
             // so that we get the same hash as the original.
             $content = $provenance->id . ':' . $slot->name . ':' . $slot->description;
@@ -258,7 +263,8 @@ function studio_api_item_delete($containerid, $containertype = STUDIO_SLOT_ITEM_
     global $DB;
 
     if ($DB->record_exists('openstudio_content_items', array('containerid' => $containerid, 'containertype' => $containertype))) {
-        return $DB->delete_records('openstudio_contents_items', array('containerid' => $containerid, 'containertype' => $containertype));
+        return $DB->delete_records('openstudio_contents_items',
+                array('containerid' => $containerid, 'containertype' => $containertype));
     } else {
         return false;
     }

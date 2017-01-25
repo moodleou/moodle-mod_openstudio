@@ -37,7 +37,6 @@ require_once($CFG->dirroot . '/mod/openstudio/api/search.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/item.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/slotversion.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/flags.php');
-require_once($CFG->dirroot . '/mod/openstudio/api/set.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/group.php');
 
 class content {
@@ -412,6 +411,7 @@ EOF;
                     if ($contentdata->fileid != '') {
                         $shouldversion = true;
                     } else {
+                        // TODO: update this to use new embed code.
                         // Normalize the content fields for comparison.
                         $dataembedcode = isset($data['embedcode']) ? preg_replace('/\s+/',
                                 '', str_replace(' ', '', trim($data['embedcode']))) : '';
@@ -441,18 +441,16 @@ EOF;
                 if ($shouldversion) {
                     // Regardless of whether versioning is turned on, if the content has changed,
                     // update the provenance data.
-                    if ($folderid && $provenance = studio_api_set_slot_get_provenance($folderid, $contentdata->id)) {
+                    if ($folderid && $provenance = folder::get_content_provenance($folderid, $contentdata->id)) {
                         $provenanceupdate = (object) array(
                                 'id' => $provenance->foldercontentid,
-                                'provenancestatus' => folder::UNLINKED
+                                'provenancestatus' => folder::PROVENANCE_UNLINKED
                         );
                         // If the content is part of a folder and has provenance, then we need to folder
                         // the status to unlinked.
                         if ($provenance->provenanceid == $provenance->contentid) {
                             // If the folder content is currently just a soft-link, make it a full copy.
-                            $newcontent = studio_api_slot_copy_to_pinboard($provenance->userid, $contentdata->id, $cm);
-                            studio_api_set_move_slot(
-                                    $newcontent->id, $provenance->foldercontentname, $provenance->foldercontentdescription);
+                            $newcontent = folder::copy_content($contentid, $provenance->userid, null, null, $cm);
                             if (array_key_exists('visibility', $data)) {
                                 unset($data['visibility']);
                             }
@@ -462,25 +460,24 @@ EOF;
                             $contentdata = $DB->get_record('openstudio_contents',
                                     array('id' => $newcontent->id), '*', MUST_EXIST);
                         }
-                        studio_api_set_slot_update($provenanceupdate);
+                        folder::update_content($provenanceupdate);
 
-                    } else if ($softlinks = studio_api_set_slot_get_softlinks($contentdata->id)) {
+                    } else if ($softlinks = folder::get_content_softlinks($contentdata->id)) {
                         // The content is linked to any folders, switch the folder contents to copies that will
                         // keep the original content.
 
                         foreach ($softlinks as $softlink) {
-                            $newcontent = studio_api_slot_copy_to_pinboard($contentdata->userid, $contentdata->id, $cm);
-                            studio_api_set_move_slot($newcontent->id, $softlink->name, $softlink->description);
+                            $newcontent = folder::copy_content($contentid, $userid, $softlink->name, $softlink->description, $cm);
                             $softlink->contentid = $newcontent->id;
-                            $softlink->provenancestatus = folder::UNLINKED;
-                            studio_api_set_slot_update($softlink);
+                            $softlink->provenancestatus = folder::PROVENANCE_UNLINKED;
+                            folder::update_content($softlink);
                         }
 
-                    } else if ($copies = studio_api_set_slot_get_copies($contentdata->id)) {
+                    } else if ($copies = folder::get_content_copies($contentdata->id)) {
                         // If the content has copies, then we need to folder the status of the copies to unlinked.
                         foreach ($copies as $copy) {
-                            $copy->provenancestatus = folder::UNLINKED;
-                            studio_api_set_slot_update($copy);
+                            $copy->provenancestatus = folder::PROVENANCE_UNLINKED;
+                            folder::update_content($copy);
                         }
                     }
                 }
@@ -576,7 +573,7 @@ EOF;
             array_key_exists('urltitle', $data) ? ($contentdata->urltitle = $data['urltitle']) : null;
             if (array_key_exists('name', $data) || array_key_exists('description', $data)) {
                 if (!is_null($folderid)
-                        && ($provenance = studio_api_set_slot_get_provenance($folderid, $contentdata->id)) && !$shouldversion) {
+                        && ($provenance = folder::get_content_provenance($folderid, $contentdata->id)) && !$shouldversion) {
                     // If the content is part of a folder and has provenance, and the content hasn't been changed...
                     $provenanceupdate = (object) array(
                             'id' => $provenance->foldercontentid,
@@ -602,7 +599,7 @@ EOF;
                     }
 
                     if ($provenanceupdate->provenancestatus == folder::PROVENANCE_EDITED) {
-                        studio_api_set_slot_update($provenanceupdate);
+                        folder::update_content($provenanceupdate);
                     }
                 } else {
                     array_key_exists('name', $data) ? ($contentdata->name = $data['name']) : null;
@@ -666,7 +663,7 @@ EOF;
             $transaction->allow_commit();
 
             // Update search index for content.
-            if (($provenanceupdate == null) || ($provenanceupdate->provenancestatus < folder::UNLINKED)) {
+            if (($provenanceupdate == null) || ($provenanceupdate->provenancestatus < folder::PROVENANCE_UNLINKED)) {
                 // Delete search index for old record.
                 if (($cm != null) && ($contentdataold != false)) {
                     studio_api_search_delete($cm, $contentdataold);
@@ -966,7 +963,7 @@ EOF;
      *
      * @param int $viewerid User reading the content.
      * @param int $contentid Slot id of the content to get.
-     * @return array $content Return the content record data.
+     * @return object $content Return the content record data.
      */
     public static function get_record($viewerid, $contentid) {
         global $DB;
