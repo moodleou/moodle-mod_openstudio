@@ -315,6 +315,8 @@ class mod_openstudio_generator extends testing_module_generator {
     private function generate_content($contentdata) {
         global $DB, $CFG, $USER;
 
+        $contentdata = (array) $contentdata;
+
         // Switch $USER for file creation.
         $realuser = $USER;
         $USER = $DB->get_record('user', array('id' => $contentdata['userid']));
@@ -347,7 +349,7 @@ class mod_openstudio_generator extends testing_module_generator {
             $contentdata['urltitle'] = '';
         }
         if (!isset($contentdata['visibility'])) {
-            $contentdata['visibility'] = STUDIO_VISIBILITY_PRIVATE;
+            $contentdata['visibility'] = mod_openstudio\local\api\content::VISIBILITY_PRIVATE;
         }
 
         $file = null;
@@ -387,6 +389,63 @@ class mod_openstudio_generator extends testing_module_generator {
 
     public function create_contents($contentdata) {
         return $this->generate_content($contentdata);
+    }
+
+    public function create_contentversions($versiondata) {
+        global $CFG, $DB, $USER;
+        $versiondata = (array) $versiondata;
+        if (!isset($versiondata['contentid'])) {
+            throw new coding_exception('$versiondata passed to create_contentversion must include contentid');
+        }
+        $content = $DB->get_record('openstudio_contents', ['id' => $versiondata['contentid']]);
+        list($course, $cm) = get_course_and_cm_from_instance($content->openstudioid, 'openstudio');
+        if (!isset($versiondata['content'])) {
+            $versiondata['content'] = '';
+        }
+        if (!isset($versiondata['mimetype'])) {
+            $versiondata['mimetype'] = '';
+        }
+        if (!isset($versiondata['contenttype'])) {
+            $versiondata['contenttype'] = content::TYPE_TEXT;
+        }
+        if (!isset($versiondata['urltitle'])) {
+            $versiondata['urltitle'] = '';
+        }
+        if (!isset($versiondata['name'])) {
+            $versiondata['name'] = random_string();
+        }
+        if (!isset($versiondata['description'])) {
+            $versiondata['description'] = random_string();
+        }
+        if (!isset($versiondata['deletedby'])) {
+            $versiondata['deletedby'] = null;
+        }
+        if (!isset($versiondata['deletedtime'])) {
+            $versiondata['deletedtime'] = null;
+        }
+
+        $file = null;
+        if (isset($versiondata['file'])) {
+            // Switch $USER for file creation.
+            $realuser = $USER;
+            $USER = $DB->get_record('user', array('id' => $versiondata['userid']));
+
+            $fs = get_file_storage();
+            $filerecord = (object) array(
+                'userid' => $versiondata['userid'],
+                'component' => 'mod_openstudio',
+                'filearea' => 'content',
+                'filepath' => '/',
+                'filename' => basename($versiondata['file']),
+                'contextid' => $cm->context->id,
+                'itemid' => $DB->insert_record('openstudio_content_files', (object) ['refcount' => 1])
+            );
+            $storedfile = $fs->create_file_from_pathname($filerecord, $CFG->dirroot . '/' . $versiondata['file']);
+            unset($versiondata['file']);
+            $versiondata['fileid'] = $storedfile->get_itemid();
+            $USER = $realuser;
+        }
+        return $DB->insert_record('openstudio_content_versions', (object) $versiondata);
     }
 
     public function create_folders($folderdata) {

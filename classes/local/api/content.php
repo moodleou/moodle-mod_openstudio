@@ -35,7 +35,6 @@ require_once($CFG->dirroot . '/mod/openstudio/api/embedcode.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/tracking.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/search.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/item.php');
-require_once($CFG->dirroot . '/mod/openstudio/api/slotversion.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/flags.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/group.php');
 
@@ -515,9 +514,9 @@ EOF;
 
                     studio_api_item_toversion($contentdata->id, $contentversionid);
 
-                    $existingversioncount = studio_api_slotversion_getcount($contentdata->id);
+                    $existingversioncount = contentversion::count($contentdata->id);
                     if ($existingversioncount > $addversion) {
-                        studio_api_slotversion_delete_oldest($userid, $contentdata->id);
+                        contentversion::delete_oldest($contentdata->id, $userid);
                     }
                 }
 
@@ -786,9 +785,9 @@ EOF;
 
                 \studio_api_item_toversion($contentid, $contentversionid);
 
-                $existingversioncount = \studio_api_slotversion_getcount($contentdata->id);
+                $existingversioncount = contentversion::count($contentdata->id);
                 if ($existingversioncount > $versioncount) {
-                    \studio_api_slotversion_delete_oldest($userid, $contentdata->id);
+                    contentversion::delete_oldest($contentdata->id, $userid);
                 }
             }
 

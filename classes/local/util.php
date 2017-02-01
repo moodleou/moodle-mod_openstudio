@@ -25,6 +25,7 @@
 namespace mod_openstudio\local;
 
 use mod_openstudio\local\api\content;
+use mod_openstudio\local\api\contentversion;
 use mod_openstudio\local\api\comments;
 use mod_openstudio\local\api\folder;
 use mod_openstudio\local\api\item;
@@ -582,8 +583,7 @@ EOF;
 
         // Include slot versions?
         if ($getversions > 0) {
-            $contentdata->versioncount = \studio_api_slotversion_getcount(
-                    $contentdata->id, ($getversions == 1 ? false : true));
+            $contentdata->versioncount = contentversion::count($contentdata->id, ($getversions == 1 ? false : true));
         }
 
         return $contentdata;
