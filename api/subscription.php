@@ -1764,23 +1764,23 @@ EOF;
         $processcounts = array();
         foreach ($rs as $subscription) {
             // If the studioid is not cached, cache it.
-            if (!mod_openstudio\local\util::cache_check('subscription_processed_studioid_' . $subscription->studioid)) {
+            if (!mod_openstudio\local\util::cache_check('subscription_processed_studioid_' . $subscription->openstudioid)) {
                 // Get the course data we need for the first time and cache it.
                 // Get Course ID from studio record.
-                $courseid = $DB->get_field("openstudio", 'course', array("id" => $subscription->studioid));
+                $courseid = $DB->get_field("openstudio", 'course', array("id" => $subscription->openstudioid));
 
                 // Get Course Code to add to subject line.
                 $coursecode = $DB->get_field('course', 'shortname', array('id' => $courseid));
-                mod_openstudio\local\util::cache_put('subscription_coursecode_for_' . $subscription->studioid, $coursecode);
-                mod_openstudio\local\util::cache_put('subscription_processed_studioid_' . $subscription->studioid, true);
+                mod_openstudio\local\util::cache_put('subscription_coursecode_for_' . $subscription->openstudioid, $coursecode);
+                mod_openstudio\local\util::cache_put('subscription_processed_studioid_' . $subscription->openstudioid, true);
             } else {
                 // If it is cached, just get the coursecode value.
-                $coursecode = mod_openstudio\local\util::cache_get('subscription_coursecode_for_' . $subscription->studioid);
+                $coursecode = mod_openstudio\local\util::cache_get('subscription_coursecode_for_' . $subscription->openstudioid);
             }
 
             // Initialise processing count if necessary.
-            if (!array_key_exists($subscription->studioid, $processcounts)) {
-                $processcounts[$subscription->studioid] = 0;
+            if (!array_key_exists($subscription->openstudioid, $processcounts)) {
+                $processcounts[$subscription->openstudioid] = 0;
             }
 
             // Check if number of records for a given studio instance exceeds $processlimit,
@@ -1808,20 +1808,20 @@ EOF;
                 // If user exists, just get data from the cache.
                 $userdetails = mod_openstudio\local\util::cache_get('subscription_user_' . $subscription->userid);
             }
-            if (!mod_openstudio\local\util::cache_check('openstudio' . $subscription->studioid . 'context')) {
+            if (!mod_openstudio\local\util::cache_check('openstudio' . $subscription->openstudioid . 'context')) {
                 // Get Studio module class id. We'll need this for our context for capabilities.
-                $params = array('openstudio', $subscription->studioid);
+                $params = array('openstudio', $subscription->openstudioid);
                 $modulecontext = $DB->get_record_sql($modulecontextsql, $params);
                 $context = context_module::instance($modulecontext->id);
-                mod_openstudio\local\util::cache_put('openstudio' . $subscription->studioid . 'context', $context);
+                mod_openstudio\local\util::cache_put('openstudio' . $subscription->openstudioid . 'context', $context);
             } else {
-                $context = mod_openstudio\local\util::cache_get('openstudio' . $subscription->studioid . 'context');
+                $context = mod_openstudio\local\util::cache_get('openstudio' . $subscription->openstudioid . 'context');
             }
 
             // Check if user has permissions for this to process.
             if (has_capability('mod/studio:viewothers', $context, $subscription->userid)) {
                 // Set up unqiue studios to write log.
-                $uniquestudios[$subscription->studioid] = $subscription->studioid;
+                $uniquestudios[$subscription->openstudioid] = $subscription->openstudioid;
 
                 // Check if this falls within the timescale we are after.
                 if (studio_api_notification_process_subscription_now(
@@ -1835,7 +1835,7 @@ EOF;
                     // Determine Subscripton type and get data.
                     switch ($subscription->subscription) {
                         case subscription::GROUP:
-                            $sdata = studio_api_notification_group($subscription->userid, $subscription->studioid,
+                            $sdata = studio_api_notification_group($subscription->userid, $subscription->openstudioid,
                                     array(), array(), $subscription->timeprocessed);
                             $emailtype = 'stream';
                             $emailsubject = 'Studio: ' . $coursecode . ' - Latest Activity for your Group';
@@ -1843,7 +1843,7 @@ EOF;
                             break;
 
                         case subscription::MODULE:
-                            $sdata = studio_api_notification_module($subscription->userid, $subscription->studioid,
+                            $sdata = studio_api_notification_module($subscription->userid, $subscription->openstudioid,
                                     array(), array(), $subscription->timeprocessed);
                             $emailtype = 'stream';
                             $emailsubject = 'Studio: ' . $coursecode . ' - Latest Activity for your Studio';
@@ -1871,7 +1871,7 @@ EOF;
 
                         // Let's get the content of the email.
                         $emailbody = mod_studio_renderer::studio_render_notification_email_body(
-                                $filteredslots, $emailtype, $subscription->studioid,
+                                $filteredslots, $emailtype, $subscription->openstudioid,
                                 $userdetails, $subscription->id, $vid, $subscription->subscription);
                         if ($emailbody !== false) {
                             if ($subscription->format == subscription::FORMAT_HTML) {
@@ -1892,7 +1892,7 @@ EOF;
                     studio_api_notification_update_subscription($subscription->id, '', '', time());
 
                     // Increment processing count for the studio instance.
-                    $processcounts[$subscription->studioid] = $processcounts[$subscription->studioid] + 1;
+                    $processcounts[$subscription->openstudioid] = $processcounts[$subscription->openstudioid] + 1;
                 }
             } else {
                 // Even though we havent really processed the user because of lack of permission,
