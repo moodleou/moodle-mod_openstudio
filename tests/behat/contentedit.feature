@@ -57,7 +57,7 @@ Feature: Create and edit contents
           | Description                  | Test Open Studio description |
           | Abuse reports are emailed to | teacher1@asd.com             |
           | ID number                    | OS1                          |
-
+        And all users have accepted the plagarism statement for "OS1" openstudio
         And I follow "Test Open Studio name 1"
         And I click on "div.openstudio-upload-container" "css_element"
         And I press "Add file"
@@ -91,7 +91,7 @@ Feature: Create and edit contents
           | Description                  | Test Open Studio description |
           | Abuse reports are emailed to | teacher1@asd.com             |
           | ID number                    | OS1                          |
-
+        And all users have accepted the plagarism statement for "OS1" openstudio
         And I follow "Test Open Studio name 1"
         And I click on "div.openstudio-upload-container" "css_element"
         And I press "Add file"
@@ -124,7 +124,7 @@ Feature: Create and edit contents
           | Description                  | Test Open Studio description |
           | Abuse reports are emailed to | teacher1@asd.com             |
           | ID number                    | OS1                          |
-
+        And all users have accepted the plagarism statement for "OS1" openstudio
         And I follow "Test Open Studio name 1"
         And I click on "div.openstudio-upload-container" "css_element"
         And I press "Add web/embed link"
@@ -144,7 +144,7 @@ Feature: Create and edit contents
           | Description               | My Group Board View Description modify 1    |
           | Web link                  | https://www.youtube.com/watch?v=BGD6L-4yceY |
         And I press "Save"
-        And I follow "My Module"
+        And I follow "Shared Content"
         Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "Youtube-61px"
         And I should see "Test My Group Board View modify 1"
         And I should not see "Test My Group Board View 1"
@@ -158,7 +158,7 @@ Feature: Create and edit contents
           | Description                  | Test Open Studio description |
           | Abuse reports are emailed to | teacher1@asd.com             |
           | ID number                    | OS1                          |
-
+        And all users have accepted the plagarism statement for "OS1" openstudio
         And I follow "Test Open Studio name 1"
         And I click on "div.openstudio-upload-container" "css_element"
         And I press "Add web/embed link"
@@ -178,7 +178,7 @@ Feature: Create and edit contents
           | Description               | My Group Board View Description modify 1    |
           | Web link                  | https://www.youtube.com/watch?v=R4_rYoK4aLE |
         And I press "Save"
-        And I follow "My Module"
+        And I follow "Shared Content"
         Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "Youtube-61px"
         And I should see "Test My Group Board View modify 1"
         And I should not see "Test My Group Board View 1"

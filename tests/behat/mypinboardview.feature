@@ -51,14 +51,14 @@ Feature: Create and edit contents
         And I follow "Course 1"
         And I turn editing mode on
         And I add a "Open Studio" to section "1" and I fill the form with:
-            | Name | Test Open Studio name 1 |
-            | Description | Test Open Studio description |
-            | Your word for 'My Module' | Module 1 |
-            | Group mode | Visible groups |
-            | Grouping | grouping1 |
-                | Enable pinboard | 99 |
-            | Abuse reports are emailed to | teacher1@asd.com |
-            | ID number                    | OS1              |
+            | Name                         | Test Open Studio name 1      |
+            | Description                  | Test Open Studio description |
+            | Your word for 'My Module'    | Module 1                     |
+            | Group mode                   | Visible groups               |
+            | Grouping                     | grouping1                    |
+            | Enable pinboard              | 99                           |
+            | Abuse reports are emailed to | teacher1@asd.com             |
+            | ID number                    | OS1                          |
         And Open Studio test instance is configured for "Test Open Studio name 1"
         And all users have accepted the plagarism statement for "OS1" openstudio
 
@@ -68,17 +68,18 @@ Feature: Create and edit contents
         When I follow "Test Open Studio name 1"
         Then I should see "Test Open Studio name 1"
         And I click on "div.openstudio-upload-container" "css_element"
+        And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | Only me |
-          | Title | Test My Pinboard View |
-          | Description | My Pinboard View Description |
-          | Upload content | mod/openstudio/tests/importfiles/test1.jpg |
-        And I press "Save changes"
+          | Who can view this content | Only me                                    |
+          | Title                     | Test My Pinboard View                      |
+          | Description               | My Pinboard View Description               |
+          | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+        And I press "Save"
         And I click on "li.my-content" "css_element"
         And I follow "My Pinboard"
         Then I should see "Test My Pinboard View"
         And I click on "li.shared-content" "css_element"
-        And I follow "Module 1"
+        And I follow "My Module"
         Then I should not see "Test My Pinboard View"
 
         # Other user can't see content in My Pinbord
@@ -92,14 +93,15 @@ Feature: Create and edit contents
 
         # Add Module view
         And I click on "div.openstudio-upload-container" "css_element"
+        And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | My module |
-          | Title | My Module Title |
-          | Description | My Module Description |
-          | Upload content | mod/openstudio/tests/importfiles/Winterfell.jpg |
-        And I press "Save changes"
+          | Who can view this content | My module                                       |
+          | Title                     | My Module Title                                 |
+          | Description               | My Module Description                           |
+          | Upload content            | mod/openstudio/tests/importfiles/Winterfell.jpg |
+        And I press "Save"
         And I click on "li.shared-content" "css_element"
-        And I follow "Module 1"
+        And I follow "My Module"
 
         Then I should see "My Module Title"
         And I click on "li.my-content" "css_element"
@@ -112,4 +114,6 @@ Feature: Create and edit contents
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
         And I click on "li.my-content" "css_element"
+        And I click on "li.shared-content" "css_element"
+        And I follow "My Module"
         Then I should see "My Module Title"

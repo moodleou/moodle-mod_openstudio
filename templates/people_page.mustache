@@ -1,0 +1,186 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_openstudio/people_page
+
+    People page template of the OpenStudio.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    
+    Example context (json):
+    {
+        "people": [
+            {
+                "firstname" : "User",
+                "lastname" : "A",
+                "viewuserworkurl" : "http://example.com/mod/openstudio/view.php?id=3",
+                "userpictureurl" : "../../../mod/openstudio/pix/people_rgb_32px.svg",
+                "viewuserworkurl" : "http://example.com/mod/openstudio/view.php?id=3&sid=9",
+                "commentsicon" : "../../../mod/openstudio/pix/comments_rgb_32px.svg",
+                "viewedicon": "../../../mod/openstudio/pix/viewed_rgb_32px.svg",
+                "flagscontentread" : 3,
+                "userprogressdata" : {
+                    "lastactivedate" : "5/10/16, 13:27",
+                    "totalpostedcomments" : 2
+                 },
+                 "percentcompleted" : 80
+            },
+            {
+                "firstname" : "User",
+                "lastname" : "B",
+                "viewuserworkurl" : "http://example.com/mod/openstudio/view.php?id=3",
+                "userpictureurl" : "../../../mod/openstudio/pix/people_rgb_32px.svg",
+                "viewuserworkurl" : "http://example.com/mod/openstudio/view.php?id=3&sid=9",
+                "commentsicon" : "../../../mod/openstudio/pix/comments_rgb_32px.svg",
+                "viewedicon": "../../../mod/openstudio/pix/viewed_rgb_32px.svg",
+                "flagscontentread" : 5,
+                "userprogressdata" : {
+                    "lastactivedate" : "1/10/16, 11:22",
+                    "totalpostedcomments" : 1
+                 },
+                 "percentcompleted" : 40
+            },
+            {
+                "firstname" : "User",
+                "lastname" : "C",
+                "viewuserworkurl" : "http://example.com/mod/openstudio/view.php?id=3",
+                "userpictureurl" : "../../../mod/openstudio/pix/people_rgb_32px.svg",
+                "viewuserworkurl" : "http://example.com/mod/openstudio/view.php?id=3&sid=9",
+                "commentsicon" : "../../../mod/openstudio/pix/comments_rgb_32px.svg",
+                "viewedicon": "../../../mod/openstudio/pix/viewed_rgb_32px.svg",
+                "flagscontentread" : 0,
+                "userprogressdata" : {
+                    "lastactivedate" : "4/10/16, 11:22",
+                    "totalpostedcomments" : 0
+                 },
+                 "percentcompleted" : 0
+            }
+        ],
+        "showmultigroup" : true,
+        "sortbydate" : false,
+        "sortdesc" : true,
+        "sortasc" : false,
+        "sortbyusername" : true,
+        "nextsortactionurl" : "http://example.com/mod/openstudio/view.php?id=7&vid=2&fsort=1&osort=0",
+        "groupitems" : [
+            {
+               "id" : "-1",
+               "name" : "My module",
+               "selectedgroup" : false
+            },
+            {
+               "id" : "1",
+               "name" : "Group 1",
+               "selectedgroup" : false
+            },
+            {
+               "id" : "2",
+               "name" : "Group 2",
+               "selectedgroup" : true
+            }
+        ]
+    }
+}}
+                                                    
+<div class="openstudio-container">
+    <div class="openstudio-module-title">
+        <h1>{{#str}} menupeople, mod_openstudio {{/str}}</h1>
+    </div>
+    <div class="openstudio-filter">
+        {{>mod_openstudio/people_filter}}
+    </div>
+
+    <div class="openstudio-profile-details">
+        {{#people}}
+        <div class="openstudio-profile-row">
+            <div class="openstudio-profile-info">
+                <div class="openstudio-profile-img">
+                    <img class="defaultuserpic" src="{{{userpictureurl}}}"
+                         alt="{{#str}} contentitempicture, mod_openstudio {{/str}} {{{firstname}}} {{{lastname}}}"
+                         title="{{#str}} contentitempicture, mod_openstudio {{/str}} {{{firstname}}} {{{lastname}}}">
+                </div>
+                <div>
+                    <h4 class="openstudio-profile-name">{{{firstname}}} {{{lastname}}}</h4>
+                    <a class="openstudio-profile-view" href="{{{viewuserworkurl}}}">
+                        {{#str}} contentitemview, mod_openstudio {{/str}}
+                        {{{firstname}}}’s
+                        {{#str}} contentitemwork, mod_openstudio {{/str}}
+                    </a>
+                </div>
+            </div>
+            <div class="openstudio-profile-active-date">
+                <div class="openstudio-profile-label-title">
+                    {{#str}} profilebarlastactivedate, mod_openstudio {{/str}}
+                </div>
+                <div class="openstudio-profile-active-date-title">
+                    {{#userprogressdata}}
+                        {{lastactivedate}}
+                    {{/userprogressdata}}
+                </div>
+            </div>
+            <div class="openstudio-profile-participation">
+                <div class="openstudio-profile-label-title">
+                    {{#str}} participationlabel, mod_openstudio {{/str}}
+                </div>
+                <div class="openstudio-profile-participation-value">
+                    <span class="openstudio-profile-participation-icon">
+                        <img src="{{commentsicon}}"
+                             alt="{{#str}} commentslabel, openstudio {{/str}}"
+                             class="openstudio-grid-item-content-detail-info-icon" />
+                    </span>
+                    <span class="openstudio-profile-participation-label">
+                        {{#str}}
+                            contentflagxcommentsmade, mod_openstudio, {
+                                "number": {{#quote}}
+                                                {{#userprogressdata}}{{totalpostedcomments}}{{/userprogressdata}}
+                                          {{/quote}}
+                            }
+                        {{/str}}
+                    </span>
+                </div>
+                <div class="openstudio-profile-participation-value">
+                    <span class="openstudio-profile-participation-icon">
+                        <img src="{{viewedicon}}"
+                             alt="{{#str}} commentslabel, openstudio {{/str}}"
+                             class="openstudio-grid-item-content-detail-info-icon" />
+                    </span>
+                    <span class="openstudio-profile-participation-label">
+                        {{#str}}
+                            contentflagxviewed, mod_openstudio, {
+                                    "number": {{#quote}}{{flagscontentread}}{{/quote}}
+                            }
+                        {{/str}}
+                    </span>
+                </div>
+            </div>
+            <div class="openstudio-profile-work-progress">
+                <div class="openstudio-profile-label-title">
+                    {{#str}} mystudioworkprogress, mod_openstudio {{/str}}
+                </div>
+                <div class="openstudio-profile-work-progress">
+                    {{>mod_openstudio/work_progress}}
+                </div>
+            </div>
+        </div>
+        {{/people}}
+    </div>
+</div>

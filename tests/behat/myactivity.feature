@@ -120,7 +120,7 @@ Feature: My Activity
       | Who can view this content | My module                                    |
       | Title                     | Test My Activities View 3                    |
       | Description               | Test My Activities View 3 Add web/embed link |
-      | Add web/embed link        | https://www.youtube.com/watch?v=ktAnpf_nu5c  |
+      | Web link                  | https://www.youtube.com/watch?v=ktAnpf_nu5c  |
     And I press "Save"
     And I click on "li.my-content" "css_element"
     And I follow "My Activities"
@@ -144,17 +144,15 @@ Feature: My Activity
     And I follow "My Activities"
     And I click on "div.openstudio-grid-item-content" "css_element"
     And I go to content edit view
-    And I press "Add file"
     And I set the following fields to these values:
       | Who can view this content | My module                                  |
       | Title                     | Test My Activities View 5                  |
       | Description               | My Activities Description 5                |
-      | Upload content            | mod/openstudio/tests/importfiles/test3.jpg |
     And I press "Save"
     And I click on "li.my-content" "css_element"
     And I follow "My Activities"
     And I should see "Test My Activities View 5"
     And I should not see "Test My Activities View 4"
     And I should see "Content 1.1 Required"
-    Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test3.jpg"
-    Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should not contain "test2.jpg"
+    Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test2.jpg"
+  

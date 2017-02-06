@@ -79,7 +79,7 @@ Feature: Create and edit contents
         And I should not see "Details"
         And I press "Save"
         And I click on "li.shared-content" "css_element"
-        And I follow "Module 1"
+        And I follow "My Module"
         Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "mod/openstudio/pix/openstudio_preview_image.png"
 
       Scenario: Add new content just a title and description with a file
@@ -93,7 +93,7 @@ Feature: Create and edit contents
           | Upload content            | mod/openstudio/tests/importfiles/test2.jpg |
         And I press "Save"
         And I click on "li.shared-content" "css_element"
-        And I follow "Module 1"
+        And I follow "My Module"
         Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test2.jpg"
         And I should see "Test My Group Board View 2"
 
@@ -110,7 +110,7 @@ Feature: Create and edit contents
           | Show Image Data           | 1                                          |
         And I press "Save"
         And I click on "li.shared-content" "css_element"
-        And I follow "Module 1"
+        And I follow "My Module"
         Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test3.jpg"
         And I should see "Test My Group Board View 3"
 
@@ -126,7 +126,7 @@ Feature: Create and edit contents
         Then the "disabled" attribute of "div.felement input[name='ownershipdetail']" "css_element" should contain "disabled"
         And I press "Save"
         And I click on "li.shared-content" "css_element"
-        And I follow "Module 1"
+        And I follow "My Module"
         Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test3.jpg"
         And I should see "Test My Group Board View 4 ownership All my own work"
 
@@ -141,7 +141,7 @@ Feature: Create and edit contents
           | Details                   | Test 4                                               |
         And I press "Save"
         And I click on "li.shared-content" "css_element"
-        And I follow "Module 1"
+        And I follow "My Module"
         Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test3.jpg"
         And I should see "Test My Group Board View 4 ownership Found elsewhere"
 
@@ -159,7 +159,7 @@ Feature: Create and edit contents
         And I should see "Tests Add New Tags"
         And I press "Save"
         And I click on "li.shared-content" "css_element"
-        And I follow "Module 1"
+        And I follow "My Module"
         Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test4.jpg"
         And I should see "Test My Group Board View 4 Tags"
 
@@ -171,10 +171,10 @@ Feature: Create and edit contents
           | Who can view this content | My module                                            |
           | Title                     | Test My Group Board View 5 Add web/embed link        |
           | Description               | My Group Board View Description 5 Add web/embed link |
-          | Add web/embed link        | https://www.youtube.com/watch?v=ktAnpf_nu5c          |
+          | Web link                  | https://www.youtube.com/watch?v=ktAnpf_nu5c          |
         And I press "Save"
         And I click on "li.shared-content" "css_element"
-        And I follow "Module 1"
+        And I follow "My Module"
         Then I should see "Test My Group Board View 5 Add web/embed link"
 
       Scenario: Add new content just a title and description with a weblink, ownership data
@@ -185,11 +185,11 @@ Feature: Create and edit contents
           | Who can view this content | My module                                            |
           | Title                     | Test My Group Board View 5 ownership All my own work |
           | Description               | My Group Board View Description 5 ownership          |
-          | Add web/embed link        | https://www.youtube.com/watch?v=Y7uGHY-t80I          |
+          | Web link                  | https://www.youtube.com/watch?v=Y7uGHY-t80I          |
         Then the "disabled" attribute of "div.felement input[name='ownershipdetail']" "css_element" should contain "disabled"
         And I press "Save"
         And I click on "li.shared-content" "css_element"
-        And I follow "Module 1"
+        And I follow "My Module"
         Then I should see "Test My Group Board View 5 ownership All my own work"
 
         And I click on "div.openstudio-upload-container" "css_element"
@@ -198,12 +198,12 @@ Feature: Create and edit contents
           | Who can view this content | My module                                            |
           | Title                     | Test My Group Board View 5 ownership Found elsewhere |
           | Description               | My Group Board View Description 5 ownership          |
-          | Add web/embed link        | https://www.youtube.com/watch?v=BGD6L-4yceY          |
+          | Web link                  | https://www.youtube.com/watch?v=BGD6L-4yceY          |
           | Found elsewhere           | 1                                                    |
           | Details                   | Test 5                                               |
         And I press "Save"
         And I click on "li.shared-content" "css_element"
-        And I follow "Module 1"
+        And I follow "My Module"
         Then I should see "Test My Group Board View 5 ownership Found elsewhere"
 
       Scenario: Add new content just a title and description with a weblink and tags
@@ -214,11 +214,11 @@ Feature: Create and edit contents
           | Who can view this content | My module                                   |
           | Title                     | Test My Group Board View 5 Tags             |
           | Description               | My Group Board View Description 5 Tags      |
-          | Add web/embed link        | https://www.youtube.com/watch?v=qyId4XZdC_4 |
+          | Web link                  | https://www.youtube.com/watch?v=qyId4XZdC_4 |
           | Tags                      | Tests Add New Tags web/embed link           |
         And I wait "2" seconds
         And I should see "Tests Add New Tags web/embed link"
         And I press "Save"
         And I click on "li.shared-content" "css_element"
-        And I follow "Module 1"
+        And I follow "My Module"
         Then I should see "Test My Group Board View 5 Tags"

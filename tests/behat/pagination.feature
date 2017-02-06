@@ -58,6 +58,7 @@ Feature: Create and edit contents
             | Abuse reports are emailed to | teacher1@asd.com             |
             | ID number                    | OS1                          |
         And Open Studio test instance is configured for "Test Open Studio name 1"
+        And all users have accepted the plagarism statement for "OS1" openstudio
 
     Scenario: Test Pagination without contents
         When I follow "Test Open Studio name 1"
@@ -89,6 +90,8 @@ Feature: Create and edit contents
             | OS1        | student1 | TestSlot 13 | Test slot 13 description | module     |
 
         When I reload the page
+        And I click on "li.shared-content" "css_element"
+        And I follow "My Module"
         Then I should see "TestSlot 13"
         And I should see "Next"
         When I follow "Next"

@@ -80,6 +80,10 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             case content::VISIBILITY_PRIVATE_PINBOARD:
                 $placeholdertext = $theme->themepinboardname;
                 break;
+
+            case content::VISIBILITY_PEOPLE:
+                $data->enablesubscription = false;
+                break;
         }
         $data->placeholdertext = $placeholdertext;
 
@@ -496,6 +500,61 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         }
 
         return $this->render_from_template('mod_openstudio/body', $contentdata);
+    }
+
+    /**
+     * This function renders the HTML fragment for the people page of Open Studio.
+     *
+     * @param object $permissions The permission object for the given user/view.
+     * @param object $peopledata The people records to display.
+     * @return string The rendered HTM fragment.
+     */
+    public function people_page($permissions, $peopledata) {
+        global $OUTPUT;
+
+        $grouplist = studio_api_group_list(
+                $permissions->activecid, $permissions->groupingid,
+                $permissions->activeuserid, $permissions->groupmode);
+
+        $groupitem = array();
+
+        // We need to add My Module to group selection.
+        if ($permissions->feature_module) {
+            $groupitem[-1] = (object) [
+                    'groupid' => -1,
+                    'selectedgroup' => $peopledata->selectedgroupid == -1 ? true : false,
+                    'vid' => content::VISIBILITY_MODULE,
+                    'name' => get_string('contentformvisibilitymodule', 'openstudio')
+            ];
+        }
+
+        $showmultigroup = false;
+        if ($grouplist) {
+            $groupitem[0] = (object) [
+                    'groupid' => 0,
+                    'selectedgroup' => $peopledata->selectedgroupid == 0 ? true : false,
+                    'vid' => content::VISIBILITY_GROUP,
+                    'name' => get_string('filterallgroup', 'openstudio')
+            ];
+
+            foreach ($grouplist as $group) {
+                $groupitem[$group->groupid] = (object) [
+                        'groupid' => $group->groupid,
+                        'selectedgroup' => $peopledata->selectedgroupid == $group->groupid ? true : false,
+                        'vid' => content::VISIBILITY_GROUP,
+                        'name' => $group->name
+                ];
+            }
+        }
+
+        $showmultigroup = (count($groupitem) > 1);
+
+        $peopledata->groupitems = array_values($groupitem);
+        $peopledata->showmultigroup = $showmultigroup;
+        $peopledata->commentsicon = $OUTPUT->pix_url('comments_rgb_32px', 'openstudio');
+        $peopledata->viewedicon = $OUTPUT->pix_url('viewed_rgb_32px', 'openstudio');
+
+        return $this->render_from_template('mod_openstudio/people_page', $peopledata);
     }
 
     /**

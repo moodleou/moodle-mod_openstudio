@@ -81,6 +81,7 @@ class content {
     const VISIBILITY_PRIVATE_PINBOARD = 5;
     const VISIBILITY_INFOLDERONLY = 6;
     const VISIBILITY_TUTOR = 7;
+    const VISIBILITY_PEOPLE = 8;
 
     const UPDATEMODE_UPDATED = 1;
     const UPDATEMODE_CREATED = 2;

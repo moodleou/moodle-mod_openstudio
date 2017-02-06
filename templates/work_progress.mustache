@@ -15,9 +15,9 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template mod_openstudio/actions
+    @template mod_openstudio/work_progress
 
-    Actions template of the OpenStudio UI.
+    Progress template of the OpenStudio.
 
     Classes required for JS:
     * none
@@ -25,21 +25,22 @@
     Data attributes required for JS:
     * none
 
+
     Example context (json):
     {
-        "placeholdertext" : "My Module"
+        "percentcompleted" : 80
     }
 
 }}
-<div class="openstudio-buttons-settings">
-    {{#enablesubscription}}
-        <div class="openstudio-subscribe-button">
-            <button type="submit" class="btn" name="subscribebutton">
-                {{#str}} subscribetothisstudio, mod_openstudio {{/str}} {{placeholdertext}}
-            </button>
-        </div>
-    {{/enablesubscription}}
-    <div class="openstudio-add-dashboard-button">
-     {{{addtodashboard}}}
+<div class="openstudio-work-progress-container">
+    <div class="openstudio-work-progress openstudio-work-progress-green openstudio-work-progress-nostripes">
+        <span style="width: {{percentcompleted}}%"></span>
     </div>
+    <div class="openstudio-work-progress">
+        <div class="openstudio-work-progress-item">&nbsp;</div>
+        <div class="openstudio-work-progress-item">&nbsp;</div>
+        <div class="openstudio-work-progress-item">&nbsp;</div>
+        <div class="openstudio-work-progress-item">&nbsp;</div>
+    </div>
+    <div class="openstudio-work-progress-percent">{{percentcompleted}}%</div>
 </div>

@@ -86,6 +86,8 @@ Feature: Create and edit contents
           | Enable Folders                | 1                              |
           | Abuse reports are emailed to  | teacher1@asd.com               |
           | ID number                     | OS2                            |
+        And all users have accepted the plagarism statement for "OS1" openstudio
+        And all users have accepted the plagarism statement for "OS2" openstudio
         And I follow "Test Open Studio name 1"
         Then I should not see "People"
         And I follow "Course 1"
@@ -109,7 +111,7 @@ Feature: Create and edit contents
           | Enable pinboard               | 99                             |
           | Enable Folders                | 1                              |
           | Abuse reports are emailed to  | teacher1@asd.com               |
-          | ID number                     | OS21                           |
+          | ID number                     | OS1                            |
 
         And I add a "Open Studio" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 2      |
@@ -130,6 +132,9 @@ Feature: Create and edit contents
           | Enable Folders                | 1                              |
           | Abuse reports are emailed to  | teacher1@asd.com               |
           | ID number                     | OS3                            |
+        And all users have accepted the plagarism statement for "OS1" openstudio
+        And all users have accepted the plagarism statement for "OS2" openstudio
+        And all users have accepted the plagarism statement for "OS3" openstudio
 
         # Only My Group is available
         When I follow "Test Open Studio name 1"
@@ -165,6 +170,7 @@ Feature: Create and edit contents
           | Enable Folders               | 1                            |
           | Abuse reports are emailed to | teacher1@asd.com             |
           | ID number                    | OS1                          |
+        And all users have accepted the plagarism statement for "OS1" openstudio
         And I follow "Test Open Studio name 1"
         And I click on "li.administration" "css_element"
         And I follow "Manage levels"
@@ -198,6 +204,7 @@ Feature: Create and edit contents
           | Enable Folders               | 1                            |
           | Abuse reports are emailed to | teacher1@asd.com             |
           | ID number                    | OS1                          |
+        And all users have accepted the plagarism statement for "OS1" openstudio
         And I follow "Test Open Studio name 1"
         And I follow "My Content"
         Then I should see "My Pinboard"
