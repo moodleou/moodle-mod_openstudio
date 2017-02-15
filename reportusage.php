@@ -69,7 +69,7 @@ $contentdataactivity = array();
 foreach ($contentdata->slotactivity as $value) {
     $contentdataactivity[] = array(
             'levelname' => levels::get_name($value->levelcontainer, $value->levelid),
-            'contenttypename' => studio_api_language_get_contenttype_name($value->contenttype),
+            'contenttypename' => get_string('reportcontenttypename' . $value->contenttype, 'openstudio'),
             'totalusers' => $value->totalusers,
             'totalcontents' => $value->totalslots
     );
@@ -77,9 +77,12 @@ foreach ($contentdata->slotactivity as $value) {
 
 $contentdatavisbility = array();
 foreach ($contentdata->slotvisbility as $value) {
+    if ($value->visibility < 0) {
+        $value->visibility = 'group';
+    }
     $contentdatavisbility[] = array(
             'levelname' => levels::get_name($value->levelcontainer, $value->levelid),
-            'visibilitytypename' => studio_api_language_get_visibilitytype_name($value->visibility),
+            'visibilitytypename' => get_string('reportvisibilityname' . $value->visibility, 'openstudio'),
             'totalcontents' => $value->totalslots
     );
 }
@@ -98,7 +101,7 @@ $flagdata->flagdatacontentstop20 = $flagdatacontentstop20;
 $flagdatacontents = array();
 foreach ($flagdata->slots as $value) {
     $flagdatacontents[] = array(
-            'flagtypename' => studio_api_language_get_flagtype_name($value->flagid ),
+            'flagtypename' => get_string('reportflagname' . $value->flagid, 'openstudio'),
             'totalusers' => $value->totalusers,
             'totalcontents' => $value->totals
     );

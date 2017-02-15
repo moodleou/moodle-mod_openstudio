@@ -138,7 +138,7 @@ class managecontents_form extends \moodleform {
                     $url = new \moodle_url('/mod/openstudio/managefolders.php', $urlparams);
                     $content->name = \html_writer::link($url, $content->name,
                         array('title' => get_string('configurefolder', 'openstudio')));
-                    $setorcollection = ' (' . get_string('reportcontenttypename26', 'openstudio') . ')';
+                    $setorcollection = ' (' . get_string('reportcontenttypename100', 'openstudio') . ')';
                 }
 
                 $contentname[] = $mform->createElement('static', 'contentname[' . $content->id . ']', '',
