@@ -33,7 +33,6 @@ require_once(__DIR__.'/follow.php');
 require_once(__DIR__.'/rss.php');
 require_once(__DIR__.'/subscription.php');
 require_once(__DIR__.'/tags.php');
-require_once(__DIR__.'/filesystem.php');
 require_once(__DIR__.'/reports.php');
 require_once(__DIR__.'/lock.php');
 require_once(__DIR__.'/item.php');

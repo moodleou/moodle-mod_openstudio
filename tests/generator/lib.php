@@ -384,6 +384,15 @@ class mod_openstudio_generator extends testing_module_generator {
         $contentid = content::create($studio->id, $contentdata['userid'],
                 $levelcontainer, $levelid, $contentdata, $file, $context, $cm);
         $USER = $realuser;
+
+        if (isset($contentdata['deletedby']) && isset($contentdata['deletedtime'])) {
+            $updaterecord = (object) [
+                'id' => $contentid,
+                'deletedby' => $contentdata['deletedby'],
+                'deletedtime' => $contentdata['deletedtime']
+            ];
+            $DB->update_record('openstudio_contents', $updaterecord);
+        }
         return $contentid;
     }
 

@@ -30,6 +30,7 @@
  */
 
 use mod_openstudio\local\api\content;
+use mod_openstudio\local\api\filesystem;
 use mod_openstudio\local\util;
 use mod_openstudio\local\util\feature;
 use mod_openstudio\local\util\defaults;
@@ -187,8 +188,6 @@ function openstudio_delete_instance($id) {
 
     $result = true;
 
-    require_once(__DIR__ . '/api/filesystem.php');
-
     $cm = get_coursemodule_from_id('openstudio', $id);
     if ($cm) {
         // Delete search indexes.
@@ -199,7 +198,7 @@ function openstudio_delete_instance($id) {
         // Delete content files from moodle file system.
         $modulecontext = context_module::instance($cm->id);
         if ($modulecontext) {
-            studio_api_filesystem_remove_content_files_from_moodlefs($modulecontext->id, $studio->id, false);
+            filesystem::remove_content_files($modulecontext->id, $studio->id);
         }
     }
 

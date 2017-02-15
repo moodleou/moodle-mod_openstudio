@@ -22,6 +22,7 @@
 
 use mod_openstudio\local\util;
 use mod_openstudio\local\api\content;
+use mod_openstudio\local\api\filesystem;
 
 require_once(__DIR__ . '/../../config.php');
 require_once($CFG->dirroot . '/mod/studio/locallib.php');
@@ -197,7 +198,7 @@ if ($sform->is_submitted() && !$uform->is_submitted()) {
 
         // Delete the test file too.
         if (is_dir(TEMPFOLDER . $filename)) {
-            studio_api_filesystem_rrmdir(TEMPFOLDER . $filename);
+            filesystem::rrmdir(TEMPFOLDER . $filename);
         }
         if (file_exists(TEMPFOLDER . $filename . '.zip')) {
             unlink(TEMPFOLDER . $filename . '.zip');

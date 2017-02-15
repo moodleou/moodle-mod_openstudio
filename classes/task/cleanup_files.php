@@ -23,6 +23,9 @@
  */
 namespace mod_openstudio\task;
 
+defined('MOODLE_INTERNAL') || die();
+
+use mod_openstudio\local\api\filesystem;
 
 class cleanup_files extends \core\task\scheduled_task {
 
@@ -36,15 +39,9 @@ class cleanup_files extends \core\task\scheduled_task {
     }
 
     /**
-     * Function to be run periodically according to the moodle cron
-     * This function searches for things that need to be done, such
-     * as sending out mail, toggling flags etc ...
+     * Remove files from content posts that have been deleted.
      *
-     * Two jobs are performed:
-     * 1) Delete temporary files generated when users export content from their studio.
-     * 2) Remove files from slots that have been deleted.
-     *
-     * NOTE: task 2 should not be run if we want to keep the files for auditing purposes.
+     * NOTE: This should not be run if we want to keep the files for auditing purposes.
      * Current assumption is that users cannot undelete slots, so a deleted slot is
      * effectively useless.  If we don't clear up, then users can abuse the system
      * and effectively fill up the file system with deleted files.
@@ -52,21 +49,8 @@ class cleanup_files extends \core\task\scheduled_task {
      * @return boolean
      */
     public function execute() {
-        global $CFG;
-
-        require_once($CFG->dirroot . '/mod/openstudio/api/filesystem.php');
-
         try {
-            studio_api_filesystem_export_delete_temporary_files();
-        } catch (\Exception $e) {
-            mtrace("Studio exception occurred deleting temporary files: " .
-                    $e->getMessage() . "\n\n" .
-                    $e->debuginfo . "\n\n" .
-                    $e->getTraceAsString()."\n\n");
-        }
-
-        try {
-            studio_api_filesystem_remove_deleted_slot_files_from_moodlefs();
+            filesystem::remove_deleted_files();
         } catch (\Exception $e) {
             mtrace("Studio exception occurred removing deleted slot files: " .
                     $e->getMessage() . "\n\n" .

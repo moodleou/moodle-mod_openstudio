@@ -50,28 +50,7 @@ class mod_openstudio_import_testcase extends \advanced_testcase {
      * Clean up temporary directory.
      */
     public function tearDown() {
-        $this->deletedir($this->tempdir);
-    }
-
-    /**
-     * Recursively delete a directory and its contents.
-     * @param string $path
-     */
-    private function deletedir($path) {
-        $iterator = new DirectoryIterator($path);
-        foreach ($iterator as $fileinfo) {
-            if ($fileinfo->isDot()) {
-                continue;
-            }
-            if ($fileinfo->isDir()) {
-                if ($this->deletedir($fileinfo->getPathname())) {
-                    @rmdir($fileinfo->getPathname());
-                }
-            }
-            if ($fileinfo->isFile()) {
-                @unlink($fileinfo->getPathname());
-            }
-        }
+        mod_openstudio\local\api\filesystem::rrmdir($this->tempdir);
     }
 
     /**
