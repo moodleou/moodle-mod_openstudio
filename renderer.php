@@ -26,6 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\levels;
 use mod_openstudio\local\renderer_utils;
+use mod_openstudio\local\api\flags;
 
 /**
  * OpenStudio renderer.
@@ -79,10 +80,6 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
             case content::VISIBILITY_PRIVATE_PINBOARD:
                 $placeholdertext = $theme->themepinboardname;
-                break;
-
-            case content::VISIBILITY_PEOPLE:
-                $data->enablesubscription = false;
                 break;
         }
         $data->placeholdertext = $placeholdertext;
@@ -431,19 +428,21 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      * This function renders the HTML fragment for the body content of Open Studio.
      *
      * @param int $cmid The course module id.
+     * @param int $openstudioid The openstudio id.
      * @param object $theme The theme settings.
      * @param int $viewmode View mode: module, group, studio, pinboard or workspace.
      * @param object $permissions The permission object for the given user/view.
      * @param object $contentdata The content records to display.
      * @return string The rendered HTM fragment.
      */
-    public function body($cmid, $theme, $viewmode = content::VISIBILITY_MODULE, $permissions, $contentdata) {
+    public function body($cmid, $openstudioid, $theme, $viewmode = content::VISIBILITY_MODULE, $permissions, $contentdata) {
         global $OUTPUT;
 
         $placeholdertext = '';
         $selectview = false;
         $myactivities = false;
         $blocksdata = array();
+        $showprofilebarview = false;
         switch ($viewmode) {
             case content::VISIBILITY_MODULE:
                 $placeholdertext = $theme->thememodulename;
@@ -459,10 +458,12 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 $placeholdertext = $theme->themestudioname;
                 $myactivities = true;
                 $blocksdata = levels::get_records(1, $permissions->activecminstanceid);
+                $showprofilebarview = true;
                 break;
 
             case content::VISIBILITY_PRIVATE_PINBOARD:
                 $placeholdertext = $theme->themepinboardname;
+                $showprofilebarview = true;
                 break;
         }
 
@@ -479,12 +480,16 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $showmultigroup = (count($groupitem) > 1);
         }
 
+        $contentdata = renderer_utils::profile_bar($permissions, $openstudioid, $contentdata);
+
         $contentdata->groupitems = array_values($groupitem);
+        $contentdata->showprofilebarview = $showprofilebarview;
         $contentdata->showmultigroup = $showmultigroup;
         $contentdata->placeholdertext = $placeholdertext;
         $contentdata->selectview = $selectview;
         $contentdata->myactivities = $myactivities;
         $contentdata->blocksdata = $blocksdata;
+        $contentdata->viewedicon = $OUTPUT->pix_url('viewed_rgb_32px', 'openstudio');
         $contentdata->commentsicon = $OUTPUT->pix_url('comments_rgb_32px', 'openstudio');
         $contentdata->inspirationicon = $OUTPUT->pix_url('inspiration_rgb_32px', 'openstudio');
         $contentdata->participationicon = $OUTPUT->pix_url('participation_rgb_32px', 'openstudio');

@@ -331,7 +331,7 @@ $string['contenttypelabelnone'] = '';
 
 $string['contentflagprogress'] = 'Progress';
 $string['contentflagparticipation'] = 'Participation';
-$string['contentmyflagparticipation'] = 'My participation';
+$string['contentmyflagparticipation'] = 'My Participation';
 $string['contentflagalert'] = 'Report abuse';
 $string['contentflagfeedback'] = 'Feedback';
 $string['contentflaghelpme'] = 'Feedback requested';

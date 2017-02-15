@@ -946,7 +946,7 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     float: left;
 }
 
-.openstudio-profile-work-progress{
+.openstudio-profile-work-progress {
     width: 29%;
     float: left;
 }
@@ -1127,6 +1127,204 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     width: 29px;
 }
 
+
+.openstudio-profile-bar {
+    padding-left: 15px;
+    padding-bottom: 5px;
+    font-size: 1em; 
+}
+
+.openstudio-profile-rule {
+    border: 1px solid #d4d2d2;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    margin-left: 15px;
+}
+
+.openstudio-profile-bar .openstudio-profile-user-picture  img{
+    float: left;
+    display: inline-block;
+    height: 50px;
+    width: 48px;
+    padding-top: 10px;
+}
+
+.openstudio-profile-bar .openstudio-profile-head {
+    display: inline-block;
+    float: left;
+    padding-top: 5px;
+    margin-left: 10px;
+    width: 90%;
+}
+
+.openstudio-profile-head .openstudio-profile-date {
+     float: left;
+     padding-left: 7px;
+     display: inline-block;
+}
+
+.openstudio-profile-date .openstudio-profile-last-active-date {
+    color: #000000;
+}
+
+.openstudio-profile-date .openstudio-profile-active-date {
+    color: #000000;
+}
+
+.openstudio-profile-bar .openstudio-profile-comment-view {
+    float: left;
+    color: #000000;
+    display: inline-block;
+    padding-left: 5px;
+}
+
+.openstudio-profile-comment-view .openstudio-profile-comment img {
+    float: left;
+    display: inline-block;
+    padding-top: 2px;
+}
+
+.openstudio-profile-comment .openstudio-profile-comment-text {
+    display: inline-block;
+    margin-left: 2px;
+}
+
+.openstudio-profile-comment-view .openstudio-own-view img{
+   float: left;
+   display: inline-block;
+   padding-top: 2px;
+}
+
+.openstudio-own-view .openstudio-profile-view-text {
+    display: inline-block;
+    margin-left: 2px;
+}
+
+.openstudio-profile-progress-content-description .openstudio-profile-block {
+    display: inline-block;
+}
+
+.openstudio-profile-progress-content-description .openstudio-profile-progress {
+    padding-left: 2px;
+}
+
+.openstudio-profile-progress-content-description .openstudio-profile-progress-step {
+    display: inline-block;
+    border: 1px solid #bef2ef;
+    width: 12px;
+    height: 12px; 
+}
+
+.openstudio-profile-progress-content-description .content-block-active {
+    background-color: #378726;
+    border: 1px solid #378726;
+}
+
+.openstudio-profile-progress-content-description .content-block-inactive {
+    background-color: #ea0000;
+    border: 1px solid #ea0000;
+}
+
+.openstudio-profile-bar .openstudio-profile-mypaticipation-content {
+    width: 20%;
+    display: inline-block;
+}
+
+.openstudio-profile-bar .openstudio-profile-mypaticipation-content a {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.openstudio-profile-bar .openstudio-profile-mypaticipation {
+    color: #002158;
+    font-family: Arial;
+    font-weight: bold;
+    padding-left: 7px;
+    padding-right: 16px;
+    background-image: url([[pix:t/expanded]]);
+    background-size: 10px 10px;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
+.openstudio-profile-bar .collapsed{
+    color: #002158;
+    font-family: Arial;
+    font-weight: bold;
+    border-left: none;
+    border-right: none;
+    padding-left: 7px;
+    padding-right: 16px;
+    background-image: url([[pix:t/collapsed]]);
+    border-left: 0 none;
+    border-right: medium none;
+    background-size: 10px 10px;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
+.openstudio-profile-bar .openstudio-profile-paticipation-content {
+    width: 20%;
+    display: inline-block;
+}
+
+.openstudio-profile-paticipation-content .openstudio-profile-paticipation {
+    color: #002158;
+    font-family: Arial;
+    border-left: none;
+    border-right: none;
+    padding-left: 7px;
+    padding-right: 20px;
+    background-image: url([[pix:openstudio|participation_rgb_32px]]);
+    border-left: 0 none;
+    border-right: medium none;
+    background-size: 16px 16px;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: right;
+   
+}
+
+.openstudio-profile-bar .openstudio-profile-progress-content {
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.openstudio-profile-progress-content .openstudio-profile-progress-content-description {
+    float: left;
+    display: inline-block;
+}
+
+.openstudio-profile-bar .openstudio-profile-progress-title {
+    display: inline-block;
+    color: #002158;
+    font-family: Arial;
+}
+
+.openstudio-profile-bar .openstudio-profile-progress-bar {
+    display: inline-block;
+    padding-left: 2px;
+    width: 270px;
+    height: 18px;
+   
+}
+
+.openstudio-profile-bar .openstudio-profile-progress-working-title {
+    display: inline-block;
+    margin-left: 5px;
+    font-size: 1em;
+}
+
+.openstudio-paging {
+    text-align: center;
+    font-size: 16px;
+    font-family: Arial;
+    padding-bottom: 74px;
+}
+
+
 /* IE */
 @media screen\0 {
     .openstudio-add-file-button {
@@ -1179,13 +1377,10 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         margin-top: 0;
         width: 250px;
     }
-}
 
-.openstudio-paging {
-    text-align: center;
-    font-size: 16px;
-    font-family: Arial;
-    padding-bottom: 74px;
+    .openstudio-profile-bar .openstudio-profile-progress-content {
+        margin-left: 5px;
+    }
 }
 
 /* Tablet Portrait. */
@@ -1550,6 +1745,45 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         margin-left: 5px;
         margin-top: 6px;
     }
+    
+    .openstudio-profile-bar .openstudio-profile-head {
+        width: 80%;
+    }
+
+    .openstudio-profile-bar .openstudio-profile-mypaticipation-content {
+        width: 80%;
+        color: #002158;
+        height: 25px;
+    }
+
+    .openstudio-profile-bar .openstudio-profile-mypaticipation {
+        font-size: 1.428em;
+        background-size: 20px 20px;
+        padding-right: 30px;
+        width: 60%;
+    }
+
+    .openstudio-profile-bar .openstudio-profile-paticipation-content {
+        display: block;
+    }
+
+    .openstudio-profile-head .openstudio-profile-date {
+        float: none;
+        display: block;
+    }
+
+    .openstudio-profile-bar .openstudio-profile-paticipation-content {
+        width: 60%;
+    }
+
+    .openstudio-profile-bar .openstudio-profile-comment-view {
+        float: none;
+        display: block;
+    }
+
+    .openstudio-profile-bar .openstudio-profile-progress-content {
+        margin-left: 5px;
+    }
 }
 
 /* Mobile small. */
@@ -1662,5 +1896,50 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     .path-mod-openstudio .mform .fradio > span,
     .path-mod-openstudio .mform .fgroup > span {
         display: block;
+    }
+
+    .openstudio-profile-bar .openstudio-profile-head {
+        width: 70%;
+    }
+
+    .openstudio-profile-bar .openstudio-profile-mypaticipation-content {
+        width: 80%;
+        color: #002158;
+        height: 25px;
+    }
+
+    .openstudio-profile-bar .openstudio-profile-mypaticipation {
+        background-size: 20px 20px;
+        padding-right: 30px;
+        font-size: 1.428em;
+    }
+
+    .openstudio-profile-mypaticipation-content .openstudio-profile-date {
+        font-size: 0.875em;
+    }
+
+    .openstudio-profile-head .openstudio-profile-date {
+        float: none;
+    }
+
+    .openstudio-profile-date .openstudio-profile-last-active-date {
+        font-size:  1.285em;
+    }
+
+    .openstudio-profile-bar .openstudio-profile-paticipation-content {
+        width: 60%;
+    }
+
+    .openstudio-profile-paticipation-content .openstudio-profile-paticipation {
+        margin-bottom: 6px;
+    }
+
+    .openstudio-profile-comment-view .openstudio-profile-comment img,
+    .openstudio-profile-comment-view .openstudio-own-view img {
+        padding-top: 2px;
+    }
+    
+    .openstudio-profile-bar .openstudio-profile-progress-content {
+        margin-left: 5px;
     }
 }

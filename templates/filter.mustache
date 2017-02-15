@@ -30,6 +30,19 @@
         "total" : "1000",
         "selectview" : true,
         "showmultigroup": true,
+        "userpictureurl" : "../../../mod/openstudio/pix/people_rgb_32px.svg",
+        "commentsicon" : "../../../mod/openstudio/pix/comments_rgb_32px.svg",
+        "viewedicon" : "../../../mod/openstudio/pix/viewed_rgb_32px.svg",
+        "activedate" : "1 January 70, 08:00",
+        "flagscontentread" : "100",
+        "totalpostedcomments" : "100",
+        "userporgresspercentage" : "100",
+        "showprofilebarview" : "true",
+        "fullusername" : "Admin User",
+        "contentediturl": "http://exmaple/mod/openstudio/contentedit.php?id=4&lid=0&sid=0&type=0&sstsid=0",
+        "myactivities" : "true",
+        "percentcompleted" : "70",
+        "showownfile" : true,
         "groupitems" : [
             {
                "id" : "1",
@@ -43,6 +56,14 @@
     }
 
 }}
+
+{{#showownfile}}
+    {{#showprofilebarview}}
+        {{>mod_openstudio/profile_bar}}
+        <div class="openstudio-profile-rule"></div>
+    {{/showprofilebarview}}
+{{/showownfile}}
+
 <span class="openstudio-filter-devider">
 <span class="openstudio-filter-text">
     <a href="#" class="openstudio-filter-collapsed">

@@ -24,6 +24,7 @@ namespace mod_openstudio\local;
 
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\stream;
+use mod_openstudio\local\api\flags;
 
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
@@ -85,5 +86,53 @@ class renderer_utils {
 
         return $navigationurls;
 
+    }
+
+    /**
+     * This function generate variables for profile bar of Open Studio.
+     *
+     * @param object $permissions The permission object for the given user/view.
+     * @param int $openstudioid The open studio id.
+     * @param object $contentdata The content records to display.
+     * @return object $contentdata
+     */
+    public static function profile_bar($permissions, $openstudioid, $contentdata) {
+        global $USER;
+
+        $vuid = optional_param('vuid', $USER->id, PARAM_INT);
+        $flagscontentread = 0;
+        $showownfile = false;
+
+        if ($vuid != $USER->id) {
+            $contentowner = studio_api_user_get_user_by_id($vuid);
+        } else {
+            $contentowner = $USER;
+        }
+
+        $userprogressdata = studio_api_user_get_activity_status($openstudioid, $contentowner->id);
+
+        $activedate = userdate($userprogressdata, get_string('strftimerecent', 'openstudio'));
+        $flagsdata = studio_api_flags_get_user_flag_total($openstudioid, $contentowner->id);
+
+        if (array_key_exists(flags::READ_CONTENT, $flagsdata)) {
+            $flagscontentread = $flagsdata[flags::READ_CONTENT]->count;
+        }
+
+        if ($userprogressdata['totalslots'] > 0) {
+            $userprogresspercentage = ceil(($userprogressdata['filledslots'] / $userprogressdata['totalslots']) * 100);
+            $contentdata->percentcompleted = $userprogresspercentage;
+        }
+
+        if ($permissions->feature_studio || ($permissions->activitydata->used > 0)) {
+            $showownfile = true;
+        }
+
+        $contentdata->showownfile = $showownfile;
+        $contentdata->fullusername = $contentowner->firstname.' '.$contentowner->lastname;
+        $contentdata->activedate = $activedate;
+        $contentdata->flagscontentread = $flagscontentread;
+        $contentdata->totalpostedcomments = $userprogressdata['totalpostedcomments'];
+        $contentdata->userpictureurl = new \moodle_url('/user/pix.php/'.$contentowner->id.'/f1.jpg');
+        return $contentdata;
     }
 }

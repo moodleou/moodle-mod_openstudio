@@ -310,13 +310,11 @@ if ($finalviewpermissioncheck) {
             $content->contentlink = new moodle_url('/mod/openstudio/content.php',
                                     array('id' => $id, 'sid' => $content->id));
 
-            $content->userpictureurl = new moodle_url('/user/pix.php/'.$content->userid.'/f1.jpg');
-
             if (!$content->timemodified) {
                 $content->contentediturl = new moodle_url('/mod/openstudio/contentedit.php',
                     array('id' => $id, 'sid' => 0, 'lid' => $content->l3id));
             } else {
-                $content->contentediturl = new moodle_url('/mod/openstudio/content.php',
+                $content->contentediturl = new moodle_url('/mod/openstudio/contentedit.php',
                     array('id' => $id, 'sid' => $content->id));
             }
 
@@ -375,7 +373,7 @@ echo $OUTPUT->header(); // Header.
 
 echo $html;
 
-echo $renderer->body($cm->id, $theme, $vid, $permissions, $contentdata); // Body.
+echo $renderer->body($cm->id, $cminstance->id, $theme, $vid, $permissions, $contentdata); // Body.
 
 // Finish the page.
 echo $OUTPUT->footer();
