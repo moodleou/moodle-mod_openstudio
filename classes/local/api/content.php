@@ -30,10 +30,9 @@ use mod_openstudio\local\util;
 defined('MOODLE_INTERNAL') || die();
 
 // Remove after these APIs are refactored.
-if(function_exists('studio_api_tags_tag_slot')){
+if(function_exists('studio_api_tracking_log_action')){
     return ;
 }
-require_once($CFG->dirroot . '/mod/openstudio/api/tags.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/tracking.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/search.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/item.php');
@@ -329,7 +328,7 @@ EOF;
 
             if ($contentid != false) {
                 if (array_key_exists('tags', $data)) {
-                    \studio_api_tags_tag_slot($contentid, $data['tags']);
+                    tags::set($contentid, $data['tags']);
                 }
 
                 if (!isset($data['folderid'])) {
@@ -619,7 +618,7 @@ EOF;
                 throw new \Exception('Failed to update content.');
             }
 
-            studio_api_tags_tag_slot($contentid, $data['tags']);
+            tags::set($contentid, $data['tags']);
 
             if ($previousvisibilitysetting != $currentvisibilitysetting) {
                 $trackingvisibiltyflag = false;
@@ -847,7 +846,7 @@ EOF;
                 comments::delete_all($contentid, $userid);
 
                 // Delete all tags associated with content.
-                \studio_api_tags_remove_slot_tag($contentid);
+                tags::remove($contentid);
             }
 
             // Delete all flags associated with content.
@@ -999,7 +998,7 @@ EOF;
             }
         }
 
-        $contenttags = \studio_api_tags_get_slot_tags($contentid, true);
+        $contenttags = tags::get($contentid);
         if (!empty($contenttags)) {
             $contentdata->tagsraw = $contenttags;
 

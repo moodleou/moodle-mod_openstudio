@@ -29,6 +29,7 @@ use mod_openstudio\local\api\contentversion;
 use mod_openstudio\local\api\comments;
 use mod_openstudio\local\api\folder;
 use mod_openstudio\local\api\item;
+use mod_openstudio\local\api\tags;
 use mod_openstudio\local\util\defaults;
 
 defined('MOODLE_INTERNAL') || die();
@@ -574,7 +575,7 @@ EOF;
 
         // Include slot tags?
         if ($gettags) {
-            $contentdata->tags = \studio_api_tags_get_slot_tags($contentdata->id, true);
+            $contentdata->tags = tags::get($contentdata->id);
         } else {
             $contentdata->tags = array();
         }

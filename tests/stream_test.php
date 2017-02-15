@@ -483,9 +483,9 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
         $this->assertEquals(2, iterator_count($resultblock11my));
 
         // Now let's add some tags to test if our tag filter works.
-        studio_api_tags_tag_slot($contenttoflag[0], 'Winterfell, Targeryen');
-        studio_api_tags_tag_slot($contenttoflag[1], 'Winterfell, Lannister');
-        studio_api_tags_tag_slot($contenttoflag[2], 'Martell');
+        mod_openstudio\local\api\tags::set($contenttoflag[0], 'Winterfell, Targeryen');
+        mod_openstudio\local\api\tags::set($contenttoflag[1], 'Winterfell, Lannister');
+        mod_openstudio\local\api\tags::set($contenttoflag[2], 'Martell');
 
         $resultblock11tags1 = mod_openstudio\local\api\stream::get_contents($this->studiogroup->id, $this->groupings->a->id,
                 $this->users->students->eight->id, $this->users->students->six->id,

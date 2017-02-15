@@ -27,6 +27,7 @@ require_once('openstudio_testcase.php');
 
 class mod_openstudio_tags_testcase extends openstudio_testcase {
 
+    private $tags;
 
     /**
      * Sets up our fixtures.
@@ -47,61 +48,25 @@ class mod_openstudio_tags_testcase extends openstudio_testcase {
         $this->users = new stdClass();
         $this->users->students = new stdClass();
         $this->users->students->one = $this->getDataGenerator()->create_user(
-                array('email' => 'student1@ouunittest.com', 'username' => 'student1'));
-        $this->users->students->two = $this->getDataGenerator()->create_user(
-                array('email' => 'student2@ouunittest.com', 'username' => 'student2'));
-        $this->users->students->three = $this->getDataGenerator()->create_user(
-                array('email' => 'student3@ouunittest.com', 'username' => 'student3'));
-        $this->users->students->four = $this->getDataGenerator()->create_user(
-                array('email' => 'student4@ouunittest.com', 'username' => 'student4'));
-        $this->users->students->five = $this->getDataGenerator()->create_user(
-                array('email' => 'student5@ouunittest.com', 'username' => 'student5'));
-        $this->users->students->six = $this->getDataGenerator()->create_user(
-                array('email' => 'student6@ouunittest.com', 'username' => 'student6'));
-        $this->users->students->seven = $this->getDataGenerator()->create_user(
-                array('email' => 'student7@ouunittest.com', 'username' => 'student7'));
-        $this->users->students->eight = $this->getDataGenerator()->create_user(
-                array('email' => 'student8@ouunittest.com', 'username' => 'student8'));
-        $this->users->students->nine = $this->getDataGenerator()->create_user(
-                array('email' => 'student9@ouunittest.com', 'username' => 'student9'));
-        $this->users->students->ten = $this->getDataGenerator()->create_user(
-                array('email' => 'student10@ouunittest.com', 'username' => 'student10'));
-        $this->users->teachers = new stdClass();
-        $this->users->teachers->one = $this->getDataGenerator()->create_user(
-                array('email' => 'teacher1@ouunittest.com', 'username' => 'teacher1'));
-        $this->users->teachers->two = $this->getDataGenerator()->create_user(
-                array('email' => 'teacher2@ouunittest.com', 'username' => 'teacher2'));
+                ['email' => 'student1@ouunittest.com', 'username' => 'student1']);
 
         // Enroll our students and teacher (users) in the course.
         $this->getDataGenerator()->enrol_user(
                 $this->users->students->one->id, $this->course->id, $studentroleid, 'manual');
-        $this->getDataGenerator()->enrol_user(
-                $this->users->students->two->id, $this->course->id, $studentroleid, 'manual');
-        $this->getDataGenerator()->enrol_user(
-                $this->users->students->three->id, $this->course->id, $studentroleid, 'manual');
-        $this->getDataGenerator()->enrol_user(
-                $this->users->students->four->id, $this->course->id, $studentroleid, 'manual');
-        $this->getDataGenerator()->enrol_user(
-                $this->users->students->five->id, $this->course->id, $studentroleid, 'manual');
-        $this->getDataGenerator()->enrol_user(
-                $this->users->students->six->id, $this->course->id, $studentroleid, 'manual');
-        $this->getDataGenerator()->enrol_user(
-                $this->users->students->eight->id, $this->course->id, $studentroleid, 'manual');
-        $this->getDataGenerator()->enrol_user(
-                $this->users->students->nine->id, $this->course->id, $studentroleid, 'manual');
-        $this->getDataGenerator()->enrol_user(
-                $this->users->students->ten->id, $this->course->id, $studentroleid, 'manual');
-        $this->getDataGenerator()->enrol_user(
-                $this->users->teachers->one->id, $this->course->id, $teacherroleid, 'manual');
-        $this->getDataGenerator()->enrol_user(
-                $this->users->teachers->two->id, $this->course->id, $teacherroleid, 'manual');
 
         // Studio generator.
         $this->generator = $this->getDataGenerator()->get_plugin_generator('mod_openstudio');
 
         // Create generic studios.
-        $this->studiolevels = $this->generator->create_instance(array('course' => $this->course->id));
+        $this->studiolevels = $this->generator->create_instance(['course' => $this->course->id, 'idnumber' => 'OS1']);
         $this->studiolevels->leveldata = $this->generator->create_mock_levels($this->studiolevels->id);
+        $this->contentid = $this->generator->create_contents([
+            'openstudio' => 'OS1',
+            'name' => random_string(),
+            'description' => random_string(),
+            'userid' => $this->users->students->one->id
+        ]);
+        $this->tags = [strtolower(random_string()), strtolower(random_string()), strtolower(random_string())];
     }
 
     protected function tearDown() {
@@ -112,19 +77,97 @@ class mod_openstudio_tags_testcase extends openstudio_testcase {
     }
 
     /**
-     * Tests the studio tags api.
+     * Test that tags are set correctly.
      */
-    public function test_tags() {
-        $this->resetAfterTest(true);
-        $this->populate_single_data_array();
-        $this->populate_content_data();
+    public function test_set() {
+        $this->assertCount(0, core_tag_tag::get_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid));
+        mod_openstudio\local\api\tags::set($this->contentid, $this->tags);
+        $settags = core_tag_tag::get_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid);
+        $this->assertCount(count($this->tags), $settags);
+        // Check that the returned tags are those set for the content, and no more.
+        foreach ($settags as $settag) {
+            $key = array_search($settag->name, $this->tags);
+            $this->assertNotFalse($key);
+            unset($this->tags[$key]);
+        }
+        $this->assertCount(0, $this->tags);
+    }
 
-        $tags = array('Winterfell', 'King\'s Landing', 'Vale of Arryn', 'The Wall', 'Bravos');
+    /**
+     * Test that tags are set correctly when passed as a comma-separated string.
+     */
+    public function test_set_by_string() {
+        $tagstring = implode(',', $this->tags);
+        $this->assertCount(0, core_tag_tag::get_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid));
+        mod_openstudio\local\api\tags::set($this->contentid, $tagstring);
+        $settags = core_tag_tag::get_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid);
+        $this->assertCount(count($this->tags), $settags);
+        // Check that the returned tags are those set for the content, and no more.
+        foreach ($settags as $settag) {
+            $key = array_search($settag->name, $this->tags);
+            $this->assertNotFalse($key);
+            unset($this->tags[$key]);
+        }
+        $this->assertCount(0, $this->tags);
+    }
 
-        $this->assertEquals(null, studio_api_tags_tag_slot($this->contentid, $tags));
-        $this->assertEquals(count($tags), count(studio_api_tags_get_slot_tags($this->contentid)));
-        $this->assertEquals(null, studio_api_tags_remove_slot_tag($this->contentid));
-        $this->assertEquals(0, count(studio_api_tags_get_slot_tags($this->contentid)));
+    /**
+     * Test that passing an empty array of tags doesn't set any.
+     */
+    public function test_set_no_tags() {
+        $this->assertCount(0, core_tag_tag::get_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid));
+        mod_openstudio\local\api\tags::set($this->contentid, []);
+        $this->assertCount(0, core_tag_tag::get_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid));
+    }
+
+    /**
+     * Test that we get an exception if we try to set tags on a non-existant content post.
+     */
+    public function test_set_no_content() {
+        $this->setExpectedException('dml_missing_record_exception');
+        mod_openstudio\local\api\tags::set($this->contentid + 1, [random_string()]);
+    }
+
+    /**
+     * Test that tags are removed correctly.
+     */
+    public function test_remove() {
+        $context = context_module::instance($this->studiolevels->cmid);
+        core_tag_tag::set_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid, $context, $this->tags);
+        $this->assertCount(
+                count($this->tags), core_tag_tag::get_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid));
+
+        mod_openstudio\local\api\tags::remove($this->contentid);
+        $this->assertCount(0, core_tag_tag::get_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid));
+    }
+
+    public function test_remove_no_content() {
+        $this->setExpectedException('dml_missing_record_exception');
+        mod_openstudio\local\api\tags::remove($this->contentid + 1);
+    }
+
+    public function test_get() {
+        $context = context_module::instance($this->studiolevels->cmid);
+        core_tag_tag::set_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid, $context, $this->tags);
+
+        $settags = mod_openstudio\local\api\tags::get($this->contentid);
+        $this->assertCount(count($this->tags), $settags);
+
+        foreach ($settags as $settag) {
+            $key = array_search($settag->name, $this->tags);
+            $this->assertNotFalse($key);
+            unset($this->tags[$key]);
+        }
+        $this->assertCount(0, $this->tags);
+    }
+
+    public function test_get_no_tags() {
+        $this->assertEmpty(mod_openstudio\local\api\tags::get($this->contentid));
+    }
+
+    public function test_get_no_content() {
+        $this->setExpectedException('dml_missing_record_exception');
+        mod_openstudio\local\api\tags::get($this->contentid + 1);
     }
 
 }
