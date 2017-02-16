@@ -34,7 +34,6 @@ if(function_exists('studio_api_tags_tag_slot')){
     return ;
 }
 require_once($CFG->dirroot . '/mod/openstudio/api/tags.php');
-require_once($CFG->dirroot . '/mod/openstudio/api/embedcode.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/tracking.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/search.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/item.php');
@@ -415,26 +414,15 @@ EOF;
                     if ($contentdata->fileid != '') {
                         $shouldversion = true;
                     } else {
-                        // TODO: update this to use new embed code.
-                        // Normalize the content fields for comparison.
-                        $dataembedcode = isset($data['embedcode']) ? preg_replace('/\s+/',
-                                '', str_replace(' ', '', trim($data['embedcode']))) : '';
-                        $dataweblink = isset($data['weblink']) ? preg_replace('/\s+/',
-                                '', str_replace(' ', '', trim($data['weblink']))) : '';
-                        $oldcontent = preg_replace('/\s+/', '', str_replace(' ', '', trim($contentdata->content)));
-
-                        // If the embed code has changed, then we should version.
-                        if ($dataembedcode != '') {
-                            $oldembedcode = studio_internal_render_slot_translate_embedded_content($oldcontent);
-                            $oldembedcode = preg_replace('/\s+/', '', str_replace(' ', '', trim($oldembedcode)));
-
-                            if ($oldembedcode != $dataembedcode) {
-                                $shouldversion = true;
-                            }
-                        } else {
-                            // If the weblink code has changed, then we should version.
-                            if ($dataweblink != '') {
-                                if ($oldcontent != $dataweblink ) {
+                        // If the weblink or embed code has changed, then we should version.
+                        if ($data['weblink'] != '') {
+                            $embeddata = embedcode::parse(embedcode::get_ouembed_api(), $data['weblink']);
+                            if ($embeddata) {
+                                if ($contentdata->content != $embeddata->url) {
+                                    $shouldversion = true;
+                                }
+                            } else {
+                                if ($contentdata->content != $data['weblink']) {
                                     $shouldversion = true;
                                 }
                             }
@@ -1411,11 +1399,12 @@ EOF;
             // Execute logic to decipher embed code and extract key information to
             // store in slot record.
             $embeddata = false;
+            $embedapi = embedcode::get_ouembed_api();
             if (!empty($data['weblink'])) {
-                $embeddata = \studio_api_embedcode_parse($data['weblink']);
+                $embeddata = embedcode::parse($embedapi, $data['weblink']);
             }
             if (($embeddata === false) && !empty($data['embedcode'])) {
-                $embeddata = \studio_api_embedcode_parse($data['embedcode']);
+                $embeddata = embedcode::parse($embedapi, $data['embedcode']);
             }
             if ($embeddata !== false) {
                 $data['weblink'] = $embeddata->url;
