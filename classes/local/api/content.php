@@ -30,6 +30,9 @@ use mod_openstudio\local\util;
 defined('MOODLE_INTERNAL') || die();
 
 // Remove after these APIs are refactored.
+if(function_exists('studio_api_tags_tag_slot')){
+    return ;
+}
 require_once($CFG->dirroot . '/mod/openstudio/api/tags.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/embedcode.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/tracking.php');
@@ -37,6 +40,7 @@ require_once($CFG->dirroot . '/mod/openstudio/api/search.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/item.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/flags.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/group.php');
+
 
 class content {
     const INFO_IMAGEDATA = 2;

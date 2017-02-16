@@ -1005,4 +1005,47 @@ function openstudio_feature_settings($studioorid, $updatedb = false) {
     return $themefeatures;
 }
 
+/**
+ * Return studio on course that have last modified date for current user
+ *
+ * @param stdClass $course
+ * @return array
+ */
+function openstudio_get_ourecent_activity($course) {
+    $modinfo = get_fast_modinfo($course);
+
+    $return = array();
+
+    foreach ($modinfo->get_instances_of('openstudio') as $studio) {
+        if ($studio->uservisible) {
+            $lastpostdate = util::get_last_modified($studio, $studio->get_course());
+            if (!empty($lastpostdate)) {
+                $data = new stdClass();
+                $data->cm = $studio;
+                $data->text = get_string('lastmodified', 'openstudio',
+                        userdate($lastpostdate, get_string('strftimerecent', 'openstudio')));
+                $data->date = $lastpostdate;
+                $return[$data->cm->id] = $data;
+            }
+        }
+    }
+    return $return;
+}
+
+/**
+ * Show last updated date + time.
+ *
+ * @param cm_info $cm
+ */
+function openstudio_cm_info_view(cm_info $cm) {
+    if (!$cm->uservisible) {
+        return;
+    }
+    $lastpostdate = util::get_last_modified($cm, $cm->get_course());
+    if (!empty($lastpostdate)) {
+        $cm->set_after_link(html_writer::span(get_string('lastmodified', 'openstudio',
+                userdate($lastpostdate, get_string('strftimerecent', 'openstudio'))), 'lastmodtext studiolmt'));
+    }
+}
+
 
