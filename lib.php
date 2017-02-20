@@ -1047,4 +1047,11 @@ function openstudio_cm_info_view(cm_info $cm) {
     }
 }
 
+/**
+ * @return array List of all extra capabilitiess needed in module
+ */
+function openstudio_get_extra_capabilities() {
+    return array('report/restrictuser:view', 'report/restrictuser:restrict',
+            'report/restrictuser:removerestrict');
+}
 
