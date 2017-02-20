@@ -124,6 +124,7 @@ switch ($vidd) {
         $pagetitle = $pageheading = get_string('pageheader', 'openstudio',
                 array('cname' => $course->shortname, 'cmname' => $cm->name,
                       'title' => $theme->themegroupname));
+        $vidviewname = 'group';
         break;
 
     case content::VISIBILITY_PRIVATE:
@@ -131,6 +132,7 @@ switch ($vidd) {
         $pagetitle = $pageheading = get_string('pageheader', 'openstudio',
                 array('cname' => $course->shortname, 'cmname' => $cm->name,
                       'title' => $theme->themestudioname));
+        $vidviewname = 'work';
         break;
 
     case content::VISIBILITY_MODULE:
@@ -138,6 +140,7 @@ switch ($vidd) {
         $pagetitle = $pageheading = get_string('pageheader', 'openstudio',
                 array('cname' => $course->shortname, 'cmname' => $cm->name,
                       'title' => $theme->thememodulename));
+        $vidviewname = 'module';
         break;
 }
 if ($vuid != $USER->id) {
@@ -378,3 +381,8 @@ echo $renderer->body($cm->id, $cminstance->id, $theme, $vid, $permissions, $cont
 
 // Finish the page.
 echo $OUTPUT->footer();
+
+// Log page action.
+util::trigger_event($cm->id, 'stream_viewed', "{$vidviewname}/1",
+        util::get_page_name_and_params(true),
+        "view {$vidviewname} stream");
