@@ -160,8 +160,6 @@ foreach ($storage->storagebyuser as $value) {
 }
 $storage->storagestoragebyuser = $storagestoragebyuser;
 
-$activitylog = studio_api_reports_get_activity_log($course->id, $cm->id);
-
 $html = $renderer->reportusage($summarydata, $contentdataactivity, $contentdatavisbility, $flagdata, $storage, $activitylog);
 
 echo $html;

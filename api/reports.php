@@ -61,7 +61,7 @@ SELECT AVG(usertotals.total)
 
 EOF;
 
-    $averageslotperuser = round($DB->get_field_sql($sql, array($studioid)));
+    $averagecontentperuser = round($DB->get_field_sql($sql, array($studioid)));
 
     $sql = <<<EOF
 SELECT AVG(usertotals.total)
@@ -74,7 +74,7 @@ SELECT AVG(usertotals.total)
 
 EOF;
 
-    $averagepinboardslotperuser = round($DB->get_field_sql($sql, array($studioid)));
+    $averagepinboardcontentperuser = round($DB->get_field_sql($sql, array($studioid)));
 
     $sql = <<<EOF
 SELECT AVG(usertotals.total)
@@ -86,7 +86,7 @@ SELECT AVG(usertotals.total)
 
 EOF;
 
-    $averageactivityslotperuser = round($DB->get_field_sql($sql, array($studioid)));
+    $averageactivitycontentperuser = round($DB->get_field_sql($sql, array($studioid)));
 
     $sql = <<<EOF
 SELECT COUNT(s.id) as slots,
@@ -153,9 +153,9 @@ EOF;
     return (object) array(
             'registeredusers' => $registeredusers,
             'activeusers' => $activeusers,
-            'averageslotperuser' => $averageslotperuser,
-            'averagepinboardslotperuser' => $averagepinboardslotperuser,
-            'averageactivityslotperuser' => $averageactivityslotperuser,
+            'averagecontentperuser' => $averagecontentperuser,
+            'averagepinboardcontentperuser' => $averagepinboardcontentperuser,
+            'averageactivitycontentperuser' => $averageactivitycontentperuser,
             'slots' => $slots,
             'slotversions' => $slotversions,
             'slotcomments' => $slotcomments);
@@ -483,7 +483,7 @@ function studio_api_reports_get_activity_log($courseid, $cmid) {
   SELECT action, count(*) AS total
     FROM {log}
    WHERE course = ?
-     AND module = 'studio'
+     AND module = 'openstudio'
      AND cmid = ?
 GROUP BY action
 ORDER BY count(*) DESC

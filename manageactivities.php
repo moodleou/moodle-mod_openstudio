@@ -264,3 +264,6 @@ if ($l1id > 0) {
 }
 
 echo $renderer->footer(); // Footer.
+
+util::trigger_event($cm->id, 'manageactivities_viewed', '',
+        util::get_page_name_and_params(true));
