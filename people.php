@@ -182,6 +182,12 @@ $peopledata->selectedgroupid = $groupid;
 // Render page header and crumb trail.
 util::page_setup($PAGE, $pagetitle, $pageheading, $pageurl, $course, $cm);
 
+// Breadcrumb.
+$peoplepageurl = new moodle_url('/mod/openstudio/people.php',
+        array('id' => $cm->id, 'vid' => content::VISIBILITY_MODULE));
+$crumbarray[get_string('menupeople', 'openstudio')] = $peoplepageurl;
+util::add_breadcrumb($PAGE, $cm->id, navigation_node::TYPE_ACTIVITY, $crumbarray);
+
 $PAGE->requires->js_call_amd('mod_openstudio/peoplepage', 'init');
 
 // Generate stream html.

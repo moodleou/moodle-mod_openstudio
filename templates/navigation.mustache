@@ -38,15 +38,18 @@
                 "hassubnavigation" : "true",
                 "subnavigation" : {
                    "name" : "My Module",
-                    "url" : "https://example.com/mod/openstudio/view.php?id=4&vid=3&fblock=0&ftype=0&fflag=0&ftags&fsort=1&osort=0"
-                 }
+                    "url" : "https://example.com/mod/openstudio/view.php?id=4&vid=3&fblock=0&ftype=0&fflag=0&ftags&fsort=1&osort=0",
+                    "active": true
+                 },
+                 "active": true
             },
             {
                 "name" : "People",
                 "url" : "https://example.com/mod/openstudio/view.php?id=4",
                 "class" : "people",
                 "pix" : "../../../theme/image.php?theme=osep&amp;component=openstudio&amp;image=people_rgb_32px",
-                "hassubnavigation" : "false"
+                "hassubnavigation" : "false",
+                "active": false
             },
             {
                 "name" : "My Content",
@@ -56,8 +59,10 @@
                 "hassubnavigation" : "true",
                 "subnavigation" : {
                    "name" : "My Activities",
-                    "url" : "https://example.com/mod/openstudio/view.php?id=4&vid=3&fblock=0&ftype=0&fflag=0&ftags&fsort=1&osort=0"
-                 }
+                    "url" : "https://example.com/mod/openstudio/view.php?id=4&vid=3&fblock=0&ftype=0&fflag=0&ftags&fsort=1&osort=0",
+                    "active": false
+                 },
+                "active": false
             },
             {
                 "name" : "Administration",
@@ -67,8 +72,10 @@
                 "hassubnavigation" : "true",
                 "subnavigation" : {
                    "name" : "Edit settings",
-                    "url" : "https://example.com/mod/openstudio/view.php?id=4&vid=3&fblock=0&ftype=0&fflag=0&ftags&fsort=1&osort=0"
-                 }
+                    "url" : "https://example.com/mod/openstudio/view.php?id=4&vid=3&fblock=0&ftype=0&fflag=0&ftags&fsort=1&osort=0",
+                    "active": false
+                 },
+                "active": false
             }
         ]
     }
@@ -76,9 +83,9 @@
 
 <ul class="nav nav-pills">
     {{#navigation}}
-        <li role="presentation" class="{{#hassubnavigation}}dropdown{{/hassubnavigation}} {{class}}">
+        <li role="presentation" class="{{#hassubnavigation}}dropdown{{/hassubnavigation}} {{class}} {{#active}}active{{/active}}">
             {{#hassubnavigation}}
-                <a class="dropdown-toggle" data-toggle="dropdown" href="{{url}}" role="button" aria-haspopup="true" aria-expanded="false">
+                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                     <span class="openstudio-navigation-img">
                         <img src="{{pix}}" alt="{{name}}" class="openstudio-navigation-icon" />
                     </span>
@@ -87,7 +94,7 @@
                 </a>
                 <ul class="dropdown-menu">
                     {{#subnavigation}}
-                       <li><a href="{{{url}}}">{{name}}</a></li>
+                       <li><a class="{{#active}}menuitem-active{{/active}}" href="{{{url}}}">{{name}}</a></li>
                     {{/subnavigation}}
                 </ul>
             {{/hassubnavigation}}

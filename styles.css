@@ -9,6 +9,11 @@
     padding-bottom: 20px;
 }
 
+.path-mod-openstudio .dropdown-menu > li > a.menuitem-active {
+    background-color: #bfe2ef;
+    color: #002158;
+}
+
 .openstudio-nav-primary {
     margin-top: 20px;
     clear: both;
@@ -222,6 +227,10 @@
 
 .path-mod-openstudio .nav-pills > .active > a {
     background-color: #bfe2ef;
+}
+
+.path-mod-openstudio .nav .dropdown-toggle {
+    cursor: pointer;
 }
 
 .path-mod-openstudio .nav .dropdown-toggle .caret {

@@ -63,24 +63,40 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         // Check if enable Email subscriptions.
         $data->enablesubscription = $permissions->feature_enablesubscription;
 
+        $menuhighlight = new stdClass;
+        $menuhighlight->mymodule = false;
+        $menuhighlight->mygroup = false;
+        $menuhighlight->myactivity = false;
+        $menuhighlight->mypinboard = false;
+        $menuhighlight->people = false;
+
         // Placeholder text.
         $placeholdertext = '';
         switch ($viewmode) {
             case content::VISIBILITY_MODULE:
                 $placeholdertext = $theme->thememodulename;
+                $menuhighlight->mymodule = true;
                 break;
 
             case content::VISIBILITY_GROUP:
                 $placeholdertext = $theme->themegroupname;
+                $menuhighlight->mygroup = true;
                 break;
 
             case content::VISIBILITY_WORKSPACE:
             case content::VISIBILITY_PRIVATE:
                 $placeholdertext = $theme->themestudioname;
+                $menuhighlight->myactivity = true;
                 break;
 
             case content::VISIBILITY_PRIVATE_PINBOARD:
                 $placeholdertext = $theme->themepinboardname;
+                $menuhighlight->mypinboard = true;
+                break;
+
+            case content::VISIBILITY_PEOPLE:
+                $data->enablesubscription = false;
+                $menuhighlight->people = true;
                 break;
         }
         $data->placeholdertext = $placeholdertext;
@@ -100,7 +116,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $submenuitem = array(
                     'name' => get_string('settingsthemehomesettingsmodule', 'openstudio'),
                     'url' => $navigationurls->mymoduleurl,
-                    'pix' => $OUTPUT->pix_url('mymodule_rgb_32px', 'openstudio')
+                    'pix' => $OUTPUT->pix_url('mymodule_rgb_32px', 'openstudio'),
+                    'active' => $menuhighlight->mymodule
             );
             $menuitem['hassubnavigation'] = true;
             $menuitem['subnavigation'][] = $submenuitem;
@@ -110,7 +127,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $submenuitem = array(
                     'name' => get_string('settingsthemehomesettingsgroup', 'openstudio'),
                     'url' => $navigationurls->mygroupurl,
-                    'pix' => $OUTPUT->pix_url('group_rgb_32px', 'openstudio')
+                    'pix' => $OUTPUT->pix_url('group_rgb_32px', 'openstudio'),
+                    'active' => $menuhighlight->mygroup
             );
             $menuitem['hassubnavigation'] = true;
             $menuitem['subnavigation'][] = $submenuitem;
@@ -123,6 +141,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 $menuitem['url'] = '#';
                 $menuitem['pix'] = $OUTPUT->pix_url('shared_content_rgb_32px', 'openstudio');
                 $menuitem['class'] = 'shared-content';
+                $menuitem['active'] = $menuhighlight->mymodule || $menuhighlight->mygroup;
                 $data->navigation[] = $menuitem;
             } else {
                 $menuitem = array(
@@ -131,7 +150,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                     'name' => get_string('menusharedcontent', 'openstudio'),
                     'url' => $submenuitem['url'],
                     'pix' => $OUTPUT->pix_url('shared_content_rgb_32px', 'openstudio'),
-                    'class' => 'shared-content'
+                    'class' => 'shared-content',
+                    'active' => $menuhighlight->mymodule || $menuhighlight->mygroup
                 );
                 $data->navigation[] = $menuitem;
             }
@@ -143,6 +163,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $menuitem['url'] = $navigationurls->peoplemoduleurl;
             $menuitem['pix'] = $OUTPUT->pix_url('people_rgb_32px', 'openstudio');
             $menuitem['class'] = 'people';
+            $menuitem['active'] = $menuhighlight->people;
             $menuitem['hassubnavigation'] = false;
             $data->navigation[] = $menuitem;
         }
@@ -158,7 +179,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $submenuitem = array(
                     'name' => get_string('settingsthemehomesettingsstudio', 'openstudio'),
                     'url' => $navigationurls->myworkurl,
-                    'pix' => $OUTPUT->pix_url('activity_rgb_32px', 'openstudio')
+                    'pix' => $OUTPUT->pix_url('activity_rgb_32px', 'openstudio'),
+                    'active' => $menuhighlight->myactivity
             );
             $menuitem['hassubnavigation'] = true;
             $subnavigations[] = $submenuitem;
@@ -168,7 +190,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $submenuitem = array(
                     'name' => get_string('settingsthemehomesettingspinboard', 'openstudio'),
                     'url' => $navigationurls->pinboardurl,
-                    'pix' => $OUTPUT->pix_url('pinboard_rgb_32px', 'openstudio')
+                    'pix' => $OUTPUT->pix_url('pinboard_rgb_32px', 'openstudio'),
+                    'active' => $menuhighlight->mypinboard
             );
             $menuitem['hassubnavigation'] = true;
             $subnavigations[] = $submenuitem;
@@ -179,7 +202,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             if (count($subnavigations) > 1) {
                 $submenuitem = array(
                         'name' => get_string('settingsthemehomesettingsall', 'openstudio'),
-                        'url' => '#'
+                        'url' => '#',
+                        'active' => false
                 );
                 $menuitem['hassubnavigation'] = true;
                 $menuitem['subnavigation'][] = $submenuitem;
@@ -192,6 +216,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 $menuitem['url'] = '#';
                 $menuitem['pix'] = $OUTPUT->pix_url('openstudio_rgb_32px', 'openstudio');
                 $menuitem['class'] = 'my-content';
+                $menuitem['active'] = $menuhighlight->myactivity || $menuhighlight->mypinboard;
                 $data->navigation[] = $menuitem;
             } else {
                 $menuitem = array(
@@ -200,7 +225,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                     'name' => get_string('menumycontent', 'openstudio'),
                     'url' => $submenuitem['url'],
                     'pix' => $OUTPUT->pix_url('openstudio_rgb_32px', 'openstudio'),
-                    'class' => 'my-content'
+                    'class' => 'my-content',
+                    'active' => $menuhighlight->myactivity || $menuhighlight->mypinboard
                 );
                 $data->navigation[] = $menuitem;
             }

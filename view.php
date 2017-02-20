@@ -361,8 +361,33 @@ if ($finalviewpermissioncheck) {
         }
     }
 }
+
 // Render page header and crumb trail.
 util::page_setup($PAGE, $pagetitle, $pageheading, $pageurl, $course, $cm);
+
+// Breadcrumb.
+switch ($vid) {
+    case content::VISIBILITY_MODULE:
+        $placeholdertext = $theme->thememodulename;
+        break;
+
+    case content::VISIBILITY_GROUP:
+        $placeholdertext = $theme->themegroupname;
+        break;
+
+    case content::VISIBILITY_WORKSPACE:
+    case content::VISIBILITY_PRIVATE:
+        $placeholdertext = $theme->themestudioname;
+        break;
+
+    case content::VISIBILITY_PRIVATE_PINBOARD:
+        $placeholdertext = $theme->themepinboardname;
+        break;
+}
+$viewpageurl = new moodle_url('/mod/openstudio/view.php',
+        array('id' => $cm->id, 'vid' => $vid));
+$crumbarray[$placeholdertext] = $viewpageurl;
+util::add_breadcrumb($PAGE, $cm->id, navigation_node::TYPE_ACTIVITY, $crumbarray);
 
 $PAGE->requires->js_call_amd('mod_openstudio/viewhelper', 'init');
 
