@@ -1616,13 +1616,13 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     }
 
     .path-mod-openstudio .osep-moduleheading {
-        height: 76px;
-        width: 175px;
+        min-height: 76px;
     }
 
     .openstudio-container {
         margin-left: -20px;
         margin-right: -20px;
+        margin-top: 5px;
     }
 
     .openstudio-grid-item {
