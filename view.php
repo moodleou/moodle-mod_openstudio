@@ -313,7 +313,7 @@ if ($finalviewpermissioncheck) {
             $content->contentthumbnailurl = $contentthumbnailfileurl;
             $content->datetimeupdated = $content->timemodified ? date('j/m/y h:i', $content->timemodified) : null;
             $content->contentlink = new moodle_url('/mod/openstudio/content.php',
-                    array('id' => $id, 'sid' => $content->id));
+                    array('id' => $id, 'sid' => $content->id, 'vuid' => $content->userid));
 
             $content->viewuserworkurl = new moodle_url('/mod/openstudio/view.php',
                     array('id' => $id, 'vuid' => $content->userid, 'vid' => content::VISIBILITY_PRIVATE));

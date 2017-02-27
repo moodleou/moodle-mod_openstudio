@@ -25,6 +25,9 @@ namespace mod_openstudio\local;
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\stream;
 use mod_openstudio\local\api\flags;
+use mod_openstudio\local\api\levels;
+use mod_openstudio\local\api\lock;
+use mod_openstudio\local\api\embedcode;
 
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
@@ -97,14 +100,16 @@ class renderer_utils {
      * @return object $contentdata
      */
     public static function profile_bar($permissions, $openstudioid, $contentdata) {
-        global $USER;
+        global $USER, $OUTPUT;
 
         $vuid = optional_param('vuid', $USER->id, PARAM_INT);
         $flagscontentread = 0;
         $showownfile = false;
+        $ismyprofile = true;
 
-        if ($vuid != $USER->id) {
+        if ($vuid && $vuid != $USER->id) {
             $contentowner = studio_api_user_get_user_by_id($vuid);
+            $ismyprofile = false;
         } else {
             $contentowner = $USER;
         }
@@ -118,6 +123,7 @@ class renderer_utils {
             $flagscontentread = $flagsdata[flags::READ_CONTENT]->count;
         }
 
+        $contentdata->percentcompleted = 0;
         if ($userprogressdata['totalslots'] > 0) {
             $userprogresspercentage = ceil(($userprogressdata['filledslots'] / $userprogressdata['totalslots']) * 100);
             $contentdata->percentcompleted = $userprogresspercentage;
@@ -128,6 +134,7 @@ class renderer_utils {
         }
 
         $contentdata->showownfile = $showownfile;
+        $contentdata->ismyprofile = $ismyprofile;
         $contentdata->fullusername = $contentowner->firstname.' '.$contentowner->lastname;
         $contentdata->activedate = $activedate;
         $contentdata->flagscontentread = $flagscontentread;
@@ -135,8 +142,432 @@ class renderer_utils {
         $contentdata->userpictureurl = new \moodle_url('/user/pix.php/'.$contentowner->id.'/f1.jpg');
         $contentdata->viewuserworkurl = new \moodle_url('/mod/openstudio/view.php',
                     array('id' => $openstudioid, 'vuid' => $contentowner->id, 'vid' => content::VISIBILITY_PRIVATE));
+        $contentdata->viewedicon = $OUTPUT->pix_url('viewed_rgb_32px', 'openstudio');
+        $contentdata->commentsicon = $OUTPUT->pix_url('comments_rgb_32px', 'openstudio');
+
+        $contentdata->showprofileactivities = false;
+        if (isset($userprogressdata['progressdetail']) && $userprogressdata['progressdetail']) {
+            $contentdata->showprofileactivities = true;
+            $profileactivityitems = [];
+
+            if (!empty($userprogressdata['progressdetail'])) {
+                foreach ($userprogressdata['progressdetail'] as $values) {
+                    foreach ($values as $level2id => $activities) {
+                        $activityname = '';
+                        foreach ($activities as $key => $activity) {
+                            $activityname = $activity->level2name;
+
+                            $activities[$key]->isactive = false;
+                            $activities[$key]->activityediturl = new \moodle_url('/mod/openstudio/contentedit.php',
+                                array('id' => $contentdata->cmid, 'sid' => 0, 'lid' => $activity->level3id));
+
+                            if ($activity->id) {
+                                $activities[$key]->isactive = true;
+                                $activities[$key]->activityediturl = new \moodle_url('/mod/openstudio/content.php',
+                                    array('id' => $contentdata->cmid, 'sid' => $activity->id, 'vuid' => $contentowner->id));
+                            }
+                            $activities[$key]->activitytitle = implode(" - ", array($activity->level1name,
+                                $activity->level2name, $activity->level3name));
+                        }
+
+                        if (!empty($activities)) {
+                            $profileactivityitems[$level2id]->activityname = $activityname;
+                            $profileactivityitems[$level2id]->activities = array_values($activities);
+                        }
+                    }
+                }
+
+                // Returns all the values from the array and indexes the array numerically.
+                // We need this because mustache requires it.
+                $contentdata->profileactivities = array_values($profileactivityitems);
+            }
+        }
         return $contentdata;
     }
+
+    /**
+     * This function generate variables for a content.
+     *
+     * @param int $cmid Course module id.
+     * @param object $permissions The permission object for the given user/view.
+     * @param object $contentdata The content records to display.
+     * @param boolean $iscontentversion Indicate if content is a content version record.
+     * @return object $contentdata
+     */
+    public static function content_details($cmid, $permissions, $contentdata, $iscontentversion) {
+        global $OUTPUT, $CFG;
+
+        if ($iscontentversion) {
+            $contentarea = 'contentversion';
+            $contentthumbnailarea = 'contentthumbnailversion';
+        } else {
+            $contentarea = 'content';
+            $contentthumbnailarea = 'contentthumbnail';
+        }
+
+        $contenttypenone = false;
+        $contenttypeimage = false;
+        $contenttypemedia = false;
+        $contenttypefileurl = false;
+        $contenttypeembed = false;
+        $contenttypedownloadfile = false;
+        $contenttypeiframe = false;
+        $contenttypeuseimagedefault = false;
+        $contentdatahtml = '';
+        $contentfileurl = '';
+        $contentthumbnailfileurl = '';
+        $contenttypeiconurl = '';
+        $contentdatatitle = '';
+        $contentiframesrc = '';
+        $context = \context_module::instance($cmid);
+
+        // Get content file url.
+        switch ($contentdata->contenttype) {
+            case content::TYPE_NONE:
+                if (!$iscontentversion && $contentdata->isownedbyviewer) {
+                    $contentislock = false;
+                    if ($permissions->feature_enablelock) {
+                        $lockdata = self::content_lock_data($contentdata, $permissions);
+                        $contentislock = $lockdata->contentislock;
+                    }
+                    if ($contentislock === false) {
+                        $contenttypenone = true;
+                        $contentfileurl = new \moodle_url('/mod/openstudio/contentedit.php',
+                                array('id' => $cmid, 'sid' => $contentdata->id));
+                    }
+                }
+                break;
+            case content::TYPE_IMAGE:
+                $contenttypeimage = true;
+                $contentfileurl = $CFG->wwwroot
+                    . "/pluginfile.php/{$context->id}/mod_openstudio"
+                    . "/{$contentarea}/{$contentdata->id}/" . rawurlencode($contentdata->content);
+
+                break;
+
+            case content::TYPE_VIDEO:
+            case content::TYPE_AUDIO:
+                $contenttypemedia = true;
+                $contenttypedownloadfile = true;
+                $contentfileurl = $CFG->wwwroot
+                    . "/pluginfile.php/{$context->id}/mod_openstudio"
+                    . "/{$contentarea}/{$contentdata->id}/" . rawurlencode($contentdata->content);
+
+                // This used for media filter.
+                $contentdatahtml = \html_writer::start_tag('a',
+                    array('href' => $contentfileurl, 'target' => '_top'));
+                $contentdatahtml .= \html_writer::end_tag('a');
+                $contentdatahtml = format_text($contentdatahtml);
+                break;
+            case content::TYPE_DOCUMENT:
+                $contenttypedownloadfile = true;
+                /*
+                 * Note, this block of code utilises a case statement fallthrough.
+                 * If the content has files in the notebook file area, we render it
+                 * as a notebook, and break out of the case statement here.
+                 * If not, we carry on treating this as a regular document slot.
+                 */
+                $fs = get_file_storage();
+                if ($contentfiles = $fs->get_area_files($context->id, 'mod_openstudio', 'notebook', $contentdata->fileid)) {
+                    if ($contentarea == 'contentversion') {
+                        $contentarea = 'notebookversion';
+                    } else {
+                        $contentarea = 'notebook';
+                    }
+                    $contenttypeiframe = true;
+                    foreach ($contentfiles as $contentfile) {
+                        $filename = $contentfile->get_filename();
+                        if ($filename != '.') {
+                            $extension = pathinfo($filename, PATHINFO_EXTENSION);
+                            $contentfileurls[$extension] = $CFG->wwwroot
+                                . "/pluginfile.php/{$context->id}/mod_openstudio"
+                                . "/{$contentarea}/{$contentdata->id}/" . rawurlencode($filename);
+                        }
+                    }
+                    $contentiframesrc = $contentfileurls['html'];
+                    $contentfileurl = $contentfileurls['ipynb'] . '?forcedownload=true';
+                    break; // Only if this is a notebook.
+                }
+            case content::TYPE_PRESENTATION:
+            case content::TYPE_SPREADSHEET:
+                $contenttypedownloadfile = true;
+                $contentfileurl = $CFG->wwwroot
+                    . "/pluginfile.php/{$context->id}/mod_openstudio"
+                    . "/{$contentarea}/{$contentdata->id}/" . rawurlencode($contentdata->content);
+
+                break;
+            case content::TYPE_URL:
+            case content::TYPE_URL_DOCUMENT:
+            case content::TYPE_URL_DOCUMENT_DOC:
+            case content::TYPE_URL_DOCUMENT_PDF:
+            case content::TYPE_URL_IMAGE:
+            case content::TYPE_URL_PRESENTATION:
+            case content::TYPE_URL_PRESENTATION_PPT:
+            case content::TYPE_URL_SPREADSHEET:
+            case content::TYPE_URL_SPREADSHEET_XLS:
+            case content::TYPE_URL_VIDEO:
+            case content::TYPE_URL_AUDIO:
+                $contentfileurl = $contentdata->content;
+                $embeddata = isset($contentdata->weblink) ? embedcode::parse(embedcode::get_ouembed_api(),
+                        $contentdata->weblink) : false;
+                if ($embeddata === false) {
+                    $contenttypefileurl = true;
+                    if ($contentdata->contenttype == content::TYPE_URL_IMAGE) {
+                        $contenttypeimage = true;
+                        $contentdatatitle = get_string('contentcontentweblinkimageuntitled', 'openstudio');
+
+                        if (trim($contentdata->urltitle) != '') {
+                            $contentdatatitle = $contentdata->urltitle;
+                        }
+                        if ($contentdatatitle == '') {
+                            $contentdatatitle = $contentdata->name;
+                        }
+                        // Skip the rest of the case code.
+                        break;
+                    } else if (($contentdata->contenttype == content::TYPE_URL_VIDEO) ||
+                        ($contentdata->contenttype == content::TYPE_URL_AUDIO)) {
+                            $contenttypemedia = true;
+
+                            // Skip the rest of the case code.
+                        break;
+                    } else if (($contentdata->contenttype == content::TYPE_URL) ||
+                        ($contentdata->contenttype == content::TYPE_URL_DOCUMENT_PDF)) {
+                            $contenttypeiframe = true;
+                            $contenttypefileurl = true;
+
+                            $contentfileurl = $contentiframesrc = $contentdata->content;
+
+                            // Skip the rest of the case code.
+                        break;
+                    }
+                } else {
+                    $contenttypeembed = true;
+                    $contentdatahtml = isset($embeddata->html) ? $embeddata->html : '';
+                }
+
+                break;
+            default:
+                break;
+        }
+
+        // Get content type icon.
+        if (trim($contentdata->thumbnail) != '') {
+            $contenttypeiconurl = $contentdata->thumbnail;
+        } else {
+            switch ($contentdata->contenttype) {
+                case content::TYPE_NONE:
+                        $contenttypeuseimagedefault = true;
+                        $contenttypeiconurl = $OUTPUT->pix_url('unknown_rgb_32px', 'openstudio');
+                    break;
+                case content::TYPE_IMAGE:
+                    if ($contentdata->mimetype == 'image/bmp') {
+                        $contenttypeiconurl = $OUTPUT->pix_url('image_rgb_32px', 'openstudio');
+                    } else {
+                        $contenttypeiconurl = $CFG->wwwroot
+                            . "/pluginfile.php/{$context->id}/mod_openstudio"
+                            . "/{$contentthumbnailarea}/{$contentdata->id}/" . rawurlencode($contentdata->content);
+                    }
+                    break;
+
+                case content::TYPE_VIDEO:
+                    $contenttypeiconurl = $OUTPUT->pix_url('video_rgb_32px', 'openstudio');
+                    break;
+                case content::TYPE_AUDIO:
+                    $contenttypeiconurl = $OUTPUT->pix_url('audio_rgb_32px', 'openstudio');
+                    break;
+                case content::TYPE_DOCUMENT:
+                case content::TYPE_URL_DOCUMENT:
+                case content::TYPE_URL_DOCUMENT_DOC:
+                    switch ($contentdata->mimetype) {
+                        case 'application/vnd.oasis.opendocument.text':
+                            $contenttypeiconurl = $OUTPUT->pix_url('word_rgb_32px', 'openstudio');
+                            break;
+                        case 'application/pdf':
+                            $contenttypeiconurl = $OUTPUT->pix_url('pdf_rgb_32px', 'openstudio');
+                            break;
+                        default:
+                            $contenttypeiconurl = $OUTPUT->pix_url('text_doc_rgb_32px', 'openstudio');
+                            break;
+                    }
+                    break;
+                case content::TYPE_URL_DOCUMENT_PDF:
+                    $contenttypeuseimagedefault = true;
+                    $contenttypeiconurl = $OUTPUT->pix_url('pdf_rgb_32px', 'openstudio');
+                    break;
+                case content::TYPE_PRESENTATION:
+                case content::TYPE_URL_PRESENTATION:
+                case content::TYPE_URL_PRESENTATION_PPT:
+                    $contenttypeuseimagedefault = true;
+                    $contenttypeiconurl = $OUTPUT->pix_url('powerpoint_rgb_32px', 'openstudio');
+                    break;
+                case content::TYPE_SPREADSHEET:
+                case content::TYPE_URL_SPREADSHEET:
+                case content::TYPE_URL_SPREADSHEET_XLS:
+                    $contenttypeuseimagedefault = true;
+                    $contenttypeiconurl = $OUTPUT->pix_url('excel_spreadsheet_rgb_32px', 'openstudio');
+                    break;
+                case content::TYPE_URL_IMAGE:
+                    $contenttypeiconurl = $contentdata->content;
+                    break;
+                case content::TYPE_TEXT:
+                case content::TYPE_URL:
+                case content::TYPE_URL_VIDEO:
+                case content::TYPE_URL_AUDIO:
+                    if ((trim($contentdata->content) == '') &&
+                            isset($contentdata->description) && (trim($contentdata->description) != '')) {
+                        $contenttypeiconurl = $OUTPUT->pix_url('text_doc_rgb_32px', 'openstudio');
+                    } else {
+                        $contenttypeiconurl = $OUTPUT->pix_url('online_rgb_32px', 'openstudio');
+                    }
+                    break;
+                default:
+                    $contenttypeiconurl = $OUTPUT->pix_url('unknown_rgb_32px', 'openstudio');
+                    break;
+            }
+        }
+
+        $contentdata->contenttypenone = $contenttypenone;
+        $contentdata->contenttypeimage = $contenttypeimage;
+        $contentdata->contenttypemedia = $contenttypemedia;
+        $contentdata->contenttypefileurl = $contenttypefileurl;
+        $contentdata->contenttypeembed = $contenttypeembed;
+        $contentdata->contenttypedownloadfile = $contenttypedownloadfile;
+        $contentdata->contenttypeiframe = $contenttypeiframe;
+        $contentdata->contentiframesrc = $contentiframesrc;
+        $contentdata->contentdatahtml = $contentdatahtml;
+        $contentdata->contenttypeiconurl = $contenttypeiconurl;
+        $contentdata->contenttypeuseimagedefault = $contenttypeuseimagedefault;
+
+        $contentdata->contentfileurl = $contentfileurl;
+        $contentdata->contentthumbnailfileurl = $contentthumbnailfileurl;
+        $contentdata->contentdatatitle = $contentdatatitle;
+        $contentdata->contentdatadate = userdate($contentdata->timemodified, get_string('formattimedatetime', 'openstudio'));
+
+        $contentdata->contentvisibilityicon = self::content_visibility_icon($contentdata);
+
+        return $contentdata;
+    }
+
+    /**
+     * This function generate visibility icon for a content.
+     *
+     * @param object $contentdata The content records to display.
+     * @return object $contentdata
+     */
+    public static function content_visibility_icon($contentdata) {
+        $visibility = (int)$contentdata->vid;
+        if ($visibility < 0) {
+            $visibility = content::VISIBILITY_GROUP;
+        }
+
+        switch ($visibility) {
+            case content::VISIBILITY_MODULE:
+                $contentvisibilityicon = 'mymodule';
+                break;
+            case content::VISIBILITY_GROUP:
+                $contentvisibilityicon = 'group';
+                break;
+            case content::VISIBILITY_WORKSPACE:
+            case content::VISIBILITY_PRIVATE:
+            case content::VISIBILITY_PRIVATE_PINBOARD:
+                $contentvisibilityicon = 'onlyme';
+                break;
+            case content::VISIBILITY_TUTOR:
+                $contentvisibilityicon = 'tutor';
+                break;
+            default:
+                $contentvisibilityicon = 'onlyme';
+                break;
+        }
+
+        return $contentvisibilityicon;
+    }
+
+    /**
+     * This function will return lock data for a content.
+     *
+     * @param object $contentdata The content records to display.
+     * @return object $contentdata
+     */
+    protected function content_lock_data($contentdata) {
+        $contentislock = false;
+        $contentislockmessage = '';
+        if ($contentdata->l3id > 0) {
+
+            // Check lock level management access.
+            $contentleveldata = levels::get_record(3, $contentdata->l3id);
+
+            if (isset($contentleveldata->locktype) &&
+                (($contentleveldata->locktype == lock::ALL) ||
+                    ($contentleveldata->locktype == lock::CRUD) ||
+                    ($contentleveldata->locktype == lock::SOCIAL_CRUD) ||
+                    ($contentleveldata->locktype == lock::COMMENT_CRUD))) {
+
+                $contentlocktime = isset($contentleveldata->locktime) ? $contentleveldata->locktime : 0;
+                $contentunlocktime = isset($contentleveldata->unlocktime) ? $contentleveldata->unlocktime : 0;
+                $contentlocktimetext = '';
+                $contentunlocktimetext = '';
+
+                if ($contentlocktime > $contentunlocktime ) {
+                    if (($contentunlocktime > 0) && (time() >= $contentunlocktime)) {
+                        $contentislock = false;
+                    }
+                    if (($contentlocktime > 0) && (time() >= $contentlocktime)) {
+                        $contentislock = true;
+                    }
+                } else {
+                    if (($contentlocktime > 0) && (time() >= $contentlocktime)) {
+                        $contentislock = true;
+                    }
+                    if (($contentunlocktime > 0) && (time() >= $contentunlocktime)) {
+                        $contentislock = false;
+                    }
+                }
+
+                if ($contentlocktime > 0) {
+                    $contentlocktimetext = userdate($contentlocktime);
+                }
+                if ($contentunlocktime > 0) {
+                    $contentunlocktimetext = userdate($contentunlocktime);
+                }
+                if (($contentlocktime > 0) && ($contentunlocktime <= 0)) {
+                    if ($contentislock) {
+                        $contentislockmessage = get_string('contentislockedfrom', 'openstudio',
+                                array('from' => $contentlocktimetext));
+                    } else {
+                        $contentislockmessage = get_string('slotwillbelockedfrom', 'openstudio',
+                                array('from' => $contentlocktimetext));
+                    }
+                } else if (($contentlocktime <= 0) && ($contentunlocktime > 0)) {
+                    if ($contentislock) {
+                        $contentislockmessage = get_string('contentislockedtill', 'openstudio',
+                                array('till' => $contentunlocktimetext));
+                    }
+                } else if (($contentlocktime > 0) && ($contentunlocktime > 0)) {
+                    if ($contentunlocktime < $contentlocktime) {
+                        if ($contentislock) {
+                            $contentislockmessage = get_string('contentislockedfrom', 'openstudio',
+                                    array('from' => $contentlocktimetext));
+                        } else {
+                            $contentislockmessage = get_string('slotwillbelockedfrom', 'openstudio',
+                                    array('from' => $contentlocktimetext));
+                        }
+                    } else {
+                        if ($contentislock) {
+                            $contentislockmessage = get_string('contentislockedfromtill', 'openstudio',
+                                    array('from' => $contentlocktimetext, 'till' => $contentunlocktimetext));
+                        } else {
+                            $contentislockmessage = get_string('slotwillbelockedfromtill', 'openstudio',
+                                    array('from' => $contentlocktimetext, 'till' => $contentunlocktimetext));
+                        }
+                    }
+                }
+
+            }
+        }
+        return (object) array('contentislock' => $contentislock, 'contentislockmessage' => $contentislockmessage);
+    }
+
 
     /**
      * Renders a paging bar.

@@ -26,6 +26,15 @@ defined('MOODLE_INTERNAL') || die();
 
 // We defined the web service functions to install.
 $functions = array(
+    'mod_openstudio_external_flag_content' => array(
+        'classname' => 'mod_openstudio_external',
+        'methodname' => 'flag_content',
+        'description' => 'Flag a content',
+        'type' => 'write',
+        'ajax' => true,
+        'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
+        'capabilities' => 'mod/openstudio:view'
+    ),
     'mod_openstudio_external_subscribe' => array(
         'classname' => 'mod_openstudio_external',
         'methodname' => 'subscribe',
@@ -50,6 +59,7 @@ $functions = array(
 $services = array(
     'Open Studio service' => array(
         'functions' => array(
+            'mod_openstudio_external_flag_content',
             'mod_openstudio_external_subscribe',
             'mod_openstudio_external_unsubscribe'),
         'restrictedusers' => 0,

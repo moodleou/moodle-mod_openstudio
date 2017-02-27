@@ -6,6 +6,7 @@
     min-height: 500px;
     margin-top: 20px;
     background-color: #bfe2ef;
+    padding-bottom: 20px;
 }
 
 .path-mod-openstudio .dropdown-menu > li > a.menuitem-active {
@@ -49,22 +50,6 @@
     margin-right: 13px;
     display: inline-block;
     padding-bottom: 10px;
-}
-
-.openstudio-atom-button {
-    padding-right: 5px;
-    display: inline-block;
-}
-
-.openstudio-rss-box {
-    padding-top: 12px;
-    clear: right;
-}
-
-.openstudio-rss-box  a {
-    font-size: 1em;
-    color: #0b55a8;
-    cursor: pointer;
 }
 
 .openstudio-button-box {
@@ -133,8 +118,8 @@
  * Subscription feature
  */
 
- /* Header */
-.moodle-dialogue-base .openstudio-subscribe-dialog-container .moodle-dialogue-wrap .moodle-dialogue-hd, 
+/* Header */
+.moodle-dialogue-base .openstudio-subscribe-dialog-container .moodle-dialogue-wrap .moodle-dialogue-hd,
 .moodle-dialogue-base .openstudio-subscribe-dialog-container .moodle-dialogue-wrap .moodle-dialogue-hd.yui3-widget-hd {
     height: 48px;
     padding: 0px;
@@ -220,38 +205,107 @@
  * End Subscription feature.
  */
 
+/**
+ * Content modal.
+ */
+#page-mod-openstudio-content .modal-header,
+#page-mod-openstudio-content .modal-footer {
+    display: none;
+}
+.openstudio-modal-content-title {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.openstudio-modal-content-title span {
+    display: inline-block;
+    margin-top: 3px;
+}
+
+.openstudio-content-view-maximize-box.openstudio-modal-content-footer a.openstudio-content-view-maximize {
+    color: #fff;
+    font-size: 0.875em;
+    font-family: Arial;
+}
+
+#page-mod-openstudio-content .modal-body {
+    background-color: #464542;
+    border-radius: 4px;
+}
+
+.openstudio-lockscroll {
+    overflow-y: hidden;
+}
+
+.openstudio-modal-content-title span {
+    font-size: 1.125em;
+    color: #ffffff;
+    font-family: Arial;
+    font-weight: bold;
+}
+
+.openstudio-modal-content-close {
+    display: block;
+    width: 30px;
+    height: 30px;
+    background-image: url([[pix:openstudio|close_button_rgb_32px]]);
+    background-size: 30px 30px;
+    float: right;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+
+.path-mod-openstudio .modal-body {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 130px;
+    padding-top: 12px;
+}
+
+.openstudio-modal-content .openstudio-content-view-date {
+    color: #d4d2d2;
+}
+
+.path-mod-openstudio .modal-backdrop {
+    background-color: #464542;
+    opacity: 0.7;
+}
+
+.path-mod-openstudio .modal-container.large .modal {
+    max-width: 1034px;
+}
+
+.openstudio-modal-content-body-iframe {
+    position: relative;
+    padding-bottom: 56.25%;
+    padding-top: 25px;
+    height: 0;
+}
+
+.openstudio-modal-content-body-iframe iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.openstudio-modal-content-body {
+    margin-bottom: 18px;
+}
+
+.openstudio-modal-content-body a img {
+    width: 100%;
+}
+
+/**
+ * End Content modal.
+ */
+
 .path-mod-openstudio .openstudio-nav-logo-wrapper {
     margin-left: -9px;
-}
-
-.path-mod-openstudio .openstudio-rss-button {
-    background-image: url([[pix:openstudio|rss_rgb_32]]);
-    background-position: 4px 4px;
-    background-size: 16px 16px;
-    background-color: transparent;
-    background-repeat: no-repeat;
-    border: 1px solid #002158;
-    color: #000000;
-    cursor: pointer;
-    font-size: 1em;
-    font-weight: bold;
-    padding-left: 27px;
-    padding-top: 1px;
-    text-align: center;
-    vertical-align: middle;
-    margin: 0px;
-}
-
-.path-mod-openstudio .openstudio-rss-button:hover, .openstudio-rss-button:focus {
-    background-image: url([[pix:openstudio|rss_rgb_32]]);
-    background-position: 4px 4px;
-    background-size: 16px 16px;
-    background-color: transparent;
-    background-repeat: no-repeat;
-    background-color: #002158;
-    color: white;
-    text-decoration: none;
-    outline: none;
 }
 
 /* General navigation styles. */
@@ -302,16 +356,7 @@
 }
 
 .path-mod-openstudio .open .caret {
-    border-left: none;
-    border-right: none;
     background-image: url([[pix:t/expanded]]);
-    border-left: 0 none;
-    border-right: medium none;
-    background-size: 13px 13px;
-    background-color: transparent;
-    background-repeat: no-repeat;
-    width: 15px;
-    height: 15px;
 }
 
 .path-mod-openstudio .caret {
@@ -756,78 +801,6 @@ a.openstudio-add-title:hover  {
     width: 588px;
 }
 
-.path-mod-openstudio select.visibility {
-    background-image: url([[pix:openstudio|onlyme_rgb_32px]]);
-    background-position: 5px center;
-    background-repeat: no-repeat;
-    background-size: 17px auto;
-    text-indent: 10px;
-}
-
-.path-mod-openstudio select.visibility_1 {
-    background-image: url([[pix:openstudio|onlyme_rgb_32px]]);
-    background-position: 5px center;
-    background-repeat: no-repeat;
-    background-size: 17px auto;
-    text-indent: 10px;
-}
-
-.path-mod-openstudio select.visibility_2 {
-    background-image: url([[pix:openstudio|people_rgb_32px]]);
-    background-position: 5px center;
-    background-repeat: no-repeat;
-    background-size: 17px auto;
-    text-indent: 10px;
-}
-
-.path-mod-openstudio select.visibility_3 {
-    background-image: url([[pix:openstudio|mymodule_rgb_32px]]);
-    background-position: 5px center;
-    background-repeat: no-repeat;
-    background-size: 17px auto;
-    text-indent: 10px;
-}
-
-.path-mod-openstudio .visibility_7 {
-    background-image: url([[pix:openstudio|share_with_tutor_rgb_32px]]);
-    background-position: 5px center;
-    background-repeat: no-repeat;
-    background-size: 17px auto;
-    text-indent: 10px;
-}
-
-.path-mod-openstudio .visibility option[value="1"] {
-    background-image: url([[pix:openstudio|onlyme_rgb_32px]]);
-    background-position: 3px center;
-    background-repeat: no-repeat;
-    background-size: 17px auto;
-    text-indent: 25px;
-}
-
-.path-mod-openstudio .visibility option[value="2"] {
-    background-image: url([[pix:openstudio|people_rgb_32px]]);
-    background-position: 3px center;
-    background-repeat: no-repeat;
-    background-size: 17px auto;
-    text-indent: 25px;
-}
-
-.path-mod-openstudio .visibility option[value="3"] {
-    background-image: url([[pix:openstudio|mymodule_rgb_32px]]);
-    background-position: 3px center;
-    background-repeat: no-repeat;
-    background-size: 17px auto;
-    text-indent: 25px;
-}
-
-.path-mod-openstudio .visibility option[value="7"] {
-    background-image: url([[pix:openstudio|share_with_tutor_rgb_32px]]);
-    background-position: 3px center;
-    background-repeat: no-repeat;
-    background-size: 17px auto;
-    text-indent: 25px;
-}
-
 .path-mod-openstudio .openstudio-content-edit-form div > label {
     font-weight: bold;
 }
@@ -989,6 +962,21 @@ a.openstudio-add-title:hover  {
     text-align: center;
 }
 
+iframe.openstudio-content-view-iframe {
+    width: 100%;
+    height: 590px;
+    border: none;
+    overflow: scroll;
+}
+
+.openstudio-content-view-iframe .block-region {
+    display: none;
+}
+
+.openstudio-content-view-iframe .mform fieldset.collapsible legend a.fheader {
+    margin-left: 0;
+}
+
 /* Activity. */
 .openstudio-activity-title {
     font-size: 1.28571em;
@@ -1061,6 +1049,459 @@ a.openstudio-actvity-title:hover  {
     width: 120px;
 }
 
+/* Content detail page */
+.openstudio-content-view-container {
+    background: #ffffff none repeat scroll 0 0;
+    margin: 20px;
+    padding: 8px 20px 40px 20px;
+    position: relative;
+}
+
+.openstudio-content-view-title {
+    font-size: 1.28571em ;
+    font-weight: bold;
+    color: #002158;
+    margin-bottom: 17px;
+    background-position: right top;
+    background-repeat: no-repeat;
+    background-size: 24px 24px;
+    border-left: 0 none;
+    border-right: medium none;
+    padding-right: 25px;
+}
+
+.openstudio-content-view-title-icon-mymodule {
+    background-image: url([[pix:openstudio|mymodule_rgb_32px]]);
+}
+
+.openstudio-content-view-title-icon-group {
+    background-image: url([[pix:openstudio|share_with_my_group_rgb_32px]]);
+}
+
+.openstudio-content-view-title-icon-onlyme {
+    background-image: url([[pix:openstudio|onlyme_rgb_32px]]);
+}
+
+.openstudio-content-view-title-icon-tutor {
+    background-image: url([[pix:openstudio|share_with_tutor_rgb_32px]]);
+}
+
+.openstudio-content-view-subtitle {
+    font-size: 1.14285em ;
+    font-weight: bold;
+    color: #000000;
+    margin-top: 10px;
+}
+
+.openstudio-content-view-primary {
+    width: 580px;
+    float: left;
+    margin-right: 40px;
+}
+
+.openstudio-content-view-secondary {
+    width: 374px;
+    display: block;
+    float: right;
+    top: 0;
+}
+
+.openstudio-content-view-container .maximize {
+    width: 100%;
+}
+
+.openstudio-content-view-type-img-box {
+    background: #ddf0f8 ;
+    height: 372px;
+    text-align: center;
+    width: 100%;
+}
+
+.openstudio-content-view-file img {
+    max-width: 580px;
+    width: 100%;
+}
+
+.openstudio-content-view-type-img {
+    height: 140px;
+    margin-top: 122px;
+}
+
+.openstudio-content-view-container .maximize img {
+    max-width: 100%;
+}
+
+.openstudio-content-view-date {
+    font-size: 0.85714em;
+    color: #676463;
+    float: left;
+}
+
+.openstudio-content-view-maximize-box {
+    float: right;
+    line-height: 13px;
+}
+
+.openstudio-content-view-maximize {
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.openstudio-content-view-description {
+    color: #000000;
+    font-size: 1em;
+    margin-top: 10px;
+}
+
+.openstudio-content-view-tags-container {
+    padding-top: 7px;
+    border-bottom: 1px solid #d4d2d2;
+}
+
+.openstudio-content-view-tags {
+    width: 55%;
+    float: left;
+    padding-bottom: 13px;
+}
+
+.openstudio-content-view-tag-item {
+    display: inline-block;
+    margin: 0 0 5px;
+    padding: 0;
+}
+
+.openstudio-content-view-tag-item > li {
+    background: #ddf0f8 none repeat scroll 0 0;
+    display: inline-block;
+    margin: 0 5px 10px 0;
+    padding: 4px 10px 5px;
+    position: relative;
+    color: #0b55a8;
+}
+
+.openstudio-content-view-archive {
+    float: right;
+    margin-bottom: 27px;
+    margin-right: -10px;
+}
+
+.openstudio-content-view-archive > input:first-child {
+    margin-right: 5px;
+}
+
+.openstudio-content-view-animation-icons {
+    border-bottom: 1px solid #d4d2d2;
+    padding: 15px 0px 11px 0px;
+}
+
+.openstudio-content-view-icon {
+    width: 40px;
+    height: 40px;
+}
+
+.openstudio-content-view-animation-icons-left {
+    float: left;
+}
+
+.openstudio-content-view-animation-icons-right {
+    float: right;
+}
+
+.openstudio-content-view-flag-icon {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center;
+    font-size: 1em;
+    color: #0b55a8;
+    background-size: 40px 40px;
+    display: inline-block;
+    height: 0;
+    padding-top: 40px;
+    border: none;
+    cursor: pointer;
+}
+
+.openstudio-content-view-icon-favourite {
+    background-image: url([[pix:openstudio|favourite_btn_grey_rgb_32px]]);
+    margin-left: 15px;
+}
+
+.openstudio-content-view-icon-favourite-active,
+.openstudio-content-view-icon-favourite:hover {
+    background-image: url([[pix:openstudio|favourite_btn_blue_rgb_32px]]);
+    margin-left: 15px;
+}
+
+.openstudio-content-view-icon-participation {
+    background-image: url([[pix:openstudio|participation_btn_grey_rgb_32px]]);
+}
+
+.openstudio-content-view-icon-participation-active,
+.openstudio-content-view-icon-participation:hover {
+    background-image: url([[pix:openstudio|participation_btn_blue_rgb_32px]]);
+}
+
+.openstudio-content-view-icon-inspiration {
+    background-image: url([[pix:openstudio|inspiration_btn_grey_rgb_32px]]);
+    margin-left: 8px;
+}
+
+.openstudio-content-view-icon-inspiration-active,
+.openstudio-content-view-icon-inspiration:hover {
+    background-image: url([[pix:openstudio|inspiration_btn_blue_rgb_32px]]);
+    margin-left: 8px;
+}
+
+.openstudio-content-view-icon-copies {
+    background-image: url([[pix:openstudio|copies_btn_grey_rgb_32px]]);
+    margin-right: 17px;
+    cursor: default;
+}
+
+.openstudio-content-view-icon-copies-active {
+    background-image: url([[pix:openstudio|copies_btn_blue_rgb_32px]]);
+    margin-right: 17px;
+    cursor: default;
+}
+
+.openstudio-content-view-icon-views {
+    background-image: url([[pix:openstudio|viewed_btn_grey_rgb_32px]]);
+    margin-right: 12px;
+    cursor: default;
+}
+
+.openstudio-content-view-icon-views-active {
+    background-image: url([[pix:openstudio|viewed_btn_blue_rgb_32px]]);
+    margin-right: 12px;
+    cursor: default;
+}
+
+.openstudio-content-view-actions {
+    padding-top: 28px;
+}
+
+.path-mod-openstudio .openstudio-content-view-edit-button,
+.path-mod-openstudio .openstudio-content-view-delete-button,
+.path-mod-openstudio .openstudio-content-view-version-button {
+    margin-right: 5px;
+}
+
+.path-mod-openstudio .openstudio-content-view-edit-button-link:hover,
+.path-mod-openstudio .openstudio-content-view-version-button-link:hover {
+    text-decoration: none;
+    outline: none;
+}
+
+.openstudio-content-view-add-comment {
+    margin-top: 20px;
+}
+
+.openstudio-content-view-block {
+    height: 34px;
+    background: #bfe2ef;
+    cursor: pointer;
+    color: #0b55a8;
+    font-family: Arial;
+    font-weight: normal;
+    border-left: none;
+    border-right: none;
+    background-image: url([[pix:t/expanded]]);
+    border-left: 0 none;
+    border-right: medium none;
+    background-size: 15px 15px;
+    background-color: #bfe2ef;
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+}
+
+.openstudio-content-view-block-content {
+    margin-bottom: 27px;
+}
+
+.openstudio-content-view-block-post-owner {
+    background: #ddf0f8 none repeat scroll 0 0;
+    height: 100px;
+}
+
+.openstudio-content-view-secondary .collapsed {
+    background-image: url([[pix:t/collapsed]]);
+}
+
+.openstudio-content-view-block span {
+    color: #002158;
+    font-weight: normal;
+    padding-left: 15px;
+    font-size: 1.28571em;
+    line-height: 35px;
+}
+
+.openstudio-content-view-user-picture {
+    padding: 15px;
+    float: left;
+}
+
+.openstudio-content-view-user-picture img {
+    width: 64px;
+}
+
+.openstudio-content-view-user-info {
+    margin-top: 13px;
+}
+
+.openstudio-content-view-user-info-name {
+    font-size: 0.92857em;
+    font-family: Arial;
+    font-weight: Bold;
+    color: #312b39;
+    line-height: 17px;
+    margin-bottom: -3px;
+    margin-top: 0px;
+}
+
+.openstudio-content-view-user-info-view {
+    font-size: 0.85714em;
+    color: #0b55a8;
+    border-right: none;
+    background-image: url([[pix:t/right]]);
+    border-left: 0 none;
+    border-right: medium none;
+    background-size: 10px 10px;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: right;
+    display: inline-block;
+    padding-right: 16px;
+}
+
+.openstudio-content-view-date-box {
+    margin-top: 10px;
+}
+
+.openstudio-content-view-metadata-info {
+    border-bottom: 1px solid #bfe2ef;
+    padding: 7px 7px 7px 15px;
+}
+
+div.openstudio-content-view-image-metadata div:nth-of-type(even) {
+    background: #ffffff;
+}
+
+div.openstudio-content-view-image-metadata div:nth-of-type(odd) {
+    background: #f4fafc;
+}
+
+.openstudio-content-view-image-data-label {
+    width: 120px;
+    text-align: left;
+    display: inline-block;
+    height: 25px;
+    line-height: 25px;
+}
+
+.openstudio-content-view-image-data-value {
+    text-align: left;
+    display: inline-block;
+}
+.openstudio-content-view-image-data-value {
+    text-align: left;
+    display: inline-block;
+}
+
+.openstudio-content-view-primary .ouembed-embedtype-video {
+    width: 100%;
+    height: 315px;
+}
+
+.openstudio-content-view-version-img img {
+    width: 64px;
+    height: 44px;
+    float: left;
+}
+
+.openstudio-content-view-version-info {
+    padding-left: 10px;
+    display: table;
+    vertical-align: top;
+}
+
+.openstudio-content-view-version-info-name {
+    font-size: 0.92857em;
+    font-family: Arial;
+    font-weight: Bold;
+    color: #312b39;
+    line-height: 17px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.openstudio-content-view-version-detail {
+    border-bottom: 1px solid #bfe2ef;
+    padding: 15px 10px 15px 15px;
+}
+
+div.openstudio-content-view-version div:nth-of-type(even) {
+    background: #ffffff;
+}
+
+div.openstudio-content-view-version div:nth-of-type(odd) {
+    background: #f4fafc;
+}
+
+.openstudio-content-view-version-date {
+    color: #676463;
+    float: left;
+    font-size: 0.85714em;
+}
+
+.openstudio-content-view-version-actions {
+    display: inline-block;
+    float: right;
+}
+
+#openstudio_content_view_post_image_location {
+    background: #ddf0f8;
+}
+
+#openstudio_content_view_map_canvas {
+    height: 250px;
+    margin: 15px 15px 20px 15px;
+    padding: 0px
+}
+
+.openstudio-content-view-actions-icons-left {
+    float: left;
+}
+
+.openstudio-content-view-actions-icons-right {
+    float: right;
+}
+
+.path-mod-openstudio .openstudio-request-feedback-button {
+    background-image: url([[pix:openstudio|request_feedback_blue_rgb_32px]]);
+    background-position: 8px 6px;
+    background-size: 16px 16px;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: 1px solid #002158;
+    color: #000000;
+    cursor: pointer;
+    padding-left: 30px;
+    text-align: center;
+    vertical-align: middle;
+    margin: 0px;
+    text-decoration: none;
+}
+
+.path-mod-openstudio .openstudio-request-feedback-button:hover,
+.path-mod-openstudio .openstudio-request-feedback-button:focus {
+    background-image: url([[pix:openstudio|request_feedback_white_rgb_32px]]);
+    background-repeat: no-repeat;
+    background-color: #002158;
+    background-position: 8px 6px;
+    background-size: 16px 16px;
+    color: #ffffff;
+}
+
 /* People Page */
 .openstudio-profile-row {
     height: 48px;
@@ -1115,7 +1556,7 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     font-size: 1em;
     font-family: Arial;
     font-weight: Bold;
-    color: #312b39;
+    color: #002158;
     margin-top: 0px;
     height: 10px;
 }
@@ -1274,14 +1715,14 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
 
 .openstudio-work-progress-percent {
    float: right;
-   margin-right: -5px;
+   margin-right: -3px;
 }
 
 
 .openstudio-profile-bar {
     padding-left: 15px;
     padding-bottom: 5px;
-    font-size: 1em; 
+    font-size: 1em;
 }
 
 .openstudio-profile-rule {
@@ -1296,6 +1737,7 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     display: inline-block;
     height: 50px;
     width: 48px;
+    height: 48px;
     padding-top: 10px;
 }
 
@@ -1303,8 +1745,8 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     display: inline-block;
     float: left;
     padding-top: 5px;
-    margin-left: 10px;
-    width: 90%;
+    width: 22%;
+    float:  left;;
 }
 
 .openstudio-profile-head .openstudio-profile-date {
@@ -1314,7 +1756,7 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
 }
 
 .openstudio-profile-date .openstudio-profile-last-active-date {
-    color: #000000;
+    color: #002158;
 }
 
 .openstudio-profile-date .openstudio-profile-active-date {
@@ -1340,9 +1782,9 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
 }
 
 .openstudio-profile-comment-view .openstudio-own-view img{
-   float: left;
-   display: inline-block;
-   padding-top: 2px;
+    float: left;
+    display: inline-block;
+    padding-top: 2px;
 }
 
 .openstudio-own-view .openstudio-profile-view-text {
@@ -1362,7 +1804,7 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     display: inline-block;
     border: 1px solid #bef2ef;
     width: 12px;
-    height: 12px; 
+    height: 12px;
 }
 
 .openstudio-profile-progress-content-description .content-block-active {
@@ -1375,8 +1817,27 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     border: 1px solid #ea0000;
 }
 
+#openstudio_profile_bar {
+    display: block;
+}
+
+#openstudio_profile_active_date,
+#openstudio_profile_fullusername_mobile {
+    display: none;
+}
+
+#openstudio_profile_bar_mobile {
+    display: none;
+    float: left;
+    width: 100%;
+}
+
+#openstudio_profile_fullusername {
+    display: inline-block;
+}
+
 .openstudio-profile-bar .openstudio-profile-mypaticipation-content {
-    width: 20%;
+    width: 100%;
     display: inline-block;
 }
 
@@ -1399,47 +1860,33 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
 }
 
 .openstudio-profile-bar .collapsed{
-    color: #002158;
-    font-family: Arial;
-    font-weight: bold;
-    border-left: none;
-    border-right: none;
-    padding-left: 7px;
-    padding-right: 16px;
     background-image: url([[pix:t/collapsed]]);
-    border-left: 0 none;
-    border-right: medium none;
-    background-size: 10px 10px;
-    background-color: transparent;
-    background-repeat: no-repeat;
-    background-position: right;
 }
 
 .openstudio-profile-bar .openstudio-profile-paticipation-content {
-    width: 20%;
+    width: 25%;
     display: inline-block;
+    margin-top: 3px;
+    vertical-align: top;
 }
 
 .openstudio-profile-paticipation-content .openstudio-profile-paticipation {
     color: #002158;
     font-family: Arial;
-    border-left: none;
-    border-right: none;
+    border: none;
     padding-left: 7px;
     padding-right: 20px;
     background-image: url([[pix:openstudio|participation_rgb_32px]]);
-    border-left: 0 none;
-    border-right: medium none;
     background-size: 16px 16px;
     background-color: transparent;
     background-repeat: no-repeat;
     background-position: right;
-   
+    width: 80px;
 }
 
 .openstudio-profile-bar .openstudio-profile-progress-content {
     display: inline-block;
-    margin-left: 5px;
+    vertical-align: top;
 }
 
 .openstudio-profile-progress-content .openstudio-profile-progress-content-description {
@@ -1451,6 +1898,8 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     display: inline-block;
     color: #002158;
     font-family: Arial;
+    margin-top: 3px;
+    vertical-align: middle;
 }
 
 .openstudio-profile-bar .openstudio-profile-progress-bar {
@@ -1458,7 +1907,6 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     padding-left: 2px;
     width: 270px;
     height: 18px;
-   
 }
 
 .openstudio-profile-bar .openstudio-profile-progress-working-title {
@@ -1500,10 +1948,6 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         margin-right: 3px;
     }
 
-    .openstudio-rss-box {
-        display: none;
-    }
-
     .openstudio-add-dashboard-button {
         clear: right;
         float: right;
@@ -1530,6 +1974,35 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
 
     .openstudio-profile-bar .openstudio-profile-progress-content {
         margin-left: 5px;
+    }
+
+    .openstudio-content-view-primary {
+        width: 400px;
+        margin-right: 10px;
+    }
+
+    .openstudio-content-view-secondary {
+        width: 308px;
+    }
+
+    .openstudio-content-view-version-actions {
+        clear: left;
+        display: table;
+        float: left;
+        padding-top: 15px;
+    }
+
+    .openstudio-content-view-tags {
+        width: 100%;
+        padding-bottom: 0px;
+    }
+
+    .openstudio-content-view-archive {
+        float: left;
+    }
+
+    .openstudio-content-view-animation-icons-right {
+        float: right;
     }
 
     .openstudio-profile-work-progress {
@@ -1582,6 +2055,38 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     .openstudio-profile-info {
         width: 35%;
     }
+
+    .openstudio-content-view-tags {
+        width: 100%;
+    }
+
+    .openstudio-content-view-archive {
+        float: left;
+        margin-bottom: 30px;
+    }
+
+    .openstudio-content-view-animation-icons-left {
+        width: 100%;
+    }
+
+    .openstudio-content-view-animation-icons-right {
+        float: left;
+        margin-top: 10px;
+        width: 100%;
+        padding-left: 28px;
+    }
+
+    .openstudio-content-view-primary {
+        width: 320px;
+    }
+
+    .openstudio-content-view-secondary {
+        width: 234px;
+    }
+
+    .openstudio-content-view-container {
+        padding: 8px 15px 40px;
+    }
 }
 
 /* Mobile. */
@@ -1591,10 +2096,6 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     }
 
     .openstudio-nav-settings {
-        display: none;
-    }
-
-    .openstudio-rss-box {
         display: none;
     }
 
@@ -1697,6 +2198,7 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         margin-left: -20px;
         margin-right: -20px;
         margin-top: 5px;
+        padding-bottom: 2px;
     }
 
     .openstudio-grid-item {
@@ -1719,7 +2221,8 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         padding: 6px 15px 11px 0;
     }
 
-    .openstudio-filter-collapsed {
+    .openstudio-filter-collapsed,
+    .openstudio-filter-icon {
         background-size: 16px 16px;
         padding-right: 24px;
     }
@@ -1840,16 +2343,67 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         border-bottom: 1px solid #bfe2ef;
     }
 
-    .openstudio-profile-participation {
+    #openstudio_profile_bar,
+    #profile_mypaticipation,
+    #openstudio_profile_fullusername {
+        display: none;
+    }
+
+    #openstudio_profile_bar_mobile,
+    #openstudio_profile_fullusername_mobile,
+    #openstudio_profile_active_date {
+        display: block;
         width: 100%;
-        padding-top: 15px;
-        padding-bottom: 19px;
-        border-bottom: 1px solid #bfe2ef;
+    }
+
+
+    .openstudio-profile-comment-view .openstudio-profile-comment img,
+    .openstudio-profile-comment-view .openstudio-own-view img {
+        padding-top: 2px;
+        width: 24px;
+    }
+
+    .openstudio-own-view .openstudio-profile-view-text {
+        margin-left: 5px;
+    }
+
+    .openstudio-profile-own-date {
+        font-size: 1.142857em;
+    }
+
+    .openstudio-profile-last-active-date {
+        font-size: 1.28571em;
+        margin-top: 5px;
+    }
+
+    .openstudio-profile-comment-text,
+    .openstudio-profile-view-text,
+    .openstudio-profile-block {
+        font-size: 1.142857em;
+    }
+
+    .openstudio-profile-bar .openstudio-profile-progress-title {
+        margin-top: 7px;
+        margin-bottom: 4px;
+        font-size: 1.28571em;
+    }
+
+    .openstudio-profile-bar .openstudio-profile-progress-bar {
+        padding-left: 0px;
+    }
+
+    .openstudio-profile-bar .openstudio-profile-comment-view {
+        padding-left: 0px;
+    }
+
+    .openstudio-profile-comment,
+    .openstudio-own-view {
+        display: table;
     }
 
     .openstudio-profile-work-progress{
         width: 100%;
-        padding-top: 10px;
+        padding-top: 5px;
     }
 
     .openstudio-work-progress-item {
@@ -1869,6 +2423,7 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
 
     .openstudio-profile-label-title {
         font-size: 1.28571em;
+        margin-top: 5px;
     }
 
     .openstudio-profile-active-date-title {
@@ -1881,11 +2436,20 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     }
 
     .openstudio-profile-participation span {
-        font-size: 1.14285em;
+        font-size: 1.28571em;
     }
 
     .openstudio-work-progress {
         width: 215px;
+        margin-top: 5px;
+    }
+
+    .openstudio-profile-block {
+        margin-top: 5px;
+    }
+
+    .openstudio-profile-progress {
+        margin-top: 2px;
     }
 
     .openstudio-work-progress-container {
@@ -1904,9 +2468,8 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     .openstudio-profile-participation-label {
         display: inline-block;
         margin-left: 5px;
-        margin-top: 6px;
     }
-    
+
     .openstudio-profile-bar .openstudio-profile-head {
         width: 80%;
     }
@@ -1925,7 +2488,9 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     }
 
     .openstudio-profile-bar .openstudio-profile-paticipation-content {
-        display: block;
+        width: 100%;
+        padding: 10px 0px 19px 0px;
+        border-bottom: 1px solid #bfe2ef;
     }
 
     .openstudio-profile-head .openstudio-profile-date {
@@ -1933,8 +2498,10 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         display: block;
     }
 
-    .openstudio-profile-bar .openstudio-profile-paticipation-content {
-        width: 60%;
+    .openstudio-profile-paticipation-content .openstudio-profile-paticipation {
+        padding-left: 0px;
+        width: 100px;
+        font-size: 1.28571em;
     }
 
     .openstudio-profile-bar .openstudio-profile-comment-view {
@@ -1943,12 +2510,167 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     }
 
     .openstudio-profile-bar .openstudio-profile-progress-content {
+        margin-left: 0px;
+    }
+
+    .openstudio-content-view-container {
+        padding : 8px 15px 25px;
+    }
+
+    .openstudio-content-view-primary {
+        margin-right: 0px;
+        width: 100%;
+        position: relative;
+    }
+
+    .openstudio-content-view-secondary {
+        width: 100%;
+        float: left;
+    }
+
+    .openstudio-content-view-animation-icons-left {
+        width: 100%;
+    }
+
+    .openstudio-content-view-animation-icons-right {
+        float: left;
+        width: 100%;
+    }
+
+    .openstudio-content-view-maximize-box {
+        display: none;
+    }
+
+    .openstudio-content-view-tags {
+        width: 100%;
+    }
+
+    .openstudio-content-view-archive {
+        float: left;
+    }
+
+    .openstudio-content-view-animation-icons-right {
+        float: left;
+        margin-top: 10px;
+        padding-left: 28px;
+    }
+
+    .openstudio-content-view-date {
+        font-size: 1.28571em;
+    }
+
+    .openstudio-grid-item-content-subtitle {
+        font-size: 1.428571em;
+    }
+
+    .openstudio-content-view-description {
+        font-size: 1.285714em;
+    }
+
+    .openstudio-content-view-icon-participation {
         margin-left: 5px;
     }
 
     .openstudio-profile-work-progress .openstudio-profile-label-title,
     .openstudio-profile-work-progress {
         margin-left: 0px;
+    }
+
+    .openstudio-content-view-icon-inspiration,
+    .openstudio-content-view-icon-inspiration-active,
+    .openstudio-content-view-icon-inspiration:hover {
+        margin-left: 13px;
+    }
+
+    .openstudio-content-view-icon-views-active {
+        margin-left: 3px;
+    }
+
+    #openstudio_content_view_post_owner_heading {
+        margin-top: 30px;
+    }
+
+    .openstudio-content-view-block {
+        height: 50px;
+        line-height: 50px;
+        font-size: 1.28571em;
+        color: #002158;
+    }
+
+    .openstudio-content-view-image-data-label {
+        width: 110px;
+        height: 31px;
+        line-height: 31px;
+    }
+
+    .openstudio-content-view-block-content {
+        margin-bottom: 15px;
+    }
+
+    .openstudio-content-view-actions-icons-left {
+        float: none;
+    }
+
+    .openstudio-content-view-actions-icons-right {
+        float: left;
+        margin-top: 10px;
+    }
+
+    .openstudio-content-view-tags-container {
+        padding-top: 13px;
+    }
+
+    .openstudio-content-view-tag-item {
+        margin: 0px;
+    }
+
+    .openstudio-content-view-tags {
+        margin-bottom: 0px;
+    }
+
+    .openstudio-content-view-title {
+        font-size: 1.42857em;
+    }
+
+    .openstudio-content-view-add-comment {
+        margin-bottom: 10px;
+        margin-top: 25px;
+    }
+
+    .openstudio-content-view-user-info-name {
+        font-size: 1.28571em;
+    }
+
+    .openstudio-content-view-user-info-view {
+        font-size: 1.14285em;
+    }
+
+    .openstudio-content-view-user-picture img,
+    .openstudio-content-view-version-img img {
+        height: 38px;
+        width: 48px;
+    }
+
+    .openstudio-content-view-version-info-name {
+        font-size: 1.28571em;
+    }
+
+    .openstudio-content-view-version-date {
+        font-size: 1.14285em;
+        margin-top: 8px;
+    }
+
+    .openstudio-content-view-version-actions {
+        padding-top: 8px;
+    }
+
+    .openstudio-content-view-image-data-label,
+    .openstudio-content-view-image-data-value {
+        font-size: 1.28571em;
+    }
+
+    .openstudio-work-progress-percent {
+        line-height: 30px;
     }
 }
 
@@ -2092,10 +2814,6 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         font-size:  1.285em;
     }
 
-    .openstudio-profile-bar .openstudio-profile-paticipation-content {
-        width: 60%;
-    }
-
     .openstudio-profile-paticipation-content .openstudio-profile-paticipation {
         margin-bottom: 6px;
     }
@@ -2103,10 +2821,6 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     .openstudio-profile-comment-view .openstudio-profile-comment img,
     .openstudio-profile-comment-view .openstudio-own-view img {
         padding-top: 2px;
-    }
-    
-    .openstudio-profile-bar .openstudio-profile-progress-content {
-        margin-left: 5px;
     }
 
     .openstudio-profile-img {

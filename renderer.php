@@ -28,6 +28,7 @@ use mod_openstudio\local\api\levels;
 use mod_openstudio\local\api\subscription;
 use mod_openstudio\local\renderer_utils;
 use mod_openstudio\local\api\flags;
+use mod_openstudio\local\api\lock;
 
 /**
  * OpenStudio renderer.
@@ -200,13 +201,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         if (!empty($subnavigations)) {
             // When has one sub menu item, display sub item as main menu.
             if (count($subnavigations) > 1) {
-                $submenuitem = array(
-                        'name' => get_string('settingsthemehomesettingsall', 'openstudio'),
-                        'url' => '#',
-                        'active' => false
-                );
                 $menuitem['hassubnavigation'] = true;
-                $menuitem['subnavigation'][] = $submenuitem;
 
                 foreach ($subnavigations as $sub) {
                     $menuitem['subnavigation'][] = $sub;
@@ -553,6 +548,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $showmultigroup = (count($groupitem) > 1);
         }
 
+        $contentdata->cmid = $cmid;
         $contentdata = renderer_utils::profile_bar($permissions, $openstudioid, $contentdata);
 
         $contentdata->groupitems = array_values($groupitem);
@@ -634,6 +630,233 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $peopledata->viewedicon = $OUTPUT->pix_url('viewed_rgb_32px', 'openstudio');
 
         return $this->render_from_template('mod_openstudio/people_page', $peopledata);
+    }
+
+    /**
+     * This function renders the HTML fragment for the content detail page of Open Studio.
+     *
+     * @param int $cmid The course module id.
+     * @param object $permissions The permission object for the given user/view.
+     * @param object $contentdata The content detail to display.
+     * @param int $openstudioid The openstudio id.
+     * @return string The rendered HTML fragment.
+     */
+    public function content_page($cmid, $permissions, $contentdata, $openstudioid = null) {
+        global $CFG;
+
+        $contentdata->cmid = $cmid;
+        $contentdata = renderer_utils::profile_bar($permissions, $openstudioid, $contentdata);
+        $contentdata = renderer_utils::content_details($cmid, $permissions, $contentdata, false);
+
+        $tagsraw = array();
+        if (count($contentdata->tagsraw) > 0) {
+            foreach ($contentdata->tagsraw as $contenttag) {
+                $taglink = new moodle_url('/mod/openstudio/search.php',
+                    array('id' => $cmid,
+                        'searchtext' => 'tag:'
+                            . str_replace(' ', '', $contenttag->name)));
+
+                $tagsraw[] = (object) [
+                        'taglink' => $taglink->out(false),
+                        'tagname' => $contenttag->rawname
+                    ];
+            }
+        }
+
+        $contentdata->tagsraw = $tagsraw;
+
+        $flagtotals = flags::count_by_content($contentdata->id, $permissions->activeuserid);
+        $flagstatus = flags::get_for_content_by_user($contentdata->id, $permissions->activeuserid);
+
+        $contentdata->contentactionurl = new moodle_url('/mod/openstudio/redirector.php');
+        $contentdata->contentflagfavourite = flags::FAVOURITE;
+        $contentdata->contentflagsmile = flags::MADEMELAUGH;
+        $contentdata->contentflaginspire = flags::INSPIREDME;
+        $contentdata->contentfavouritetotal = 0;
+        $contentdata->contentsmiletotal = 0;
+        $contentdata->contentinspiretotal = 0;
+        $contentdata->contentrequestfeedbacktotal = 0;
+        $contentdata->contentviewtotal = 0;
+        $contentdata->contentflagfavouriteactive = false;
+        $contentdata->contentflagsmileactive = false;
+        $contentdata->contentflaginspireaction = false;
+        $contentdata->contentflagrequestfeedbackaction = false;
+        $contentdata->contentflagrequestfeedbackactive = false;
+
+        if (array_key_exists(flags::FAVOURITE, $flagtotals)) {
+            $contentdata->contentfavouritetotal = $flagtotals[flags::FAVOURITE]->count;
+        }
+        if (array_key_exists(flags::MADEMELAUGH, $flagtotals)) {
+            $contentdata->contentsmiletotal = $flagtotals[flags::MADEMELAUGH]->count;
+        }
+        if (array_key_exists(flags::INSPIREDME, $flagtotals)) {
+            $contentdata->contentinspiretotal = $flagtotals[flags::INSPIREDME]->count;
+        }
+        if (array_key_exists(flags::NEEDHELP, $flagtotals)) {
+            $contentdata->contentrequestfeedbacktotal = $flagtotals[flags::NEEDHELP]->count;
+        }
+        if (array_key_exists(flags::READ_CONTENT, $flagtotals)) {
+            // Note: we deduct the content owner's own view from the count.
+            $contentdata->contentviewtotal = $flagtotals[flags::READ_CONTENT]->count - 1;
+        }
+        if (in_array(flags::FAVOURITE, $flagstatus)) {
+            $contentdata->contentflagfavouriteactive = true;
+        }
+        if (in_array(flags::MADEMELAUGH, $flagstatus)) {
+            $contentdata->contentflagsmileactive = true;
+        }
+        if (in_array(flags::INSPIREDME, $flagstatus)) {
+            $contentdata->contentflaginspireactive = true;
+        }
+        if (in_array(flags::NEEDHELP, $flagstatus)) {
+            $contentdata->contentflagrequestfeedbackaction = 0;
+            $contentdata->contentflagrequestfeedbackactive = true;
+        }
+
+        // Get copies count.
+        $contenthash = studio_api_item_generate_hash($contentdata->id);
+        $contentdata->contentcopycount = studio_api_item_count_occurences($contenthash, $cmid);
+        $contentdata->contentcopyenable = $contentdata->contentcopycount > 1 ? true : false;
+
+        // Check lock permission.
+        $contentlockenable = false;
+        $contentlocklink = '';
+        if ($permissions->canlockothers || $permissions->managecontent) {
+            $contentlockenable = true;
+            $contentlocklink = new moodle_url('/mod/openstudio/redirector.php',
+                array('action' => 'content',
+                    'action-value' => 'lock',
+                    'id' => $cmid,
+                    'sid' => $contentdata->id,
+                    'locktype' => lock::ALL));
+        }
+        $contentdata->contentlockenable = $contentlockenable;
+        $contentdata->contentlocklink = $contentlocklink;
+
+        // Check edit/delete content permission.
+        $contenteditenable = false;
+        $contenteditlink = '';
+        $contentdeleteenable = false;
+        if (($contentdata->isownedbyviewer || $permissions->managecontent) && $cmid && $contentdata) {
+            $contenteditenable = true;
+            $editparams = array('id' => $cmid, 'sid' => $contentdata->id);
+            $contenteditlink = new moodle_url('/mod/openstudio/contentedit.php', $editparams);
+
+            if (($contentdata->l1id > 0) || ($contentdata->l1id == 0) || $permissions->managecontent) {
+                if (studio_api_lock_slot_show_crud($contentdata, $permissions)
+                    || $permissions->managecontent) {
+                    $contentdeleteenable = true;
+                }
+            }
+        }
+        $contentdata->contentviewversionlink = new moodle_url('/mod/openstudio/content.php',
+                array('id' => $cmid, 'sid' => $contentdata->id, 'vuid' => $contentdata->userid, 'version' => 1));
+        $contentdata->contenteditenable = $contenteditenable;
+        $contentdata->contenteditlink = $contenteditlink;
+        $contentdata->contentdeleteenable = $contentdeleteenable;
+
+        // Check Request feedback permission.
+        $contentrequestfeedbackenable = false;
+        if ($contentdata->isownedbyviewer && !$contentdata->contentflagrequestfeedbackactive) {
+            $contentrequestfeedbackenable = true;
+        }
+        $contentdata->contentrequestfeedbackenable = $contentrequestfeedbackenable;
+
+        // Check comment permission.
+        $contentdata->contentcommentenable = $permissions->addcomment ? true : false;
+
+        $contentexifinfo = array();
+        $contentmapenable = false;
+        $contentmetadataenable = false;
+        $metadatamake = '';
+        $metadatamodel = '';
+        $metadatafocal = '';
+        $metadataexposure = '';
+        $metadataaperture = '';
+        $metadataiso = '';
+        $contentgpslat = '';
+        $contentgpslng = '';
+        if ($contentdata->contenttype == content::TYPE_IMAGE) {
+            $contentexifinfo = content::get_image_exif_data(
+                    $permissions->activecmcontextid , 'mod_openstudio', 'content',
+                    $contentdata->fileid, '/', $contentdata->content);
+
+            // Show image GPS data if user requested it and it is available.
+            if (($contentdata->showextradata & content::INFO_GPSDATA) && !empty($contentexifinfo['GPSData'])) {
+                $contentmapenable = true;
+                $contentgpslat = $contentexifinfo['GPSData']['lat'];
+                $contentgpslng = $contentexifinfo['GPSData']['lng'];
+            }
+
+            // Show image EXIF metadata if user requested it and it is available.
+            if ($contentdata->showextradata & content::INFO_IMAGEDATA) {
+                $metadatamake = empty($contentexifinfo['Make']) ? '' : $contentexifinfo['Make'];
+
+                if (strlen($metadatamake) < 2) {
+                    $metadatamake = empty($contentexifinfo['UndefinedTag:0xA433']) ? '' : $contentexifinfo['UndefinedTag:0xA433'];
+                }
+
+                $metadatamodel = empty($contentexifinfo['Model']) ? '' : $contentexifinfo['Model'];
+
+                if (strlen($metadatamodel) < 2) {
+                    $metadatamodel = empty($contentexifinfo['UndefinedTag:0xA434']) ? '' : $contentexifinfo['UndefinedTag:0xA434'];
+                }
+
+                $metadatafocal = empty($contentexifinfo['FocalLengthIn35mmFilm']) ? '' : $contentexifinfo['FocalLengthIn35mmFilm'];
+
+                $metadataexposure = empty($contentexifinfo['ExposureTime']) ? '' : $contentexifinfo['ExposureTime'];
+
+                if (!empty($contentexifinfo['COMPUTED'])
+                    && !empty($contentexifinfo['COMPUTED']['ApertureFNumber'])) {
+                    $metadataaperture = $contentexifinfo['COMPUTED']['ApertureFNumber'];
+                } else {
+                    $metadataaperture = empty($contentexifinfo['FNumber']) ? '' : $contentexifinfo['FNumber'];
+
+                }
+
+                $metadataiso = empty($contentexifinfo['ISOSpeedRatings']) ? '' : $contentexifinfo['ISOSpeedRatings'];
+
+                if (!empty($metadatamake)
+                    || !empty($metadatamodel)
+                    || !empty($metadatafocal)
+                    || !empty($metadataexposure)
+                    || !empty($metadataaperture)
+                    || !empty($metadataiso)) {
+                    $contentmetadataenable = true;
+                }
+            }
+        }
+
+        // Check if maximize feature is enable.
+        $contentdata->maximizeenable = ($contentdata->contenttypeimage || $contentdata->contenttypeiframe);
+
+        $contentdata->metadatamake = $metadatamake;
+        $contentdata->metadatamodel = $metadatamodel;
+        $contentdata->metadatafocal = $metadatafocal;
+        $contentdata->metadataexposure = $metadataexposure;
+        $contentdata->metadataaperture = $metadataaperture;
+        $contentdata->metadataiso = $metadataiso;
+        $contentdata->contentmetadataenable = $contentmetadataenable;
+        $contentdata->contentgpslat = $contentgpslat;
+        $contentdata->contentgpslng = $contentgpslng;
+        $contentdata->contentmapenable = $contentmapenable;
+
+        // Render content versions.
+        $contentversions = array();
+        $hascontentversions = false;
+
+        if (!empty($contentdata->contentversions)) {
+            foreach ($contentdata->contentversions as $contentversion) {
+                $contentversion->vid = $contentdata->vid;
+                $contentversions[] = renderer_utils::content_details($cmid, $permissions, $contentversion, true);
+            }
+            $hascontentversions = true;
+        }
+
+        $contentdata->hascontentversions = $hascontentversions;
+        $contentdata->contentversions = $contentversions;
+
+        return $this->render_from_template('mod_openstudio/content_page', $contentdata);
     }
 
     /**

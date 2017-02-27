@@ -1,0 +1,70 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_openstudio/profile_bar_details_mobile
+
+    Profile bar template of the OpenStudio UI.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Example context (json):
+    {
+        "userpictureurl" : "../../../mod/openstudio/pix/people_rgb_32px.svg",
+        "commentsicon" : "../../../mod/openstudio/pix/comments_rgb_32px.svg",
+        "viewedicon" : "../../../mod/openstudio/pix/viewed_rgb_32px.svg",
+        "fullusername" : "Admin User",
+        "activedate" : "1 January 70, 08:00",
+        "flagscontentread" : "100",
+        "percentcompleted" : "70",
+        "myactivities" : "true"
+    }
+}}
+
+<div class="openstudio-profile-active-date" id="openstudio_profile_active_date">
+    <div class="openstudio-profile-last-active-date">
+        {{#str}} profilebarlastactivedate, mod_openstudio {{/str}}
+    </div>
+    <div class="openstudio-profile-own-date">
+        {{activedate}}
+    </div>
+</div>
+<div class="openstudio-profile-paticipation-content clearfix">
+    <div class="openstudio-profile-paticipation">
+        {{#str}} contentflagparticipation, mod_openstudio {{/str}}
+    </div>
+    <div id="profile_comment_view_mobile" class="openstudio-profile-comment-view">
+        {{>mod_openstudio/profile_bar_participation}}
+    </div>
+</div>
+
+<div class="openstudio-profile-progress-content">
+    <div class="openstudio-profile-progress-percent">
+        <div class="openstudio-profile-progress-title">
+            {{#str}} mystudioworkprogress, mod_openstudio {{/str}}
+        </div>
+        <div class="openstudio-profile-progress-bar">
+            {{>mod_openstudio/work_progress}}
+        </div>
+    </div>
+    <div id="profile_percent_mobile" class="openstudio-profile-progress-content-description">
+        {{>mod_openstudio/profile_bar_activities}}
+    </div>
+</div>

@@ -1,0 +1,56 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_openstudio/profile_bar_participation
+
+    Profile bar participation template of the OpenStudio UI.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Example context (json):
+    {
+        "commentsicon" : "../../../mod/openstudio/pix/comments_rgb_32px.svg",
+        "viewedicon" : "../../../mod/openstudio/pix/viewed_rgb_32px.svg",
+        "totalpostedcomments" : 5,
+        "flagscontentread" : 10
+    }
+}}
+
+<div class="openstudio-profile-comment">
+    <img src="{{{commentsicon}}}">
+    <span class="openstudio-profile-comment-text">
+        {{#str}}
+            contentflagxcommentsmade, mod_openstudio, {
+                "number": {{#quote}}{{totalpostedcomments}}{{/quote}}
+            }
+        {{/str}}
+    </span>
+</div>
+<div class="openstudio-own-view">
+    <img src="{{{viewedicon}}}">
+    <span class="openstudio-profile-view-text">
+        {{#str}}
+            contentflagxviewed, mod_openstudio, {
+                "number": {{#quote}}{{flagscontentread}}{{/quote}}
+            }
+        {{/str}}
+    </span>
+</div>

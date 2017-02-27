@@ -42,10 +42,18 @@
     <div class="openstudio-profile-user-picture">
         <img src="{{{userpictureurl}}}">
     </div>
-    <div class="openstudio-profile-head ">
-        <div class ="openstudio-profile-mypaticipation-content">
-            <a class="openstudio-profile-mypaticipation collapsed" data-toggle="collapse"
-            data-target="#profile_mypaticipation,#profile_comment_view,#profile_percent" >{{fullusername}}</a>
+    <div class="openstudio-profile-head clearfix">
+        <div class="openstudio-profile-mypaticipation-content">
+            <div class="openstudio-profile-profile-header">
+                <a id="openstudio_profile_fullusername" class="openstudio-profile-mypaticipation collapsed"
+                   data-toggle="collapse" data-target="#profile_mypaticipation, #profile_comment_view, #profile_percent" >
+                    {{fullusername}}
+                </a>
+                <a id="openstudio_profile_fullusername_mobile" class="openstudio-profile-mypaticipation collapsed"
+                   data-toggle="collapse" data-target="#openstudio_profile_bar_mobile" >
+                    {{fullusername}}
+                </a>
+            </div>
             <div id="profile_mypaticipation" class="openstudio-profile-date collapse">
                 <div class="openstudio-profile-last-active-date">
                     {{#str}} profilebarlastactivedate, mod_openstudio {{/str}}
@@ -55,56 +63,11 @@
                 </div>
             </div>
         </div>
-        <div class="openstudio-profile-paticipation-content">
-            <span class="openstudio-profile-paticipation">
-                {{#str}} contentflagparticipation, mod_openstudio {{/str}}
-            </span>
-            <div id="profile_comment_view" class="openstudio-profile-comment-view collapse">
-                <div class="openstudio-profile-comment">
-                    <img src="{{{commentsicon}}}">
-                    <div class="openstudio-profile-comment-text">
-                        {{#str}}
-                            contentflagxcommentsmade, mod_openstudio, {
-                                "number": {{#quote}}{{totalpostedcomments}}{{/quote}}
-                            }
-                        {{/str}}
-                     </div>
-                </div>
-                <div class="openstudio-own-view">
-                    <img src="{{{viewedicon}}}">
-                    <div class="openstudio-profile-view-text">
-                      {{#str}}
-                        contentflagxviewed, mod_openstudio, {
-                            "number": {{#quote}}{{flagscontentread}}{{/quote}}
-                        }
-                      {{/str}}
-                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="openstudio-profile-progress-content">
-            <div class="openstudio-profile-progress-percent">
-                <div class="openstudio-profile-progress-title">
-                    {{#str}} mystudioworkprogress, mod_openstudio {{/str}}
-                </div>
-                <div class="openstudio-profile-progress-bar">
-                    {{>mod_openstudio/work_progress}}
-                </div>
-            </div>
-            <div id="profile_percent" id="profile_description" class="openstudio-profile-progress-content-description collapse">
-            {{#myactivities}}
-                {{#activityitems}}
-                    <div class="openstudio-profile-block">{{{activityname}}}</div>
-                    <div class="openstudio-profile-progress"> 
-                        {{#activities}}
-                            <a class="openstudio-profile-progress-step {{#timemodified}} 
-                                content-block-active {{/timemodified}}" href="{{{contentediturl}}}" >
-                            </a>
-                        {{/activities}}
-                    </div>
-                {{/activityitems}}
-            {{/myactivities}}
-            </div>
-        </div>
-    </div>   
+    </div>
+    <div class="clearfix" id="openstudio_profile_bar">
+        {{>mod_openstudio/profile_bar_details}}
+    </div>
+    <div class="clearfix collapse" id="openstudio_profile_bar_mobile">
+        {{>mod_openstudio/profile_bar_details_mobile}}
+    </div>
 </div>

@@ -26,6 +26,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 use mod_openstudio\local\api\subscription;
+use mod_openstudio\local\api\flags;
 use mod_openstudio\local\util;
 
 require_once($CFG->dirroot . '/mod/openstudio/api/subscription.php');
@@ -195,4 +196,171 @@ class mod_openstudio_external extends external_api {
                 'warnings' => new external_warnings())
         );
     }
+
+    /**
+     * Returns description of method parameters
+     *
+     * @return external_function_parameters
+     */
+    public static function flag_content_parameters() {
+        return new external_function_parameters(array(
+                'cmid' => new external_value(PARAM_INT, 'Course module ID'),
+                'cid' => new external_value(PARAM_INT, 'Content ID'),
+                'fid' => new external_value(PARAM_INT, 'Flag ID'),
+                'mode' => new external_value(PARAM_TEXT, 'Flag mode'))
+        );
+    }
+
+    /**
+     * Flag a content.
+     *
+     * @param int $cmid Course module ID
+     * @param int $cid Content ID
+     * @param int $fid Flag ID
+     * @param text $mode Flag mode
+     * @return array
+     *  [
+     *      success: boolean,
+     *      warning: external_warnings object,
+     *      mode: text,
+     *      flagtext: text,
+     *      flagremoveclass: text,
+     *      flagaddclass: text,
+     *      fid: int
+     *  ]
+     */
+    public static function flag_content($cmid, $cid, $fid, $mode) {
+        global $USER;
+
+        $context = context_module::instance($cmid);
+        external_api::validate_context($context);
+
+        $results = array();
+        $warnings = array();
+        $success = false;
+        $flagtext = '';
+        $flagremoveclass = '';
+        $flagaddclass = '';
+        $mode = trim($mode);
+        $params = self::validate_parameters(self::flag_content_parameters(), array(
+            'cmid' => $cmid,
+            'cid' => $cid,
+            'fid' => $fid,
+            'mode' => $mode));
+
+        $coursedata = util::render_page_init($params['cmid'], array('mod/openstudio:view'));
+        $cm = $coursedata->cm;
+
+        $result = flags::toggle($params['cid'], $params['fid'], $mode, $USER->id);
+
+        if ($result) {
+            $success = true;
+            // Log page action.
+            if ($params['fid'] == 'on') {
+                $logaction = false;
+                switch ($params['fid']) {
+                    case flags::FAVOURITE:
+                        $logaction = 'content_favourite_flagged';
+                        $logtext = 'content favourite flagged';
+                        break;
+
+                    case flags::MADEMELAUGH:
+                        $logaction = 'content_smile_flagged';
+                        $logtext = 'content smile flagged';
+                        break;
+
+                    case flags::INSPIREDME:
+                        $logaction = 'content_inspire_flagged';
+                        $logtext = 'content inspire flagged';
+                        break;
+                }
+
+                if ($logaction !== false) {
+                    util::trigger_event(
+                        $cm->id, $logaction, '', util::get_page_name_and_params(true), $logtext);
+                }
+
+            }
+
+            $total = flags::count_for_content($params['cid'], $params['fid']) + 0;
+            switch ($params['fid']) {
+                case flags::FAVOURITE:
+                    $flagtext = get_string('contentflagxfavourites', 'openstudio',
+                            array('number' => $total));
+                    switch ($mode) {
+                        case 'on':
+                            $flagremoveclass = 'openstudio-content-view-icon-favourite';
+                            $flagaddclass = 'openstudio-content-view-icon-favourite-active';
+                        break;
+                        case 'off':
+                            $flagremoveclass = 'openstudio-content-view-icon-favourite-active';
+                            $flagaddclass = 'openstudio-content-view-icon-favourite';
+                            break;
+                    }
+                    break;
+                case flags::MADEMELAUGH:
+                    $flagtext = get_string('contentflagxsmiles', 'openstudio',
+                            array('number' => $total));
+                    switch ($mode) {
+                        case 'on':
+                            $flagremoveclass = 'openstudio-content-view-icon-participation';
+                            $flagaddclass = 'openstudio-content-view-icon-participation-active';
+                            break;
+                        case 'off':
+                            $flagremoveclass = 'openstudio-content-view-icon-participation-active';
+                            $flagaddclass = 'openstudio-content-view-icon-participation';
+                            break;
+                    }
+                    break;
+                case flags::INSPIREDME:
+                    $flagtext = get_string('contentflagxinspired', 'openstudio',
+                            array('number' => $total));
+                    switch ($mode) {
+                        case 'on':
+                            $flagremoveclass = 'openstudio-content-view-icon-inspiration';
+                            $flagaddclass = 'openstudio-content-view-icon-inspiration-active';
+                            break;
+                        case 'off':
+                            $flagremoveclass = 'openstudio-content-view-icon-inspiration-active';
+                            $flagaddclass = 'openstudio-content-view-icon-inspiration';
+                            break;
+                    }
+                    break;
+            }
+        } else {
+            $warnings[] = array(
+                'item' => 'module',
+                'itemid' => $params['cmid'],
+                'warningcode' => 'cannotflagcontent',
+                'message' => 'Flag content error!');
+        }
+
+        $results['success'] = $success;
+        $results['warnings'] = $warnings;
+        $results['mode'] = $mode == 'on' ? 'off' : 'on';
+        $results['flagtext'] = $flagtext;
+        $results['flagremoveclass'] = $flagremoveclass;
+        $results['flagaddclass'] = $flagaddclass;
+        $results['fid'] = $params['fid'];
+
+        return $results;
+    }
+
+    /**
+     * Returns description of method result value
+     *
+     * @return external_description
+     */
+    public static function flag_content_returns() {
+        return new external_single_structure(array(
+                'success' => new external_value(PARAM_BOOL, 'flag successfully'),
+                'mode' => new external_value(PARAM_TEXT, 'flag mode'),
+                'flagtext' => new external_value(PARAM_TEXT, 'flag text'),
+                'flagremoveclass' => new external_value(PARAM_TEXT, 'flag remove class'),
+                'flagaddclass' => new external_value(PARAM_TEXT, 'flag add new class'),
+                'fid' => new external_value(PARAM_INT, 'flag ID'),
+                'warnings' => new external_warnings())
+        );
+    }
+
 }
