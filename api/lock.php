@@ -31,7 +31,7 @@ use mod_openstudio\local\api\lock;
  * $return bool Return true or false depending on the operation success.
  */
 function studio_api_lock_slot($userid, $slotid, $locktype) {
-    global $DB;
+    global $DB, $USER;
     $success = false;
 
     // Get course module id from $slotid.
@@ -40,8 +40,8 @@ function studio_api_lock_slot($userid, $slotid, $locktype) {
     $context = context_module::instance($cm->id);
 
     // Check if the user has permissions for this process.
-    if (has_capability('mod/studio:canlock', $context, $userid) ||
-            has_capability('mod/studio:canlockothers', $context, $userid)) {
+    if ((has_capability('mod/openstudio:canlock', $context, $userid) && $slot->userid == $USER->id) ||
+            has_capability('mod/openstudio:canlockothers', $context, $userid)) {
         $success = studio_api_lock_slot_system($userid, $slotid, $locktype);
     }
 

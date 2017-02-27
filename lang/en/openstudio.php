@@ -66,6 +66,8 @@ $string['openstudio:canlock'] = 'Can lock';
 $string['openstudio:canlockothers'] = 'Can lock others';
 $string['event:contentlocked'] = 'Content locked';
 $string['event:contentunlocked'] = 'Content unlocked';
+$string['errorcontentlock'] = 'Lock content error!';
+$string['errorcontentunlock'] = 'Unlock content error!';
 
 $string['event:foldercreated'] = 'Folder created';
 $string['event:foldercontentcreated'] = 'Folder content created';

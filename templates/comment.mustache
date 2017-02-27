@@ -81,7 +81,10 @@
         </div>
     </div>
 
-    <input id="id_addcomment" name="addcommentbutton"
+    <input id="id_addcomment" name="addcommentbutton" class="openstudio-content-actions
+           {{#locked}}
+                locked
+           {{/locked}}"
            value="{{#str}} contentcommentsaddnewcomment, mod_openstudio {{/str}}" type="button">
 
     <div class="openstudio-comment-form">

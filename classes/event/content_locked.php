@@ -34,6 +34,8 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2015 The Open University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+require_once($CFG->dirroot.'/mod/openstudio/api/lock.php');
 class content_locked extends \core\event\base {
 
     /**

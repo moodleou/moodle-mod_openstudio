@@ -26,6 +26,7 @@
  */
 
 use mod_openstudio\local\api\content;
+use mod_openstudio\local\api\lock;
 use mod_openstudio\local\api\stream;
 use mod_openstudio\local\util;
 use mod_openstudio\local\util\defaults;
@@ -237,6 +238,7 @@ if ($finalviewpermissioncheck) {
                 $content = studio_api_lock_determine_lock_status($content);
             }
 
+            $content->locked = ($content->locktype == lock::ALL);
             $contentid = (int) $content->id;
 
             if ($contentid !== 0) {

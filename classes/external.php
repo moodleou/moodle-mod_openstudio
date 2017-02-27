@@ -32,10 +32,12 @@ use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\contentversion;
 use mod_openstudio\local\renderer_utils;
 use mod_openstudio\local\api\comments;
+use mod_openstudio\local\api\lock;
 
 require_once($CFG->dirroot . '/mod/openstudio/api/subscription.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/user.php');
 require_once($CFG->libdir . '/externallib.php');
+require_once($CFG->dirroot . '/mod/openstudio/api/lock.php');
 
 /**
  * OpenStudio external functions
@@ -749,6 +751,136 @@ class mod_openstudio_external extends external_api {
     public static function delete_content_returns() {
         return new external_single_structure(array(
                 'success' => new external_value(PARAM_BOOL, 'Unlock successfully'))
+        );
+    }
+
+    /**
+     * Returns description of method parameters
+     *
+     * @return external_function_parameters
+     */
+    public static function lock_parameters() {
+        return new external_function_parameters(array(
+                'cmid' => new external_value(PARAM_INT, 'Course module ID'),
+                'cid' => new external_value(PARAM_INT, 'Content ID'),
+                'locktype' => new external_value(PARAM_INT, 'Lock type'))
+        );
+    }
+
+    /*
+     * Lock content
+     *
+     * @param int $cmid Course module ID
+     * @param int $cid Content ID
+     * @param int $locktype Lock type
+     * @return array
+     *  [
+     *      cid: int
+     *  ]
+     * @throws moodle_exception
+     */
+    public static function lock($cmid, $cid, $locktype) {
+
+        $context = context_module::instance($cmid);
+        self::validate_context($context);
+        $params = self::validate_parameters(self::lock_parameters(), array(
+                'cmid' => $cmid,
+                'cid' => $cid,
+                'locktype' => $locktype));
+
+        global $USER;
+        $userid = $USER->id;
+
+        $success = false;
+
+        if ($locktype == lock::ALL) {
+            $success = studio_api_lock_slot($userid, $params['cid'], $params['locktype']);
+            util::trigger_event($params['cmid'], 'content_locked', "{$userid}/{$params['locktype']}",
+                    "view.php?id={$params['cid']}", util::format_log_info($params['cid']));
+        }
+
+        if (!$success) {
+            throw new moodle_exception('errorcontentlock', 'openstudio');
+        }
+
+        $result['cid'] = $params['cid'];
+
+        return $result;
+    }
+
+    /**
+     * Returns description of method result value
+     *
+     * @return external_description
+     */
+    public static function lock_returns() {
+        return new external_single_structure(array(
+                'cid' => new external_value(PARAM_INT, 'Locked content ID'))
+        );
+    }
+
+    /**
+     * Returns description of method parameters
+     *
+     * @return external_function_parameters
+     */
+    public static function unlock_parameters() {
+        return new external_function_parameters(array(
+                'cmid' => new external_value(PARAM_INT, 'Course module ID'),
+                'cid' => new external_value(PARAM_INT, 'Content ID'),
+                'locktype' => new external_value(PARAM_INT, 'Lock type'))
+        );
+    }
+
+    /**
+     * Unlock content
+     *
+     * @param int $cmid Course module ID
+     * @param int $cid Content ID
+     * @param int $locktype Lock type
+     * @return array
+     *  [
+     *      cid: int
+     *  ]
+     * @throws moodle_exception
+     */
+    public static function unlock($cmid, $cid, $locktype) {
+        $context = context_module::instance($cmid);
+        self::validate_context($context);
+
+        $params = self::validate_parameters(self::unlock_parameters(), array(
+                'cmid' => $cmid,
+                'cid' => $cid,
+                'locktype' => $locktype));
+
+        global $USER;
+        $userid = $USER->id;
+
+        $success = false;
+
+        if ($locktype == lock::NONE) {
+            $success = studio_api_lock_slot($userid, $params['cid'], $params['locktype']);
+            util::trigger_event($params['cmid'], 'content_unlocked', "{$userid}/{$params['locktype']}",
+                    "view.php?id={$params['cid']}", util::format_log_info($params['cid']));
+        }
+
+        if (!$success) {
+            throw new moodle_exception('errorcontentunlock', 'openstudio');
+        }
+
+        $result['cid'] = $params['cid'];
+
+        return $result;
+    }
+
+    /**
+     * Returns description of method result value
+     *
+     * @return external_description
+     */
+    public static function unlock_returns() {
+        return new external_single_structure(array(
+                'cid' => new external_value(PARAM_INT, 'Unlocked content ID'))
         );
     }
 }

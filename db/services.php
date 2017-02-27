@@ -88,6 +88,24 @@ $functions = array(
             'ajax' => true,
             'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
             'capabilities' => 'mod/openstudio:addcomment'
+    ),
+    'mod_openstudio_external_lock' => array(
+        'classname' => 'mod_openstudio_external',
+        'methodname' => 'lock',
+        'description' => 'Lock content',
+        'type' => 'write',
+        'ajax' => true,
+        'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
+        'capabilities' => 'mod/openstudio:view'
+    ),
+    'mod_openstudio_external_unlock' => array(
+        'classname' => 'mod_openstudio_external',
+        'methodname' => 'unlock',
+        'description' => 'Unlock content',
+        'type' => 'write',
+        'ajax' => true,
+        'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
+        'capabilities' => 'mod/openstudio:view'
     )
 );
 
@@ -101,7 +119,9 @@ $services = array(
             'mod_openstudio_external_delete_content',
             'mod_openstudio_external_add_comment',
             'mod_openstudio_external_flag_comment',
-            'mod_openstudio_external_delete_comment'),
+            'mod_openstudio_external_delete_comment',
+            'mod_openstudio_external_lock',
+            'mod_openstudio_external_unlock'),
         'restrictedusers' => 0,
         'enabled' => 1,
         'shortname' => 'openstudio_service',

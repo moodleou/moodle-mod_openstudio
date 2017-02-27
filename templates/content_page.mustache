@@ -28,6 +28,8 @@
 
     Example context (json):
     {
+        "locked": "0",
+        "contentlockenable": true,
         "placeholdertext" : "My module",
         "userpictureurl" : "../../../mod/openstudio/pix/people_rgb_32px.svg",
         "activedate" : "5/10/16, 19:22",
@@ -151,7 +153,11 @@
                 </div>
             </div>
             <div class="openstudio-content-view-animation-icons clearfix">
-                <div class="openstudio-content-view-animation-icons-left">
+                <div class="openstudio-content-view-animation-icons-left openstudio-content-actions
+                    {{#locked}}
+                        locked
+                    {{/locked}}
+                ">
                     <a id="content_view_icon_{{contentflagfavourite}}"
                        data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagfavourite}}"
                        data-mode="{{#contentflagfavouriteactive}}off{{/contentflagfavouriteactive}}
@@ -212,8 +218,12 @@
                     <div class="openstudio-content-view-actions-icons-left">
                         {{#contenteditenable}}
                             <a href="{{{contenteditlink}}}" class="openstudio-content-view-edit-button-link">
-                                <input id="id_editbutton" name="editbutton" class="openstudio-content-view-edit-button"
-                                       value="{{#str}}contentactioneditname, mod_openstudio{{/str}}" type="button">
+                                <input id="id_editbutton" name="editbutton" class="openstudio-content-view-edit-button
+                                    openstudio-content-actions
+                                    {{#locked}}
+                                        locked
+                                    {{/locked}}"
+                                    value="{{#str}}contentactioneditname, mod_openstudio{{/str}}" type="button">
                             </a>
                         {{/contenteditenable}}
                         {{#contentdeleteenable}}
@@ -221,9 +231,17 @@
                                    value="{{#str}}contentactiondelete, mod_openstudio{{/str}}" type="button">
                         {{/contentdeleteenable}}
                         {{#contentlockenable}}
-                            <a href="{{{contentlocklink}}}">
-                                <input id="id_lockbutton" name="lockbutton"
-                                       value="{{#str}}contentactionlockname, mod_openstudio{{/str}}" type="button">
+                            <a>
+                                <input id="id_lockbutton" name="lockbutton" type="button"
+                                    {{#locked}}
+                                       data-lockstate="locked"
+                                        value="{{#str}}contentactionunlockname, mod_openstudio{{/str}}"
+                                    {{/locked}}
+                                    {{^locked}}
+                                       data-lockstate="unlocked"
+                                        value="{{#str}}contentactionlockname, mod_openstudio{{/str}}"
+                                    {{/locked}}
+                                >
                             </a>
                         {{/contentlockenable}}
                     </div>

@@ -744,19 +744,20 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $contentdata->contentcopyenable = $contentdata->contentcopycount > 1 ? true : false;
 
         // Check lock permission.
-        $contentlockenable = false;
-        $contentlocklink = '';
-        if ($permissions->canlockothers || $permissions->managecontent) {
-            $contentlockenable = true;
-            $contentlocklink = new moodle_url('/mod/openstudio/redirector.php',
-                array('action' => 'content',
-                    'action-value' => 'lock',
-                    'id' => $cmid,
-                    'sid' => $contentdata->id,
-                    'locktype' => lock::ALL));
+        $locked = ($contentdata->locktype == lock::ALL);
+        $lockconst = array(
+                'NONE' => lock::NONE,
+                'ALL' => lock::ALL);
+
+        // Check permission for processing lock.
+        if ($contentdata->isownedbyviewer) {
+            $contentlockenable = $permissions->canlock;
+        } else {
+            $contentlockenable = $permissions->managecontent;
         }
+
         $contentdata->contentlockenable = $contentlockenable;
-        $contentdata->contentlocklink = $contentlocklink;
+        $contentdata->locked = $locked;
 
         // Check edit/delete content permission.
         $contenteditenable = false;
@@ -917,6 +918,14 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 ]));
             }
         }
+
+        $PAGE->requires->strings_for_js(
+            array('contentactionunlockname', 'contentactionlockname'), 'mod_openstudio');
+
+        $this->page->requires->js_call_amd('mod_openstudio/lock', 'init', [[
+                'cmid' => $cmid,
+                'cid' => $contentdata->id,
+                'CONST' => $lockconst]]);
 
         return $this->render_from_template('mod_openstudio/content_page', $contentdata);
     }
