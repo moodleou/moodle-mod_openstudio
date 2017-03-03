@@ -440,19 +440,19 @@ class mod_openstudio_stream_testcase extends advanced_testcase {
                 break;
             }
         }
-        $this->assertEquals(true, studio_api_flags_toggle($contenttoflag[0],
+        $this->assertEquals(true, mod_openstudio\local\api\flags::toggle($contenttoflag[0],
                 mod_openstudio\local\api\flags::FAVOURITE,
                 'on', $this->users->students->nine->id));
-        $this->assertEquals(true, studio_api_flags_toggle($contenttoflag[1],
+        $this->assertEquals(true, mod_openstudio\local\api\flags::toggle($contenttoflag[1],
                 mod_openstudio\local\api\flags::FAVOURITE,
                 'on', $this->users->students->nine->id));
-        $this->assertEquals(true, studio_api_flags_toggle($contenttoflag[2],
+        $this->assertEquals(true, mod_openstudio\local\api\flags::toggle($contenttoflag[2],
                 mod_openstudio\local\api\flags::FAVOURITE,
                 'on', $this->users->students->nine->id));
-        $this->assertEquals(true, studio_api_flags_toggle($contenttoflag[3],
+        $this->assertEquals(true, mod_openstudio\local\api\flags::toggle($contenttoflag[3],
                 mod_openstudio\local\api\flags::FAVOURITE,
                 'on', $this->users->students->eight->id));
-        $this->assertEquals(true, studio_api_flags_toggle($contenttoflag[4],
+        $this->assertEquals(true, mod_openstudio\local\api\flags::toggle($contenttoflag[4],
                 mod_openstudio\local\api\flags::FAVOURITE,
                 'on', $this->users->students->eight->id));
 

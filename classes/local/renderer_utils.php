@@ -112,7 +112,7 @@ class renderer_utils {
         $userprogressdata = studio_api_user_get_activity_status($openstudioid, $contentowner->id);
 
         $activedate = userdate($userprogressdata, get_string('strftimerecent', 'openstudio'));
-        $flagsdata = studio_api_flags_get_user_flag_total($openstudioid, $contentowner->id);
+        $flagsdata = flags::count_by_user($openstudioid, $contentowner->id);
 
         if (array_key_exists(flags::READ_CONTENT, $flagsdata)) {
             $flagscontentread = $flagsdata[flags::READ_CONTENT]->count;

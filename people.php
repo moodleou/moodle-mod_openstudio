@@ -121,7 +121,7 @@ if (!empty($peopledatatemp)) {
         $person->viewuserworkurl = new moodle_url('/mod/openstudio/view.php',
                     array('id' => $id, 'vuid' => $person->id, 'vid' => content::VISIBILITY_PRIVATE));
 
-        $flagsdata = studio_api_flags_get_user_flag_total($cminstance->id, $person->id);
+        $flagsdata = flags::count_by_user($cminstance->id, $person->id);
         $flagscontentread = 0;
 
         if (array_key_exists(flags::READ_CONTENT, $flagsdata)) {

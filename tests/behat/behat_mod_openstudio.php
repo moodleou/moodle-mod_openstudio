@@ -278,22 +278,22 @@ EOF;
                     switch ($leveldata->name) {
                         case 'contentxyz1':
                             $DB->set_field('openstudio_contents', 'contenttype', content::TTYPE_IMAGE, array('id' => $contentid));
-                            studio_api_flags_toggle($contentid, flags::FAVOURITE, 'on', $user->id);
+                            flags::toggle($contentid, flags::FAVOURITE, 'on', $user->id);
                             break;
 
                         case 'contentxyz2':
                             $DB->set_field('openstudio_contents', 'contenttype', content::TYPE_VIDEO, array('id' => $contentid));
-                            studio_api_flags_toggle($contentid, flags::NEEDHELP, 'on', $user->id);
+                            flags::toggle($contentid, flags::NEEDHELP, 'on', $user->id);
                             break;
 
                         case 'contentxyz3':
                             $DB->set_field('openstudio_contents', 'contenttype', content::TYPE_AUDIO, array('id' => $contentid));
-                            studio_api_flags_toggle($contentid, flags::MADEMELAUGH, 'on', $user->id);
+                            flags::toggle($contentid, flags::MADEMELAUGH, 'on', $user->id);
                             break;
 
                         case 'contentxyz4':
                             $DB->set_field('openstudio_contents', 'contenttype', content::TYPE_DOCUMENT, array('id' => $contentid));
-                            studio_api_flags_toggle($contentid, flags::INSPIREDME, 'on', $user->id);
+                            flags::toggle($contentid, flags::INSPIREDME, 'on', $user->id);
                             break;
 
                         case 'contentxyz5':

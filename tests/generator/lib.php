@@ -25,6 +25,7 @@ use mod_openstudio\local\api\levels;
 use mod_openstudio\local\api\comments;
 use mod_openstudio\local\api\folder;
 use mod_openstudio\local\api\template;
+use mod_openstudio\local\api\flags;
 
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
@@ -585,17 +586,15 @@ class mod_openstudio_generator extends testing_module_generator {
     }
 
     public function create_flag($flagdata) {
-        if (!isset($flagdata['contentid'])) {
-            $flagdata['contentid'] = 0;
+        if (isset($flagdata['personid'])) {
+            return flags::user_toggle($flagdata['personid'], $flagdata['flagid'], 'on', $flagdata['userid'], true);
         }
-        if (!isset($flagdata['personid'])) {
-            $flagdata['personid'] = 0;
+        if (isset($flagdata['commentid'])) {
+            if (!isset($flagdata['contentid'])) {
+                $flagdata['contentid'] = 0;
+            }
+            return flags::comment_toggle($flagdata['contentid'], $flagdata['commentid'], $flagdata['userid'], true);
         }
-        if (!isset($flagdata['commentid'])) {
-            $flagdata['commentid'] = null;
-        }
-        return studio_api_flags_toggle_internal($flagdata['contentid'], $flagdata['personid'],
-                $flagdata['commentid'], $flagdata['flagid'], 'on', $flagdata['userid'], true);
+        return flags::toggle($flagdata['contentid'], $flagdata['flagid'], 'on', $flagdata['userid'], true);
     }
-
 }

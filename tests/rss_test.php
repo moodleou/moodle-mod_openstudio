@@ -230,19 +230,19 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
                     $this->studiolevels->id, $this->users->students->one->id, $this->singleentrydata);
 
             // Let's add eight flags to each slot. 4 FAVOURITES & 4 MADEMELAUGH.
-            studio_api_flags_toggle(${'pbslot' . $i}, mod_openstudio\local\api\flags::FAVOURITE,
+            mod_openstudio\local\api\flags::toggle(${'pbslot' . $i}, mod_openstudio\local\api\flags::FAVOURITE,
                     'on', $this->users->students->three->id);
-            studio_api_flags_toggle(${'pbslot' . $i}, mod_openstudio\local\api\flags::FAVOURITE,
+            mod_openstudio\local\api\flags::toggle(${'pbslot' . $i}, mod_openstudio\local\api\flags::FAVOURITE,
                     'on', $this->users->students->four->id);
-            studio_api_flags_toggle(${'pbslot' . $i}, mod_openstudio\local\api\flags::FAVOURITE,
+            mod_openstudio\local\api\flags::toggle(${'pbslot' . $i}, mod_openstudio\local\api\flags::FAVOURITE,
                     'on', $this->users->students->five->id);
-            studio_api_flags_toggle(${'pbslot' . $i}, mod_openstudio\local\api\flags::MADEMELAUGH,
+            mod_openstudio\local\api\flags::toggle(${'pbslot' . $i}, mod_openstudio\local\api\flags::MADEMELAUGH,
                     'on', $this->users->students->six->id);
-            studio_api_flags_toggle(${'pbslot' . $i}, mod_openstudio\local\api\flags::MADEMELAUGH,
+            mod_openstudio\local\api\flags::toggle(${'pbslot' . $i}, mod_openstudio\local\api\flags::MADEMELAUGH,
                     'on', $this->users->students->seven->id);
-            studio_api_flags_toggle(${'pbslot' . $i}, mod_openstudio\local\api\flags::MADEMELAUGH,
+            mod_openstudio\local\api\flags::toggle(${'pbslot' . $i}, mod_openstudio\local\api\flags::MADEMELAUGH,
                     'on', $this->users->students->eight->id);
-            studio_api_flags_toggle(${'pbslot' . $i}, mod_openstudio\local\api\flags::MADEMELAUGH,
+            mod_openstudio\local\api\flags::toggle(${'pbslot' . $i}, mod_openstudio\local\api\flags::MADEMELAUGH,
                     'on', $this->users->students->nine->id);
 
             // So time modified is different.
@@ -296,7 +296,7 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
         sleep(1);
         // Randomly picked $pbslot18 from those created in this function above.
         mod_openstudio\local\api\content::update($this->users->students->one->id, $pbslot18, $this->singleentrydata);
-        studio_api_flags_toggle($pbslot18, mod_openstudio\local\api\flags::MADEMELAUGH,
+        mod_openstudio\local\api\flags::toggle($pbslot18, mod_openstudio\local\api\flags::MADEMELAUGH,
                 'on', $this->users->students->ten->id);
         // Let's query everything again and make sure $pbslot18 is the first result that comes back.
         $pinboardrssslots2 = studio_api_rss_pinboard($this->users->students->one->id,
@@ -343,13 +343,17 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
                             $this->users->students->one->id, 3, $slotlevelid, $data); // Level 3 is for slots.
 
                     // Let's add some flags to each slot.
-                    studio_api_flags_toggle($slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::FAVOURITE,
+                    mod_openstudio\local\api\flags::toggle(
+                            $slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::FAVOURITE,
                             'on', $this->users->students->three->id);
-                    studio_api_flags_toggle($slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::INSPIREDME,
+                    mod_openstudio\local\api\flags::toggle(
+                            $slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::INSPIREDME,
                             'on', $this->users->students->four->id);
-                    studio_api_flags_toggle($slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::NEEDHELP,
+                    mod_openstudio\local\api\flags::toggle(
+                            $slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::NEEDHELP,
                             'on', $this->users->students->five->id);
-                    studio_api_flags_toggle($slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::MADEMELAUGH,
+                    mod_openstudio\local\api\flags::toggle(
+                            $slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::MADEMELAUGH,
                             'on', $this->users->students->six->id);
 
                     // So time modified is different.
@@ -428,13 +432,17 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
                             $this->users->students->eight->id, 3, $slotlevelid, $data); // Level 3 is for slots.
 
                     // Let's add some flags to each slot.
-                    studio_api_flags_toggle($slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::FAVOURITE,
+                    mod_openstudio\local\api\flags::toggle(
+                            $slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::FAVOURITE,
                             'on', $this->users->students->three->id);
-                    studio_api_flags_toggle($slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::INSPIREDME,
+                    mod_openstudio\local\api\flags::toggle(
+                            $slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::INSPIREDME,
                             'on', $this->users->students->four->id);
-                    studio_api_flags_toggle($slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::NEEDHELP,
+                    mod_openstudio\local\api\flags::toggle(
+                            $slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::NEEDHELP,
                             'on', $this->users->students->five->id);
-                    studio_api_flags_toggle($slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::MADEMELAUGH,
+                    mod_openstudio\local\api\flags::toggle(
+                            $slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::MADEMELAUGH,
                             'on', $this->users->students->six->id);
 
                     // So time modified is different.
@@ -516,13 +524,17 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
                     $slots[$slotlevelid][$slotcount + 1] = mod_openstudio\local\api\content::create(
                             $this->studiolevels->id, $this->users->students->six->id, 3, $slotlevelid, $data);
                     // Let's add some flags to each slot.
-                    studio_api_flags_toggle($slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::FAVOURITE,
+                    mod_openstudio\local\api\flags::toggle(
+                            $slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::FAVOURITE,
                             'on', $this->users->students->three->id);
-                    studio_api_flags_toggle($slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::INSPIREDME,
+                    mod_openstudio\local\api\flags::toggle(
+                            $slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::INSPIREDME,
                             'on', $this->users->students->four->id);
-                    studio_api_flags_toggle($slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::NEEDHELP,
+                    mod_openstudio\local\api\flags::toggle(
+                            $slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::NEEDHELP,
                             'on', $this->users->students->five->id);
-                    studio_api_flags_toggle($slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::MADEMELAUGH,
+                    mod_openstudio\local\api\flags::toggle(
+                            $slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::MADEMELAUGH,
                             'on', $this->users->students->nine->id);
 
                     // So time modified is different.
@@ -564,19 +576,19 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
         $myslotid = mod_openstudio\local\api\content::create_in_pinboard(
                 $this->studiolevels->id, $this->users->students->three->id, $this->singleentrydata);
         // Let's add eight flags to each slot. 3 FAVOURITES & 4 MADEMELAUGH. CONCLUSION: TOTAL = 7.
-        studio_api_flags_toggle(
+        mod_openstudio\local\api\flags::toggle(
                 $myslotid, mod_openstudio\local\api\flags::FAVOURITE, 'on',  $this->users->students->one->id);
-        studio_api_flags_toggle(
+        mod_openstudio\local\api\flags::toggle(
                 $myslotid, mod_openstudio\local\api\flags::FAVOURITE, 'on', $this->users->students->four->id);
-        studio_api_flags_toggle(
+        mod_openstudio\local\api\flags::toggle(
                 $myslotid, mod_openstudio\local\api\flags::FAVOURITE, 'on', $this->users->students->five->id);
-        studio_api_flags_toggle(
+        mod_openstudio\local\api\flags::toggle(
                 $myslotid, mod_openstudio\local\api\flags::MADEMELAUGH, 'on', $this->users->students->six->id);
-        studio_api_flags_toggle(
+        mod_openstudio\local\api\flags::toggle(
                 $myslotid, mod_openstudio\local\api\flags::MADEMELAUGH, 'on', $this->users->students->ten->id);
-        studio_api_flags_toggle(
+        mod_openstudio\local\api\flags::toggle(
                 $myslotid, mod_openstudio\local\api\flags::MADEMELAUGH, 'on', $this->users->students->eight->id);
-        studio_api_flags_toggle(
+        mod_openstudio\local\api\flags::toggle(
                 $myslotid, mod_openstudio\local\api\flags::MADEMELAUGH, 'on', $this->users->students->nine->id);
 
         // Should not be false.

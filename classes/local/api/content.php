@@ -37,7 +37,6 @@ require_once($CFG->dirroot . '/mod/openstudio/api/tags.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/tracking.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/search.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/item.php');
-require_once($CFG->dirroot . '/mod/openstudio/api/flags.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/group.php');
 
 
@@ -852,10 +851,7 @@ EOF;
             }
 
             // Delete all flags associated with content.
-            $result = \studio_api_flags_clear_flags($contentid);
-            if ($result === false) {
-                throw new \Exception('Failed to delete content flags.');
-            }
+            flags::clear($contentid);
 
             // Update tracking.
             \studio_api_tracking_log_action($contentid, tracking::DELETE_CONTENT, $userid);

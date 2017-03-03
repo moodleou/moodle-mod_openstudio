@@ -210,22 +210,22 @@ class mod_openstudio_subscription_testcase extends openstudio_testcase {
      */
     public function add_flags() {
         // Add 3 flags to each of our 2 slots..
-        studio_api_flags_toggle($this->contentid, mod_openstudio\local\api\flags::FAVOURITE,
+        mod_openstudio\local\api\flags::toggle($this->contentid, mod_openstudio\local\api\flags::FAVOURITE,
                 'on', $this->users->students->one->id);
         sleep(1);
-        studio_api_flags_toggle($this->contentid, mod_openstudio\local\api\flags::FAVOURITE,
+        mod_openstudio\local\api\flags::toggle($this->contentid, mod_openstudio\local\api\flags::FAVOURITE,
                 'on', $this->users->students->four->id);
         sleep(1);
-        studio_api_flags_toggle($this->contentid, mod_openstudio\local\api\flags::FAVOURITE,
+        mod_openstudio\local\api\flags::toggle($this->contentid, mod_openstudio\local\api\flags::FAVOURITE,
                 'on', $this->users->students->five->id);
         sleep(1);
-        studio_api_flags_toggle($this->pbslotid, mod_openstudio\local\api\flags::MADEMELAUGH,
+        mod_openstudio\local\api\flags::toggle($this->pbslotid, mod_openstudio\local\api\flags::MADEMELAUGH,
                 'on', $this->users->students->six->id);
         sleep(1);
-        studio_api_flags_toggle($this->pbslotid, mod_openstudio\local\api\flags::MADEMELAUGH,
+        mod_openstudio\local\api\flags::toggle($this->pbslotid, mod_openstudio\local\api\flags::MADEMELAUGH,
                 'on', $this->users->students->ten->id);
         sleep(1);
-        studio_api_flags_toggle($this->pbslotid, mod_openstudio\local\api\flags::MADEMELAUGH,
+        mod_openstudio\local\api\flags::toggle($this->pbslotid, mod_openstudio\local\api\flags::MADEMELAUGH,
                 'on', $this->users->students->eight->id);
         sleep(1);
     }

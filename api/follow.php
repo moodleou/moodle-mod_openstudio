@@ -69,7 +69,7 @@ function studio_api_follow_is_following_user($personid, $userid) {
 function studio_api_follow_slot($slotid, $userid, $follow = true, $returnstudioflagid = false) {
     $toggle = $follow ? 'on' : 'off';
 
-    return studio_api_flags_toggle(
+    return mod_openstudio\local\api\flags::toggle(
             $slotid, STUDIO_PARTICPATION_FLAG_FOLLOW_SLOT, $toggle, $userid, null, $returnstudioflagid);
 }
 
@@ -87,6 +87,6 @@ function studio_api_follow_slot($slotid, $userid, $follow = true, $returnstudiof
 function studio_api_follow_user($personid, $userid, $follow = true, $returnstudioflagid = false) {
     $toggle = $follow ? 'on' : 'off';
 
-    return studio_api_flags_user_toggle(
+    return mod_openstudio\local\api\flags::user_toggle(
             $personid, STUDIO_PARTICPATION_FLAG_FOLLOW_USER, $toggle, $userid, $returnstudioflagid);
 }

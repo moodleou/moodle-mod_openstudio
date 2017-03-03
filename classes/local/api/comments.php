@@ -77,7 +77,7 @@ class comments {
             }
 
             // Update slot flag.
-            studio_api_flags_toggle($contentid, flags::COMMENT, 'on', $userid, $folderid);
+            flags::comment_toggle($contentid, flags::COMMENT, 'on', $userid, $folderid);
             if ($folderid) {
                 studio_api_tracking_log_action($folderid, tracking::MODIFY_FOLDER, $userid);
             }

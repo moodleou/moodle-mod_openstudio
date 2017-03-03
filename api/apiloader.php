@@ -27,7 +27,6 @@ require_once(__DIR__.'/language.php');
 require_once(__DIR__.'/user.php');
 require_once(__DIR__.'/group.php');
 require_once(__DIR__.'/search.php');
-require_once(__DIR__.'/flags.php');
 require_once(__DIR__.'/tracking.php');
 require_once(__DIR__.'/follow.php');
 require_once(__DIR__.'/rss.php');
