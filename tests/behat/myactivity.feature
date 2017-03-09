@@ -41,8 +41,7 @@ Feature: My Activity
       | ID number                    | OS1                          |
     And all users have accepted the plagarism statement for "OS1" openstudio
     And I follow "Test Open Studio name 1"
-    And I click on "li.administration" "css_element"
-    And I follow "Manage levels"
+    And I follow "Administration > Manage levels" in the openstudio navigation
     And I press "Add another Block"
     And I set the field "Block Name" to "Block 1"
     And I press "Save Changes"
@@ -70,32 +69,28 @@ Feature: My Activity
     
   Scenario: Show My Activity Board View
     When I follow "Test Open Studio name 1"
-    And I click on "li.my-content" "css_element"
-    And I follow "My Activities"
+    And I follow "My Content > My Activities" in the openstudio navigation
     Then I should see "Activity 1"
     And I should not see "Activity 2"
     And I should see "Activity 3"
   
   Scenario: Upload a new content without file upload
     When I follow "Test Open Studio name 1"
-    And I click on "li.my-content" "css_element"
-    And I follow "My Activities"
+    And I follow "My Content > My Activities" in the openstudio navigation
     And I follow "Content 1.1 Required"
     And I set the following fields to these values:
       | Who can view this content | My module |
       | Title | Test My Activities View 1|
       | Description | My Activities Description 1|
     And I press "Save"
-    And I click on "li.my-content" "css_element"
-    And I follow "My Activities"
+    And I follow "My Content > My Activities" in the openstudio navigation
     And I should see "Test My Activities View 1"
     And I should see "Content 1.1 Required"
     Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "mod/openstudio/pix/openstudio_preview_image.png"
 
   Scenario: Upload a new content with file upload
     When I follow "Test Open Studio name 1"
-    And I click on "li.my-content" "css_element"
-    And I follow "My Activities"
+    And I follow "My Content > My Activities" in the openstudio navigation
     And I follow "Content 1.1 Required"
     And I press "Add file"
     And I set the following fields to these values:
@@ -104,16 +99,14 @@ Feature: My Activity
       | Description               | My Activities Description 2                |
       | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
     And I press "Save"
-    And I click on "li.my-content" "css_element"
-    And I follow "My Activities"
+    And I follow "My Content > My Activities" in the openstudio navigation
     And I should see "Test My Activities View 2"
     And I should see "Content 1.1 Required"
     Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test1.jpg"
 
   Scenario: Upload a new content with Add web/embed link
     When I follow "Test Open Studio name 1"
-    And I click on "li.my-content" "css_element"
-    And I follow "My Activities"
+    And I follow "My Content > My Activities" in the openstudio navigation
     And I follow "Content 1.1 Required"
     And I press "Add web/embed link"
     And I set the following fields to these values:
@@ -122,16 +115,14 @@ Feature: My Activity
       | Description               | Test My Activities View 3 Add web/embed link |
       | Web link                  | https://www.youtube.com/watch?v=ktAnpf_nu5c  |
     And I press "Save"
-    And I click on "li.my-content" "css_element"
-    And I follow "My Activities"
+    And I follow "My Content > My Activities" in the openstudio navigation
     And I should see "Test My Activities View 3"
     And I should see "Content 1.1 Required"
     Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "Youtube-61px"
 
   Scenario:  Edit the setting of the new content uploaded
     When I follow "Test Open Studio name 1"
-    And I click on "li.my-content" "css_element"
-    And I follow "My Activities"
+    And I follow "My Content > My Activities" in the openstudio navigation
     And I follow "Content 1.1 Required"
     And I press "Add file"
     And I set the following fields to these values:
@@ -140,8 +131,7 @@ Feature: My Activity
       | Description               | My Activities Description 4                |
       | Upload content            | mod/openstudio/tests/importfiles/test2.jpg |
     And I press "Save"
-    And I click on "li.my-content" "css_element"
-    And I follow "My Activities"
+    And I follow "My Content > My Activities" in the openstudio navigation
     And I click on "div.openstudio-grid-item-content" "css_element"
     And I go to content edit view
     And I set the following fields to these values:
@@ -149,8 +139,7 @@ Feature: My Activity
       | Title                     | Test My Activities View 5                  |
       | Description               | My Activities Description 5                |
     And I press "Save"
-    And I click on "li.my-content" "css_element"
-    And I follow "My Activities"
+    And I follow "My Content > My Activities" in the openstudio navigation
     And I should see "Test My Activities View 5"
     And I should not see "Test My Activities View 4"
     And I should see "Content 1.1 Required"

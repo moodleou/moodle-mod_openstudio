@@ -19,9 +19,10 @@ Feature: Subscribe/Unsubscribe to my studio
       | student1 | C1 | student |
 
     # Enable REST web service
-    Then I log in as "admin"
-    And I expand "Site administration" node
-    And I navigate to "Advanced features" node in "Site administration"
+    When I am on site homepage
+    And I log in as "admin"
+    And I follow "Site administration"
+    And I follow "Advanced features"
     And I set the field "Enable web services" to "1"
     And I press "Save changes"
     When I navigate to "Overview" node in "Site administration > Plugins > Web services"
@@ -29,9 +30,9 @@ Feature: Subscribe/Unsubscribe to my studio
     And I click on "Enable" "link" in the "REST protocol" "table_row"
     And I press "Save changes"
 
-    When I log out
-    And I log in as "teacher1"
     And I am on site homepage
+    And I log out
+    And I log in as "teacher1"
     And I follow "Course 1"
     And I turn editing mode on
     And I add a "Open Studio" to section "1" and I fill the form with:
@@ -42,6 +43,7 @@ Feature: Subscribe/Unsubscribe to my studio
       | Abuse reports are emailed to | teacher1@asd.com |
       | ID number                    | OS1              |
 
+    And I am on site homepage
     And I log out
     And I log in as "student1"
     And I am on site homepage

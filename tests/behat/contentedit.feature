@@ -77,7 +77,7 @@ Feature: Create and edit contents
           | Description               | My Group Board View Description modify 1   |
           | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
-        And I click on "li.shared-content" "css_element"
+        And I follow "Shared content" in the openstudio navigation
         Then I should see "Test My Group Board View modify 1"
         And the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test1.jpg"
         And I should not see "Test My Group Board View 1"
@@ -110,7 +110,7 @@ Feature: Create and edit contents
           | Title                     | Test My Group Board View modify 1        |
           | Description               | My Group Board View Description modify 1 |
         And I press "Save"
-        And I click on "li.shared-content" "css_element"
+        And I follow "Shared content" in the openstudio navigation
         Then I should see "Test My Group Board View modify 1"
         And the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test1.jpg"
         And I should not see "Test My Group Board View 1"
@@ -135,7 +135,7 @@ Feature: Create and edit contents
         And I press "Save"
         And I go to content edit view
         Then I should see "Test Open Studio name 1"
-        And I should not see "Add web/embed link"
+        And I should see "Add web/embed link"
 
         And I press "Add web/embed link"
         And I set the following fields to these values:
@@ -144,7 +144,7 @@ Feature: Create and edit contents
           | Description               | My Group Board View Description modify 1    |
           | Web link                  | https://www.youtube.com/watch?v=BGD6L-4yceY |
         And I press "Save"
-        And I follow "Shared Content"
+        And I follow "Shared content" in the openstudio navigation
         Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "Youtube-61px"
         And I should see "Test My Group Board View modify 1"
         And I should not see "Test My Group Board View 1"
@@ -178,7 +178,7 @@ Feature: Create and edit contents
           | Description               | My Group Board View Description modify 1    |
           | Web link                  | https://www.youtube.com/watch?v=R4_rYoK4aLE |
         And I press "Save"
-        And I follow "Shared Content"
+        And I follow "Shared content" in the openstudio navigation
         Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "Youtube-61px"
         And I should see "Test My Group Board View modify 1"
         And I should not see "Test My Group Board View 1"

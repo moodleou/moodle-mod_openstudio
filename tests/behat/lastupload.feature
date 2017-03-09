@@ -92,7 +92,8 @@ Feature: Create and edit contents
         | Title | Test My Group Board View 1 |
         | Description | My Group Board View Description 1 |
         | Upload content | mod/openstudio/tests/importfiles/test1.jpg |
-      And I press "Save"  
+      And I press "Save"
+      And I am on site homepage
       And I follow "Course 1"
       And I follow "Test Open Studio name 2"
       And I click on "div.openstudio-upload-container" "css_element"
@@ -102,7 +103,8 @@ Feature: Create and edit contents
         | Title | Test My Group Board View 2 |
         | Description | My Group Board View Description 2 |
         | Upload content | mod/openstudio/tests/importfiles/test2.jpg |
-      And I press "Save"  
+      And I press "Save"
+      And I am on site homepage
       And I follow "Course 1"
       And "OU Recent activity" "block" should exist
       Then "/descendant::div[@class='activityinstance'][1]//span[@class='lastmodtext studiolmt']" "xpath_element" should exist
@@ -110,7 +112,8 @@ Feature: Create and edit contents
       And I should see "Test Open Studio name 2" in the ".ourecent_list li:nth-child(1) .instancename" "css_element"
        And I should not see "Test Open Studio name 3" in the ".ourecent_list li:nth-child(1) .instancename" "css_element"
 
-      Given I log out
+      Given I am on site homepage
+      And I log out
       When I log in as "student1"
       And I follow "Course 1"
       And "OU Recent activity" "block" should exist
@@ -119,7 +122,8 @@ Feature: Create and edit contents
       And I should see "Test Open Studio name 2" in the ".ourecent_list li:nth-child(1) .instancename" "css_element"
       And I should not see "Test Open Studio name 3" in the ".ourecent_list li:nth-child(1) .instancename" "css_element"
 
-     Given I log out
+     Given I am on site homepage
+     And I log out
      When I log in as "student3"
      And I follow "Course 1"
      Then "/descendant::div[@class='activityinstance'][1]//span[@class='lastmodtext studiolmt']" "xpath_element" should exist
@@ -142,6 +146,7 @@ Feature: Create and edit contents
       And I press "Save"
 
       # Add new content in My Pinboard View
+      And I am on site homepage
       And I follow "Course 1"
       And I follow "Test Open Studio name 2"
       And I click on "div.openstudio-upload-container" "css_element"
@@ -154,6 +159,7 @@ Feature: Create and edit contents
       And I press "Save"
 
       # Add new content in My Group View
+      And I am on site homepage
       And I follow "Course 1"
       And I follow "Test Open Studio name 3"
       And I click on "div.openstudio-upload-container" "css_element"
@@ -165,6 +171,7 @@ Feature: Create and edit contents
         | Upload content | mod/openstudio/tests/importfiles/test2.jpg |
       And I press "Save"  
 
+      And I am on site homepage
       And I follow "Course 1"
       And "OU Recent activity" "block" should exist
       Then "/descendant::div[@class='activityinstance'][1]//span[@class='lastmodtext studiolmt']" "xpath_element" should exist
@@ -173,7 +180,8 @@ Feature: Create and edit contents
       And I should see "Test Open Studio name 3" in the ".ourecent_list li:nth-child(1) .instancename" "css_element"
 
       # Switch student1 user
-      Given I log out
+      Given I am on site homepage
+      And I log out
       When I log in as "student1"
       And I follow "Course 1"
       And "OU Recent activity" "block" should exist
@@ -183,7 +191,8 @@ Feature: Create and edit contents
       And I should see "Test Open Studio name 3" in the ".ourecent_list li:nth-child(1) .instancename" "css_element"
 
       # Switch student3 user
-      Given I log out
+      Given I am on site homepage
+      And I log out
       When I log in as "student3"
       And I follow "Course 1"
       Then "/descendant::div[@class='activityinstance'][1]//span[@class='lastmodtext studiolmt']" "xpath_element" should exist

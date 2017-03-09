@@ -75,20 +75,18 @@ Feature: Create and edit contents
           | Description               | My Pinboard View Description               |
           | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
-        And I click on "li.my-content" "css_element"
-        And I follow "My Pinboard"
+        And I follow "My Content > My Pinboard" in the openstudio navigation
         Then I should see "Test My Pinboard View"
-        And I click on "li.shared-content" "css_element"
-        And I follow "My Module"
+        And I follow "Shared content > My Module" in the openstudio navigation
         Then I should not see "Test My Pinboard View"
 
         # Other user can't see content in My Pinbord
+        And I am on site homepage
         And I log out
         And I log in as "student1"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
-        And I click on "li.my-content" "css_element"
-        And I follow "My Pinboard"
+        And I follow "My Content > My Pinboard" in the openstudio navigation
         Then I should not see "Test My Pinboard View"
 
         # Add Module view
@@ -100,20 +98,19 @@ Feature: Create and edit contents
           | Description               | My Module Description                           |
           | Upload content            | mod/openstudio/tests/importfiles/Winterfell.jpg |
         And I press "Save"
-        And I click on "li.shared-content" "css_element"
-        And I follow "My Module"
+        And I follow "Shared content > My Module" in the openstudio navigation
 
         Then I should see "My Module Title"
-        And I click on "li.my-content" "css_element"
-        And I follow "My Pinboard"
+        And I follow "My Content > My Pinboard" in the openstudio navigation
         Then I should see "My Module Title"
 
         # Other user can see content in My Module
+        And I am on site homepage
         And I log out
         And I log in as "student2"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
-        And I click on "li.my-content" "css_element"
-        And I click on "li.shared-content" "css_element"
-        And I follow "My Module"
+        And I follow "My Content" in the openstudio navigation
+        
+        And I follow "Shared content > My Module" in the openstudio navigation
         Then I should see "My Module Title"

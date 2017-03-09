@@ -78,6 +78,7 @@ Feature: Create and edit contents
         And all users have accepted the plagarism statement for "OS2" openstudio
         And I follow "Test Open Studio name 1"
         Then I should not see "People"
+        And I am on site homepage
         And I follow "Course 1"
         And I follow "Test Open Studio name 2"
         Then I should see "People"
@@ -109,9 +110,10 @@ Feature: Create and edit contents
           | Description               | My Pinboard View Description               |
           | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
-        And I click on "li.people" "css_element"
-
+        And I follow "People" in the openstudio navigation
+        
         # switch student1 user
+        And I am on site homepage
         And I log out
         And I log in as "student1"
         And I follow "Course 1"
@@ -124,10 +126,11 @@ Feature: Create and edit contents
           | Description               | My Pinboard View Description 1             |
           | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
-        And I click on "li.people" "css_element"
+        And I follow "People" in the openstudio navigation
         Then I should see "Teacher 1"
 
         # switch student2 user
+        And I am on site homepage
         And I log out
         And I log in as "student2"
         And I follow "Course 1"
@@ -140,11 +143,12 @@ Feature: Create and edit contents
           | Description               | My Pinboard View Description 2             |
           | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
-        And I click on "li.people" "css_element"
+        And I follow "People" in the openstudio navigation
         Then I should see "Teacher 1"
         And I should see "Student 1"
 
         # switch student5 user
+        And I am on site homepage
         And I log out
         And I log in as "student5"
         And I follow "Course 1"
@@ -157,17 +161,18 @@ Feature: Create and edit contents
           | Description               | My Pinboard View Description 5             |
           | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
-        And I click on "li.people" "css_element"
+        And I follow "People" in the openstudio navigation
         Then I should see "Teacher 1"
         And I should see "Student 1"
         And I should see "Student 2"
 
         # switch teacher1 user
+        And I am on site homepage
         And I log out
         And I log in as "teacher1"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
-        And I click on "li.people" "css_element"
+        And I follow "People" in the openstudio navigation
         Then I should see "Student 1"
         And I should see "Student 2"
         And I should see "Student 5"
@@ -202,11 +207,12 @@ Feature: Create and edit contents
           | Description               | My Pinboard View Description 1             |
           | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
+        And I am on site homepage
         And I log out
         And I log in as "student3"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
-        And I click on "li.my-content" "css_element"
+        And I follow "My content" in the openstudio navigation
         And I click on "div.openstudio-upload-container" "css_element"
         And I press "Add file"
         And I set the following fields to these values:
@@ -217,11 +223,12 @@ Feature: Create and edit contents
         And I press "Save"
         
         # GIVEN Group Name selected, THEN show all members of the selected group
+        And I am on site homepage
         And I log out
         And I log in as "student5"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
-        And I click on "li.people" "css_element"
+        And I follow "People" in the openstudio navigation
         And I click on "select#openstudio-people-groupid" "css_element"
         And I click on "option[name='group1']" "css_element"
         Then I should see "Student 2"
@@ -242,11 +249,12 @@ Feature: Create and edit contents
         And I should see "Student 3"
 
         # switch student2 user
+        And I am on site homepage
         And I log out
         And I log in as "student2"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
-        And I click on "li.people" "css_element"
+        And I follow "People" in the openstudio navigation
         Then I should see "All Group"
         And I should see "Student 3"
         And I click on "select#openstudio-people-groupid" "css_element"

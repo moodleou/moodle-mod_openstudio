@@ -78,11 +78,10 @@ Feature: Create and edit contents
         And I press "Add web/embed link"
         And I should not see "Details"
         And I press "Save"
-        And I click on "li.shared-content" "css_element"
-        And I follow "My Module"
+        And I follow "Shared content > My Module" in the openstudio navigation
         Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "mod/openstudio/pix/openstudio_preview_image.png"
 
-      Scenario: Add new content just a title and description with a file
+    Scenario: Add new content just a title and description with a file
         When I follow "Test Open Studio name 1"
         And I click on "div.openstudio-upload-container" "css_element"
         And I press "Add file"
@@ -92,12 +91,11 @@ Feature: Create and edit contents
           | Description               | My Group Board View Description 2          |
           | Upload content            | mod/openstudio/tests/importfiles/test2.jpg |
         And I press "Save"
-        And I click on "li.shared-content" "css_element"
-        And I follow "My Module"
+        And I follow "Shared content > My Module" in the openstudio navigation
         Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test2.jpg"
         And I should see "Test My Group Board View 2"
 
-      Scenario: Add new content just a title and description with an image including GPS and EXIF data
+    Scenario: Add new content just a title and description with an image including GPS and EXIF data
         When I follow "Test Open Studio name 1"
         And I click on "div.openstudio-upload-container" "css_element"
         And I press "Add file"
@@ -109,12 +107,11 @@ Feature: Create and edit contents
           | Show GPS Data             | 1                                          |
           | Show Image Data           | 1                                          |
         And I press "Save"
-        And I click on "li.shared-content" "css_element"
-        And I follow "My Module"
+        And I follow "Shared content > My Module" in the openstudio navigation
         Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test3.jpg"
         And I should see "Test My Group Board View 3"
 
-      Scenario: Add new content just a title and description with a file, ownership data
+    Scenario: Add new content just a title and description with a file, ownership data
         When I follow "Test Open Studio name 1"
         And I click on "div.openstudio-upload-container" "css_element"
         And I press "Add file"
@@ -125,8 +122,7 @@ Feature: Create and edit contents
           | Upload content            | mod/openstudio/tests/importfiles/test3.jpg           |
         Then the "disabled" attribute of "div.felement input[name='ownershipdetail']" "css_element" should contain "disabled"
         And I press "Save"
-        And I click on "li.shared-content" "css_element"
-        And I follow "My Module"
+        And I follow "Shared content > My Module" in the openstudio navigation
         Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test3.jpg"
         And I should see "Test My Group Board View 4 ownership All my own work"
 
@@ -140,12 +136,11 @@ Feature: Create and edit contents
           | Found elsewhere           | 1                                                    |
           | Details                   | Test 4                                               |
         And I press "Save"
-        And I click on "li.shared-content" "css_element"
-        And I follow "My Module"
+        And I follow "Shared content > My Module" in the openstudio navigation
         Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test3.jpg"
         And I should see "Test My Group Board View 4 ownership Found elsewhere"
 
-      Scenario: Add new content just a title and description with a file and tags
+    Scenario: Add new content just a title and description with a file and tags
         When I follow "Test Open Studio name 1"
         And I click on "div.openstudio-upload-container" "css_element"
         And I press "Add file"
@@ -158,12 +153,11 @@ Feature: Create and edit contents
         And I wait "2" seconds
         And I should see "Tests Add New Tags"
         And I press "Save"
-        And I click on "li.shared-content" "css_element"
-        And I follow "My Module"
+        And I follow "Shared content > My Module" in the openstudio navigation
         Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test4.jpg"
         And I should see "Test My Group Board View 4 Tags"
 
-      Scenario: Add new content just a title and description with a weblink
+    Scenario: Add new content just a title and description with a weblink
         When I follow "Test Open Studio name 1"
         And I click on "div.openstudio-upload-container" "css_element"
         And I press "Add web/embed link"
@@ -173,11 +167,10 @@ Feature: Create and edit contents
           | Description               | My Group Board View Description 5 Add web/embed link |
           | Web link                  | https://www.youtube.com/watch?v=ktAnpf_nu5c          |
         And I press "Save"
-        And I click on "li.shared-content" "css_element"
-        And I follow "My Module"
+        And I follow "Shared content > My Module" in the openstudio navigation
         Then I should see "Test My Group Board View 5 Add web/embed link"
 
-      Scenario: Add new content just a title and description with a weblink, ownership data
+    Scenario: Add new content just a title and description with a weblink, ownership data
         When I follow "Test Open Studio name 1"
         And I click on "div.openstudio-upload-container" "css_element"
         And I press "Add web/embed link"
@@ -188,8 +181,7 @@ Feature: Create and edit contents
           | Web link                  | https://www.youtube.com/watch?v=Y7uGHY-t80I          |
         Then the "disabled" attribute of "div.felement input[name='ownershipdetail']" "css_element" should contain "disabled"
         And I press "Save"
-        And I click on "li.shared-content" "css_element"
-        And I follow "My Module"
+        And I follow "Shared content > My Module" in the openstudio navigation
         Then I should see "Test My Group Board View 5 ownership All my own work"
 
         And I click on "div.openstudio-upload-container" "css_element"
@@ -202,11 +194,10 @@ Feature: Create and edit contents
           | Found elsewhere           | 1                                                    |
           | Details                   | Test 5                                               |
         And I press "Save"
-        And I click on "li.shared-content" "css_element"
-        And I follow "My Module"
+        And I follow "Shared content > My Module" in the openstudio navigation
         Then I should see "Test My Group Board View 5 ownership Found elsewhere"
 
-      Scenario: Add new content just a title and description with a weblink and tags
+    Scenario: Add new content just a title and description with a weblink and tags
         When I follow "Test Open Studio name 1"
         And I click on "div.openstudio-upload-container" "css_element"
         And I press "Add web/embed link"
@@ -219,6 +210,5 @@ Feature: Create and edit contents
         And I wait "2" seconds
         And I should see "Tests Add New Tags web/embed link"
         And I press "Save"
-        And I click on "li.shared-content" "css_element"
-        And I follow "My Module"
+        And I follow "Shared content > My Module" in the openstudio navigation
         Then I should see "Test My Group Board View 5 Tags"

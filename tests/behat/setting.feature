@@ -59,7 +59,7 @@ Feature: Create and edit contents
         And I should see "Your word for 'My Activities'"
         And I should see "Your word for 'My Pinboard'"
         And I should see " Enable 'My Module'"
-        And the "value" attribute of "div[id='fitem_id_pinboard'] div.felement input" "css_element" should contain "100"
+        And the "value" attribute of "input#id_pinboard" "css_element" should contain "100"
         And I should see "Site upload limit (10MB)"
 
     Scenario: Behavior handling for People Tab
@@ -90,6 +90,7 @@ Feature: Create and edit contents
         And all users have accepted the plagarism statement for "OS2" openstudio
         And I follow "Test Open Studio name 1"
         Then I should not see "People"
+        And I am on site homepage
         And I follow "Course 1"
         And I follow "Test Open Studio name 2"
         Then I should see "People"
@@ -143,17 +144,19 @@ Feature: Create and edit contents
         Then I should see "My Group"
 
         # Only My Module is available
-        When I follow "Course 1"
+        When I am on site homepage
+        And I follow "Course 1"
         And I follow "Test Open Studio name 2"
         Then I should see "Shared Content"
         And I follow "Shared Content"
         Then I should see "My Module"
 
         # My Module and My Group are available
-        When I follow "Course 1"
+        When I am on site homepage
+        And I follow "Course 1"
         And I follow "Test Open Studio name 3"
         Then I should see "Shared Content"
-        And I click on "li.shared-content" "css_element"
+        And I follow "Shared content" in the openstudio navigation
         Then I should see "My Group"
         And I should see "My Module"
 
@@ -172,8 +175,7 @@ Feature: Create and edit contents
           | ID number                    | OS1                          |
         And all users have accepted the plagarism statement for "OS1" openstudio
         And I follow "Test Open Studio name 1"
-        And I click on "li.administration" "css_element"
-        And I follow "Manage levels"
+        And I follow "Administration > Manage levels" in the openstudio navigation
         And I press "Add another Block"
         And I set the field "Block Name" to "Block 1"
         And I press "Save Changes"
@@ -187,7 +189,7 @@ Feature: Create and edit contents
         And I press "Add another Content"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
-        And I click on "li.my-content" "css_element"
+        And I follow "My content" in the openstudio navigation
         Then I should see "My Pinboard"
         And I should see "My Activities"
 

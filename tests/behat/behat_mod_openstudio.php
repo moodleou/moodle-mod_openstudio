@@ -541,4 +541,27 @@ EOF;
         }
         return (0 - $id);
     }
+
+    /**
+     * Follows the open studio redirection
+     *
+     * @Given /^I follow "(?P<link_string>(?:[^"]|\\")*)" in the openstudio navigation$/
+     * @throws Exception
+     * @param string $link
+     */
+    public function go_to_openstudio_navigation($link) {
+        $parentnodes = array_map('trim', explode('>', $link));
+        $subitem = strtolower(str_replace(' ', '-', $parentnodes[0]));
+        if (isset($parentnodes[1])) {
+            $selector = "ul > li.dropdown.".$subitem." > a > span.openstudio-navigation-text";
+            $menulink = $this->getSession()->getPage()->find("css", $selector);
+            $menulink->click();
+            $linknode = $this->find_link($parentnodes[1]);
+            $this->ensure_node_is_visible($linknode);
+            $linknode->click();
+        } else {
+            $selector = "li.".$subitem." > a > span.openstudio-navigation-text";
+            $this->getSession()->getPage()->find("css", $selector)->click();
+        }
+    }
 }

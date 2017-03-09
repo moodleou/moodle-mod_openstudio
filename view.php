@@ -47,6 +47,7 @@ $course = $coursedata->course;
 $mcontext = $coursedata->mcontext;
 $permissions = $coursedata->permissions;
 $theme = $coursedata->theme;
+$placeholdertext = '';
 
 require_login($course, true, $cm);
 

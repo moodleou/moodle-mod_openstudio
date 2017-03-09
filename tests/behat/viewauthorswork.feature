@@ -18,14 +18,14 @@ Feature: View author's work
 
         And the following "courses" exist:
             | fullname | shortname | category |
-            | Course 1 | C1 | 0 |
+            | Course 1 | C1        | 0        |
 
         And the following "course enrolments" exist:
-            | user | course | role |
+            | user | course | role           |
             | teacher1 | C1 | editingteacher |
-            | student1 | C1 | student |
-            | student2 | C1 | student |
-            | student3 | C1 | student |
+            | student1 | C1 | student        |
+            | student2 | C1 | student        |
+            | student3 | C1 | student        |
 
         And the following "groups" exist:
             | name   | course | idnumber |
@@ -56,37 +56,38 @@ Feature: View author's work
         And I follow "Course 1"
         And I turn editing mode on
         And I add a "Open Studio" to section "1" and I fill the form with:
-            | Name | Test Open Studio name 1 |
-            | Description | Test Open Studio description |
-            | Group mode | Visible groups |
-            | Grouping | grouping1 |
-            | Teacher | true |
-            | Enable pinboard | 99 |
-            | Abuse reports are emailed to | teacher1@asd.com |
-            | ID number                    | OS1              |
+            | Name                         | Test Open Studio name 1      |
+            | Description                  | Test Open Studio description |
+            | Group mode                   | Visible groups               |
+            | Grouping                     | grouping1                    |
+            | Teacher                      | true                         |
+            | Enable pinboard              | 99                           |
+            | Abuse reports are emailed to | teacher1@asd.com             |
+            | ID number                    | OS1                          |
         And Open Studio test instance is configured for "Test Open Studio name 1"
         And all users have accepted the plagarism statement for "OS1" openstudio
 
         # Upload contents
         And the following open studio "contents" exist:
-            | openstudio | user     | name                  | description           | visibility |
-            | OS1        | student1 | Content 1 - onlyme    | name                  | private |
-            | OS1        | student1 | Content 1 - my module | name                  | module |
-            | OS1        | student1 | Content 1 - tutor     | name                  | tutor |
+            | openstudio | user     | name                  | description| visibility |
+            | OS1        | student1 | Content 1 - onlyme    | name       | private    |
+            | OS1        | student1 | Content 1 - my module | name       | module     |
+            | OS1        | student1 | Content 1 - tutor     | name       | tutor      |
 
-            | OS1        | student2 | Content 2 - onlyme    | name                  | private |
-            | OS1        | student2 | Content 2 - my module | name                  | module |
-            | OS1        | student2 | Content 2 - tutor     | name                  | tutor |
+            | OS1        | student2 | Content 2 - onlyme    | name       | private    |
+            | OS1        | student2 | Content 2 - my module | name       | module     |
+            | OS1        | student2 | Content 2 - tutor     | name       | tutor      |
 
-            | OS1        | student3 | Content 3 - onlyme    | name                  | private |
-            | OS1        | student3 | Content 3 - my module | name                  | module |
-            | OS1        | student3 | Content 3 - tutor     | name                  | tutor |
+            | OS1        | student3 | Content 3 - onlyme    | name       | private    |
+            | OS1        | student3 | Content 3 - my module | name       | module     |
+            | OS1        | student3 | Content 3 - tutor     | name       | tutor      |
 
         And the following open studio "contents" exist:
             | openstudio | name            | description       | contenttype | user     | visibilitygroup |
             | OS1        | Student1_group1 | Lorem ipsum dolor | text        | student1 | G1          |
             | OS1        | Student2_group2 | Lorem ipsum dolor | text        | student2 | G2          |
             | OS1        | Student3_group3 | Lorem ipsum dolor | text        | student3 | G1          |
+        And I am on site homepage
         And I log out
 
     @javascript
@@ -94,29 +95,28 @@ Feature: View author's work
         Given I log in as "student1"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
-        And I click on ".shared-content" "css_element"
-        And I click on "//a[contains(text(),'My Module')]" "xpath_element"
+        And I follow "Shared content > My Module" in the openstudio navigation
         And I click on "//h4[contains(text(),'Student 3')]/following-sibling::a" "xpath_element"
+        And I wait "1" seconds
         Then I should see "Content 3 - my module"
         Then I should see "Student3_group3"
         Then I should not see "Content 3 - onlyme"
         Then I should not see "Content 3 - tutor"
 
-        And I click on ".shared-content" "css_element"
-        And I click on "//a[contains(text(),'My Module')]" "xpath_element"
+        And I follow "Shared content > My Module" in the openstudio navigation
         And I click on "//h4[contains(text(),'Student 2')]/following-sibling::a" "xpath_element"
         Then I should see "Content 2 - my module"
         Then I should not see "Student2_group2"
         Then I should not see "Content 2 - onlyme"
         Then I should not see "Content 2 - tutor"
+        And I am on site homepage
         And I log out
 
         # Test Open Studio with teacher role
         Given I log in as "teacher1"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
-        And I click on ".shared-content" "css_element"
-        And I click on "//a[contains(text(),'My Module')]" "xpath_element"
+        And I follow "Shared content > My Module" in the openstudio navigation
         And I click on "//h4[contains(text(),'Student 3')]/following-sibling::a" "xpath_element"
         Then I should see "Content 3 - my module"
         Then I should see "Student3_group3"

@@ -65,8 +65,7 @@ Feature: My Activity
       And all users have accepted the plagarism statement for "OS1" openstudio
       And all users have accepted the plagarism statement for "OS2" openstudio
       And I follow "Test Open Studio name 1"
-      And I click on "li.administration" "css_element"
-      And I follow "Manage levels"
+      And I follow "Administration > Manage levels" in the openstudio navigation
       And I press "Add another Block"
       And I set the field "Block Name" to "Block 1"
       And I press "Save Changes"
@@ -114,42 +113,37 @@ Feature: My Activity
 
   Scenario: Check existing of View My Own Profile in My Activities/My Pinboard view
       When I follow "Test Open Studio name 1"
-      And I click on "li.my-content" "css_element"
-      And I follow "My Activities"
+      And I follow "My Content > My Activities" in the openstudio navigation
       Then I should see "Teacher 1"
       And I should see "Participation"
       And I should see "My studio work progress" 
-      And I click on "li.my-content" "css_element"
-      And I follow "My Pinboard"
+      And I follow "My Content > My Pinboard" in the openstudio navigation
       Then I should see "Teacher 1"
       And I should see "Participation"
-      And I should see "My studio work progress" 
-      And I click on "li.shared-content" "css_element"
-      And I follow "My Module"
-      Then I should see "Teacher 1"
+      And I should see "My studio work progress"
+      And I follow "Shared content > My Module" in the openstudio navigation
+      Then I should not see "Teacher 1"
       And I should not see "Participation"
       And I should not see "My studio work progress"
-      And I click on "li.shared-content" "css_element"
-      And I follow "My Group"
-      Then I should see "Teacher 1"
+      And I follow "Shared content > My Group" in the openstudio navigation
+      Then I should not see "Teacher 1"
       And I should not see "Participation"
       And I should not see "My studio work progress" 
 
       # switch other user
+      And I am on site homepage
       And I log out
       And I log in as "student1"
       And I follow "Course 1"
       And I follow "Test Open Studio name 1"
-      And I click on "li.my-content" "css_element"
-      And I follow "My Activities"
+      And I follow "My content > My Activities" in the openstudio navigation
       Then I should see "Student 1"
       And I should see "Participation"
       And I should see "My studio work progress"
 
   Scenario:  All users can expand or collapse the Profile Panel
       When I follow "Test Open Studio name 1"
-      And I click on "li.my-content" "css_element"
-      And I follow "My Activities"
+      And I follow "My content > My Activities" in the openstudio navigation
       And I click on "a.openstudio-profile-mypaticipation" "css_element"
       Then I should see "Last active date:"
       And I should see "comments made"
@@ -159,12 +153,12 @@ Feature: My Activity
       And I should see "Activity 3"
 
       # switch other user
+      And I am on site homepage
       And I log out
       And I log in as "student1"
       And I follow "Course 1"
       And I follow "Test Open Studio name 1"
-      And I click on "li.my-content" "css_element"
-      And I follow "My Activities"
+      And I follow "My content > My Activities" in the openstudio navigation
       And I click on "a.openstudio-profile-mypaticipation" "css_element"
       Then I should see "Last active date:"
       And I should see "comments made"
@@ -175,8 +169,7 @@ Feature: My Activity
 
   Scenario:  Check progress of user 
       When I follow "Test Open Studio name 1"
-      And I click on "li.my-content" "css_element"
-      And I follow "My Activities"
+      And I follow "My content > My Activities" in the openstudio navigation
       And I click on "a.openstudio-profile-mypaticipation" "css_element"
       And I click on "a.openstudio-profile-progress-step" "css_element"
       And I press "Add file"
@@ -186,8 +179,7 @@ Feature: My Activity
         | Description               | My Ownprofile View Description             |
         | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
       And I press "Save"
-      And I click on "li.my-content" "css_element"
-      And I follow "My Activities"
+      And I follow "My content > My Activities" in the openstudio navigation
       Then I should see "Test My Ownprofile View"
 
       And I click on "a.openstudio-profile-mypaticipation" "css_element"
@@ -195,12 +187,12 @@ Feature: My Activity
       And I should see "10%"
 
       # switch other user
+      And I am on site homepage
       And I log out
       And I log in as "student1"
       And I follow "Course 1"
       And I follow "Test Open Studio name 1"
-      And I click on "li.my-content" "css_element"
-      And I follow "My Activities"
+      And I follow "My content > My Activities" in the openstudio navigation
       And I click on "a.openstudio-profile-mypaticipation" "css_element"
       And I click on "a.openstudio-profile-progress-step" "css_element"
       And I press "Add file"
@@ -210,8 +202,7 @@ Feature: My Activity
         | Description               | Test My Ownprofile View Description        |
         | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
       And I press "Save"
-      And I click on "li.my-content" "css_element"
-      And I follow "My Activities"
+      And I follow "My content > My Activities" in the openstudio navigation
       Then I should see "Test My Ownprofile View Student"
 
       And I click on "a.openstudio-profile-mypaticipation" "css_element"
@@ -219,12 +210,15 @@ Feature: My Activity
       And I should see "10%"
 
   Scenario: Check own profile in case of empty content
-      When I follow "Test Open Studio name 2"
+      When I am on site homepage
+      And I follow "Course 1"
+      And I follow "Test Open Studio name 2"
       And I follow "My Content"
       And I should not see "Participation"
       And I should not see "My studio work progress"
 
       # switch other user
+      And I am on site homepage
       And I log out
       And I log in as "student1"
       And I follow "Course 1"

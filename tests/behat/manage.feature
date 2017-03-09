@@ -45,8 +45,7 @@ Feature: Manage open studio folders
   @javascript
   Scenario: Manage set templates
     Given I follow "Test Open Studio name 1"
-    And I click on "li.administration" "css_element"
-    And I follow "Manage levels"
+    And I follow "Administration > Manage levels" in the openstudio navigation
     And I press "Add another Block"
     And I set the field "Block Name" to "Block 1"
     And I press "Save Changes"
@@ -73,12 +72,12 @@ Feature: Manage open studio folders
     And "Content 1" "link" should not exist
     And "Content 2" "link" should exist
 
-    When I click on "//fieldset[contains(., 'Content 2')]/input[@title='Edit Name']" "xpath_element"
+    When I click on "//div[contains(., 'Content 2')]/input[@title='Edit Name']" "xpath_element"
     And I set the field "Is folder?" to "0"
     And I press "Save Changes"
     Then I should see "Content 2"
     And "Content 2" "link" should not exist
-    When I click on "//fieldset[contains(., 'Content 2')]/input[@title='Edit Name']" "xpath_element"
+    When I click on "//div[contains(., 'Content 2')]/input[@title='Edit Name']" "xpath_element"
     And I set the field "Is folder?" to "1"
     And I press "Save Changes"
     Then I should see "Content 2 (Folder)"
@@ -98,7 +97,7 @@ Feature: Manage open studio folders
       | Number of additional contents allowed    | 2                          |
 
     When I press "Add another Content"
-    Then I should see "Content 1" in the "div.fstatic h3" "css_element"
+    Then I should see "Content 1" in the "div.col-md-9.form-inline.felement > div.form-control-static > h3" "css_element"
     And "Name" "field" should exist
     And "Folder guidance text" "field" should exist
     And "Prevent re-ordering?" "field" should exist
@@ -133,7 +132,7 @@ Feature: Manage open studio folders
     And "id_contentmoveup_2" "button" should be visible
 
     When I press "Add another Content"
-    Then "//div[@class='felement fstatic']/h3[text()='Content 4']" "xpath_element" should exist
+    Then I should see "Content 4"
     And "id_contentdelete_3" "button" should not be visible
     And "id_contentmovedown_3" "button" should not be visible
     And "id_contentmoveup_3" "button" should not be visible

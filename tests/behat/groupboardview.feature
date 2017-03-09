@@ -73,26 +73,25 @@ Feature: Create and edit contents
           | Description               | My Group Board View Description 1          |
           | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
-        And I click on "li.shared-content" "css_element"
-        And I follow "My Group"
+        And I follow "Shared content > My Group" in the openstudio navigation
         Then I should see "Test My Group Board View 1"
 
         # Check that content posted in one group can be viewed by a user in another group when in Visible Groups mode
+        And I am on site homepage
         And I log out
         And I log in as "student1"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
-        And I click on "li.shared-content" "css_element"
-        And I follow "My Group"
+        And I follow "Shared content > My Group" in the openstudio navigation
         Then I should see "Test My Group Board View 1"
 
         #  Check that content posted in one group cannot be viewed by a user in another group when in Separate Groups mode
+        And I am on site homepage
         And I log out
         And I log in as "student3"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
-        And I click on "li.shared-content" "css_element"
-        And I follow "My Group"
+        And I follow "Shared content > My Group" in the openstudio navigation
         Then I should not see "Test My Group Board View 1"
 
         # Student add new content when in Separate Groups mode
@@ -104,26 +103,25 @@ Feature: Create and edit contents
           | Description               | My Group Board View Description 3          |
           | Upload content            | mod/openstudio/tests/importfiles/test3.jpg |
         And I press "Save"
-        And I click on "li.shared-content" "css_element"
-        And I follow "My Group"
+        And I follow "Shared content > My Group" in the openstudio navigation
         Then I should see "Test My Group Board View 3"
 
         # Check that a teacher can view content posted in any group when in Separate Groups mode
+        And I am on site homepage
         And I log out
         And I log in as "teacher1"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
-        And I click on "li.shared-content" "css_element"
-        And I follow "My Group"
+        And I follow "Shared content > My Group" in the openstudio navigation
         Then I should see "Test My Group Board View 3"
 
         # Test that the list of groups (both for the filter and the edit content form) is generated correctly for users in different groups.
+        And I am on site homepage
         And I log out
         And I log in as "student2"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
-        And I click on "li.shared-content" "css_element"
-        And I follow "My Group"
+        And I follow "Shared content > My Group" in the openstudio navigation
         And I click on "div.openstudio-upload-container" "css_element"
         And I press "Add file"
         And I set the following fields to these values:
@@ -132,44 +130,43 @@ Feature: Create and edit contents
           | Description               | My Group Board View Description 2          |
           | Upload content            | mod/openstudio/tests/importfiles/test2.jpg |
         And I press "Save"
-        And I click on "li.shared-content" "css_element"
-        And I follow "My Group"
+        And I follow "Shared content > My Group" in the openstudio navigation
         Then I should see "Test My Group Board View 2"
         And I should see "Test My Group Board View 1"
         And I should not see "Test My Group Board View 3"
 
+        And I am on site homepage
         And I log out
         And I log in as "student1"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
-        And I click on "li.shared-content" "css_element"
-        And I follow "My Group"
+        And I follow "Shared content > My Group" in the openstudio navigation
         Then I should see "Test My Group Board View 1"
         And I should not see "Test My Group Board View 2"
         And I should not see "Test My Group Board View 3"
 
+        And I am on site homepage
         And I log out
         And I log in as "student3"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
-        And I click on "li.shared-content" "css_element"
-        And I follow "My Group"
+        And I follow "Shared content > My Group" in the openstudio navigation
         Then I should not see "Test My Group Board View 1"
         And I should see "Test My Group Board View 2"
         And I should see "Test My Group Board View 3"
 
         #  When groups mode is disabled, the My Groups page is not accessible, and content cannot be shared with a group
+        And I am on site homepage
         And I log out
         And I log in as "teacher1"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
-        And I click on "li.administration" "css_element"
-        And I follow "Edit settings"
+        And I follow "Administration > Edit settings" in the openstudio navigation
         And I set the following fields to these values:
           | Group mode | No groups |
           | Grouping   | None      |
         And I press "Save and display"
-        And I click on "li.shared-content" "css_element"
+        And I follow "Shared content" in the openstudio navigation
         Then I should see " Module 1"
         And I should not see "My Group"
         And I should not see "Test My Group Board View 1"

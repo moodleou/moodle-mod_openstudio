@@ -62,6 +62,7 @@ Feature: Accept plagarism statement
         Then I should see "Add new content"
 
         # Switch studen1 user
+        And I am on site homepage
         And I log out
         And I log in as "student1"
         And I follow "Course 1"
@@ -69,6 +70,7 @@ Feature: Accept plagarism statement
         Then I should see "Plagiarism statement"
 
         # Switch teacher1 user
+        And I am on site homepage
         And I log out
         And I log in as "teacher1"
         And I am on site homepage

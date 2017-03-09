@@ -90,8 +90,7 @@ Feature: Create and edit contents
             | OS1        | student1 | TestSlot 13 | Test slot 13 description | module     |
 
         When I reload the page
-        And I click on "li.shared-content" "css_element"
-        And I follow "My Module"
+        And I follow "Shared content > My Module" in the openstudio navigation
         Then I should see "TestSlot 13"
         And I should see "Next"
         When I follow "Next"
