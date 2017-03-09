@@ -511,6 +511,14 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 $myactivities = true;
                 $blocksdata = levels::get_records(1, $permissions->activecminstanceid);
                 $showprofilebarview = true;
+
+                // Set selected block.
+                foreach ($blocksdata as $key => $block) {
+                    $blocksdata[$key]->selected = false;
+                    if ($contentdata->blockid == $block->id) {
+                        $blocksdata[$key]->selected = true;
+                    }
+                }
                 break;
 
             case content::VISIBILITY_PRIVATE_PINBOARD:
@@ -521,14 +529,27 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         $grouplist = studio_api_group_list(
                     $permissions->activecid, $permissions->groupingid,
-                    $permissions->activeuserid, 1);
+                    $permissions->activeuserid, $permissions->groupmode);
 
         $showmultigroup = false;
         $groupitem = array();
         if ($grouplist) {
+            $groupitem[0] = (object) [
+                'groupid' => 0,
+                'selectedgroup' => $contentdata->selectedgroupid == 0 ? true : false,
+                'vid' => content::VISIBILITY_GROUP,
+                'name' => get_string('filterall', 'openstudio')
+            ];
+
             foreach ($grouplist as $group) {
-                $groupitem[$group->groupid] = $group;
+                $groupitem[$group->groupid] = (object) [
+                    'groupid' => $group->groupid,
+                    'selectedgroup' => $contentdata->selectedgroupid == $group->groupid ? true : false,
+                    'vid' => content::VISIBILITY_GROUP,
+                    'name' => $group->name
+                ];
             }
+
             $showmultigroup = (count($groupitem) > 1);
         }
 
@@ -546,7 +567,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $contentdata->inspirationicon = $OUTPUT->pix_url('inspiration_rgb_32px', 'openstudio');
         $contentdata->participationicon = $OUTPUT->pix_url('participation_rgb_32px', 'openstudio');
         $contentdata->favouriteicon = $OUTPUT->pix_url('favourite_rgb_32px', 'openstudio');
-
+        $contentdata->vid = $viewmode;
         $contentdata->contentediturl = new moodle_url('/mod/openstudio/contentedit.php',
                    array('id' => $cmid, 'lid' => 0, 'sid' => 0, 'type' => 0, 'sstsid' => 0));
 

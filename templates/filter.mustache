@@ -43,6 +43,11 @@
         "myactivities" : "true",
         "percentcompleted" : "70",
         "showownfile" : true,
+        "sortbydate" : false,
+        "sortdesc" : true,
+        "sortasc" : false,
+        "sortbytitle" : true,
+        "nextsortactionurl" : "http://example.com/mod/openstudio/view.php?id=7&vid=2&fsort=1&osort=0",
         "groupitems" : [
             {
                "id" : "1",
@@ -64,42 +69,60 @@
     {{/showprofilebarview}}
 {{/showownfile}}
 
-<span class="openstudio-filter-devider">
+<span class="openstudio-filter-divider">
 <span class="openstudio-filter-text">
-    <a href="#" class="openstudio-filter-collapsed">
+    <a href="{{sortbydateurl}}" class="openstudio-filter-text-selected">
         {{#str}} filterpreferences, mod_openstudio {{/str}}
     </a>
+    {{#sortdesc}}{{#pix}} t/collapsed, core, {{#str}} filterpreferences, openstudio {{/str}} {{/pix}}{{/sortdesc}}
 </span>
 </span>
 
-<span class="openstudio-filter-sort-devider">
-<span class="openstudio-filter-sort-text ">{{#str}} filtersortby, mod_openstudio {{/str}}
-    <a href="#" class="openstudio-filter-expanded openstudio-filter-text-selected">
-        {{#str}} filterdate, mod_openstudio {{/str}}
+<span class="openstudio-filter-sort-divider">
+<span class="openstudio-filter-sort-text">{{#str}} filtersortby, mod_openstudio {{/str}}
+    {{#sortbydate}}
+        <a href="{{sortbydateurl}}" class="openstudio-filter-text-selected">
+            {{#str}} filterdate, mod_openstudio {{/str}}
+        </a>
+        {{#sortdesc}}{{#pix}} t/collapsed, core, {{#str}} filtersortactivedesc, openstudio {{/str}} {{/pix}}{{/sortdesc}}
+        {{#sortasc}}{{#pix}} t/expanded, core, {{#str}} filtersortactiveasc, openstudio {{/str}} {{/pix}}{{/sortasc}}
+    {{/sortbydate}}
+    {{^sortbydate}}
+        <a href="{{sortbydateurl}}" class="">{{#str}} filterdate, mod_openstudio {{/str}}</a>
+    {{/sortbydate}}
     </a>
 </span>
 <span class="openstudio-filter-sort-text openstudio-filter-sort-text-title">
-    <a href="#" class="openstudio-filter-collapsed">
-        {{#str}} filtertitle, mod_openstudio {{/str}}
-    </a>
+    {{#sortbytitle}}
+        <a href="{{sortbytitleurl}}" class="openstudio-filter-text-selected">
+            {{#str}} filtertitle, mod_openstudio {{/str}}
+        </a>
+        {{#sortdesc}}{{#pix}} t/collapsed, core, {{#str}} filtersortactivedesc, openstudio {{/str}} {{/pix}}{{/sortdesc}}
+        {{#sortasc}}{{#pix}} t/expanded, core, {{#str}} filtersortactiveasc, openstudio {{/str}} {{/pix}}{{/sortasc}}
+    {{/sortbytitle}}
+    {{^sortbytitle}}
+        <a href="{{sortbytitleurl}}" class="">{{#str}} filtertitle, mod_openstudio {{/str}}</a>
+    {{/sortbytitle}}
 </span>
 </span>
 
 <span class="openstudio-filter-text">
 <span>{{#str}} filtertotal, mod_openstudio {{/str}}: {{total}}</span>
 </span>
+
 {{#selectview}}
 <span class="openstudio-filter-select">
-    <span>{{#str}} filtergroup, mod_openstudio {{/str}}:</span>
+    <label for="filter_groupid">{{#str}} filtergroup, mod_openstudio {{/str}}:</label>
     {{#showmultigroup}}
-        <select>
-           <option value="0">{{#str}} filterall, mod_openstudio {{/str}}</option>
-          {{#groupitems}}
-            <option value="{{id}}">{{name}}</option>
-          {{/groupitems}}
+        <select id="filter_groupid">
+            {{#groupitems}}
+                <option value="{{groupid}}" name="{{name}}"
+                    {{#selectedgroup}}selected="selected"{{/selectedgroup}}>{{name}}
+                </option>
+            {{/groupitems}}
         </select>
     {{/showmultigroup}}
-    {{^ showmultigroup}}
+    {{^showmultigroup}}
         {{#groupitems}}
             <span>{{name}}</span>
         {{/groupitems}}
@@ -109,22 +132,23 @@
 
 {{#myactivities}}
     <span class="openstudio-filter-select">
-    <span>{{#str}} filterwork, mod_openstudio {{/str}}:</span>
-    <select id="filter_block_activity">
-            <option value="0">{{#str}} filterall, mod_openstudio {{/str}}</option>
-        {{#blocksdata}}
-            <option value="{{id}}">{{name}}</option>
-        {{/blocksdata}}
-    </select>
-</span>
+        <label for="filter_block_activity">{{#str}} filterwork, mod_openstudio {{/str}}:</label>
+        <select id="filter_block_activity">
+                <option value="0">{{#str}} filterall, mod_openstudio {{/str}}</option>
+            {{#blocksdata}}
+                <option value="{{id}}" {{#selected}}selected="selected"{{/selected}}>{{name}}</option>
+            {{/blocksdata}}
+        </select>
+    </span>
 {{/myactivities}}
 
 <span class="openstudio-filter-select">
-    <span>{{#str}} filterview, mod_openstudio {{/str}}:</span>
-    <select>
-        <option value="50">50</option>
-        <option value="100" selected="selected">100</option>
-        <option value="250">250</option>
-        <option value="300">300</option>
+    <label for="filter_pagesize">{{#str}} filterview, mod_openstudio {{/str}}:</label>
+    <select id="filter_pagesize">
+        {{#viewsizes}}
+            <option value="{{size}}" {{#selected}}selected="selected"{{/selected}}>{{size}}</option>
+        {{/viewsizes}}
     </select>
 </span>
+<input type="hidden" id="view_sort_action_url" value="{{sortactionurl}}">
+<input type="hidden" id="vid" value="{{vid}}">

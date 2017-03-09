@@ -410,39 +410,12 @@
     color: #002158;
 }
 
-.openstudio-filter-collapsed {
-    border-left: none;
-    border-right: none;
-    background-image: url([[pix:t/collapsed]]);
-    border-left: 0 none;
-    border-right: medium none;
-    background-size: 10px 10px;
-    background-color: transparent;
-    background-repeat: no-repeat;
-    background-position: right;
-    display: inline-block;
-    padding-right: 16px;
-    font-size: 1em;
-    color: #002158;
+.openstudio-filter-sort-text img {
+    width: 10px;
+    padding-left: 3px;
 }
 
-.openstudio-filter-expanded {
-    border-left: none;
-    border-right: none;
-    background-image: url([[pix:t/expanded]]);
-    border-left: 0 none;
-    border-right: medium none;
-    background-size: 10px 10px;
-    background-color: transparent;
-    background-repeat: no-repeat;
-    background-position: right;
-    display: inline-block;
-    padding-right: 16px;
-    font-size: 1em;
-    color: #002158;
-}
-
-.openstudio-filter-devider {
+.openstudio-filter-divider {
     border-right: 1px solid #d4d2d2;
     height: 35px;
     line-height: 35px;
@@ -479,7 +452,7 @@
     font-weight: bold;
 }
 
-.openstudio-filter-sort-devider {
+.openstudio-filter-sort-divider {
     border-right: 1px solid #d4d2d2;
     height: 35px;
     line-height: 35px;
@@ -496,6 +469,11 @@
 
 .openstudio-filter-sort-text a {
     color: #002158;
+}
+
+.path-mod-openstudio .openstudio-filter-select label {
+    color: #002158;
+    display: inline;
 }
 
 .openstudio-content {
@@ -1662,17 +1640,12 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         font-size: 1.28571em;
     }
 
-    .openstudio-filter-devider {
+    .openstudio-filter-divider {
         line-height: 38px;
     }
 
     .openstudio-filter {
         padding: 6px 15px 11px 0;
-    }
-
-    .openstudio-filter-expanded {
-        background-size: 16px 16px;
-        padding-right: 24px;
     }
 
     .openstudio-filter-collapsed {
@@ -1684,7 +1657,7 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         font-size: 1.28571em;
     }
 
-    .openstudio-filter-sort-devider {
+    .openstudio-filter-sort-divider {
         border-right: 0px;
         padding-right: 0px;
     }
@@ -1972,7 +1945,7 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         width: 280px;
     }
 
-    .openstudio-filter-devider {
+    .openstudio-filter-divider {
         border-right: 0px;
     }
 

@@ -154,7 +154,13 @@ if ($vid == content::VISIBILITY_PRIVATE_PINBOARD) {
     $fblock = -1;
 }
 
-$fblockarray = array();
+$blockid = optional_param('blockid', 0, PARAM_INT); // Block id to filter against.
+$fblockarray = optional_param('fblockarray', array(), PARAM_INT);
+
+// Stream get contents need to pass block array if existed.
+if ($blockid) {
+    array_push($fblockarray, $blockid);
+}
 
 $finalviewpermissioncheck = true;
 if ((($vid == content::VISIBILITY_MODULE) || ($vid == content::VISIBILITY_GROUP) || ($vid == content::VISIBILITY_WORKSPACE))
@@ -193,9 +199,6 @@ if (isset($SESSION->studio_view_filters)) {
     }
 }
 $streamdatapagesize = optional_param('pagesize', $streamdatapagesize, PARAM_INT);
-if ($streamdatapagesize > 100) {
-    $streamdatapagesize = 100;
-}
 
 // Get stream of contents.
 $contentdata = (object) array('contents' => array(), 'total' => 0);
@@ -210,7 +213,7 @@ if ($finalviewpermissioncheck) {
 
     $contentdatatemp = stream::get_contents(
             $cminstance->id, $permissions->groupingid, $viewuser->id, $contentowner->id, $vid,
-            null, null, null, null, null, null,
+            $fblockarray, null, null, null, null, null,
             $sortflag, $pagestart, $streamdatapagesize, ($fblock == -1), true,
             $permissions->managecontent, $groupid, $permissions->groupmode,
             false,
@@ -391,6 +394,68 @@ $crumbarray[$placeholdertext] = $viewpageurl;
 util::add_breadcrumb($PAGE, $cm->id, navigation_node::TYPE_ACTIVITY, $crumbarray);
 
 $PAGE->requires->js_call_amd('mod_openstudio/viewhelper', 'init');
+
+// Sort action url.
+$sortactionurl = new moodle_url('/mod/openstudio/view.php', ['id' => $id, 'osort' => $osort, 'fsort' => $fsort]);
+$sortactionurl = $sortactionurl->out(false);
+$contentdata->sortactionurl = $sortactionurl;
+
+$nextosort = 1 - $osort;
+$sortbydateurl = new moodle_url('/mod/openstudio/view.php',
+        ['id' => $id, 'vid' => $vid, 'groupid' => $groupid, 'pagesize' => $streamdatapagesize,
+                'blockid' => $blockid, 'osort' => $nextosort, 'fsort' => stream::SORT_BY_DATE]);
+
+$contentdata->sortbydateurl = $sortbydateurl->out(false);
+
+$sortbytitleurl = new moodle_url('/mod/openstudio/view.php',
+        ['id' => $id, 'vid' => $vid, 'groupid' => $groupid, 'pagesize' => $streamdatapagesize,
+                'blockid' => $blockid, 'osort' => $nextosort, 'fsort' => stream::SORT_BY_ACTIVITYTITLE]);
+
+$contentdata->sortbytitleurl = $sortbytitleurl->out(false);
+
+$sortbydate = false;
+$sortbytitle = false;
+switch ($fsort) {
+    case stream::SORT_BY_ACTIVITYTITLE:
+        $sortbytitle = true;
+        break;
+    case stream::SORT_BY_DATE:
+    default:
+        $sortbydate = true;
+        break;
+}
+
+$sortasc = false;
+$sortdesc = false;
+switch ($osort) {
+    case stream::SORT_ASC:
+        $sortasc = true;
+        break;
+    case stream::SORT_DESC:
+    default:
+        $sortdesc = true;
+        break;
+}
+
+$contentdata->sortbydate = $sortbydate;
+$contentdata->sortbytitle = $sortbytitle;
+$contentdata->sortasc = $sortasc;
+$contentdata->sortdesc = $sortdesc;
+$contentdata->selectedgroupid = $groupid;
+
+$viewsizes[0] = (object) ['size' => 50, 'selected' => false];
+$viewsizes[1] = (object) ['size' => 100, 'selected' => false];
+$viewsizes[2] = (object) ['size' => 150, 'selected' => false];
+$viewsizes[3] = (object) ['size' => 250, 'selected' => false];
+
+foreach ($viewsizes as $key => $value) {
+    if ($value->size == $streamdatapagesize) {
+        $viewsizes[$key]->selected = true;
+    }
+}
+
+$contentdata->viewsizes = $viewsizes;
+$contentdata->blockid = $blockid;
 
 // Generate stream html.
 $renderer = $PAGE->get_renderer('mod_openstudio');

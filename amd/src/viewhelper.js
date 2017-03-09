@@ -38,7 +38,9 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
 
             t.handleTooltip();
             t.handleIsotope();
-
+            t.handleGroupSwitcher();
+            t.handleViewSizeSwitcher();
+            t.handleBlockSwitcher();
         },
 
         /**
@@ -69,6 +71,78 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
                     }
                 });
             });
+
+        },
+
+        /**
+         * Handle when user filter by group.
+         *
+         * @method handleGroupSwitcher
+         */
+        handleGroupSwitcher: function() {
+            $('#filter_groupid').change(function() {
+
+                t.redirectURL();
+
+            });
+
+        },
+
+        /**
+         * Handle when user filter by block.
+         *
+         * @method handleBlockSwitcher
+         */
+        handleBlockSwitcher: function() {
+            $('#filter_groupid').change(function() {
+
+                t.redirectURL();
+
+            });
+
+        },
+
+        /**
+         * Handle when user filter by view number.
+         *
+         * @method handleViewSizeSwitcher
+         */
+        handleViewSizeSwitcher: function() {
+            $('#filter_block_activity').change(function() {
+
+                t.redirectURL();
+
+            });
+
+        },
+
+        /**
+         * Handle redirect URL.
+         *
+         * @method redirectURL
+         */
+        redirectURL: function() {
+            var url = $('#view_sort_action_url').val();
+            var vid = $('#vid').val();
+
+            url = url + '&vid=' + vid;
+
+            if ($('#filter_groupid').length) {
+                var groupid = $('#filter_groupid').val();
+                url = url + '&groupid=' + groupid;
+            }
+
+            if ($('#filter_pagesize').length) {
+                var pagesize = $('#filter_pagesize').val();
+                url = url + '&pagesize=' + pagesize;
+            }
+
+            if ($('#filter_block_activity').length) {
+                var blockid = $('#filter_block_activity').val();
+                url = url + '&blockid=' + blockid;
+            }
+
+            window.location.href = url;
 
         }
 
