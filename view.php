@@ -370,6 +370,7 @@ if ($finalviewpermissioncheck) {
 util::page_setup($PAGE, $pagetitle, $pageheading, $pageurl, $course, $cm);
 
 // Breadcrumb.
+$importenable = false;
 switch ($vid) {
     case content::VISIBILITY_MODULE:
         $placeholdertext = $theme->thememodulename;
@@ -385,6 +386,7 @@ switch ($vid) {
         break;
 
     case content::VISIBILITY_PRIVATE_PINBOARD:
+        $importenable = true;
         $placeholdertext = $theme->themepinboardname;
         break;
 }
@@ -392,6 +394,15 @@ $viewpageurl = new moodle_url('/mod/openstudio/view.php',
         array('id' => $cm->id, 'vid' => $vid));
 $crumbarray[$placeholdertext] = $viewpageurl;
 util::add_breadcrumb($PAGE, $cm->id, navigation_node::TYPE_ACTIVITY, $crumbarray);
+
+// Only content owner can import.
+$importenable = $importenable && ($vuid === $USER->id);
+if ($importenable) {
+    $importurl = new moodle_url('/mod/openstudio/import.php', array('id' => $id));
+    $importstr = get_string('openstudio:import', 'mod_openstudio');
+
+    \theme_osep\bottom_buttons::add(\theme_osep\bottom_buttons::TYPE_IMPORT, $importurl, $importstr);
+}
 
 $PAGE->requires->js_call_amd('mod_openstudio/viewhelper', 'init');
 

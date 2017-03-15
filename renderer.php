@@ -653,6 +653,21 @@ class mod_openstudio_renderer extends plugin_renderer_base {
     }
 
     /**
+     * This function renders the HTML fragment for the Import page of Open Studio.
+     *
+     * @param \moodleform $uform The import upload form
+     * @param string $formerror Form error message
+     * @return string The rendered HTML fragment.
+     */
+    public function import_page($uform, $formerror) {
+        $data = new stdClass();
+        $data->uformhtml = $uform->render();
+        $data->formerror = $formerror;
+
+        return $this->render_from_template('mod_openstudio/import', $data);
+    }
+
+    /**
      * This function renders the HTML fragment for the report usage content of Open Studio.
      *
      * @param array $summarydata Summary data of report usage.

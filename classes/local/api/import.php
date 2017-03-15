@@ -25,6 +25,7 @@
 namespace mod_openstudio\local\api;
 
 use mod_openstudio\local\util;
+use mod_openstudio\local\api\content;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -41,7 +42,10 @@ class import {
         $temppath = $importfile->copy_content_to_temp('openstudio', $tempname);
 
         $archive = new \zip_archive;
-        $archive->open($temppath, \zip_archive::OPEN);
+
+        if (!$archive->open($temppath, \zip_archive::OPEN)) {
+            return null;
+        }
 
         $files = [];
 
@@ -124,7 +128,7 @@ SELECT s.id
 
 EOF;
 
-        $params = [$cm->instance, $userid, STUDIO_CONTENTTYPE_NONE];
+        $params = [$cm->instance, $userid, content::TYPE_NONE];
         $emptycontents = $DB->get_records_sql($sql, $params);
 
         $context = \context_module::instance($cm->id);

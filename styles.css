@@ -84,6 +84,53 @@
 }
 
 /**
+ * Import feature
+ */
+
+.path-mod-openstudio #osep-bottombutton-import img {
+    margin-bottom: 3px;
+}
+
+.openstudio-import-header {
+    margin-top: 27px;
+    padding-top: 9px;
+    border-top: 1px solid #d4d2d2;
+    margin-bottom: 26px;
+}
+.openstudio-import-header h2 {
+    font-family: Arial;
+    font-size: 1.57em;
+    color: #002158;
+    font-weight: bold;
+}
+
+.openstudio-import-form label[for="id_importfile"] {
+    font-weight: bold;
+}
+
+.openstudio-import-form .mform .iconhelp {
+    margin-left: 0px;
+}
+
+.openstudio-import-form #fitem_id_importcontents {
+    margin-top: 40px;
+    margin-bottom: 63px;
+}
+
+.openstudio-import-form .fp-restrictions {
+    display: none;
+}
+
+.openstudio-import-error {
+    text-align: right;
+    color: red;
+}
+
+/**
+ * End import feature
+ */
+
+/**
  * Subscription feature
  */
 

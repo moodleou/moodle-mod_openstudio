@@ -825,6 +825,8 @@ $string['manageexportxml'] = 'Export XML';
 $string['manageimporthelp'] = '<p>To import new block/activity structure, paste valid XML describing the block/activity structure into the form.</p><p>Warning: the import action will delete any existing block/activity structure prior to importing the new structure.</p>';
 $string['manageimportconfirmhelp'] = '<p>Verify the block/activity structure below and select the Import XML button to create the structure.</p><p>Warning: the import action will delete any existing block/activity structure prior to importing the new structure.</p>';
 $string['manageimportxml'] = 'Import XML';
+$string['import:errorfile'] = 'File can not be read.';
+$string['import:erroroverload'] = 'The zip file contains more files than you have room for on your Pinboard.';
 
 $string['manageblocksheader'] = 'Manage Blocks';
 $string['activeblocksheader'] = 'Active Blocks';
@@ -901,9 +903,11 @@ $string['errornoactivities'] = 'This studio has no activities! Please add some b
 
 $string['importfileheader'] = 'Choose file to import';
 $string['importfile'] = 'Choose file';
+$string['importzipfile'] = 'Choose zip file';
 $string['importfile_help'] = 'Only Zip files are accepted.  Collect your various files and compress them into one Zip file to upload and import.';
 $string['importchooserheader'] = 'Select files to Import';
 $string['importbutton'] = 'Import';
+$string['importcontentheader'] = 'Import posts';
 $string['addtoqueuebutton'] = 'Add download to queue';
 $string['searchformheader'] = 'Search contents';
 $string['searchformfieldlabel'] = 'Search';
