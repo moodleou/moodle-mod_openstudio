@@ -72,4 +72,97 @@ class export {
         }
         return explode('x', strtr($ids, array_flip(self::$encodemap)));
     }
+
+    /**
+     * Get ALL files to be exported from a studio for a specific user.
+     *
+     * @param int $studioid
+     * @param int $userid
+     * @param int $limitfrom
+     * @param int $limitnum
+     * @return recordset
+     */
+    public static function get_files($studioid, $userid, array $fileids = null,
+            array $slotids = null, $limitfrom = 0, $limitnum = 250, $returncountonly = false) {
+
+        global $DB;
+
+        if ($fileids != null) {
+            list($filessql, $fileparams) = $DB->get_in_or_equal($fileids);
+            $filessql = "AND s.fileid $filessql";
+        }
+
+        if ($slotids != null) {
+            list($slotssql, $slotparams) = $DB->get_in_or_equal($slotids);
+            $slotssql = "AND s.id $slotssql";
+        }
+
+        // Prepare actions SQL.
+        $sql = <<<EOF
+SELECT s.id,
+       s.fileid,
+       s.name,
+       s.mimetype,
+       s.content,
+       f.itemid,
+       f.contenthash,
+       f.pathnamehash,
+       f.component,
+       f.filearea,
+       f.itemid,
+       f.filepath,
+       f.filename,
+       f.filesize
+  FROM {openstudio_contents} s,
+       {files} f
+ WHERE s.openstudioid = ?
+   AND s.userid  = ?
+   AND s.fileid > ?
+   AND f.itemid = s.fileid
+   AND f.component = ?
+   AND f.filearea = ?
+   AND f.filesize > ?
+   AND s.deletedby IS NULL
+   AND s.deletedtime IS NULL
+
+EOF;
+
+        $params[] = $studioid;
+        $params[] = $userid;
+        $params[] = 0;
+        $params[] = 'mod_openstudio';
+        $params[] = 'content';
+        $params[] = 0;
+
+        if (isset($filessql)) {
+            $sql .= $filessql;
+            foreach ($fileids as $fid) {
+                $params[] = $fid;
+            }
+        }
+
+        if (isset($slotssql)) {
+            $sql .= $slotssql;
+            foreach ($slotids as $sid) {
+                $params[] = $sid;
+            }
+        }
+
+        $rs = $DB->get_recordset_sql($sql, $params, $limitfrom, $limitnum);
+
+        if (!$returncountonly) {
+            // Return the recordset.
+            return $rs;
+        } else {
+            $count = 0;
+            if ($rs->valid()) {
+                foreach ($rs as $r) {
+                    $count++;
+                }
+                $rs->close();
+            }
+
+            return $count;
+        }
+    }
 }

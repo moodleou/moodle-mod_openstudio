@@ -19,12 +19,14 @@ namespace mod_openstudio;
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\export;
 use mod_openstudio\local\api\stream;
+use mod_openstudio\local\api\contentversion;
 use mod_openstudio\local\api\folder;
 use mod_openstudio\local\util;
 
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/portfolio/caller.php');
+require_once($CFG->dirroot.'/mod/openstudio/api/apiloader.php');
 
 /**
  * Portfolio callback class for openstudio exports.
@@ -61,7 +63,28 @@ class portfolio_caller extends \portfolio_module_caller_base {
     }
 
     public function load_data() {
-        $contents = stream::get_contents_by_ids($this->user->id, $this->contentids);
+        global $PAGE, $USER;
+
+        $contents = array();
+
+        $coursedata = util::render_page_init($this->cm->id);
+        $renderer = $PAGE->get_renderer('mod_openstudio');
+
+        $showdeletedcontentversions = ($coursedata->permissions->viewdeleted || $coursedata->permissions->managecontent);
+
+        foreach ($this->contentids as $contentid) {
+            // Get content data.
+            $contentandversions = contentversion::get_content_and_versions($contentid, $USER->id, $showdeletedcontentversions);
+            $contentdata = studio_api_lock_determine_lock_status($contentandversions->contentdata);
+            $contentdata->contentversions = array_values($contentandversions->contentversions);
+            $contentdata->vid = $contentdata->visibilitycontext;
+
+            // After all, call renderer to get content page.
+            $contentdata->contentpage = $renderer->content_page($coursedata->cm->id, $coursedata->permissions,
+                    $contentdata, $coursedata->cminstance->id);
+            $contents[] = $contentdata;
+        }
+
         $this->load_contents($contents);
         if (empty($this->files)) {
             // No attached files to export, we'll just be generating HTML pages for the content.  Create a dummy file to

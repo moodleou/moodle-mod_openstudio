@@ -681,6 +681,20 @@ $string['profilepanellabel'] = "User's profile panel";
 $string['exportimportstreamtitle'] = 'Export/import options: ';
 $string['export'] = 'Export';
 $string['exportimport'] = 'Import';
+$string['exportdialogheader'] = 'Export posts';
+$string['exportdialogcontent'] = 'Do you want to include all content listed on this page, or only selected posts?';
+$string['exportall'] = 'All content shown';
+$string['exportselectedpost'] = 'Selected posts';
+$string['export:file'] = 'File';
+$string['export:title'] = 'Title';
+$string['export:size'] = 'Size';
+$string['export:location'] = 'Location';
+$string['export:guide'] = 'You can download individual posts using the links below. Alternatively, '.
+        'select several posts and click ‘Download selected posts as zip’ to download them all at once.';
+$string['export:selectall'] = 'Select all';
+$string['export:selectnone'] = 'Select none';
+$string['export:exportselected'] = 'Export selected posts';
+$string['export:emptycontent'] = 'No post for exporting';
 
 $string['subscribestreamtitle'] = 'Subscribe to activity stream';
 $string['subscribestreammessage'] = 'You have no email subscription from this page. ';

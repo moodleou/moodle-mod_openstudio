@@ -2,6 +2,11 @@
     margin: 0px;
 }
 
+/* OSEP bottom button */
+.path-mod-openstudio .osep-bottombuttons a {
+    margin-left: 13px;
+}
+
 .openstudio-container {
     min-height: 500px;
     margin-top: 20px;
@@ -302,6 +307,179 @@
 
 /**
  * End Content modal.
+ */
+
+/**
+ * Export feature.
+ */
+
+.path-mod-openstudio #osep-bottombutton-export img {
+    margin-bottom: 3px;
+}
+
+/* Export dialog header */
+.moodle-dialogue-base .openstudio-export-dialog-container .moodle-dialogue-wrap .moodle-dialogue-hd,
+.moodle-dialogue-base .openstudio-export-dialog-container .moodle-dialogue-wrap .moodle-dialogue-hd.yui3-widget-hd {
+    height: 46px;
+    padding: 0px;
+}
+
+.moodle-dialogue-base .openstudio-export-dialog-container .openstudio-export-header {
+    padding: 13px 15px;
+    display: inline-block;
+    font-family: Arial;
+}
+
+.moodle-dialogue-base .openstudio-export-dialog-container .yui3-button.closebutton {
+    padding: 3px 3px;
+    margin: 0px 9px 0px 9px;
+}
+
+.moodle-dialogue-base .openstudio-export-dialog-container .yui3-button.closebutton:before {
+    height: 30px;
+    display: block;
+}
+
+/* Export dialog body */
+.moodle-dialogue-base .moodle-dialogue.openstudio-export-dialog-container .moodle-dialogue-bd {
+    padding: 20px 15px;
+}
+
+.moodle-dialogue-base .moodle-dialogue.openstudio-export-dialog-container .moodle-dialogue-bd {
+    padding: 12px 15px;
+}
+
+.openstudio-export-message {
+    color: red;
+    display: none;
+}
+
+/* Export dialog footer */
+.moodle-dialogue-base .moodle-dialogue.openstudio-export-dialog-container .moodle-dialogue-content .moodle-dialogue-ft {
+    text-align: left;
+    margin: 7px 7px 30px;
+}
+
+.moodle-dialogue-base .moodle-dialogue.openstudio-export-dialog-container .moodle-dialogue-ft .yui3-widget-buttons {
+    display: inline-flex;
+}
+
+.moodle-dialogue-base .moodle-dialogue.openstudio-export-dialog-container .moodle-dialogue-ft
+.yui3-widget-buttons button{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.moodle-dialogue-base .moodle-dialogue.openstudio-export-dialog-container .moodle-dialogue-ft .yui3-widget-buttons
+.openstudio-exportall-btn {
+    order: 1;
+}
+
+.moodle-dialogue-base .moodle-dialogue.openstudio-export-dialog-container .moodle-dialogue-ft .yui3-widget-buttons
+.openstudio-exportselected-btn{
+    order: 2;
+}
+
+.moodle-dialogue-base .moodle-dialogue.openstudio-export-dialog-container .moodle-dialogue-ft .yui3-widget-buttons
+.openstudio-cancelexport-btn{
+    order: 3;
+}
+
+/* Export content list */
+
+body.format-oustudyplan .generaltable.openstudio-export-items thead tr th {
+    vertical-align: middle;
+}
+
+.openstudio-export-post-header {
+    font-family: "Arial";
+    font-size: 28px;
+    color: #002158;
+    margin: 19px 0px 27px;
+    font-weight: bold;
+}
+
+.openstudio-export-controls {
+    margin: 10px 0px;
+}
+
+.openstudio-export-controls-bottom {
+    margin-top: 30px;
+    margin-bottom: 60px;
+}
+
+.openstudio-export-controls button.btn {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.openstudio-export-controls button[name="openstudio-export-select-none"] {
+    margin-right: 45px;
+}
+
+.openstudio-export-guide {
+    margin: 13px 0px 27px;
+}
+
+.openstudio-export-items tr th:nth-child(1),
+.openstudio-export-items tr td:nth-child(1) {
+    padding-right: 1px;
+    width: 1px;
+}
+
+.openstudio-export-items tr th:nth-child(2) {
+    padding-left: 17px;
+    width: 29px;
+}
+
+.openstudio-export-items tr td:nth-child(2) {
+    padding-left: 15px;
+    width: 29px;
+}
+
+.openstudio-export-items tr th:nth-child(3),
+.openstudio-export-items tr td:nth-child(3) {
+    padding-left: 0px;
+    color: #0b55a8;
+}
+
+.openstudio-export-items tr th:nth-child(4),
+.openstudio-export-items tr td:nth-child(4) {
+    width: 152px;
+    color: #000000;
+}
+
+.openstudio-export-items tr th:nth-child(5),
+.openstudio-export-items tr td:nth-child(5) {
+    width: 218px;
+    color: #0b55a8;
+}
+
+.openstudio-export-items tr:last-child td {
+    border-bottom: 3px solid #bfe2ef;
+}
+
+.openstudio-export-items tr td {
+    vertical-align: middle;
+}
+
+.openstudio-export-checkbox img {
+    width: 12px;
+    height: 12px;
+    margin-top: -3px;
+}
+
+.openstudio-export-filetype img {
+    width: 24px;
+    height: 24px;
+}
+
+label.openstudio-export-item-name {
+    display: inline;
+}
+
+/**
+ * End export feature.
  */
 
 .path-mod-openstudio .openstudio-nav-logo-wrapper {
@@ -2672,8 +2850,12 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     .openstudio-work-progress-percent {
         line-height: 30px;
     }
-}
 
+    .moodle-dialogue-base .openstudio-export-dialog-container .moodle-dialogue-wrap .moodle-dialogue-hd,
+    .moodle-dialogue-base .openstudio-export-dialog-container .moodle-dialogue-wrap .moodle-dialogue-hd.yui3-widget-hd {
+        height: 50px;
+    }
+}
 /* Mobile small. */
 @media (max-width: 419px) {
     .path-mod-openstudio .osep-moduleheading {

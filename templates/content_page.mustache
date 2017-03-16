@@ -42,19 +42,22 @@
         "contentfavouritetotal" : 5,
         "contentsmiletotal" : 0,
         "contentinspiretotal" : 0,
-        "contentcopyenable" : true
+        "contentcopyenable" : true,
+        "profilebarenable": true
     }
 }}
 {{#contentmapenable}}
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 {{/contentmapenable}}
 <div class="openstudio-container">
-    <div class="openstudio-module-title">
-        <h1>{{{placeholdertext}}}</h1>
-    </div>
-    <div class="openstudio-filter clearfix">
-       {{>mod_openstudio/profile_bar}}
-    </div>
+    {{#profilebarenable}}
+        <div class="openstudio-module-title">
+            <h1>{{{placeholdertext}}}</h1>
+        </div>
+        <div class="openstudio-filter clearfix">
+           {{>mod_openstudio/profile_bar}}
+        </div>
+    {{/profilebarenable}}
     <div class="openstudio-content-view-container clearfix">
         <div class="openstudio-content-view-primary">
             <div class="openstudio-content-view-title openstudio-content-view-title-icon-{{{contentvisibilityicon}}}">

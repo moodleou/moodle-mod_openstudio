@@ -1,0 +1,117 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_openstudio/exportposts
+
+    Export selected posts - basic HTML skeleton, then include content template.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Example context (json):
+    {
+        "contents": [
+            {
+                "id": 1,
+                "icon": {
+                    "fileicon" : "../../../mod/openstudio/pix/audio_rgb_32px.svg",
+                    "filetype": "Audio"
+                },
+                "name" : "HTML Mark up",
+                "size" : "0.75MB",
+                "location" : "My pinboard",
+                "index": 1
+            },
+            {
+                "id": 2,
+                "icon": {
+                    "fileicon" : "../../../mod/openstudio/pix/video_rgb_32px.svg",
+                    "filetype": "Video"
+                },
+                "name" : "Word",
+                "size" : "0.75MB",
+                "location" : "My pinboard",
+                "index": 2
+            }
+        ]
+    }
+}}
+
+<h1 class="openstudio-export-post-header">{{#str}} exportdialogheader, mod_openstudio {{/str}}</h1>
+
+<div class="openstudio-export-controls">
+    <button class="btn" name="openstudio-export-select-all">
+        {{#str}} export:selectall, mod_openstudio {{/str}}
+    </button>
+    <button class="btn disabled" name="openstudio-export-select-none">
+        {{#str}} export:selectnone, mod_openstudio {{/str}}
+    </button>
+    <button class="btn disabled" name="openstudio-export-selected">
+        {{#str}} export:exportselected, mod_openstudio {{/str}}
+    </button>
+</div>
+
+<div class="openstudio-export-guide">
+    <span>{{#str}} export:guide, mod_openstudio {{/str}}</span>
+</div>
+
+<table class="generaltable openstudio-export-items">
+    <thead>
+        <tr>
+            <th class="header c0 openstudio-export-checkbox" scope="col">
+                {{#pix}}
+                    downloads_listview_tick_rgb_32px, openstudio, {{#str}} exportdownload, openstudio {{/str}}
+                {{/pix}}
+            </th>
+            <th class="header c0" scope="col">{{#str}} export:file, mod_openstudio {{/str}}</th>
+            <th class="header c1" scope="col">{{#str}} export:title, mod_openstudio {{/str}}</th>
+            <th class="header c2" scope="col">{{#str}} export:size, mod_openstudio {{/str}}</th>
+            <th class="header c3" scope="col">{{#str}} export:location, mod_openstudio {{/str}}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#contents}}
+            <tr>
+                <td class="cell c0">
+                    <input type="checkbox" id="openstudio-export-item{{index}}" data-contentid="{{id}}"/>
+                </td>
+                <td class="cell c0 openstudio-export-filetype">
+                    <img src="{{icon.fileicon}}" alt="{{icon.filetype}}"/>
+                </td>
+                <td class="cell c1"><label for="openstudio-export-item{{index}}"
+                    class="openstudio-export-item-name">{{name}}</label></td>
+                <td class="cell c2">{{size}}</td>
+                <td class="cell c3">{{location}}</td>
+            </tr>
+        {{/contents}}
+    </tbody>
+</table>
+
+<div class="openstudio-export-controls openstudio-export-controls-bottom">
+    <button class="btn" name="openstudio-export-select-all">
+        {{#str}} export:selectall, mod_openstudio {{/str}}
+    </button>
+    <button class="btn disabled" name="openstudio-export-select-none">
+        {{#str}} export:selectnone, mod_openstudio {{/str}}
+    </button>
+    <button class="btn disabled" name="openstudio-export-selected">
+        {{#str}} export:exportselected, mod_openstudio {{/str}}
+    </button>
+</div>

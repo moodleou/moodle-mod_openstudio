@@ -33,7 +33,8 @@
         "content": {
             "name": "My Exported Content",
             "fileid": 1,
-            "content": "http://placekitten.com/g/300/300/"
+            "content": "http://placekitten.com/g/300/300/",
+            "contentpage": "<div>Content page html</div>"
         }
     }
 
@@ -48,5 +49,6 @@
             <img src="{{content.content}}" />
         {{/content.fileid}}
         <!-- Include template for content page here -->
+        {{{content.contentpage}}}
     </body>
 </html>

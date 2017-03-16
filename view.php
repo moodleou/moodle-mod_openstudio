@@ -201,6 +201,7 @@ if (isset($SESSION->studio_view_filters)) {
 $streamdatapagesize = optional_param('pagesize', $streamdatapagesize, PARAM_INT);
 
 // Get stream of contents.
+$contentids = array(); // For export feature.
 $contentdata = (object) array('contents' => array(), 'total' => 0);
 if ($finalviewpermissioncheck) {
     // In My Module view, if block filter is on and set to one block only,
@@ -232,6 +233,11 @@ if ($finalviewpermissioncheck) {
             }
 
             $contentid = (int) $content->id;
+
+            if ($contentid !== 0) {
+                $contentids[] = $contentid;
+            }
+
             if ($contentid == 0) {
                 // Contentid is 0 if it's a blank uncreated content, so create a unique ID so it can be stored in th array.
                 $contentid = uniqid('', true);
@@ -397,6 +403,7 @@ util::page_setup($PAGE, $pagetitle, $pageheading, $pageurl, $course, $cm);
 
 // Breadcrumb.
 $importenable = false;
+$exportenable = false;
 switch ($vid) {
     case content::VISIBILITY_MODULE:
         $placeholdertext = $theme->thememodulename;
@@ -409,11 +416,13 @@ switch ($vid) {
     case content::VISIBILITY_WORKSPACE:
     case content::VISIBILITY_PRIVATE:
         $placeholdertext = $theme->themestudioname;
+        $exportenable = true;
         break;
 
     case content::VISIBILITY_PRIVATE_PINBOARD:
         $importenable = true;
         $placeholdertext = $theme->themepinboardname;
+        $exportenable = true;
         break;
 }
 $viewpageurl = new moodle_url('/mod/openstudio/view.php',
@@ -431,6 +440,22 @@ if ($importenable) {
 }
 
 $PAGE->requires->js_call_amd('mod_openstudio/viewhelper', 'init');
+
+// Only content owner can export.
+$exportenable = $exportenable && ($vuid === $USER->id);
+if ($exportenable) {
+    \theme_osep\bottom_buttons::add(\theme_osep\bottom_buttons::TYPE_EXPORT);
+
+    // Require strings.
+    $PAGE->requires->strings_for_js(
+            array('exportdialogheader', 'exportdialogcontent', 'export:emptycontent', 'exportall',
+                    'exportselectedpost', 'modulejsdialogcancel'), 'openstudio');
+
+    $PAGE->requires->js_call_amd('mod_openstudio/export', 'init', [[
+        "id" => $id,
+        "vid" => $vid,
+        "contentids" => $contentids]]);
+}
 
 // Sort action url.
 $sortactionurl = new moodle_url('/mod/openstudio/view.php', ['id' => $id, 'osort' => $osort, 'fsort' => $fsort]);

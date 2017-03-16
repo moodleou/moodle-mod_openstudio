@@ -645,7 +645,14 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         global $CFG;
 
         $contentdata->cmid = $cmid;
-        $contentdata = renderer_utils::profile_bar($permissions, $openstudioid, $contentdata);
+        if (!property_exists($contentdata, 'profilebarenable')) {
+            $contentdata->profilebarenable = true;
+        }
+
+        if ($contentdata->profilebarenable === true) {
+            $contentdata = renderer_utils::profile_bar($permissions, $openstudioid, $contentdata);
+        }
+
         $contentdata = renderer_utils::content_details($cmid, $permissions, $contentdata, false);
 
         $tagsraw = array();
@@ -915,5 +922,15 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $data->activitylog = $activitylog;
 
         return $this->render_from_template('mod_openstudio/reportusage', $data);
+    }
+
+    /**
+     * View for Export selected posts feature
+     *
+     * @param array $contentdata Array of content data
+     * @return string The rendered HTML fragment.
+     */
+    public function exportposts($contentdata = array()) {
+        return $this->render_from_template('mod_openstudio/exportposts', $contentdata);
     }
 }

@@ -564,4 +564,37 @@ EOF;
             $this->getSession()->getPage()->find("css", $selector)->click();
         }
     }
+
+    /**
+     * Gets the course id from it's shortname.
+     * @throws Exception
+     * @param string $shortname
+     * @return int
+     */
+    protected function get_course_id($shortname) {
+        global $DB;
+
+        if (!$id = $DB->get_field('course', 'id', array('shortname' => $shortname))) {
+            throw new Exception('The specified course with shortname "' . $shortname . '" does not exist');
+        }
+        return $id;
+    }
+
+    /**
+     * Gets the tutor role id from it's shortname.
+     * @throws Exception
+     * @param string $shortname
+     * @return int
+     */
+    protected function get_tutorroles_id($tutorroles) {
+        global $DB;
+        $shortnames = array_filter(explode(',', $tutorroles));
+        $ids = array();
+        foreach($shortnames as $shortname) {
+            if (!$ids[] = $DB->get_field('role', 'id', array('shortname' => $shortname))) {
+                throw new Exception('The role with shortname "' . $shortname . '" does not exist');
+            }
+        }
+        return implode(',', $ids);
+    }
 }
