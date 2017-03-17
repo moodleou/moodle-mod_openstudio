@@ -571,11 +571,12 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $contentdata->contentediturl = new moodle_url('/mod/openstudio/contentedit.php',
                    array('id' => $cmid, 'lid' => 0, 'sid' => 0, 'type' => 0, 'sstsid' => 0));
 
-        if ($contentdata->contents) {
-            $paging = $OUTPUT->paging_bar($contentdata->total, $contentdata->pagestart,
-                    $contentdata->streamdatapagesize, $contentdata->pageurl);
+        if ($contentdata->contents && !$myactivities) {
+            $pb = renderer_utils::openstudio_render_paging_bar($contentdata);
+            $paging = $this->render($pb);
             $contentdata->paging = $paging;
         }
+        $contentdata->available = $permissions->pinboarddata->available;
 
         return $this->render_from_template('mod_openstudio/body', $contentdata);
     }

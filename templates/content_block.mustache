@@ -41,11 +41,14 @@
         "inspirationicon" : "../../../mod/openstudio/pix/inspiration_rgb_32px.svg",
         "participationicon" : "../../../mod/openstudio/pix/participation_rgb_32px.svg",
         "favouriteicon" : "../../../mod/openstudio/pix/favourite_rgb_32px.svg",
+        "socialdatatotal" : 6,
         "socialdata" : {
+            "comments" : 1,
             "commentsnew" : 1,
-            "inspirednew" : 2,
-            "mademelaughnew" : 3,
-            "favouritenew" : 0
+            "inpsired" : 2,
+            "mademelaugh" : 3,
+            "mademelaughnew" : 1,
+            "favourite" : 0
          }
      }
 }}
@@ -76,49 +79,55 @@
                 {{/myworkview}}
             </div>
         </div>
-        {{#socialdata}}
-            <div class="openstudio-grid-item-content-detail-info">
-               <span class="openstudio-grid-item-content-detail-info-box">
-                    <span>
-                        <img src="{{commentsicon}}"
-                             alt="{{#str}} commentslabel, openstudio {{/str}}"
-                             class="openstudio-grid-item-content-detail-info-icon" />
-                    </span>
-                    <span class="openstudio-grid-item-content-detail-info-text">
-                        {{#commentsnew}} {{commentsnew}} {{/commentsnew}}
-                    </span>
-               </span>
-               <span class="openstudio-grid-item-content-detail-info-box">
-                    <span>
-                        <img src="{{inspirationicon}}"
-                             alt="{{#str}} inspirationlabel, openstudio {{/str}}"
-                             class="openstudio-grid-item-content-detail-info-icon" />
-                    </span>
-                    <span class="openstudio-grid-item-content-detail-info-text">
-                        {{#inspirednew}} {{inspirednew}} {{/inspirednew}}
-                    </span>
-               </span>
-               <span class="openstudio-grid-item-content-detail-info-box">
-                    <span>
-                        <img src="{{participationicon}}"
-                             alt="{{#str}} participationlabel, openstudio {{/str}}"
-                             class="openstudio-grid-item-content-detail-info-icon" />
-                    </span>
-                    <span class="openstudio-grid-item-content-detail-info-text">
-                        {{#mademelaughnew}} {{mademelaughnew}} {{/mademelaughnew}}
-                    </span>
-               </span>
-               <span class="openstudio-grid-item-content-detail-info-box">
-                    <span>
-                        <img src="{{favouriteicon}}"
-                             alt="{{#str}} favouritelabel, openstudio {{/str}}"
-                             class="openstudio-grid-item-content-detail-info-icon" />
-                    </span>
-                    <span class="openstudio-grid-item-content-detail-info-text">
-                        {{#favouritenew}} {{favouritenew}} {{/favouritenew}}
-                    </span>
-               </span>
-            </div>
-        {{/socialdata}}
+        {{#socialdatatotal}}
+            {{#socialdata}}
+                <div class="openstudio-grid-item-content-detail-info">
+                   <span class="openstudio-grid-item-content-detail-info-box">
+                        <span>
+                            <img src="{{commentsicon}}"
+                                 alt="{{#str}} commentslabel, openstudio {{/str}}"
+                                 class="openstudio-grid-item-content-detail-info-icon
+                                        {{^comments}}openstudio-icon-inactive{{/comments}}" />
+                        </span>
+                        <span class="openstudio-grid-item-content-detail-info-text{{#commentsnew}}-new{{/commentsnew}}">
+                            {{#comments}} {{comments}} {{/comments}}
+                        </span>
+                   </span>
+                   <span class="openstudio-grid-item-content-detail-info-box">
+                        <span>
+                            <img src="{{inspirationicon}}"
+                                 alt="{{#str}} inspirationlabel, openstudio {{/str}}"
+                                 class="openstudio-grid-item-content-detail-info-icon
+                                        {{^inpsired}}openstudio-icon-inactive{{/inpsired}}" />
+                        </span>
+                        <span class="openstudio-grid-item-content-detail-info-text{{#inspirednew}}-new{{/inspirednew}}">
+                            {{#inspired}} {{inspired}} {{/inspired}}
+                        </span>
+                   </span>
+                   <span class="openstudio-grid-item-content-detail-info-box">
+                        <span>
+                            <img src="{{participationicon}}"
+                                 alt="{{#str}} participationlabel, openstudio {{/str}}"
+                                 class="openstudio-grid-item-content-detail-info-icon
+                                        {{^mademelaugh}}openstudio-icon-inactive{{/mademelaugh}}" />
+                        </span>
+                        <span class="openstudio-grid-item-content-detail-info-text{{#mademelaughnew}}-new{{/mademelaughnew}}">
+                            {{#mademelaugh}} {{mademelaugh}} {{/mademelaugh}}
+                        </span>
+                   </span>
+                   <span class="openstudio-grid-item-content-detail-info-box">
+                        <span>
+                            <img src="{{favouriteicon}}"
+                                 alt="{{#str}} favouritelabel, openstudio {{/str}}"
+                                 class="openstudio-grid-item-content-detail-info-icon
+                                        {{^favourite}}openstudio-icon-inactive{{/favourite}}" />
+                        </span>
+                        <span class="openstudio-grid-item-content-detail-info-text{{#favouritenew}}-new{{/favouritenew}}">
+                            {{#favourite}} {{favourite}} {{/favourite}}
+                        </span>
+                   </span>
+                </div>
+            {{/socialdata}}
+        {{/socialdatatotal}}
     </div>
 </div>

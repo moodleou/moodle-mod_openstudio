@@ -27,7 +27,8 @@
 
     Example context (json):
     {
-        "contentediturl": "http://exmaple/mod/openstudio/contentedit.php?id=4&lid=0&sid=0&type=0&sstsid=0"
+        "contentediturl": "http://exmaple/mod/openstudio/contentedit.php?id=4&lid=0&sid=0&type=0&sstsid=0",
+        "available" : 100
     }
 
 }}
@@ -37,5 +38,11 @@
             {{#str}} addnewcontent, mod_openstudio {{/str}}
         </a>
     </div>
-    <a href="{{{contentediturl}}}"><div class="openstudio-upload-container"></div></a>
+    <a href="{{{contentediturl}}}"><div class="openstudio-upload-container">
+    </div></a>
+    <div class="openstudio-available">
+        {{#str}}
+           contentavailiable, mod_openstudio, { "available": {{#quote}}{{available}}{{/quote}} }
+       {{/str}}
+    </div>
 </div>

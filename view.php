@@ -326,7 +326,7 @@ if ($finalviewpermissioncheck) {
                     array('id' => $id, 'sid' => $content->id));
             }
 
-            $contentdata->contents[] = $content;
+            $contentdata->contents[$contentid] = $content;
 
             // Activity items.
             if ($vid == content::VISIBILITY_WORKSPACE || $vid == content::VISIBILITY_PRIVATE) {
@@ -355,14 +355,40 @@ if ($finalviewpermissioncheck) {
         $contentdata->pageurl = $pageurl;
 
         // Gather content social data.
+        $socialdatatotal = 0;
         $contentsocialdata = studio_api_notifications_get_activities($permissions->activeuserid, $contentslist);
         if ($contentsocialdata) {
-            foreach ($contentsocialdata as $contentsocialdataitem) {
-                if (array_key_exists($contentsocialdataitem->contentid, $contentdata->contents)) {
-                    $contentdata->contents[$contentsocialdataitem->contentid]->socialdata = $contentsocialdataitem;
+            foreach ($contentsocialdata as $socialitem) {
+                if (array_key_exists($socialitem->contentid, $contentdata->contents)) {
+                    if (($socialitem->commentsnewcontent > 0) || ($socialitem->commentsnew > 0) ||
+                        ($socialitem->inspirednewcontent > 0) || ($socialitem->inspirednew > 0) ||
+                        ($socialitem->mademelaughnewcontent > 0) || ($socialitem->mademelaughnew > 0) ||
+                        ($socialitem->favouritenewcontent > 0) || ($socialitem->favouritenew > 0)) {
+
+                        $socialitem->comments = $socialitem->commentsnewcontent + $socialitem->commentsnew;
+                        $socialitem->inspired = $socialitem->inspirednewcontent + $socialitem->inspirednew;
+                        $socialitem->mademelaugh = $socialitem->mademelaughnewcontent + $socialitem->mademelaughnew;
+                        $socialitem->favourite = $socialitem->favouritenewcontent + $socialitem->favouritenew;
+
+                    } else {
+                        $socialitem->comments = $socialitem->commentsold;
+                        $socialitem->inspired = $socialitem->inspiredold;
+                        $socialitem->mademelaugh = $socialitem->mademelaughold;
+                        $socialitem->favourite = $socialitem->favouriteold;
+                    }
+
+                    $contentdata->contents[$socialitem->contentid]->socialdata = $socialitem;
+
+                    $socialdatatotal = $socialitem->comments + $socialitem->inspired + $socialitem->mademelaugh + $socialitem->favourite;
+
+                    $contentdata->contents[$socialitem->contentid]->socialdatatotal = $socialdatatotal;
                 }
             }
         }
+
+        // Returns all the values from the array and indexes the array numerically.
+        // We need this because mustache requires it.
+        $contentdata->contents = array_values($contentdata->contents);
     }
 }
 

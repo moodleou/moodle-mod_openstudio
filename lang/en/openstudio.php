@@ -1095,6 +1095,7 @@ $string['contentactionlockname'] = 'Lock';
 $string['contentactionunlockname'] = 'Unlock';
 $string['contentlocked'] = 'Locked';
 $string['lockedbyusername'] = 'Locked by: {$a}';
+$string['contentavailiable'] = 'You have {$a->available} uploads availiable.';
 
 $string['erroractivitynotavailable'] = 'This activity is not available until: {$a}';
 

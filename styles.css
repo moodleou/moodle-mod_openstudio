@@ -6,7 +6,6 @@
     min-height: 500px;
     margin-top: 20px;
     background-color: #bfe2ef;
-    padding-bottom: 20px;
 }
 
 .path-mod-openstudio .dropdown-menu > li > a.menuitem-active {
@@ -578,7 +577,11 @@ a.openstudio-add-title:hover  {
     background-position: center;
     background-size: 72px 72px;
     display: inline-block;
-    margin-bottom: 30px;
+    margin-bottom: 5px;
+}
+
+.openstudio-available {
+    margin-bottom: 20px;
 }
 
 .openstudio-content-block {
@@ -918,7 +921,6 @@ a.openstudio-add-title:hover  {
 .openstudio-grid-item-content-detail-owner-img {
     float: left;
     margin-right: 5px;
-    padding-bottom: 17px;
 }
 
 .openstudio-grid-item-content-detail-owner-img img {
@@ -927,7 +929,7 @@ a.openstudio-add-title:hover  {
 }
 
 .openstudio-grid-item-content-detail-owner {
-    margin-bottom: 17px;
+    margin-bottom: 31px;
 }
 
 .openstudio-grid-item-content-detail-owner-name {
@@ -951,18 +953,40 @@ a.openstudio-add-title:hover  {
     display: inline-block;
     width: 43px;
     text-align: center;
+    position: relative;
 }
 
 .openstudio-grid-item-content-detail-info-icon {
     width: 14px;
 }
 
+.openstudio-icon-inactive {
+    opacity: 0.4;
+}
+
 .openstudio-grid-item-content-detail-info-text {
-    color: #676463;
+    bottom: 5px;
+    color: #0b55a8;
     display: inline-block;
     font-size: 0.85714em;
+    width: 10px;
     position: absolute;
-    margin-left: 3px;
+    text-align: center;
+}
+
+.openstudio-grid-item-content-detail-info-text-new {
+    background: #b52a1e none repeat scroll 0 0;
+    border-radius: 20px;
+    bottom: 13px;
+    color: #ffffff;
+    display: inline-block;
+    font-size: 0.85714em;
+    font-weight: bold;
+    height: 16px;
+    margin-left: -2px;
+    width: 16px;
+    position: absolute;
+    text-align: center;
 }
 
 /* Activity. */

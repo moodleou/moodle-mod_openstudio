@@ -137,4 +137,40 @@ class renderer_utils {
                     array('id' => $openstudioid, 'vuid' => $contentowner->id, 'vid' => content::VISIBILITY_PRIVATE));
         return $contentdata;
     }
+
+    /**
+     * Renders a paging bar.
+     * As design we should display 7 items for pagination. Example: Page: 1...4 5 6 7 8...20
+     * maxdisplay: The maximum number of pagelinks to display.
+     * It count number, text, and space (refer lib\outputcomponents.php).
+     *
+     * Example:
+     * When current page 20, display 7 item maxdisplay item 17.
+     * When current page in 19, display 7 item maxdisplay item 14.
+     * When current page in 18, display 7 item maxdisplay item 11.
+     * $totalpage = 20 , $page = 20, $maxdisplay = 20 - 3 * (20 - 20 + 1 ); $maxdisplay = 17;
+     *
+     * The calculation should be in general:
+     * $maxdisplay = $totalpage - 3 * ($totalpage - $page + 1 );
+     *
+     * @param object $contentdata
+     * @return object paging_bar
+     */
+    public static function openstudio_render_paging_bar ($contentdata) {
+        $pb = new \paging_bar($contentdata->total, $contentdata->pagestart,
+                    $contentdata->streamdatapagesize, $contentdata->pageurl);
+        $page = optional_param('page', 0, PARAM_INT);
+        $totalpage = ceil($contentdata->total / $contentdata->streamdatapagesize);
+        if ($totalpage <= 7) {
+              return $pb;
+        }
+
+        if ($page < 5) {
+              $pb->maxdisplay = 6;
+        } else {
+              $maxdisplay = $totalpage - 3 * ($totalpage - $page + 1 );
+              $pb->maxdisplay = $maxdisplay > 5 ? $maxdisplay : 5;
+        }
+        return $pb;
+    }
 }
