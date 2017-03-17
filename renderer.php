@@ -494,6 +494,9 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $myactivities = false;
         $blocksdata = array();
         $showprofilebarview = false;
+        $contentdata->ismypinboard = false;
+        $contentdata->ismyactivity = false;
+
         switch ($viewmode) {
             case content::VISIBILITY_MODULE:
                 $placeholdertext = $theme->thememodulename;
@@ -510,6 +513,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 $myactivities = true;
                 $blocksdata = levels::get_records(1, $permissions->activecminstanceid);
                 $showprofilebarview = true;
+                $contentdata->ismyactivity = true;
 
                 // Set selected block.
                 foreach ($blocksdata as $key => $block) {
@@ -523,6 +527,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             case content::VISIBILITY_PRIVATE_PINBOARD:
                 $placeholdertext = $theme->themepinboardname;
                 $showprofilebarview = true;
+                $contentdata->ismypinboard = true;
                 break;
         }
 
@@ -561,7 +566,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $contentdata->placeholdertext = $placeholdertext;
         $contentdata->selectview = $selectview;
         $contentdata->myactivities = $myactivities;
-        $contentdata->blocksdata = $blocksdata;
+        $contentdata->blocksdata = $contentdata->openstudio_view_filters->fblockdataarray;
         $contentdata->viewedicon = $OUTPUT->pix_url('viewed_rgb_32px', 'openstudio');
         $contentdata->commentsicon = $OUTPUT->pix_url('comments_rgb_32px', 'openstudio');
         $contentdata->inspirationicon = $OUTPUT->pix_url('inspiration_rgb_32px', 'openstudio');
@@ -589,6 +594,21 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $contentdata->paging = $paging;
         }
         $contentdata->available = $permissions->pinboarddata->available;
+
+        // Prepare select from (all/pinboard/blocks) filter.
+        $contentdata = renderer_utils::filter_area($contentdata);
+
+        // Prepare post types option for filter.
+        $contentdata = renderer_utils::filter_post_types($contentdata);
+
+        // Prepare user flags option for filter.
+        $contentdata = renderer_utils::filter_user_flags($contentdata);
+
+        // Prepare select status option for filter.
+        $contentdata = renderer_utils::filter_select_status($contentdata);
+
+        // Prepare scope option for filter.
+        $contentdata = renderer_utils::filter_scope($contentdata);
 
         return $this->render_from_template('mod_openstudio/body', $contentdata);
     }

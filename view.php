@@ -32,6 +32,7 @@ use mod_openstudio\local\util;
 use mod_openstudio\local\util\defaults;
 use mod_openstudio\local\renderer_utils;
 use mod_openstudio\local\api\flags;
+use mod_openstudio\local\api\levels;
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
@@ -40,6 +41,8 @@ require_once(dirname(__FILE__).'/api/apiloader.php');
 $id = optional_param('id', 0, PARAM_INT); // Course_module ID, or
 $groupid = optional_param('groupid', 0, PARAM_INT); // Group id to filter against.
 $n  = optional_param('n', 0, PARAM_INT);  // ... openstudio instance ID - it should be named as the first character of the module.
+$filteropen = optional_param('filteropen', 0, PARAM_INT);
+$filteractive = optional_param('filteractive', 0, PARAM_INT);
 
 // Page init and security checks.
 
@@ -161,7 +164,6 @@ if ($vid == content::VISIBILITY_PRIVATE_PINBOARD) {
 }
 
 $blockid = optional_param('blockid', 0, PARAM_INT); // Block id to filter against.
-$fblockarray = optional_param('fblockarray', array(), PARAM_INT);
 
 // Stream get contents need to pass block array if existed.
 if ($blockid) {
@@ -181,11 +183,32 @@ $fsort = optional_param('fsort', $fsortdefault, PARAM_INT);
 $osort = optional_param('osort', $osortdefault, PARAM_INT);
 $sortflag = array('id' => $fsort, 'asc' => $osort);
 
+
+// If group mode is not on, then redirect request to module workspace.
+if (!$permissions->feature_group && ($vid == content::VISIBILITY_GROUP)) {
+    $vid = content::VISIBILITY_MODULE;
+}
+
+// If activity mode is not on, then redirect request to module workspace.
+if (!$permissions->feature_studio && ($vid == content::VISIBILITY_PRIVATE)) {
+    $vid = content::VISIBILITY_MODULE;
+}
+
+// If pinboard mode is not on, then redirect request to module workspace.
+if (!$permissions->feature_pinboard && ($vid == content::VISIBILITY_PRIVATE_PINBOARD)) {
+    $vid = content::VISIBILITY_MODULE;
+}
+
+// If module mode is not on, then redirect request to module first available workspace.
+if (!$permissions->feature_module && ($vid == content::VISIBILITY_MODULE)) {
+    $vid = $permissions->allow_visibilty_modes[0];
+}
+
 // Pagination settings.
 $pagedefault = 0;
-if (isset($SESSION->studio_view_filters)) {
-    if (isset($SESSION->studio_view_filters[$vid]->page)) {
-        $pagedefault = $SESSION->studio_view_filters[$vid]->page;
+if (isset($SESSION->openstudio_view_filters)) {
+    if (isset($SESSION->openstudio_view_filters[$vid]->page)) {
+        $pagedefault = $SESSION->openstudio_view_filters[$vid]->page;
     }
 }
 $pagestart = optional_param('page', $pagedefault, PARAM_INT);
@@ -199,16 +222,240 @@ if (isset(get_config('openstudio')->streampagesize)) {
         $streamdatapagesize = get_config('openstudio')->streampagesize;
     }
 }
-if (isset($SESSION->studio_view_filters)) {
-    if (isset($SESSION->studio_view_filters[$vid]->pagesize)) {
-        $streamdatapagesize = $SESSION->studio_view_filters[$vid]->pagesize;
+if (isset($SESSION->openstudio_view_filters)) {
+    if (isset($SESSION->openstudio_view_filters[$vid]->pagesize)) {
+        $streamdatapagesize = $SESSION->openstudio_view_filters[$vid]->pagesize;
     }
 }
 $streamdatapagesize = optional_param('pagesize', $streamdatapagesize, PARAM_INT);
 
+// Check if filter reset request givem, if so, then clear all the filters by redirecting the browser.
+$resetfilter = optional_param('reset', 0, PARAM_INT);
+if ($resetfilter) {
+    if (!isset($SESSION->openstudio_view_filters[$vid])) {
+        // Completely reset the filters.
+        $SESSION->openstudio_view_filters[$vid] = new stdClass();
+    }
+
+    // Partial filter reset.
+    $SESSION->openstudio_view_filters[$vid]->fblock = null;
+    $SESSION->openstudio_view_filters[$vid]->fblockarray = null;
+    $SESSION->openstudio_view_filters[$vid]->ftype = null;
+    $SESSION->openstudio_view_filters[$vid]->ftypearray = null;
+    $SESSION->openstudio_view_filters[$vid]->fscope = null;
+    $SESSION->openstudio_view_filters[$vid]->fstatus = null;
+    $SESSION->openstudio_view_filters[$vid]->fflag = null;
+    $SESSION->openstudio_view_filters[$vid]->fflagarray = null;
+    $SESSION->openstudio_view_filters[$vid]->ftags = null;
+    $SESSION->openstudio_view_filters[$vid]->fblockdataarray = null;
+    $SESSION->openstudio_view_filters[$vid]->fsort = defaults::OPENSTUDIO_SORT_FLAG_DATE;
+    $SESSION->openstudio_view_filters[$vid]->osort = defaults::OPENSTUDIO_SORT_DESC;
+    $SESSION->openstudio_view_filters[$vid]->page = $streamdatapagesize;
+    $SESSION->openstudio_view_filters[$vid]->pagesize = defaults::STREAMPAGESIZE;
+    $SESSION->openstudio_view_filters[$vid]->filteractive = 0;
+
+    $reseturl = new moodle_url('/mod/openstudio/view.php', array('id' => $id, 'vid' => $vid, 'page' => 0));
+    redirect($reseturl);
+}
+// Record whether filtering is active.
+$isfilteringon = false;
+
+$fblockarraydefault = array();
+if (isset($SESSION->openstudio_view_filters)) {
+    if (isset($SESSION->openstudio_view_filters[$vid]->fblockarray)) {
+        $fblockarraydefault = $SESSION->openstudio_view_filters[$vid]->fblockarray;
+    }
+}
+$fblockarray = optional_param_array('fblockarray', $fblockarraydefault, PARAM_INT);
+$pinboardonly = false;
+switch ($fblock) {
+    case stream::FILTER_AREA_ALL:
+    case stream::FILTER_AREA_PINBOARD:
+        $fblockarray = null;
+        break;
+    default:
+        if (empty($fblockarray)) {
+            $fblockarray = explode(",", $fblock);
+            $fblock = implode(",", $fblockarray);
+        } else {
+            $fblock = implode(",", $fblockarray);
+        }
+        break;
+}
+
+if (trim($fblock) == '') {
+    // If fblock is not set, then set it to default.
+    $fblock = 0;
+}
+
+$isblockchecked = false;
+$fblockdataarray = levels::get_records(1, $cminstance->id);
+if ($fblockdataarray === false) {
+    $fblockdataarray = array();
+} else {
+    $blockslotcount = levels::l1s_count_l3s($cminstance->id);
+    foreach ($fblockdataarray as $key => $blockdata) {
+        // Dont show the level 1 block if it has no level slots associated with it.
+        if (!array_key_exists($blockdata->id, $blockslotcount) || ($blockslotcount[$blockdata->id] <= 0)) {
+            unset($fblockdataarray[$key]);
+            continue;
+        }
+
+        // Check if the block being checked as been selected by the user for filtering.
+        if (is_array($fblockarray) && ($fblockarray !== null) && in_array((int) $blockdata->id, $fblockarray)) {
+            $fblockdataarray[$key]->checked = $isblockchecked = true;
+        } else {
+            $fblockdataarray[$key]->checked = false;
+        }
+    }
+}
+if (!$isblockchecked) {
+    $fblockarray = null;
+}
+
+// Filter by content type.
+$ftype = '';
+$ftypedefault = 0;
+$ftypearraydefault = array();
+
+if (isset($SESSION->openstudio_view_filters)) {
+    if (isset($SESSION->openstudio_view_filters[$vid]->ftypearray)) {
+        $ftypearraydefault = $SESSION->openstudio_view_filters[$vid]->ftypearray;
+    }
+
+    if (isset($SESSION->openstudio_view_filters[$vid]->filteractive) &&
+        $SESSION->openstudio_view_filters[$vid]->filteractive) {
+        $filteractive = $SESSION->openstudio_view_filters[$vid]->filteractive;
+    }
+}
+
+$ftypearray = optional_param_array('ftypearray', $ftypearraydefault, PARAM_INT);
+if (!is_array($ftypearray) || empty($ftypearray)) {
+    $ftype = $ftypedefault;
+} else {
+    foreach ($ftypearray as $ftypearrayitem) {
+        if ($ftypearrayitem == 0) {
+            $ftype = 0;
+            break;
+        }
+        if (in_array($ftypearrayitem, array(content::TYPE_IMAGE,
+                content::TYPE_VIDEO,
+                content::TYPE_AUDIO,
+                content::TYPE_DOCUMENT,
+                content::TYPE_PRESENTATION,
+                content::TYPE_SPREADSHEET,
+                content::TYPE_URL,
+                content::TYPE_FOLDER))) {
+            $ftype .= "{$ftypearrayitem},";
+        }
+    }
+}
+
+// Filter by status.
+$fstatusdefault = 0;
+if (isset($SESSION->openstudio_view_filters)) {
+    if (isset($SESSION->openstudio_view_filters[$vid]->fstatus)) {
+        $fstatusdefault = $SESSION->openstudio_view_filters[$vid]->fstatus;
+    }
+}
+
+$fstatus = optional_param('fstatus', $fstatusdefault, PARAM_INT);
+if (! in_array($fstatus, array(stream::FILTER_LOCKED,
+        stream::FILTER_EMPTYCONTENT,
+        stream::FILTER_NOTREAD,
+        stream::FILTER_READ))) {
+    $fstatus = 0;
+}
+
+// Filter by scope.
+$fscopedefault = stream::SCOPE_EVERYONE;
+if (isset($SESSION->openstudio_view_filters)) {
+    if (isset($SESSION->openstudio_view_filters[$vid]->fscope)) {
+        $fscopedefault = $SESSION->openstudio_view_filters[$vid]->fscope;
+    }
+}
+
+$fscope = optional_param('fscope', $fscopedefault, PARAM_INT);
+if (! in_array($fscope, array(stream::SCOPE_EVERYONE,
+        stream::SCOPE_MY,
+        stream::SCOPE_THEIRS))) {
+    $fscope = stream::SCOPE_MY;
+}
+
+// Filter by tags.
+$ftagsdefault = '';
+if (isset($SESSION->openstudio_view_filters)) {
+    if (isset($SESSION->openstudio_view_filters[$vid]->ftags)) {
+        $ftagsdefault = $SESSION->openstudio_view_filters[$vid]->ftags;
+    }
+}
+$ftags = optional_param('ftags', $ftagsdefault, PARAM_TEXT);
+if ($ftags != $ftagsdefault) {
+    $isfilteringon = true;
+}
+
+// Filter by participation flag.
+$fflag = '';
+$fflagdefault = 0;
+$fflagarraydefault = array();
+if (isset($SESSION->openstudio_view_filters)) {
+    if (isset($SESSION->openstudio_view_filters[$vid]->fflagarray)) {
+        $fflagarraydefault = $SESSION->openstudio_view_filters[$vid]->fflagarray;
+    }
+}
+$fflagarray = optional_param_array('fflagarray', $fflagarraydefault, PARAM_INT);
+if (!is_array($fflagarray) || empty($fflagarray)) {
+    $fflag = $fflagdefault;
+} else {
+    foreach ($fflagarray as $fflagarrayitem) {
+        if ($fflagarrayitem == 0) {
+            $fflag = $fflagdefault;
+            break;
+        }
+        if (in_array($fflagarrayitem, array(stream::FILTER_FAVOURITES,
+                stream::FILTER_HELPME,
+                stream::FILTER_MOSTSMILES,
+                stream::FILTER_MOSTINSPIRATION,
+                stream::FILTER_COMMENTS,
+                stream::FILTER_TUTOR))) {
+            $fflag .= "{$fflagarrayitem},";
+        }
+    }
+}
+
+// Store the filter settings in session memory.
+$SESSION->openstudio_view_vid = $vid;
+if (!isset($SESSION->openstudio_view_filters)) {
+    $SESSION->openstudio_view_filters = array();
+}
+if (!isset($SESSION->openstudio_view_filters[$vid])) {
+    $SESSION->openstudio_view_filters[$vid] = new stdClass();
+}
+
+$ftags = null;
+$SESSION->openstudio_view_filters[$vid]->fblock = $fblock;
+$SESSION->openstudio_view_filters[$vid]->fblockarray = $fblockarray;
+$SESSION->openstudio_view_filters[$vid]->ftype = $ftype;
+$SESSION->openstudio_view_filters[$vid]->ftypearray = $ftypearray;
+$SESSION->openstudio_view_filters[$vid]->fscope = $fscope;
+$SESSION->openstudio_view_filters[$vid]->fstatus = $fstatus;
+$SESSION->openstudio_view_filters[$vid]->fflag = $fflag;
+$SESSION->openstudio_view_filters[$vid]->fflagarray = $fflagarray;
+$SESSION->openstudio_view_filters[$vid]->ftags = $ftags;
+$SESSION->openstudio_view_filters[$vid]->fsort = $fsort;
+$SESSION->openstudio_view_filters[$vid]->osort = $osort;
+$SESSION->openstudio_view_filters[$vid]->page = $pagestart;
+$SESSION->openstudio_view_filters[$vid]->pagesize = $streamdatapagesize;
+$SESSION->openstudio_view_filters[$vid]->groupid = $groupid;
+$SESSION->openstudio_view_filters[$vid]->filteropen = $filteropen;
+$SESSION->openstudio_view_filters[$vid]->filteractive = $filteractive;
+$SESSION->openstudio_view_filters[$vid]->fblockdataarray = $fblockdataarray;
+
 // Get stream of contents.
 $contentids = array(); // For export feature.
 $contentdata = (object) array('contents' => array(), 'total' => 0);
+$contentdata->openstudio_view_filters = $SESSION->openstudio_view_filters[$vid];
+
 if ($finalviewpermissioncheck) {
     // In My Module view, if block filter is on and set to one block only,
     // then pagination behaves differently.  In this state, we display all the activity/content rather limiting
@@ -220,7 +467,7 @@ if ($finalviewpermissioncheck) {
 
     $contentdatatemp = stream::get_contents(
             $cminstance->id, $permissions->groupingid, $viewuser->id, $contentowner->id, $vid,
-            $fblockarray, null, null, null, null, null,
+            $fblockarray, $ftype, $fscope, $fflag, $fstatus, $ftags,
             $sortflag, $pagestart, $streamdatapagesize, ($fblock == -1), true,
             $permissions->managecontent, $groupid, $permissions->groupmode,
             false,
@@ -536,6 +783,15 @@ foreach ($viewsizes as $key => $value) {
 
 $contentdata->viewsizes = $viewsizes;
 $contentdata->blockid = $blockid;
+
+// Set params used for preferences filter.
+$contentdata->id = $id;
+$contentdata->vid = $vid;
+$contentdata->fsort = $fsort;
+$contentdata->osort = $osort;
+$contentdata->page = $streamdatapagesize;
+$contentdata->filteropen = $filteropen;
+$contentdata->filteractive = ($filteropen || $resetfilter) ? 0 : $filteractive;;
 
 // Generate stream html.
 $renderer = $PAGE->get_renderer('mod_openstudio');

@@ -36,6 +36,7 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
          */
         init: function() {
 
+            t.handleFilter();
             t.handleIsotope();
             t.handleGroupSwitcher();
             t.handleViewSizeSwitcher();
@@ -82,7 +83,7 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
          * @method handleBlockSwitcher
          */
         handleBlockSwitcher: function() {
-            $('#filter_groupid').change(function() {
+            $('#filter_block_activity').change(function() {
 
                 t.redirectURL();
 
@@ -96,7 +97,7 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
          * @method handleViewSizeSwitcher
          */
         handleViewSizeSwitcher: function() {
-            $('#filter_block_activity').change(function() {
+            $('#filter_pagesize').change(function() {
 
                 t.redirectURL();
 
@@ -132,6 +133,107 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
 
             window.location.href = url;
 
+        },
+
+        /**
+         * Handle actions for filter.
+         *
+         * @method handleFilter
+         */
+        handleFilter: function() {
+
+            // By post types.
+            $('#openstudio_filter_types_0').on('click', function (e) {
+                var checkbox = $(this);
+
+                // Prevent checkbox from unchecking when clicked.
+                if (!checkbox.is(":checked")) {
+                    e.preventDefault();
+                    return false;
+                }
+
+                $('.openstudio-filter-types-checkbox').prop("checked", false);
+                $('#openstudio_filter_types_0').prop("checked", true);
+            });
+
+            $('.openstudio-filter-types-checkbox').on("click", function (e) {
+                var checkbox = $(this);
+
+                if (checkbox.is(":checked") && checkbox.attr('id') != "openstudio_filter_types_0") {
+                    $('#openstudio_filter_types_0').prop("checked", false);
+                }
+
+                var length = $('[name="ftypearray[]"]:checked').length;
+
+                if (length == 0) {
+                    $('#openstudio_filter_types_0').prop("checked", true);
+                }
+            });
+
+
+            // By user flags.
+            $('#openstudio_filter_user_flags_0').on("click", function (e) {
+                var checkbox = $(this);
+
+                // Prevent checkbox from unchecking when clicked.
+                if (!checkbox.is(":checked")) {
+                    e.preventDefault();
+                    return false;
+                }
+
+                $('.openstudio-filter-user-flags-checkbox').prop("checked", false);
+                $('#openstudio_filter_user_flags_0').prop("checked", true);
+            });
+
+            $('.openstudio-filter-user-flags-checkbox').on("click", function (e) {
+                var checkbox = $(this);
+
+                if (checkbox.is(":checked") && checkbox.attr('id') != "openstudio_filter_types_0") {
+                    $('#openstudio_filter_user_flags_0').prop("checked", false);
+                }
+
+                var length = $('[name="fflagarray[]"]:checked').length;
+
+                if (length == 0) {
+                    $('#openstudio_filter_user_flags_0').prop("checked", true);
+                }
+            });
+
+            // Reset button.
+            $('#reset_filter_btn').on('click', function (e) {
+                $('#reset_filter').val(1);
+                $('#filteractive').val(0);
+                $('#openstudio-filter-form').submit();
+
+            });
+
+            // Set Blocks option selected when a block checked.
+            // When do not has any block checked, all option should be selected.
+            $('.openstudio-filter-block').on('click', function (e) {
+                var checkbox = $(this);
+                var filter_area_activity_value = $('#filter_area_activity_value').val();
+                var length = $('[name="fblockarray[]"]:checked').length;
+
+                if (checkbox.is(":checked")) {
+                    $('#filter_block').val(filter_area_activity_value);
+                }
+
+                if (length == 0) {
+                    $('#filter_block').val(0);
+                }
+            });
+
+            // Uncheck all blocks option when ALl/Pinboard selected.
+            $('#filter_block').on('change', function (e) {
+                var filter_block = $(this).val();
+                var filter_area_activity_value = $('#filter_area_activity_value').val();
+
+                if (parseInt(filter_block) == filter_area_activity_value) {
+                    $('#filter_block').val(0);
+                } else {
+                    $('.openstudio-filter-block').prop("checked", false);
+                }
+            });
         }
 
     };

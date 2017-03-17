@@ -108,6 +108,206 @@
     display: initial;
 }
 
+/* Preferences */
+.openstudio-filter-preferences {
+    font-size: 1em;
+    color: #002158;
+    font-weight: bold;
+}
+
+#reset_filter_btn {
+    margin-left: 5px;
+}
+
+.openstudio-filter-active {
+    color: #312b39;
+    font-size: 12px;
+    height: 32px;
+    line-height: 36px;
+    text-align: left;
+}
+
+.openstudio-filter-preference-text {
+    height: 54px;
+}
+
+.path-mod-openstudio [data-toggle="collapse"] {
+    position: relative;
+}
+
+.path-mod-openstudio [data-toggle="collapse"] .openstudio-expand-image,
+.path-mod-openstudio [data-toggle="collapse"] .openstudio-collapse-image {
+    display: block;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    left: 40px;
+}
+
+.path-mod-openstudio [data-toggle="collapse"] .openstudio-expand-image {
+    display: block;
+}
+
+.path-mod-openstudio [data-toggle="collapse"] .openstudio-collapse-image {
+    display: none;
+}
+
+.path-mod-openstudio [data-toggle="collapse"].collapsed .openstudio-expand-image {
+    display: none;
+}
+
+.path-mod-openstudio [data-toggle="collapse"].collapsed .openstudio-collapse-image {
+    display: block;
+}
+
+.openstudio-filter-arrow-box {
+    position: relative;
+    background: #ffffff;
+    border-top: 1px solid #d4d2d2;
+    margin: 7px 15px 0px 15px;
+}
+
+.openstudio-filter-arrow-box:after,
+.openstudio-filter-arrow-box:before {
+    bottom: 100%;
+    left: 153px;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+@-moz-document url-prefix() {
+    .openstudio-filter-arrow-box:after,
+    .openstudio-filter-arrow-box:before {
+        left: 160px;
+    }
+}
+
+.openstudio-filter-arrow-box:after {
+    border-color: rgba(136, 183, 213, 0);
+    border-bottom-color: #ffffff;
+    border-width: 7px;
+    margin-left: 0;
+}
+
+.openstudio-filter-arrow-box:before {
+    border-color: rgba(194, 225, 245, 0);
+    border-bottom-color: #d4d2d2;
+    border-width: 9px;
+    margin-left: -2px;
+}
+
+.openstudio-filter-arrow-box div:nth-child(1) {
+    margin-left: 25px;
+}
+
+.openstudio-filter-box {
+    border-left: 1px solid #d4d2d2;
+    float: left;
+    margin-top: 10px;
+    padding-left: 8px;
+    width: 200px;
+}
+
+.openstudio-filter-box-last {
+    border-left: 1px solid #d4d2d2;
+    float: left;
+    margin-top: 10px;
+    padding-left: 8px;
+    width: 110px;
+}
+
+.openstudio-filter-header {
+    font-size: 1em;
+    font-weight: bold;
+    color: #002158;
+    margin: 0;
+    padding: 0;
+}
+
+.openstudio-filter-buttons {
+    float: right;
+    margin-right: 5px;
+    margin-top: 61px;
+    margin-bottom: 22px;
+}
+
+.openstudio-filter-buttons {
+    margin-top: 166px;
+}
+
+.path-mod-openstudio .openstudio-filter-box div > label {
+    display: inline;
+}
+
+.openstudio_filter_types_all {
+    padding-left: 23px;
+}
+
+.openstudio-filter-box div img {
+    padding: 2px 5px 0 0px;
+    vertical-align: top;
+    height: 16px;
+}
+
+.openstudio-filter-all {
+    margin-top: 12px;
+}
+
+.filter-block-select {
+    font-size: 0.85714em;
+    height: 20px;
+    margin: 8px 0px 8px 0px;
+    padding: 0;
+    width: 140px;
+}
+
+.openstudio-filter-box [type="checkbox"],
+.openstudio-filter-box [type="radio"] {
+    margin-right: 5px;
+}
+
+.openstudio-filter-box input[type="radio"] + label,
+.openstudio-filter-box input[type="checkbox"] + label {
+    padding-left: 0px;
+}
+
+
+.path-mod-openstudio .openstudio-filter-all label {
+    padding-left: 125px;
+}
+
+.openstudio-filter-header {
+    display: block;
+    margin: -6px 0 0;
+    overflow: hidden;
+    padding: 0;
+    vertical-align: top;
+}
+
+.openstudio-filter-blocks:last-of-type,
+.openstudio-filter-types:last-of-type,
+.openstudio-filter-user-flags:last-of-type,
+.openstudio-filter-status:last-of-type,
+.openstudio-filter-from:last-of-type {
+    margin-bottom: -5px;
+}
+
+.openstudio-filter-mobile {
+    display: none;
+}
+
+
+.openstudio-filter-mobile {
+    background-color: #ffffff;
+    margin: 0 20px 20px;
+    padding: 0 15px 0 0;
+    line-height: 54px;
+}
+
 /**
  * Import feature
  */
@@ -963,6 +1163,7 @@ label.openstudio-export-item-name {
     padding: 18px 24px 13px;
 }
 
+.openstudio-content-view-profile-bar,
 .openstudio-filter {
     padding: 6px 15px 8px 0px;
     background-color: #ffffff;
@@ -991,12 +1192,17 @@ label.openstudio-export-item-name {
     padding: 4px 12px 4px 0px;
 }
 
+.openstudio-filter-link {
+    width: 50px;
+    cursor: pointer;
+}
+
 .openstudio-filter-text {
     padding-left: 15px;
     font-size: 1em;
     color: #002158;
     display: inline-block;
-    line-height: 29px;
+    line-height: 18px;
 }
 
 .openstudio-filter-select {
@@ -1015,6 +1221,7 @@ label.openstudio-export-item-name {
     font-family: Arial;
     color: #000000;
     margin-left: 3px;
+    min-width: 90px;
 }
 
 .openstudio-filter-text-selected {
@@ -1643,7 +1850,7 @@ iframe.openstudio-content-view-iframe {
     margin: 0 20px 15px 20px;
 }
 
-.openstudio-activity-title:nth-child(n+4) {
+.openstudio-activity-title:nth-child(n+5) {
     border-top: 1px solid #ffffff;
     padding-top: 20px;
 }
@@ -2369,8 +2576,8 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
 }
 
 .openstudio-work-progress-percent {
-   float: right;
-   margin-right: -3px;
+    float: right;
+    margin-right: -3px;
 }
 
 
@@ -2405,9 +2612,9 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
 }
 
 .openstudio-profile-head .openstudio-profile-date {
-     float: left;
-     padding-left: 7px;
-     display: inline-block;
+    float: left;
+    padding-left: 7px;
+    display: inline-block;
 }
 
 .openstudio-profile-date .openstudio-profile-last-active-date {
@@ -2433,7 +2640,7 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
 
 .openstudio-profile-comment .openstudio-profile-comment-text {
     display: inline-block;
-    margin-left: 2px;
+    margin-left: 4px;
 }
 
 .openstudio-profile-comment-view .openstudio-own-view img{
@@ -2485,6 +2692,7 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     display: none;
     float: left;
     width: 100%;
+    line-height: 22px;
 }
 
 #openstudio_profile_fullusername {
@@ -2668,6 +2876,22 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         margin-left: -8px;
         margin-bottom: 5px;
     }
+
+    .filter-block-select {
+        width: 129px;
+    }
+
+    .openstudio-filter-box {
+        width: 135px;
+    }
+
+    .openstudio-filter-arrow-box div:nth-child(1) {
+        margin-left: 0px;
+    }
+
+    .openstudio-filter-buttons {
+        margin-right: 39px;
+    }
 }
 
 /* Tablet Portrait. */
@@ -2746,6 +2970,22 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     .ios .openstudio-content-view-actions-icons-right {
         float: left;
         margin-bottom: 20px;
+    }
+
+    .filter-block-select {
+        width: 100px;
+    }
+
+    .openstudio-filter-box {
+        width: 105px;
+    }
+
+    .openstudio-filter-box div img {
+        display: none;
+    }
+
+    .openstudio-filter-buttons {
+        margin-right: 16px;
     }
 }
 
@@ -2911,6 +3151,7 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         line-height: 38px;
     }
 
+    openstudio-content-view-profile-bar,
     .openstudio-filter {
         padding: 6px 15px 11px 0;
     }
@@ -3069,8 +3310,9 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         width: 24px;
     }
 
-    .openstudio-own-view .openstudio-profile-view-text {
-        margin-left: 5px;
+    .openstudio-profile-comment .openstudio-profile-comment-text,
+    .openstudio-own-view .openstudio-profile-view-text1 {
+        margin: 5px 0px 0px 5px;
     }
 
     .openstudio-profile-own-date {
@@ -3189,7 +3431,6 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     .openstudio-profile-bar .openstudio-profile-mypaticipation {
         font-size: 1.428em;
         background-size: 20px 20px;
-        padding-right: 30px;
         width: 60%;
     }
 
@@ -3206,7 +3447,7 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
 
     .openstudio-profile-paticipation-content .openstudio-profile-paticipation {
         padding-left: 0px;
-        width: 100px;
+        width: 115px;
         font-size: 1.28571em;
     }
 
@@ -3400,6 +3641,90 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         margin-left: -40px;
     }
 
+    .openstudio-filter {
+        display: none;
+    }
+
+    .openstudio-filter-mobile {
+        display: block;
+    }
+
+    .openstudio-filter-icon-expanded {
+        background-size: 20px auto;
+        background-position: right 15px top 9px;
+        width: 100%;
+        padding-right: 0px;
+    }
+
+    .openstudio-filter-text {
+        width: 100%;
+        display: block;
+    }
+
+    .openstudio-preference-item {
+        border-top: 1px solid #d4d2d2;
+        border-right: 1px solid #d4d2d2;
+        border-left: 1px solid #d4d2d2;
+        margin-left: 15px;
+        display: block;
+        height: 44px;
+        line-height: 43px;
+    }
+
+    .openstudio-preference-item:last-of-type {
+        border-bottom: 1px solid #d4d2d2;
+        margin-bottom: 25px;
+    }
+
+    .openstudio-filter-link,
+    .openstudio-filter-preference-icon {
+        width: 100%;
+        display: block;
+        line-height: 40px;
+    }
+
+    .path-mod-openstudio [data-toggle="collapse"] .openstudio-expand-image,
+    .path-mod-openstudio [data-toggle="collapse"] .openstudio-collapse-image {
+        right: 17px;
+        left: auto;
+    }
+
+    .openstudio-filter-preference-text img{
+        width: 20px;
+    }
+
+    .openstudio-filter-select {
+        padding-left: 0px;
+    }
+
+    .openstudio-filter-select select {
+        height: 25px;
+        font-size: 1.14285em;
+    }
+
+    .path-mod-openstudio .openstudio-filter-select label {
+        font-size: 1.28571em;
+        margin-left: 15px;
+    }
+
+    .openstudio-filter-sort-text img {
+        width: 16px;
+    }
+
+    .openstudio-filter-collapsed, .openstudio-filter-icon {
+        padding-right: 4px;
+    }
+
+    .openstudio-grid-item-content-icon {
+        height: 22px;
+        margin-top: 13px;
+        width: 22px;
+    }
+
+    .openstudio-profile-bar .collapsed {
+        background-position: right 20px top 17px;
+    }
+
     .openstudio-work-progress-percent {
         line-height: 30px;
     }
@@ -3522,19 +3847,15 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         display: block;
     }
 
-    .openstudio-profile-bar .openstudio-profile-head {
-        width: 70%;
-    }
-
     .openstudio-profile-bar .openstudio-profile-mypaticipation-content {
-        width: 80%;
+        width: 100%;
         color: #002158;
         height: 25px;
     }
 
     .openstudio-profile-bar .openstudio-profile-mypaticipation {
         background-size: 20px 20px;
-        padding-right: 30px;
+        background-position: right 20px top 18px;
         font-size: 1.428em;
     }
 

@@ -1,0 +1,185 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_openstudio/filter_box
+
+    Filter template of the OpenStudio UI.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Example context (json):
+    {
+        "area" : [
+            {
+               "value" : "0",
+               "label" : "All"
+            },
+            {
+               "value" : "-1",
+               "label" : "Pinboard"
+            },
+            {
+               "value" : "-2",
+               "label" : "Blocks"
+            }
+        ],
+        "blocksdata" : [
+            {
+               "id" : "1",
+               "name" : "Block 1"
+            },
+            {
+               "id" : "2",
+               "name" : "Block 1"
+            },
+            {
+               "id" : "3",
+               "name" : "Block 2"
+            }
+        ],
+        "posttypes" : [
+            {
+               "value" : "0",
+               "icon" : "",
+               "label" : "All types"
+            },
+            {
+               "value" : "1",
+               "icon" : "../../../mod/openstudio/pix/image_filters_rgb_32px.svg",
+               "label" : "Image"
+            },
+            {
+               "value" : "1",
+               "icon" : "../../../mod/openstudio/pix/video_filters_rgb_32px.svg",
+               "label" : "Video"
+            }
+        ],
+        "userflags" : [
+            {
+               "value" : "0",
+               "icon" : "",
+               "label" : "All types"
+            },
+            {
+               "value" : "1",
+               "icon" : "../../../mod/openstudio/pix/favourite_filters_rgb_32px.svg",
+               "label" : "Favourite"
+            },
+            {
+               "value" : "1",
+               "icon" : "../../../mod/openstudio/pix/inspiration_filters_rgb_32px.svg",
+               "label" : "Smile"
+            }
+        ]
+    }
+
+}}
+
+<form name="openstudio-filter-form" id="openstudio-filter-form" method="get" action="view.php">
+    <input id="filter-panel-reset" name="reset" value="0" type="hidden">
+    <input name="filteractive" id="filteractive" value="1" type="hidden">
+    <input name="id" value="{{id}}" type="hidden">
+    <input name="vid" value="{{vid}}" type="hidden">
+    <input name="fsort" value="{{fsort}}" type="hidden">
+    <input name="osort" value="{{osort}}" type="hidden">
+    <input name="groupid" value="{{groupid}}" type="hidden">
+    <input name="reset" id="reset_filter" value="0" type="hidden">
+    <input name="filteropen" value="1" type="hidden">
+    <input type="hidden" id="filter_area_activity_value" value="{{filter_area_activity_value}}">
+
+    <div id="filter_container" class="{{#filteropen}}in{{/filteropen}} collapse clearfix" >
+        <div class="openstudio-filter-arrow-box clearfix">
+            {{^ismypinboard}}
+                <div class="openstudio-filter-box clearfix">
+                    <span class="openstudio-filter-header">{{#str}} filterselectfrom, mod_openstudio {{/str}}</span>
+                    <div>
+                        <select name="fblock" id="filter_block" class="filter-block-select">
+                            {{#area}}
+                                <option name="{{{label}}}" value="{{value}}" {{#checked}}selected="selected"{{/checked}} >
+                                    {{label}}
+                                </option>
+                            {{/area}}
+                        </select>
+                    </div>
+                    {{#blocksdata}}
+                        <div class="openstudio-filter-blocks">
+                            <input type="checkbox" name="fblockarray[]" id="openstudio_filter_block_{{id}}"
+                                   class="openstudio-filter-block" value="{{id}}" {{#checked}}checked="checked"{{/checked}} />
+                            <label name="{{name}}" for="openstudio_filter_block_{{id}}">{{name}}</label>
+                        </div>
+                    {{/blocksdata}}
+                </div>
+            {{/ismypinboard}}
+            <div class="openstudio-filter-box clearfix">
+                <span class="openstudio-filter-header">{{#str}} filterbyposttypes, mod_openstudio {{/str}}</span>
+                <div class="openstudio-filter-all"></div>
+                {{#posttypes}}
+                    <div class="openstudio-filter-types">
+                        <input type="checkbox" name="ftypearray[]" id="openstudio_filter_types_{{value}}"
+                               class="openstudio-filter-types-checkbox" value="{{value}}" {{#checked}}checked="checked"{{/checked}} />
+                        {{#icon}}<img src="{{icon}}" alt="{{{label}}}">{{/icon}}
+                        <label name="{{{label}}}" for="openstudio_filter_types_{{value}}">{{{label}}}</label>
+                    </div>
+                {{/posttypes}}
+            </div>
+            <div class="openstudio-filter-box clearfix">
+                <span class="openstudio-filter-header">{{#str}} filterbyuserflags, mod_openstudio {{/str}}</span>
+                <div class="openstudio-filter-all"></div>
+                {{#userflags}}
+                    <div class="openstudio-filter-user-flags">
+                        <input type="checkbox" name="fflagarray[]" id="openstudio_filter_user_flags_{{value}}"
+                               class="openstudio-filter-user-flags-checkbox" value="{{value}}" {{#checked}}checked="checked"{{/checked}} />
+                        {{#icon}}<img src="{{icon}}" alt="{{{label}}}">{{/icon}}
+                        <label name="{{{label}}}" for="openstudio_filter_user_flags_{{value}}">{{{label}}}</label>
+                    </div>
+                {{/userflags}}
+            </div>
+            <div class="openstudio-filter-box clearfix">
+                <span class="openstudio-filter-header">{{#str}} filterselectstatus, mod_openstudio {{/str}}</span>
+                <div class="openstudio-filter-all"></div>
+                {{#selectstatus}}
+                    <div class="openstudio-filter-status">
+                        <input type="radio" name="fstatus" class="openstudio-filter-status" id="openstudio_filter_status_{{value}}"
+                               value="{{value}}" {{#checked}}checked="checked"{{/checked}} />
+                        {{#icon}}<img src="{{icon}}" alt="{{{label}}}">{{/icon}}
+                        <label name="{{{label}}}" for="openstudio_filter_status_{{value}}">{{{label}}}</label>
+                    </div>
+                {{/selectstatus}}
+            </div>
+            <div class="openstudio-filter-box openstudio-filter-box-last clearfix">
+                <span class="openstudio-filter-header">{{#str}} filterselectfrom, mod_openstudio {{/str}}</span>
+                <div class="openstudio-filter-all"></div>
+                {{#selectfrom}}
+                    <div class="openstudio-filter-from">
+                        <input type="radio" name="fscope" class="openstudio-filter-scope" id="openstudio_filter_from_{{value}}"
+                               value="{{value}}" {{#checked}}checked="checked"{{/checked}} />
+                        {{#icon}}<img src="{{icon}}" alt="{{{label}}}">{{/icon}}
+                        <label name="{{{label}}}" for="openstudio_filter_from_{{value}}">{{{label}}}</label>
+                    </div>
+                {{/selectfrom}}
+            </div>
+            <div class="openstudio-filter-buttons {{ismypinboard}}openstudio-filter-buttons-top{{ismypinboard}}">
+                <input type="submit" value="{{#str}} filterapplybutton, mod_openstudio {{/str}}">
+                <input type="button" id="reset_filter_btn" value="{{#str}} filterresetbutton, mod_openstudio {{/str}}">
+            </div>
+        </div>
+    </div>
+</form>

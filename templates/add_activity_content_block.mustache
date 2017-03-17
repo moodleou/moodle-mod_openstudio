@@ -38,7 +38,7 @@
 <div class="openstudio-add-new-container">
 {{#isfolder}}
     <div class="openstudio-add-new-folder">
-    <a href="{{{contentediturl}}}" class="openstudio-actvity-title">
+    <a data-name="{{l3name}}" href="{{{contentediturl}}}" class="openstudio-actvity-title">
         {{{l3name}}}
     </a>
     </div>
@@ -55,7 +55,7 @@
 {{/isfolder}}
 {{^isfolder}}
     <div class="openstudio-add-new">
-    <a href="{{{contentediturl}}}" class="openstudio-actvity-title">
+    <a data-name="{{l3name}}" href="{{{contentediturl}}}" class="openstudio-actvity-title">
         {{{l3name}}}
     </a>
     </div>

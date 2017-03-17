@@ -44,6 +44,10 @@ class stream {
     const FILTER_PEOPLE_GROUP = 0;
     const FILTER_PEOPLE_MODULE = 1;
 
+    const FILTER_AREA_ALL = 0;
+    const FILTER_AREA_PINBOARD = 1;
+    const FILTER_AREA_ACTIVITY = 2;
+
     const SCOPE_EVERYONE = 1;
     const SCOPE_MY = 2;
     const SCOPE_THEIRS = 3;

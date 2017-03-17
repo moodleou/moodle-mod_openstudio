@@ -64,6 +64,18 @@ class behat_mod_openstudio extends behat_base {
                     'contenttype' => 'contenttype'
                 )
             ),
+            'level3contents' => array(
+                'datagenerator' => 'contents',
+                'required' => array('name', 'openstudio', 'user'),
+                'switchids' => array(
+                    'user' => 'userid',
+                    'visibility' => 'visibility',
+                    'visibilitygroup' => 'visibility',
+                    'contenttype' => 'contenttype',
+                    'level3' => 'levelid',
+                    'levelcontainer' => 'levelcontainer'
+                )
+            ),
             'sets' => array(
                 'datagenerator' => 'sets',
                 'required' => array('name', 'openstudio', 'user'),
@@ -645,5 +657,19 @@ EOF;
             throw new Exception('The set template for level "' . $level3id . '" does not exist');
         }
         return $id;
+    }
+
+    /**
+     * Gets the levelcontainer id from levelcontainer id.
+     * @throws Exception
+     * @param string $visibility
+     * @return int
+     */
+    protected function get_levelcontainer_id($visibility) {
+        $constantname = content::class.'::VISIBILITY_' . strtoupper(trim($visibility));
+        if (!defined($constantname)) {
+            throw new Exception('The visibility constant "' . $constantname . '" does not exist');
+        }
+        return constant($constantname);
     }
 }

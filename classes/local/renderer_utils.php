@@ -51,28 +51,81 @@ class renderer_utils {
      * @return object urls used for navigation of Open Studio.
      */
     public static function navigation_urls($cmid) {
+        global $SESSION;
 
         $navigationurls = (object) array();
 
-        $navigationurls->myworkurl = new \moodle_url('/mod/openstudio/view.php',
+        if (isset($SESSION->openstudio_view_filters)
+            && isset($SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE])
+            && isset($SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE]->ftype)) {
+            $navigationurls->myworkurl = new \moodle_url('/mod/openstudio/view.php',
+                    array('id' => $cmid, 'vid' => content::VISIBILITY_PRIVATE,
+                            'fblock' => false,
+                            'ftype' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE]->ftype,
+                            'fflag' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE]->fflag,
+                            'ftags' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE]->ftags,
+                            'fsort' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE]->fsort,
+                            'osort' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE]->osort));
+        } else {
+            $navigationurls->myworkurl = new \moodle_url('/mod/openstudio/view.php',
                     array('id' => $cmid, 'vid' => content::VISIBILITY_PRIVATE, 'fblock' => false,
-                          'ftype' => 0, 'fflag' => 0,
-                          'fsort' => stream::SORT_BY_ACTIVITYTITLE, 'osort' => 1));
+                            'ftype' => 0, 'fflag' => 0,
+                            'fsort' => stream::SORT_BY_ACTIVITYTITLE, 'osort' => 1));
+        }
 
-        $navigationurls->pinboardurl = new \moodle_url('/mod/openstudio/view.php',
+        if (isset($SESSION->openstudio_view_filters)
+            && isset($SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE_PINBOARD])
+            && isset($SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE_PINBOARD]->ftype)) {
+            $navigationurls->pinboardurl = new \moodle_url('/mod/openstudio/view.php',
                     array('id' => $cmid, 'vid' => content::VISIBILITY_PRIVATE_PINBOARD, 'fblock' => -1,
-                          'ftype' => 0, 'fflag' => 0,
-                          'ftags' => '', 'fsort' => stream::SORT_BY_DATE, 'osort' => 0));
+                            'ftype' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE_PINBOARD]->ftype,
+                            'fflag' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE_PINBOARD]->fflag,
+                            'ftags' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE_PINBOARD]->ftags,
+                            'fsort' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE_PINBOARD]->fsort,
+                            'osort' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE_PINBOARD]->osort));
+        } else {
+            $navigationurls->pinboardurl = new \moodle_url('/mod/openstudio/view.php',
+                    array('id' => $cmid, 'vid' => content::VISIBILITY_PRIVATE_PINBOARD, 'fblock' => -1,
+                            'ftype' => 0, 'fflag' => 0,
+                            'ftags' => '', 'fsort' => stream::SORT_BY_DATE, 'osort' => 0));
+        }
 
-        $navigationurls->mygroupurl = new \moodle_url('/mod/openstudio/view.php',
+        if (isset($SESSION->openstudio_view_filters)
+            && isset($SESSION->openstudio_view_filters[content::VISIBILITY_GROUP])
+            && isset($SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->fblock)) {
+            $navigationurls->mygroupurl = new \moodle_url('/mod/openstudio/view.php',
+                    array('id' => $cmid, 'vid' => content::VISIBILITY_GROUP,
+                            'fblock' => $SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->fblock,
+                            'ftype' => $SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->ftype,
+                            'fflag' => $SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->fflag,
+                            'ftags' => $SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->ftags,
+                            'fsort' => $SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->fsort,
+                            'osort' => $SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->osort,
+                            'groupid' => $SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->groupid));
+        } else {
+            $navigationurls->mygroupurl = new \moodle_url('/mod/openstudio/view.php',
                     array('id' => $cmid, 'vid' => content::VISIBILITY_GROUP, 'fblock' => 0,
-                          'ftype' => 0, 'fflag' => 0,
-                          'ftags' => '', 'fsort' => stream::SORT_BY_DATE, 'osort' => 0));
+                            'ftype' => 0, 'fflag' => 0,
+                            'ftags' => '', 'fsort' => stream::SORT_BY_DATE, 'osort' => 0));
+        }
 
-        $navigationurls->mymoduleurl = new \moodle_url('/mod/openstudio/view.php',
+        if (isset($SESSION->openstudio_view_filters)
+            && isset($SESSION->openstudio_view_filters[content::VISIBILITY_MODULE])
+            && isset($SESSION->openstudio_view_filters[content::VISIBILITY_MODULE]->fblock)) {
+            $navigationurls->mymoduleurl = new \moodle_url('/mod/openstudio/view.php',
+                    array('id' => $cmid, 'vid' => content::VISIBILITY_MODULE,
+                            'fblock' => $SESSION->openstudio_view_filters[content::VISIBILITY_MODULE]->fblock,
+                            'ftype' => $SESSION->openstudio_view_filters[content::VISIBILITY_MODULE]->ftype,
+                            'fflag' => $SESSION->openstudio_view_filters[content::VISIBILITY_MODULE]->fflag,
+                            'ftags' => $SESSION->openstudio_view_filters[content::VISIBILITY_MODULE]->ftags,
+                            'fsort' => $SESSION->openstudio_view_filters[content::VISIBILITY_MODULE]->fsort,
+                            'osort' => $SESSION->openstudio_view_filters[content::VISIBILITY_MODULE]->osort));
+        } else {
+            $navigationurls->mymoduleurl = new \moodle_url('/mod/openstudio/view.php',
                     array('id' => $cmid, 'vid' => content::VISIBILITY_MODULE, 'fblock' => 0,
-                          'ftype' => 0, 'fflag' => 0,
-                          'ftags' => '', 'fsort' => stream::SORT_BY_DATE, 'osort' => 0));
+                            'ftype' => 0, 'fflag' => 0,
+                            'ftags' => '', 'fsort' => stream::SORT_BY_DATE, 'osort' => 0));
+        }
 
         $navigationurls->listpeopleurl = new \moodle_url('/mod/openstudio/people.php', array('id' => $cmid));
         $navigationurls->peoplegroupurl = new \moodle_url('/mod/openstudio/people.php',
@@ -705,5 +758,273 @@ class renderer_utils {
 
         return $contentdata;
 
+    }
+
+    /**
+     * This function generate variables for post types filter option of Open Studio.
+     *
+     * @param object $contentdata The content records to display.
+     * @return object $contentdata
+     */
+    public static function filter_area($contentdata) {
+        $filters = $contentdata->openstudio_view_filters;
+
+        $area = array();
+        $area[] = (object) [
+            'checked' => $filters->fblock == stream::FILTER_AREA_ALL,
+            'value' => stream::FILTER_AREA_ALL,
+            'icon' => '',
+            'label' => get_string('filterall', 'openstudio')
+        ];
+
+        // Will not include Pinboad when view activites page.
+        if (!$contentdata->ismyactivity) {
+            $area[] = (object)[
+                'checked' => $filters->fblock == stream::FILTER_AREA_PINBOARD,
+                'value' => stream::FILTER_AREA_PINBOARD,
+                'icon' => '',
+                'label' => get_string('filterpinboard', 'openstudio')
+            ];
+        }
+
+        $area[] = (object) [
+            'checked' => count($filters->fblockarray) > 0,
+            'value' => stream::FILTER_AREA_ACTIVITY,
+            'icon' => '',
+            'label' => get_string('filterblocks', 'openstudio')
+        ];
+
+        $contentdata->filter_area_activity_value = stream::FILTER_AREA_ACTIVITY;
+        $contentdata->area = $area;
+
+        return $contentdata;
+    }
+
+    /**
+     * This function generate variables for post types filter option of Open Studio.
+     *
+     * @param object $contentdata The content records to display.
+     * @return object $contentdata
+     */
+    public static function filter_post_types($contentdata) {
+        global $OUTPUT;
+
+        $filters = $contentdata->openstudio_view_filters;
+
+        $posttypes = array();
+        $posttypes[] = (object) [
+            'checked' => !$filters->ftype,
+            'value' => 0,
+            'icon' => '',
+            'label' => get_string('filtertypesall', 'openstudio')
+        ];
+
+        $posttypes[] = (object) [
+            'checked' => in_array(content::TYPE_IMAGE, $filters->ftypearray),
+            'value' => content::TYPE_IMAGE,
+            'icon' => $OUTPUT->pix_url('image_filters_rgb_32px', 'openstudio'),
+            'label' => get_string('filtertypesimage', 'openstudio')
+        ];
+
+        $posttypes[] = (object) [
+            'checked' => in_array(content::TYPE_VIDEO, $filters->ftypearray),
+            'value' => content::TYPE_VIDEO,
+            'icon' => $OUTPUT->pix_url('video_filters_rgb_32px', 'openstudio'),
+            'label' => get_string('filtertypesvideo', 'openstudio')
+        ];
+
+        $posttypes[] = (object) [
+            'checked' => in_array(content::TYPE_AUDIO, $filters->ftypearray),
+            'value' => content::TYPE_AUDIO,
+            'icon' => $OUTPUT->pix_url('audio_filters_rgb_32px', 'openstudio'),
+            'label' => get_string('filtertypesaudio', 'openstudio')
+        ];
+
+        $posttypes[] = (object) [
+            'checked' => in_array(content::TYPE_DOCUMENT, $filters->ftypearray),
+            'value' => content::TYPE_DOCUMENT,
+            'icon' => $OUTPUT->pix_url('documents_filters_rgb_32px', 'openstudio'),
+            'label' => get_string('filtertypesdocuments', 'openstudio')
+        ];
+
+        $posttypes[] = (object) [
+            'checked' => in_array(content::TYPE_PRESENTATION, $filters->ftypearray),
+            'value' => content::TYPE_PRESENTATION,
+            'icon' => $OUTPUT->pix_url('powerpoint_filters_rgb_32px', 'openstudio'),
+            'label' => get_string('filtertypespresentation', 'openstudio')
+        ];
+
+        $posttypes[] = (object) [
+            'checked' => in_array(content::TYPE_SPREADSHEET, $filters->ftypearray),
+            'value' => content::TYPE_SPREADSHEET,
+            'icon' => $OUTPUT->pix_url('spreadsheet_filters_rgb_32px', 'openstudio'),
+            'label' => get_string('filtertypesspreadsheet', 'openstudio')
+        ];
+
+        $posttypes[] = (object) [
+            'checked' => in_array(content::TYPE_URL, $filters->ftypearray),
+            'value' => content::TYPE_URL,
+            'icon' => $OUTPUT->pix_url('online_filters_rgb_32px', 'openstudio'),
+            'label' => get_string('filtertypesweblink', 'openstudio')
+        ];
+
+        $posttypes[] = (object) [
+            'checked' => in_array(content::TYPE_FOLDER, $filters->ftypearray),
+            'value' => content::TYPE_FOLDER,
+            'icon' => $OUTPUT->pix_url('folder_filters_rgb_32px', 'openstudio'),
+            'label' => get_string('filtertypesfolder', 'openstudio')
+        ];
+
+        $contentdata->posttypes = $posttypes;
+
+        return $contentdata;
+    }
+
+    /**
+     * This function generate variables for user flags filter option of Open Studio.
+     *
+     * @param object $contentdata The content records to display.
+     * @return object $contentdata
+     */
+    public static function filter_user_flags($contentdata) {
+        global $OUTPUT;
+
+        $filters = $contentdata->openstudio_view_filters;
+
+        $userflags = array();
+        $userflags[] = (object) [
+            'checked' => !$filters->fflag,
+            'value' => 0,
+            'icon' => '',
+            'label' => get_string('filterflagallcontents', 'openstudio')
+        ];
+
+        $userflags[] = (object) [
+            'checked' => in_array(stream::FILTER_FAVOURITES, $filters->fflagarray),
+            'value' => stream::FILTER_FAVOURITES,
+            'icon' => $OUTPUT->pix_url('favourite_filters_rgb_32px', 'openstudio'),
+            'label' => get_string('filterflagfavourite', 'openstudio')
+        ];
+
+        $userflags[] = (object) [
+            'checked' => in_array(stream::FILTER_MOSTSMILES, $filters->fflagarray),
+            'value' => stream::FILTER_MOSTSMILES,
+            'icon' => $OUTPUT->pix_url('participation_filters_rgb_32px', 'openstudio'),
+            'label' => get_string('filterflagsmile', 'openstudio')
+        ];
+
+        $userflags[] = (object) [
+            'checked' => in_array(stream::FILTER_MOSTINSPIRATION, $filters->fflagarray),
+            'value' => stream::FILTER_MOSTINSPIRATION,
+            'icon' => $OUTPUT->pix_url('inspiration_filters_rgb_32px', 'openstudio'),
+            'label' => get_string('filterflaginspiration', 'openstudio')
+        ];
+
+        $userflags[] = (object) [
+            'checked' => in_array(stream::FILTER_HELPME, $filters->fflagarray),
+            'value' => stream::FILTER_HELPME,
+            'icon' => $OUTPUT->pix_url('request_feedback_filters_rgb_32px', 'openstudio'),
+            'label' => get_string('filterflagfeedbackrequested', 'openstudio')
+        ];
+
+        $userflags[] = (object) [
+            'checked' => in_array(stream::FILTER_COMMENTS, $filters->fflagarray),
+            'value' => stream::FILTER_COMMENTS,
+            'icon' => $OUTPUT->pix_url('comments_filters_rgb_32px', 'openstudio'),
+            'label' => get_string('filterflagcomments', 'openstudio')
+        ];
+
+        $contentdata->userflags = $userflags;
+
+        return $contentdata;
+    }
+
+    /**
+     * This function generate variables for select status filter option of Open Studio.
+     *
+     * @param object $contentdata The content records to display.
+     * @return object $contentdata
+     */
+    public static function filter_select_status($contentdata) {
+        global $OUTPUT;
+
+        $filters = $contentdata->openstudio_view_filters;
+        $selectstatus = array();
+        $selectstatus[] = (object) [
+            'checked' => !$filters->fstatus,
+            'value' => 0,
+            'icon' => '',
+            'label' => get_string('filterallpost', 'openstudio')
+        ];
+
+        $selectstatus[] = (object) [
+            'checked' => $filters->fstatus == stream::FILTER_READ ,
+            'value' => stream::FILTER_READ,
+            'icon' => $OUTPUT->pix_url('viewed_filters_rgb_32px', 'openstudio'),
+            'label' => get_string('filterflagviewed', 'openstudio')
+        ];
+
+        $selectstatus[] = (object) [
+            'checked' => $filters->fstatus == stream::FILTER_NOTREAD,
+            'value' => stream::FILTER_NOTREAD,
+            'icon' => $OUTPUT->pix_url('not_viewed_filters_rgb_32px', 'openstudio'),
+            'label' => get_string('filterflagnotviewed', 'openstudio')
+        ];
+
+        $selectstatus[] = (object) [
+            'checked' => $filters->fstatus == stream::FILTER_EMPTYCONTENT,
+            'value' => stream::FILTER_EMPTYCONTENT,
+            'icon' => $OUTPUT->pix_url('empty_posts_filters_rgb_32px', 'openstudio'),
+            'label' => get_string('filterflagemptycontents', 'openstudio')
+        ];
+
+        $selectstatus[] = (object) [
+            'checked' => $filters->fstatus == stream::FILTER_LOCKED,
+            'value' => stream::FILTER_LOCKED,
+            'icon' => $OUTPUT->pix_url('lock_filters_rgb_32px', 'openstudio'),
+            'label' => get_string('filterflaglocked', 'openstudio')
+        ];
+
+        $contentdata->selectstatus = $selectstatus;
+
+        return $contentdata;
+    }
+
+    /**
+     * This function generate variables for select from filter option of Open Studio.
+     *
+     * @param object $contentdata The content records to display.
+     * @return object $contentdata
+     */
+    public static function filter_scope($contentdata) {
+        global $OUTPUT;
+
+        $filters = $contentdata->openstudio_view_filters;
+
+        $selectfrom = array();
+        $selectfrom[] = (object) [
+            'checked' => $filters->fscope == stream::SCOPE_EVERYONE,
+            'value' => stream::SCOPE_EVERYONE,
+            'icon' => $OUTPUT->pix_url('everyone_filters_rgb_32px', 'openstudio'),
+            'label' => get_string('filterscopeeveryone', 'openstudio')
+        ];
+
+        $selectfrom[] = (object) [
+            'checked' => $filters->fscope == stream::SCOPE_MY,
+            'value' => stream::SCOPE_MY,
+            'icon' => $OUTPUT->pix_url('mine_filters_rgb_32px', 'openstudio'),
+            'label' => get_string('filterscopemy', 'openstudio')
+        ];
+
+        $selectfrom[] = (object) [
+            'checked' => $filters->fscope == stream::SCOPE_THEIRS,
+            'value' => stream::SCOPE_THEIRS,
+            'icon' => $OUTPUT->pix_url('theirs_filters_rgb_32px', 'openstudio'),
+            'label' => get_string('filterscopetheirs', 'openstudio')
+        ];
+
+        $contentdata->selectfrom = $selectfrom;
+
+        return $contentdata;
     }
 }
