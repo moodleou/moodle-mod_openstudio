@@ -1225,7 +1225,7 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
 
 .openstudio-work-progress-percent {
    float: right;
-    width: 29px;
+   margin-right: -5px;
 }
 
 
@@ -1482,6 +1482,15 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     .openstudio-profile-bar .openstudio-profile-progress-content {
         margin-left: 5px;
     }
+
+    .openstudio-profile-work-progress {
+        margin-left: -8px;
+    }
+
+    .openstudio-profile-work-progress .openstudio-profile-label-title {
+        margin-left: -8px;
+        margin-bottom: 5px;
+    }
 }
 
 /* Tablet Portrait. */
@@ -1505,10 +1514,13 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
 
     .openstudio-profile-work-progress {
         width: 100%;
+        margin-left: 0px;
     }
 
     .openstudio-profile-work-progress .openstudio-profile-label-title {
         margin-top: 5px;
+        margin-bottom: 5px;
+        margin-left: 0px;
     }
 
     .openstudio-profile-row {
@@ -1516,6 +1528,10 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         height: 125px;
         margin: 0 20px;
         padding: 15px 15px 0;
+    }
+
+    .openstudio-profile-info {
+        width: 35%;
     }
 }
 
@@ -1885,6 +1901,11 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     .openstudio-profile-bar .openstudio-profile-progress-content {
         margin-left: 5px;
     }
+
+    .openstudio-profile-work-progress .openstudio-profile-label-title,
+    .openstudio-profile-work-progress {
+        margin-left: 0px;
+    }
 }
 
 /* Mobile small. */
@@ -2042,5 +2063,9 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     
     .openstudio-profile-bar .openstudio-profile-progress-content {
         margin-left: 5px;
+    }
+
+    .openstudio-profile-img {
+        margin-right: 7px;
     }
 }
