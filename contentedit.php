@@ -516,7 +516,8 @@ if ($contentform->is_cancelled()) {
         if (isset($foldertemplatecontentid)) {
             $urlparams['sstsid'] = $foldertemplatecontentid;
         }
-        $url = new moodle_url('/mod/openstudio/contentedit.php', $urlparams);
+        $urlparams['vid'] = $vid;
+        $url = new moodle_url('/mod/openstudio/view.php', $urlparams);
     }
     return redirect($url->out(false));
 
