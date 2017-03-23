@@ -642,7 +642,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      * @return string The rendered HTML fragment.
      */
     public function content_page($cmid, $permissions, $contentdata, $openstudioid = null) {
-        global $CFG;
+        global $CFG, $PAGE;
 
         $contentdata->cmid = $cmid;
         if (!property_exists($contentdata, 'profilebarenable')) {
@@ -862,6 +862,18 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         $contentdata->hascontentversions = $hascontentversions;
         $contentdata->contentversions = $contentversions;
+
+        if ($contentdeleteenable) {
+            // Require strings for js.
+            $PAGE->requires->strings_for_js(
+                    array('contentdeledialogueteheader', 'deleteconfirmcontent', 'modulejsdialogcancel', 'deletelevel'),
+                            'mod_openstudio');
+            $this->page->requires->js_call_amd('mod_openstudio/delete', 'init', [[
+                    'id' => $cmid,
+                    'cid' => $contentdata->id,
+                    'vid' => $contentdata->vid,
+                    'folderid' => property_exists($contentdata, 'folderid') ? $contentdata->folderid : '']]);
+        }
 
         return $this->render_from_template('mod_openstudio/content_page', $contentdata);
     }

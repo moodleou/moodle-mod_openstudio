@@ -91,15 +91,15 @@ class behat_mod_openstudio extends behat_base {
                 'required' => array('name', 'sortorder', 'level2'),
                 'switchids' => array('locktype' => 'locktype', 'contenttype' => 'contenttype')
             ),
-            'set templates' => array(
-                'datagenerator' => 'set_template',
+            'folder templates' => array(
+                'datagenerator' => 'folder_template',
                 'required' => array('level3'),
                 'switchids' => array('level3' => 'levelid')
             ),
-            'set content templates' => array(
-                'datagenerator' => 'set_content_template',
+            'folder content templates' => array(
+                'datagenerator' => 'folder_content_template',
                 'required' => array('level3', 'name'),
-                'switchids' => array('level3' => 'levelid', 'levelid' => 'settemplateid')
+                'switchids' => array('level3' => 'levelid', 'levelid' => 'foldertemplateid')
             ),
             'comments' => array(
                 'datagenerator' => 'comment',
@@ -566,6 +566,18 @@ EOF;
     }
 
     /**
+     * Follows the first content in my activity
+     *
+     * @Given /^I follow the first content in my activity$/
+     * @throws Exception
+     */
+    public function follow_first_content_in_my_activity() {
+        $this->getSession()->getPage()
+                ->find('css', '.openstudio-grid-item:first-child div.openstudio-grid-item-content-preview > a > img')
+                ->click();
+    }
+
+    /**
      * Gets the course id from it's shortname.
      * @throws Exception
      * @param string $shortname
@@ -583,7 +595,7 @@ EOF;
     /**
      * Gets the tutor role id from it's shortname.
      * @throws Exception
-     * @param string $shortname
+     * @param string $tutorroles
      * @return int
      */
     protected function get_tutorroles_id($tutorroles) {
@@ -596,5 +608,40 @@ EOF;
             }
         }
         return implode(',', $ids);
+    }
+
+    /**
+     * Get level3 ID from it's name.
+     * @param string $level3name
+     * @return int
+     * @throws Exception
+     */
+    protected function get_level3_id($level3name) {
+        global $DB;
+
+        try {
+            if (!$id = $DB->get_field('openstudio_level3', 'id', array('name' => $level3name))) {
+                throw new Exception('The specified course with shortname "' . $level3name . '" does not exist');
+            }
+        } catch (dml_multiple_records_exception $e) {
+            throw new Exception('More than one level3 was found with the name ' . $level3name
+                    .'. For simplicity, please use unique level names in behat tests.');
+        }
+        return $id;
+    }
+
+    /**
+     * Get level ID from level3 ID.
+     * @param $level3id
+     * @return int
+     * @throws Exception
+     */
+    protected function get_levelid_id($level3id) {
+        global $DB;
+
+        if (!$id = $DB->get_field('openstudio_folder_templates', 'id', array('levelid' => $level3id))) {
+            throw new Exception('The set template for level "' . $level3id . '" does not exist');
+        }
+        return $id;
     }
 }

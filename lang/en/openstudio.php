@@ -365,6 +365,7 @@ $string['contentflagxcopies'] = '{$a->number} copies';
 $string['contentflagsharedwithtutor'] = 'Shared with tutor';
 $string['contentversions'] = 'versions';
 $string['contentversioncount'] = '{$a->number} older versions';
+$string['contentdeledialogueteheader'] = 'Delete post?';
 
 $string['contentparticipationlow'] = 'Low participation - change me to a smiley by commenting and rating other people\'s work.';
 $string['contentparticipationhigh'] = 'High participation - well done for keeping busy!';
@@ -779,6 +780,7 @@ $string['errorcontentinvalidnotebook'] = 'The notebook you uploaded was invalid.
 $string['errorcontentnotebookerror'] = 'There was a problem reading one of the files in your notebook: {$a->filename} - {$a->message}';
 $string['errorinvalidcomment'] = 'Comment does not exist.';
 $string['errorcommentnotdeleted'] = 'The comment could not be deleted due to an error.';
+$string['errorcontentnotdeleted'] = 'Delete content error!';
 
 $string['modulejsdialogreturntostudio'] = 'Return to Studio';
 $string['modulejsdialogyes'] = 'Yes';
@@ -815,7 +817,8 @@ $string['modulejsshowfilters'] = 'Open <span class="accesshide">filter panel</sp
 $string['modulejscopypastehelp'] = 'Copy content to the clipboard. The clipboard is a temporary area to hold a copied content. You can paste over an activity content from the clipboard by navigating to the activity content and switching to content edit mode. In content edit mode, the option to paste from clipboard will be available.';
 $string['modulejscopypastehelpalt'] = 'Copy content to your pinboard or copy to the clipboard. <br /><br /> The clipboard is a temporary area to hold a copied content. You can paste over an activity content from the clipboard by navigating to the activity content and switching to content edit mode. In content edit mode, the option to paste from clipboard will be available.';
 
-$string['deleteconfirmcontent'] = 'Are you sure you want to delete this content? The content, content’s previous content versions and all the content’s comments will be deleted. This action cannot be undone.';
+$string['deleteconfirmcontent'] = 'Are you sure you want to delete this post? The post, all associated versions and '.
+        'comments will be deleted. This action cannot be undone.';
 $string['deleteconfirmfolder'] = 'Are you sure you want to delete this folder? The content, contents created in this folder, and comments will be deleted. This action cannot be undone.';
 $string['deleteconfirmcontentpreconf'] = 'Are you sure you want to delete the content from this content, the content’s previous content versions and all the content’s comments? This action will empty the content and cannot be undone.';
 $string['deleteconfirmfolderpreconf'] = 'Are you sure you want to delete the content in this folder, the contents created in this folder and comments will be deleted? This action will empty the folder and cannot be undone.';

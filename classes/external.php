@@ -28,6 +28,8 @@ defined('MOODLE_INTERNAL') || die;
 use mod_openstudio\local\api\subscription;
 use mod_openstudio\local\api\flags;
 use mod_openstudio\local\util;
+use mod_openstudio\local\api\content;
+use mod_openstudio\local\api\contentversion;
 
 require_once($CFG->dirroot . '/mod/openstudio/api/subscription.php');
 require_once($CFG->libdir . '/externallib.php');
@@ -363,4 +365,82 @@ class mod_openstudio_external extends external_api {
         );
     }
 
+    /**
+     * Returns description of method parameters
+     *
+     * @return external_function_parameters
+     */
+    public static function delete_content_parameters() {
+        return new external_function_parameters(array(
+                'id' => new external_value(PARAM_INT, 'Open studio instance ID'),
+                'cid' => new external_value(PARAM_INT, 'Content ID'))
+        );
+    }
+
+    /**
+     * Delete content
+     *
+     * @param int $id Open studio instance ID
+     * @param int $cid Content ID
+     * @return array
+     *  [
+     *      success: boolean
+     *  ]
+     * @throws moodle_exception
+     */
+    public static function delete_content($id, $cid) {
+        $params = self::validate_parameters(self::delete_content_parameters(), array(
+            'id' => $id,
+            'cid' => $cid));
+
+        $success = false;
+
+        // Init and check permission.
+        global $USER;
+        $userid = $USER->id;
+        $coursedata = util::render_page_init($id);
+        $cm = $coursedata->cm;
+        $cminstance = $coursedata->cminstance;
+        $course = $coursedata->course;
+        $permissions = $coursedata->permissions;
+        require_login($course, true, $cm);
+
+        // Get content and content version data.
+        $showdeletedcontentversions = false;
+        if ($permissions->viewdeleted || $permissions->managecontent) {
+            $showdeletedcontentversions = true;
+        }
+        $contentandversions = contentversion::get_content_and_versions($params['cid'], $userid, $showdeletedcontentversions);
+        $contentdata = $contentandversions->contentdata;
+
+        // Delete content.
+        $actionallowed = ($contentdata->userid == $userid) && $permissions->addcontent;
+        $actionallowed = $actionallowed || $permissions->managecontent;
+        if ($actionallowed) {
+            if ($contentdata->levelid > 0 && $contentdata->levelcontainer > 0 && $permissions->versioningon) {
+                $success = content::delete($userid, $params['cid'], $cminstance->versioning, $cm);
+            } else {
+                $success = content::empty_content($userid, $params['cid'], true, $cminstance->versioning, $cm);
+            }
+        }
+
+        if (!$success) {
+            throw new \moodle_exception('errorcontentnotdeleted', 'openstudio');
+        }
+
+        $result['success'] = $success;
+
+        return $result;
+    }
+
+    /**
+     * Returns description of method result value
+     *
+     * @return external_description
+     */
+    public static function delete_content_returns() {
+        return new external_single_structure(array(
+                'success' => new external_value(PARAM_BOOL, 'Unlock successfully'))
+        );
+    }
 }

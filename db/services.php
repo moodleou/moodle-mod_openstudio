@@ -52,6 +52,15 @@ $functions = array(
         'ajax' => true,
         'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
         'capabilities' => 'mod/openstudio:view'
+    ),
+    'mod_openstudio_external_delete_content' => array(
+        'classname' => 'mod_openstudio_external',
+        'methodname' => 'delete_content',
+        'description' => 'Delete content',
+        'type' => 'write',
+        'ajax' => true,
+        'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
+        'capabilities' => 'mod/openstudio:view'
     )
 );
 
@@ -61,7 +70,8 @@ $services = array(
         'functions' => array(
             'mod_openstudio_external_flag_content',
             'mod_openstudio_external_subscribe',
-            'mod_openstudio_external_unsubscribe'),
+            'mod_openstudio_external_unsubscribe',
+            'mod_openstudio_external_delete_content'),
         'restrictedusers' => 0,
         'enabled' => 1,
         'shortname' => 'openstudio_service',

@@ -138,15 +138,15 @@ function studio_api_item_toversion($slotid, $versionid) {
     if (!$DB->record_exists('openstudio_content_versions', array('id' => $versionid))) {
         throw new coding_exception('Slot Version does not exist.');
     }
-    $params = array('containerid' => $versionid, 'containertype' => STUDIO_SLOT_ITEM_CONTAINER_VERSION);
+    $params = array('containerid' => $versionid, 'containertype' => item::VERSION);
     if ($DB->record_exists('openstudio_content_items', $params)) {
         throw new coding_exception('Item already exists for slot version');
     }
-    $params = array('containerid' => $slotid, 'containertype' => STUDIO_SLOT_ITEM_CONTAINER_SLOT);
+    $params = array('containerid' => $slotid, 'containertype' => item::CONTENT);
     $itemrecord = $DB->get_record('openstudio_content_items', $params);
     if ($itemrecord) {
         $itemrecord->containerid = $versionid;
-        $itemrecord->containertype = STUDIO_SLOT_ITEM_CONTAINER_VERSION;
+        $itemrecord->containertype = item::VERSION;
         $DB->update_record('openstudio_content_items', $itemrecord);
     }
 }

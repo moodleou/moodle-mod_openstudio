@@ -120,6 +120,66 @@
  */
 
 /**
+ * Common dialogue
+ */
+
+/* Common dialog header */
+
+.path-mod-openstudio .moodle-dialogue-base .moodle-dialogue-wrap .moodle-dialogue-hd,
+.path-mod-openstudio .moodle-dialogue-base .moodle-dialogue-wrap .moodle-dialogue-hd.yui3-widget-hd {
+    height: 46px;
+    padding: 0px;
+}
+
+.path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue-common-header {
+    padding: 11px 15px;
+    display: inline-block;
+    font-family: Arial;
+}
+
+.path-mod-openstudio .moodle-dialogue-base .yui3-button.closebutton {
+    padding: 1px 3px 3px 3px;
+    margin: 0px 9px 0px 9px;
+}
+
+.path-mod-openstudio .moodle-dialogue-base .yui3-button.closebutton:before {
+    height: 30px;
+    display: block;
+}
+
+/* Common dialog body */
+.path-mod-openstudio .moodle-dialogue-base .moodle-dialogue-bd {
+    padding: 20px 15px;
+}
+
+.path-mod-openstudio .moodle-dialogue-base .moodle-dialogue-bd {
+    padding: 12px 15px;
+}
+
+.path-mod-openstudio .openstudio-export-message {
+    color: red;
+}
+
+/* Common dialog footer */
+.path-mod-openstudio .moodle-dialogue-base .moodle-dialogue .moodle-dialogue-content .moodle-dialogue-ft {
+    text-align: left;
+    margin: 7px 10px 30px 15px;
+}
+
+.path-mod-openstudio .moodle-dialogue-base .moodle-dialogue .moodle-dialogue-ft .yui3-widget-buttons {
+    display: inline-flex;
+}
+
+.path-mod-openstudio .moodle-dialogue-base .moodle-dialogue .moodle-dialogue-ft .yui3-widget-buttons button {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+/**
+ * End common dialogue
+ */
+
+/**
  * Subscription feature
  */
 
@@ -2849,6 +2909,11 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
 
     .openstudio-work-progress-percent {
         line-height: 30px;
+    }
+
+    .moodle-dialogue-base .moodle-dialogue-base .moodle-dialogue-wrap .moodle-dialogue-hd,
+    .moodle-dialogue-base .moodle-dialogue-base .moodle-dialogue-wrap .moodle-dialogue-hd.yui3-widget-hd {
+        height: 50px;
     }
 
     .moodle-dialogue-base .openstudio-export-dialog-container .moodle-dialogue-wrap .moodle-dialogue-hd,
