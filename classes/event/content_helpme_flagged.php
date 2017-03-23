@@ -24,6 +24,8 @@
 
 namespace mod_openstudio\event;
 
+use mod_openstudio\local\notifications\notifiable;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -96,5 +98,4 @@ EOF;
                 $this->contextinstanceid
         );
     }
-
 }

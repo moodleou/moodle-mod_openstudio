@@ -649,25 +649,25 @@ if ($contentform->is_cancelled()) {
                         && ($contentformdata->visibility == content::VISIBILITY_INFOLDERONLY)) {
                     $contentactionevent = 'folder_content_created';
                 }
-                util::trigger_event($cm->id, $contentactionevent, '',
+                util::trigger_event($cm->id, $contentactionevent, $contentid,
                         util::get_page_name_and_params(true, $loggingurl->out(false)),
                         util::format_log_info($contentdataname));
                 break;
 
             case content::UPDATEMODE_CREATED.content::UPDATEMODE_FOLDER:
-                util::trigger_event($cm->id, 'folder_created', '',
+                util::trigger_event($cm->id, 'folder_created', $contentid,
                         util::get_page_name_and_params(true, $loggingurl->out(false)),
                         util::format_log_info($contentdataname));
                 break;
 
             case content::UPDATEMODE_UPDATED:
-                util::trigger_event($cm->id, 'content_edited', '',
+                util::trigger_event($cm->id, 'content_edited', $contentid,
                         util::get_page_name_and_params(true, $loggingurl->out(false)),
                         util::format_log_info($contentdataname));
                 break;
 
             case content::UPDATEMODE_UPDATED.content::UPDATEMODE_FOLDER:
-                util::trigger_event($cm->id, 'folder_edited', '',
+                util::trigger_event($cm->id, 'folder_edited', $contentid,
                         util::get_page_name_and_params(true, $loggingurl->out(false)),
                         util::format_log_info($contentdataname));
                 break;
@@ -771,25 +771,25 @@ if ($contentform->is_cancelled()) {
                 if ($contentdata->visibility == content::VISIBILITY_INFOLDERONLY) {
                     $contentactionevent = 'folder_content_created';
                 }
-                util::trigger_event($cm->id, $contentactionevent, '',
+                util::trigger_event($cm->id, $contentactionevent, $contentid,
                         util::get_page_name_and_params() . "&userid={$userid}",
                         util::format_log_info($contentdataname));
                 break;
 
             case content::UPDATEMODE_CREATED.content::UPDATEMODE_FOLDER:
-                util::trigger_event($cm->id, 'folder_created', '',
+                util::trigger_event($cm->id, 'folder_created', $contentid,
                         util::get_page_name_and_params() . "&userid={$userid}",
                         util::format_log_info($contentdataname));
                 break;
 
             case content::UPDATEMODE_UPDATED:
-                util::trigger_event($cm->id, 'content_edited', '',
+                util::trigger_event($cm->id, 'content_edited', $contentid,
                         util::get_page_name_and_params() . "&userid={$userid}",
                         util::format_log_info($contentdataname));
                 break;
 
             case content::UPDATEMODE_UPDATED.content::UPDATEMODE_FOLDER:
-                util::trigger_event($cm->id, 'folder_edited', '',
+                util::trigger_event($cm->id, 'folder_edited', $contentid,
                         util::get_page_name_and_params() . "&userid={$userid}",
                         util::format_log_info($contentdataname));
                 break;

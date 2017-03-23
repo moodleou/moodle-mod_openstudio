@@ -21,8 +21,10 @@
  */
 
 function xmldb_openstudio_upgrade($oldversion=0) {
+    global $DB;
 
     $result = true;
+    $dbman = $DB->get_manager();
 
     if ($oldversion < 2016102501) {
 
@@ -30,7 +32,45 @@ function xmldb_openstudio_upgrade($oldversion=0) {
         upgrade_mod_savepoint(true, 2016102501, 'openstudio');
     }
 
+    if ($oldversion < 2017040401) {
+
+        // Define table openstudio_notifications to be created.
+        $table = new xmldb_table('openstudio_notifications');
+
+        // Adding fields to table openstudio_notifications.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('contentid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('commentid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+        $table->add_field('flagid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+        $table->add_field('message', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('url', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('userfrom', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('icon', XMLDB_TYPE_CHAR, '255', null, null, null, null);
+        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('timeread', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+
+        // Adding keys to table openstudio_notifications.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+        $table->add_key('userid', XMLDB_KEY_FOREIGN, array('userid'), 'user', array('id'));
+        $table->add_key('contentid', XMLDB_KEY_FOREIGN, array('contentid'), 'openstudio_contents', array('id'));
+        $table->add_key('commentid', XMLDB_KEY_FOREIGN, array('commentid'), 'openstudio_comments', array('id'));
+        $table->add_key('userfrom', XMLDB_KEY_FOREIGN, array('userfrom'), 'user', array('id'));
+
+        // Adding indexes to table openstudio_notifications.
+        $table->add_index('flagid', XMLDB_INDEX_NOTUNIQUE, array('flagid'));
+
+        // Conditionally launch create table for openstudio_notifications.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Openstudio savepoint reached.
+        upgrade_mod_savepoint(true, 2017040401, 'openstudio');
+    }
+
     // Must always return true from these functions.
     return $result;
+
 
 }

@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="mod/openstudio/db" VERSION="20161025" COMMENT="OpenStudio plugin tables"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+<XMLDB PATH="mod/openstudio/db" VERSION="20170404" COMMENT="OpenStudio plugin tables"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-
-
-
     <TABLE NAME="openstudio" COMMENT="Standard module table. Holds information about a studio instance.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Studio ID"/>
@@ -45,9 +42,6 @@
         <KEY NAME="course" TYPE="foreign" FIELDS="course" REFTABLE="course" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
-
-
-
     <TABLE NAME="openstudio_level1" COMMENT="Activity structure, level 1">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
@@ -62,9 +56,6 @@
         <KEY NAME="openstudioid" TYPE="foreign" FIELDS="openstudioid" REFTABLE="openstudio" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
-
-
-
     <TABLE NAME="openstudio_level2" COMMENT="Activity structure, level 2">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
@@ -80,9 +71,6 @@
         <KEY NAME="level1id" TYPE="foreign" FIELDS="level1id" REFTABLE="openstudio_level1" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
-
-
-
     <TABLE NAME="openstudio_level3" COMMENT="Activity structure, level 3">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
@@ -102,9 +90,6 @@
         <KEY NAME="level2id" TYPE="foreign" FIELDS="level2id" REFTABLE="openstudio_level2" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
-
-
-
     <TABLE NAME="openstudio_folder_templates" COMMENT="folder Activity structure">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
@@ -118,9 +103,6 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-
-
-
     <TABLE NAME="openstudio_content_templates" COMMENT="folder Content Activity structure">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
@@ -135,9 +117,6 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-
-
-
     <TABLE NAME="openstudio_contents" COMMENT="Studio content record">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
@@ -178,9 +157,6 @@
         <INDEX NAME="timemodified" UNIQUE="false" FIELDS="timemodified"/>
       </INDEXES>
     </TABLE>
-
-
-
     <TABLE NAME="openstudio_content_versions" COMMENT="A version of a content">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
@@ -203,9 +179,6 @@
         <KEY NAME="contentid" TYPE="foreign" FIELDS="contentid" REFTABLE="openstudio_contents" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
-
-
-
     <TABLE NAME="openstudio_content_files" COMMENT="Table holds a list of all binary files created in the Studio">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
@@ -215,9 +188,6 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-
-
-
     <TABLE NAME="openstudio_folder_contents" COMMENT="Studio collection content">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
@@ -238,9 +208,6 @@
         <KEY NAME="contentid" TYPE="foreign" FIELDS="contentid" REFTABLE="openstudio_contents" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
-
-
-
     <TABLE NAME="openstudio_flags" COMMENT="Flags assocaited with contents, people or comments">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
@@ -263,9 +230,6 @@
         <INDEX NAME="flagid" UNIQUE="false" FIELDS="flagid"/>
       </INDEXES>
     </TABLE>
-
-
-
     <TABLE NAME="openstudio_tracking" COMMENT="User usage of studio tracking table">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
@@ -284,9 +248,6 @@
         <INDEX NAME="timemodified" UNIQUE="false" FIELDS="timemodified"/>
       </INDEXES>
     </TABLE>
-
-
-    
     <TABLE NAME="openstudio_comments" COMMENT="Content comments">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
@@ -308,9 +269,6 @@
         <INDEX NAME="timemodified" UNIQUE="false" FIELDS="timemodified"/>
       </INDEXES>
     </TABLE>
-
-
-
     <TABLE NAME="openstudio_subscriptions" COMMENT="Hold user email subscription request">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
@@ -332,9 +290,6 @@
         <INDEX NAME="contentid" UNIQUE="false" FIELDS="contentid"/>
       </INDEXES>
     </TABLE>
-
-
-
     <TABLE NAME="openstudio_honesty_checks" COMMENT="Record to record user has accepted usage policy">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
@@ -348,9 +303,6 @@
         <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
-
-
-
     <TABLE NAME="openstudio_content_items" COMMENT="Stores hashes of content content to recognise duplicates within a studio.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
@@ -362,6 +314,31 @@
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
+    </TABLE>
+    <TABLE NAME="openstudio_notifications" COMMENT="Active notifications.  These records are transient and are deleted after a short time.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The user the notification should display to"/>
+        <FIELD NAME="contentid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The content the notification is referring to."/>
+        <FIELD NAME="commentid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The comment the notification refers to (optional)."/>
+        <FIELD NAME="flagid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The flag that triggered the notification (optional)"/>
+        <FIELD NAME="message" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="The notification message"/>
+        <FIELD NAME="url" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="The URL (relative to wwwroot) the notification should link to."/>
+        <FIELD NAME="userfrom" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The ID of the user who triggered the notification."/>
+        <FIELD NAME="icon" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="The pix icon identifier to show with the notification"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="timeread" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+        <KEY NAME="contentid" TYPE="foreign" FIELDS="contentid" REFTABLE="openstudio_contents" REFFIELDS="id"/>
+        <KEY NAME="commentid" TYPE="foreign" FIELDS="commentid" REFTABLE="openstudio_comments" REFFIELDS="id"/>
+        <KEY NAME="userfrom" TYPE="foreign" FIELDS="userfrom" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="flagid" UNIQUE="false" FIELDS="flagid"/>
+      </INDEXES>
     </TABLE>
   </TABLES>
 </XMLDB>

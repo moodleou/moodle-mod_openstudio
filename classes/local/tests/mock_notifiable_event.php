@@ -15,21 +15,30 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package mod_studio
- * @copyright The Open University
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ *
+ * @package
+ * @copyright  2017 The Open University
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-/* Make sure this isn't being directly accessed. */
+namespace mod_openstudio\local\tests;
+
+use mod_openstudio\local\notifications\notifiable;
+
 defined('MOODLE_INTERNAL') || die();
 
-require_once(__DIR__.'/user.php');
-require_once(__DIR__.'/group.php');
-require_once(__DIR__.'/search.php');
-require_once(__DIR__.'/tracking.php');
-require_once(__DIR__.'/follow.php');
-require_once(__DIR__.'/rss.php');
-require_once(__DIR__.'/reports.php');
-require_once(__DIR__.'/lock.php');
-require_once(__DIR__.'/item.php');
-require_once(__DIR__.'/../../studio/constants.php'); // Use old constants if new ones is not available.
+abstract class mock_notifiable_event implements notifiable {
+    public $commentid;
+    public $contentid;
+    public $context;
+    public $other;
+
+    public function get_context() {
+        return $this->context;
+    }
+
+    public function set_courseid($id) {
+        $this->other['courseid'] = $id;
+    }
+}

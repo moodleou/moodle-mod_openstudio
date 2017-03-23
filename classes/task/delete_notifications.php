@@ -15,22 +15,33 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Defines the version and other meta-info about the plugin
- *
- * Setting the $plugin->version to 0 prevents the plugin from being installed.
- * See https://docs.moodle.org/dev/version.php for more info.
+ * Delete notficiations task.
  *
  * @package    mod_openstudio
- * @copyright  2015 Your Name <your@email.address>
+ * @copyright  2017 The Open University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_openstudio\task;
+
+use Horde\Socket\Client\Exception;
+use mod_openstudio\local\api\notifications;
+
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_openstudio';
-$plugin->version = 2017041000;
-$plugin->release = 'v0.0';
-$plugin->requires = 2011120100;
-$plugin->maturity = MATURITY_ALPHA;
-$plugin->cron = 0;
-$plugin->dependencies = array();
+class delete_notifications extends \core\task\scheduled_task {
+
+    public function get_name() {
+        return get_string('cron_deletenotifications', 'openstudio');
+    }
+
+    public function execute() {
+        try {
+            notifications::delete_old(notifications::FIELD_READ);
+            notifications::delete_old(notifications::FIELD_UNREAD);
+            notifications::delete_max();
+        } catch (Exception $e) {
+            mtrace('There was an error when deleting old notifications ' . $e->getMessage());
+        }
+    }
+}

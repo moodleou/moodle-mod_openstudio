@@ -15,22 +15,33 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Defines the version and other meta-info about the plugin
  *
- * Setting the $plugin->version to 0 prevents the plugin from being installed.
- * See https://docs.moodle.org/dev/version.php for more info.
  *
- * @package    mod_openstudio
- * @copyright  2015 Your Name <your@email.address>
+ * @package
+ * @copyright  2017 The Open University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_openstudio\local\tests;
+
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_openstudio';
-$plugin->version = 2017041000;
-$plugin->release = 'v0.0';
-$plugin->requires = 2011120100;
-$plugin->maturity = MATURITY_ALPHA;
-$plugin->cron = 0;
-$plugin->dependencies = array();
+use mod_openstudio\local\notifications\notifiable;
+use mod_openstudio\local\notifications\notification;
+
+class mock_content_notifiable extends mock_notifiable_event {
+
+    function get_notification_type() {
+        return notifiable::CONTENT;
+    }
+
+    function get_notification_data() {
+        global $USER;
+        return new notification((object) [
+                'contentid' => $this->contentid,
+                'message' => 'Mock content notification ' . random_string(),
+                'url' => 'mod/openstudio/index.php',
+                'userfrom' => $USER->id
+        ]);
+    }
+}

@@ -26,8 +26,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$tasks = array(
-    array(
+$tasks = [
+    [
         'classname' => 'mod_openstudio\task\process_subscriptions',
         'blocking' => 0,
         'minute' => 'R',
@@ -35,8 +35,8 @@ $tasks = array(
         'day' => '*',
         'month' => '*',
         'dayofweek' => '*'
-    ),
-    array(
+    ],
+    [
         'classname' => 'mod_openstudio\task\cleanup_files',
         'blocking' => 0,
         'minute' => 'R',
@@ -44,5 +44,14 @@ $tasks = array(
         'day' => '*',
         'month' => '*',
         'dayofweek' => '*'
-    )
-);
+    ],
+    [
+        'classname' => 'mod_openstuido\task\delete_notifications',
+        'blocking' => 0,
+        'minute' => 'R',
+        'hour' => '*',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*'
+    ]
+];

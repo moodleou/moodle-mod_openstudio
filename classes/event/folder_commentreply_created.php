@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * The mod_openstudio inspire flag event.
+ * The mod_openstudio reply to folder comment event.
  *
  * @package    mod_openstudio
  * @copyright  2014 The Open University
@@ -30,14 +30,14 @@ use mod_openstudio\local\notifications\notification;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * The mod_openstudio inspire flag event class.
+ * The mod_openstudio reply to folder comment event class.
  *
  * @package    mod_openstudio
  * @since      Moodle 2.7
  * @copyright  2014 The Open University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class content_inspire_flagged extends \core\event\base implements notifiable {
+class folder_commentreply_created extends \core\event\base implements notifiable {
 
     /**
      * Init method.
@@ -45,7 +45,7 @@ class content_inspire_flagged extends \core\event\base implements notifiable {
      * @return void
      */
     protected function init() {
-        $this->data['objecttable'] = 'openstudio_contents';
+        $this->data['objecttable'] = 'openstudio_comments';
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
@@ -57,7 +57,7 @@ class content_inspire_flagged extends \core\event\base implements notifiable {
      */
     public function get_description() {
         $description = <<<EOF
-The user with id '$this->userid' flagged inspired on a content on course module id '$this->contextinstanceid'
+The user with id '$this->userid' replied to a comment on a set on course module id '$this->contextinstanceid'
 EOF;
 
         return $description;
@@ -69,7 +69,7 @@ EOF;
      * @return string
      */
     public static function get_name() {
-        return get_string('event:contentinspireflagged', 'mod_openstudio');
+        return get_string('event:setreplytocommentflagged', 'mod_openstudio');
     }
 
     /**
@@ -82,7 +82,7 @@ EOF;
     }
 
     public static function get_legacy_eventname() {
-        return 'content inspire flagged';
+        return 'content replied to comment (set)';
     }
 
     /**
@@ -102,18 +102,18 @@ EOF;
     }
 
     public function get_notification_type() {
-        return notifiable::CONTENT;
+        return notifiable::COMMENT;
     }
 
     public function get_notification_data() {
-        $type = get_string('notification_post', 'openstudio');
         return new notification((object) [
             'contentid' => $this->objectid,
+            'commentid' => $this->other['commentid'],
             'userfrom' => $this->userid,
-            'icon' => 'inspiration',
-            'message' => get_string('notification_inspired', 'openstudio', $type),
-            'cmid' => $this->context->instanceid,
-            'flagid' => $this->other['flagid']
+            'icon' => 'comments',
+            'message' => get_string('notification_commentreplied', 'openstudio'),
+            'cmid' => $this->context->instanceid
         ]);
     }
+
 }

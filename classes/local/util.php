@@ -148,32 +148,35 @@ class util {
                 'theme' => $theme);
     }
 
-    public static function check_permission($cm, $cminstance, $course) {
+    public static function check_permission($cm, $cminstance, $course, $userid = null) {
         global $DB, $USER;
+        if (is_null($userid)) {
+            $userid = $USER->id;
+        }
         $modulecontext = \context_module::instance($cm->id);
         $coursecontext = \context_course::instance($course->id);
         // Gather permissions.
         $permissions = (object) array(
-                'managecontent' => has_capability('mod/openstudio:managecontent', $modulecontext),
-                'viewdeleted' => has_capability('mod/openstudio:viewdeleted', $modulecontext),
-                'expertcommenter' => has_capability('mod/openstudio:expertcommenter', $modulecontext),
-                'viewparticipation' => has_capability('mod/openstudio:viewparticipation', $modulecontext),
-                'view' => has_capability('mod/openstudio:view', $modulecontext),
-                'viewothers' => has_capability('mod/openstudio:viewothers', $modulecontext),
-                'addcontent' => has_capability('mod/openstudio:addcontent', $modulecontext),
-                'addcomment' => has_capability('mod/openstudio:addcomment', $modulecontext),
-                'sharewithothers' => has_capability('mod/openstudio:sharewithothers', $modulecontext),
-                'import' => has_capability('mod/openstudio:import', $modulecontext),
-                'export' => has_capability('mod/openstudio:export', $modulecontext),
-                'canlock' => has_capability('mod/openstudio:canlock', $modulecontext),
-                'canlockothers' => has_capability('mod/openstudio:canlockothers', $modulecontext)
+                'managecontent' => has_capability('mod/openstudio:managecontent', $modulecontext, $userid),
+                'viewdeleted' => has_capability('mod/openstudio:viewdeleted', $modulecontext, $userid),
+                'expertcommenter' => has_capability('mod/openstudio:expertcommenter', $modulecontext, $userid),
+                'viewparticipation' => has_capability('mod/openstudio:viewparticipation', $modulecontext, $userid),
+                'view' => has_capability('mod/openstudio:view', $modulecontext, $userid),
+                'viewothers' => has_capability('mod/openstudio:viewothers', $modulecontext, $userid),
+                'addcontent' => has_capability('mod/openstudio:addcontent', $modulecontext, $userid),
+                'addcomment' => has_capability('mod/openstudio:addcomment', $modulecontext, $userid),
+                'sharewithothers' => has_capability('mod/openstudio:sharewithothers', $modulecontext, $userid),
+                'import' => has_capability('mod/openstudio:import', $modulecontext, $userid),
+                'export' => has_capability('mod/openstudio:export', $modulecontext, $userid),
+                'canlock' => has_capability('mod/openstudio:canlock', $modulecontext, $userid),
+                'canlockothers' => has_capability('mod/openstudio:canlockothers', $modulecontext, $userid)
         );
 
-        // Note: it is assumed that if a user can addcomment, they can also set flags such as smile, favourite, etc.
+        // Note: it is assumed that if a userid can addcomment, they can also set flags such as smile, favourite, etc.
         $permissions->addflags = $permissions->addcomment;
-        $permissions->addinstance = has_capability('mod/openstudio:addinstance', $coursecontext);
-        $permissions->managelevels = has_capability('mod/openstudio:managelevels', $coursecontext);
-        $permissions->accessallgroups = has_capability('moodle/site:accessallgroups', $coursecontext);
+        $permissions->addinstance = has_capability('mod/openstudio:addinstance', $coursecontext, $userid);
+        $permissions->managelevels = has_capability('mod/openstudio:managelevels', $coursecontext, $userid);
+        $permissions->accessallgroups = has_capability('moodle/site:accessallgroups', $coursecontext, $userid);
         // Get the configured tutor roles.
         $permissions->tutorroles = array_filter(explode(',', $cminstance->tutorroles));
         // Does the user have any of the tutor roles on the course? E.g. for displaying "Shared with tutor" filter.
@@ -182,11 +185,11 @@ class util {
         } else {
             list($tutorsql, $tutorparams) = $DB->get_in_or_equal($permissions->tutorroles);
             $tutorwhere = 'roleid ' . $tutorsql . ' AND userid = ? AND contextid = ?';
-            $tutorparams[] = $USER->id;
+            $tutorparams[] = $userid;
             $tutorparams[] = $coursecontext->id;
             $permissions->istutor = $DB->record_exists_select('role_assignments', $tutorwhere, $tutorparams);
         }
-        $permissions->activeuserid = $USER->id;
+        $permissions->activeuserid = $userid;
         $permissions->activecid = $course->id;
         $permissions->activecmid = $cm->id;
         $permissions->activecminstanceid = $cminstance->id;
@@ -202,11 +205,11 @@ class util {
         $permissions->copyingon = ($cminstance->copying == 0) ? false : true;
 
         $permissions->feature_pinboard = ($cminstance->pinboard > 0) ? true : false;
-        $permissions->pinboarddata = api\content::get_pinboard_total($cminstance->id, $USER->id);
+        $permissions->pinboarddata = api\content::get_pinboard_total($cminstance->id, $userid);
         $permissions->feature_pinboard = $permissions->feature_pinboard ||
                 (($permissions->pinboarddata->usedandempty > 0) ? true : false);
 
-        $permissions->activitydata = api\content::get_total($cminstance->id, $USER->id);
+        $permissions->activitydata = api\content::get_total($cminstance->id, $userid);
         $permissions->feature_studio = ($permissions->activitydata->total > 0) ? true : false;
         if (!$permissions->feature_studio) {
             $permissions->feature_studio = ($permissions->activitydata->used > 0) ? true : false;
@@ -1143,10 +1146,12 @@ EOF;
      * @param    mixed   $objectid  Additional, optional object id.
      * @param    string  $url       The file and parameters used to see the results of the action.
      * @param    string  $info      Additional description information.
+     * @param int $flagid The ID of the flag this event is associated with.
+     * @param int $commentid The ID of the comment this event is associated with.
      * @return void
      */
     public static function trigger_event(
-            $cmid, $action, $objectid = null, $url = '', $info = '') {
+            $cmid, $action, $objectid = null, $url = '', $info = '', $flagid = null, $commentid = null) {
 
         $modulecontext = \context_module::instance($cmid);
         $coursecontext = $modulecontext->get_course_context();
@@ -1166,7 +1171,9 @@ EOF;
                         'module' => 'openstudio',
                         'action' => $legacyname,
                         'url' => $url,
-                        'info' => $info
+                        'info' => $info,
+                        'flagid' => $flagid,
+                        'commentid' => $commentid
                 )
         );
         if (isset($objectid)) {
@@ -1206,7 +1213,11 @@ EOF;
             case 'folder_smile_flagged':
             case 'content_inspire_flagged':
             case 'folder_inspire_flagged':
+            case 'content_comment_created':
+            case 'content_commentreply_created':
             case 'content_comment_flagged':
+            case 'folder_comment_created':
+            case 'folder_commentreply_created':
             case 'folder_comment_flagged':
                 $event = $eventclass::create($params);
                 break;

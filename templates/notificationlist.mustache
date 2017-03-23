@@ -1,0 +1,76 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_openstudio/notificationlist
+
+    A list of notifications, used in HTML subscription emails, and the notifications drop-down list.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Context variables required for this template:
+    * none
+
+    Example context (json):
+    {
+        "notifications": [
+            {
+                "id": 1,
+                "picture": "<img src=\"http://placehold.it/48/48\" width=\"48\" height=\"48\" alt=\"Image of User 1\" />",
+                "message": "User 1 commented on your post '<a href=\"http://localhost\">Really cool image</a>'",
+                "messageplain": "User 1 commented on your post 'Really cool image'",
+                "icon": {
+                    "attributes": [
+                        {"name": "src", "value": "http://placehold.it/16/16"},
+                        {"name": "alt", "value": ""}
+                    ]
+                },
+                "url": "http://example.com",
+                "timecreated": "2 hours ago",
+                "isread": false
+            },
+            {
+                "id": 5,
+                "picture": "<img src=\"http://placehold.it/48/48\" width=\"48\" height=\"48\" alt=\"Image of User 1\" />",
+                "message": "User 1 liked your post '<a href=\"http://localhost\">Really cool image</a>'",
+                "messageplain": "User 1 liked your post 'Really cool image'",
+                "icon": {
+                    "attributes": [
+                        {"name": "src", "value": "http://placehold.it/16/16"},
+                        {"name": "alt", "value": ""}
+                    ]
+                },
+                "url": "http://example.com",
+                "timecreated": "3 hours ago",
+                "isread": true
+            }
+        ]
+    }
+
+}}
+<ul class="openstudio-notifications-list">
+{{#notifications}}
+    <li data-id="{{id}}" class="openstudio-notification openstudio-notification-{{#isread}}read{{/isread}}{{^isread}}unread{{/isread}}">
+        <p>{{{picture}}} <span class="openstudio-notification-message">{{{message}}}</span></p>
+        <p>{{#icon}}{{> core/pix_icon}}{{/icon}} <span class="openstudio-notification-timecreated">{{timecreated}}</span></p>
+        <button class="openstudio-notification-stopicon">{{#pix}} viewed_rgb_32px, mod_openstudio, foo {{/pix}}</button>
+    </li>
+{{/notifications}}
+</ul>

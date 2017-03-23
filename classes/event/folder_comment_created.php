@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * The mod_openstudio reply to folder comment event.
+ * The mod_openstudio flag folder comment event.
  *
  * @package    mod_openstudio
  * @copyright  2014 The Open University
@@ -24,17 +24,20 @@
 
 namespace mod_openstudio\event;
 
+use mod_openstudio\local\notifications\notifiable;
+use mod_openstudio\local\notifications\notification;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * The mod_openstudio reply to folder comment event class.
+ * The mod_openstudio folder comment flagged event class.
  *
  * @package    mod_openstudio
  * @since      Moodle 2.7
  * @copyright  2014 The Open University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class folder_replytocomment_flagged extends \core\event\base {
+class folder_comment_created extends \core\event\base implements notifiable {
 
     /**
      * Init method.
@@ -42,6 +45,7 @@ class folder_replytocomment_flagged extends \core\event\base {
      * @return void
      */
     protected function init() {
+        $this->data['objecttable'] = 'openstudio_comments';
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
@@ -53,7 +57,7 @@ class folder_replytocomment_flagged extends \core\event\base {
      */
     public function get_description() {
         $description = <<<EOF
-The user with id '$this->userid' replied to a comment on a set on course module id '$this->contextinstanceid'
+The user with id '$this->userid' commented on a set on course module id '$this->contextinstanceid'
 EOF;
 
         return $description;
@@ -65,7 +69,7 @@ EOF;
      * @return string
      */
     public static function get_name() {
-        return get_string('event:setreplytocommentflagged', 'mod_openstudio');
+        return get_string('event:setcommentflagged', 'mod_openstudio');
     }
 
     /**
@@ -78,7 +82,7 @@ EOF;
     }
 
     public static function get_legacy_eventname() {
-        return 'content replied to comment (set)';
+        return 'content commented (set)';
     }
 
     /**
@@ -97,4 +101,18 @@ EOF;
         );
     }
 
+    public function get_notification_type() {
+        return notifiable::CONTENT;
+    }
+
+    public function get_notification_data() {
+        return new notification((object) [
+            'contentid' => $this->objectid,
+            'commentid' => $this->other['commentid'],
+            'userfrom' => $this->userid,
+            'icon' => 'comments',
+            'message' => get_string('notification_commentcreated', 'openstudio'),
+            'cmid' => $this->context->instanceid
+        ]);
+    }
 }

@@ -252,11 +252,9 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 'userid' => $permissions->activeuserid,
                 'cmid' => $cmid]]);
 
-        require_once(__DIR__.'/api/subscription.php');
-        $subscriptiondata = studio_api_notification_getdata(
+        $subscriptiondata = subscription::get(
                 $permissions->activeuserid,
-                $permissions->activecminstanceid,
-                $type = subscription::MODULE);
+                $permissions->activecminstanceid);
 
         if ($subscriptiondata) {
             $data->subscriptionid = $subscriptiondata[subscription::MODULE]->id;

@@ -44,23 +44,49 @@ class flags {
      * @param int $contentid Slot id to get flag data for.
      * @param int $flagid Get data for a specific flag.
      * @param int $userid The ID of the user if we're looking for user-specific flags.
-     * @return object|bool Return false if no results, otherwise returns record/recordset results.
+     * @return \moodle_recordset|false Return false if no results, otherwise returns record/recordset results.
      */
     public static function get_content_flags($contentid, $flagid = null, $userid = null) {
         global $DB;
 
         $params = ['contentid' => $contentid];
+        $where = 'commentid IS NULL AND contentid = :contentid';
 
         if (!empty($flagid)) {
-            $params = ['contentid' => $contentid, 'flagid' => $flagid];
+            $params['flagid'] = $flagid;
+            $where .= ' AND flagid = :flagid';
+        }
+        if (!empty($userid)) {
+            $params['userid'] = $userid;
+            $where .= ' AND userid = :userid';
+        }
+        $rs = $DB->get_recordset_select('openstudio_flags', $where, $params);
+        if ($rs->valid()) {
+            return $rs;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns all flags belonging to a comment.
+     *
+     * @param int $commentid Slot id to get flag data for.
+     * @param int $flagid Get data for a specific flag.
+     * @param int $userid The ID of the user if we're looking for user-specific flags.
+     * @return \moodle_recordset|false Return false if no results, otherwise returns record/recordset results.
+     */
+    public static function get_comment_flags($commentid, $flagid = null, $userid = null) {
+        global $DB;
+
+        $params = ['commentid' => $commentid];
+
+        if (!empty($flagid)) {
+            $params = ['commentid' => $commentid, 'flagid' => $flagid];
         }
         if (!empty($userid)) {
             $params['userid'] = $userid;
         }
-        if (count($params) > 1) {
-            return $DB->get_record('openstudio_flags', $params);
-        }
-
         $rs = $DB->get_recordset('openstudio_flags', $params);
         if ($rs->valid()) {
             return $rs;
@@ -110,11 +136,14 @@ class flags {
      * @param int $contentid The Slot the comment belongs to.
      * @param int $commentid Comment ID to flag.
      * @param int $userid User id doing the flagging.
+     * @param string $toggle 'on' or 'off'
      * @param bool $returnflagid Return flag id if set to true.
+     * @param int $flagid
      * @return mixed Return result of flag setting.
      */
-    public static function comment_toggle($contentid, $commentid, $userid, $returnflagid = false) {
-        return self::toggle_internal($contentid, 0, $commentid, self::COMMENT_LIKE, 'on', $userid, null, $returnflagid);
+    public static function comment_toggle($contentid, $commentid, $userid, $toggle = 'on', $returnflagid = false,
+            $flagid = self::COMMENT_LIKE) {
+        return self::toggle_internal($contentid, 0, $commentid, $flagid, $toggle, $userid, null, $returnflagid);
     }
 
     /**
@@ -379,7 +408,8 @@ EOF;
             self::NEEDHELP,
             self::MADEMELAUGH,
             self::INSPIREDME,
-            self::READ_CONTENT
+            self::READ_CONTENT,
+            self::FOLLOW_CONTENT
         ];
         list($fsql, $params) = $DB->get_in_or_equal($flags);
         $where = 'flagid ' . $fsql . ' AND contentid = ?';

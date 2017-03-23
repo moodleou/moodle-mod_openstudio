@@ -54,4 +54,26 @@ if ($ADMIN->fulltree) {
             get_string('configpeoplepagesizedescription', 'openstudio'),
             defaults::PEOPLEPAGESIZE,
             PARAM_INT));
+
+    $settings->add(new admin_setting_configtext(
+            'openstudio/notificationlimitmax',
+            get_string('confignotificationlimitmax', 'openstudio'),
+            get_string('confignotificationlimitmaxdescription', 'openstudio'),
+            defaults::NOTIFICATIONLIMITMAX,
+            PARAM_INT
+    ));
+    $settings->add(new admin_setting_configtext(
+            'openstudio/notificationlimitread',
+            get_string('confignotificationlimitread', 'openstudio'),
+            get_string('confignotificationlimitreaddescription', 'openstudio'),
+            defaults::NOTIFICATIONLIMITREAD,
+            PARAM_INT
+    ));
+    $settings->add(new admin_setting_configtext(
+            'openstudio/notificationlimitunread',
+            get_string('confignotificationlimitunread', 'openstudio'),
+            get_string('confignotificationlimitunreaddescription', 'openstudio'),
+            defaults::NOTIFICATIONLIMITUNREAD,
+            PARAM_INT
+    ));
 }

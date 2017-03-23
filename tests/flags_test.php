@@ -270,7 +270,7 @@ class mod_openstudio_flags_testcase extends openstudio_testcase   {
             'comment' => 'Lorem ipsum dolor sit amet',
             'userid' => $this->users->students->two->id
         ]);
-        $flagid = mod_openstudio\local\api\flags::comment_toggle($slotid, $commentid, $this->users->students->one->id, true);
+        $flagid = mod_openstudio\local\api\flags::comment_toggle($slotid, $commentid, $this->users->students->one->id, 'on', true);
         $assertparams = [
             'id' => $flagid,
             'contentid' => $slotid,

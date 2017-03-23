@@ -28,6 +28,7 @@
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\lock;
 use mod_openstudio\local\api\stream;
+use mod_openstudio\local\api\notifications;
 use mod_openstudio\local\util;
 use mod_openstudio\local\util\defaults;
 use mod_openstudio\local\renderer_utils;
@@ -627,7 +628,7 @@ if ($finalviewpermissioncheck) {
 
         // Gather content social data.
         $socialdatatotal = 0;
-        $contentsocialdata = studio_api_notifications_get_activities($permissions->activeuserid, $contentslist);
+        $contentsocialdata = notifications::get_activities($permissions->activeuserid, $contentslist);
         if ($contentsocialdata) {
             foreach ($contentsocialdata as $socialitem) {
                 if (array_key_exists($socialitem->contentid, $contentdata->contents)) {

@@ -30,7 +30,7 @@ use mod_openstudio\local\util;
 defined('MOODLE_INTERNAL') || die();
 
 // Remove after these APIs are refactored.
-if(function_exists('studio_api_tracking_log_action')){
+if(function_exists('studio_api_item_log')){
     return ;
 }
 require_once($CFG->dirroot . '/mod/openstudio/api/tracking.php');

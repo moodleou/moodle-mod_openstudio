@@ -24,6 +24,9 @@
 
 namespace mod_openstudio\event;
 
+use mod_openstudio\local\notifications\notifiable;
+use mod_openstudio\local\notifications\notification;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -34,7 +37,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2014 The Open University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class folder_edited extends \core\event\base {
+class folder_edited extends \core\event\base implements notifiable {
 
     /**
      * Init method.
@@ -42,6 +45,7 @@ class folder_edited extends \core\event\base {
      * @return void
      */
     protected function init() {
+        $this->data['objecttable'] = 'openstudio_contents';
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
@@ -97,4 +101,18 @@ EOF;
         );
     }
 
+    public function get_notification_type() {
+        return notifiable::TUTOR;
+    }
+
+    public function get_notification_data() {
+        $type = get_string('notification_folder', 'openstudio');
+        return new notification((object) [
+            'contentid' => $this->objectid,
+            'userid' => $this->userid,
+            'icon' => 'share_with_tutor',
+            'message' => get_string('notification_shared', 'openstudio', $type),
+            'cmid' => $this->context->instanceid
+        ]);
+    }
 }

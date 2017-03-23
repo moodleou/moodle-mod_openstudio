@@ -24,6 +24,9 @@
 
 namespace mod_openstudio\event;
 
+use mod_openstudio\local\notifications\notifiable;
+use mod_openstudio\local\notifications\notification;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -34,7 +37,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2014 The Open University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class content_comment_flagged extends \core\event\base {
+class content_comment_flagged extends \core\event\base implements notifiable {
 
     /**
      * Init method.
@@ -42,6 +45,7 @@ class content_comment_flagged extends \core\event\base {
      * @return void
      */
     protected function init() {
+        $this->data['objecttable'] = 'openstudio_content';
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
@@ -53,7 +57,7 @@ class content_comment_flagged extends \core\event\base {
      */
     public function get_description() {
         $description = <<<EOF
-The user with id '$this->userid' commented on a content on course module id '$this->contextinstanceid'
+The user with id '$this->userid' liked a comment in course module id '$this->contextinstanceid'
 EOF;
 
         return $description;
@@ -97,4 +101,19 @@ EOF;
         );
     }
 
+    public function get_notification_type() {
+        return notifiable::COMMENT;
+    }
+
+    public function get_notification_data() {
+        return new notification((object) [
+            'contentid' => $this->objectid,
+            'commentid' => $this->other['commentid'],
+            'flagid' => $this->other['flagid'],
+            'userfrom' => $this->userid,
+            'icon' => 'comments',
+            'message' => get_string('notification_commentliked', 'openstudio'),
+            'cmid' => $this->context->instanceid
+        ]);
+    }
 }

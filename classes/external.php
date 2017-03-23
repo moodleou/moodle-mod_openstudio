@@ -34,7 +34,6 @@ use mod_openstudio\local\renderer_utils;
 use mod_openstudio\local\api\comments;
 use mod_openstudio\local\api\lock;
 
-require_once($CFG->dirroot . '/mod/openstudio/api/subscription.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/user.php');
 require_once($CFG->libdir . '/externallib.php');
 require_once($CFG->dirroot . '/mod/openstudio/api/lock.php');
@@ -92,7 +91,7 @@ class mod_openstudio_external extends external_api {
         $warnings = array();
         $result = array();
 
-        $subscriptionid = studio_api_notification_create_subscription(
+        $subscriptionid = subscription::create(
                 $params['subscriptiontype'],
                 $params['userid'],
                 $params['openstudioid'],
@@ -175,7 +174,7 @@ class mod_openstudio_external extends external_api {
             $checkpermissions = false;
         }
 
-        $success = studio_api_notification_delete_subscription(
+        $success = subscription::delete(
                 $params['subscriptionid'], $params['userid'], $checkpermissions);
 
         if (!$success) {
@@ -288,7 +287,7 @@ class mod_openstudio_external extends external_api {
 
                 if ($logaction !== false) {
                     util::trigger_event(
-                        $cm->id, $logaction, '', util::get_page_name_and_params(true), $logtext);
+                        $cm->id, $logaction, $cid, util::get_page_name_and_params(true), $logtext);
                 }
 
             }

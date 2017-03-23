@@ -15,22 +15,33 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Defines the version and other meta-info about the plugin
  *
- * Setting the $plugin->version to 0 prevents the plugin from being installed.
- * See https://docs.moodle.org/dev/version.php for more info.
  *
- * @package    mod_openstudio
- * @copyright  2015 Your Name <your@email.address>
+ * @package
+ * @copyright  2017 The Open University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_openstudio\output;
+
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_openstudio';
-$plugin->version = 2017041000;
-$plugin->release = 'v0.0';
-$plugin->requires = 2011120100;
-$plugin->maturity = MATURITY_ALPHA;
-$plugin->cron = 0;
-$plugin->dependencies = array();
+class email_renderer extends \plugin_renderer_base {
+
+    /**
+     * Generate the email body for a subscription email.
+     *
+     * @param subscription_email $email
+     * @return bool|string
+     */
+    public function render_subscription_email(subscription_email $email) {
+        $context = $email->export_for_template($this);
+        $emailbody = ['plain' => $this->render_from_template('mod_openstudio/plain_subscription_email', $context)];
+        if ($email->include_html()) {
+            $emailbody['html'] = $this->render_from_template('mod_openstudio/html_subscription_email', $context);
+        } else {
+            $emailbody['html'] = '';
+        }
+        return $emailbody;
+    }
+}

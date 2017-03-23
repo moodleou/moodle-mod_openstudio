@@ -593,8 +593,30 @@ class mod_openstudio_generator extends testing_module_generator {
             if (!isset($flagdata['contentid'])) {
                 $flagdata['contentid'] = 0;
             }
-            return flags::comment_toggle($flagdata['contentid'], $flagdata['commentid'], $flagdata['userid'], true);
+            if (!isset($flagdata['flagid'])) {
+                $flagdata['flagid'] = flags::COMMENT_LIKE;
+            }
+            return flags::comment_toggle($flagdata['contentid'], $flagdata['commentid'], $flagdata['userid'],
+                    true, $flagdata['flagid']);
         }
         return flags::toggle($flagdata['contentid'], $flagdata['flagid'], 'on', $flagdata['userid'], true);
+    }
+
+    public function create_notification($notificationdata) {
+        global $DB;
+        $record = (object) [
+            'userid' => $notificationdata['userid'],
+            'userfrom' => $notificationdata['userfrom'],
+            'contentid' => $notificationdata['contentid'],
+            'commentid' => !empty($notificationdata['commentid']) ? $notificationdata['commentid'] : null,
+            'flagid' => !empty($notificationdata['flagid']) ? $notificationdata['flagid'] : null,
+            'message' => !empty($notificationdata['message']) ? $notificationdata['message'] : random_string(),
+            'icon' => !empty($notificationdata['icon']) ? $notificationdata['icon'] : 'participation',
+            'url' => !empty($notificationdata['url']) ? $notificationdata['url'] : 'http://localhost',
+            'timecreated' => !empty($notificationdata['timecreated']) ? $notificationdata['timecreated'] : time(),
+            'timeread' => !empty($notificationdata['timeread']) ? $notificationdata['timeread'] : null
+        ];
+        $record->id = $DB->insert_record('openstudio_notifications', $record);
+        return $record;
     }
 }
