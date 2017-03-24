@@ -118,14 +118,12 @@ $returnurl = new moodle_url('/mod/openstudio/view.php',
         array('id' => $cm->id, 'vid' => content::VISIBILITY_PRIVATE));
 
 $contentdata = new stdClass();
-$contenttype = content::TYPE_NONE;
 if ($sid > 0) {
     $contentdata = content::get_record($userid, $sid);
     if ($contentdata === false) {
         print_error('errorinvalidcontent', 'openstudio', $returnurl->out(false));
     }
     $lid = $contentdata->levelid;
-    $contenttype = $contentdata->contenttype;
 }
 
 $contentdataname = '';
@@ -171,7 +169,7 @@ if (($type == content::TYPE_FOLDER_CONTENT) && ($sid == 0)) {
 }
 
 // Check if we are processing a folder and get information if so.
-if (isset($contenttype) && ($contenttype == content::TYPE_FOLDER)) {
+if (isset($contentdata->contenttype) && ($contentdata->contenttype == content::TYPE_FOLDER)) {
     $type = content::TYPE_FOLDER;
     $folderid = $contentdata->id;
     $folderdata = content::get($folderid);
@@ -493,9 +491,10 @@ $options = array(
         'allowedvisibility' => $allowedvisibility,
         'allowedfiletypes' => explode(",", $cminstance->filetypes),
         'contentid' => $contentdata->sid,
-        'contenttype' => $contenttype,
+        'contenttype' => $contentdata->contenttype,
         'contentname' => $formcontentname,
         'isfoldercontent' => ($type == content::TYPE_FOLDER_CONTENT) ? true : false,
+        'iscreatefolder' => ($type == content::TYPE_FOLDER_CONTENT && !$folderid) ? true : false,
         'isfolderlock' => $isfolderlock,
         'max_bytes' => $cminstance->contentmaxbytes
 );
@@ -596,7 +595,7 @@ if ($contentform->is_cancelled()) {
         );
     } else {
         if ($type === content::TYPE_FOLDER_CONTENT) {
-            $contentformdata->visibility = content::VISIBILITY_INFOLDERONLY;
+            $contentformdata->contenttype = content::TYPE_FOLDER;
         }
         $contentupdatemode = content::UPDATEMODE_CREATED;
 
@@ -621,45 +620,8 @@ if ($contentform->is_cancelled()) {
                 $foldercontenttemplate = array();
                 $foldertitle = $contentformdata->name;
             }
-            if ($folderid === 0) {
-                if ($cminstance->defaultvisibility == content::VISIBILITY_GROUP) {
-                    // Users can only share contents to groups that they are a member of.
-                    // This applies to all users and admins.
-                    if ($permissions->groupingid > 0) {
-                        $tutorgroups = studio_api_group_list(
-                                $course->id, $permissions->groupingid, $permissions->activeuserid, 1);
-                    } else {
-                        $tutorgroups = studio_api_group_list(
-                                $course->id, 0, $permissions->activeuserid, 1);
-                    }
-                    $firsttutorgroupid = false;
-                    if ($tutorgroups !== false) {
-                        foreach ($tutorgroups as $tutorgroup) {
-                            $tutorgroupid = 0 - $tutorgroup->groupid;
-                            $firsttutorgroupid = $tutorgroupid;
-                            break;
-                        }
-                    }
-                    if ($firsttutorgroupid !== false) {
-                        $folderdatavisibility = $firsttutorgroupid;
-                    } else {
-                        $folderdatavisibility = content::VISIBILITY_PRIVATE;
-                    }
-                } else {
-                    $folderdatavisibility = $cminstance->defaultvisibility;
-                }
 
-                // If we don't have a folder yet, create one.
-                $folderdata = (object) array(
-                    'visibility' => $folderdatavisibility,
-                    'contenttype' => content::TYPE_FOLDER,
-                    'name' => $foldertitle
-                );
-                $levelcontainer = $lid > 0 ? 3 : 0;
-                $folderid = content::create($cminstance->id, $userid, $levelcontainer,
-                        $lid, $folderdata, null, $context, $cm);
-            }
-            if (!folder::add_content($folderid, $contentid, $userid, $foldercontenttemplate)) {
+            if ($folderid && !folder::add_content($folderid, $contentid, $userid, $foldercontenttemplate)) {
                 $returnurl = new moodle_url('/mod/openstudio/view.php',
                         array('id' => $cm->id, 'vid' => content::VISIBILITY_PRIVATE_PINBOARD));
                 print_error('errornopermissiontoaddcontent', 'openstudio', $returnurl->out(false));

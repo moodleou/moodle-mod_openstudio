@@ -41,12 +41,14 @@ class mod_openstudio_content_form extends moodleform {
         global $CFG, $USER, $DB;
 
         $mform = $this->_form;
-
+        $contenttitle = get_string('contentformname', 'openstudio');
+        $contentdescription = get_string('contentformdescription', 'openstudio');
+        $submitbuttontitle = get_string('contentformsubmitbutton', 'openstudio');
         if (isset($this->_customdata['isfolderlock']) && $this->_customdata['isfolderlock']) {
             return;
         }
 
-        if ($this->_customdata['isfoldercontent'] == true) {
+        if ($this->_customdata['isfoldercontent'] == true && $this->_customdata['iscreatefolder'] == false) {
             $mform->addElement('hidden', 'visibility');
             $mform->setType('visibility', PARAM_INT);
             $mform->setDefault('visibility', content::VISIBILITY_INFOLDERONLY);
@@ -109,24 +111,28 @@ class mod_openstudio_content_form extends moodleform {
 
             $mform->addElement('html', html_writer::start_tag('div',
                     array('class' => 'openstudio-content-form-visibility')));
-            $mform->addElement('select', 'visibility',
-                    get_string('contentformvisibility', 'openstudio'),
-                    $options, array('class' => 'openstudio-content-form-select-visibility'));
+            $visibilitytitle = get_string('contentformvisibility', 'openstudio');
+            if ($this->_customdata['iscreatefolder'] == true) {
+                $visibilitytitle = get_string('folderformvisibility', 'openstudio');
+                $contenttitle = get_string('folderformname', 'openstudio');
+                $contentdescription = get_string('folderformdescription', 'openstudio');
+                $submitbuttontitle = get_string('folderformsubmitbutton', 'openstudio');
+            }
+            $mform->addElement('select', 'visibility', $visibilitytitle, $options,
+                    array('class' => 'openstudio-content-form-select-visibility'));
             $mform->setDefault('visibility', $this->_customdata['defaultvisibility']);
             $mform->addElement('html', html_writer::end_tag('div'));
         }
 
-        $mform->addElement('text', 'name',
-                get_string('contentformname', 'openstudio'));
+        $mform->addElement('text', 'name', $contenttitle);
         $mform->setType('name', PARAM_TEXT);
 
-        $mform->addElement('editor', 'description',
-                get_string('contentformdescription', 'openstudio'));
+        $mform->addElement('editor', 'description', $contentdescription);
         $mform->setType('description', PARAM_RAW);
 
         $defaultcontentuploadtype = '';
         if (in_array((int) $this->_customdata['contenttype'],
-                array(content::TYPE_FOLDER), true)) {
+                array(content::TYPE_FOLDER), true) || $this->_customdata['iscreatefolder'] == true) {
             $mform->addElement('hidden', 'weblink');
             $mform->setType('weblink', PARAM_URL);
             $mform->addElement('hidden', 'urltitle');
@@ -296,8 +302,7 @@ class mod_openstudio_content_form extends moodleform {
                 array('class' => 'openstudio-content-form-submit-buttons')));
 
         $buttonarray = array();
-        $buttonarray[] = $mform->createElement('submit', 'submitbutton',
-                get_string('contentformsubmitbutton', 'openstudio'),
+        $buttonarray[] = $mform->createElement('submit', 'submitbutton', $submitbuttontitle,
                 array('id' => 'id_submitbutton'));
 
         $buttonarray[] = $mform->createElement('cancel', 'cancelbutton',

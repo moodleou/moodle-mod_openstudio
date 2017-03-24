@@ -458,13 +458,17 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      */
     public function content_edit($contenteditform, $data) {
         global $OUTPUT;
-
+        $foldermode = false;
         if (!isset($data) || empty($data)) {
             throw new coding_exception('Wrong data format');
         }
 
         $data = (object)$data;
 
+        if ($data->contenttype == content::TYPE_FOLDER_CONTENT) {
+            $foldermode = true;
+        }
+        $data->foldermode = $foldermode;
         $data->addcontenticon = $OUTPUT->pix_url('add_content_rgb_32px', 'openstudio');
         $data->editform = $contenteditform;
 
@@ -566,9 +570,18 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $contentdata->vid = $viewmode;
         $contentdata->lockicon = $OUTPUT->pix_url('lock_grey_rgb_32px', 'openstudio');
         $contentdata->requestfeedbackicon = $OUTPUT->pix_url('request_feedback_white_rgb_32px', 'openstudio');
+        $contentdata->createcontentthumbnail = $OUTPUT->pix_url('uploads_rgb_32px', 'openstudio');
 
         $contentdata->contentediturl = new moodle_url('/mod/openstudio/contentedit.php',
                    array('id' => $cmid, 'lid' => 0, 'sid' => 0, 'type' => 0, 'sstsid' => 0));
+        if ($permissions->feature_enablefolders) {
+            $folderlink = new moodle_url('/mod/openstudio/contentedit.php',
+                    array('id' => $cmid, 'lid' => 0, 'sid' => 0, 'ssid' => 0, 'type' => content::TYPE_FOLDER_CONTENT));
+            $contentdata->folderediturl = $folderlink;
+            $contentdata->createfolderthumbnail = $OUTPUT->pix_url('create_folder_rgb_32px', 'openstudio');
+        }
+        $contentdata->feature_enablefolders = $permissions->feature_enablefolders;
+        $contentdata->available = $permissions->pinboarddata->available;
 
         if ($contentdata->contents && !$myactivities) {
             $pb = renderer_utils::openstudio_render_paging_bar($contentdata);

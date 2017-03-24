@@ -388,6 +388,7 @@ $string['contenteditformheader'] = 'Content edit form';
 
 $string['contentformheaderattachment'] = 'Block title / Activity title';
 $string['contentformname'] = 'Title';
+$string['folderformname'] = 'Folder title';
 $string['contentformattachments'] = 'Upload content';
 $string['attachments'] = 'File upload';
 $string['attachments_help'] = "If your browser supports drag and drop, the upload box says 'You can drag and drop files here to upload them'. If you don't see this message, use the 'add' icon to attach a file instead. Delete any existing files before uploading a new one.";
@@ -430,6 +431,7 @@ $string['contentformcreatefolderbutton'] = 'Create folder';
 $string['contentformvisibility'] = 'Who can view this content';
 $string['contentformheadermetadata'] = 'Optional information';
 $string['contentformdescription'] = 'Description';
+$string['folderformdescription'] = 'Folder description';
 $string['contentformtags'] = 'Tags';
 $string['contentformownershipmyownwork'] = 'All my own work';
 $string['contentformownershipfoundonline'] = 'Found online';
@@ -437,6 +439,8 @@ $string['contentformownershipfoundelsewhere'] = 'Found elsewhere';
 $string['contentformownership'] = 'Ownership';
 $string['contentformownershipdetail'] = 'Details';
 $string['contentformsubmitbutton'] = 'Save';
+$string['folderformsubmitbutton'] = 'Create folder';
+$string['folderformvisibility'] = 'Who can view this folder';
 
 $string['contentformshowgps'] = 'Show GPS Data';
 $string['contentformshowgpsdescription'] = 'Show GPS location of where image was taken if available';
@@ -1121,7 +1125,7 @@ $string['contentactionlockname'] = 'Lock';
 $string['contentactionunlockname'] = 'Unlock';
 $string['contentlocked'] = 'Locked';
 $string['lockedbyusername'] = 'Locked by: {$a}';
-$string['contentavailiable'] = 'You have {$a->available} uploads availiable.';
+$string['contentavailiable'] = 'You have {$a->available} uploads available.';
 
 $string['erroractivitynotavailable'] = 'This activity is not available until: {$a}';
 
@@ -1193,6 +1197,8 @@ $string['filterall'] = 'All';
 $string['filterwork'] = 'Work';
 $string['filterallgroup'] = 'All Group';
 $string['addnewcontent'] = 'Add new content';
+$string['updatecontent'] = 'Upload content';
+$string['createnewfolder'] = 'Create new folder';
 $string['contentitemsharewithgroup'] = 'Share with Group - {$a}';
 $string['contentitemsharewithmymodule'] = 'Share with my module';
 $string['contentitemsharewithonlyme'] = 'Only me';

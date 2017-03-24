@@ -274,35 +274,35 @@ if ($finalviewpermissioncheck) {
             // Set icon for content.
             switch ($visibility) {
                 case content::VISIBILITY_MODULE:
-                    $contenticon = new moodle_url('/mod/openstudio/pix/mymodule_rgb_32px.svg');
+                    $contenticon = $OUTPUT->pix_url('mymodule_rgb_32px', 'openstudio');
                     $itemsharewith = get_string('contentitemsharewithmymodule', 'openstudio');
                     break;
 
                 case content::VISIBILITY_GROUP:
-                    $contenticon = new moodle_url('/mod/openstudio/pix/group_rgb_32px.svg');
+                    $contenticon = $OUTPUT->pix_url('group_rgb_32px', 'openstudio');
                     $itemsharewith = get_string('contentitemsharewithgroup', 'openstudio',
                             studio_api_group_get_name(abs($content->visibility)));
                     break;
 
                 case content::VISIBILITY_WORKSPACE:
                 case content::VISIBILITY_PRIVATE:
-                    $contenticon = new moodle_url('/mod/openstudio/pix/onlyme_rgb_32px.svg');
+                    $contenticon = $OUTPUT->pix_url('onlyme_rgb_32px', 'openstudio');
                     $itemsharewith = get_string('contentitemsharewithonlyme', 'openstudio');
                     $isonlyme = true;
                     break;
 
                 case content::VISIBILITY_PRIVATE_PINBOARD:
-                    $contenticon = new moodle_url('/mod/openstudio/pix/onlyme_rgb_32px.svg');
+                    $contenticon = $OUTPUT->pix_url('onlyme_rgb_32px', 'openstudio');
                     $itemsharewith = get_string('contentitemsharewithonlyme', 'openstudio');
                     $isonlyme = true;
                     break;
 
                 case content::VISIBILITY_TUTOR:
-                    $contenticon = new moodle_url('/mod/openstudio/pix/share_with_tutor_rgb_32px.svg');
+                    $contenticon = $OUTPUT->pix_url('share_with_tutor_rgb_32px', 'openstudio');
                     $itemsharewith = get_string('contentitemsharewithmytutor', 'openstudio');
                     break;
                 default:
-                    $contenticon = new moodle_url('/mod/openstudio/pix/onlyme_rgb_32px.svg');
+                    $contenticon = $OUTPUT->pix_url('onlyme_rgb_32px', 'openstudio');
                     $itemsharewith = get_string('contentitemsharewithonlyme', 'openstudio');
                     $isonlyme = true;
                     break;
@@ -313,7 +313,16 @@ if ($finalviewpermissioncheck) {
             } else {
                 $content->myworkview = false;
             }
+            $content->isfolder = false;
 
+            // Check content is folder
+            if ($content->contenttype == content::TYPE_FOLDER || $content->l3contenttype == content::TYPE_FOLDER) {
+                $content->isfolder = true;
+                $content->folderthumbnail = $OUTPUT->pix_url('openstudio_sets_preview_box', 'openstudio');
+                $content->defaultfolderimg = $OUTPUT->pix_url('uploads_rgb_32px', 'openstudio');
+                $content->folderlink = new moodle_url('/mod/openstudio/folder.php',
+                    array('id' => $id, 'sid' => $content->id));
+            }
             $content->contenticon = $contenticon;
             $content->itemsharewith = $itemsharewith;
             $content->isonlyme = $isonlyme;

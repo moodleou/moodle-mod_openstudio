@@ -41,6 +41,8 @@
         "inspirationicon" : "../../../mod/openstudio/pix/inspiration_rgb_32px.svg",
         "participationicon" : "../../../mod/openstudio/pix/participation_rgb_32px.svg",
         "favouriteicon" : "../../../mod/openstudio/pix/favourite_rgb_32px.svg",
+        "isfolder": true,
+        "folderlink" : "http://example.com/mod/openstudio/folder.php?id=3&sid=9",
         "socialdatatotal" : 6,
         "socialdata" : {
             "comments" : 1,
@@ -73,11 +75,25 @@
                 </div>
             {{/isfeedbackrequested}}
         {{/locked}}
-        <div class="openstudio-grid-item-content-preview{{#contenttypedefaultimage}}-default{{/contenttypedefaultimage}}">
-            <a href="{{{contentlink}}}">
-                <img class="openstudio-grid-item-thumbnail" src="{{{contentthumbnailurl}}}" alt="{{{name}}}">
-            </a>
-        </div>
+        {{#isfolder}}
+            <div class ="openstudio-folder-content">
+                <img class="openstudio-folder-tab" src="{{{folderthumbnail}}}" alt="{{{name}}}">
+                <div class ="openstudio-folder-background">
+                    <a href="{{{folderlink}}}">
+                        <div class="openstudio-default-folder-background">
+                            <img class="openstudio-default-folder-img" src="{{{defaultfolderimg}}}" alt="{{{name}}}">
+                        </div>
+                    </a>
+                </div>
+            </div>
+        {{/isfolder}}
+        {{^isfolder}}
+                <div class="openstudio-grid-item-content-preview{{#contenttypedefaultimage}}-default{{/contenttypedefaultimage}}">
+                    <a href="{{{contentlink}}}">
+                        <img class="openstudio-grid-item-thumbnail" src="{{{contentthumbnailurl}}}" alt="{{{name}}}">
+                    </a>
+                </div>
+        {{/isfolder}}
     </div>
     <div class="openstudio-grid-item-content-detail">
         <div class="openstudio-grid-item-content-detail-updated">{{datetimeupdated}}</div>

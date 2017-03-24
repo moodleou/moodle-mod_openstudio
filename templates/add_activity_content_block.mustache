@@ -28,15 +28,39 @@
     Example context (json):
     {
         "contentediturl": "http://exmaple/mod/openstudio/contentedit.php?id=4&lid=0&sid=0&type=0&sstsid=0",
-        "l3name": "Content A"
+        "l3name": "Content A",
+        "isfolder" : false,
+        "folderlink" : "http://example.com/mod/openstudio/folder.php?id=3&sid=9",
+        "createcontentthumbnail" : "../../../mod/openstudio/pix/uploads_rgb_32px.svg"
     }
 
 }}
 <div class="openstudio-add-new-container">
-    <div class="openstudio-add-new">
-        <a href="{{{contentediturl}}}" class="openstudio-actvity-title">
-            {{{l3name}}}
-        </a>
+{{#isfolder}}
+    <div class="openstudio-add-new-folder">
+    <a href="{{{contentediturl}}}" class="openstudio-actvity-title">
+        {{{l3name}}}
+    </a>
     </div>
-    <a href="{{{contentediturl}}}"><div class="openstudio-upload-container"></div></a>
+    <div class ="openstudio-folder-content">
+        <img class="openstudio-folder-tab" src="{{{folderthumbnail}}}" alt="{{{name}}}">
+        <div class ="openstudio-folder-background">
+            <a href="{{{folderlink}}}">
+                <div class="openstudio-default-folder-background">
+                    <img class="openstudio-default-folder-img" src="{{{defaultfolderimg}}}" alt="{{{name}}}">
+                </div>
+            </a>
+        </div>
+    </div>
+{{/isfolder}}
+{{^isfolder}}
+    <div class="openstudio-add-new">
+    <a href="{{{contentediturl}}}" class="openstudio-actvity-title">
+        {{{l3name}}}
+    </a>
+    </div>
+    <a href="{{{contentediturl}}}"><div class="openstudio-upload-container">
+        <img src="{{{createcontentthumbnail}}}" alt="{{{name}}}">
+    </div></a>
+{{/isfolder}}
 </div>

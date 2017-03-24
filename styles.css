@@ -1061,6 +1061,10 @@ label.openstudio-export-item-name {
     padding-bottom: 14px;
 }
 
+.openstudio-add-new-folder {
+    padding-bottom: 10px;
+}
+
 .openstudio-add-title {
     font-size: 1em;
     color: #832884;
@@ -1086,17 +1090,45 @@ a.openstudio-add-title:hover  {
     width: 100%;
     border-radius : 4px;
     border: 1px dashed #676463;
-    background-image: url([[pix:openstudio|uploads_rgb_32px]]);
-    background-color: #FFFFFF;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 72px 72px;
     display: inline-block;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.openstudio-upload-container img {
+    width: 74px;
+    margin-top: 30px;
 }
 
 .openstudio-available {
     margin-bottom: 20px;
+}
+
+.openstudio-create-new-content {
+    float: left;
+    height: 66px;
+    width: 100%;
+    border-radius : 4px;
+    border: 1px dashed #676463;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.openstudio-create-new-content img {
+    float: left;
+    margin-left: 15px;
+    width: 48px;
+    margin-top: 8px;
+}
+
+.openstudio-create-content-title {
+    text-align: center;
+    margin-top: 20px;
+    float: left;
+    margin-left: 9px;
+    color: #676463;
+    font-size: 0.85714em;
+    font-weight: bold;
 }
 
 .openstudio-content-block {
@@ -1112,6 +1144,10 @@ a.openstudio-add-title:hover  {
     font-size: 1em;
     color: #002158;
     font-weight: bold;
+}
+
+.openstudio-available {
+    margin-bottom: 20px;
 }
 
 .path-mod-openstudio .dropdown-menu {
@@ -1437,6 +1473,44 @@ a.openstudio-add-title:hover  {
 .openstudio-tooltip:hover .openstudio-tooltiptext {
     visibility: visible;
     opacity: 1;
+}
+.openstudio-folder-content {
+    width: 87%;
+    margin-left: 14px;
+}
+
+.openstudio-folder-content .openstudio-folder-tab {
+    margin-bottom: -4px;
+    width: 100%;
+    margin-right: auto;
+}
+
+.openstudio-folder-content .openstudio-folder-background {
+    width: 88.8%;
+    background-color: #99a6bc;
+    margin-top: -2px;
+    padding: 6px 10px 10px 10px;
+    margin-right: auto;
+    margin-bottom: 10px;
+}
+
+.openstudio-folder-background .openstudio-default-folder-background {
+    height: 84px;
+    background-color: #f0f0f1;
+    padding: 10px;
+}
+
+.openstudio-default-folder-background .openstudio-default-folder-img {
+    border-radius: 4px;
+    border: 1px dashed #676463;
+    width: 100%;
+    padding-top: 15px;
+    padding-bottom: 20px;
+}
+
+.openstudio-default-folder-background img{
+    height: 48px;
+    vertical-align: middle;
 }
 
 .openstudio-grid-item-content-detail-owner-img {
@@ -2835,9 +2909,21 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
 
     .openstudio-upload-container {
         border-radius: 6px;
+        height: 180px;
+    }
+
+    .openstudio-upload-container  img {
+        width: 100px;
+    }
+
+    .openstudio-create-new-folder {
+        border-radius: 6px;
         background-size: 100px 100px;
-        height: 212px;
-        margin-bottom: 49px;
+        height: 120px;
+    }
+
+    .openstudio-create-new-content .openstudio-create-content-title {
+        font-size: 1.28571em;
     }
 
     .openstudio-grid-item-content {
@@ -3282,6 +3368,10 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     .openstudio-comment-form-header {
         margin-bottom: 10px;
     }
+
+    .openstudio-folder-content .openstudio-folder-background {
+        width: 94%;
+    }
 }
 /* Mobile small. */
 @media (max-width: 419px) {
@@ -3466,5 +3556,9 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     .ios .openstudio-content-view-actions-icons-right {
         margin-top: 0px;
         margin-bottom: 0px;
+    }
+
+    .openstudio-folder-content .openstudio-folder-background {
+        width: 89.6%;
     }
 }

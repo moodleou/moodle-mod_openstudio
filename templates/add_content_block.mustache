@@ -28,7 +28,12 @@
     Example context (json):
     {
         "contentediturl": "http://exmaple/mod/openstudio/contentedit.php?id=4&lid=0&sid=0&type=0&sstsid=0",
-        "available" : 100
+        "available" : 100,
+        "contentediturl": "http://exmaple/mod/openstudio/contentedit.php?id=4&lid=0&sid=0&type=0&sstsid=0",
+        "feature_enablefolders" : true,
+        "folderediturl": "http://exmaple/mod/openstudio/contentedit.php?id=4&lid=0&sid=0&type=0&sstsid=0",
+        "createcontentthumbnail" : "../../../mod/openstudio/pix/uploads_rgb_32px.svg",
+        "createfolderthumbnail" : "../../../mod/openstudio/pix/create_folder_rgb_32px.svg"
     }
 
 }}
@@ -38,11 +43,30 @@
             {{#str}} addnewcontent, mod_openstudio {{/str}}
         </a>
     </div>
+{{#feature_enablefolders}}
+    <a class="openstudio-create-new-content" href="{{{contentediturl}}}">
+        <img class="openstudio-folder-tab" src="{{{createcontentthumbnail}}}" alt="{{{name}}}">
+        <div class="openstudio-create-content-title">
+            {{#str}} updatecontent, mod_openstudio {{/str}}
+        </div>
+    </a>
+    {{#folderediturl}}
+        <a class="openstudio-create-new-content" href="{{{folderediturl}}}">
+            <img class="openstudio-folder-tab" src="{{{createfolderthumbnail}}}" alt="{{{name}}}">
+            <div class="openstudio-create-content-title">
+                {{#str}} createnewfolder, mod_openstudio {{/str}}
+            </div>
+        </a>
+    {{/folderediturl}}
+{{/feature_enablefolders}}
+{{^feature_enablefolders}}
     <a href="{{{contentediturl}}}"><div class="openstudio-upload-container">
+         <img src="{{{createcontentthumbnail}}}" alt="{{{name}}}">
     </div></a>
-    <div class="openstudio-available">
-        {{#str}}
-           contentavailiable, mod_openstudio, { "available": {{#quote}}{{available}}{{/quote}} }
-       {{/str}}
-    </div>
+{{/feature_enablefolders}}
+<div class="openstudio-available">
+    {{#str}}
+       contentavailiable, mod_openstudio, { "available": {{#quote}}{{available}}{{/quote}} }
+   {{/str}}
+</div>
 </div>

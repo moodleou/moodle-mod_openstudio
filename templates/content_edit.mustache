@@ -30,6 +30,7 @@
         "addcontenticon" : "../../../theme/image.php?theme=osep&amp;component=openstudio&amp;image=add_content_rgb_32px",
         "editform" : "<form></form>",
         "isfolderlock" : true,
+        "foldermode": true,
         "feature_enablefolders" : true
     }
 
@@ -47,16 +48,21 @@
                  alt="{{#str}} contentaddnew, mod_openstudio {{/str}}"
                  class="openstudio-add-content-icon" />
             <span class="openstudio-upload-content-title">
-                {{#str}} contentaddnew, mod_openstudio {{/str}}
+                {{#foldermode}}
+                    {{#str}} createnewfolder, mod_openstudio {{/str}}
+                {{/foldermode}}
+                {{^foldermode}}
+                    {{#str}} contentaddnew, mod_openstudio {{/str}}
+                {{/foldermode}}
             </span>
         </div>
-
-        {{#feature_enablefolders}}
-            <div class="openstudio-create-folder-button">
-                <button>{{#str}} contentformcreatefolderbutton, mod_openstudio {{/str}}</button>
-            </div>
-        {{/feature_enablefolders}}
-
+        {{^foldermode}}
+            {{#feature_enablefolders}}
+                <div class="openstudio-create-folder-button">
+                    <button>{{#str}} contentformcreatefolderbutton, mod_openstudio {{/str}}</button>
+                </div>
+            {{/feature_enablefolders}}
+        {{/foldermode}}
         <div class="openstudio-clear"></div>
         {{{editform}}}
     {{/isfolderlock}}
