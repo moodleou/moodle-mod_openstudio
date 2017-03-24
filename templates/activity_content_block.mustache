@@ -52,15 +52,31 @@
 }}
 <div class="openstudio-grid-item-content">
     <div class="openstudio-grid-item-content-title">{{{l3name}}}</div>
-    <img data-toggle="tooltip" data-placement="bottom"
-            title="{{itemsharewith}}, {{datetimeupdated}}"
-            class="openstudio-grid-item-content-icon" src="{{{contenticon}}}" alt="{{{name}}}" >
-    <div class="openstudio-grid-item-content-preview">
-        <a href="{{{contentlink}}}">
-            <img class="" src="{{{contentthumbnailurl}}}" alt="{{{name}}}">
-        </a>
+    <div class="openstudio-tooltip">
+        <img class="openstudio-grid-item-content-icon" src="{{{contenticon}}}" alt="{{{name}}}">
+        <span class="openstudio-tooltiptext {{#isonlyme}}openstudio-tooltiptext-onlyme{{/isonlyme}}">{{itemsharewith}}</span>
     </div>
-
+    <div class="openstudio-grid-item-content-box">
+        {{#locked}}
+            <div class="openstudio-item-lock">
+                <span><img src="{{lockicon}}" alt="{{#str}} postlocked, mod_openstudio {{/str}}"></span>
+                <span>{{#str}} postlocked, mod_openstudio {{/str}}</span>
+            </div>
+        {{/locked}}
+        {{^locked}}
+            {{#isfeedbackrequested}}
+                <div class="openstudio-item-request-feedback">
+                    <span><img src="{{requestfeedbackicon}}" alt="{{#str}} contentneedhelp, mod_openstudio {{/str}}"></span>
+                    <span>{{#str}} contentneedhelp, mod_openstudio {{/str}}</span>
+                </div>
+            {{/isfeedbackrequested}}
+        {{/locked}}
+        <div class="openstudio-grid-item-content-preview{{#contenttypedefaultimage}}-default{{/contenttypedefaultimage}}">
+            <a href="{{{contentlink}}}">
+                <img class="openstudio-grid-item-thumbnail" src="{{{contentthumbnailurl}}}" alt="{{{name}}}">
+            </a>
+        </div>
+    </div>
     {{#name}}
         <div class="openstudio-grid-item-content-subtitle">{{{name}}}</div>
     {{/name}}

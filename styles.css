@@ -720,13 +720,13 @@ label.openstudio-export-item-name {
     color: #002158;
     line-height: 22px;
     margin: 0;
-    padding: 18px 20px 13px;
+    padding: 18px 24px 13px;
 }
 
 .openstudio-filter {
     padding: 6px 15px 8px 0px;
     background-color: #ffffff;
-    margin: 0px 20px 20px 20px;
+    margin: 0px 24px 20px 24px;
 }
 
 .path-mod-openstudio .nav {
@@ -1072,7 +1072,7 @@ a.openstudio-add-title:hover  {
 /* Grid Content. */
 
 .openstudio-grid {
-    margin: 20px 20px 0px 20px;
+    margin: 20px 24px 0px 24px;
 }
 
 .openstudio-grid-item {
@@ -1127,6 +1127,84 @@ a.openstudio-add-title:hover  {
 .openstudio-grid-item-content-preview img {
     height: 100%;
     width: 100%;
+}
+
+.openstudio-grid-item-content-preview-default {
+    height: 137px;
+    background: #ddf0f8;
+    clear: left;
+    text-align: center;
+}
+
+.openstudio-grid-item-content-preview-default img {
+    height: 64px;
+    margin-top: 44px;
+}
+
+.openstudio-grid-item-content-box {
+    clear: left;
+    position: relative;
+}
+
+.openstudio-item-lock {
+    background-color: #f0f0f1;
+    height: 22px;
+    position: absolute;
+    width: 100%;
+}
+
+.openstudio-item-lock img {
+    width: 14px;
+    height: 14px;
+    padding-left: 10px;
+    padding-right: 1px;
+}
+
+.openstudio-item-lock span {
+    color: #676463;
+}
+
+.openstudio-tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.openstudio-tooltip .openstudio-tooltiptext {
+    visibility: hidden;
+    background-color: #464542;
+    color: #ffffff;
+    text-align: center;
+    border-radius: 4px;
+    padding: 5px 3px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    margin-left: -70px;
+    opacity: 0;
+    transition: opacity 1s;
+    width: 150px;
+    font-size: 0.92857em;
+}
+
+.openstudio-tooltip .openstudio-tooltiptext-onlyme {
+    width: 60px;
+    margin-left: -25px;
+}
+
+.openstudio-tooltip .openstudio-tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #464542 transparent transparent transparent;
+}
+
+.openstudio-tooltip:hover .openstudio-tooltiptext {
+    visibility: visible;
+    opacity: 1;
 }
 
 .openstudio-grid-item-content-detail-owner-img {
@@ -2440,7 +2518,7 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     }
 
     .openstudio-grid-item {
-        width: 380px;
+        width: 100%;
     }
 
     .openstudio-filter-text a {
@@ -2907,13 +2985,31 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         font-size: 1.28571em;
     }
 
-    .openstudio-work-progress-percent {
-        line-height: 30px;
+    .openstudio-grid-item-content-icon {
+        height: 22px;
+        margin-top: 13px;
+        width: 22px;
     }
 
-    .moodle-dialogue-base .moodle-dialogue-base .moodle-dialogue-wrap .moodle-dialogue-hd,
-    .moodle-dialogue-base .moodle-dialogue-base .moodle-dialogue-wrap .moodle-dialogue-hd.yui3-widget-hd {
-        height: 50px;
+    .openstudio-grid-item-content-title {
+        width: 92%;
+    }
+
+    .openstudio-tooltip .openstudio-tooltiptext {
+        bottom: 75%;
+        margin-left: -110px;
+    }
+
+    .openstudio-tooltip .openstudio-tooltiptext::after {
+        left: 78%;
+    }
+
+    .openstudio-tooltip .openstudio-tooltiptext-onlyme {
+        margin-left: -40px;
+    }
+
+    .openstudio-work-progress-percent {
+        line-height: 30px;
     }
 
     .moodle-dialogue-base .openstudio-export-dialog-container .moodle-dialogue-wrap .moodle-dialogue-hd,
@@ -2979,10 +3075,6 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         margin-left: -170px;
         width: 460px;
         margin-top: 4px;
-    }
-
-    .openstudio-grid-item {
-        width: 280px;
     }
 
     .openstudio-filter-divider {
@@ -3068,6 +3160,10 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     .openstudio-profile-comment-view .openstudio-profile-comment img,
     .openstudio-profile-comment-view .openstudio-own-view img {
         padding-top: 2px;
+    }
+
+    .openstudio-grid-item-content-title {
+        width: 88%;
     }
 
     .openstudio-profile-img {

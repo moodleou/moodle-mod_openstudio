@@ -606,4 +606,86 @@ class renderer_utils {
         }
         return $pb;
     }
+
+    /**
+     * This function generate default icon for a content type.
+     *
+     * @param object $contentdata The content records to display.
+     * @param object $context Moodle context object.
+     * @return object $contentdata
+     */
+    public static function content_type_image($contentdata, $context) {
+        global $CFG, $OUTPUT;
+
+        $contenttypedefaultimage = true;
+        $contentthumbnailarea = 'contentthumbnail';
+        switch ($contentdata->contenttype) {
+            case content::TYPE_IMAGE:
+                if ($contentdata->mimetype == 'image/bmp') {
+                    $contenttypeimage = $OUTPUT->pix_url('unknown_rgb_32px', 'openstudio');
+                } else {
+                    if ($contentdata->content) {
+                        $contenttypeimage = $CFG->wwwroot
+                            . "/pluginfile.php/{$context->id}/mod_openstudio"
+                            . "/{$contentthumbnailarea}/{$contentdata->id}/". rawurlencode($contentdata->content);
+                        if ($contentdata->thumbnail) {
+                            $contenttypeimage = $contentdata->thumbnail;
+                        }
+
+                        $contenttypedefaultimage = false;
+                    }
+                }
+                break;
+            case content::TYPE_VIDEO:
+                $contenttypeimage = $OUTPUT->pix_url('video_rgb_32px', 'openstudio');
+                break;
+            case content::TYPE_AUDIO:
+                $contenttypeimage = $OUTPUT->pix_url('audio_rgb_32px', 'openstudio');
+                break;
+            case content::TYPE_DOCUMENT:
+            case content::TYPE_URL_DOCUMENT:
+            case content::TYPE_URL_DOCUMENT_DOC:
+                switch ($contentdata->mimetype) {
+                    case 'application/vnd.oasis.opendocument.text':
+                        $contenttypeimage = $OUTPUT->pix_url('word_rgb_32px', 'openstudio');
+                        break;
+                    case 'application/pdf':
+                        $contenttypeimage = $OUTPUT->pix_url('pdf_rgb_32px', 'openstudio');
+                        break;
+                    default:
+                        $contenttypeimage = $OUTPUT->pix_url('text_doc_rgb_32px', 'openstudio');
+                        break;
+                }
+                break;
+            case content::TYPE_URL_DOCUMENT_PDF:
+                $contenttypeimage = $OUTPUT->pix_url('pdf_rgb_32px', 'openstudio');
+                break;
+            case content::TYPE_PRESENTATION:
+            case content::TYPE_URL_PRESENTATION:
+            case content::TYPE_URL_PRESENTATION_PPT:
+                $contenttypeimage = $OUTPUT->pix_url('powerpoint_rgb_32px', 'openstudio');
+                break;
+
+            case content::TYPE_SPREADSHEET:
+            case content::TYPE_URL_SPREADSHEET:
+            case content::TYPE_URL_SPREADSHEET_XLS:
+                $contenttypeimage = $OUTPUT->pix_url('excel_spreadsheet_rgb_32px', 'openstudio');
+                break;
+            case content::TYPE_TEXT:
+            case content::TYPE_URL:
+            case content::TYPE_URL_VIDEO:
+            case content::TYPE_URL_AUDIO:
+                $contenttypeimage = $OUTPUT->pix_url('online_rgb_32px', 'openstudio');
+                break;
+            default:
+                $contenttypeimage = $OUTPUT->pix_url('unknown_rgb_32px', 'openstudio');
+                break;
+        }
+
+        $contentdata->contenttypeimage = $contenttypeimage;
+        $contentdata->contenttypedefaultimage = $contenttypedefaultimage;
+
+        return $contentdata;
+
+    }
 }

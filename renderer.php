@@ -564,6 +564,9 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $contentdata->participationicon = $OUTPUT->pix_url('participation_rgb_32px', 'openstudio');
         $contentdata->favouriteicon = $OUTPUT->pix_url('favourite_rgb_32px', 'openstudio');
         $contentdata->vid = $viewmode;
+        $contentdata->lockicon = $OUTPUT->pix_url('lock_grey_rgb_32px', 'openstudio');
+        $contentdata->requestfeedbackicon = $OUTPUT->pix_url('request_feedback_white_rgb_32px', 'openstudio');
+
         $contentdata->contentediturl = new moodle_url('/mod/openstudio/contentedit.php',
                    array('id' => $cmid, 'lid' => 0, 'sid' => 0, 'type' => 0, 'sstsid' => 0));
 

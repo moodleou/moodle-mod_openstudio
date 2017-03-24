@@ -29,6 +29,8 @@ use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\stream;
 use mod_openstudio\local\util;
 use mod_openstudio\local\util\defaults;
+use mod_openstudio\local\renderer_utils;
+use mod_openstudio\local\api\flags;
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
@@ -148,6 +150,9 @@ if ($vuid != $USER->id) {
     $pagetitle .= ': ' . get_string('profileswork', 'openstudio', array('name' => $contentowner->firstname));;
 }
 
+// Render page header and crumb trail.
+util::page_setup($PAGE, $pagetitle, $pageheading, $pageurl, $course, $cm);
+
 $fblock = optional_param('fblock', 0, PARAM_TEXT);
 if ($vid == content::VISIBILITY_PRIVATE_PINBOARD) {
     // If its a request to view pinboard, then fblock can only be -1.
@@ -243,39 +248,28 @@ if ($finalviewpermissioncheck) {
                 $contentid = uniqid('', true);
             } else {
                 $contentslist[] = $contentid;
+                // Content feedback requested
+                $content->isfeedbackrequested = false;
+                $flagstatus = flags::get_for_content_by_user($contentid, $permissions->activeuserid);
+                if (in_array(flags::NEEDHELP, $flagstatus)) {
+                    $content->isfeedbackrequested = true;
+                }
             }
 
             $context = context_module::instance($cm->id);
-            $slotarea = 'content';
-            $slotthumbnailarea = 'contentthumbnail';
+
             $contenticon = '';
 
-            $contentfileurl = $CFG->wwwroot
-                    . "/pluginfile.php/{$context->id}/mod_openstudio"
-                    . "/{$slotarea}/{$content->id}/" . rawurlencode($content->content);
-            $contentfilewithsizecheckurl = $CFG->wwwroot
-                    . "/pluginfile.php/{$context->id}/mod_openstudio"
-                    . "/{$slotarea}/{$content->id}/" . rawurlencode($content->content) . "?sizecheck=1";
-            if ($content->mimetype == 'image/bmp') {
-                $contentthumbnailfileurl = new moodle_url('/mod/openstudio/pix/openstudio_preview_image.png');
-            } else {
-                if ($content->content) {
-                    $contentthumbnailfileurl = $CFG->wwwroot
-                            . "/pluginfile.php/{$context->id}/mod_openstudio"
-                            . "/{$slotthumbnailarea}/{$content->id}/". rawurlencode($content->content);
-                    if ($content->thumbnail) {
-                        $contentthumbnailfileurl = $content->thumbnail;
-                    }
-                } else {
-                    $contentthumbnailfileurl = new moodle_url('/mod/openstudio/pix/openstudio_preview_image.png');
-                }
-            }
+            $content = renderer_utils::content_type_image($content, $context);
+
+            $contentthumbnailfileurl = $content->contenttypeimage;
 
             $visibility = (int)$content->visibility;
             if ($visibility < 0) {
                 $visibility = content::VISIBILITY_GROUP;
             }
 
+            $isonlyme = false;
             $itemsharewith = '';
             // Set icon for content.
             switch ($visibility) {
@@ -286,7 +280,7 @@ if ($finalviewpermissioncheck) {
 
                 case content::VISIBILITY_GROUP:
                     $contenticon = new moodle_url('/mod/openstudio/pix/group_rgb_32px.svg');
-                    $itemsharewith = get_string('slotvisibletogroup', 'studio',
+                    $itemsharewith = get_string('contentitemsharewithgroup', 'openstudio',
                             studio_api_group_get_name(abs($content->visibility)));
                     break;
 
@@ -294,16 +288,23 @@ if ($finalviewpermissioncheck) {
                 case content::VISIBILITY_PRIVATE:
                     $contenticon = new moodle_url('/mod/openstudio/pix/onlyme_rgb_32px.svg');
                     $itemsharewith = get_string('contentitemsharewithonlyme', 'openstudio');
+                    $isonlyme = true;
                     break;
 
                 case content::VISIBILITY_PRIVATE_PINBOARD:
                     $contenticon = new moodle_url('/mod/openstudio/pix/onlyme_rgb_32px.svg');
                     $itemsharewith = get_string('contentitemsharewithonlyme', 'openstudio');
+                    $isonlyme = true;
                     break;
 
                 case content::VISIBILITY_TUTOR:
                     $contenticon = new moodle_url('/mod/openstudio/pix/share_with_tutor_rgb_32px.svg');
                     $itemsharewith = get_string('contentitemsharewithmytutor', 'openstudio');
+                    break;
+                default:
+                    $contenticon = new moodle_url('/mod/openstudio/pix/onlyme_rgb_32px.svg');
+                    $itemsharewith = get_string('contentitemsharewithonlyme', 'openstudio');
+                    $isonlyme = true;
                     break;
             }
 
@@ -315,7 +316,7 @@ if ($finalviewpermissioncheck) {
 
             $content->contenticon = $contenticon;
             $content->itemsharewith = $itemsharewith;
-            $content->contentfileurl = $contentfileurl;
+            $content->isonlyme = $isonlyme;
             $content->contentthumbnailurl = $contentthumbnailfileurl;
             $content->datetimeupdated = $content->timemodified ? date('j/m/y h:i', $content->timemodified) : null;
             $content->contentlink = new moodle_url('/mod/openstudio/content.php',
@@ -323,6 +324,10 @@ if ($finalviewpermissioncheck) {
 
             $content->viewuserworkurl = new moodle_url('/mod/openstudio/view.php',
                     array('id' => $id, 'vuid' => $content->userid, 'vid' => content::VISIBILITY_PRIVATE));
+
+            $user = studio_api_user_get_user_by_id($content->userid);
+            $picture = new user_picture($user);
+            $content->userpictureurl = $picture->get_url($PAGE)->out(false);
 
             if (!$content->timemodified) {
                 $content->contentediturl = new moodle_url('/mod/openstudio/contentedit.php',

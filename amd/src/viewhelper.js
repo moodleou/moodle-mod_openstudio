@@ -36,22 +36,10 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
          */
         init: function() {
 
-            t.handleTooltip();
             t.handleIsotope();
             t.handleGroupSwitcher();
             t.handleViewSizeSwitcher();
             t.handleBlockSwitcher();
-        },
-
-        /**
-         * Handle tooltip for each block with Bootstrap when hover.
-         *
-         * @method handleTooltip
-         */
-        handleTooltip: function() {
-
-            $('[data-toggle="tooltip"]').tooltip();
-
         },
 
         /**
@@ -67,7 +55,7 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
                     itemSelector: '.openstudio-grid-item',
                     masonry: {
                         columnWidth: 243,
-                        gutter: 23
+                        gutter: 20
                     }
                 });
             });
