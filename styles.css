@@ -2,6 +2,34 @@
     margin: 0px;
 }
 
+.path-mod-openstudio [data-toggle="collapse"] {
+    position: relative;
+}
+
+.path-mod-openstudio [data-toggle="collapse"] .openstudio-expand-image,
+.path-mod-openstudio [data-toggle="collapse"] .openstudio-collapse-image {
+    display: block;
+    position: absolute;
+    right: 15px;
+    top: 0px;
+}
+
+.path-mod-openstudio [data-toggle="collapse"] .openstudio-expand-image {
+    display: block;
+}
+
+.path-mod-openstudio [data-toggle="collapse"] .openstudio-collapse-image {
+    display: none;
+}
+
+.path-mod-openstudio [data-toggle="collapse"].collapsed .openstudio-expand-image {
+    display: none;
+}
+
+.path-mod-openstudio [data-toggle="collapse"].collapsed .openstudio-collapse-image {
+    display: block;
+}
+
 /* OSEP bottom button */
 .path-mod-openstudio .osep-bottombuttons a {
     margin-left: 13px;
@@ -156,10 +184,6 @@
     padding: 12px 15px;
 }
 
-.path-mod-openstudio .openstudio-export-message {
-    color: red;
-}
-
 /* Common dialog footer */
 .path-mod-openstudio .moodle-dialogue-base .moodle-dialogue .moodle-dialogue-content .moodle-dialogue-ft {
     text-align: left;
@@ -177,6 +201,277 @@
 
 /**
  * End common dialogue
+ */
+
+/**
+ * Comment feature
+ */
+
+.path-mod-openstudio .oumediafilter {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+/* Comment thread */
+
+.openstudio-comment-form-content .filepicker-filelist {
+    border: none;
+}
+
+.openstudio-comment-form-content .filepicker-filelist .filepicker-container,
+.openstudio-comment-form-content .filemanager.fm-noitems .fm-empty-container
+.openstudio-comment-form-content .filepicker-filename > * {
+    display: none;
+}
+
+.openstudio-comment-form-content .filepicker-filename > a {
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.openstudio-comment-form-content .filepicker-filelist,
+.openstudio-comment-form-content .filemanager-container {
+    min-height: 17px;
+}
+
+.openstudio-comment-form-content,
+.openstudio-comment-reply-form {
+     display: none;
+}
+
+.openstudio-comment-form-body .mform .fitem .fitemtitle {
+    display: none;
+}
+
+.openstudio-comment-form-body .mform .fitem .felement {
+    margin-left: 0px;
+    color: #000000;
+    font-size: 1em;
+}
+
+.openstudio-comment-form-content .felement.fstatic {
+    margin-bottom: 0px;
+}
+
+.openstudio-comment-form-content input[name="commentattachmentchoose"] ~ span {
+    display: none;
+}
+
+.openstudio-comment-form-content .felement.ffilepicker input.fp-btn-choose,
+.openstudio-comment-form-content .felement.ffilepicker input.fp-btn-choose:hover {
+    color: #0b55a8;
+    font-family: Arial;
+    border: none;
+    font-size: 1em;
+    padding: 0px;
+    margin-bottom: 2px;
+    background: none;
+    box-shadow: none;
+}
+
+body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commentext .fitemtitle label {
+    display: none;
+}
+
+#fitem_id_commentheader {
+    margin-bottom: 7px;
+}
+
+#fitem_id_commentattachmentguidance {
+    margin-bottom: 0px;
+}
+
+#fitem_id_commentattachment{
+    margin-bottom: 3px;
+}
+
+.openstudio-comment-form-header {
+    font-family: Arial;
+    border: none;
+    background-color: #bfe2ef;
+    font-size: 1.28571em;
+    min-height: 34px;
+    height: auto;
+    background: #bfe2ef;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.openstudio-comment-form-header span {
+    display: block;
+    width: calc(100% - 30px);
+}
+
+.openstudio-comment-form-header {
+    color: #002158;
+    font-weight: normal;
+    padding-left: 15px;
+    font-size: 1.28571em;
+    line-height: 35px;
+}
+
+.openstudio-comment-form-body #fitem_id_commentheader .felement {
+    font-size: 1.28571em;
+    font-weight: bold;
+    color: #002158;
+    line-height: 22px;
+    margin: 0;
+}
+
+.openstudio-comment-form-body #fitem_id_commentattachmentguidance {
+    font-size: 0.857em;
+    font-family: Arial;
+    color: #000000;
+}
+
+.openstudio-comment-thread-list {
+    margin-top: 16px;
+}
+.openstudio-comment-thread-header {
+    font-size: 1.28571em;
+    font-weight: bold;
+    color: #002158;
+    font-family: Arial;
+    margin-bottom: 18px;
+}
+.openstudio-comment-thread-body {
+    margin-bottom: 20px;
+}
+.openstudio-comment-leftcolumn {
+    float: left;
+    width: 128px;
+    clear: both;
+    min-height: 1px;
+}
+
+.openstudio-comment-rightcolumn {
+    float: right;
+    width: calc(100% - 128px);
+}
+
+.openstudio-comment-text {
+    min-height: 72px;
+    padding-bottom: 5px;
+}
+
+.openstudio-comment-thread-original-item {
+    background: #f4fafc;
+}
+
+.openstudio-comment-thread-original-item .openstudio-comment-text {
+    min-height: 107px;
+}
+
+.openstudio-comment-thread-original-item .openstudio-comment-metadata .openstudio-comment-rightcolumn {
+    margin-top: 7px;
+}
+
+.openstudio-comment-thread-original-item .openstudio-comment-thread-item {
+    padding: 15px;
+}
+
+.openstudio-comment-thread-replied-items .openstudio-comment-metadata .openstudio-comment-leftcolumn {
+    display: none;
+}
+
+.openstudio-comment-thread-item {
+    border-top: 1px solid #bfe2ef;
+}
+
+.openstudio-comment-thread-item.openstudio-comment-reply-form {
+    border-top: none;
+    border-bottom: 1px solid #bfe2ef;
+}
+
+.openstudio-comment-thread-replied-items .openstudio-comment-thread-item {
+    padding: 15px 15px 8px 50px;
+}
+
+.openstudio-comment-thread-body .openstudio-comment-thread:last-child .openstudio-comment-thread-replied-items
+div.openstudio-comment-thread-item:nth-last-child(2) {
+    border-bottom: 1px solid #bfe2ef;
+}
+
+.openstudio-comment-thread-replied-items div.openstudio-comment-thread-item:nth-last-child(2)
+.openstudio-comment-metadata .openstudio-comment-leftcolumn {
+    display: block;
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+.openstudio-comment-thread-replied-items div.openstudio-comment-thread-item:nth-last-child(2)
+.openstudio-comment-metadata .openstudio-comment-rightcolumn {
+    margin-top: 19px;
+}
+
+.openstudio-comment-owner img {
+    max-width: 48px;
+    max-height: 48px;
+}
+
+.openstudio-comment-flag {
+    position: relative;
+}
+
+.openstudio-comment-flag .openstudio-comment-flag-status {
+    display: inline-block;
+    margin-right: 13px;
+}
+
+.openstudio-comment-flag-status.openstudio-hidden {
+    display: none;
+}
+
+.openstudio-comment-flag-status img {
+    width: 14px;
+    height: 14px;
+}
+
+.openstudio-comment-flag-count {
+    color: #d4d2d2;
+    font-size: 0.857em;
+    font-family: Arial;
+    display: inline-block;
+    position: absolute;
+    top: -5px;
+    left: 16px;
+}
+
+.openstudio-comment-flag-count.flagged {
+     color: #0b55a8;
+}
+
+.openstudio-comment-flag {
+    float: left;
+}
+
+.openstudio-comment-action {
+    float: right;
+}
+
+.openstudio-comment-flag-link,
+.openstudio-comment-delete-link,
+.openstudio-comment-report-link {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.openstudio-comment-owner-name {
+    display: block;
+    color: #312b39;
+    font-weight: bold;
+    font-size: 0.9285em;
+    margin: 10px 0px 4px;
+}
+
+.openstudio-comment-time {
+    color: #676463;
+    font-size: 0.785em;
+    display: block;
+}
+
+/**
+ * End comment feature
  */
 
 /**
@@ -377,72 +672,9 @@
     margin-bottom: 3px;
 }
 
-/* Export dialog header */
-.moodle-dialogue-base .openstudio-export-dialog-container .moodle-dialogue-wrap .moodle-dialogue-hd,
-.moodle-dialogue-base .openstudio-export-dialog-container .moodle-dialogue-wrap .moodle-dialogue-hd.yui3-widget-hd {
-    height: 46px;
-    padding: 0px;
-}
-
-.moodle-dialogue-base .openstudio-export-dialog-container .openstudio-export-header {
-    padding: 13px 15px;
-    display: inline-block;
-    font-family: Arial;
-}
-
-.moodle-dialogue-base .openstudio-export-dialog-container .yui3-button.closebutton {
-    padding: 3px 3px;
-    margin: 0px 9px 0px 9px;
-}
-
-.moodle-dialogue-base .openstudio-export-dialog-container .yui3-button.closebutton:before {
-    height: 30px;
-    display: block;
-}
-
-/* Export dialog body */
-.moodle-dialogue-base .moodle-dialogue.openstudio-export-dialog-container .moodle-dialogue-bd {
-    padding: 20px 15px;
-}
-
-.moodle-dialogue-base .moodle-dialogue.openstudio-export-dialog-container .moodle-dialogue-bd {
-    padding: 12px 15px;
-}
-
 .openstudio-export-message {
     color: red;
     display: none;
-}
-
-/* Export dialog footer */
-.moodle-dialogue-base .moodle-dialogue.openstudio-export-dialog-container .moodle-dialogue-content .moodle-dialogue-ft {
-    text-align: left;
-    margin: 7px 7px 30px;
-}
-
-.moodle-dialogue-base .moodle-dialogue.openstudio-export-dialog-container .moodle-dialogue-ft .yui3-widget-buttons {
-    display: inline-flex;
-}
-
-.moodle-dialogue-base .moodle-dialogue.openstudio-export-dialog-container .moodle-dialogue-ft
-.yui3-widget-buttons button{
-    margin-left: 5px;
-    margin-right: 5px;
-}
-
-.moodle-dialogue-base .moodle-dialogue.openstudio-export-dialog-container .moodle-dialogue-ft .yui3-widget-buttons
-.openstudio-exportall-btn {
-    order: 1;
-}
-
-.moodle-dialogue-base .moodle-dialogue.openstudio-export-dialog-container .moodle-dialogue-ft .yui3-widget-buttons
-.openstudio-exportselected-btn{
-    order: 2;
-}
-
-.moodle-dialogue-base .moodle-dialogue.openstudio-export-dialog-container .moodle-dialogue-ft .yui3-widget-buttons
-.openstudio-cancelexport-btn{
-    order: 3;
 }
 
 /* Export content list */
@@ -1608,10 +1840,6 @@ a.openstudio-actvity-title:hover  {
     outline: none;
 }
 
-.openstudio-content-view-add-comment {
-    margin-top: 20px;
-}
-
 .openstudio-content-view-block {
     height: 34px;
     background: #bfe2ef;
@@ -1786,6 +2014,7 @@ div.openstudio-content-view-version div:nth-of-type(odd) {
 
 .openstudio-content-view-actions-icons-left {
     float: left;
+    margin-bottom: 19px;
 }
 
 .openstudio-content-view-actions-icons-right {
@@ -2957,6 +3186,9 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         font-size: 1.28571em;
     }
 
+    /**
+     * Comment feature
+     */
     .openstudio-content-view-user-info-view {
         font-size: 1.14285em;
     }
@@ -3012,9 +3244,11 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         line-height: 30px;
     }
 
-    .moodle-dialogue-base .openstudio-export-dialog-container .moodle-dialogue-wrap .moodle-dialogue-hd,
-    .moodle-dialogue-base .openstudio-export-dialog-container .moodle-dialogue-wrap .moodle-dialogue-hd.yui3-widget-hd {
-        height: 50px;
+    /**
+     * Comment feature
+     */
+    .openstudio-comment-form-header {
+        margin-bottom: 10px;
     }
 }
 /* Mobile small. */
@@ -3169,4 +3403,31 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     .openstudio-profile-img {
         margin-right: 7px;
     }
+
+    /**
+     * Comment feature
+     */
+
+    .openstudio-comment-thread-item .openstudio-comment-leftcolumn {
+        width: 100%;
+    }
+
+    .openstudio-comment-thread-item .openstudio-comment-text {
+        float: left;
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    .openstudio-comment-thread-item .openstudio-comment-metadata .openstudio-comment-leftcolumn {
+        width: 75px;
+    }
+
+    .openstudio-comment-thread-item .openstudio-comment-metadata .openstudio-comment-rightcolumn {
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    /**
+     * End comment feature
+     */
 }

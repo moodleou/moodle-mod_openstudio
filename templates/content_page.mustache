@@ -43,7 +43,8 @@
         "contentsmiletotal" : 0,
         "contentinspiretotal" : 0,
         "contentcopyenable" : true,
-        "profilebarenable": true
+        "profilebarenable": true,
+        "actionenable": true
     }
 }}
 {{#contentmapenable}}
@@ -197,24 +198,26 @@
                 </div>
             </div>
             <div class="openstudio-content-view-actions clearfix">
-                <div class="openstudio-content-view-actions-icons-left">
-                    {{#contenteditenable}}
-                        <a href="{{{contenteditlink}}}" class="openstudio-content-view-edit-button-link">
-                            <input id="id_editbutton" name="editbutton" class="openstudio-content-view-edit-button"
-                                   value="{{#str}}contentactioneditname, mod_openstudio{{/str}}" type="button">
-                        </a>
-                    {{/contenteditenable}}
-                    {{#contentdeleteenable}}
-                        <input id="id_deletebutton" name="deletebutton" class="openstudio-content-view-delete-button"
-                               value="{{#str}}contentactiondelete, mod_openstudio{{/str}}" type="button">
-                    {{/contentdeleteenable}}
-                    {{#contentlockenable}}
-                        <a href="{{{contentlocklink}}}">
-                            <input id="id_lockbutton" name="lockbutton"
-                                   value="{{#str}}contentactionlockname, mod_openstudio{{/str}}" type="button">
-                        </a>
-                    {{/contentlockenable}}
-                </div>
+                {{#actionenable}}
+                    <div class="openstudio-content-view-actions-icons-left">
+                        {{#contenteditenable}}
+                            <a href="{{{contenteditlink}}}" class="openstudio-content-view-edit-button-link">
+                                <input id="id_editbutton" name="editbutton" class="openstudio-content-view-edit-button"
+                                       value="{{#str}}contentactioneditname, mod_openstudio{{/str}}" type="button">
+                            </a>
+                        {{/contenteditenable}}
+                        {{#contentdeleteenable}}
+                            <input id="id_deletebutton" name="deletebutton" class="openstudio-content-view-delete-button"
+                                   value="{{#str}}contentactiondelete, mod_openstudio{{/str}}" type="button">
+                        {{/contentdeleteenable}}
+                        {{#contentlockenable}}
+                            <a href="{{{contentlocklink}}}">
+                                <input id="id_lockbutton" name="lockbutton"
+                                       value="{{#str}}contentactionlockname, mod_openstudio{{/str}}" type="button">
+                            </a>
+                        {{/contentlockenable}}
+                    </div>
+                {{/actionenable}}
                 <div class="openstudio-content-view-actions-icons-right">
                     {{#contentrequestfeedbackenable}}
                         <input id="id_requestfeedbackbutton" class="openstudio-request-feedback-button"
@@ -223,10 +226,7 @@
                 </div>
             </div>
             {{#contentcommentenable}}
-                <div class="openstudio-content-view-add-comment">
-                    <input id="id_addcomment" name="addcommentbutton"
-                           value="{{#str}}contentcommentsaddnewcomment, mod_openstudio{{/str}}" type="button">
-                </div>
+                {{>mod_openstudio/comment}}
             {{/contentcommentenable}}
         </div>
         <div class="openstudio-content-view-secondary">

@@ -606,6 +606,23 @@ class renderer_utils {
         }
         return $pb;
     }
+    /**
+     * This function will return media markup as oumedia filter input.
+     *
+     * @param object $file File record
+     * @return string Media markup
+     */
+    public static function get_media_filter_markup($file) {
+        $href = \moodle_url::make_pluginfile_url(
+            $file->contextid,
+            $file->component,
+            $file->filearea,
+            $file->itemid,
+            $file->filepath,
+            $file->filename)->out(false);
+        $markup = \html_writer::link($href, '');
+        return $markup;
+    }
 
     /**
      * This function generate default icon for a content type.

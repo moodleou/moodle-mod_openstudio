@@ -423,6 +423,8 @@ $string['contentformvisibilitygroup'] = 'My tutor group';
 $string['contentformvisibilitymodule'] = 'My module';
 $string['contentformmetadataexpand'] = 'Expand';
 $string['contentformmetadatacollapse'] = 'Collapse';
+$string['commentformexpand'] = 'Comment form hidden, click to show comment form';
+$string['commentformcollapse'] = 'Comment form shown, click to hide comment form';
 
 $string['contentformcreatefolderbutton'] = 'Create folder';
 $string['contentformvisibility'] = 'Who can view this content';
@@ -590,6 +592,7 @@ $string['contentcommentsheader2'] = 'Comments';
 $string['contentcommentsformlabelcomment'] = 'Comment';
 $string['contentcommentsaddnewcomment'] = 'Add new comment';
 $string['contentcommentsalert'] = 'Report';
+$string['contentcommentsreport'] = 'Report comment';
 $string['contentcommentsdelete'] = 'Delete comment';
 $string['contentcommentsreply'] = 'Reply';
 $string['contentcommentswritereply'] = 'Write a reply...';
@@ -731,6 +734,8 @@ $string['subemailactionby'] = '{$a->count}. {$a->actiondesc}';
 $string['subemailatestflags'] = 'Latest Flags';
 $string['subemailatestcomments'] = 'Latest Comments';
 $string['subemailatestactions'] = 'Latest Actions';
+$string['emptycomment'] = 'Empty comment';
+$string['commenterror'] = 'Comment error from database';
 
 $string['subemailunsubscribecontent'] = 'Unsubscribe from this content';
 $string['subemailunsubscribestream'] = 'Unsubscribe from this stream';

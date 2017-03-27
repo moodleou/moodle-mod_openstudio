@@ -30,8 +30,11 @@ use mod_openstudio\local\api\flags;
 use mod_openstudio\local\util;
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\contentversion;
+use mod_openstudio\local\renderer_utils;
+use mod_openstudio\local\api\comments;
 
 require_once($CFG->dirroot . '/mod/openstudio/api/subscription.php');
+require_once($CFG->dirroot . '/mod/openstudio/api/user.php');
 require_once($CFG->libdir . '/externallib.php');
 
 /**
@@ -361,10 +364,293 @@ class mod_openstudio_external extends external_api {
                 'flagremoveclass' => new external_value(PARAM_TEXT, 'flag remove class'),
                 'flagaddclass' => new external_value(PARAM_TEXT, 'flag add new class'),
                 'fid' => new external_value(PARAM_INT, 'flag ID'),
-                'warnings' => new external_warnings())
+        ));
+    }
+
+    /**
+     * Returns description of method parameters
+     *
+     * @return external_function_parameters
+     */
+    public static function add_comment_parameters() {
+        return new external_function_parameters(array(
+                'cmid' => new external_value(PARAM_INT, 'Course module ID'),
+                'cid' => new external_value(PARAM_INT, 'Content ID'),
+                'folderid' => new external_value(PARAM_INT, 'Folder ID'),
+                'commenttext' => new external_value(PARAM_RAW, 'Comment text'),
+                'commentattachment' => new external_value(PARAM_INT, 'Comment attachment'),
+                'inreplyto' => new external_value(PARAM_INT, 'Parent comment ID'))
         );
     }
 
+    /**
+     * Add new comment
+     *
+     * @param int $cmid Course module ID
+     * @param int $cid Content ID
+     * @param int $folderid Folder ID
+     * @param string $commentext Comment text
+     * @param string $commentattachment Comment attachment
+     * @param int $inreplyto Parent comment ID
+     * @return array
+     *  [
+     *      commentid: int
+     *      commenthtml: string
+     *  ]
+     * @throws moodle_exception
+     */
+    public static function add_comment($cmid, $cid, $folderid = 0, $commenttext = '',
+            $commentattachment = 0, $inreplyto = 0) {
+        global $USER, $PAGE, $CFG;
+        $userid = $USER->id;
+
+        // Init and check permission.
+        $coursedata = util::render_page_init($cmid, array('mod/openstudio:addcomment'));
+        $cm = $coursedata->cm;
+        $mcontext = $coursedata->mcontext;
+        $permissions = $coursedata->permissions;
+
+        // Validate input parameters and context.
+        self::validate_context($mcontext);
+        $params = self::validate_parameters(self::add_comment_parameters(), array(
+                'cmid' => $cmid,
+                'cid' => $cid,
+                'folderid' => $folderid,
+                'commenttext' => $commenttext,
+                'commentattachment' => $commentattachment,
+                'inreplyto' => $inreplyto));
+
+        // Check if user has permission to add content.
+        $actionallowed = $permissions->addcomment || $permissions->managecontent;
+
+        if ($actionallowed) {
+            try {
+                // Standardize comment text.
+                $commenttext = trim($params['commenttext']);
+
+                // Check if comment content is not empty.
+                $draftareafiles = file_get_drafarea_files($params['commentattachment'], $filepath = '/');
+                if (($commenttext != '') || (is_object($draftareafiles) && !empty($draftareafiles->list))) {
+
+                    // Set default comment text if user just upload comment attachment.
+                    if ($commenttext == '') {
+                        $commenttext = get_string('contentcommentsaudioattached', 'openstudio');
+                    }
+
+                    // Do add comment.
+                    $context = context_module::instance($cm->id);
+                    $commentid = comments::create($params['cid'], $userid, $commenttext, $params['folderid'],
+                        ['id' => $params['commentattachment']], $context, $inreplyto);
+
+                    // Check if process is success.
+                    if (!$commentid) {
+                        throw new \moodle_exception('commenterror', 'openstudio');
+                    }
+
+                    // Render comment html and send to client.
+                    $commentdata = comments::get($commentid, $userid);
+                    $commentdata->timemodified = userdate($commentdata->timemodified,
+                            get_string('formattimedatetime', 'openstudio'));
+
+                    $user = studio_api_user_get_user_by_id($commentdata->userid);
+                    $commentdata->fullname = fullname($user);
+
+                    // User picture.
+                    $picture = new user_picture($user);
+                    $commentdata->userpictureurl = $picture->get_url($PAGE)->out(false);
+
+                    $renderer = $PAGE->get_renderer('mod_openstudio');
+                    // Check comment attachment.
+                    if ($file = comments::get_attachment($commentdata->id)) {
+                        $commentdata->commenttext .= renderer_utils::get_media_filter_markup($file);
+                    }
+
+                    $commentdata->commenttext = format_text($commentdata->commenttext);
+
+                    $commentdata->deleteenable = true;
+                    $commentdata->reportenable = false;
+
+                    $commenthtml = $renderer->content_comment($commentdata);
+
+                } else {
+                    // Comment empty error.
+                    throw new \moodle_exception('emptycomment', 'openstudio');
+                }
+            } catch (Exception $e) {
+                // Database error.
+                throw new \moodle_exception('commenterror', 'openstudio');
+            }
+        } else {
+            // No permision.
+            throw new \moodle_exception('nocommentpermissions', 'openstudio');
+        }
+
+        return [
+            'commentid' => $commentid,
+            'commenthtml' => $commenthtml
+        ];
+    }
+
+    /**
+     * Returns description of method result value
+     *
+     * @return external_description
+     */
+    public static function add_comment_returns() {
+        return new external_single_structure(array(
+                'commentid' => new external_value(PARAM_INT, 'Added comment ID'),
+                'commenthtml' =>  new external_value(PARAM_RAW, 'Comment content HTML'))
+        );
+    }
+
+    /**
+     * Returns description of method parameters
+     *
+     * @return external_function_parameters
+     */
+    public static function flag_comment_parameters() {
+        return new external_function_parameters(array(
+                'cmid' => new external_value(PARAM_INT, 'Course module ID'),
+                'cid' => new external_value(PARAM_INT, 'Content ID'),
+                'commentid' => new external_value(PARAM_INT, 'Comment ID'))
+        );
+    }
+
+    /**
+     * Flag comment
+     *
+     * @param int $cmid Course module ID
+     * @param int $cid Content ID
+     * @param int $commentid Comment ID
+     * @return array
+     *  [
+     *      count: int
+     *  ]
+     * @throws moodle_exception
+     */
+    public static function flag_comment($cmid, $cid, $commentid) {
+        global $USER;
+        $userid = $USER->id;
+
+        // Validate input parameters.
+        $params = self::validate_parameters(self::flag_comment_parameters(), array(
+                'cmid' => $cmid,
+                'cid' => $cid,
+                'commentid' => $commentid));
+
+        // Init and check permission.
+        $coursedata = util::render_page_init($params['cmid'], array('mod/openstudio:view'));
+        $permissions = $coursedata->permissions;
+
+        $actionallowed = $permissions->addcomment || $permissions->managecontent;
+        $comment = comments::get($params['commentid']);
+
+        if ($actionallowed) {
+            try {
+                if ($comment) {
+                    flags::comment_toggle($params['cid'], $params['commentid'], $userid, true);
+                    $count = flags::count_for_comment($params['commentid']);
+                } else {
+                    throw new \moodle_exception('errorinvalidcomment', 'openstudio');
+                }
+            } catch (Exception $e) {
+                // Database error.
+                throw new \moodle_exception('commenterror', 'openstudio');
+            }
+        } else {
+            // No permision.
+            throw new \moodle_exception('nocommentpermissions', 'openstudio');
+        }
+
+        return [
+            'count' => $count
+        ];
+    }
+
+    /**
+     * Returns description of method result value
+     *
+     * @return external_description
+     */
+    public static function flag_comment_returns() {
+        return new external_single_structure(array(
+                'count' => new external_value(PARAM_INT, 'Comment count'))
+        );
+    }
+
+    /**
+     * Returns description of method parameters
+     *
+     * @return external_function_parameters
+     */
+    public static function delete_comment_parameters() {
+        return new external_function_parameters(array(
+                'cmid' => new external_value(PARAM_INT, 'Course module ID'),
+                'commentid' => new external_value(PARAM_INT, 'Comment ID'))
+        );
+    }
+
+    /**
+     * Flag comment
+     *
+     * @param int $cmid Course module ID
+     * @param int $commentid Comment ID
+     * @return array
+     *  [
+     *      commentid: int
+     *  ]
+     * @throws moodle_exception
+     */
+    public static function delete_comment($cmid, $commentid) {
+        global $USER;
+        $userid = $USER->id;
+
+        // Validate input parameters.
+        $params = self::validate_parameters(self::delete_comment_parameters(), array(
+                'cmid' => $cmid,
+                'commentid' => $commentid));
+
+        // Init and check permission.
+        $coursedata = util::render_page_init($params['cmid'], array('mod/openstudio:addcomment'));
+        $permissions = $coursedata->permissions;
+
+        $actionallowed = $permissions->addcomment || $permissions->managecontent;
+        $comment = comments::get($params['commentid']);
+
+        if ($actionallowed) {
+            try {
+                if ($comment) {
+                    $success = comments::delete($params['commentid'], $userid);
+                    if (!$success) {
+                        throw new \moodle_exception('commenterror', 'openstudio');
+                    }
+                } else {
+                    throw new \moodle_exception('errorinvalidcomment', 'openstudio');
+                }
+            } catch (Exception $e) {
+                // Database error.
+                throw new \moodle_exception('commenterror', 'openstudio');
+            }
+        } else {
+            // No permision.
+            throw new \moodle_exception('nocommentpermissions', 'openstudio');
+        }
+
+        return [
+            'commentid' => $params['commentid']
+        ];
+    }
+
+    /**
+     * Returns description of method result value
+     *
+     * @return external_description
+     */
+    public static function delete_comment_returns() {
+        return new external_single_structure(array(
+                'commentid' => new external_value(PARAM_INT, 'Deleted comment ID'))
+        );
+    }
     /**
      * Returns description of method parameters
      *

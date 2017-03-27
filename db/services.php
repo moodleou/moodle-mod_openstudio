@@ -61,6 +61,33 @@ $functions = array(
         'ajax' => true,
         'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
         'capabilities' => 'mod/openstudio:view'
+    ),
+    'mod_openstudio_external_add_comment' => array(
+            'classname' => 'mod_openstudio_external',
+            'methodname' => 'add_comment',
+            'description' => 'Add new comment',
+            'type' => 'write',
+            'ajax' => true,
+            'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
+            'capabilities' => 'mod/openstudio:addcomment'
+    ),
+    'mod_openstudio_external_flag_comment' => array(
+            'classname' => 'mod_openstudio_external',
+            'methodname' => 'flag_comment',
+            'description' => 'Flag comment',
+            'type' => 'write',
+            'ajax' => true,
+            'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
+            'capabilities' => 'mod/openstudio:view'
+    ),
+    'mod_openstudio_external_delete_comment' => array(
+            'classname' => 'mod_openstudio_external',
+            'methodname' => 'delete_comment',
+            'description' => 'Delete comment',
+            'type' => 'write',
+            'ajax' => true,
+            'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
+            'capabilities' => 'mod/openstudio:addcomment'
     )
 );
 
@@ -71,7 +98,10 @@ $services = array(
             'mod_openstudio_external_flag_content',
             'mod_openstudio_external_subscribe',
             'mod_openstudio_external_unsubscribe',
-            'mod_openstudio_external_delete_content'),
+            'mod_openstudio_external_delete_content',
+            'mod_openstudio_external_add_comment',
+            'mod_openstudio_external_flag_comment',
+            'mod_openstudio_external_delete_comment'),
         'restrictedusers' => 0,
         'enabled' => 1,
         'shortname' => 'openstudio_service',

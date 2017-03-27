@@ -764,6 +764,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $contentdata->contenteditenable = $contenteditenable;
         $contentdata->contenteditlink = $contenteditlink;
         $contentdata->contentdeleteenable = $contentdeleteenable;
+        $contentdata->actionenable = $contentdata->contentdeleteenable || $contentdata->contenteditenable
+                || $contentdata->contentlockenable;
 
         // Check Request feedback permission.
         $contentrequestfeedbackenable = false;
@@ -878,6 +880,33 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                     'folderid' => property_exists($contentdata, 'folderid') ? $contentdata->folderid : '']]);
         }
 
+        if ($contentdata->contentcommentenable) {
+
+            // Require strings for js.
+            $PAGE->requires->strings_for_js(
+                    array('contentcommentliked', 'contentcommentsdelete', 'modulejsdialogcommentdeleteconfirm',
+                            'modulejsdialogcancel', 'modulejsdialogdelete'), 'mod_openstudio');
+
+            $this->page->requires->js_call_amd('mod_openstudio/comment', 'init', [[
+                    'cmid' => $cmid,
+                    'cid' => $contentdata->id]]);
+
+            // Init OUMP module (Media player).
+            // We need to init oump here to make sure that oump is always loaded even when no comment loaded.
+            // As current behaviour, filter just call oump AMD module when has media markups found in filter input.
+            // So if no media found, we can not trigger oump feature after user added a new comment by ajax.
+
+            if (file_exists($CFG->dirroot.'/local/oump/classes/filteroump.php')) {
+                // OUMP installed.
+                require_once($CFG->dirroot.'/local/oump/classes/filteroump.php');
+                $PAGE->requires->js_call_amd('local_oump/mloader', 'initialise', array([
+                    'wwwroot' => $CFG->wwwroot . '/local/oump',
+                    'urlargs' => filter_oump::get_requirejs_urlargs(),
+                    'jsdependency' => filter_oump::get_js_dependency()
+                ]));
+            }
+        }
+
         return $this->render_from_template('mod_openstudio/content_page', $contentdata);
     }
 
@@ -947,5 +976,21 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      */
     public function exportposts($contentdata = array()) {
         return $this->render_from_template('mod_openstudio/exportposts', $contentdata);
+    }
+
+    /**
+     * View for content comment
+     *
+     * @param object $commentdata Comment data
+     * @return string The rendered HTML fragment.
+     */
+    public function content_comment($commentdata) {
+        if ($commentdata->inreplyto) {
+            // Added comment is to reply to parent comment.
+            return $this->render_from_template('mod_openstudio/comment_item_block', $commentdata);
+        } else {
+            // Added comment is to open new comment stream.
+            return $this->render_from_template('mod_openstudio/comment_thread_block', $commentdata);
+        }
     }
 }

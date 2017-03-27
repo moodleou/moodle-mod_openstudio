@@ -579,8 +579,9 @@ EOF;
 
     /**
      * Gets the course id from it's shortname.
+     *
      * @throws Exception
-     * @param string $shortname
+     * @param string $shortname Course short name
      * @return int
      */
     protected function get_course_id($shortname) {
@@ -594,9 +595,10 @@ EOF;
 
     /**
      * Gets the tutor role id from it's shortname.
+     *
      * @throws Exception
-     * @param string $tutorroles
-     * @return int
+     * @param string $tutorroles Tutor role's short names
+     * @return string
      */
     protected function get_tutorroles_id($tutorroles) {
         global $DB;

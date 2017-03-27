@@ -1,0 +1,115 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_openstudio/comment_item_block
+
+    Comment item block template of the OpenStudio UI.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+
+    Example context (json):
+    {
+        "id": "31",
+        "contentid": "20",
+        "userid": "2",
+        "commenttext": "Comment replied",
+        "inreplyto": "23",
+        "timemodified": "5/10/16, 13:27",
+        "fullname": "Admin User",
+        "flagcount": "0",
+        "userhasflagged": "0",
+        "deleteenable": "true",
+        "reportenable": "false",
+        "userpictureurl": "../../../mod/openstudio/pix/people_rgb_32px.svg"
+    }
+}}
+<div class="openstudio-comment-thread-item clearfix" data-thread-item="{{id}}">
+    <div class="openstudio-comment-leftcolumn openstudio-comment-owner">
+        <img src="{{userpictureurl}}" alt="{{fullname}}"/>
+        <span class="openstudio-comment-owner-name">{{fullname}}</span>
+        <span class="openstudio-comment-time">{{timemodified}}</span>
+    </div>
+    <div class="openstudio-comment-rightcolumn openstudio-comment-text">
+        {{{commenttext}}}
+    </div>
+    <div class="openstudio-comment-metadata">
+        <div class="openstudio-comment-leftcolumn">
+            <input name="replycommentbutton"  type="button" data-comment-parent="
+                {{#inreplyto}} {{inreplyto}} {{/inreplyto}}
+                {{^inreplyto}} {{id}} {{/inreplyto}}"
+                value="{{#str}} contentcommentsreply, mod_openstudio {{/str}}">
+        </div>
+        <div class="openstudio-comment-rightcolumn">
+            <div class="openstudio-comment-flag">
+                {{#flagcount}}
+                    <span class="openstudio-comment-flag-status flagged">
+                        {{#pix}}
+                            participation_rgb_32px, openstudio, {{#str}} contentcommentliked, openstudio {{/str}}
+                        {{/pix}}
+                    </span>
+                    <span class="openstudio-comment-flag-status unflagged openstudio-hidden">
+                        {{#pix}}
+                            participation_grey_rgb_32px, openstudio, {{#str}} contentcommentnotliked, openstudio {{/str}}
+                        {{/pix}}
+                    </span>
+                {{/flagcount}}
+                {{^flagcount}}
+                    <span class="openstudio-comment-flag-status flagged openstudio-hidden">
+                        {{#pix}}
+                            participation_rgb_32px, openstudio, {{#str}} contentcommentliked, openstudio {{/str}}
+                        {{/pix}}
+                    </span>
+                    <span class="openstudio-comment-flag-status unflagged">
+                        {{#pix}}
+                            participation_grey_rgb_32px, openstudio, {{#str}} contentcommentnotliked, openstudio {{/str}}
+                        {{/pix}}
+                    </span>
+                {{/flagcount}}
+                <span class="openstudio-comment-flag-count
+                    {{#flagcount}}
+                        flagged
+                    {{/flagcount}}
+                ">{{flagcount}}</span>
+                {{^userhasflagged}}
+                    <a class="openstudio-comment-flag-link" href="" data-comment-id="{{id}}">
+                        {{#str}} contentcommentlike, mod_openstudio {{/str}}
+                    </a>
+                {{/userhasflagged}}
+            </div>
+
+            {{#deleteenable}}
+                <div class="openstudio-comment-action">
+                    <a class="openstudio-comment-delete-link" href="" data-comment-id="{{id}}">
+                        {{#str}} contentcommentsdelete, mod_openstudio {{/str}}
+                    </a>
+                </div>
+            {{/deleteenable}}
+            {{#reportenable}}
+                <div class="openstudio-comment-action">
+                    <a class="openstudio-comment-report-link" href="">
+                        {{#str}} contentcommentsreport, mod_openstudio {{/str}}
+                    </a>
+                </div>
+            {{/reportenable}}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,108 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_openstudio/comment
+
+    Comment template of the OpenStudio UI.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+
+    Example context (json):
+    {
+        "commentform": "<form></form>",
+        "emptycomment": false,
+        "comments": [
+            {
+                "id": "31",
+                "contentid": "20",
+                "userid": "2",
+                "commenttext": "Comment replied",
+                "inreplyto": "23",
+                "timemodified": "5/10/16, 13:27",
+                "fullname": "Admin User",
+                "flagcount": "0",
+                "userhasflagged": "0",
+                "deleteenable": "true",
+                "reportenable": "false",
+                "userpictureurl": "../../../mod/openstudio/pix/people_rgb_32px.svg",
+                "replies": [
+                    {
+                        "id": "31",
+                        "contentid": "20",
+                        "userid": "2",
+                        "commenttext": "Comment replied",
+                        "inreplyto": "23",
+                        "timemodified": "5/10/16, 13:27",
+                        "fullname": "Admin User",
+                        "flagcount": "0",
+                        "userhasflagged": "0",
+                        "deleteenable": "true",
+                        "reportenable": "false",
+                        "userpictureurl": "../../../mod/openstudio/pix/people_rgb_32px.svg"
+                    }
+                ]
+            }
+        ]
+    }
+}}
+<div class="openstudio-content-view-add-comment clearfix">
+
+    <div class="openstudio-comment-thread openstudio-comment-thread-list
+        {{#emptycomment}}
+            openstudio-hidden
+        {{/emptycomment}}
+    ">
+        <div class="openstudio-comment-thread-header">
+            <span>{{#str}} subemailcomments, mod_openstudio {{/str}}</span>
+        </div>
+        <div class="openstudio-comment-thread-body">
+            {{#comments}}
+                {{>mod_openstudio/comment_thread_block}}
+            {{/comments}}
+        </div>
+    </div>
+
+    <input id="id_addcomment" name="addcommentbutton"
+           value="{{#str}} contentcommentsaddnewcomment, mod_openstudio {{/str}}" type="button">
+
+    <div class="openstudio-comment-form">
+        <div class="openstudio-comment-form-content">
+            <div class="openstudio-comment-form-header" data-toggle="collapse"
+                data-target="#openstudio-comment-form-body">
+                <span>{{#str}} contentcommentsformheader, mod_openstudio {{/str}}</span>
+                <div class="openstudio-expand-image">
+                    {{#pix}}
+                        t/expanded, core, {{#str}} commentformcollapse, openstudio {{/str}}
+                    {{/pix}}
+                </div>
+                <div class="openstudio-collapse-image">
+                    {{#pix}}
+                        t/collapsed, core, {{#str}} commentformexpand, openstudio {{/str}}
+                    {{/pix}}
+                </div>
+            </div>
+            <div class="openstudio-comment-form-body" id="openstudio-comment-form-body">
+                {{{commentform}}}
+            </div>
+        </div>
+    </div>
+</div>
