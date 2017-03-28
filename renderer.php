@@ -645,7 +645,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      * @return string The rendered HTML fragment.
      */
     public function content_page($cmid, $permissions, $contentdata, $openstudioid = null) {
-        global $CFG, $PAGE;
+        global $CFG, $PAGE, $OUTPUT;
 
         $contentdata->cmid = $cmid;
         if (!property_exists($contentdata, 'profilebarenable')) {
@@ -677,11 +677,13 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         $flagtotals = flags::count_by_content($contentdata->id, $permissions->activeuserid);
         $flagstatus = flags::get_for_content_by_user($contentdata->id, $permissions->activeuserid);
+        $flagfeedbackstatus = flags::get_for_content_by_user($contentdata->id, $contentdata->userid);
 
         $contentdata->contentactionurl = new moodle_url('/mod/openstudio/redirector.php');
         $contentdata->contentflagfavourite = flags::FAVOURITE;
         $contentdata->contentflagsmile = flags::MADEMELAUGH;
         $contentdata->contentflaginspire = flags::INSPIREDME;
+        $contentdata->contentflagrequestfeedback = flags::NEEDHELP;
         $contentdata->contentfavouritetotal = 0;
         $contentdata->contentsmiletotal = 0;
         $contentdata->contentinspiretotal = 0;
@@ -768,11 +770,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 || $contentdata->contentlockenable;
 
         // Check Request feedback permission.
-        $contentrequestfeedbackenable = false;
-        if ($contentdata->isownedbyviewer && !$contentdata->contentflagrequestfeedbackactive) {
-            $contentrequestfeedbackenable = true;
-        }
-        $contentdata->contentrequestfeedbackenable = $contentrequestfeedbackenable;
+        $contentdata->contentrequestfeedbackenable = $contentdata->isownedbyviewer;
 
         // Check comment permission.
         $contentdata->contentcommentenable = $permissions->addcomment ? true : false;

@@ -608,7 +608,7 @@ div.openstudio-comment-thread-item:nth-last-child(2) {
     display: block;
     width: 30px;
     height: 30px;
-    background-image: url([[pix:openstudio|close_button_rgb_32px]]);
+    background-image: url([[pix:openstudio|close_button_white_rgb_32px]]);
     background-size: 30px 30px;
     float: right;
     background-position: center;
@@ -1525,6 +1525,33 @@ iframe.openstudio-content-view-iframe {
     margin-left: 0;
 }
 
+.openstudio-item-request-feedback {
+    background-color: #0b55a8;
+    height: 22px;
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+}
+
+.openstudio-item-request-feedback img {
+    width: 16px;
+    height: 16px;
+    padding-left: 10px;
+    padding-right: 1px;
+}
+
+.openstudio-item-request-feedback span {
+    color: #ffffff;
+}
+
+.openstudio-item-request-feedback-cancel {
+    display: none;
+}
+
+.openstudio-modal-content .openstudio-item-request-feedback {
+    display: none;
+}
+
 /* Activity. */
 .openstudio-activity-title {
     font-size: 1.28571em;
@@ -1645,6 +1672,7 @@ a.openstudio-actvity-title:hover  {
     width: 580px;
     float: left;
     margin-right: 40px;
+    position: relative;
 }
 
 .openstudio-content-view-secondary {
@@ -1665,8 +1693,7 @@ a.openstudio-actvity-title:hover  {
     width: 100%;
 }
 
-.openstudio-content-view-file img {
-    max-width: 580px;
+.openstudio-content-view-img {
     width: 100%;
 }
 
@@ -2035,6 +2062,7 @@ div.openstudio-content-view-version div:nth-of-type(odd) {
     vertical-align: middle;
     margin: 0px;
     text-decoration: none;
+    height: 32px;
 }
 
 .path-mod-openstudio .openstudio-request-feedback-button:hover,
@@ -2632,6 +2660,11 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     .openstudio-content-view-container {
         padding: 8px 15px 40px;
     }
+
+    .ios .openstudio-content-view-actions-icons-right {
+        float: left;
+        margin-bottom: 20px;
+    }
 }
 
 /* Mobile. */
@@ -3158,7 +3191,6 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
 
     .openstudio-content-view-actions-icons-right {
         float: left;
-        margin-top: 10px;
     }
 
     .openstudio-content-view-tags-container {
@@ -3430,4 +3462,9 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     /**
      * End comment feature
      */
+
+    .ios .openstudio-content-view-actions-icons-right {
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
 }

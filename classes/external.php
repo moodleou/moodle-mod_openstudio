@@ -278,6 +278,10 @@ class mod_openstudio_external extends external_api {
                         $logaction = 'content_inspire_flagged';
                         $logtext = 'content inspire flagged';
                         break;
+                    case flags::NEEDHELP:
+                        $logaction = 'content_helpme_flagged';
+                        $logtext = 'content request feedback flagged';
+                        break;
                 }
 
                 if ($logaction !== false) {
@@ -287,6 +291,7 @@ class mod_openstudio_external extends external_api {
 
             }
 
+            $iscontentflagrequestfeedback = false;
             $total = flags::count_for_content($params['cid'], $params['fid']) + 0;
             switch ($params['fid']) {
                 case flags::FAVOURITE:
@@ -331,6 +336,21 @@ class mod_openstudio_external extends external_api {
                             break;
                     }
                     break;
+                case flags::NEEDHELP:
+                    $iscontentflagrequestfeedback = true;
+                    switch ($mode) {
+                        case 'on':
+                            $flagremoveclass = 'openstudio-item-request-feedback-cancel';
+                            $flagaddclass = 'openstudio-item-request-feedback';
+                            $flagtext = get_string('contentflagaskforhelpcancel', 'openstudio');
+                            break;
+                        case 'off':
+                            $flagremoveclass = 'openstudio-item-request-feedback';
+                            $flagaddclass = 'openstudio-item-request-feedback-cancel';
+                            $flagtext = get_string('contentflagaskforhelp', 'openstudio');
+                            break;
+                    }
+                    break;
             }
         } else {
             $warnings[] = array(
@@ -347,6 +367,7 @@ class mod_openstudio_external extends external_api {
         $results['flagremoveclass'] = $flagremoveclass;
         $results['flagaddclass'] = $flagaddclass;
         $results['fid'] = $params['fid'];
+        $results['iscontentflagrequestfeedback'] = $iscontentflagrequestfeedback;
 
         return $results;
     }
@@ -364,6 +385,7 @@ class mod_openstudio_external extends external_api {
                 'flagremoveclass' => new external_value(PARAM_TEXT, 'flag remove class'),
                 'flagaddclass' => new external_value(PARAM_TEXT, 'flag add new class'),
                 'fid' => new external_value(PARAM_INT, 'flag ID'),
+                'iscontentflagrequestfeedback' => new external_value(PARAM_BOOL, 'is content flag request feedback')
         ));
     }
 

@@ -380,6 +380,7 @@ class renderer_utils {
                 case content::TYPE_DOCUMENT:
                 case content::TYPE_URL_DOCUMENT:
                 case content::TYPE_URL_DOCUMENT_DOC:
+                    $contenttypeuseimagedefault = true;
                     switch ($contentdata->mimetype) {
                         case 'application/vnd.oasis.opendocument.text':
                             $contenttypeiconurl = $OUTPUT->pix_url('word_rgb_32px', 'openstudio');
@@ -388,7 +389,7 @@ class renderer_utils {
                             $contenttypeiconurl = $OUTPUT->pix_url('pdf_rgb_32px', 'openstudio');
                             break;
                         default:
-                            $contenttypeiconurl = $OUTPUT->pix_url('text_doc_rgb_32px', 'openstudio');
+                            $contenttypeiconurl = $OUTPUT->pix_url('word_rgb_32px', 'openstudio');
                             break;
                     }
                     break;
@@ -670,7 +671,7 @@ class renderer_utils {
                         $contenttypeimage = $OUTPUT->pix_url('pdf_rgb_32px', 'openstudio');
                         break;
                     default:
-                        $contenttypeimage = $OUTPUT->pix_url('text_doc_rgb_32px', 'openstudio');
+                        $contenttypeimage = $OUTPUT->pix_url('word_rgb_32px', 'openstudio');
                         break;
                 }
                 break;

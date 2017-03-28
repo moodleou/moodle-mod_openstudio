@@ -49,6 +49,9 @@ define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/templates'],
                 t.doFlagContent($(this));
             });
 
+            $(".openstudio-request-feedback-button").bind('click', function() {
+                t.doFlagContent($(this));
+            });
         },
 
         /**
@@ -138,8 +141,17 @@ define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/templates'],
                         // Update new flag content.
                         var flagcontainer = $('#content_view_icon_' + res.fid);
                         flagcontainer.attr('data-mode', res.mode);
-                        flagcontainer.html(res.flagtext);
-                        flagcontainer.removeClass(res.flagremoveclass).addClass(res.flagaddclass);
+
+                        // Check if flag a request feedback.
+                        if (res.iscontentflagrequestfeedback) {
+                            flagcontainer.html(res.flagtext);
+                            $('#openstudio_item_request_feedback')
+                                .removeClass(res.flagremoveclass)
+                                .addClass(res.flagaddclass);
+                        } else {
+                            flagcontainer.html(res.flagtext);
+                            flagcontainer.removeClass(res.flagremoveclass).addClass(res.flagaddclass);
+                        }
                     }
                 })
                 .fail(function(ex) {

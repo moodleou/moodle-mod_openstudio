@@ -325,9 +325,11 @@ if ($finalviewpermissioncheck) {
             $content->viewuserworkurl = new moodle_url('/mod/openstudio/view.php',
                     array('id' => $id, 'vuid' => $content->userid, 'vid' => content::VISIBILITY_PRIVATE));
 
-            $user = studio_api_user_get_user_by_id($content->userid);
-            $picture = new user_picture($user);
-            $content->userpictureurl = $picture->get_url($PAGE)->out(false);
+            if ($content->userid) {
+                $user = studio_api_user_get_user_by_id($content->userid);
+                $picture = new user_picture($user);
+                $content->userpictureurl = $picture->get_url($PAGE)->out(false);
+            }
 
             if (!$content->timemodified) {
                 $content->contentediturl = new moodle_url('/mod/openstudio/contentedit.php',

@@ -75,6 +75,16 @@
                     <div><a href="{{contentfileurl}}">{{#str}} contentcontentdownload, mod_openstudio {{/str}}</a></div>
                 {{/contenttypedownloadfile}}
 
+                <div id="openstudio_item_request_feedback"
+                     class="{{#contentflagrequestfeedbackactive}}
+                                openstudio-item-request-feedback
+                            {{/contentflagrequestfeedbackactive}}
+                            {{^contentflagrequestfeedbackactive}}
+                                openstudio-item-request-feedback-cancel
+                            {{/contentflagrequestfeedbackactive}}">
+                    <span>{{#pix}} request_feedback_white_rgb_32px, mod_openstudio, {{#str}} contentneedhelp, mod_openstudio {{/str}} {{/pix}}</span>
+                    <span>{{#str}} contentneedhelp, mod_openstudio {{/str}}</span>
+                </div>
                 {{#contenttypeuseimagedefault}}
                     <div class="openstudio-content-view-type-img-box">
                         <img class="openstudio-content-view-type-img"
@@ -88,7 +98,7 @@
 
                 {{#contenttypeimage}}
                     <a href="{{contentfileurl}}">
-                        <img src="{{{contentfileurl}}}" alt="{{{contentdatatitle}}}">
+                        <img src="{{{contentfileurl}}}" class="openstudio-content-view-img" alt="{{{contentdatatitle}}}">
                     </a>
                 {{/contenttypeimage}}
 
@@ -143,10 +153,10 @@
             <div class="openstudio-content-view-animation-icons clearfix">
                 <div class="openstudio-content-view-animation-icons-left">
                     <a id="content_view_icon_{{contentflagfavourite}}"
-                        data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagfavourite}}"
-                        data-mode="{{#contentflagfavouriteactive}}off{{/contentflagfavouriteactive}}
-                                    {{^contentflagfavouriteactive}}on{{/contentflagfavouriteactive}}"
-                        class="openstudio-content-view-flag-icon openstudio-content-view-icon-favourite
+                       data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagfavourite}}"
+                       data-mode="{{#contentflagfavouriteactive}}off{{/contentflagfavouriteactive}}
+                           {{^contentflagfavouriteactive}}on{{/contentflagfavouriteactive}}"
+                       class="openstudio-content-view-flag-icon openstudio-content-view-icon-favourite
                                     {{#contentflagfavouriteactive}}
                                         openstudio-content-view-icon-favourite-active
                                     {{/contentflagfavouriteactive}}">
@@ -156,10 +166,10 @@
                         {{/str}}
                     </a>
                     <a id="content_view_icon_{{contentflagsmile}}"
-                        data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagsmile}}"
-                        data-mode="{{#contentflagsmileactive}}off{{/contentflagsmileactive}}
+                       data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagsmile}}"
+                       data-mode="{{#contentflagsmileactive}}off{{/contentflagsmileactive}}
                            {{^contentflagsmileactive}}on{{/contentflagsmileactive}}"
-                        class="openstudio-content-view-flag-icon openstudio-content-view-icon-participation
+                       class="openstudio-content-view-flag-icon openstudio-content-view-icon-participation
                                     {{#contentflagsmileactive}}
                                         openstudio-content-view-icon-participation-active
                                     {{/contentflagsmileactive}}">
@@ -168,10 +178,10 @@
                         {{/str}}
                     </a>
                     <a id="content_view_icon_{{contentflaginspire}}"
-                        data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflaginspire}}"
-                        data-mode="{{#contentflaginspireactive}}off{{/contentflaginspireactive}}
+                       data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflaginspire}}"
+                       data-mode="{{#contentflaginspireactive}}off{{/contentflaginspireactive}}
                            {{^contentflaginspireactive}}on{{/contentflaginspireactive}}"
-                        class="openstudio-content-view-flag-icon openstudio-content-view-icon-inspiration
+                       class="openstudio-content-view-flag-icon openstudio-content-view-icon-inspiration
                                     {{#contentflaginspireactive}}
                                         openstudio-content-view-icon-inspiration-active
                                     {{/contentflaginspireactive}}">
@@ -179,7 +189,7 @@
                             contentflagxinspired, mod_openstudio, { "number": {{#quote}}{{contentinspiretotal}}{{/quote}} }
                         {{/str}}
                     </a>
-               </div>
+                </div>
                 <div class="openstudio-content-view-animation-icons-right">
                     {{#contentcopyenable}}
                         <span class="openstudio-content-view-flag-icon openstudio-content-view-icon-copies-active">
@@ -189,7 +199,7 @@
                         </span>
                     {{/contentcopyenable}}
                     <span
-                        class="openstudio-content-view-flag-icon openstudio-content-view-icon-views
+                            class="openstudio-content-view-flag-icon openstudio-content-view-icon-views
                                     {{#contentviewtotal}}openstudio-content-view-icon-views-active{{/contentviewtotal}}">
                         {{#str}}
                             contentflagxviews, mod_openstudio, { "number": {{#quote}}{{contentviewtotal}}{{/quote}} }
@@ -220,8 +230,13 @@
                 {{/actionenable}}
                 <div class="openstudio-content-view-actions-icons-right">
                     {{#contentrequestfeedbackenable}}
-                        <input id="id_requestfeedbackbutton" class="openstudio-request-feedback-button"
-                               value="{{#str}}contentflagaskforhelp, mod_openstudio{{/str}}" type="button">
+                        <button id="content_view_icon_{{contentflagrequestfeedback}}" class="openstudio-request-feedback-button"
+                                data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagrequestfeedback}}"
+                                data-mode="{{#contentflagrequestfeedbackactive}}off{{/contentflagrequestfeedbackactive}}
+                                {{^contentflagrequestfeedbackactive}}on{{/contentflagrequestfeedbackactive}}">
+                            {{#contentflagrequestfeedbackactive}}{{#str}}contentflagaskforhelpcancel, mod_openstudio{{/str}}{{/contentflagrequestfeedbackactive}}
+                            {{^contentflagrequestfeedbackactive}}{{#str}}contentflagaskforhelp, mod_openstudio{{/str}}{{/contentflagrequestfeedbackactive}}
+                        </button>
                     {{/contentrequestfeedbackenable}}
                 </div>
             </div>
@@ -255,7 +270,7 @@
                     <span>{{#str}} contentviewpostarchive, mod_openstudio {{/str}}</span>
                 </div>
                 <div id="openstudio_content_view_post_archive"
-                        class="openstudio-content-view-block-content openstudio-content-view-version collapse clearfix">
+                     class="openstudio-content-view-block-content openstudio-content-view-version collapse clearfix">
                     {{#contentversions}}
                         <div class="openstudio-content-view-version-detail clearfix">
                             <span class="openstudio-content-view-version-img"><img src="{{{contenttypeiconurl}}}"></span>
@@ -267,7 +282,7 @@
                                 <a href="{{{contentviewversionlink}}}" class="openstudio-content-view-version-button-link">
                                 <input id="id_viewversionbutton" name="viewversionbutton"
                                        class="openstudio-content-view-version-button"
-                                   value="{{#str}}contentactionview, mod_openstudio{{/str}}" type="button">
+                                       value="{{#str}}contentactionview, mod_openstudio{{/str}}" type="button">
                                 </a>
                                 {{#contentdeleteenable}}
                                     <input id="id_deleteversionbutton" name="deleteversionbutton"

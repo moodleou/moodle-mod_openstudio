@@ -449,7 +449,7 @@ Feature: Create and edit contents detail
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
         And I follow "Shared content > My Module" in the openstudio navigation
-        And I click on "div.openstudio-grid-item-content-preview > a > img" "css_element"
+        And I follow "TestContentDetails 9"
         And I should see "Teacher 1"
         And I should see "TestContentDetails 9"
         And I should see "Owner of this post"
@@ -466,7 +466,7 @@ Feature: Create and edit contents detail
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
         And I follow "Shared content > My Module" in the openstudio navigation
-        And I click on "div.openstudio-grid-item-content-preview > a > img" "css_element"
+        And I follow "TestContentDetails 9"
         And I should see "Teacher 1"
         And I should see "TestContentDetails 9"
         And I should see "Owner of this post"
@@ -483,7 +483,7 @@ Feature: Create and edit contents detail
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
         And I follow "Shared content > My Module" in the openstudio navigation
-        And I click on "div.openstudio-grid-item-content-preview > a > img" "css_element"
+        And I follow "TestContentDetails 9"
         And I should see "Teacher 1"
         And I should see "TestContentDetails 9"
         And I should see "Owner of this post"
@@ -492,3 +492,47 @@ Feature: Create and edit contents detail
         And I should see "TestContentDetails 9"
         And I scroll to the bottom of the OU study planner
         And I should see "2 views"
+
+    Scenario: Request feedback on students work
+        When I am on site homepage
+        And I follow "Course 1"
+        And I follow "Test Open Studio name 1"
+        And the following open studio "contents" exist:
+            | openstudio | user     | name                         | description                  | file                                              | visibility |
+            | OS1        | teacher1 | Test My Content Details View | Test My Content Details View | mod/openstudio/tests/importfiles/test1.jpg        | module     |
+        And I follow "Shared content > My Module" in the openstudio navigation
+        And I follow "Test My Content Details View"
+        And I scroll to the bottom of the OU study planner
+        And "Request feedback" "button" should exist
+
+        # Test show Requested feedback
+        And I press "Request feedback"
+        And "Cancel feedback request" "button" should exist
+        And "Request feedback" "button" should not exist
+        And I should see "Feedback requested" in the "div#openstudio_item_request_feedback" "css_element"
+        And the "class" attribute of "div#openstudio_item_request_feedback" "css_element" should contain "openstudio-item-request-feedback"
+
+        # Cancel Requested feedback
+        And I press "Cancel feedback request"
+        And I should not see "Feedback requested" in the "div#openstudio_item_request_feedback" "css_element"
+        And the "class" attribute of "div#openstudio_item_request_feedback" "css_element" should contain "openstudio-item-request-feedback-cancel"
+
+        # switch to student1
+        And I am on site homepage
+        And I log out
+        And I log in as "student1"
+        And I follow "Course 1"
+        And I follow "Test Open Studio name 1"
+        And I follow "Shared content > My Module" in the openstudio navigation
+        And I follow "Test My Content Details View"
+        And "Request feedback" "button" should not exist
+
+        # switch to student2
+        And I am on site homepage
+        And I log out
+        And I log in as "student2"
+        And I follow "Course 1"
+        And I follow "Test Open Studio name 1"
+        And I follow "Shared content > My Module" in the openstudio navigation
+        And I follow "Test My Content Details View"
+        And "Request feedback" "button" should not exist
