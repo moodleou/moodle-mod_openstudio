@@ -231,6 +231,77 @@ class mod_openstudio_external extends external_api {
      *
      * @return external_function_parameters
      */
+    public static function delete_version_parameters() {
+        return new external_function_parameters(array(
+                'cmid' => new external_value(PARAM_INT, 'Course module ID'),
+                'cid' => new external_value(PARAM_INT, 'Content ID'),
+                'cvid' => new external_value(PARAM_INT, 'Content version ID'))
+        );
+    }
+
+    /**
+     * Flag a content.
+     *
+     * @param int $cmid Course module ID
+     * @param int $cid Content ID
+     * @param int $cvid Content version ID
+     * @return array
+     *  [
+     *      success: boolean,
+     *      warning: external_warnings object,
+     *  ]
+     */
+    public static function delete_version($cmid, $cid, $cvid) {
+        global $USER;
+
+        $context = context_module::instance($cmid);
+        external_api::validate_context($context);
+
+        $params = self::validate_parameters(self::delete_version_parameters(), array(
+                'cmid' => $cmid,
+                'cid' => $cid,
+                'cvid' => $cvid));
+
+        $results = array();
+        $success = false;
+
+        $coursedata = util::render_page_init($params['cmid'], array('mod/openstudio:view'));
+        $cm = $coursedata->cm;
+        $permissions = $coursedata->permissions;
+        $userid = $USER->id;
+
+        $contentdata = content::get($cid);
+        $contetversiondata = contentversion::get($cvid, $userid, $cm);
+
+        if ($contetversiondata && $contentdata) {
+            $actionallowed = ($contentdata->userid == $userid) && $permissions->addcontent;
+            $actionallowed = $actionallowed || $permissions->managecontent;
+            if ($actionallowed) {
+                $success = content::version_delete($userid, $cvid);
+            }
+        }
+
+        $results['success'] = $success;
+
+        return $results;
+    }
+
+    /**
+     * Returns description of method result value
+     *
+     * @return external_description
+     */
+    public static function delete_version_returns() {
+        return new external_single_structure(array(
+                'success' => new external_value(PARAM_BOOL, 'delete successfully'))
+        );
+    }
+
+    /**
+     * Returns description of method parameters
+     *
+     * @return external_function_parameters
+     */
     public static function flag_content_parameters() {
         return new external_function_parameters(array(
                 'cmid' => new external_value(PARAM_INT, 'Course module ID'),
@@ -564,7 +635,7 @@ class mod_openstudio_external extends external_api {
     public static function add_comment_returns() {
         return new external_single_structure(array(
                 'commentid' => new external_value(PARAM_INT, 'Added comment ID'),
-                'commenthtml' =>  new external_value(PARAM_RAW, 'Comment content HTML'))
+                'commenthtml' => new external_value(PARAM_RAW, 'Comment content HTML'))
         );
     }
 

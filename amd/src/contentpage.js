@@ -24,34 +24,68 @@
 /**
  * @module mod_oucontent/contentpage
  */
-define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/templates'],
-    function($, Ajax, Str, Modal, Templates) {
-    var t;
+define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/templates', 'core/config', 'require'],
+    function($, Ajax, Str, Modal, Templates, Config, require) {
+        var t;
 
-    t = {
+        t = {
 
-        init: function() {
-            $.fx.off = true;
+            /**
+             * M.core.dialog instance
+             */
+            dialogue: null,
 
-            // Maximize feature.
-            t.createMaximizeModal();
-            $('#openstudio_content_view_maximize').on('click', t.toogleContentModal);
-            $('body').delegate('#openstudio_content_view_minimize', 'click', t.toogleContentModal);
-            $('body').delegate('.openstudio-modal-content-close', 'click', t.toogleContentModal);
+            delete_item: null,
 
-            var contentViewMapCanvas = $('#openstudio_content_view_map_canvas');
+            /**
+             * Module config. Passed from server side.
+             */
+            mconfig: null,
 
-            if (contentViewMapCanvas.length) {
-                t.showGoogleMap(contentViewMapCanvas);
-            }
+            init: function(options) {
+                $.fx.off = true;
 
-            $(".openstudio-content-view-flag-icon").bind('click', function() {
-                t.doFlagContent($(this));
-            });
+                t.mconfig = options;
 
-            $(".openstudio-request-feedback-button").bind('click', function() {
-                t.doFlagContent($(this));
-            });
+                Y.use('moodle-core-notification-dialogue', function() {
+                    require(['mod_openstudio/osdialogue'], function(osDialogue){
+                        t.archiveDialogue = t.createArchiveDialogue(osDialogue);
+                        t.deleteContentDialogue = t.createDeleteContentDialogue(osDialogue);
+                    });
+                });
+                
+                // Maximize feature.
+                t.createMaximizeModal();
+                $('#openstudio_content_view_maximize').on('click', t.toogleContentModal);
+                $('body').delegate('#openstudio_content_view_minimize', 'click', t.toogleContentModal);
+                $('body').delegate('.openstudio-modal-content-close', 'click', t.toogleContentModal);
+
+                var contentViewMapCanvas = $('#openstudio_content_view_map_canvas');
+
+                if (contentViewMapCanvas.length) {
+                    t.showGoogleMap(contentViewMapCanvas);
+                }
+
+                // Click event on archive button.
+                $('#id_archivebutton').on('click', function(e) {
+                    e.preventDefault();
+                    t.archiveDialogue.show();
+                });
+
+                // Click event on delete button.
+                $('.openstudio-delete-content-version').on('click', function(e) {
+                    e.preventDefault();
+                    t.delete_item = $(this);
+                    t.deleteContentDialogue.show();
+                });
+
+                $(".openstudio-content-view-flag-icon").bind('click', function() {
+                    t.doFlagContent($(this));
+                });
+
+                $(".openstudio-request-feedback-button").bind('click', function() {
+                    t.doFlagContent($(this));
+                });
         },
 
         /**
@@ -157,6 +191,199 @@ define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/templates'],
                 .fail(function(ex) {
                     window.console.error('Error saving social flag ' + ex.message);
                 });
+        },
+
+        /**
+         * Set header for dialog
+         * @method setHeader
+         */
+        setHeader: function(dialogue, label) {
+            Str
+                .get_string(label, 'mod_openstudio')
+                .done(function(s) {
+                    dialogue.set('headerContent',
+                        '<span class="openstudio-dialogue-common-header">' + s + '</span>');
+                });
+        },
+
+        /**
+         * Set body for dialog
+         * @method setBody
+         */
+        setBody: function(dialogue, label) {
+            Str
+                .get_string(label, 'mod_openstudio')
+                .done(function(s) {
+                    dialogue.set('bodyContent',
+                        '<span>' + s + '</span>');
+                });
+        },
+
+        /**
+         * Create archive dialogue and some events on it.
+         *
+         * @return M.core.dialog instance
+         * @method createArchiveDialogue
+         * @return M.core.dialogue
+         */
+        createArchiveDialogue: function(osDialogue) {
+            var dialogue = new osDialogue({
+                closeButton: true,
+                visible: false,
+                centered: true,
+                responsive: true,
+                responsiveWidth: 767,
+                modal: true,
+                focusOnPreviousTargetAfterHide: true,
+                width: 521
+            });
+
+
+            t.setHeader(dialogue, 'archivedialogheader');
+            t.setBody(dialogue, 'modulejsdialogcontentarchiveconfirm');
+
+            // Button [Archive]
+            var archiveBtnProperty = {
+                name: 'archive',
+                classNames: 'openstudio-archive-yes-btn',
+                events: {
+                    click: function() {
+                        t.redirectPostRequest({
+                            url: $('#contentversionlink').val(),
+                            data: {
+                                archiveversion: 1,
+                            }
+                        });
+                    }
+                }
+            };
+
+            // Button [cancel]
+            var cancelBtnProperty = {
+                name: 'cancel',
+                classNames: 'openstudio-archive-no-btn',
+                action: 'hide'
+            };
+
+            Str
+                .get_strings([
+                    {key: 'contentactionarchivepost', component: 'mod_openstudio'},
+                    {key: 'modulejsdialogcancel', component: 'mod_openstudio'}
+                ])
+                .done(function(s) {
+                    archiveBtnProperty.label = s[0];
+                    cancelBtnProperty.label = s[1];
+
+                    dialogue.addButton(archiveBtnProperty, ['footer']);
+                    dialogue.addButton(cancelBtnProperty, ['footer']);
+                });
+
+            return dialogue;
+        },
+
+        /**
+         * Create delete content dialogue and some events on it.
+         *
+         * @return M.core.dialog instance
+         * @method createDeleteContentDialogue
+         * @return M.core.dialogue
+         */
+        createDeleteContentDialogue: function(osDialogue) {
+            var dialogue = new osDialogue({
+                closeButton: true,
+                visible: false,
+                centered: true,
+                responsive: true,
+                responsiveWidth: 767,
+                modal: true,
+                focusOnPreviousTargetAfterHide: true,
+                width: 521
+            });
+
+            t.setHeader(dialogue, 'deletearchiveversionheader');
+            t.setBody(dialogue, 'deletearchiveversionheaderconfirm');
+
+            // Button [delete]
+            var deleteBtnProperty = {
+                name: 'delete',
+                classNames: 'openstudio-delete-btn',
+                events: {
+                    click: function() {
+                        var delete_item = t.delete_item;
+                        var promises = Ajax.call([{
+                            methodname: 'mod_openstudio_external_delete_version',
+                            args: {
+                                cmid: delete_item.attr('data-cmid'),
+                                cid: delete_item.attr('data-cid'),
+                                cvid: delete_item.attr('data-cvid')
+                            }
+                        }]);
+
+                        promises[0]
+                            .done(function(res) {
+                                $('.openstudio-cancel-btn').trigger('click');
+
+                                // Redirect to current version content when delete from view version detail.
+                                if ($('#contentcurrenteversionurl').length > 0) {
+                                    window.location.href = $('#contentcurrenteversionurl').val();
+                                } else {
+                                    // Remove from post type list.
+                                    $('#content_version_id_' + delete_item.attr('data-cvid')).remove();
+                                }
+                            })
+                            .fail(function(ex) {
+                                window.console.error('Error delete content version' + ex.message);
+                            });
+                    }
+                }
+            };
+
+            // Button [cancel]
+            var cancelBtnProperty = {
+                name: 'cancel',
+                classNames: 'openstudio-cancel-btn',
+                action: 'hide'
+            };
+
+            Str
+                .get_strings([
+                    {key: 'modulejsdialogdelete', component: 'mod_openstudio'},
+                    {key: 'modulejsdialogcancel', component: 'mod_openstudio'}
+                ])
+                .done(function(s) {
+                    deleteBtnProperty.label = s[0];
+                    cancelBtnProperty.label = s[1];
+
+                    dialogue.addButton(deleteBtnProperty, ['footer']);
+                    dialogue.addButton(cancelBtnProperty, ['footer']);
+                });
+
+            return dialogue;
+        },
+
+        /**
+         * Redirect to url with post method.
+         * @method redirectPostRequest
+         * @param {JSON} options Request data
+         */
+        redirectPostRequest: function(options) {
+            var form = $('<form></form>');
+            form.attr({
+                'method': 'POST',
+                'action': options.url,
+                'style': 'display: none;'
+            });
+
+            $.each(options.data, function(key, value) {
+                var field = $('<input/>');
+                field.attr("type", "hidden");
+                field.attr("name", key);
+                field.attr("value", value);
+
+                form.append(field);
+            });
+
+            $(form).appendTo('body').submit();
         }
     };
 

@@ -26,6 +26,15 @@ defined('MOODLE_INTERNAL') || die();
 
 // We defined the web service functions to install.
 $functions = array(
+    'mod_openstudio_external_delete_version' => array(
+        'classname' => 'mod_openstudio_external',
+        'methodname' => 'delete_version',
+        'description' => 'Delete content version',
+        'type' => 'write',
+        'ajax' => true,
+        'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
+        'capabilities' => 'mod/openstudio:view'
+    ),
     'mod_openstudio_external_flag_content' => array(
         'classname' => 'mod_openstudio_external',
         'methodname' => 'flag_content',

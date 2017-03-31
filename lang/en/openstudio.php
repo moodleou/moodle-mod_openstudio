@@ -494,9 +494,14 @@ $string['contentactionview'] = 'View';
 $string['contentactionolderversion'] = 'Previous<span class="accesshide"> version</span>';
 $string['contentactionnewerversion'] = 'Next<span class="accesshide"> version</span>';
 $string['contentactionallversions'] = 'All versions';
-$string['contentactionreturntomainversion'] = 'Return to main version';
+$string['contentactionreturntomainversion'] = 'Current version';
 $string['contentactionarchivepost'] = 'Archive post';
 $string['contentactionreportpost'] = 'Report post';
+$string['contentactioneditpost'] = 'Edit this post';
+
+$string['archivedialogheader'] = 'Archive post';
+$string['deletearchiveversionheader'] = 'Delete archive version?';
+$string['deletearchiveversionheaderconfirm'] = 'Are you sure you want to delete this version from the archive?';
 
 $string['contentclicktoview'] = 'Click to view content';
 $string['contentclicktoedit'] = 'Click to edit';
@@ -835,7 +840,7 @@ $string['modulejsdialogcommentdeleteconfirm'] = 'Are you sure you want to delete
 $string['modulejsdialogcontentdeleteconfirm'] = 'Are you sure you want to delete the content from this content?';
 $string['modulejsdialogcontentdeleteemptyconfirm'] = 'Are you sure you want to delete the content from this content? <br /><br />Select Empty to delete the content content, all content versions and content comments.';
 $string['modulejsdialogcontentversiondeleteconfirm'] = 'Are you sure you want to delete the content from this content, the content\'s previous content versions and all the content\'s comments?  This action cannot be undone.';
-$string['modulejsdialogcontentarchiveconfirm'] = 'Are you sure you want to archive the content content?';
+$string['modulejsdialogcontentarchiveconfirm'] = 'Are you sure you want to archive the content?';
 $string['modulejsdialogsubscribe'] = 'Subscribe';
 $string['modulejsdialogsubscriptioncreated'] = 'Subscription created!';
 $string['modulejsdialogsubscriptionupdated'] = 'Subscription updated!';

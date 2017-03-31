@@ -239,20 +239,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         $data->notificationicon = $OUTPUT->pix_url('notifications_rgb_32px', 'openstudio');
         $data->notifications = [];
-        $notifications = notifications::get_current($cm->instance, $USER->id, defaults::NOTIFICATIONLIMITMAX);
-        foreach ($notifications as $notification) {
-            $data->notifications[] = $notification->export_for_template($this->output);
-        }
-        $data->notificationnumber = array_reduce($notifications, function($carry, notification $notification) {
-            $carry += $notification->timeread ? 0 : 1;
-            return $carry;
-        });
-        $stopstring = get_string('stopnotificationsforcontent', 'mod_openstudio');
-        $stopicon = new \pix_icon('stop_notification', $stopstring, 'mod_openstudio', [
-            'width' => 16,
-            'height' => 16
-        ]);
-        $data->notificationstopicon = $stopicon->export_for_template($this->output);
+
 
         $addtodashboard = block_externaldashboard_backend::render_favourites_button($PAGE->cm, false);
         $data->addtodashboard = $addtodashboard;
@@ -725,32 +712,109 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $contentdata = renderer_utils::profile_bar($permissions, $openstudioid, $contentdata);
         }
 
-        $contentdata = renderer_utils::content_details($cmid, $permissions, $contentdata, false);
+        $contentdata = renderer_utils::content_details($cmid, $permissions, $contentdata, $contentdata->iscontentversion);
+       
+        // Not need generate full data for a content version.
+        if (!$contentdata->iscontentversion) {
+            $tagsraw = array();
+            if (count($contentdata->tagsraw) > 0) {
+                foreach ($contentdata->tagsraw as $contenttag) {
+                    $taglink = new moodle_url('/mod/openstudio/search.php',
+                        array('id' => $cmid,
+                            'searchtext' => 'tag:'
+                                . str_replace(' ', '', $contenttag->name)));
 
-        $tagsraw = array();
-        if (count($contentdata->tagsraw) > 0) {
-            foreach ($contentdata->tagsraw as $contenttag) {
-                $taglink = new moodle_url('/mod/openstudio/search.php',
-                    array('id' => $cmid,
-                        'searchtext' => 'tag:'
-                            . str_replace(' ', '', $contenttag->name)));
-
-                $tagsraw[] = (object) [
+                    $tagsraw[] = (object) [
                         'taglink' => $taglink->out(false),
                         'tagname' => $contenttag->rawname
                     ];
+                }
+            }
+
+            $contentdata->tagsraw = $tagsraw;
+
+            // Generate content flags.
+            $contentdata = renderer_utils::content_flags($cmid, $permissions, $contentdata);
+
+            // Process lock.
+            renderer_utils::process_content_lock($contentdata, $permissions, $cmid);
+
+            $contentexifinfo = array();
+            $contentmapenable = false;
+            $contentmetadataenable = false;
+            $metadatamake = '';
+            $metadatamodel = '';
+            $metadatafocal = '';
+            $metadataexposure = '';
+            $metadataaperture = '';
+            $metadataiso = '';
+            $contentgpslat = '';
+            $contentgpslng = '';
+            if ($contentdata->contenttype == content::TYPE_IMAGE) {
+                $contentexifinfo = content::get_image_exif_data(
+                        $permissions->activecmcontextid , 'mod_openstudio', 'content',
+                        $contentdata->fileid, '/', $contentdata->content);
+
+                // Show image GPS data if user requested it and it is available.
+                if (($contentdata->showextradata & content::INFO_GPSDATA) && !empty($contentexifinfo['GPSData'])) {
+                    $contentmapenable = true;
+                    $contentgpslat = $contentexifinfo['GPSData']['lat'];
+                    $contentgpslng = $contentexifinfo['GPSData']['lng'];
+                }
+
+                // Show image EXIF metadata if user requested it and it is available.
+                if ($contentdata->showextradata & content::INFO_IMAGEDATA) {
+                    $metadatamake = empty($contentexifinfo['Make']) ? '' : $contentexifinfo['Make'];
+
+                    if (strlen($metadatamake) < 2) {
+                        $metadatamake = empty($contentexifinfo['UndefinedTag:0xA433']) ? '' : $contentexifinfo['UndefinedTag:0xA433'];
+                    }
+
+                    $metadatamodel = empty($contentexifinfo['Model']) ? '' : $contentexifinfo['Model'];
+
+                    if (strlen($metadatamodel) < 2) {
+                        $metadatamodel = empty($contentexifinfo['UndefinedTag:0xA434']) ? '' : $contentexifinfo['UndefinedTag:0xA434'];
+                    }
+
+                    $metadatafocal = empty($contentexifinfo['FocalLengthIn35mmFilm']) ? '' : $contentexifinfo['FocalLengthIn35mmFilm'];
+
+                    $metadataexposure = empty($contentexifinfo['ExposureTime']) ? '' : $contentexifinfo['ExposureTime'];
+
+                    if (!empty($contentexifinfo['COMPUTED'])
+                        && !empty($contentexifinfo['COMPUTED']['ApertureFNumber'])) {
+                        $metadataaperture = $contentexifinfo['COMPUTED']['ApertureFNumber'];
+                    } else {
+                        $metadataaperture = empty($contentexifinfo['FNumber']) ? '' : $contentexifinfo['FNumber'];
+
+                    }
+
+                    $metadataiso = empty($contentexifinfo['ISOSpeedRatings']) ? '' : $contentexifinfo['ISOSpeedRatings'];
+
+                    if (!empty($metadatamake)
+                        || !empty($metadatamodel)
+                        || !empty($metadatafocal)
+                        || !empty($metadataexposure)
+                        || !empty($metadataaperture)
+                        || !empty($metadataiso)) {
+                        $contentmetadataenable = true;
+                    }
+                }
+
+                $contentdata->metadatamake = $metadatamake;
+                $contentdata->metadatamodel = $metadatamodel;
+                $contentdata->metadatafocal = $metadatafocal;
+                $contentdata->metadataexposure = $metadataexposure;
+                $contentdata->metadataaperture = $metadataaperture;
+                $contentdata->metadataiso = $metadataiso;
+                $contentdata->contentmetadataenable = $contentmetadataenable;
+                $contentdata->contentgpslat = $contentgpslat;
+                $contentdata->contentgpslng = $contentgpslng;
+                $contentdata->contentmapenable = $contentmapenable;
             }
         }
 
-        $contentdata->tagsraw = $tagsraw;
-
-        // Generate content flags.
-        $contentdata = renderer_utils::content_flags($cmid, $permissions, $contentdata);
-
         // Process delete.
         $deleteenable = renderer_utils::process_content_delete($contentdata, $permissions, $cmid);
-        // Process lock.
-        renderer_utils::process_content_lock($contentdata, $permissions, $cmid);
 
         // Check edit content permission.
         $contenteditenable = $deleteenable;
@@ -758,8 +822,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $contenteditlink = new moodle_url('/mod/openstudio/contentedit.php', $editparams);
 
         if (($contentdata->l1id > 0) || ($contentdata->l1id == 0) || $permissions->managecontent) {
-            if (studio_api_lock_slot_show_crud($contentdata, $permissions)
-                || $permissions->managecontent) {
+            if (studio_api_lock_slot_show_crud($contentdata, $permissions) || $permissions->managecontent) {
                 $contentdeleteenable = true;
             }
         }
@@ -772,83 +835,13 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 || $contentdata->contentlockenable;
 
         // Check comment permission.
-        $contentdata->contentcommentenable = $permissions->addcomment ? true : false;
-
-        $contentexifinfo = array();
-        $contentmapenable = false;
-        $contentmetadataenable = false;
-        $metadatamake = '';
-        $metadatamodel = '';
-        $metadatafocal = '';
-        $metadataexposure = '';
-        $metadataaperture = '';
-        $metadataiso = '';
-        $contentgpslat = '';
-        $contentgpslng = '';
-        if ($contentdata->contenttype == content::TYPE_IMAGE) {
-            $contentexifinfo = content::get_image_exif_data(
-                    $permissions->activecmcontextid , 'mod_openstudio', 'content',
-                    $contentdata->fileid, '/', $contentdata->content);
-
-            // Show image GPS data if user requested it and it is available.
-            if (($contentdata->showextradata & content::INFO_GPSDATA) && !empty($contentexifinfo['GPSData'])) {
-                $contentmapenable = true;
-                $contentgpslat = $contentexifinfo['GPSData']['lat'];
-                $contentgpslng = $contentexifinfo['GPSData']['lng'];
-            }
-
-            // Show image EXIF metadata if user requested it and it is available.
-            if ($contentdata->showextradata & content::INFO_IMAGEDATA) {
-                $metadatamake = empty($contentexifinfo['Make']) ? '' : $contentexifinfo['Make'];
-
-                if (strlen($metadatamake) < 2) {
-                    $metadatamake = empty($contentexifinfo['UndefinedTag:0xA433']) ? '' : $contentexifinfo['UndefinedTag:0xA433'];
-                }
-
-                $metadatamodel = empty($contentexifinfo['Model']) ? '' : $contentexifinfo['Model'];
-
-                if (strlen($metadatamodel) < 2) {
-                    $metadatamodel = empty($contentexifinfo['UndefinedTag:0xA434']) ? '' : $contentexifinfo['UndefinedTag:0xA434'];
-                }
-
-                $metadatafocal = empty($contentexifinfo['FocalLengthIn35mmFilm']) ? '' : $contentexifinfo['FocalLengthIn35mmFilm'];
-
-                $metadataexposure = empty($contentexifinfo['ExposureTime']) ? '' : $contentexifinfo['ExposureTime'];
-
-                if (!empty($contentexifinfo['COMPUTED'])
-                    && !empty($contentexifinfo['COMPUTED']['ApertureFNumber'])) {
-                    $metadataaperture = $contentexifinfo['COMPUTED']['ApertureFNumber'];
-                } else {
-                    $metadataaperture = empty($contentexifinfo['FNumber']) ? '' : $contentexifinfo['FNumber'];
-
-                }
-
-                $metadataiso = empty($contentexifinfo['ISOSpeedRatings']) ? '' : $contentexifinfo['ISOSpeedRatings'];
-
-                if (!empty($metadatamake)
-                    || !empty($metadatamodel)
-                    || !empty($metadatafocal)
-                    || !empty($metadataexposure)
-                    || !empty($metadataaperture)
-                    || !empty($metadataiso)) {
-                    $contentmetadataenable = true;
-                }
-            }
-        }
+        $contentdata->contentcommentenable = $permissions->addcomment;
 
         // Check if maximize feature is enable.
         $contentdata->maximizeenable = ($contentdata->contenttypeimage || $contentdata->contenttypeiframe);
 
-        $contentdata->metadatamake = $metadatamake;
-        $contentdata->metadatamodel = $metadatamodel;
-        $contentdata->metadatafocal = $metadatafocal;
-        $contentdata->metadataexposure = $metadataexposure;
-        $contentdata->metadataaperture = $metadataaperture;
-        $contentdata->metadataiso = $metadataiso;
-        $contentdata->contentmetadataenable = $contentmetadataenable;
-        $contentdata->contentgpslat = $contentgpslat;
-        $contentdata->contentgpslng = $contentgpslng;
-        $contentdata->contentmapenable = $contentmapenable;
+        // Check archive post permission.
+        $contentdata->contentarchivepostenable = $contentdata->isownedbyviewer;
 
         // Render content versions.
         $contentversions = array();
@@ -856,7 +849,9 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         if (!empty($contentdata->contentversions)) {
             foreach ($contentdata->contentversions as $contentversion) {
-                $contentversion->vid = $contentdata->vid;
+                $contentviewversionlink = new moodle_url('/mod/openstudio/content.php', array(
+                        'id' => $cmid, 'sid' => $contentversion->id, 'vuid' => $contentdata->userid, 'contentversion' => 1));
+                $contentversion->contentviewversionlink = $contentviewversionlink->out(false);
                 $contentversions[] = renderer_utils::content_details($cmid, $permissions, $contentversion, true);
             }
             $hascontentversions = true;
@@ -885,14 +880,18 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 // OUMP installed.
                 require_once($CFG->dirroot.'/local/oump/classes/filteroump.php');
                 $PAGE->requires->js_call_amd('local_oump/mloader', 'initialise', array([
-                    'wwwroot' => $CFG->wwwroot . '/local/oump',
-                    'urlargs' => filter_oump::get_requirejs_urlargs(),
-                    'jsdependency' => filter_oump::get_js_dependency()
+                        'wwwroot' => $CFG->wwwroot . '/local/oump',
+                        'urlargs' => filter_oump::get_requirejs_urlargs(),
+                        'jsdependency' => filter_oump::get_js_dependency()
                 ]));
             }
         }
         $contentdata->viewuserworkurl = new \moodle_url('/mod/openstudio/view.php',
-              array('id' => $cmid, 'vuid' => $contentdata->userid, 'vid' => content::VISIBILITY_PRIVATE));
+                array('id' => $cmid, 'vuid' => $contentdata->userid, 'vid' => content::VISIBILITY_PRIVATE));
+
+        $contentrestoreversionurl = new moodle_url('/mod/openstudio/content.php', array(
+                'id' => $cmid, 'sid' => $contentdata->id, 'vuid' => $contentdata->userid, 'restoreversion' => 1));
+        $contentdata->contentrestoreversionurl = $contentrestoreversionurl->out(false);
 
         return $this->render_from_template('mod_openstudio/content_page', $contentdata);
     }

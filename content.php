@@ -33,6 +33,7 @@ use mod_openstudio\local\api\contentversion;
 use mod_openstudio\local\api\flags;
 use mod_openstudio\local\api\comments;
 use mod_openstudio\local\forms\comment_form;
+use mod_openstudio\local\api\tracking;
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
@@ -45,9 +46,13 @@ $folderid = optional_param('folderid', 0, PARAM_INT);
 // Content id.
 $contentid = optional_param('sid', 0, PARAM_INT);
 // User id.
+$iscontentversion = optional_param('contentversion', 0, PARAM_INT); // View content version.
+$restoreversion = optional_param('restoreversion', 0, PARAM_INT); // Restore content version.
+$archiveversion = optional_param('archiveversion', 0, PARAM_INT); // Archive content version.
 $userid = optional_param('vuid', $USER->id, PARAM_INT);
 $coursedata = util::render_page_init($id, array('mod/openstudio:view'));
 $cm = $coursedata->cm;
+$cmid = $cm->id;
 $cminstance = $coursedata->cminstance;
 $course = $coursedata->course;
 $mcontext = $coursedata->mcontext;
@@ -63,32 +68,129 @@ util::honesty_check($id);
 
 $returnurliferror = new moodle_url('/mod/openstudio/view.php', array('id' => $cm->id));
 
+// Restore content version.
+if ($restoreversion) {
+    $contentversiondata = contentversion::get($contentid, $USER->id);
+    if ($contentversiondata != false) {
+        $contentrestoredata = content::get($contentversiondata->contentid);
+    }
+
+    if ($contentrestoredata) {
+        $actionallowed = ($contentrestoredata->userid == $USER->id) && $permissions->addcontent && $permissions->versioningon;
+        $actionallowed = $actionallowed || $permissions->managecontent;
+        if ($actionallowed) {
+            $restoredata = content::restore_version($userid, $contentid, $cm);
+
+            // If restore success will return restore content id.
+            // The process for view content detail will affect with content restore.
+            // Else process for view content version detail.
+            if ($restoredata) {
+                $contentid = $restoredata->id;
+            }
+        }
+    }
+}
+
 // Get content and content version data.
 $showdeletedcontentversions = false;
-if ($permissions->viewdeleted || $permissions->managecontent) {
-    $showdeletedcontentversions = true;
+
+// Handle content and content version.
+if ($iscontentversion) {
+    $contentdata = contentversion::get($contentid, $USER->id, $showdeletedcontentversions);
+} else {
+    $contentandversions = contentversion::get_content_and_versions($contentid, $USER->id, $showdeletedcontentversions);
+    $contentdata = studio_api_lock_determine_lock_status($contentandversions->contentdata);
 }
-$contentandversions = contentversion::get_content_and_versions($contentid, $USER->id, $showdeletedcontentversions);
-
-$contentdata = studio_api_lock_determine_lock_status($contentandversions->contentdata);
-
-// Returns all the values from the array and indexes the array numerically.
-// We need this because mustache requires it.
-$contentdata->contentversions = array_values($contentandversions->contentversions);
 
 if ($contentdata === false) {
     return redirect($returnurliferror->out(false));
 }
 
 // Check the viewing user has permission to view content.
-if (!util::can_read_content($cminstance, $permissions, $contentdata, $folderid)) {
+if (!util::can_read_content($cminstance, $permissions, $contentdata, '')) {
     print_error('errornopermissiontoviewcontent', 'openstudio', $returnurliferror->out(false));
 }
 
-$contentdataname = $contentdata->name;
-if ($contentdata->l3name) {
-    $contentdataname = $contentdata->l3name;
+// Archive content version.
+if ($archiveversion) {
+    $actionallowed = ($contentdata->userid == $userid) && $permissions->addcontent;
+    $actionallowed = $actionallowed || $permissions->managecontent;
+    if ($actionallowed) {
+        if ($permissions->versioningon) {
+            content::delete($userid, $contentid, $cminstance->versioning, $cm);
+        } else {
+            content::empty_content($userid, $contentid, true, $cminstance->versioning, $cm);
+            if (($contentdata->levelid == 0) && ($contentdata->levelcontainer == 0)) {
+                $redirectorurl = new moodle_url('/mod/openstudio/view.php',
+                        array('id' => $cm->id, 'vid' => content::VISIBILITY_PRIVATE_PINBOARD, 'fblock' => -1));
+                return redirect($redirectorurl);
+            }
+        }
+        $redirectorurl = new moodle_url('/mod/openstudio/content.php',
+                array('id' => $cm->id, 'sid' => $contentdata->id,  'vuid' => $contentdata->userid, 'ssid' => $folderid));
+        return redirect($redirectorurl);
+    }
 }
+
+$contentdata->iscontentversion = false;
+if ($iscontentversion) {
+    $contentdata->iscontentversion = true;
+    $contentcurrenteversionurl = new moodle_url('/mod/openstudio/content.php',
+            array('id' => $cm->id, 'sid' => $contentdata->contentid, 'vuid' => $contentdata->userid));
+
+    $contentdata->contentcurrenteversionurl = $contentcurrenteversionurl->out(false);
+
+    $contentdata->contentpreviousversionlink = '';
+    $contentdata->contentnextversionlink = '';
+    $contentdata->contentallversionlink = '';
+    if ($contentdata->numberofversions > 1) {
+        if ($contentdata->versionnumber > 1) {
+            $contentpreviousversionlink = new moodle_url('/mod/openstudio/content.php', array(
+                    'id' => $cmid,
+                    'sid' => $contentdata->previousversionid,
+                    'vuid' => $contentdata->userid,
+                    'contentversion' => 1
+            ));
+
+            $contentdata->contentpreviousversionlink = $contentpreviousversionlink->out(false);
+        }
+
+        if ($contentdata->versionnumber < $contentdata->numberofversions) {
+            $contentnextversionlink = new moodle_url('/mod/openstudio/content.php', array(
+                    'id' => $cmid,
+                    'sid' => $contentdata->nextversionid,
+                    'vuid' => $contentdata->userid,
+                    'contentversion' => 1
+            ));
+
+            $contentdata->contentnextversionlink = $contentnextversionlink->out(false);
+        }
+
+        $contentallversionlink = new moodle_url('/mod/openstudio/view.php', array(
+                'id' => $cmid,
+                'sid' => $contentdata->contentid,
+                'vid' => content::VISIBILITY_PRIVATE_PINBOARD,
+                'contentversion' => 1
+        ));
+
+        $contentdata->contentallversionlink = $contentallversionlink->out(false);
+    }
+
+    $contentdataname = get_string('contentversiontitle', 'openstudio',
+            array('versionnumber' => $contentdata->versionnumber, 'numberofversions' => $contentdata->numberofversions));
+
+} else {
+    // Returns all the values from the array and indexes the array numerically.
+    // We need this because mustache requires it.
+    $contentdata->contentversions = array_values($contentandversions->contentversions);
+
+    $contentdata->iscontentversion = false;
+    $contentdataname = $contentdata->name;
+    if ($contentdata->l3name) {
+        $contentdataname = $contentdata->l3name;
+    }
+}
+
 $contentdata->contentdataname = $contentdataname;
 
 // Get page url.
@@ -246,7 +348,22 @@ if ($folderid) {
     }
 }
 
+$PAGE->requires->strings_for_js(
+    array('contentactionarchivepost', 'modulejsdialogcancel', 'archivedialogheader',
+        'modulejsdialogcontentarchiveconfirm', 'deletearchiveversionheader', 'deletearchiveversionheaderconfirm'),
+    'mod_openstudio');
 $PAGE->requires->js_call_amd('mod_openstudio/contentpage', 'init');
+
+// Update flag and tracking.
+$tracking = tracking::READ_CONTENT;
+$logaction = 'content_viewed';
+if ($iscontentversion) {
+    $tracking = tracking::READ_CONTENT_VERSION;
+    $logaction = 'contentversion_viewed';
+}
+
+flags::toggle($contentdata->id, flags::READ_CONTENT, 'on', $USER->id, $contentdata->id);
+studio_api_tracking_log_action($contentdata->id, $tracking, $USER->id);
 
 // Note: This header statement is needed because the slot form data contains
 // object and script code and browsers like webkit thinks this is a cross-site

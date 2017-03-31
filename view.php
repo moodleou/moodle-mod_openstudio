@@ -499,7 +499,7 @@ if ($finalviewpermissioncheck) {
                 $contentslist[] = $contentid;
                 // Content feedback requested.
                 $content->isfeedbackrequested = false;
-                $flagstatus = flags::get_for_content_by_user($contentid, $permissions->activeuserid);
+                $flagstatus = flags::get_for_content_by_user($contentid, $content->userid);
                 if (in_array(flags::NEEDHELP, $flagstatus)) {
                     $content->isfeedbackrequested = true;
                 }

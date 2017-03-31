@@ -426,7 +426,7 @@ class renderer_utils {
         } else {
             switch ($contentdata->contenttype) {
                 case content::TYPE_NONE:
-                        $contenttypeuseimagedefault = true;
+                        $contenttypeuseimagedefault = false;
                         $contenttypeiconurl = $OUTPUT->pix_url('unknown_rgb_32px', 'openstudio');
                     break;
                 case content::TYPE_IMAGE:
@@ -565,7 +565,7 @@ class renderer_utils {
      * @param object $contentdata The content records to display.
      * @return object $contentdata
      */
-    protected function content_lock_data($contentdata) {
+    protected static function content_lock_data($contentdata) {
         $contentislock = false;
         $contentislockmessage = '';
         if ($contentdata->l3id > 0) {
@@ -1102,7 +1102,7 @@ class renderer_utils {
         if (in_array(flags::INSPIREDME, $flagstatus)) {
             $contentdata->contentflaginspireactive = true;
         }
-        if (in_array(flags::NEEDHELP, $flagstatus)) {
+        if (in_array(flags::NEEDHELP, $flagfeedbackstatus)) {
             $contentdata->contentflagrequestfeedbackaction = 0;
             $contentdata->contentflagrequestfeedbackactive = true;
         }

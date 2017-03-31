@@ -777,9 +777,9 @@ EOF;
             if (isset($contentdata->name)) {
                 if (trim($contentdata->name) == '') {
                     if ($contentdata->contenttype == content::TYPE_FOLDER) {
-                        $slotdataname = get_string('settitlepinboard', 'openstudio');
+                        $slotdataname = get_string('foldertitlepinboard', 'openstudio');
                     } else {
-                        $slotdataname = get_string('slottitlepinboard', 'openstudio');
+                        $slotdataname = get_string('contenttitlepinboard', 'openstudio');
                     }
                 } else {
                     $slotdataname = $contentdata->name;

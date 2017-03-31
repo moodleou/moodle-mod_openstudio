@@ -597,3 +597,77 @@ Feature: Create and edit contents detail
             | oualerts_message      | Report Open Studio Test |
         And I press "Send alert"
         And I should see "Test ContentDetail Report Abuse"
+
+    Scenario: Archive post content details
+        When I am on site homepage
+        And I follow "Course 1"
+        And I follow "Test Open Studio name 1"
+        And the following open studio "contents" exist:
+            | openstudio | user     | name                         | description                  | file                                              | visibility |
+            | OS1        | teacher1 | Test My Content Details View | Test My Content Details View | mod/openstudio/tests/importfiles/test1.jpg        | module     |
+        And I follow "Shared content > My Module" in the openstudio navigation
+        And I follow "Test My Content Details View"
+        And I should not see "Post archive"
+        And "Archive post" "button" should exist
+        And I press "Archive post"
+        And I should see "Are you sure you want to archive the content?"
+
+        # Press Archive post in Archive post popup
+        And I click on "Archive post" "button" in the "Archive post" "dialogue"
+
+        # Add new content Archive post
+        And I follow "Edit this post"
+        And I press "Add file"
+        And I set the following fields to these values:
+          | Who can view this content | My module                                  |
+          | Title                     | Test My Content Details View Archive 1     |
+          | Description               | Test My Content Details View Archive 1     |
+          | Upload content            | mod/openstudio/tests/importfiles/test2.jpg |
+          | Tags                      | Tests Add New Tags                         |
+        And I press "Save"
+        And I should see "Post archive"
+        And I press "Post archive"
+        And I should see "Test My Content Details View"
+
+        # View content Archive post
+        And I press "View"
+        And I should see "Version 1 of 1"
+        And "Current version" "button" should exist
+
+        # View content Current version
+        And I press "Current version"
+        And I should see "Test My Content Details View Archive 1"
+
+        # View Current version in My Module
+        And I follow "Shared content > My Module" in the openstudio navigation
+        And I should see "Test My Content Details View Archive 1"
+
+        # Restore this version
+        And I follow "Test My Content Details View Archive 1"
+        And I press "Archive post"
+        And I click on "Archive post" "button" in the "Archive post" "dialogue"
+        And I follow "Edit this post"
+        And I press "Add file"
+        And I set the following fields to these values:
+          | Who can view this content | My module                                  |
+          | Title                     | Test My Content Details View Archive 2     |
+          | Description               | Test My Content Details View Archive 2     |
+          | Upload content            | mod/openstudio/tests/importfiles/test3.jpg |
+          | Tags                      | Tests Add New Tags                         |
+        And I press "Save"
+        And I press "Post archive"
+        And I should see "Test My Content Details View Archive"
+        And I should see "Test My Content Details View Archive 1"
+        And I press "View"
+        And I press "Restore this version"
+        And I should see "Test My Content Details View Archive 1"
+        And I follow "Shared content > My Module" in the openstudio navigation
+        And I should see "Test My Content Details View Archive 1"
+
+        # Delete Archive post
+        And I follow "Test My Content Details View Archive 1"
+        And I press "Post archive"
+        And I should see "Test My Content Details View Archive 2"
+        And I press "Delete"
+        And I click on "Delete" "button" in the "Delete post?" "dialogue"
+        And I should not see "Test My Content Details View Archive 2"
