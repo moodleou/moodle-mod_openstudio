@@ -36,16 +36,35 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
         isotope: null,
 
         /**
+         * Module config. Passed from server side.
+         * {
+         *     searchtext: string
+         * }
+         */
+        mconfig: null,
+
+        /**
+         * List out all of css selector used in this module.
+         */
+        CSS: {
+            SEARCHBOX: '#oustudyplan-query'
+        },
+
+        /**
          * Initialise this module.
          *
+         * @param {JSON} options  The settings for this feature.
          */
-        init: function() {
+        init: function(options) {
+
+            t.mconfig = options || {searchtext: ''};
 
             t.handleFilter();
             t.handleIsotope();
             t.handleGroupSwitcher();
             t.handleViewSizeSwitcher();
             t.handleBlockSwitcher();
+            t.initSearchForm();
         },
 
         /**
@@ -256,6 +275,16 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
                     $('.openstudio-filter-block').prop("checked", false);
                 }
             });
+        },
+
+        /**
+         * Init query string for search form.
+         * Because oustudyplan renderer does not allow us to set value for input while rendering search form.
+         *
+         * @method initSearchForm
+         */
+        initSearchForm: function() {
+            $(t.CSS.SEARCHBOX).val(t.mconfig.searchtext);
         }
 
     };

@@ -122,7 +122,7 @@ if ($uform->is_submitted() && $uformdata = $uform->get_submitted_data()) {
 
 // Render page.
 $renderer = $PAGE->get_renderer('mod_openstudio');
-$PAGE->set_button($renderer->searchform($theme, $vid));
+$PAGE->set_button($renderer->searchform($theme, $vid, $id));
 
 $html = $renderer->siteheader(
     $coursedata, $permissions, $theme, $cm->name, '', $vid);

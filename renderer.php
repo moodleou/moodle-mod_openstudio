@@ -443,9 +443,11 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      * This function renders the HTML for search form.
      * @param object $theme The theme settings.
      * @param int $viewmode View mode: module, group, studio, pinboard or workspace.
+     * @param int $openstudioid Open studio instance ID
+     * @param int $groupid Group ID
      * @return string The rendered HTM search form.
      */
-    public function searchform($theme, $viewmode) {
+    public function searchform($theme, $viewmode, $openstudioid, $groupid = 0) {
         global $OUTPUT, $CFG;
         $data = new stdClass();
 
@@ -474,6 +476,9 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $data->searchlink = $CFG->wwwroot.'/mod/openstudio/search.php';
         $data->helplink = $CFG->wwwroot.'/help.php';
         $data->iconsearch = $OUTPUT->pix_url('i/search');
+        $data->id = $openstudioid;
+        $data->vid = $viewmode;
+        $data->groupid = $groupid;
 
         return $this->render_from_template('mod_openstudio/search_form', $data);
     }
@@ -527,9 +532,11 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      * @param int $viewmode View mode: module, group, studio, pinboard or workspace.
      * @param object $permissions The permission object for the given user/view.
      * @param object $contentdata The content records to display.
+     * @param boolean $issearch Detect search behaviour
      * @return string The rendered HTM fragment.
      */
-    public function body($cmid, $openstudioid, $theme, $viewmode = content::VISIBILITY_MODULE, $permissions, $contentdata) {
+    public function body($cmid, $openstudioid, $theme, $viewmode = content::VISIBILITY_MODULE, $permissions, $contentdata,
+            $issearch = false) {
         global $OUTPUT;
 
         $placeholdertext = '';
@@ -552,7 +559,9 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             case content::VISIBILITY_WORKSPACE:
             case content::VISIBILITY_PRIVATE:
                 $placeholdertext = $theme->themestudioname;
-                $myactivities = true;
+                if (!$issearch) {
+                    $myactivities = true;
+                }
                 $blocksdata = levels::get_records(1, $permissions->activecminstanceid);
                 $contentdata->ismyactivity = true;
 
@@ -607,7 +616,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $contentdata->placeholdertext = $placeholdertext;
         $contentdata->selectview = $selectview;
         $contentdata->myactivities = $myactivities;
-        $contentdata->blocksdata = $contentdata->openstudio_view_filters->fblockdataarray;
+        $contentdata->blocksdata = property_exists($contentdata, 'openstudio_view_filters') ?
+                $contentdata->openstudio_view_filters->fblockdataarray : array();
         $contentdata->viewedicon = $OUTPUT->pix_url('viewed_rgb_32px', 'openstudio');
         $contentdata->commentsicon = $OUTPUT->pix_url('comments_rgb_32px', 'openstudio');
         $contentdata->inspirationicon = $OUTPUT->pix_url('inspiration_rgb_32px', 'openstudio');
@@ -637,19 +647,21 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $contentdata->available = $permissions->pinboarddata->available;
 
         // Prepare select from (all/pinboard/blocks) filter.
-        $contentdata = renderer_utils::filter_area($contentdata);
+        if (property_exists($contentdata, 'openstudio_view_filters')) {
+            $contentdata = renderer_utils::filter_area($contentdata);
 
-        // Prepare post types option for filter.
-        $contentdata = renderer_utils::filter_post_types($contentdata);
+            // Prepare post types option for filter.
+            $contentdata = renderer_utils::filter_post_types($contentdata);
 
-        // Prepare user flags option for filter.
-        $contentdata = renderer_utils::filter_user_flags($contentdata);
+            // Prepare user flags option for filter.
+            $contentdata = renderer_utils::filter_user_flags($contentdata);
 
-        // Prepare select status option for filter.
-        $contentdata = renderer_utils::filter_select_status($contentdata);
+            // Prepare select status option for filter.
+            $contentdata = renderer_utils::filter_select_status($contentdata);
 
-        // Prepare scope option for filter.
-        $contentdata = renderer_utils::filter_scope($contentdata);
+            // Prepare scope option for filter.
+            $contentdata = renderer_utils::filter_scope($contentdata);
+        }
 
         return $this->render_from_template('mod_openstudio/body', $contentdata);
     }

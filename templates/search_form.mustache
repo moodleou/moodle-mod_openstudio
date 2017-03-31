@@ -27,6 +27,8 @@
 
     Example context (json):
     {
+        "id": 3,
+        "groupid": 0,
         "placeholdertext" : "My module",
         "searchlink" : "https://example.com/mod/openstudio/search.php",
         "helplink" : "https://example.com/mod/openstudio/help.php",
@@ -38,16 +40,15 @@
     <div>
         <label for="openstudio_searchquery">{{#str}} navsearchlabel, openstudio {{/str}} {{placeholdertext}}</label>
         <span class="helptooltip">
-        <a href="{{helplink}}"
-        title="{{#str}} navsearchhelp, openstudio {{/str}} {{placeholdertext}}" aria-haspopup="true" target="_blank">
-        {{#pix}} help, i {{/pix}}
-        alt="{{#str}} navsearchhelp, openstudio {{/str}} {{placeholdertext}}" class="iconhelp" />
-        </a>
+            <a href="{{helplink}}"
+                title="{{#str}} navsearchhelp, openstudio {{/str}} {{placeholdertext}}" aria-haspopup="true" target="_blank">
+                {{#pix}} help, i {{/pix}}
+            </a>
         </span>
-        <input type="hidden" name="id" value="13" />
+        <input type="hidden" name="id" value="{{id}}" />
+        <input type="hidden" name="vid" value="{{vid}}" />
+        <input type="hidden" name="groupid" value="{{groupid}}"/>
         <input type="text" name="query" id="openstudio_searchquery"
-        placeholder="{{#str}} navsearchlabel, openstudio {{/str}} {{placeholdertext}}"/>
-        <input type="image" id="ousearch_searchbutton" alt="{{#str}} navsearchlabel, openstudio {{/str}}" title="{{#str}} navsearchlabel, openstudio {{/str}}"
-        src="{{iconsearch}}" />
+            placeholder="{{#str}} navsearchlabel, openstudio {{/str}} {{placeholdertext}}"/>
     </div>
 </form>

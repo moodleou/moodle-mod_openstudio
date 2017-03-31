@@ -573,12 +573,11 @@ if ($finalviewpermissioncheck) {
 
             // Check content is folder.
             if ($content->contenttype == content::TYPE_FOLDER || $content->l3contenttype == content::TYPE_FOLDER) {
-                $contentexist = folder::get_first_content($content->id);
+                $contentexist = $firstcontent = folder::get_first_content($content->id);
                 $content->isfolder = true;
                 $content->hascontent = false;
                 $folderthumbnailfileurl = $OUTPUT->pix_url('uploads_rgb_32px', 'openstudio');
                 $content->defaultfolderimg = $OUTPUT->pix_url('uploads_rgb_32px', 'openstudio');
-                $firstcontent = folder::get_first_content($content->id);
                 if ($firstcontent) {
                     $content->hascontent = true;
                     $content->thumbnailimg = true;
@@ -591,7 +590,7 @@ if ($finalviewpermissioncheck) {
                     $folderthumbnailfileurl = $firstcontent->contenttypeimage;
                 }
                 $content->folderthumbnail = $folderthumbnailfileurl;
-                $content->folderdefaultthumbnail = $OUTPUT->pix_url('openstudio_sets_preview_box', 'openstudio'); 
+                $content->folderdefaultthumbnail = $OUTPUT->pix_url('openstudio_sets_preview_box', 'openstudio');
                 $content->folderlink = new moodle_url('/mod/openstudio/folder.php',
                         array('id' => $id, 'lid' => $content->l3id, 'vid' => content::VISIBILITY_PRIVATE, 'sid' => $content->id));
                 if (!$content->id) {
@@ -834,7 +833,7 @@ $contentdata->filteractive = ($filteropen || $resetfilter) ? 0 : $filteractive;;
 
 // Generate stream html.
 $renderer = $PAGE->get_renderer('mod_openstudio');
-$PAGE->set_button($renderer->searchform($theme, $vid));
+$PAGE->set_button($renderer->searchform($theme, $vid, $id, $groupid));
 
 $html = $renderer->siteheader(
         $coursedata, $permissions, $theme, $cm->name, '', $vid);

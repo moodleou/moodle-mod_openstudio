@@ -129,7 +129,7 @@ $PAGE->requires->js_call_amd('mod_openstudio/folderbrowseposts', 'init', [[
 
 // Generate stream html.
 $renderer = $PAGE->get_renderer('mod_openstudio');
-$PAGE->set_button($renderer->searchform($theme, $vid));
+$PAGE->set_button($renderer->searchform($theme, $vid, $id));
 
 $html = $renderer->siteheader(
     $coursedata, $permissions, $theme, $cm->name, '', $vid);

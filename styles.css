@@ -1048,6 +1048,30 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
  */
 
 /**
+ * Search feature
+ */
+
+.openstudio-search-message {
+	padding-left: 15px;
+	background-color: #fff;
+	margin: 0 20px 20px 20px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	padding-right: 15px;
+}
+
+.openstudio-search-message span {
+    font-size: 0.857em;
+}
+
+.openstudio-search-message .openstudio-search-pagination {
+    margin-left: auto;
+}
+/**
+ * End search feature
+ */
+/**
  * Content modal.
  */
 .openstudio-fullscreen-modal .modal-header,
@@ -2018,6 +2042,7 @@ a.openstudio-add-title:hover  {
 
 .openstudio-grid-item-content-detail-owner {
     margin-bottom: 18px;
+    min-height: 35px;
 }
 
 .openstudio-grid-item-content-detail-owner-name {

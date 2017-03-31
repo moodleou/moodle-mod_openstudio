@@ -29,6 +29,8 @@
     Example context (json):
     {
         "placeholdertext" : "My module",
+        "adddisable": false,
+        "filterdisable": false,
         "contents": [
             {
                 "firstname" : "Admin",
@@ -110,33 +112,61 @@
     <div class="openstudio-module-title">
         <h1>{{{placeholdertext}}}</h1>
     </div>
-    <div class="openstudio-filter">
-        {{>mod_openstudio/filter}}
-    </div>
-    <div class="openstudio-filter-mobile">
-        {{>mod_openstudio/filter_mobile}}
-    </div>
+    {{#searchmessage}}
+        <div class="openstudio-search-message">
+            <span>
+                {{#str}} searchresultsummary, mod_openstudio {{/str}}
+                <strong>{{searchmessage}}</strong>
+            </span>
+            <div class="openstudio-search-pagination">
+                {{#prevurl}}
+                    <a href="{{prevurl}}">
+                        {{#str}} searchpagerprevious, mod_openstudio {{/str}}
+                        {{#nexturl}} | {{/nexturl}}
+                    </a>
+
+                {{/prevurl}}
+                {{#nexturl}}
+                    <a href="{{nexturl}}">
+                        {{#str}} searchpagernext, mod_openstudio {{/str}}
+                    </a>
+                {{/nexturl}}
+            </div>
+        </div>
+    {{/searchmessage}}
+    {{^filterdisable}}
+        <div class="openstudio-filter">
+            {{>mod_openstudio/filter}}
+        </div>
+        <div class="openstudio-filter-mobile">
+            {{>mod_openstudio/filter_mobile}}
+        </div>
+    {{/filterdisable}}
     {{#myactivities}}
         {{#activityitems}}
             <div class="openstudio-activity-title">{{{activityname}}}</div>
             <div class="openstudio-grid" id="openstudio_grid_{{activityid}}">
                 {{#activities}}
-                    <div class="openstudio-grid-item
-                        {{^timemodified}}
-                            openstudio-grid-item-add-new{{#l3required}}-required{{/l3required}}
-                        {{/timemodified}}">
-                        {{#timemodified}}{{>mod_openstudio/activity_content_block}}{{/timemodified}}
-                        {{^timemodified}}{{>mod_openstudio/add_activity_content_block}}{{/timemodified}}
-                    </div>
+                    {{^adddisable}}
+                        <div class="openstudio-grid-item
+                            {{^timemodified}}
+                                openstudio-grid-item-add-new{{#l3required}}-required{{/l3required}}
+                            {{/timemodified}}">
+                            {{#timemodified}}{{>mod_openstudio/activity_content_block}}{{/timemodified}}
+                            {{^timemodified}}{{>mod_openstudio/add_activity_content_block}}{{/timemodified}}
+                        </div>
+                    {{/adddisable}}
                 {{/activities}}
             </div>
         {{/activityitems}}
     {{/myactivities}}
     {{^myactivities}}
         <div class="openstudio-grid" id="openstudio_grid">
-            <div class="openstudio-grid-item openstudio-grid-item-add-new">
-                {{>mod_openstudio/add_content_block}}
-            </div>
+            {{^adddisable}}
+                <div class="openstudio-grid-item openstudio-grid-item-add-new">
+                    {{>mod_openstudio/add_content_block}}
+                </div>
+            {{/adddisable}}
             {{#contents}}
                 <div class="openstudio-grid-item">{{>mod_openstudio/content_block}}</div>
             {{/contents}}
