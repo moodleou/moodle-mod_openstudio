@@ -239,6 +239,20 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         $data->notificationicon = $OUTPUT->pix_url('notifications_rgb_32px', 'openstudio');
         $data->notifications = [];
+        $notifications = notifications::get_current($cm->instance, $USER->id, defaults::NOTIFICATIONLIMITMAX);
+        foreach ($notifications as $notification) {
+            $data->notifications[] = $notification->export_for_template($this->output);
+        }
+        $data->notificationnumber = array_reduce($notifications, function($carry, notification $notification) {
+            $carry += $notification->timeread ? 0 : 1;
+            return $carry;
+        });
+        $stopstring = get_string('stopnotificationsforcontent', 'mod_openstudio');
+        $stopicon = new \pix_icon('stop_notification', $stopstring, 'mod_openstudio', [
+                'width' => 16,
+                'height' => 16
+        ]);
+        $data->notificationstopicon = $stopicon->export_for_template($this->output);
 
 
         $addtodashboard = block_externaldashboard_backend::render_favourites_button($PAGE->cm, false);
