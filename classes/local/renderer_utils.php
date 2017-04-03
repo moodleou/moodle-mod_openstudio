@@ -171,8 +171,10 @@ class renderer_utils {
                         }
 
                         if (!empty($activities)) {
-                            $profileactivityitems[$level2id]->activityname = $activityname;
-                            $profileactivityitems[$level2id]->activities = array_values($activities);
+                            $profileactivityitems[$level2id] = (object) [
+                                    'activityname' => $activityname,
+                                    'activities' => array_values($activities)
+                            ];
                         }
                     }
                 }
