@@ -3456,6 +3456,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     vertical-align: top;
 }
 
+.openstudio-profile-participation .openstudio-profile-label-title,
 .openstudio-profile-paticipation-content .openstudio-profile-paticipation {
     color: #002158;
     font-family: Arial;
@@ -3471,6 +3472,13 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     height: 16px;
     display: inline-block;
     margin-left: 4px;
+}
+
+.openstudio-profile-participation .openstudio-profile-label-title{
+    color: #002158;
+    font-size: 1em;
+    line-height: 16px;
+    padding-left: 0;
 }
 
 .openstudio-profile-bar .openstudio-profile-progress-content {
@@ -4261,6 +4269,7 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-profile-row {
         margin: 0 24px;
+        height: auto;
     }
 
     .openstudio-profile-bar .openstudio-profile-paticipation-content {

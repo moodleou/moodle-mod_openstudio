@@ -243,7 +243,8 @@ class util {
         $permissions->feature_enablefolders = self::has_feature($cminstance, util\feature::ENABLEFOLDERS);
         $permissions->feature_enablefoldersanycontent = self::has_feature($cminstance, util\feature::ENABLEFOLDERSANYCONTENT);
         $permissions->feature_enablerss = self::has_feature($cminstance, util\feature::ENABLERSS);
-        $permissions->feature_enablesubscription = self::has_feature($cminstance, util\feature::ENABLESUBSCRIPTION);
+        // Feature Enable Subscription is obsolete, permission default is true.
+        $permissions->feature_enablesubscription = true;
         $permissions->feature_enableexportimport = self::has_feature($cminstance, util\feature::ENABLEEXPORTIMPORT);
         $permissions->feature_contentusesweblink = self::has_feature($cminstance, util\feature::CONTENTUSESWEBLINK);
         $permissions->feature_contentusesembedcode = self::has_feature($cminstance, util\feature::CONTENTUSESEMBEDCODE);

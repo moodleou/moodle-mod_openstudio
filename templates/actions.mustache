@@ -33,17 +33,19 @@
 }}
 <div class="openstudio-buttons-settings">
     <div class="openstudio-subscribe-button">
-        <button type="submit" class="btn" name="subscribebutton"
-            {{#subscriptionid}}
-                subscriptionid="{{subscriptionid}}"
-            {{/subscriptionid}}>
-            {{#subscriptionid}}
-                {{#str}} unsubscribe, mod_openstudio {{/str}}
-            {{/subscriptionid}}
-            {{^subscriptionid}}
-                {{#str}} subscribetothisstudio, mod_openstudio {{/str}}
-            {{/subscriptionid}}
-        </button>
+        {{#enablesubscription}}
+            <button type="submit" class="btn" name="subscribebutton"
+                {{#subscriptionid}}
+                    subscriptionid="{{subscriptionid}}"
+                {{/subscriptionid}}>
+                {{#subscriptionid}}
+                    {{#str}} unsubscribe, mod_openstudio {{/str}}
+                {{/subscriptionid}}
+                {{^subscriptionid}}
+                    {{#str}} subscribetothisstudio, mod_openstudio {{/str}}
+                {{/subscriptionid}}
+            </button>
+        {{/enablesubscription}}
     </div>
     <div class="openstudio-add-dashboard-button">
      {{{addtodashboard}}}
