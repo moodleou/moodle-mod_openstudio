@@ -31,6 +31,7 @@ use mod_openstudio\local\api\lock;
 use mod_openstudio\local\api\levels;
 use mod_openstudio\local\api\folder;
 use mod_openstudio\local\api\template;
+use mod_openstudio\local\api\flags;
 use mod_openstudio\local\util\defaults;
 use mod_openstudio\local\util;
 
@@ -609,6 +610,7 @@ if ($contentform->is_cancelled()) {
                 $context,
                 $cm
         );
+        flags::toggle($contentid, flags::FOLLOW_CONTENT, 'on', $userid);
 
         if ($type === content::TYPE_FOLDER_CONTENT) {
             if ($foldertemplatecontentid > 0) {

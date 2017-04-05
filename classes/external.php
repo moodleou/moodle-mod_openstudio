@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die;
 
 use mod_openstudio\local\api\subscription;
 use mod_openstudio\local\api\flags;
+use mod_openstudio\local\api\notifications;
 use mod_openstudio\local\util;
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\contentversion;
@@ -238,8 +239,14 @@ class mod_openstudio_external extends external_api {
     public static function flag_content($cmid, $cid, $fid, $mode) {
         global $USER;
 
+        $params = self::validate_parameters(self::flag_content_parameters(), array(
+                'cmid' => $cmid,
+                'cid' => $cid,
+                'fid' => $fid,
+                'mode' => $mode));
         $context = context_module::instance($cmid);
         external_api::validate_context($context);
+        require_capability('mod/openstudio:addcontent', $context);
 
         $results = array();
         $warnings = array();
@@ -247,22 +254,16 @@ class mod_openstudio_external extends external_api {
         $flagtext = '';
         $flagremoveclass = '';
         $flagaddclass = '';
-        $mode = trim($mode);
-        $params = self::validate_parameters(self::flag_content_parameters(), array(
-            'cmid' => $cmid,
-            'cid' => $cid,
-            'fid' => $fid,
-            'mode' => $mode));
+        $mode = trim($params['mode']);
 
-        $coursedata = util::render_page_init($params['cmid'], array('mod/openstudio:view'));
-        $cm = $coursedata->cm;
+        list($course, $cm) = get_course_and_cm_from_cmid($params['cmid'], 'openstudio');
 
         $result = flags::toggle($params['cid'], $params['fid'], $mode, $USER->id);
 
         if ($result) {
             $success = true;
             // Log page action.
-            if ($params['fid'] == 'on') {
+            if ($mode == 'on') {
                 $logaction = false;
                 switch ($params['fid']) {
                     case flags::FAVOURITE:
@@ -287,9 +288,11 @@ class mod_openstudio_external extends external_api {
 
                 if ($logaction !== false) {
                     util::trigger_event(
-                        $cm->id, $logaction, $cid, util::get_page_name_and_params(true), $logtext);
+                        $cm->id, $logaction, $cid, util::get_page_name_and_params(true), $logtext, $params['fid']);
                 }
 
+            } else {
+                notifications::delete_unread_for_flag($params['cid'], $USER->id, $params['fid']);
             }
 
             $iscontentflagrequestfeedback = false;
@@ -464,6 +467,15 @@ class mod_openstudio_external extends external_api {
                     $context = context_module::instance($cm->id);
                     $commentid = comments::create($params['cid'], $userid, $commenttext, $params['folderid'],
                         ['id' => $params['commentattachment']], $context, $inreplyto);
+                    $eventurl = new moodle_url('/mod/openstudio/content.php', ['id' => $params['cmid'], 'sid' => $params['cid']]);
+                    if ($inreplyto) {
+                        util::trigger_event(
+                                $params['cmid'], 'content_commentreply_created', $params['cid'], $eventurl, '', null, $inreplyto);
+                    } else {
+                        util::trigger_event(
+                                $params['cmid'], 'content_comment_created', $params['cid'], $eventurl, '', null, $commentid);
+                    }
+                    flags::comment_toggle($params['cid'], $commentid, $userid, 'on', false, flags::FOLLOW_CONTENT);
 
                     // Check if process is success.
                     if (!$commentid) {
@@ -535,8 +547,9 @@ class mod_openstudio_external extends external_api {
         return new external_function_parameters(array(
                 'cmid' => new external_value(PARAM_INT, 'Course module ID'),
                 'cid' => new external_value(PARAM_INT, 'Content ID'),
-                'commentid' => new external_value(PARAM_INT, 'Comment ID'))
-        );
+                'commentid' => new external_value(PARAM_INT, 'Comment ID'),
+                'fid' => new external_value(PARAM_INT, 'Flag ID', flags::COMMENT_LIKE)
+        ));
     }
 
     /**
@@ -545,13 +558,14 @@ class mod_openstudio_external extends external_api {
      * @param int $cmid Course module ID
      * @param int $cid Content ID
      * @param int $commentid Comment ID
+     * @param int $flagid The flag being toggled.
      * @return array
      *  [
      *      count: int
      *  ]
      * @throws moodle_exception
      */
-    public static function flag_comment($cmid, $cid, $commentid) {
+    public static function flag_comment($cmid, $cid, $commentid, $flagid = flags::COMMENT_LIKE) {
         global $USER;
         $userid = $USER->id;
 
@@ -559,7 +573,8 @@ class mod_openstudio_external extends external_api {
         $params = self::validate_parameters(self::flag_comment_parameters(), array(
                 'cmid' => $cmid,
                 'cid' => $cid,
-                'commentid' => $commentid));
+                'commentid' => $commentid,
+                'fid' => $flagid));
 
         // Init and check permission.
         $coursedata = util::render_page_init($params['cmid'], array('mod/openstudio:view'));
@@ -571,8 +586,24 @@ class mod_openstudio_external extends external_api {
         if ($actionallowed) {
             try {
                 if ($comment) {
-                    flags::comment_toggle($params['cid'], $params['commentid'], $userid, true);
-                    $count = flags::count_for_comment($params['commentid']);
+                    if (flags::has_user_flagged_comment($params['commentid'], $userid, $params['fid'])) {
+                        $toggle = 'off';
+                    } else {
+                        $toggle = 'on';
+                    }
+                    flags::comment_toggle($params['cid'], $params['commentid'], $userid, $toggle, false, $params['fid']);
+                    $count = flags::count_for_comment($params['commentid'], $params['fid']);
+                    if ($params['fid'] == flags::COMMENT_LIKE) {
+                        if ($toggle === 'off') {
+                            notifications::delete_unread_for_comment_flag($params['commentid'], $userid, flags::COMMENT_LIKE);
+                        } else {
+                            $eventurl = new moodle_url('/mod/openstudio/content.php',
+                                    ['id' => $params['cmid'], 'sid' => $params['cid']]);
+                            util::trigger_event(
+                                    $params['cmid'], 'content_comment_flagged', $params['cid'],
+                                    $eventurl, '', flags::COMMENT_LIKE, $commentid);
+                        }
+                    }
                 } else {
                     throw new \moodle_exception('errorinvalidcomment', 'openstudio');
                 }
@@ -644,6 +675,7 @@ class mod_openstudio_external extends external_api {
             try {
                 if ($comment) {
                     $success = comments::delete($params['commentid'], $userid);
+                    notifications::delete_unread_for_comment($params['commentid']);
                     if (!$success) {
                         throw new \moodle_exception('commenterror', 'openstudio');
                     }
@@ -879,7 +911,55 @@ class mod_openstudio_external extends external_api {
      */
     public static function unlock_returns() {
         return new external_single_structure(array(
-                'cid' => new external_value(PARAM_INT, 'Unlocked content ID'))
+                        'cid' => new external_value(PARAM_INT, 'Unlocked content ID'))
         );
+    }
+
+    /**
+     * Parameters for read_notifications
+     *
+     * @return external_function_parameters
+     */
+    public static function read_notifications_parameters() {
+        return new external_function_parameters([
+            'cmid' => new external_value(PARAM_INT, 'Course module ID'),
+            'ids' => new external_multiple_structure(
+                    new external_value(PARAM_INT, 'notification ID'), 'notification IDs'
+            )
+        ]);
+    }
+
+    /**
+     * Mark the specified notifications as read.
+     *
+     * @param int $cmid
+     * @param int[] $ids
+     */
+    public static function read_notifications($cmid, array $ids) {
+        global $USER;
+        $params = external_api::validate_parameters(self::read_notifications_parameters(), [
+            'cmid' => $cmid,
+            'ids' => $ids
+        ]);
+        $context = context_module::instance($params['cmid']);
+        external_api::validate_context($context);
+        require_capability('mod/openstudio:addcontent', $context);
+
+        foreach ($params['ids'] as $id) {
+            if (notifications::is_for_user($id, $USER->id)) {
+                notifications::mark_read($id);
+            } else {
+                throw new Exception('User can only mark their own notifications read');
+            }
+        }
+    }
+
+    /**
+     * Return values for read_notifications.
+     *
+     * @return external_value
+     */
+    public static function read_notifications_returns() {
+        return new external_value(PARAM_BOOL, 'Success');
     }
 }

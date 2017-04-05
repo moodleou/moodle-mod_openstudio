@@ -106,6 +106,15 @@ $functions = array(
         'ajax' => true,
         'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
         'capabilities' => 'mod/openstudio:view'
+    ),
+    'mod_openstudio_external_read_notifications' => array(
+        'classname' => 'mod_openstudio_external',
+        'methodname' => 'read_notifications',
+        'description' => 'Mark notifications as read',
+        'type' => 'write',
+        'ajax' => true,
+        'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
+        'capabilities' => 'mod/openstudio:view'
     )
 );
 
@@ -121,7 +130,8 @@ $services = array(
             'mod_openstudio_external_flag_comment',
             'mod_openstudio_external_delete_comment',
             'mod_openstudio_external_lock',
-            'mod_openstudio_external_unlock'),
+            'mod_openstudio_external_unlock',
+            'mod_openstudio_external_read_notifications'),
         'restrictedusers' => 0,
         'enabled' => 1,
         'shortname' => 'openstudio_service',
