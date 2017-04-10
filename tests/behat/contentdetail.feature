@@ -91,7 +91,7 @@ Feature: Create and edit contents detail
         And I should see "0 views"
 
         And "Archive post" "button" should exist
-        And "Report post" "button" should exist
+        And "Report post" "button" should not exist
         And I should not see "Image meta-data"
         And I should not see "Image location"
         
@@ -142,7 +142,7 @@ Feature: Create and edit contents detail
         And I should see "0 views"
 
         And "Archive post" "button" should exist
-        And "Report post" "button" should exist
+        And "Report post" "button" should not exist
         And I should see "Image meta-data"
         And I should see "Image location"
         
@@ -193,7 +193,7 @@ Feature: Create and edit contents detail
         And I should see "0 views"
 
         And "Archive post" "button" should exist
-        And "Report post" "button" should exist
+        And "Report post" "button" should not exist
         And I should not see "Image meta-data"
         And I should not see "Image location"
         
@@ -244,7 +244,7 @@ Feature: Create and edit contents detail
         And I should see "0 views"
 
         And "Archive post" "button" should exist
-        And "Report post" "button" should exist
+        And "Report post" "button" should not exist
         And I should not see "Image meta-data"
         And I should not see "Image location"
         
@@ -291,7 +291,7 @@ Feature: Create and edit contents detail
         And I should see "0 views"
 
         And "Archive post" "button" should exist
-        And "Report post" "button" should exist
+        And "Report post" "button" should not exist
         And I should not see "Image meta-data"
         And I should not see "Image location"
         
@@ -342,7 +342,7 @@ Feature: Create and edit contents detail
         And I should see "0 views"
 
         And "Archive post" "button" should exist
-        And "Report post" "button" should exist
+        And "Report post" "button" should not exist
         And I should not see "Image meta-data"
         And I should not see "Image location"
         
@@ -393,7 +393,7 @@ Feature: Create and edit contents detail
         And I should see "0 views"
 
         And "Archive post" "button" should exist
-        And "Report post" "button" should exist
+        And "Report post" "button" should not exist
         And I should not see "Image meta-data"
         And I should not see "Image location"
         
@@ -536,3 +536,64 @@ Feature: Create and edit contents detail
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "Test My Content Details View"
         And "Request feedback" "button" should not exist
+
+    Scenario: Add new content and Report content abuse
+        # The OU Alert Plugin is enable by Admin
+        When I log out
+        And I log in as "admin"
+        And I navigate to "OU Alerts" node in "Site administration > Plugins > Reports"
+        And I follow "OU Alerts"
+        And I set the following fields to these values:
+            | id_s__oualerts_enabled | 1 |
+        And I press "Save changes"
+        And I should see "Changes saved"
+
+        # switch to teacher1
+        And I log out
+        And I log in as "teacher1"
+        And I follow "Course 1"
+        And I follow "Test Open Studio name 1"
+        And the following open studio "contents" exist:
+            | openstudio | user     | name                             | description                                  | file                                              | visibility |
+            | OS1        | teacher1 | Test ContentDetail Report Abuse  | Test ContentDetail Report Abuse  Description | mod/openstudio/tests/importfiles/test1.jpg        | module     |
+
+        # Redirect to content detail
+        And I follow "Shared content > My Module" in the openstudio navigation
+        And I follow "Test ContentDetail Report Abuse"
+        # The owner of the content can not report the content
+        And I should see "Teacher 1"
+        And I should see "Test ContentDetail Report Abuse"
+        And "Report post" "button" should not exist
+
+        # switch to student1 and Report content
+        And I am on site homepage
+        And I log out
+        And I log in as "student1"
+        And I follow "Course 1"
+        And I follow "Test Open Studio name 1"
+        And I follow "Shared content > My Module" in the openstudio navigation
+        And I follow "Test ContentDetail Report Abuse"
+        And "Report post" "button" should exist
+        And I press "Report post"
+        When I set the following fields to these values:
+            | id_oualerts_reasons_1 | 1                       |
+            | id_oualerts_reasons_8 | 1                       |
+            | oualerts_message      | Report Open Studio Test |
+        And I press "Send alert"
+        And I should see "Test ContentDetail Report Abuse"
+
+        # switch to student2 and Report content
+        And I am on site homepage
+        And I log out
+        And I log in as "student2"
+        And I follow "Course 1"
+        And I follow "Test Open Studio name 1"
+        And I follow "Shared content > My Module" in the openstudio navigation
+        And I follow "Test ContentDetail Report Abuse"
+        And I press "Report post"
+        When I set the following fields to these values:
+            | id_oualerts_reasons_1 | 1                       |
+            | id_oualerts_reasons_8 | 1                       |
+            | oualerts_message      | Report Open Studio Test |
+        And I press "Send alert"
+        And I should see "Test ContentDetail Report Abuse"

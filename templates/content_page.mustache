@@ -47,7 +47,8 @@
         "contentcopyenable" : true,
         "profilebarenable": true,
         "actionenable": true,
-        "isinlockedfolder": false
+        "isinlockedfolder": false,
+         "reportabuselink" : http://example.com,
     }
 }}
 {{#contentmapenable}}
@@ -155,8 +156,12 @@
                 <div class="openstudio-content-view-archive">
                     <input id="id_archivebutton" name="archivebutton"
                            value="{{#str}}contentactionarchivepost, mod_openstudio{{/str}}" type="button">
-                    <input id="id_reportbutton" name="reportbutton"
-                           value="{{#str}}contentactionreportpost, mod_openstudio{{/str}}" type="button">
+                    {{#reportabuselink}}
+                        <a id="id_reportbutton_link" href="{{{reportabuselink}}}">
+                            <input id="id_reportbutton" name="reportbutton"
+                               value="{{#str}}contentactionreportpost, mod_openstudio{{/str}}" type="button">
+                        <a>
+                    {{/reportabuselink}}
                 </div>
             </div>
 

@@ -1571,4 +1571,39 @@ EOF;
 
         return $icon;
     }
+
+    /*
+     * Helper function to generate the report abuse link.
+     * The function below currently uses the oualerts plugin.
+     * The function can be extended to support other installed alerting functions.
+     *
+     * @param string $modname Module/plugin name making the report.
+     * @param int $modulecontextid Module instance id.
+     * @param string $itemtype Item type being reported.
+     * @param int $itemid Item id being reported.
+     * @param string $itemurl Item URL being reported.
+     * @param string $returnurl Return URL to send user to after submitting report.
+     * @param int $userid Id of user making the report.
+     * @return string Returns constructed URL.
+     */
+    public static function render_report_abuse_link(
+            $modname, $modulecontextid, $itemtype, $itemid, $itemurl, $returnurl, $userid) {
+
+        $reportabuselink = '';
+
+        /*
+         * Depending on which alert system is available, call it to get the
+         * report abuse link.
+         */
+        if (self::oualerts_installed()) {
+            $itemurl = urlencode($itemurl);
+            $returnurl = urlencode($returnurl);
+            $reportabuselink = oualerts_generate_alert_form_url(
+                    $modname, $modulecontextid,
+                    $itemtype, $itemid, $itemurl, $returnurl,
+                    $userid, true, true);
+        }
+
+        return $reportabuselink;
+    }
 }

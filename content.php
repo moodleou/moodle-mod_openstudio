@@ -218,6 +218,11 @@ util::add_breadcrumb($PAGE, $cm->id, navigation_node::TYPE_ACTIVITY, $crumbarray
 // Generate stream html.
 $renderer = $PAGE->get_renderer('mod_openstudio');
 $PAGE->set_button($renderer->searchform($theme, $vid));
+if (!$permissions->contentismine) {
+    $contentdata->reportabuselink = util::render_report_abuse_link(
+        'openstudio', $permissions->activecmcontextid, 'content', $contentdata->id,
+        $pageurl, $pageurl, $permissions->activeuserid);
+}
 
 $contentdata->vid = $vid;
 $contentdata->placeholdertext = $areaurlname;
