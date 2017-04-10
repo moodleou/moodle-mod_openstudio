@@ -29,7 +29,9 @@ define([
     'core/yui',
     'core/templates',
     'core/str',
-], function($, Y, Templates, Str) {
+    'core/ajax',
+    'require'
+], function($, Y, Templates, Str, ajax, require) {
     var t;
     t = {
 
@@ -61,7 +63,13 @@ define([
          */
         init: function(options) {
             t.mconfig = options;
-            t.dialogue = t.createSubscriptionDialogue(t.CSS.BOUNDINGBOX);
+
+            // Create subscription dialogue.
+            Y.use('moodle-core-notification-dialogue', function() {
+                require(['mod_openstudio/osdialogue'], function(osDialogue){
+                    t.dialogue = t.createSubscriptionDialogue(osDialogue, t.CSS.BOUNDINGBOX);
+                });
+            });
 
             // Click event on subscription button.
             $(t.CSS.SUBSCRIBEBUTTON).on('click', function() {
@@ -79,26 +87,23 @@ define([
         /**
          * Create subscription dialogue and some events on it.
          *
+         * @param {object} osDialogue OSDialogue object
          * @param {string} boundingBoxClass The class wrapping the subscription dialog
-         * @return M.core.dialog instance
+         * @return {object} OSDialogue instance
          * @method createSubscriptionDialogue
          */
-        createSubscriptionDialogue: function(boundingBoxClass) {
+        createSubscriptionDialogue: function(osDialogue, boundingBoxClass) {
             /**
              * Set header for dialog
              * @method setHeader
              */
             function setHeader() {
-                var headerstring = 'Subscription settings';
                 Str
                     .get_string('subscriptiondialogheader', 'mod_openstudio')
                     .done(function(s) {
-                        headerstring = s;
-                    })
-                    .always(function() {
                         dialogue.set('headerContent',
                             '<span class="' + t.CSS.DIALOGHEADER.replace('.', '') +
-                            '">' + headerstring + '</span>');
+                            '">' + s + '</span>');
                     });
             }
 
@@ -119,43 +124,35 @@ define([
              * @method setBody
              */
             function setFooter() {
-                // Button [Cancel]
-                var cancelBtnProperty = {
-                    name: 'cancel',
-                    label: 'Cancel',
-                    classNames: 'openstudio-cancel-btn',
-                    action: 'hide'
-                };
                 Str
-                    .get_string('subscriptiondialogcancel', 'mod_openstudio')
+                    .get_strings([
+                        {key: 'subscriptiondialogcancel', component: 'mod_openstudio'},
+                        {key: 'subscribe', component: 'mod_openstudio'}
+                    ])
                     .done(function(s) {
-                        cancelBtnProperty.label = s;
-                    })
-                    .always(function() {
+                        // Button [Cancel]
+                        var cancelBtnProperty = {
+                            name: 'cancel',
+                            label: s[0],
+                            classNames: 'openstudio-cancel-btn',
+                            action: 'hide'
+                        };
                         dialogue.addButton(cancelBtnProperty, ['footer']);
-                    });
 
-                // Button [Subscribe]
-                var subscribeBtnProperty = {
-                    name: 'subscribe',
-                    label: 'Subscribe',
-                    classNames: 'openstudio-subscript-btn',
-                    events: {
-                        click: t.subscribe.bind(t)
-                    }
-                };
-
-                Str
-                    .get_string('subscribe', 'mod_openstudio')
-                    .done(function(s) {
-                        subscribeBtnProperty.label = s;
-                    })
-                    .always(function() {
+                        // Button [Subscribe]
+                        var subscribeBtnProperty = {
+                            name: 'subscribe',
+                            label: s[1],
+                            classNames: 'openstudio-subscript-btn',
+                            events: {
+                                click: t.subscribe.bind(t)
+                            }
+                        };
                         dialogue.addButton(subscribeBtnProperty, ['footer']);
                     });
             }
 
-            var dialogue = new M.core.dialogue({
+            var dialogue = new osDialogue({
                 closeButton: true,
                 visible: false,
                 centered: false,
@@ -181,29 +178,31 @@ define([
              * @method doSubscribe
              */
             function doSubscribe() {
-                require(['core/ajax'], function(ajax) {
-                    var args = {
-                        openstudioid: t.mconfig.openstudioid,
-                        emailformat: $('select[name="openstudio-subscription-email-format"]').val(),
-                        frequency: $('select[name="openstudio-subscription-email-frequency"]').val(),
-                        userid: t.mconfig.userid
-                    };
 
-                    var promises = ajax.call([{
-                        methodname: 'mod_openstudio_external_subscribe',
-                        args: args
-                    }]);
+                var args = {
+                    openstudioid: t.mconfig.openstudioid,
+                    emailformat: $('select[name="openstudio-subscription-email-format"]').val(),
+                    frequency: $('select[name="openstudio-subscription-email-frequency"]').val(),
+                    userid: t.mconfig.userid
+                };
 
-                    promises[0]
-                        .done(function(res) {
-                            if (res.success) {
-                                updateSubscriptionButtonState(res.subscriptionid);
-                            }
-                        })
-                        .fail(function(ex) {
-                            window.console.error('Log request failed ' + ex.message);
-                        });
-                });
+                M.util.js_pending('openstudioSubscribe');
+
+                var promises = ajax.call([{
+                    methodname: 'mod_openstudio_external_subscribe',
+                    args: args
+                }]);
+
+                promises[0]
+                    .done(function(res) {
+                        updateSubscriptionButtonState(res.subscriptionid);
+                    })
+                    .always(function() {
+                        M.util.js_complete('openstudioSubscribe');
+                    })
+                    .fail(function(ex) {
+                        window.console.error('Log request failed ' + ex.message);
+                    });
             }
 
             /**
@@ -212,14 +211,10 @@ define([
              * @method updateSubscriptionButtonState
              */
             function updateSubscriptionButtonState(subscriptionid) {
-                var unsubscribestr = 'Unsubscribe';
                 Str
                     .get_string('unsubscribe', 'mod_openstudio')
                     .done(function(s) {
-                        unsubscribestr = s;
-                    })
-                    .always(function() {
-                        $(t.CSS.SUBSCRIBEBUTTON).text(unsubscribestr);
+                        $(t.CSS.SUBSCRIBEBUTTON).text(s);
                     });
 
                 $(t.CSS.SUBSCRIBEBUTTON).attr('subscriptionid', subscriptionid);
@@ -239,28 +234,29 @@ define([
              * @method doUnsubscribe
              */
             function doUnsubscribe() {
-                require(['core/ajax'], function(ajax) {
-                    var args = {
-                        subscriptionid: $(t.CSS.SUBSCRIBEBUTTON).attr('subscriptionid'),
-                        userid: t.mconfig.userid,
-                        cmid: t.mconfig.cmid,
-                    };
+                var args = {
+                    subscriptionid: $(t.CSS.SUBSCRIBEBUTTON).attr('subscriptionid'),
+                    userid: t.mconfig.userid,
+                    cmid: t.mconfig.cmid
+                };
 
-                    var promises = ajax.call([{
-                        methodname: 'mod_openstudio_external_unsubscribe',
-                        args: args
-                    }]);
+                M.util.js_pending('openstudioUnsubscribe');
 
-                    promises[0]
-                        .done(function(res) {
-                            if (res.success) {
-                                updateSubscriptionButtonState();
-                            }
-                        })
-                        .fail(function(ex) {
-                            window.console.warn('Log request failed ' + ex.message);
-                        });
-                });
+                var promises = ajax.call([{
+                    methodname: 'mod_openstudio_external_unsubscribe',
+                    args: args
+                }]);
+
+                promises[0]
+                    .done(function() {
+                        updateSubscriptionButtonState();
+                    })
+                    .always(function() {
+                        M.util.js_complete('openstudioUnsubscribe');
+                    })
+                    .fail(function(ex) {
+                        window.console.warn('Log request failed ' + ex.message);
+                    });
             }
 
             /**
@@ -268,14 +264,10 @@ define([
              * @method updateSubscriptionButtonState
              */
             function updateSubscriptionButtonState() {
-                var subscribestr = 'Subscribe to my studio';
                 Str
                     .get_string('subscribetothisstudio', 'mod_openstudio')
                     .done(function(s) {
-                        subscribestr = s;
-                    })
-                    .always(function() {
-                        $(t.CSS.SUBSCRIBEBUTTON).text(subscribestr);
+                        $(t.CSS.SUBSCRIBEBUTTON).text(s);
                     });
 
                 $(t.CSS.SUBSCRIBEBUTTON).removeAttr('subscriptionid');
@@ -287,6 +279,7 @@ define([
         /**
          * Check if Studio is subscribed.
          * @method issubscribed
+         * @return {boolean}
          */
         issubscribed: function() {
             return ($(t.CSS.SUBSCRIBEBUTTON)[0].hasAttribute('subscriptionid'));
@@ -305,7 +298,7 @@ define([
                     .get('boundingBox')
                     .setStyles({
                        top: 3,
-                       right: 200,
+                       right: 211,
                        left: 'auto',
                        width: 316
                     });
@@ -327,7 +320,7 @@ define([
                     .get('boundingBox')
                     .setStyles({
                        top: 3,
-                       right: 200,
+                       right: 211,
                        left: 'auto',
                        width: 316
                     });
@@ -347,7 +340,7 @@ define([
 
                 $('body').after($(t.CSS.BOUNDINGBOX).parent());
             }
-        },
+        }
     };
 
     return t;

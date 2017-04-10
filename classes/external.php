@@ -97,10 +97,9 @@ class mod_openstudio_external extends external_api {
      * @param int $subscriptiontype Subscription type
      * @return array
      *  [
-     *      success: boolean
-     *      warning: external_warnings object,
      *      subscriptionid: int
      *  ]
+     * @throws moodle_exception
      */
     public static function subscribe($openstudioid, $emailformat, $frequency, $userid, $subscriptiontype = null) {
         require_login();
@@ -111,7 +110,6 @@ class mod_openstudio_external extends external_api {
                 'frequency' => $frequency,
                 'userid' => $userid,
                 'subscriptiontype' => $subscriptiontype));
-        $warnings = array();
         $result = array();
 
         $subscriptionid = subscription::create(
@@ -123,19 +121,10 @@ class mod_openstudio_external extends external_api {
                 $params['frequency']);
 
         if (!$subscriptionid) {
-            $warnings[] = array(
-                    'item' => 'module',
-                    'itemid' => $openstudioid,
-                    'warningcode' => 'cannotsubscribemodule',
-                    'message' => 'Subscription create error!');
-            $success = false;
-        } else {
-            $success = true;
+            throw new \moodle_exception('errorsubscribe', 'openstudio');
         }
 
         $result['subscriptionid'] = $subscriptionid;
-        $result['success'] = $success;
-        $result['warnings'] = $warnings;
 
         return $result;
     }
@@ -147,9 +136,7 @@ class mod_openstudio_external extends external_api {
      */
     public static function subscribe_returns() {
         return new external_single_structure(array(
-                'subscriptionid' => new external_value(PARAM_INT, 'Open Studio instance id'),
-                'success' => new external_value(PARAM_BOOL, 'Subscribe successfully'),
-                'warnings' => new external_warnings())
+                'subscriptionid' => new external_value(PARAM_INT, 'Open Studio instance id'))
         );
     }
 
@@ -174,9 +161,9 @@ class mod_openstudio_external extends external_api {
      * @param int $coursemoduleid Course module instance ID
      * @return array
      *  [
-     *      success: boolean
-     *      warning: external_warnings object,
+     *      subscriptionid: int
      *  ]
+     * @throws moodle_exception
      */
     public static function unsubscribe($subscriptionid, $userid, $coursemoduleid) {
         require_login();
@@ -186,8 +173,6 @@ class mod_openstudio_external extends external_api {
                 'userid' => $userid,
                 'cmid' => $coursemoduleid));
 
-        $warnings = array();
-        $result = array();
         $checkpermissions = true;
 
         $coursedata = util::render_page_init($params['cmid'], array('mod/openstudio:view'));
@@ -201,17 +186,12 @@ class mod_openstudio_external extends external_api {
                 $params['subscriptionid'], $params['userid'], $checkpermissions);
 
         if (!$success) {
-            $warnings[] = array(
-                    'item' => 'module',
-                    'itemid' => $params['subscriptionid'],
-                    'warningcode' => 'cannotunsubscribemodule',
-                    'message' => 'Subscription delete error!');
+            throw new \moodle_exception('errorunsubscribe', 'openstudio');
         }
 
-        $result['success'] = $success;
-        $result['warnings'] = $warnings;
-
-        return $result;
+        return [
+            'subscriptionid' => $params['subscriptionid']
+        ];
     }
 
     /**
@@ -221,8 +201,7 @@ class mod_openstudio_external extends external_api {
      */
     public static function unsubscribe_returns() {
         return new external_single_structure(array(
-                'success' => new external_value(PARAM_BOOL, 'unsubscribe successfully'),
-                'warnings' => new external_warnings())
+                'subscriptionid' => new external_value(PARAM_INT, 'Subscription ID'))
         );
     }
 

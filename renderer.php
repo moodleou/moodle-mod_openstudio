@@ -265,6 +265,10 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 "FREQUENCY_HOURLY" => subscription::FREQUENCY_HOURLY,
                 "FREQUENCY_DAILY" => subscription::FREQUENCY_DAILY);
 
+        $PAGE->requires->strings_for_js(array(
+                'subscriptiondialogheader', 'subscriptiondialogcancel', 'subscribe', 'unsubscribe',
+                'subscribetothisstudio'), 'mod_openstudio');
+
         $this->page->requires->js_call_amd('mod_openstudio/subscribe', 'init', [[
                 'constants' => $subscriptionconstant,
                 'openstudioid' => $coursedata->cminstance->id,

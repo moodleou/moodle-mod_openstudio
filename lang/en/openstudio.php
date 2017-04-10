@@ -751,6 +751,8 @@ $string['unsubscribe'] = 'Unsubscribe';
 $string['subscriptionemailsubject'] = 'OpenStudio: {$a} - Latest activity';
 $string['subscriptionhello'] = 'Hi {$a}';
 $string['subscriptionintro'] = 'You have {$a} new notifications in your OpenStudio:';
+$string['errorsubscribe'] = 'Subscription create error!';
+$string['errorunsubscribe'] = 'Subscription delete error!';
 
 $string['subemailgreeting'] = 'Dear {$a->firstname} {$a->lastname},';
 $string['subemailintrostreamgroup'] = 'Here is a summary of the activity has been happening with the contents in the group stream that you subscribed to.';

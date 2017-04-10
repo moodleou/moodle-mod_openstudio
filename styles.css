@@ -533,48 +533,51 @@ button.openstudio-notification-stopbutton:focus {
 
 /* Common dialog header */
 
-.path-mod-openstudio .moodle-dialogue-base .moodle-dialogue-wrap .moodle-dialogue-hd,
-.path-mod-openstudio .moodle-dialogue-base .moodle-dialogue-wrap .moodle-dialogue-hd.yui3-widget-hd {
+.path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue .moodle-dialogue-wrap .moodle-dialogue-hd,
+.path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue .moodle-dialogue-wrap .moodle-dialogue-hd.yui3-widget-hd {
     height: 46px;
     padding: 0px;
 }
 
-.path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue-common-header {
+.path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue .moodle-dialogue-hd span:first-child {
     padding: 11px 15px;
     display: inline-block;
     font-family: Arial;
 }
 
-.path-mod-openstudio .moodle-dialogue-base .yui3-button.closebutton {
+.path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue .yui3-button.closebutton {
     padding: 1px 3px 3px 3px;
     margin: 0px 9px 0px 9px;
 }
 
-.path-mod-openstudio .moodle-dialogue-base .yui3-button.closebutton:before {
+.path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue .yui3-button.closebutton:before {
     height: 30px;
     display: block;
 }
 
 /* Common dialog body */
-.path-mod-openstudio .moodle-dialogue-base .moodle-dialogue-bd {
+.path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue .moodle-dialogue-bd {
     padding: 20px 15px;
 }
 
-.path-mod-openstudio .moodle-dialogue-base .moodle-dialogue-bd {
+.path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue .moodle-dialogue-bd {
     padding: 12px 15px;
 }
 
 /* Common dialog footer */
-.path-mod-openstudio .moodle-dialogue-base .moodle-dialogue .moodle-dialogue-content .moodle-dialogue-ft {
+.path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue.moodle-dialogue .moodle-dialogue-content
+.moodle-dialogue-ft {
     text-align: left;
     margin: 7px 10px 30px 15px;
 }
 
-.path-mod-openstudio .moodle-dialogue-base .moodle-dialogue .moodle-dialogue-ft .yui3-widget-buttons {
+.path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue.moodle-dialogue .moodle-dialogue-ft
+.yui3-widget-buttons {
     display: inline-flex;
 }
 
-.path-mod-openstudio .moodle-dialogue-base .moodle-dialogue .moodle-dialogue-ft .yui3-widget-buttons button {
+.path-mod-openstudio .moodle-dialogue-base  .openstudio-dialogue.moodle-dialogue .moodle-dialogue-ft
+.yui3-widget-buttons button {
     margin-left: 5px;
     margin-right: 5px;
 }
@@ -859,16 +862,9 @@ div.openstudio-comment-thread-item:nth-last-child(2) {
  */
 
 /* Header */
-.moodle-dialogue-base .openstudio-subscribe-dialog-container .moodle-dialogue-wrap .moodle-dialogue-hd,
-.moodle-dialogue-base .openstudio-subscribe-dialog-container .moodle-dialogue-wrap .moodle-dialogue-hd.yui3-widget-hd {
-    height: 48px;
-    padding: 0px;
-}
-
-.moodle-dialogue-base .openstudio-subscribe-dialog-container .openstudio-subscription-header {
-    padding: 13px 15px;
-    display: inline-block;
-    font-family: Arial;
+.path-mod-openstudio .moodle-dialogue-base .openstudio-subscribe-dialog-container.moodle-dialogue
+.moodle-dialogue-content .moodle-dialogue-ft {
+    margin: 0;
 }
 
 /* Footer */
@@ -878,31 +874,13 @@ div.openstudio-comment-thread-item:nth-last-child(2) {
 
 .moodle-dialogue-base .openstudio-subscribe-dialog-container.moodle-dialogue .moodle-dialogue-content .moodle-dialogue-ft {
     margin: 0px;
-    padding: 20px 10px 30px 10px;
+    padding: 20px 10px 30px 15px;
     border-top: 1px solid #bfe2ef;
-}
-
-.openstudio-subscribe-dialog-container .moodle-dialogue-ft .openstudio-cancel-btn {
-    float: left;
-}
-
-.openstudio-subscribe-dialog-container .moodle-dialogue-ft .openstudio-subscript-btn {
-    float: right;
 }
 
 .yui3-skin-sam .yui3-panel.openstudio-subscribe-dialog-container .yui3-widget-ft .yui3-button {
     margin-left: 5px;
     margin-right: 5px;
-}
-
-.moodle-dialogue-base .openstudio-subscribe-dialog-container .yui3-button.closebutton {
-    padding: 3px 3px;
-    margin: 0px 12px;
-}
-
-.moodle-dialogue-base .openstudio-subscribe-dialog-container .yui3-button.closebutton:before {
-    height: 30px;
-    display: block;
 }
 
 /* Body */
@@ -911,7 +889,7 @@ div.openstudio-comment-thread-item:nth-last-child(2) {
 }
 
 .openstudio-fd-subscription {
-    margin: 20px 0px;
+    margin: 9px 0px;
 }
 
 .openstudio-subscription-selection {
@@ -938,7 +916,8 @@ div.openstudio-comment-thread-item:nth-last-child(2) {
 
 .openstudio-fd-subscription-tablecell{
     display: table-cell;
-    padding: 3px 4.5px;
+    padding: 8px 4.5px;
+    font-family: Arial, sans-serif;
 }
 
 /**
@@ -4606,6 +4585,49 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-folder-preview-default img  {
         width: 448px;
+    }
+
+    /**
+     * Subscription dialogue
+     */
+
+    .moodle-dialogue-base .openstudio-subscribe-dialog-container.moodle-dialogue .moodle-dialogue-bd {
+        padding: 1px 0;
+    }
+
+    .moodle-dialogue-base .openstudio-subscribe-dialog-container.moodle-dialogue .moodle-dialogue-content
+    .moodle-dialogue-ft {
+        padding-top: 29px;
+    }
+
+    .moodle-dialogue-base .openstudio-subscribe-dialog-container .moodle-dialogue-wrap .moodle-dialogue-hd,
+    .moodle-dialogue-base .openstudio-subscribe-dialog-container .moodle-dialogue-wrap
+    .moodle-dialogue-hd.yui3-widget-hd {
+        padding: 11px 40px 8px 15px;
+    }
+
+    .openstudio-fd-subscription {
+        margin: 8px 0;
+    }
+
+    .openstudio-fd-subscription-tablecell {
+        padding: 6px 5px;
+        font-size: 1.1428em;
+    }
+
+    .openstudio-fd-subscription-tablecell:nth-child(2) {
+        font-size: 1em;
+    }
+
+    .openstudio-fd-subscription-tablecell select {
+        height: 25px;
+        font-size: 1em;
+        padding: 2px 3px 0;
+    }
+
+    .openstudio-subscription-header {
+        font-family: Arial;
+        font-size: 1em;
     }
 }
 /* Mobile small. */

@@ -26,17 +26,25 @@
  */
 define([
     'jquery',
-    'core/yui',
-    'core/notification'
-], function($, Y, Notification) {
+    'core/yui'
+], function($, Y) {
     var OSDIALOGUE_NAME = 'Open Studio dialogue',
         DIALOGUE_PREFIX = 'moodle-dialogue';
     var t = function() {
+        // Set bouding class for Open Studio dialogue to be distinguishable with other Moodle dialogues.
+        arguments[0].extraClasses = arguments[0].extraClasses || [];
+        arguments[0].extraClasses.push('openstudio-dialogue');
+
         t.superclass.constructor.apply(this, arguments);
     };
 
     Y.extend(t, M.core.dialogue, {
-        addButton : function(property, sections) {
+        /**
+         * Override addButton function of super class.
+         * @param {object} property
+         * @param {array} sections
+         */
+        addButton: function(property, sections) {
             var self = this;
             var button = '<button class="' + property.classNames + '">' + property.label + '</button>';
             var sectionNode;
