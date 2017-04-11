@@ -2218,6 +2218,10 @@ a.openstudio-actvity-title:hover  {
     color: #0b55a8;
 }
 
+.openstudio-folder-global-background .openstudio-content-view-tag-item > li {
+    background: #f2f3f6;
+}
+
 .openstudio-content-view-archive {
     float: right;
     margin-bottom: 27px;
@@ -2419,12 +2423,20 @@ a.openstudio-actvity-title:hover  {
     padding: 7px 7px 7px 15px;
 }
 
+.openstudio-folder-global-background .openstudio-content-view-metadata-info {
+    border-bottom: 1px solid #d8dde6;
+}
+
 div.openstudio-content-view-image-metadata div:nth-of-type(even) {
     background: #ffffff;
 }
 
 div.openstudio-content-view-image-metadata div:nth-of-type(odd) {
     background: #f4fafc;
+}
+
+.openstudio-folder-global-background .openstudio-content-view-image-metadata div:nth-of-type(odd) {
+    background: #f2f3f6;
 }
 
 .openstudio-content-view-image-data-label {
@@ -2493,10 +2505,6 @@ div.openstudio-content-view-version div:nth-of-type(odd) {
 .openstudio-content-view-version-actions {
     display: inline-block;
     float: right;
-}
-
-#openstudio_content_view_post_image_location {
-    background: #ddf0f8;
 }
 
 #openstudio_content_view_map_canvas {

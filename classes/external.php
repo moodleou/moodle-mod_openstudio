@@ -34,6 +34,7 @@ use mod_openstudio\local\api\contentversion;
 use mod_openstudio\local\renderer_utils;
 use mod_openstudio\local\api\comments;
 use mod_openstudio\local\api\lock;
+use mod_openstudio\local\api\folder;
 
 require_once($CFG->dirroot . '/mod/openstudio/api/user.php');
 require_once($CFG->libdir . '/externallib.php');
@@ -749,7 +750,8 @@ class mod_openstudio_external extends external_api {
     public static function delete_content_parameters() {
         return new external_function_parameters(array(
                 'id' => new external_value(PARAM_INT, 'Open studio instance ID'),
-                'cid' => new external_value(PARAM_INT, 'Content ID'))
+                'cid' => new external_value(PARAM_INT, 'Content ID'),
+                'containingfolder' => new external_value(PARAM_INT, 'Folder ID', VALUE_OPTIONAL, 0))
         );
     }
 
@@ -758,6 +760,7 @@ class mod_openstudio_external extends external_api {
      *
      * @param int $id Open studio instance ID
      * @param int $cid Content ID
+     * @param int $containingfolder Folder ID
      * @return array
      *  [
      *      success: boolean,
@@ -765,10 +768,11 @@ class mod_openstudio_external extends external_api {
      *  ]
      * @throws moodle_exception
      */
-    public static function delete_content($id, $cid) {
+    public static function delete_content($id, $cid, $containingfolder = 0) {
         $params = self::validate_parameters(self::delete_content_parameters(), array(
             'id' => $id,
-            'cid' => $cid));
+            'cid' => $cid,
+            'containingfolder' => $containingfolder));
 
         $success = false;
 
@@ -794,10 +798,21 @@ class mod_openstudio_external extends external_api {
         $actionallowed = ($contentdata->userid == $userid) && $permissions->addcontent;
         $actionallowed = $actionallowed || $permissions->managecontent;
         if ($actionallowed) {
-            if ($contentdata->levelid > 0 && $contentdata->levelcontainer > 0 && $permissions->versioningon) {
-                $success = content::delete($userid, $params['cid'], $cminstance->versioning, $cm);
+            if ($params['containingfolder']) {
+                if ($contentdata) {
+                    $provenance = folder::get_content_provenance($params['containingfolder'], $contentdata->id);
+                    $success = folder::remove_content($params['containingfolder'], $contentdata->id, $userid);
+                    if (empty($provenance->provenanceid) || $provenance->provenanceid != $contentdata->id) {
+                        // If this isn't just a soft link, empty the actual slot as well.
+                        content::empty_content($userid, $contentdata->id, true, $cminstance->versioning, $cm);
+                    }
+                }
             } else {
-                $success = content::empty_content($userid, $params['cid'], true, $cminstance->versioning, $cm);
+                if ($contentdata->levelid > 0 && $contentdata->levelcontainer > 0 && $permissions->versioningon) {
+                    $success = content::delete($userid, $params['cid'], $cminstance->versioning, $cm);
+                } else {
+                    $success = content::empty_content($userid, $params['cid'], true, $cminstance->versioning, $cm);
+                }
             }
             notifications::delete_unread_for_post($params['cid']);
         }

@@ -1140,9 +1140,8 @@ class renderer_utils {
                 $content = self::content_type_image($content, $context);
                 $contentthumbnailfileurl = $content->contenttypeimage;
 
-                $contentdetail = new \moodle_url('/mod/openstudio/content.php',
-                            array('id' => $folderdata->cmid, 'sid' => $content->id, 'vuid' => $content->userid,
-                                'folderid' => $folderdata->id));
+                $contentdetail = new \moodle_url('/mod/openstudio/content.php', array(
+                        'id' => $folderdata->cmid, 'sid' => $content->id, 'vuid' => $content->userid, 'folderid' => $folderdata->id));
                 $content->contentdetailurl = $contentdetail;
                 $content->contentthumbnailurl = $contentthumbnailfileurl;
                 $content->datetimeupdated = $content->timemodified ? date('j/m/y h:i', $content->timemodified) : null;

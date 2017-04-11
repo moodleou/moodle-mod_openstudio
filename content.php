@@ -53,7 +53,6 @@ $course = $coursedata->course;
 $mcontext = $coursedata->mcontext;
 $permissions = $coursedata->permissions;
 $theme = $coursedata->theme;
-$folderid = null;
 
 require_login($course, true, $cm);
 
@@ -223,15 +222,22 @@ $PAGE->set_button($renderer->searchform($theme, $vid));
 $contentdata->vid = $vid;
 $contentdata->placeholdertext = $areaurlname;
 
-$PAGE->requires->js_call_amd('mod_openstudio/contentpage', 'init');
-
+$contentdata->folderid = $folderid;
 $contentdata->isfoldercontent = false;
 if ($folderid) {
     $folderdata = content::get($folderid);
     if ($folderdata) {
+        $contentdata->name = $folderdata->name;
+        $folderedit = new moodle_url('/mod/openstudio/contentedit.php',
+                array('id' => $cm->id, 'lid' => 0, 'sid' => $folderdata->id, 'type' => content::TYPE_FOLDER_CONTENT));
+        $contentdata->folderedit = $folderedit->out(false);
+        $contentdata->isfoldercontent = true;
+        $contentdata->folderid = $folderdata->id;
         $contentdata->isinlockedfolder = ($folderdata->locktype == lock::ALL);
     }
 }
+
+$PAGE->requires->js_call_amd('mod_openstudio/contentpage', 'init');
 
 // Note: This header statement is needed because the slot form data contains
 // object and script code and browsers like webkit thinks this is a cross-site

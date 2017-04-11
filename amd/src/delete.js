@@ -182,7 +182,8 @@ define([
                 methodname: 'mod_openstudio_external_delete_content',
                 args: {
                     id: t.mconfig.id,
-                    cid: t.mconfig.cid
+                    cid: t.mconfig.cid,
+                    containingfolder: t.mconfig.folderid
                 }
             }]);
 

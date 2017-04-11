@@ -503,7 +503,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $data->foldermode = $foldermode;
         $data->folderdetails = $folderdetails;
         $createfolderlink = new moodle_url('/mod/openstudio/contentedit.php',
-                    array('id' => $data->cmid, 'lid' => 0, 'sid' => 0, 'ssid' => 0, 'type' => content::TYPE_FOLDER_CONTENT));
+                array('id' => $data->cmid, 'lid' => 0, 'sid' => 0, 'ssid' => 0, 'type' => content::TYPE_FOLDER_CONTENT));
         $data->createfolderlink = $createfolderlink;
         $data->addcontenticon = $OUTPUT->pix_url('add_content_rgb_32px', 'openstudio');
         $data->editform = $contenteditform;
@@ -754,7 +754,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         // Check edit content permission.
         $contenteditenable = $deleteenable;
-        $editparams = array('id' => $cmid, 'sid' => $contentdata->id);
+        $editparams = array('id' => $cmid, 'sid' => $contentdata->id, 'ssid' => $contentdata->folderid);
         $contenteditlink = new moodle_url('/mod/openstudio/contentedit.php', $editparams);
 
         if (($contentdata->l1id > 0) || ($contentdata->l1id == 0) || $permissions->managecontent) {

@@ -53,15 +53,20 @@
 {{#contentmapenable}}
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 {{/contentmapenable}}
-<div class="openstudio-container">
-    {{#profilebarenable}}
-        <div class="openstudio-module-title">
-            <h1>{{{placeholdertext}}}</h1>
-        </div>
-        <div class="openstudio-content-view-profile-bar clearfix">
-           {{>mod_openstudio/profile_bar}}
-        </div>
-    {{/profilebarenable}}
+<div class="openstudio-container {{#isfoldercontent}}openstudio-folder-global-background{{/isfoldercontent}}">
+    {{#isfoldercontent}}
+        {{>mod_openstudio/folder_header}}
+    {{/isfoldercontent}}
+    {{^isfoldercontent}}
+        {{#profilebarenable}}
+            <div class="openstudio-module-title">
+                <h1>{{{placeholdertext}}}</h1>
+            </div>
+            <div class="openstudio-filter clearfix">
+                {{>mod_openstudio/profile_bar}}
+            </div>
+        {{/profilebarenable}}
+    {{/isfoldercontent}}
     <div class="openstudio-content-view-container clearfix">
         <div class="openstudio-content-view-primary">
             <div class="openstudio-content-view-title openstudio-content-view-title-icon-{{{contentvisibilityicon}}}">
@@ -140,7 +145,8 @@
                 <div class="openstudio-content-view-tags">
                     <ul class="openstudio-content-view-tag-item">
                         {{#tagsraw}}
-                            <li class="openstudio-content-view-tag">
+                            <li class="openstudio-content-view-tag
+                                {{#isfoldercontent}}openstudio-folder-block-content-background{{/isfoldercontent}}">
                                 <a href="{{{taglink}}}">{{{tagname}}}</a>
                             </li>
                         {{/tagsraw}}
@@ -208,12 +214,14 @@
             {{/contentcommentenable}}
         </div>
         <div class="openstudio-content-view-secondary">
-            <div id="openstudio_content_view_post_owner_heading" class="openstudio-content-view-block collapsed"
+            <div id="openstudio_content_view_post_owner_heading" class="openstudio-content-view-block
+                    {{#isfoldercontent}}openstudio-folder-global-background{{/isfoldercontent}} collapsed"
                  data-toggle="collapse"
                  data-target="#openstudio_content_view_post_owner">
                 <span>{{#str}} contentviewownerpost, mod_openstudio {{/str}}</span>
             </div>
             <div id="openstudio_content_view_post_owner" class="openstudio-content-view-block-content
+                {{#isfoldercontent}}openstudio-folder-block-content-background{{/isfoldercontent}}
                 openstudio-content-view-block-post-owner collapse clearfix">
                 <div class="openstudio-content-view-user-picture">
                     <img src="{{{userpictureurl}}}">
@@ -228,12 +236,15 @@
                 </div>
             </div>
             {{#hascontentversions}}
-                <div class="openstudio-content-view-block collapsed" data-toggle="collapse"
+                <div class="openstudio-content-view-block collapsed
+                     {{#isfoldercontent}}openstudio-folder-global-background{{/isfoldercontent}}" data-toggle="collapse"
                      data-target="#openstudio_content_view_post_archive">
                     <span>{{#str}} contentviewpostarchive, mod_openstudio {{/str}}</span>
                 </div>
                 <div id="openstudio_content_view_post_archive"
-                     class="openstudio-content-view-block-content openstudio-content-view-version collapse clearfix">
+                        class="openstudio-content-view-block-content
+                        {{#isfoldercontent}}openstudio-folder-block-content-background{{/isfoldercontent}}
+                        openstudio-content-view-version collapse clearfix">
                     {{#contentversions}}
                         <div class="openstudio-content-view-version-detail clearfix">
                             <span class="openstudio-content-view-version-img"><img src="{{{contenttypeiconurl}}}"></span>
@@ -257,7 +268,9 @@
                 </div>
             {{/hascontentversions}}
             {{#contentmetadataenable}}
-                <div class="openstudio-content-view-block collapsed" data-toggle="collapse"
+                <div class="openstudio-content-view-block collapsed
+                                {{#isfoldercontent}}openstudio-folder-global-background{{/isfoldercontent}}"
+                     data-toggle="collapse"
                      data-target="#openstudio_content_view_post_image_meta_data">
                     <span>{{#str}} contentviewimagemetadata, mod_openstudio {{/str}}</span>
                 </div>
@@ -306,12 +319,15 @@
                 </div>
             {{/contentmetadataenable}}
             {{#contentmapenable}}
-                <div class="openstudio-content-view-block collapsed" data-toggle="collapse"
+                <div class="openstudio-content-view-block collapsed
+                            {{#isfoldercontent}}openstudio-folder-global-background{{/isfoldercontent}}"
+                     data-toggle="collapse"
                      data-target="#openstudio_content_view_post_image_location">
                     <span>{{#str}} contentviewimagelocation, mod_openstudio {{/str}}</span>
                 </div>
                 <div id="openstudio_content_view_post_image_location"
-                     class="openstudio-content-view-block-content collapse">
+                     class="openstudio-content-view-block-content openstudio-content-view-block-post-owner  collapse
+                            {{#isfoldercontent}}openstudio-folder-block-content-background{{/isfoldercontent}}">
                     <div id="openstudio_content_view_map_canvas"
                          data-gpslat="{{contentgpslat}}" data-gpslng="{{contentgpslng}}"></div>
                 </div>
