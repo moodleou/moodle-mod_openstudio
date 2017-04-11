@@ -46,7 +46,8 @@
         "contentinspiretotal" : 0,
         "contentcopyenable" : true,
         "profilebarenable": true,
-        "actionenable": true
+        "actionenable": true,
+        "isinlockedfolder": false
     }
 }}
 {{#contentmapenable}}
@@ -152,67 +153,9 @@
                            value="{{#str}}contentactionreportpost, mod_openstudio{{/str}}" type="button">
                 </div>
             </div>
-            <div class="openstudio-content-view-animation-icons clearfix">
-                <div class="openstudio-content-view-animation-icons-left openstudio-content-actions
-                    {{#locked}}
-                        locked
-                    {{/locked}}
-                ">
-                    <a id="content_view_icon_{{contentflagfavourite}}"
-                       data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagfavourite}}"
-                       data-mode="{{#contentflagfavouriteactive}}off{{/contentflagfavouriteactive}}
-                           {{^contentflagfavouriteactive}}on{{/contentflagfavouriteactive}}"
-                       class="openstudio-content-view-flag-icon openstudio-content-view-icon-favourite
-                                    {{#contentflagfavouriteactive}}
-                                        openstudio-content-view-icon-favourite-active
-                                    {{/contentflagfavouriteactive}}">
-                        {{#str}}
-                            contentflagxfavourites, mod_openstudio,
-                            { "number": {{#quote}}{{contentfavouritetotal}}{{/quote}} }
-                        {{/str}}
-                    </a>
-                    <a id="content_view_icon_{{contentflagsmile}}"
-                       data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagsmile}}"
-                       data-mode="{{#contentflagsmileactive}}off{{/contentflagsmileactive}}
-                           {{^contentflagsmileactive}}on{{/contentflagsmileactive}}"
-                       class="openstudio-content-view-flag-icon openstudio-content-view-icon-participation
-                                    {{#contentflagsmileactive}}
-                                        openstudio-content-view-icon-participation-active
-                                    {{/contentflagsmileactive}}">
-                        {{#str}}
-                            contentflagxsmiles, mod_openstudio, { "number": {{#quote}}{{contentsmiletotal}}{{/quote}} }
-                        {{/str}}
-                    </a>
-                    <a id="content_view_icon_{{contentflaginspire}}"
-                       data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflaginspire}}"
-                       data-mode="{{#contentflaginspireactive}}off{{/contentflaginspireactive}}
-                           {{^contentflaginspireactive}}on{{/contentflaginspireactive}}"
-                       class="openstudio-content-view-flag-icon openstudio-content-view-icon-inspiration
-                                    {{#contentflaginspireactive}}
-                                        openstudio-content-view-icon-inspiration-active
-                                    {{/contentflaginspireactive}}">
-                        {{#str}}
-                            contentflagxinspired, mod_openstudio, { "number": {{#quote}}{{contentinspiretotal}}{{/quote}} }
-                        {{/str}}
-                    </a>
-                </div>
-                <div class="openstudio-content-view-animation-icons-right">
-                    {{#contentcopyenable}}
-                        <span class="openstudio-content-view-flag-icon openstudio-content-view-icon-copies-active">
-                            {{#str}}
-                                contentflagxcopies, mod_openstudio, { "number": {{#quote}}{{contentcopycount}}{{/quote}} }
-                            {{/str}}
-                        </span>
-                    {{/contentcopyenable}}
-                    <span
-                            class="openstudio-content-view-flag-icon openstudio-content-view-icon-views
-                                    {{#contentviewtotal}}openstudio-content-view-icon-views-active{{/contentviewtotal}}">
-                        {{#str}}
-                            contentflagxviews, mod_openstudio, { "number": {{#quote}}{{contentviewtotal}}{{/quote}} }
-                        {{/str}}
-                    </span>
-                </div>
-            </div>
+
+            {{>mod_openstudio/content_flags}}
+
             <div class="openstudio-content-view-actions clearfix">
                 {{#actionenable}}
                     <div class="openstudio-content-view-actions-icons-left">
@@ -231,18 +174,20 @@
                                    value="{{#str}}contentactiondelete, mod_openstudio{{/str}}" type="button">
                         {{/contentdeleteenable}}
                         {{#contentlockenable}}
-                            <a>
-                                <input id="id_lockbutton" name="lockbutton" type="button"
-                                    {{#locked}}
-                                       data-lockstate="locked"
-                                        value="{{#str}}contentactionunlockname, mod_openstudio{{/str}}"
-                                    {{/locked}}
-                                    {{^locked}}
-                                       data-lockstate="unlocked"
-                                        value="{{#str}}contentactionlockname, mod_openstudio{{/str}}"
-                                    {{/locked}}
-                                >
-                            </a>
+                            {{^isinlockedfolder}}
+                                <a>
+                                    <input id="id_lockbutton" name="lockbutton" type="button"
+                                        {{#locked}}
+                                           data-lockstate="locked"
+                                            value="{{#str}}contentactionunlockname, mod_openstudio{{/str}}"
+                                        {{/locked}}
+                                        {{^locked}}
+                                           data-lockstate="unlocked"
+                                            value="{{#str}}contentactionlockname, mod_openstudio{{/str}}"
+                                        {{/locked}}
+                                    >
+                                </a>
+                            {{/isinlockedfolder}}
                         {{/contentlockenable}}
                     </div>
                 {{/actionenable}}

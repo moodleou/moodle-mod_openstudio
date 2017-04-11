@@ -1,0 +1,227 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_openstudio/folder_page
+
+    folder detail template of the OpenStudio UI.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+
+    Example context (json):
+    {
+        "placeholdertext" : "My module",
+        "userpictureurl" : "../../../mod/openstudio/pix/people_rgb_32px.svg",
+        "activedate" : "5/10/16, 19:22",
+        "flagsfolderread" : "100",
+        "percentcompleted" : "70",
+        "folderdataname": "Film studies 2016 – The Jungle Book",
+        "foldertypeimage": true,
+        "folderfileurl": "../../../mod/openstudio/pix/viewed_rgb_32px.svg",
+        "folderdatadate" : "5/10/16, 19:22",
+        "description": "Description show here",
+        "contentflagfavouriteactive" : true,
+        "contentflagfavouriteactive" : true,
+        "contentfavouritetotal" : 5,
+        "contentsmiletotal" : 0,
+        "contentinspiretotal" : 0,
+        "contentcopyenable" : true,
+        "myfolder" : true,
+        "contentdeleteenable": true,
+        "contentlockenable": true,
+        "locked": false,
+        "contents": [
+            {
+                "firstname" : "Admin",
+                "lastname" : "User",
+                "name" : "Niagara Falls",
+                "contentlink" : "http://example.com/mod/openstudio/content.php?id=3&sid=9",
+                "contenticon" : "../../../mod/openstudio/pix/icon.svg",
+                "contentthumbnailurl" : "../../../mod/openstudio/pix/icon.svg",
+                "timemodified" : "5/10/16, 13:27",
+                "userpictureurl" : "../../../mod/openstudio/pix/people_rgb_32px.svg",
+                "viewuserworkurl" : "http://example.com/mod/openstudio/view.php?id=3&sid=9",
+                "commentsicon" : "../../../mod/openstudio/pix/inspiration_rgb_32px.svg",
+                "inspirationicon" : "../../../mod/openstudio/pix/inspiration_rgb_32px.svg",
+                "participationicon" : "../../../mod/openstudio/pix/participation_rgb_32px.svg",
+                "favouriteicon" : "../../../mod/openstudio/pix/favourite_rgb_32px.svg",
+                "socialdata" : {
+                    "commentsnew" : 1,
+                    "inspirednew" : 2,
+                    "mademelaughnew" : 3,
+                    "favouritenew" : 0
+                 }
+            }, 
+        ]
+    }
+}}
+
+<div class="openstudio-container openstudio-folder-global-background">
+    {{>mod_openstudio/folder_header}}
+    <div class="openstudio-folder-view-container clearfix">
+        <div class="openstudio-folder-view-title">
+            <div class="openstudio-folder-view-title-background">
+                <span>{{#str}}folderoverview, mod_openstudio{{/str}}</span>
+                <span class="openstudio-folder-view-title-icon">
+                    <img src="{{{visibilityicon}}}" alt="{{{mod_openstudio}}}">
+                </span>
+            </div>
+
+            <div class="openstudio-folder-view-title-managepost">
+                <input id="id_managepost" class="osep-smallbutton" name="managepost" value="{{#str}}foldermanagepost, mod_openstudio{{/str}}" type="button">
+            </div>
+        </div>
+        <div class="openstudio-folder-view-primary clearfix" id="openstudio_folder_view_primary">
+            <div id="openstudio_item_request_feedback"
+                 class="{{#contentflagrequestfeedbackactive}}openstudio-item-request-feedback{{/contentflagrequestfeedbackactive}}
+                        {{^contentflagrequestfeedbackactive}}openstudio-item-request-feedback-cancel{{/contentflagrequestfeedbackactive}}">          
+                <span>{{#pix}} request_feedback_white_rgb_32px, mod_openstudio, {{#str}} contentneedhelp, mod_openstudio {{/str}} {{/pix}}</span>
+                <span>{{#str}} contentneedhelp, mod_openstudio {{/str}}</span>
+            </div>
+            <div class="openstudio-folder-items clearfix">
+                <div class="openstudio-folder-item openstudio-folder-view-content">
+                    {{#myfolder}}
+                        <div class="openstudio-folder-view-add-new-content">
+                            <div class="openstudio-folder-view-add-new-content-title">
+                                <a href="{{addcontent}}" class="openstudio-add-new-content-link">
+                                    {{#pix}} add_content_rgb_32px, mod_openstudio, {{{name}}} {{/pix}}
+                                    <span>{{#str}} addnewcontent, mod_openstudio {{/str}}</span>
+                                </a>
+                            </div>
+                            <a href="{{{addcontent}}}">
+                                <div class="openstudio-upload-folder">
+                                    <img class="openstudio-upload-new-content-to-folder" src="{{{addcontentthumbnail}}}" alt="{{{name}}}">
+                                    <span class="openstudio-new-folder-title">{{#str}} updatecontenttofolder, mod_openstudio {{/str}}
+                                    </span>
+                                    <span class="openstudio-new-folder-title-device">
+                                        {{#str}} foldertdevicetitle, mod_openstudio {{/str}}
+                                    </span>
+                                </div>
+                            </a>
+                            <a href="{{{contentediturl}}}">
+                                <div class="openstudio-upload-folder openstudio-select-content">
+                                    <img class="openstudio-select-existing-post" src="{{{selectcontentthumbnail}}}" alt="{{{name}}}">
+                                    <span class="openstudio-select-post-title">
+                                       {{#str}} folderselectexist, mod_openstudio {{/str}}
+                                    </span>
+                                    <span class="openstudio-select-post-title-device">
+                                        {{#str}} foldertselectdevicetitle, mod_openstudio {{/str}}
+                                    </span>
+                                </div>
+                            </a>
+
+                            <div class="openstudio-folder-available">
+                                {{#str}}
+                                   folderavailiable, mod_openstudio, { "available": {{additionlimit}} }
+                                {{/str}}
+                            </div>
+
+                        </div>
+                    {{/myfolder}}
+                </div>
+                {{#contents}}
+                    {{>mod_openstudio/folder_block}}
+                {{/contents}}
+            </div>
+        </div>
+
+        <div class="openstudio-content-view-secondary">
+            <div id="openstudio_folder_view_post_owner_heading" class="openstudio-content-view-block
+                    openstudio-folder-global-background collapsed"
+                 data-toggle="collapse"
+                 role="button"
+                 data-target="#openstudio_folder_view_post_owner">
+                <span>{{#str}} contentownerfolder, mod_openstudio {{/str}}</span>
+            </div>
+            <div id="openstudio_folder_view_post_owner" class="openstudio-content-view-block-content
+                    openstudio-folder-block-content-background collapse clearfix">
+                <div class="openstudio-content-view-user-picture">
+                    {{{userpicturehtml}}}
+                </div>
+                <div class="openstudio-content-view-user-info">
+                    <h4 class="openstudio-content-view-user-info-name">{{{fullname}}}</h4>
+                    <a class="openstudio-content-view-user-info-view" href="{{{viewuserworkurl}}}">
+                        {{#str}} contentitemview, mod_openstudio {{/str}}
+                        {{{firstname}}}’s
+                        {{#str}} contentitemwork, mod_openstudio {{/str}}
+                    </a>
+                </div>
+            </div>
+            <div class="openstudio-content-view-block openstudio-folder-global-background collapsed" data-toggle="collapse"
+                 data-target="#openstudio_folder_view_descripton" role="button">
+                <span>{{#str}} folderformdescription, mod_openstudio {{/str}}</span>
+            </div>
+
+            <div id="openstudio_folder_view_descripton" class="openstudio-content-view-block-content collapse clearfix">
+                <div class="openstudio-folder-view-descripton-content openstudio-folder-block-content-background">
+                    <div class="openstudio-folder-view-descripton-title">{{name}}</div>
+                    <div class="openstudio-folder-view-descripton-text">{{{description}}}</div>
+                    <div class="openstudio-folder-view-descripton-date">{{contentdatadate}}</div>
+                </div>
+            </div>
+            <div class="openstudio-content-view-block openstudio-folder-global-background collapsed" data-toggle="collapse"
+                 data-target="#openstudio_folder_view_folder_comments" role="button">
+                <span>{{#str}} folderfoldercomments, mod_openstudio {{/str}}</span>
+            </div>
+            <div id="openstudio_folder_view_folder_comments" class="openstudio-content-view-block-content
+                    openstudio-folder-block-content-background collapse clearfix">
+                <div class="openstudio-folder-view-comments clearfix">
+                    <input id="id_postcomment" class="osep-smallbutton" name="postcomment" value="{{#str}}contentcommentsformpostcomment, mod_openstudio{{/str}}"
+                           type="button" class="openstudio-content-actions {{#locked}} locked {{/locked}}">
+                </div>
+            </div>
+
+            {{>mod_openstudio/content_flags}}
+
+            <div class="openstudio-folder-view-buttons clearfix">
+                {{#contentdeleteenable}}
+                    <input id="id_deletebutton" class="osep-smallbutton" name="deletefolder" value="{{#str}}folderdeletedfolder, mod_openstudio{{/str}}" type="button">
+                {{/contentdeleteenable}}
+
+                {{#contentlockenable}}
+                    <input id="id_lockbutton" name="lockbutton" type="button"
+                        {{#locked}}
+                            data-lockstate="locked"
+                            value="{{#str}}folderunlockfolder, mod_openstudio{{/str}}"
+                        {{/locked}}
+                        {{^locked}}
+                            data-lockstate="unlocked"
+                            value="{{#str}}folderlockfolder, mod_openstudio{{/str}}"
+                            class="osep-smallbutton"
+                        {{/locked}}
+                    />
+                {{/contentlockenable}}
+            </div>
+            <div class="openstudio-folder-view-request-feedback">
+                {{#contentrequestfeedbackenable}}
+                    <button id="content_view_icon_{{contentflagrequestfeedback}}"
+                            class="openstudio-request-feedback-button osep-smallbutton"
+                            data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagrequestfeedback}}"
+                            data-mode="{{#contentflagrequestfeedbackactive}}off{{/contentflagrequestfeedbackactive}}
+                                {{^contentflagrequestfeedbackactive}}on{{/contentflagrequestfeedbackactive}}">
+                        {{#contentflagrequestfeedbackactive}}{{#str}}contentflagaskforhelpcancel, mod_openstudio{{/str}}{{/contentflagrequestfeedbackactive}}
+                        {{^contentflagrequestfeedbackactive}}{{#str}}contentflagaskforhelp, mod_openstudio{{/str}}{{/contentflagrequestfeedbackactive}}
+                    </button>
+                {{/contentrequestfeedbackenable}}
+            </div>
+        </div>
+    </div>
+</div>

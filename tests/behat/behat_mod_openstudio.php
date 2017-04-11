@@ -76,13 +76,17 @@ class behat_mod_openstudio extends behat_base {
                     'levelcontainer' => 'levelcontainer'
                 )
             ),
-            'sets' => array(
-                'datagenerator' => 'sets',
+            'folders' => array(
+                'datagenerator' => 'folders',
                 'required' => array('name', 'openstudio', 'user'),
-                'switchids' => array('user' => 'userid', 'visibility' => 'visibility', 'contenttype' => 'contenttype')
+                'switchids' => array(
+                    'user' => 'userid',
+                    'visibility' => 'visibility',
+                    'contenttype' => 'contenttype'
+                )
             ),
-            'set contents' => array(
-                'datagenerator' => 'set_contents',
+            'folders contents' => array(
+                'datagenerator' => 'folders_contents',
                 'required' => array('openstudio', 'set', 'content', 'user'),
                 'switchids' => array('status' => 'status', 'provenancestatus' => 'provenancestatus', 'user' => 'userid')
             ),

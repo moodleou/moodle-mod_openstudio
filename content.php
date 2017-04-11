@@ -26,6 +26,7 @@
  */
 
 use mod_openstudio\local\api\content;
+use mod_openstudio\local\api\lock;
 use mod_openstudio\local\util;
 use mod_openstudio\local\renderer_utils;
 use mod_openstudio\local\api\contentversion;
@@ -37,9 +38,14 @@ require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
 require_once(dirname(__FILE__).'/api/apiloader.php');
 
-$id = optional_param('id', 0, PARAM_INT); // Course_module ID.
-$contentid = optional_param('sid', 0, PARAM_INT); // Content id.
-$userid = optional_param('vuid', $USER->id, PARAM_INT); // User id.
+// Course_module ID.
+$id = optional_param('id', 0, PARAM_INT);
+// Folder id.
+$folderid = optional_param('folderid', 0, PARAM_INT);
+// Content id.
+$contentid = optional_param('sid', 0, PARAM_INT);
+// User id.
+$userid = optional_param('vuid', $USER->id, PARAM_INT);
 $coursedata = util::render_page_init($id, array('mod/openstudio:view'));
 $cm = $coursedata->cm;
 $cminstance = $coursedata->cminstance;
@@ -85,6 +91,14 @@ if ($contentdata->l3name) {
     $contentdataname = $contentdata->l3name;
 }
 $contentdata->contentdataname = $contentdataname;
+
+// Get page url.
+$pageurl = util::get_current_url();
+
+// Render page header and crumb trail.
+$pagetitle = $pageheading = get_string('pageheader', 'openstudio',
+    array('cname' => $course->shortname, 'cmname' => $cm->name, 'title' => $contentdataname));
+util::page_setup($PAGE, $pagetitle, $pageheading, $pageurl, $course, $cm);
 
 // Is the content mine?
 $permissions->contentismine = $contentdata->isownedbyviewer;
@@ -155,14 +169,6 @@ foreach ($contentdata->comments as $key => $value) {
 
 $contentdata->emptycomment = (empty($contentdata->comments));
 
-// Get page url.
-$pageurl = util::get_current_url();
-
-// Render page header and crumb trail.
-$pagetitle = $pageheading = get_string('pageheader', 'openstudio',
-        array('cname' => $course->shortname, 'cmname' => $cm->name, 'title' => $contentdataname));
-util::page_setup($PAGE, $pagetitle, $pageheading, $pageurl, $course, $cm);
-
 $contentdatavisibilitycontext = $contentdata->visibilitycontext;
 $crumbarray = array();
 switch ($contentdatavisibilitycontext) {
@@ -218,6 +224,14 @@ $contentdata->vid = $vid;
 $contentdata->placeholdertext = $areaurlname;
 
 $PAGE->requires->js_call_amd('mod_openstudio/contentpage', 'init');
+
+$contentdata->isfoldercontent = false;
+if ($folderid) {
+    $folderdata = content::get($folderid);
+    if ($folderdata) {
+        $contentdata->isinlockedfolder = ($folderdata->locktype == lock::ALL);
+    }
+}
 
 // Note: This header statement is needed because the slot form data contains
 // object and script code and browsers like webkit thinks this is a cross-site

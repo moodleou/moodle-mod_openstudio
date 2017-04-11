@@ -39,7 +39,7 @@ define([
          * {
          *     id: int,
          *     folderid: int,
-         *     vid: int
+         *     isfolder: bool
          * }
          */
         mconfig: null,
@@ -94,13 +94,14 @@ define([
              * @method setHeader
              */
             function setHeader() {
+                var langstring = (t.mconfig.isfolder) ? 'folderdeletedfolder' : 'contentdeledialogueteheader';
                 Str
-                    .get_string('contentdeledialogueteheader', 'mod_openstudio')
+                    .get_string(langstring, 'mod_openstudio')
                     .done(function(s) {
                         dialogue.set('headerContent',
                             '<span class="' + t.CSS.DIALOGHEADER.replace('.', '') +
                             '">' + s + '</span>');
-                    })
+                    });
             }
 
             /**
@@ -108,11 +109,12 @@ define([
              * @method setBody
              */
             function setBody() {
+                var langstring = (t.mconfig.isfolder) ? 'deleteconfirmfolder' : 'deleteconfirmcontent';
                 Str
-                    .get_string('deleteconfirmcontent', 'mod_openstudio')
+                    .get_string(langstring, 'mod_openstudio')
                     .done(function(s) {
                         dialogue.set('bodyContent', s);
-                    })
+                    });
             }
 
             /**
@@ -146,7 +148,7 @@ define([
                         deleteBtnProperty.label = s[1];
                         dialogue.addButton(deleteBtnProperty, ['footer']);
                         dialogue.addButton(cancelBtnProperty, ['footer']);
-                    })
+                    });
             }
 
             var dialogue = new osDialogue({
@@ -185,12 +187,12 @@ define([
             }]);
 
             promises[0]
-                .done(function() {
+                .done(function(res) {
                     var url = '';
                     if (t.mconfig.folderid) {
-                        url = SiteConfig.wwwroot + '/mod/openstudio/folder.php?fid=' + t.mconfig.folderid;
+                        url = SiteConfig.wwwroot + '/mod/openstudio/folder.php?sid=' + t.mconfig.folderid;
                     } else {
-                        url = SiteConfig.wwwroot + '/mod/openstudio/view.php?vid=' + t.mconfig.vid;
+                        url = SiteConfig.wwwroot + '/mod/openstudio/view.php?vid=' + res.vid;
                     }
 
                     url += '&id=' + t.mconfig.id;

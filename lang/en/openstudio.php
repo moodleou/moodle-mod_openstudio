@@ -481,6 +481,7 @@ $string['contentformhelp2'] = 'Copy and paste a <em>website link</em> from the i
 $string['contentformhelp3'] = 'Fill in as much information as you want, or as little as you think your readers will need. The information will be used to help people search and locate your work.';
 $string['contentformhelp4'] = 'Copy and paste the <em>embed code</em> provided by some third-party websites.';
 $string['contentaddnew'] = 'Add new content';
+$string['contentedit'] = 'Edit content';
 
 $string['contentactionpermlink'] = 'Permanent link to this page';
 $string['contentactioncopy'] = 'Copy';
@@ -641,7 +642,7 @@ $string['contentcommentsformheader'] = 'Provide feedback by posting a comment';
 $string['contentcommentsformheader2'] = 'Post an audio comment (optional)';
 $string['contentcommentsformcommenttext'] = 'Comment';
 $string['contentcommentsformattachment'] = 'Attach an audio (MP3 file) as comment';
-$string['contentcommentsformpostcomment'] = 'Post comment';
+$string['contentcommentsformpostcomment'] = 'Add new comment';
 $string['contentcommentsaudioattached'] = 'Audio commentary posted as comment.';
 
 $string['contentmaptitle'] = 'Image location';
@@ -857,7 +858,7 @@ $string['modulejscopypastehelpalt'] = 'Copy content to your pinboard or copy to 
 
 $string['deleteconfirmcontent'] = 'Are you sure you want to delete this post? The post, all associated versions and '.
         'comments will be deleted. This action cannot be undone.';
-$string['deleteconfirmfolder'] = 'Are you sure you want to delete this folder? The content, contents created in this folder, and comments will be deleted. This action cannot be undone.';
+$string['deleteconfirmfolder'] = 'Are you sure you want to delete this folder? The content, contents created in this folder, and comments will be deleted.';
 $string['deleteconfirmcontentpreconf'] = 'Are you sure you want to delete the content from this content, the content’s previous content versions and all the content’s comments? This action will empty the content and cannot be undone.';
 $string['deleteconfirmfolderpreconf'] = 'Are you sure you want to delete the content in this folder, the contents created in this folder and comments will be deleted? This action will empty the folder and cannot be undone.';
 $string['deleteconfirmfoldercontent'] = 'Are you sure you want to delete this content from this folder? The content’s content and all comments will be deleted.';
@@ -1231,7 +1232,7 @@ $string['updatecontent'] = 'Upload content';
 $string['createnewfolder'] = 'Create new folder';
 $string['contentitemsharewithgroup'] = 'Share with Group - {$a}';
 $string['contentitemsharewithmymodule'] = 'Share with my module';
-$string['contentitemsharewithonlyme'] = 'Only me';
+$string['contentitemsharewithonlyme'] = 'Share with only me';
 $string['contentitemsharewithmytutor'] = 'Share with my tutor';
 $string['contentitemview'] = 'View';
 $string['contentitemwork'] = 'work';
@@ -1300,3 +1301,18 @@ $string['stopnotificationsforcomment'] = 'Stop notifications for this comment';
 $string['notificationslistheader'] = 'My notifications';
 $string['youhavenotifications'] = 'You have';
 $string['unreadnotifications'] = 'unread notifications';
+
+$string['folderfoldercomments'] = 'Folder Comments';
+$string['folderselectexist'] = 'Select existing post to add to folder';
+$string['folderdeletedfolder'] = 'Delete folder';
+$string['folderlockfolder'] = 'Lock folder';
+$string['folderunlockfolder'] = 'Unlock folder';
+$string['foldermanagepost'] = 'Manage posts';
+$string['foldereditandpermission'] = 'Edit folder title and permissions';
+$string['folderavailiable'] = 'You have {$a->available} posts available in this folder.';
+$string['updatecontenttofolder'] = 'Upload content to folder';
+$string['foldernoname'] = 'Untitled Folder';
+$string['folderoverview'] = 'Folder Overview';
+$string['foldertdevicetitle'] = 'Upload post';
+$string['foldertselectdevicetitle'] = 'Browse posts';
+$string['editfolder'] = 'Edit Folder';

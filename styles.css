@@ -106,12 +106,12 @@
     clear: right;
 }
 
-.openstudio-content-view-container .openstudio-content-actions.locked {
+.openstudio-content-actions.locked {
     display: none;
 }
 
-.openstudio-content-view-container .openstudio-content-actions {
-    display: initial;
+.openstudio-content-actions {
+    display: block;
 }
 
 /* Preferences */
@@ -1895,6 +1895,9 @@ a.openstudio-add-title:hover  {
     padding-top: 15px;
     padding-bottom: 20px;
 }
+.openstudio-folder-background .openstudio-content-folder-img {
+    width: 100%;
+}
 
 .openstudio-default-folder-background img{
     height: 48px;
@@ -2192,7 +2195,6 @@ a.openstudio-actvity-title:hover  {
 
 .openstudio-content-view-tags-container {
     padding-top: 7px;
-    border-bottom: 1px solid #d4d2d2;
 }
 
 .openstudio-content-view-tags {
@@ -2227,6 +2229,7 @@ a.openstudio-actvity-title:hover  {
 }
 
 .openstudio-content-view-animation-icons {
+    border-top: 1px solid #d4d2d2;
     border-bottom: 1px solid #d4d2d2;
     padding: 15px 0px 11px 0px;
 }
@@ -2375,6 +2378,7 @@ a.openstudio-actvity-title:hover  {
 
 .openstudio-content-view-user-picture img {
     width: 64px;
+    height: 100%;
 }
 
 .openstudio-content-view-user-info {
@@ -2524,7 +2528,6 @@ div.openstudio-content-view-version div:nth-of-type(odd) {
     vertical-align: middle;
     margin: 0px;
     text-decoration: none;
-    height: 32px;
 }
 
 .path-mod-openstudio .openstudio-request-feedback-button:hover,
@@ -2958,6 +2961,271 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     padding-bottom: 52px;
 }
 
+/* Handle folder overview */
+.openstudio-folder-header {
+    margin: 20px;
+    padding: 12px 0 2px 0;
+}
+
+.openstudio-folder-header .openstudio-folder-header-left {
+    width: 70%;
+    display: inline-block;
+}
+
+.openstudio-folder-header .openstudio-folder-header-right {
+    float: right;
+    margin-top: 5px;
+}
+.openstudio-folder-header-left img {
+    position: absolute;
+}
+.openstudio-folder-header-left .openstudio-folder-header-title {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    font-size: 1.57142em;
+    font-weight: bold;
+    color: #002158;
+    line-height: 23px;
+    margin-top: 4px;
+    margin-left: 34px;
+}
+
+.openstudio-folder-header-right .openstudio-folder-header-title {
+    vertical-align: middle;
+    position: relative;
+    font-size: 1em;
+    margin-left: 4px;
+    color: #002158;
+}
+
+.openstudio-folder-header img {
+    height: 24px;
+}
+
+.openstudio-folder-view-container {
+    background: #ffffff none repeat scroll 0 0;
+    margin: 20px;
+    padding: 8px 20px 40px 20px;
+    position: relative;
+}
+
+.openstudio-folder-view-title {
+    font-size: 1.28571em ;
+    font-weight: bold;
+    color: #002158;
+    margin-bottom: 15px;
+    width: 580px;
+    float: left;
+    margin-right: 40px;
+}
+
+.openstudio-folder-view-title-background {
+    width: 180px;
+    float: left;
+}
+
+.openstudio-folder-view-title-managepost {
+    float: right;
+}
+
+.openstudio-folder-view-request-feedback {
+    margin-top: 10px;
+}
+
+.openstudio-folder-view-title-managepost #id_managepost {
+    margin-right: 0px;
+}
+
+.openstudio-folder-view-comments {
+    padding: 15px 0 20px 15px;
+}
+
+.openstudio-folder-view-primary {
+    width: 580px;
+    float: left;
+    background-color: #d8dde6;
+    padding: 0px 0px 40px 0px;
+}
+
+.openstudio-folder-view-content .openstudio-folder-view-add-new-content {
+    float: left;
+    width: 243px;
+    padding-right: 20px;
+}
+
+.openstudio-folder-global-background .openstudio-item-request-feedback {
+    position: relative;
+}
+
+.openstudio-folder-items {
+    padding: 0px 37px;
+}
+
+.openstudio-folder-show-content-block {
+    float: left;
+    width: 213px;
+    margin-top: 15px;
+    background-color: #FFF;
+    padding: 5px 15px 15px 15px;
+    border-radius: 4px;
+}
+
+.openstudio-folder-show-content-block-date {
+    font-size: 0.85714em;
+    color: #676463;
+}
+
+.openstudio-folder-show-content-block:nth-child(odd) {
+    margin-right: 20px;
+}
+
+/* Handle folder overview*/
+
+.openstudio-folder-global-background {
+    background-color: #d8dde6;
+}
+
+.openstudio-folder-block-content-background {
+    background-color: #f2f3f6;
+}
+
+.openstudio-upload-folder {
+    height: 68px;
+    width: 100%;
+    border-radius : 4px;
+    border: 1px dashed #676463;
+    float: left;
+    margin-bottom: 10px;
+}
+.openstudio-select-content {
+    margin-bottom: 15px;
+}
+
+.openstudio-upload-new-content-to-folder,
+.openstudio-select-existing-post {
+    width: 50px;
+    float: left;
+    margin-left: 10px;
+    margin-top: 10px
+}
+
+.openstudio-new-folder-title,
+.openstudio-select-post-title {
+    width: 140px;
+    font-size: 0.875em;
+    font-weight: bold;
+    text-align: center;
+    color: #676463;
+    padding: 13px 0 0 70px;
+    text-align: left;
+    display: block;
+}
+
+.openstudio-upload-folder .openstudio-new-folder-title-device,
+.openstudio-upload-folder .openstudio-select-post-title-device {
+    font-size: 0.875em;
+    font-weight: bold;
+    text-align: center;
+    color: #676463;
+    display: none;
+}
+
+.openstudio-folder-show-content-block-title {
+    height: 33px;
+}
+
+.openstudio-folder-view-descripton-content {
+    padding: 15px 15px 20px 15px;
+}
+
+.openstudio-folder-view-descripton-title {
+    font-size: 1.1428em;
+    color: #000000;
+    font-family: Arial;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.openstudio-folder-view-descripton-text {
+    text-indent: 0px;
+    font-size: 1em;
+    color: #000000;
+    font-family: Arial;
+}
+
+.openstudio-folder-view-descripton-text p {
+    padding: 0;
+    margin: 0;
+}
+
+.openstudio-folder-view-descripton-date {
+    color: #676463;
+    font-size: 0.85714em;
+}
+
+.openstudio-grid-item-folder-preview {
+    margin-bottom: 5px;
+}
+
+.openstudio-folder-preview-default {
+    height: 137px;
+    clear: left;
+    text-align: center;
+}
+
+.openstudio-grid-item-folder-preview img {
+    height: 100%;
+    width: 100%;
+}
+
+.openstudio-folder-preview-default img {
+    width: 64px;
+}
+
+.openstudio-folder-show-content-block-link-title {
+    font-size: 1em;
+    font-weight: bold;
+    color: #002158;
+}
+
+.openstudio-folder-available {
+    font-size: 0.857em;
+    color: #312b39;
+}
+
+.openstudio-folder-view-buttons {
+    margin-top: 28px;
+}
+
+.path-mod-openstudio #id_deletefolder,
+.path-mod-openstudio #id_lockfolder,
+.path-mod-openstudio #id_requestfeedbackbutton {
+    margin-right: 5px;
+}
+
+.openstudio-add-new-content-link {
+    font-size: 1.285em;
+    color: #832884;
+    font-weight: bold;
+    display: inline-block;
+}
+
+a.openstudio-add-new-content-link:hover  {
+    color: #002158;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.openstudio-folder-view-add-new-content-title {
+    height: 51px;
+    line-height: 51px;
+}
+
+.openstudio-folder-view-title-icon img {
+    width: 24px;
+    padding-left: 5px;
+}
 
 /* IE */
 @media screen\0 {
@@ -2973,7 +3241,7 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
 }
 
 /* Tablet. */
-@media only screen and (max-device-width: 1023px) {
+@media only screen and (max-device-width: 1024px) {
     .openstudio-nav-settings {
         display: none;
     }
@@ -3048,6 +3316,101 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     .openstudio-profile-work-progress .openstudio-profile-label-title {
         margin-left: -8px;
         margin-bottom: 5px;
+    }
+
+    .openstudio-folder-view-container {
+        padding: 8px 20px 40px;
+    }
+
+    .openstudio-folder-view-primary {
+        width: 400px;
+        margin-right: 10px;
+    }
+
+    .openstudio-folder-items {
+        margin-left: 3px;
+    }
+
+    .openstudio-folder-view-content {
+        width: 100%;
+    }
+
+    .openstudio-folder-view-content .openstudio-folder-view-add-new-content {
+        padding-left: 10px;
+        padding-right: 10px;
+        float: none;
+        width: auto;
+    }
+
+    .openstudio-folder-available {
+        color: #312b39;
+        font-size: 1.14286em;
+        margin-bottom: 25px;
+        float: left;
+    }
+
+    .openstudio-upload-folder {
+        width: 175px;
+        height: 90px;
+    }
+
+    .openstudio-upload-new-content-to-folder,
+    .openstudio-select-existing-post {
+        margin-left: 63px;
+    }
+
+    .openstudio-select-content {
+        margin-left: 15px;
+    }
+
+    .openstudio-folder-show-content-block {
+        width: 157px;
+    }
+
+    .openstudio-folder-show-content-block:nth-child(odd) {
+        margin-right: 0px;
+    }
+
+    .openstudio-new-folder-title,
+    .openstudio-select-post-title {
+        display: none;
+    }
+
+    .openstudio-upload-folder .openstudio-new-folder-title-device,
+    .openstudio-upload-folder .openstudio-select-post-title-device {
+        display: block;
+        width: 140px;
+        margin-top: 60px;
+        margin-left: 17px;
+    }
+
+    .openstudio-folder-view-container .openstudio-content-view-secondary {
+        width: 300px;
+    }
+
+    .openstudio-folder-view-container .openstudio-content-view-icon-inspiration {
+        margin-left: 0px;
+    }
+
+    .openstudio-folder-view-container .openstudio-content-view-icon-favourite {
+        margin-left: -3px;
+    }
+
+    .openstudio-folder-items {
+        padding: 0px;
+    }
+
+    .openstudio-folder-view-title {
+        width: 400px;
+    }
+
+    .openstudio-folder-header-left {
+        width: 50%;
+    }
+
+    .openstudio-folder-view-container .openstudio-content-view-actions-icons-right {
+        float: left;
+        margin-top: 10px;
     }
 
     .filter-block-select {
@@ -3128,6 +3491,10 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         padding-left: 28px;
     }
 
+    .openstudio-folder-view-container .openstudio-content-view-animation-icons-right  {
+        padding-left: 10px;
+    }
+
     .openstudio-content-view-primary {
         width: 320px;
     }
@@ -3143,6 +3510,70 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     .ios .openstudio-content-view-actions-icons-right {
         float: left;
         margin-bottom: 20px;
+    }
+
+    .openstudio-folder-view-primary {
+        width: 320px;
+    }
+
+    .openstudio-folder-view-container {
+        padding: 8px 15px 40px;
+    }
+
+    .openstudio-upload-folder {
+        width: 132px;
+    }
+
+    .openstudio-folder-view-content .openstudio-folder-view-add-new-content {
+        padding-left: 17px;
+    }
+
+    .openstudio-new-folder-title,
+    .openstudio-select-post-title {
+        display: none;
+    }
+
+    .openstudio-upload-folder .openstudio-new-folder-title-device,
+    .openstudio-upload-folder .openstudio-select-post-title-device {
+        display: block;
+        width: 140px;
+        margin-top: 60px;
+        margin-left: 0px;
+    }
+
+    .openstudio-folder-show-content-block {
+        width: 258px;
+        margin-left: 17px;
+    }
+
+    .openstudio-folder-view-container .openstudio-content-view-secondary {
+        width: 234px;
+    }
+
+    .openstudio-folder-available {
+        margin-bottom: 0px;
+    }
+
+    .path-mod-openstudio .openstudio-folder-view-container #id_lockfolder {
+        margin-right: 0px;
+    }
+
+    .openstudio-folder-items {
+        padding: 0px;
+    }
+
+
+    .openstudio-folder-header .openstudio-folder-header-left {
+        width: 320px ;
+    }
+
+    .openstudio-folder-view-title {
+        width: 320px;
+    }
+
+    .openstudio-upload-new-content-to-folder,
+    .openstudio-select-existing-post {
+        margin-left: 43px;
     }
 
     .filter-block-select {
@@ -3648,6 +4079,130 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         float: left;
     }
 
+    .openstudio-folder-header .openstudio-folder-header-left {
+        padding-top: 4px;
+    }
+
+    .openstudio-folder-header .openstudio-folder-header-right {
+        float: left;
+        margin-top: 15px;
+    }
+
+    .openstudio-folder-header-right .openstudio-folder-header-title {
+        font-size: 1.28571em;
+    }
+
+    .openstudio-folder-header-right img,
+    .openstudio-folder-view-title-icon img {
+        display: none;
+    }
+
+    .openstudio-folder-view-title-background {
+        float: none;
+        padding-bottom: 8px;
+    }
+
+    .openstudio-folder-view-title {
+        font-size: 1.42857em;
+        margin-bottom: 20px;
+        margin-right: 0px;
+        width: 100%;
+    }
+
+    .openstudio-folder-view-title-managepost  {
+        float: left;
+    }
+
+    .openstudio-folder-view-primary {
+        padding: 0;
+        width: 100%;
+        margin-bottom: 40px;
+        padding-bottom: 25px;
+    }
+
+    .openstudio-folder-view-container {
+        padding-right: 15px;
+    }
+
+    .openstudio-upload-folder {
+        height: 130px;
+        width: 100%;
+        border-radius: 8px;
+    }
+
+    .openstudio-new-folder-title,
+    .openstudio-select-post-title {
+        display: none;
+    }
+
+    .openstudio-upload-folder .openstudio-new-folder-title-device,
+    .openstudio-upload-folder .openstudio-select-post-title-device {
+        display: none;
+    }
+
+    .openstudio-folder-show-content-block {
+        width: auto;
+        margin: 0px 10px 20px 10px;
+        padding-bottom: 20px;
+    }
+
+    .openstudio-folder-show-content-block-link-title {
+        font-size: 1.57142em;
+    }
+
+    .openstudio-folder-show-content-block-title {
+        height: 45px;
+    }
+
+    .openstudio-folder-show-content-block-date {
+        font-size: 1.28571em;
+    }
+
+    .openstudio-grid-item-folder-preview {
+        margin-bottom: 15px;
+    }
+
+    .openstudio-content-view-block-content {
+        margin-bottom: 15px;
+    }
+
+    .openstudio-content-view-block-content {
+        margin-bottom: 15px;
+    }
+
+    .openstudio-content-view-icon-favourite,
+    .openstudio-content-view-icon-favourite-active,
+    .openstudio-content-view-icon-favourite:hover {
+        margin-left: 0px;
+        width: 92px;
+        text-align: center;
+    }
+
+    .openstudio-content-view-animation-icons {
+        margin-top: 28px;
+    }
+
+    .openstudio-folder-view-content {
+        width: 100%;
+    }
+
+    .openstudio-add-new-content-link {
+        font-size: 1.42857em;
+    }
+
+    .openstudio-folder-view-add-new-content-title img {
+        width: 25px;
+    }
+
+    .openstudio-folder-background .openstudio-default-folder-background-activities {
+        width: 98%;
+        margin-top: -4px;
+    }
+
+    .openstudio-default-folder-background-activities .openstudio-default-folder-img {
+        margin-left: 8px;
+    }
+
     .openstudio-content-view-animation-icons-left {
         width: 100%;
     }
@@ -3912,6 +4467,29 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     .openstudio-folder-content .openstudio-folder-background {
         width: 94%;
     }
+
+    .openstudio-new-folder-title-device {
+        display: none;
+    }
+
+    .openstudio-folder-view-container .openstudio-content-view-secondary {
+        width: 100%;
+    }
+
+    .openstudio-upload-new-content-to-folder,
+    .openstudio-select-existing-post {
+        width: 100px;
+        margin-left: 146px;
+    }
+
+    .openstudio-upload-folder,
+    .openstudio-folder-view-add-new-content-title {
+        margin-left: -3px;
+    }
+
+    .openstudio-folder-preview-default img  {
+        width: 448px;
+    }
 }
 /* Mobile small. */
 @media (max-width: 419px) {
@@ -4061,6 +4639,11 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         margin-right: 7px;
     }
 
+    .openstudio-upload-folder,
+    .openstudio-folder-view-add-new-content-title {
+        margin-left: -6px;
+    }
+
     /**
      * Comment feature
      */
@@ -4095,5 +4678,15 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
 
     .openstudio-folder-content .openstudio-folder-background {
         width: 89.6%;
+    }
+
+    .openstudio-upload-folder .openstudio-new-folder-title-device,
+    .openstudio-upload-folder .openstudio-select-post-title-device {
+        display: none;
+    }
+
+    .openstudio-upload-new-content-to-folder,
+    .openstudio-select-existing-post {
+        margin-left: 65px;
     }
 }

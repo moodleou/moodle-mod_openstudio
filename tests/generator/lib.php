@@ -459,7 +459,7 @@ class mod_openstudio_generator extends testing_module_generator {
     }
 
     public function create_folders($folderdata) {
-        $folderdata['contenttype'] = STUDIO_CONTENTTYPE_SET;
+        $folderdata['contenttype'] = content::TYPE_FOLDER;
         return $this->generate_content($folderdata);
     }
 

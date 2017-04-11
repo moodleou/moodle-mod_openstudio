@@ -119,12 +119,14 @@ $returnurl = new moodle_url('/mod/openstudio/view.php',
         array('id' => $cm->id, 'vid' => content::VISIBILITY_PRIVATE));
 
 $contentdata = new stdClass();
+$contenttype = content::TYPE_NONE;
 if ($sid > 0) {
     $contentdata = content::get_record($userid, $sid);
     if ($contentdata === false) {
         print_error('errorinvalidcontent', 'openstudio', $returnurl->out(false));
     }
     $lid = $contentdata->levelid;
+    $contenttype = $contentdata->contenttype;
 }
 
 $contentdataname = '';
@@ -153,6 +155,7 @@ if ($lid > 0) {
 
 $folderlid = 0;
 $foldertemplatecontentid = 0;
+$permissions->pinboardfolderlimit = 100;
 
 // Check if its a new folder content.
 if (($type == content::TYPE_FOLDER_CONTENT) && ($sid == 0)) {
@@ -258,13 +261,6 @@ if ($sid > 0) {
 
     if (!in_array($type, array(content::TYPE_FOLDER, content::TYPE_FOLDER_CONTENT))) {
         $contentdataname = util::get_content_name($contentdata);
-    }
-    if (!in_array($contentdata->contenttype, array(content::TYPE_NONE,
-                                                content::TYPE_FOLDER))) {
-        $contentdata->contenttype = content::TYPE_NONE;
-    } else {
-        // Do nothing.
-        $donothingforcodechecker = true;
     }
 
     $strcontenturl = new moodle_url('/mod/openstudio/content.php',
@@ -496,7 +492,11 @@ $options = array(
         'contentname' => $formcontentname,
         'isfoldercontent' => ($type == content::TYPE_FOLDER_CONTENT) ? true : false,
         'iscreatefolder' => ($type == content::TYPE_FOLDER_CONTENT && !$folderid) ? true : false,
+        'contentfolder' => $folderid ? true : false,
+        'folderdetails' => ($sid && $type == content::TYPE_FOLDER_CONTENT) ? true : false,
+        'contentdetails' => $sid ? true : false,
         'isfolderlock' => $isfolderlock,
+        'cmid' => $cm->id,
         'max_bytes' => $cminstance->contentmaxbytes
 );
 $contentform = new mod_openstudio_content_form($url->out(false), $options,
@@ -510,14 +510,24 @@ if ($contentform->is_cancelled()) {
     }
     if ($sid > 0) {
         $url = new moodle_url('/mod/openstudio/content.php', $urlparams);
-    } else {
-        $urlparams['lid'] = $lid;
-        $urlparams['type'] = $contentdata->contenttype;
-        if (isset($foldertemplatecontentid)) {
-            $urlparams['sstsid'] = $foldertemplatecontentid;
+        if ($type == content::TYPE_FOLDER) {
+            $url = new moodle_url('/mod/openstudio/folder.php', $urlparams);
         }
-        $urlparams['vid'] = $vid;
-        $url = new moodle_url('/mod/openstudio/view.php', $urlparams);
+    } else {
+        if ($folderid ) {
+            $urlparams['id'] = $id;
+            $urlparams['lid'] = $lid;
+            $urlparams['sid'] = $folderid;
+            $url = new moodle_url('/mod/openstudio/folder.php', $urlparams);
+        } else {
+            $urlparams['lid'] = $lid;
+            $urlparams['type'] = $contentdata->contenttype;
+            if (isset($foldertemplatecontentid)) {
+                $urlparams['sstsid'] = $foldertemplatecontentid;
+            }
+            $urlparams['vid'] = $vid;
+            $url = new moodle_url('/mod/openstudio/view.php', $urlparams);
+        }
     }
     return redirect($url->out(false));
 
@@ -583,6 +593,10 @@ if ($contentform->is_cancelled()) {
             }
         }
 
+        if ($type === content::TYPE_FOLDER && $id) {
+             $contentformdata->tags = null;
+        }
+
         $contentid = content::update(
                 $userid,
                 $contentformdata->sid,
@@ -595,8 +609,12 @@ if ($contentform->is_cancelled()) {
                 $folderid
         );
     } else {
-        if ($type === content::TYPE_FOLDER_CONTENT) {
+        if ($type === content::TYPE_FOLDER_CONTENT && !$folderid) {
             $contentformdata->contenttype = content::TYPE_FOLDER;
+            if ($lid) {
+                $contentformdata->levelid = $lid;
+                $contentformdata->levelcontainer = $contentformdata->visibility;
+            }
         }
         $contentupdatemode = content::UPDATEMODE_CREATED;
 
@@ -679,9 +697,19 @@ if ($contentform->is_cancelled()) {
                 break;
         }
 
-        if ($type === content::TYPE_FOLDER_CONTENT) {
-            $url = new moodle_url('/mod/openstudio/content.php',
-                    array('id' => $id, 'sid' => $contentid, 'ssid' => $folderid));
+        if ($type === content::TYPE_FOLDER_CONTENT || $type === content::TYPE_FOLDER) {
+            if ($folderid) {
+                if ($type === content::TYPE_FOLDER) {
+                    $url = new moodle_url('/mod/openstudio/folder.php',
+                        array('id' => $id, 'sid' => $contentid, 'ssid' => $folderid));
+                } else {
+                    $url = new moodle_url('/mod/openstudio/content.php',
+                        array('id' => $id, 'sid' => $contentid, 'folderid' => $folderid, 'vuid' => $userid));
+                }
+            } else {
+                $url = new moodle_url('/mod/openstudio/folder.php',
+                        array('id' => $id, 'sid' => $contentid, 'ssid' => $folderid));
+            }
         } else {
             $url = new moodle_url('/mod/openstudio/content.php',
                     array('id' => $id, 'sid' => $contentid, 'vuid' => $userid));

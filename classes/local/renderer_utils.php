@@ -28,6 +28,8 @@ use mod_openstudio\local\api\flags;
 use mod_openstudio\local\api\levels;
 use mod_openstudio\local\api\lock;
 use mod_openstudio\local\api\embedcode;
+use mod_openstudio\local\api\folder;
+use mod_openstudio\local\util\defaults;
 
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
@@ -211,13 +213,26 @@ class renderer_utils {
                             $activityname = $activity->level2name;
 
                             $activities[$key]->isactive = false;
-                            $activities[$key]->activityediturl = new \moodle_url('/mod/openstudio/contentedit.php',
-                                array('id' => $contentdata->cmid, 'sid' => 0, 'lid' => $activity->level3id));
+                            if ($activities[$key]->slotcontenttype2 == content::TYPE_FOLDER) {
+                                $activities[$key]->activityediturl = new \moodle_url('/mod/openstudio/contentedit.php',
+                                        array('id' => $contentdata->cmid, 'sid' => 0, 'lid' => $activity->level3id,
+                                                'ssid' => 0, 'type' => content::TYPE_FOLDER_CONTENT));
 
-                            if ($activity->id) {
-                                $activities[$key]->isactive = true;
-                                $activities[$key]->activityediturl = new \moodle_url('/mod/openstudio/content.php',
-                                    array('id' => $contentdata->cmid, 'sid' => $activity->id, 'vuid' => $contentowner->id));
+                                if ($activity->id) {
+                                    $activities[$key]->isactive = true;
+                                    $activities[$key]->activityediturl = new \moodle_url('/mod/openstudio/folder.php',
+                                            array('id' => $contentdata->cmid, 'sid' => $activity->id,
+                                                    'vuid' => $contentowner->id, 'lid' => $activity->level3id));
+                                }
+                            } else {
+                                $activities[$key]->activityediturl = new \moodle_url('/mod/openstudio/contentedit.php',
+                                        array('id' => $contentdata->cmid, 'sid' => 0, 'lid' => $activity->level3id));
+
+                                if ($activity->id) {
+                                    $activities[$key]->isactive = true;
+                                    $activities[$key]->activityediturl = new \moodle_url('/mod/openstudio/content.php',
+                                            array('id' => $contentdata->cmid, 'sid' => $activity->id, 'vuid' => $contentowner->id));
+                                }
                             }
                             $activities[$key]->activitytitle = implode(" - ", array($activity->level1name,
                                 $activity->level2name, $activity->level3name));
@@ -511,28 +526,33 @@ class renderer_utils {
      * @return object $contentdata
      */
     public static function content_visibility_icon($contentdata) {
-        $visibility = (int)$contentdata->vid;
-        if ($visibility < 0) {
-            $visibility = content::VISIBILITY_GROUP;
+        global $OUTPUT;
+
+        $visibility = content::VISIBILITY_PRIVATE_PINBOARD;
+        if (isset($contentdata->visibility)) {
+            $visibility = (int)$contentdata->visibility;
+            if ($visibility < 0) {
+                $visibility = content::VISIBILITY_GROUP;
+            }
         }
 
         switch ($visibility) {
             case content::VISIBILITY_MODULE:
-                $contentvisibilityicon = 'mymodule';
+                $contentvisibilityicon = $OUTPUT->pix_url('mymodule_rgb_32px', 'openstudio');
                 break;
             case content::VISIBILITY_GROUP:
-                $contentvisibilityicon = 'group';
+                $contentvisibilityicon = $OUTPUT->pix_url('share_with_my_group_rgb_32px', 'openstudio');
                 break;
             case content::VISIBILITY_WORKSPACE:
             case content::VISIBILITY_PRIVATE:
             case content::VISIBILITY_PRIVATE_PINBOARD:
-                $contentvisibilityicon = 'onlyme';
+                $contentvisibilityicon = $OUTPUT->pix_url('onlyme_rgb_32px', 'openstudio');
                 break;
             case content::VISIBILITY_TUTOR:
-                $contentvisibilityicon = 'tutor';
+                $contentvisibilityicon = $OUTPUT->pix_url('share_with_tutor_rgb_32px', 'openstudio');
                 break;
             default:
-                $contentvisibilityicon = 'onlyme';
+                $contentvisibilityicon = $OUTPUT->pix_url('onlyme_rgb_32px', 'openstudio');
                 break;
         }
 
@@ -1026,5 +1046,214 @@ class renderer_utils {
         $contentdata->selectfrom = $selectfrom;
 
         return $contentdata;
+    }
+
+    /**
+     * This function will return flag data for a content.
+     *
+     * @param int $cmid The course module id.
+     * @param object $permissions The permission object for the given user/view.
+     * @param object $contentdata The content records to display.
+     * @return object $contentdata
+     */
+    public static function content_flags($cmid, $permissions, $contentdata) {
+
+        $flagtotals = flags::count_by_content($contentdata->id, $permissions->activeuserid);
+        $flagstatus = flags::get_for_content_by_user($contentdata->id, $permissions->activeuserid);
+        $flagfeedbackstatus = flags::get_for_content_by_user($contentdata->id, $contentdata->userid);
+
+        $contentdata->contentflagfavourite = flags::FAVOURITE;
+        $contentdata->contentflagsmile = flags::MADEMELAUGH;
+        $contentdata->contentflaginspire = flags::INSPIREDME;
+        $contentdata->contentflagrequestfeedback = flags::NEEDHELP;
+        $contentdata->contentfavouritetotal = 0;
+        $contentdata->contentsmiletotal = 0;
+        $contentdata->contentinspiretotal = 0;
+        $contentdata->contentrequestfeedbacktotal = 0;
+        $contentdata->contentviewtotal = 0;
+        $contentdata->contentflagfavouriteactive = false;
+        $contentdata->contentflagsmileactive = false;
+        $contentdata->contentflaginspireaction = false;
+        $contentdata->contentflagrequestfeedbackaction = false;
+        $contentdata->contentflagrequestfeedbackactive = false;
+
+        if (array_key_exists(flags::FAVOURITE, $flagtotals)) {
+            $contentdata->contentfavouritetotal = $flagtotals[flags::FAVOURITE]->count;
+        }
+        if (array_key_exists(flags::MADEMELAUGH, $flagtotals)) {
+            $contentdata->contentsmiletotal = $flagtotals[flags::MADEMELAUGH]->count;
+        }
+        if (array_key_exists(flags::INSPIREDME, $flagtotals)) {
+            $contentdata->contentinspiretotal = $flagtotals[flags::INSPIREDME]->count;
+        }
+        if (array_key_exists(flags::NEEDHELP, $flagtotals)) {
+            $contentdata->contentrequestfeedbacktotal = $flagtotals[flags::NEEDHELP]->count;
+        }
+        if (array_key_exists(flags::READ_CONTENT, $flagtotals)) {
+            // Note: we deduct the content owner's own view from the count.
+            $contentdata->contentviewtotal = $flagtotals[flags::READ_CONTENT]->count - 1;
+        }
+        if (in_array(flags::FAVOURITE, $flagstatus)) {
+            $contentdata->contentflagfavouriteactive = true;
+        }
+        if (in_array(flags::MADEMELAUGH, $flagstatus)) {
+            $contentdata->contentflagsmileactive = true;
+        }
+        if (in_array(flags::INSPIREDME, $flagstatus)) {
+            $contentdata->contentflaginspireactive = true;
+        }
+        if (in_array(flags::NEEDHELP, $flagstatus)) {
+            $contentdata->contentflagrequestfeedbackaction = 0;
+            $contentdata->contentflagrequestfeedbackactive = true;
+        }
+
+        // Get copies count.
+        $contenthash = studio_api_item_generate_hash($contentdata->id);
+        $contentdata->contentcopycount = studio_api_item_count_occurences($contenthash, $cmid);
+        $contentdata->contentcopyenable = $contentdata->contentcopycount > 1 ? true : false;
+
+        // Check Request feedback permission.
+        $contentdata->contentrequestfeedbackenable = $contentdata->isownedbyviewer;
+
+        return $contentdata;
+    }
+    /**
+     * This function will return content data for a folder.
+     *
+     * @param int $pinboardfolderlimit The pinboard folder limit.
+     * @param int $openstudioid The openstudio id.
+     * @param object $folderdata The folder records to display.
+     * @return object $folderdata
+     */
+    public static function folder_content($pinboardfolderlimit, $folderdata) {
+        $context = \context_module::instance($folderdata->cmid);
+        $contentdatatemp = folder::get_contents($folderdata->id);
+        $folderdata->total = count($contentdatatemp);
+
+        // Get folder limit.
+        $limitadd = self::get_limit_add_content_folder($pinboardfolderlimit,
+                    $folderdata->id, $folderdata->levelid, $folderdata->total);
+        $folderdata->additionlimit = $limitadd;
+
+        foreach ($contentdatatemp as $content) {
+            if (!$content->deletedby && !$content->deletedtime) {
+                $content = self::content_type_image($content, $context);
+                $contentthumbnailfileurl = $content->contenttypeimage;
+
+                $contentdetail = new \moodle_url('/mod/openstudio/content.php',
+                            array('id' => $folderdata->cmid, 'sid' => $content->id, 'vuid' => $content->userid,
+                                'folderid' => $folderdata->id));
+                $content->contentdetailurl = $contentdetail;
+                $content->contentthumbnailurl = $contentthumbnailfileurl;
+                $content->datetimeupdated = $content->timemodified ? date('j/m/y h:i', $content->timemodified) : null;
+                $folderdata->contents[] = $content;
+            }
+        }
+        return $folderdata;
+    }
+
+     /**
+      * This function will return folder limit add content
+      *
+      * @param int $limit The pinboardfolderlimit setting for the studio instance.
+      * @param int $folderid Optional, the ID of the folder
+      * @param int $levelid Optional, the ID of the level for the pre-definted folder
+      * @return int The maximum number of contents allowed to be added
+      */
+    public static function get_limit_add_content_folder($pinboardfolderlimit, $folderid, $levelid, $contentexist) {
+        $limitadd = 0;
+        if ($levelid) {
+            $limitadd = folder::get_addition_limit($pinboardfolderlimit, $folderid, $levelid);
+        } else {
+            $limitadd = defaults::MAXPINBOARDFOLDERSCONTENTS - $contentexist;
+        }
+        return $limitadd;
+    }
+
+    /**
+     * Check locking status and set up data and include dependencies.
+     *
+     * @param $contentdata Object
+     * @param $permissions Object
+     * @param $cmid int Course module ID
+     */
+    public static function process_content_lock(&$contentdata, $permissions, $cmid) {
+        global $PAGE;
+
+        // Check lock permission.
+        if (property_exists($contentdata, 'isinlockedfolder') && $contentdata->isinlockedfolder == true) {
+            $locked = true;
+        } else {
+            $locked = ($contentdata->locktype == lock::ALL);
+        }
+
+        $lockconst = array(
+            'NONE' => lock::NONE,
+            'ALL' => lock::ALL);
+
+        // Check permission for processing lock.
+        if ($contentdata->isownedbyviewer) {
+            $contentlockenable = $permissions->canlock;
+        } else {
+            $contentlockenable = $permissions->managecontent;
+        }
+
+        $contentdata->contentlockenable = $contentlockenable;
+        $contentdata->locked = $locked;
+
+        $PAGE->requires->strings_for_js(
+            array('contentactionunlockname', 'contentactionlockname'), 'mod_openstudio');
+
+        $PAGE->requires->js_call_amd('mod_openstudio/lock', 'init', [[
+            'cmid' => $cmid,
+            'cid' => $contentdata->id,
+            'isfolder' => $contentdata->contenttype == content::TYPE_FOLDER,
+            'CONST' => $lockconst]]);
+    }
+
+    /**
+     * Check delete capability and set up data and include dependencies.
+     *
+     * @param $contentdata Object
+     * @param $permissions Object
+     * @param $cmid int Course module ID
+     * @return bool
+     */
+    public static function process_content_delete(&$contentdata, $permissions, $cmid) {
+        global $PAGE;
+
+        $deleteenable = false;
+        if (($contentdata->isownedbyviewer || $permissions->managecontent)) {
+            if (($contentdata->l1id > 0) || ($contentdata->l1id == 0) || $permissions->managecontent) {
+                if (studio_api_lock_slot_show_crud($contentdata, $permissions)
+                    || $permissions->managecontent) {
+                    $deleteenable = true;
+                }
+            }
+        }
+        $contentdata->contentdeleteenable = $deleteenable;
+
+        if ($deleteenable) {
+            $isfolder = $contentdata->contenttype == content::TYPE_FOLDER;
+
+            // Require strings for js.
+            if ($isfolder) {
+                $PAGE->requires->strings_for_js(
+                    array('folderdeletedfolder', 'deleteconfirmfolder', 'modulejsdialogcancel', 'deletelevel'),
+                    'mod_openstudio');
+            } else {
+                $PAGE->requires->strings_for_js(
+                    array('contentdeledialogueteheader', 'deleteconfirmcontent', 'modulejsdialogcancel', 'deletelevel'),
+                    'mod_openstudio');
+            }
+
+            $PAGE->requires->js_call_amd('mod_openstudio/delete', 'init', [[
+                'id' => $cmid,
+                'cid' => $contentdata->id,
+                'folderid' => property_exists($contentdata, 'folderid') ? $contentdata->folderid : null,
+                'isfolder' => $isfolder]]);
+        }
+
+        return $deleteenable;
     }
 }

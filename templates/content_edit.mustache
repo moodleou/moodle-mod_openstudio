@@ -49,17 +49,30 @@
                  class="openstudio-add-content-icon" />
             <span class="openstudio-upload-content-title">
                 {{#foldermode}}
-                    {{#str}} createnewfolder, mod_openstudio {{/str}}
+                    {{#folderdetails}}
+                        {{#str}} editfolder, mod_openstudio {{/str}}
+                    {{/folderdetails}}
+                    {{^folderdetails}}
+                        {{#str}} createnewfolder, mod_openstudio {{/str}}
+                    {{/folderdetails}}
                 {{/foldermode}}
                 {{^foldermode}}
-                    {{#str}} contentaddnew, mod_openstudio {{/str}}
+                    {{#contentmode}}
+                        {{#str}} contentedit, mod_openstudio {{/str}}
+                    {{/contentmode}}
+                    {{^contentmode}}
+                        {{#str}} contentaddnew, mod_openstudio {{/str}}
+                    {{/contentmode}}
                 {{/foldermode}}
             </span>
         </div>
         {{^foldermode}}
             {{#feature_enablefolders}}
                 <div class="openstudio-create-folder-button">
-                    <button>{{#str}} contentformcreatefolderbutton, mod_openstudio {{/str}}</button>
+                    <a href="{{{createfolderlink}}}">
+                        <input id="id_createnewfolder" name="createnewfolderbutton"
+                               value="{{#str}} contentformcreatefolderbutton, mod_openstudio {{/str}}" type="button">
+                    </a>
                 </div>
             {{/feature_enablefolders}}
         {{/foldermode}}

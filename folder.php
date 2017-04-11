@@ -23,14 +23,26 @@
  */
 
 use mod_openstudio\local\util;
+use mod_openstudio\local\api\contentversion;
+use mod_openstudio\local\api\folder;
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
 require_once(dirname(__FILE__).'/api/apiloader.php');
 
-$id = optional_param('id', 0, PARAM_INT); // Course_module ID.
+// Course module id.
+$id = optional_param('id', 0, PARAM_INT);
+// Folder ID.
+$folderid = optional_param('sid', 0, PARAM_INT);
+// User id.
+$userid = optional_param('vuid', $USER->id, PARAM_INT);
+// Content level id.
+$lid = optional_param('lid', 0, PARAM_INT);
+$vid = optional_param('vid', -1, PARAM_INT);
+$foldercontenttemplateid = optional_param('sstsid', null, PARAM_INT);
 $coursedata = util::render_page_init($id, array('mod/openstudio:view'));
 $cm = $coursedata->cm;
+$cminstance = $coursedata->cminstance;
 $course = $coursedata->course;
 $mcontext = $coursedata->mcontext;
 $permissions = $coursedata->permissions;
@@ -43,15 +55,67 @@ require_capability('mod/openstudio:view', $mcontext);
 // Terms and conditions check.
 util::honesty_check($id);
 
+$returnurliferror = new moodle_url('/mod/openstudio/view.php', array('id' => $cm->id));
+
+// Save selected post to folder.
+$selectedposts = optional_param('selectedposts', '', PARAM_RAW_TRIMMED);
+if ($selectedposts && $folderid) {
+    $contentdata = content::get($folderid);
+    $contentrecords = array();
+    $contents = explode(',', $selectedposts);
+    foreach ($contents as $itemid) {
+        $selectedcontentdata = content::get($itemid);
+        if ($contentdata->userid == $selectedcontentdata->userid) {
+            folder::collect_content($folderid, $itemid, $USER->id, null, true);
+        } else {
+            $setdataslotid = folder::collect_content($folderid, $itemid,
+                $USER->id, null);
+        }
+    }
+}
+
+// Get content and content version data.
+$showdeletedcontentversions = false;
+if ($permissions->viewdeleted || $permissions->managecontent) {
+    $showdeletedcontentversions = true;
+}
+
+if ($folderid > 0) {
+    $contentandversions = contentversion::get_content_and_versions($folderid, $USER->id, $showdeletedcontentversions);
+    $folderdata = studio_api_lock_determine_lock_status($contentandversions->contentdata);
+} else {
+    $folderdata = (object) array(
+        'id' => 0,
+        'name' => get_string('foldernoname', 'openstudio'),
+        'isownedbyviewer' => true,
+        'userid' => $USER->id,
+        'levelid' => $lid,
+        'visibility' => $vid,
+        'timemodified' => time(),
+        'visibilitycontext' => STUDIO_VISIBILITY_PRIVATE,
+        'deletedby' => null
+    );
+}
+
+// Check the viewing user has permission to view content.
+if (!util::can_read_content($cminstance, $permissions, $folderdata)) {
+    print_error('errornopermissiontoviewcontent', 'openstudio', $returnurliferror->out(false));
+}
+
+$folderdataname = $folderdata->name;
+
 // Get page url.
 $pageurl = util::get_current_url();
 
 // Render page header and crumb trail.
-util::page_setup($PAGE, '', '', $pageurl, $course, $cm);
+$pagetitle = $pageheading = get_string('pageheader', 'openstudio',
+        array('cname' => $course->shortname, 'cmname' => $cm->name, 'title' => $folderdataname));
+util::page_setup($PAGE, $pagetitle, $pageheading, $pageurl, $course, $cm);
 
+$PAGE->requires->js_call_amd('mod_openstudio/contentpage', 'init');
+$PAGE->requires->js_call_amd('mod_openstudio/folderhelper', 'init');
 // Generate stream html.
 $renderer = $PAGE->get_renderer('mod_openstudio');
-$vid = optional_param('vid', -1, PARAM_INT);
 $PAGE->set_button($renderer->searchform($theme, $vid));
 
 $html = $renderer->siteheader(
@@ -60,6 +124,8 @@ $html = $renderer->siteheader(
 echo $OUTPUT->header(); // Header.
 
 echo $html;
+
+echo $renderer->folder_page($cm->id, $permissions, $folderdata);
 
 // Finish the page.
 echo $OUTPUT->footer();

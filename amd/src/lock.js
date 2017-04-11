@@ -37,6 +37,7 @@ define([
          * {
          *     cmid: int,
          *     cid: int,
+         *     isfolder: bool,
          *     CONST: {
          *         ALL: int,
          *         NONE: int
@@ -49,7 +50,7 @@ define([
          */
         CSS: {
             LOCKBUTTON: '#id_lockbutton',
-            ACTIONITEMS: '.openstudio-content-view-container .openstudio-content-actions'
+            ACTIONITEMS: '.openstudio-content-actions'
         },
 
         /**
@@ -99,8 +100,9 @@ define([
 
             promises[0]
                 .done(function() {
+                    var unlockstring = t.mconfig.isfolder ? 'folderunlockfolder' : 'contentactionunlockname';
                     Str
-                        .get_string('contentactionunlockname', 'mod_openstudio')
+                        .get_string(unlockstring, 'mod_openstudio')
                         .done(function(s) {
                             $(t.CSS.LOCKBUTTON)
                                 .attr('value', s)
@@ -137,8 +139,9 @@ define([
 
             promises[0]
                 .done(function() {
+                    var lockstring = t.mconfig.isfolder ? 'folderlockfolder' : 'contentactionlockname';
                     Str
-                        .get_string('contentactionlockname', 'mod_openstudio')
+                        .get_string(lockstring, 'mod_openstudio')
                         .done(function(s) {
                             $(t.CSS.LOCKBUTTON)
                                 .attr('value', s)

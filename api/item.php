@@ -263,7 +263,7 @@ function studio_api_item_delete($containerid, $containertype = STUDIO_SLOT_ITEM_
     global $DB;
 
     if ($DB->record_exists('openstudio_content_items', array('containerid' => $containerid, 'containertype' => $containertype))) {
-        return $DB->delete_records('openstudio_contents_items',
+        return $DB->delete_records('openstudio_content_items',
                 array('containerid' => $containerid, 'containertype' => $containertype));
     } else {
         return false;

@@ -50,6 +50,27 @@ require_once($CFG->dirroot . '/mod/openstudio/api/lock.php');
 class mod_openstudio_external extends external_api {
 
     /**
+     * This function checks whether a content is locked or unlocked .
+     *
+     * @param int $cid Content ID
+     * @param bool $errorthrown If true, throw error when content is locked
+     * @return bool
+     * @throws moodle_exception
+     */
+    public static function validate_locking_status($cid, $errorthrown = true) {
+        $cid = (int)$cid;
+        if (studio_api_lock_check($cid) === false) {
+            return true;
+        }
+
+        if ($errorthrown) {
+            throw new \moodle_exception('event:contentlocked', 'openstudio');
+        }
+
+        return false;
+    }
+
+    /**
      * Returns description of method parameters
      *
      * @return external_function_parameters
@@ -257,6 +278,11 @@ class mod_openstudio_external extends external_api {
         $mode = trim($params['mode']);
 
         list($course, $cm) = get_course_and_cm_from_cmid($params['cmid'], 'openstudio');
+        // Validate locking status.
+        self::validate_locking_status($params['cid']);
+
+        $coursedata = util::render_page_init($params['cmid'], array('mod/openstudio:view'));
+        $cm = $coursedata->cm;
 
         $result = flags::toggle($params['cid'], $params['fid'], $mode, $USER->id);
 
@@ -446,6 +472,9 @@ class mod_openstudio_external extends external_api {
                 'commentattachment' => $commentattachment,
                 'inreplyto' => $inreplyto));
 
+        // Validate locking status.
+        self::validate_locking_status($params['cid']);
+
         // Check if user has permission to add content.
         $actionallowed = $permissions->addcomment || $permissions->managecontent;
 
@@ -576,6 +605,9 @@ class mod_openstudio_external extends external_api {
                 'commentid' => $commentid,
                 'fid' => $flagid));
 
+        // Validate locking status.
+        self::validate_locking_status($params['cid']);
+
         // Init and check permission.
         $coursedata = util::render_page_init($params['cmid'], array('mod/openstudio:view'));
         $permissions = $coursedata->permissions;
@@ -671,6 +703,9 @@ class mod_openstudio_external extends external_api {
         $actionallowed = $permissions->addcomment || $permissions->managecontent;
         $comment = comments::get($params['commentid']);
 
+        // Validate locking status.
+        self::validate_locking_status($comment->contentid);
+
         if ($actionallowed) {
             try {
                 if ($comment) {
@@ -725,7 +760,8 @@ class mod_openstudio_external extends external_api {
      * @param int $cid Content ID
      * @return array
      *  [
-     *      success: boolean
+     *      success: boolean,
+     *      vid: int
      *  ]
      * @throws moodle_exception
      */
@@ -771,6 +807,11 @@ class mod_openstudio_external extends external_api {
         }
 
         $result['success'] = $success;
+        if ($contentdata->levelid == 0) {
+            $result['vid'] = content::VISIBILITY_PRIVATE_PINBOARD;
+        } else {
+            $result['vid'] = content::VISIBILITY_PRIVATE;
+        }
 
         return $result;
     }
@@ -782,7 +823,8 @@ class mod_openstudio_external extends external_api {
      */
     public static function delete_content_returns() {
         return new external_single_structure(array(
-                'success' => new external_value(PARAM_BOOL, 'Unlock successfully'))
+                'success' => new external_value(PARAM_BOOL, 'Unlock successfully'),
+                'vid' => new external_value(PARAM_INT, 'Visibility ID'))
         );
     }
 

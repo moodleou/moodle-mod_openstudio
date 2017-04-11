@@ -42,6 +42,7 @@
         "inspirationicon" : "../../../mod/openstudio/pix/inspiration_rgb_32px.svg",
         "participationicon" : "../../../mod/openstudio/pix/participation_rgb_32px.svg",
         "favouriteicon" : "../../../mod/openstudio/pix/favourite_rgb_32px.svg",
+        "hascontent" : false,
         "socialdata" : {
             "commentsnew" : 1,
             "inspirednew" : 2,
@@ -71,12 +72,39 @@
                 </div>
             {{/isfeedbackrequested}}
         {{/locked}}
+    </div>
+    {{#isfolder}}
+        <div class ="openstudio-folder-content">
+            <img class="openstudio-folder-tab" src="{{{folderdefaultthumbnail}}}" alt="{{{name}}}">
+            <div class ="openstudio-folder-background">
+                <a href="{{{folderlink}}}">
+                    {{#hascontent}}
+                        {{#thumbnailimg}}
+                            <img class="openstudio-content-folder-img" src="{{{folderthumbnail}}}" alt="{{{name}}}">
+                        {{/thumbnailimg}}
+                        {{^thumbnailimg}}
+                            <div class="openstudio-default-folder-background">
+                                <img class="openstudio-default-folder-img" src="{{{folderthumbnail}}}" alt="{{{name}}}">
+                            </div>
+                        {{/thumbnailimg}}
+                    {{/hascontent}}
+                    {{^hascontent}}
+                        <div class="openstudio-default-folder-background">
+                            <img class="openstudio-default-folder-img" src="{{{defaultfolderimg}}}" alt="{{{name}}}">
+                        </div>
+                    {{/hascontent}}
+                </a>
+            </div>
+        </div>
+    {{/isfolder}}
+    {{^isfolder}}
         <div class="openstudio-grid-item-content-preview{{#contenttypedefaultimage}}-default{{/contenttypedefaultimage}}">
             <a href="{{{contentlink}}}">
                 <img class="openstudio-grid-item-thumbnail" src="{{{contentthumbnailurl}}}" alt="{{{name}}}">
             </a>
         </div>
-    </div>
+    {{/isfolder}}
+
     {{#name}}
         <div class="openstudio-grid-item-content-subtitle">{{{name}}}</div>
     {{/name}}

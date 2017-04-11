@@ -56,7 +56,9 @@
             <input name="replycommentbutton"  type="button" data-comment-parent="
                 {{#inreplyto}} {{inreplyto}} {{/inreplyto}}
                 {{^inreplyto}} {{id}} {{/inreplyto}}"
-                value="{{#str}} contentcommentsreply, mod_openstudio {{/str}}">
+                value="{{#str}} contentcommentsreply, mod_openstudio {{/str}}"
+                class="openstudio-content-actions {{#locked}} locked {{/locked}}"
+            >
         </div>
         <div class="openstudio-comment-rightcolumn">
             <div class="openstudio-comment-flag">
@@ -90,7 +92,8 @@
                     {{/flagcount}}
                 ">{{flagcount}}</span>
                 {{^userhasflagged}}
-                    <a class="openstudio-comment-flag-link" href="" data-comment-id="{{id}}">
+                    <a class="openstudio-comment-flag-link openstudio-content-actions {{#locked}} locked {{/locked}}"
+                        href="" data-comment-id="{{id}}">
                         {{#str}} contentcommentlike, mod_openstudio {{/str}}
                     </a>
                 {{/userhasflagged}}
@@ -98,14 +101,15 @@
 
             {{#deleteenable}}
                 <div class="openstudio-comment-action">
-                    <a class="openstudio-comment-delete-link" href="" data-comment-id="{{id}}">
+                    <a class="openstudio-comment-delete-link openstudio-content-actions {{#locked}} locked {{/locked}}"
+                        href="" data-comment-id="{{id}}">
                         {{#str}} contentcommentsdelete, mod_openstudio {{/str}}
                     </a>
                 </div>
             {{/deleteenable}}
             {{#reportenable}}
                 <div class="openstudio-comment-action">
-                    <a class="openstudio-comment-report-link" href="">
+                    <a class="openstudio-comment-report-link openstudio-content-actions {{#locked}} locked {{/locked}}" href="">
                         {{#str}} contentcommentsreport, mod_openstudio {{/str}}
                     </a>
                 </div>

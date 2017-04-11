@@ -34,6 +34,7 @@ use mod_openstudio\local\util\defaults;
 use mod_openstudio\local\renderer_utils;
 use mod_openstudio\local\api\flags;
 use mod_openstudio\local\api\levels;
+use mod_openstudio\local\api\folder;
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
@@ -498,7 +499,7 @@ if ($finalviewpermissioncheck) {
                 $contentid = uniqid('', true);
             } else {
                 $contentslist[] = $contentid;
-                // Content feedback requested
+                // Content feedback requested.
                 $content->isfeedbackrequested = false;
                 $flagstatus = flags::get_for_content_by_user($contentid, $permissions->activeuserid);
                 if (in_array(flags::NEEDHELP, $flagstatus)) {
@@ -509,6 +510,7 @@ if ($finalviewpermissioncheck) {
             $context = context_module::instance($cm->id);
 
             $contenticon = '';
+            $folderthumbnailfileurl = '';
 
             $content = renderer_utils::content_type_image($content, $context);
 
@@ -565,13 +567,33 @@ if ($finalviewpermissioncheck) {
             }
             $content->isfolder = false;
 
-            // Check content is folder
+            // Check content is folder.
             if ($content->contenttype == content::TYPE_FOLDER || $content->l3contenttype == content::TYPE_FOLDER) {
                 $content->isfolder = true;
-                $content->folderthumbnail = $OUTPUT->pix_url('openstudio_sets_preview_box', 'openstudio');
+                $content->hascontent = false;
+                $folderthumbnailfileurl = $OUTPUT->pix_url('uploads_rgb_32px', 'openstudio');
                 $content->defaultfolderimg = $OUTPUT->pix_url('uploads_rgb_32px', 'openstudio');
+                $firstcontent = folder::get_first_content($content->id);
+                if ($firstcontent) {
+                    $content->hascontent = true;
+                    $content->thumbnailimg = true;
+                    $firsrcm = get_coursemodule_from_instance('openstudio', $firstcontent->openstudioid);
+                    $context = context_module::instance($firsrcm->id);
+                    $firstcontent = renderer_utils::content_type_image($firstcontent, $context);
+                    if ($firstcontent->contenttype != content::TYPE_IMAGE) {
+                        $content->thumbnailimg = false;
+                    }
+                    $folderthumbnailfileurl = $firstcontent->contenttypeimage;
+                }
+                $content->folderthumbnail = $folderthumbnailfileurl;
+                $content->folderdefaultthumbnail = $OUTPUT->pix_url('openstudio_sets_preview_box', 'openstudio'); 
                 $content->folderlink = new moodle_url('/mod/openstudio/folder.php',
-                    array('id' => $id, 'sid' => $content->id));
+                        array('id' => $id, 'lid' => $content->l3id, 'vid' => content::VISIBILITY_PRIVATE, 'sid' => $content->id));
+                if (!$content->id) {
+                    $content->folderlink = new moodle_url('/mod/openstudio/contentedit.php',
+                            array('id' => $id, 'sid' => 0, 'lid' => $content->l3id,
+                                    'ssid' => 0, 'type' => content::TYPE_FOLDER_CONTENT));
+                }
             }
             $content->contenticon = $contenticon;
             $content->itemsharewith = $itemsharewith;

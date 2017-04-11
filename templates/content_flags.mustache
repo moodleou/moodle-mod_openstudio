@@ -1,0 +1,93 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_openstudio/content_flags
+
+    Content detail template of the OpenStudio UI.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+
+    Example context (json):
+    {
+        "contentflagfavouriteactive" : true,
+        "contentfavouritetotal" : 5,
+        "contentsmiletotal" : 0,
+        "contentinspiretotal" : 0,
+        "contentcopyenable" : true
+    }
+}}
+<div class="openstudio-content-view-animation-icons clearfix">
+    <div class="openstudio-content-view-animation-icons-left openstudio-content-actions {{#locked}}locked{{/locked}}">
+        <a id="content_view_icon_{{contentflagfavourite}}"
+           data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagfavourite}}"
+           {{#contentflagfavouriteactive}}data-mode="on"{{/contentflagfavouriteactive}}
+           {{^contentflagfavouriteactive}}data-mode="off"{{/contentflagfavouriteactive}}
+           class="openstudio-content-view-flag-icon openstudio-content-view-icon-favourite
+                    {{#contentflagfavouriteactive}}
+                        openstudio-content-view-icon-favourite-active
+                    {{/contentflagfavouriteactive}}">
+            {{#str}}
+                contentflagxfavourites, mod_openstudio,
+                { "number": {{#quote}}{{contentfavouritetotal}}{{/quote}} }
+            {{/str}}
+        </a>
+        <a id="content_view_icon_{{contentflagsmile}}"
+           data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagsmile}}"
+           {{#contentflagsmileactive}}data-mode="off"{{/contentflagsmileactive}}
+           {{^contentflagsmileactive}}data-mode="on"{{/contentflagsmileactive}}
+           class="openstudio-content-view-flag-icon openstudio-content-view-icon-participation
+                    {{#contentflagsmileactive}}
+                        openstudio-content-view-icon-participation-active
+                    {{/contentflagsmileactive}}">
+            {{#str}}
+                contentflagxsmiles, mod_openstudio, { "number": {{#quote}}{{contentsmiletotal}}{{/quote}} }
+            {{/str}}
+        </a>
+        <a id="content_view_icon_{{contentflaginspire}}"
+           data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflaginspire}}"
+           {{#contentflaginspireactive}}data-mode="off"{{/contentflaginspireactive}}
+           {{^contentflaginspireactive}}data-mode="on"{{/contentflaginspireactive}}
+           class="openstudio-content-view-flag-icon openstudio-content-view-icon-inspiration
+                    {{#contentflaginspireactive}}
+                        openstudio-content-view-icon-inspiration-active
+                    {{/contentflaginspireactive}}">
+            {{#str}}
+                contentflagxinspired, mod_openstudio, { "number": {{#quote}}{{contentinspiretotal}}{{/quote}} }
+            {{/str}}
+        </a>
+    </div>
+    <div class="openstudio-content-view-animation-icons-right">
+        {{#contentcopyenable}}
+            <span class="openstudio-content-view-flag-icon openstudio-content-view-icon-copies-active">
+                {{#str}}
+                    contentflagxcopies, mod_openstudio, { "number": {{#quote}}{{contentcopycount}}{{/quote}} }
+                {{/str}}
+            </span>
+        {{/contentcopyenable}}
+        <span class="openstudio-content-view-flag-icon openstudio-content-view-icon-views
+                    {{#contentviewtotal}}openstudio-content-view-icon-views-active{{/contentviewtotal}}">
+            {{#str}}
+                contentflagxviews, mod_openstudio, { "number": {{#quote}}{{contentviewtotal}}{{/quote}} }
+            {{/str}}
+        </span>
+    </div>
+</div>

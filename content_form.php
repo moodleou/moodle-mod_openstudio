@@ -260,6 +260,9 @@ class mod_openstudio_content_form extends moodleform {
             $mform->addElement('html', html_writer::end_tag('div'));
 
         }
+        if ($this->_customdata['folderdetails']) {
+            $submitbuttontitle = get_string('contentformsubmitbutton', 'openstudio');
+        }
 
         $mform->addElement('html', html_writer::start_tag('div',
                 array('id' => 'contentformoptionalmetadata',
