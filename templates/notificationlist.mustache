@@ -20,19 +20,22 @@
     A list of notifications, used in HTML subscription emails, and the notifications drop-down list.
 
     Classes required for JS:
-    * none
+    * .openstudio-notitifications-list .stopicon
+    * openstudio-notitication-stopicon
 
     Data attributes required for JS:
-    * none
+    * id
+    * contentid
 
     Context variables required for this template:
-    * none
+    * notifications
 
     Example context (json):
     {
         "notifications": [
             {
                 "id": 1,
+                "contentid":
                 "picture": "<img src=\"http://placehold.it/48/48\" width=\"48\" height=\"48\" alt=\"Image of User 1\" />",
                 "message": "User 1 commented on your post '<a href=\"http://localhost\">Really cool image</a>'",
                 "messageplain": "User 1 commented on your post 'Really cool image'",
@@ -44,7 +47,8 @@
                 },
                 "url": "http://example.com",
                 "timecreated": "2 hours ago",
-                "isread": false
+                "isread": false,
+                "isfollowing": true
             },
             {
                 "id": 5,
@@ -59,18 +63,45 @@
                 },
                 "url": "http://example.com",
                 "timecreated": "3 hours ago",
-                "isread": true
+                "isread": true,
+                "isfollowing": false
             }
-        ]
+        ],
+        "notificationstopicon" : {
+            "attributes": [
+                {"name": "src", "value": "http://placehold.it/16/16"},
+                {"name": "alt", "value": ""}
+            ]
+        }
     }
 
 }}
-<ul class="openstudio-notifications-list">
+<div class="openstudio-notifications dropdown-menu">
+    <h2 class="openstudio-notifications-heading">
+        <div class="openstudio-notifications-arrow">{{#pix}} notifications_arrow, mod_openstudio {{/pix}}</div>
+        {{#pix}} notifications_rgb_32px, mod_openstudio {{/pix}}{{#str}} notificationslistheader, mod_openstudio {{/str}}</h2>
+    <ul class="openstudio-notifications-list">
 {{#notifications}}
     <li data-id="{{id}}" class="openstudio-notification openstudio-notification-{{#isread}}read{{/isread}}{{^isread}}unread{{/isread}}">
-        <p>{{{picture}}} <span class="openstudio-notification-message">{{{message}}}</span></p>
-        <p>{{#icon}}{{> core/pix_icon}}{{/icon}} <span class="openstudio-notification-timecreated">{{timecreated}}</span></p>
-        <button class="openstudio-notification-stopicon">{{#pix}} viewed_rgb_32px, mod_openstudio, foo {{/pix}}</button>
+        {{{picture}}}
+        <div class="openstudio-notification-body">
+            <p class="openstudio-notification-message">{{{message}}}</p>
+            <p class="openstudio-notification-details">{{#icon}}{{> core/pix_icon}}{{/icon}} {{timecreated}}
+                {{#isfollowing}}
+                        <button data-contentid="{{contentid}}"
+                                {{#commentid}}data-commentid="{{commentid}}"{{/commentid}}
+                                class="openstudio-notification-stopbutton openstudio-tooltip"
+                                    {{#commentid}}title="{{#str}} stopnotificationsforcomment, mod_openstudio {{/str}}"{{/commentid}}
+                                    {{^commentid}}title="{{#str}} stopnotificationsforcontent, mod_openstudio {{/str}}"{{/commentid}}>
+                                {{#notificationstopicon}}{{> core/pix_icon}}{{/notificationstopicon}}
+                        </button>
+                {{/isfollowing}}
+            </p>
+        </div>
     </li>
 {{/notifications}}
-</ul>
+{{^notifications}}
+    <li>{{#str}} nonotifications, mod_openstudio {{/str}}</li>
+{{/notifications}}
+    </ul>
+</div>

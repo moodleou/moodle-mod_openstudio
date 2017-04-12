@@ -52,6 +52,12 @@
     clear: both;
 }
 
+.openstudio-nav-primary .nav,
+.openstudio-nav-primary .notifications {
+    display: inline-block;
+    vertical-align: top;
+}
+
 .openstudio-nav-logo-text {
     font-weight: bold;
     color: #002158;
@@ -306,6 +312,172 @@
     margin: 0 20px 20px;
     padding: 0 15px 0 0;
     line-height: 54px;
+}
+
+/** Notifications */
+
+.openstudio-navigation-notification-icon {
+    cursor: pointer;
+}
+
+.openstudio-nav-primary .notifications .openstudio-notifications-arrow {
+    display: none;
+}
+
+.openstudio-nav-primary .notifications.open .openstudio-notifications-arrow {
+    display: block;
+    position: absolute;
+    top: -20px;
+    left: 223px
+}
+
+.openstudio-notifications {
+    width: 445px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.path-mod-openstudio .openstudio-notifications.dropdown-menu {
+    padding: 0;
+    top: 62px;
+    left: -222px;
+}
+
+.openstudio-notifications-heading {
+    background-color: #0b55a8;
+    color: white;
+    font-size: 1.14285em;
+    margin: 0;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    line-height: 34px;
+    padding-left: 10px;
+}
+
+.openstudio-notifications-heading img {
+    width: 24px;
+    margin-right: 2px;
+}
+
+.openstudio-notifications-list {
+    margin: 0;
+    list-style: none;
+    max-height: 560px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.openstudio-notification {
+    padding: 15px;
+    border-bottom: 1px solid #bfe2ef;
+}
+
+.openstudio-notification-unread {
+    background-color: #e7f4fa;
+}
+
+.openstudio-notification .userpicture,
+.openstudio-notification-body {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.openstudio-notification .userpicture {
+    margin-right: 5px;
+}
+
+.openstudio-notification-body {
+    width: calc(100% - 58px);
+}
+
+.openstudio-notification-body p {
+    margin-top: 0;
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+.openstudio-notification-body .openstudio-notification-details {
+    font-size: 0.85714em;
+}
+
+.openstudio-notification-body .openstudio-notification-details img {
+    vertical-align: top;
+}
+
+.openstudio-notification-stopbutton {
+    float: right;
+    border: none;
+    padding: 0;
+    margin-right: 0;
+}
+
+.openstudio-notification-stopbutton:hover,
+button.openstudio-notification-stopbutton:focus {
+    background-color: transparent;
+}
+
+button.openstudio-notification-stopbutton:focus {
+    outline: 1px dotted grey;
+}
+
+@media (max-width: 1023px) {
+    .openstudio-notifications {
+        width: 393px;
+    }
+    .path-mod-openstudio .openstudio-notifications.dropdown-menu {
+        left: -290px;
+    }
+    .openstudio-nav-primary .notifications.open .openstudio-notifications-arrow {
+        left: 291px;
+    }
+}
+
+@media (max-width: 767px) {
+    .openstudio-notifications {
+        width: 100vw;
+    }
+    .path-mod-openstudio .openstudio-notifications.dropdown-menu {
+        top: 81px;
+        left: -323px;
+    }
+    .openstudio-notifications-heading {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        padding-left: 10px;
+        padding-right: 20px;
+    }
+    .openstudio-notifications-heading img {
+        width: 40px;
+    }
+    .openstudio-notifications-list {
+        max-height: none;
+    }
+    .openstudio-notification {
+        padding: 20px;
+    }
+    .openstudio-notification-details .smallicon {
+        width: 18px;
+        height: 18px;
+    }
+    .openstudio-notification-stopbutton .smallicon {
+        width: 24px;
+        height: 24px;
+    }
+    .openstudio-nav-primary .notifications.open .openstudio-notifications-arrow {
+        top: -17px;
+        left: 335px;
+    }
+}
+
+@media (max-width: 419px) {
+    .path-mod-openstudio .openstudio-notifications.dropdown-menu {
+        top: 63px;
+        left: -248px;
+    }
+    .openstudio-nav-primary .notifications.open .openstudio-notifications-arrow {
+        left: 252px;
+        top: -15px;
+    }
 }
 
 /**
@@ -776,8 +948,8 @@ div.openstudio-comment-thread-item:nth-last-child(2) {
 /**
  * Content modal.
  */
-#page-mod-openstudio-content .modal-header,
-#page-mod-openstudio-content .modal-footer {
+.openstudio-fullscreen-modal .modal-header,
+.openstudio-fullscreen-modal .modal-footer {
     display: none;
 }
 .openstudio-modal-content-title {
@@ -796,9 +968,13 @@ div.openstudio-comment-thread-item:nth-last-child(2) {
     font-family: Arial;
 }
 
-#page-mod-openstudio-content .modal-body {
+.openstudio-fullscreen-modal .modal-body {
     background-color: #464542;
     border-radius: 4px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 130px;
+    padding-top: 12px;
 }
 
 .openstudio-lockscroll {
@@ -822,13 +998,6 @@ div.openstudio-comment-thread-item:nth-last-child(2) {
     background-position: center;
     background-repeat: no-repeat;
     cursor: pointer;
-}
-
-.path-mod-openstudio .modal-body {
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-bottom: 130px;
-    padding-top: 12px;
 }
 
 .openstudio-modal-content .openstudio-content-view-date {
@@ -1126,7 +1295,7 @@ label.openstudio-export-item-name {
     width: 28px;
 }
 
-.openstudio-navigation-notification-text {
+.openstudio-navigation-notification-number {
     background: #b52a1e none repeat scroll 0 0;
     border: 2px solid #ffffff;
     border-radius: 20px;
@@ -1664,9 +1833,13 @@ a.openstudio-add-title:hover  {
     bottom: 125%;
     margin-left: -70px;
     opacity: 0;
-    transition: opacity 1s;
+    transition: opacity .25s;
     width: 150px;
     font-size: 0.92857em;
+}
+
+.openstudio-notification-stopbutton .openstudio-tooltiptext {
+    margin-left: -86px;
 }
 
 .openstudio-tooltip .openstudio-tooltiptext-onlyme {

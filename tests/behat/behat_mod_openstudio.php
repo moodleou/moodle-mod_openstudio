@@ -367,7 +367,7 @@ EOF;
         require_once(__DIR__ . '/../generator/lib.php');
 
         if (empty(self::$elements[$elementname])) {
-            throw new ExpectationException($elementname . ' data generator is not implemented');
+            throw new ExpectationException($elementname . ' data generator is not implemented', $this->getSession());
         }
 
         $this->datagenerator = testing_util::get_data_generator();
@@ -418,7 +418,7 @@ EOF;
                 // Using an alternative to the direct data generator call.
                 $this->{'process_' . $elementdatagenerator}($elementdata);
             } else {
-                throw new ExpectationException($elementname . ' data generator is not implemented');
+                throw new ExpectationException($elementname . ' data generator is not implemented', $this->getSession());
             }
         }
     }
@@ -666,10 +666,133 @@ EOF;
      * @return int
      */
     protected function get_levelcontainer_id($visibility) {
-        $constantname = content::class.'::VISIBILITY_' . strtoupper(trim($visibility));
+        $constantname = content::class . '::VISIBILITY_' . strtoupper(trim($visibility));
         if (!defined($constantname)) {
             throw new Exception('The visibility constant "' . $constantname . '" does not exist');
         }
         return constant($constantname);
+    }
+
+    /**
+     * Get the ID of a grouping from the idnumber
+     *
+     * @param string $grouping ID number of the grouping
+     * @return int
+     * @throws Exception
+     */
+    protected function get_grouping_id($grouping) {
+        global $DB;
+
+        if (!$id = $DB->get_field('groupings', 'id', array('idnumber' => $grouping))) {
+            throw new Exception('The grouping with idnumber "' . $grouping . '" does not exist');
+        }
+        return $id;
+    }
+
+    /**
+     * Set the follow flag for a user on a content post.
+     *
+     * @Given /^"(?P<username_string>(?:[^"]|\\")*)" will recieve notifications for openstudio content "(?P<contentname_string>(?:[^"]|\\")*)"$/
+     *
+     * @param $username
+     * @param $contentname
+     */
+    public function user_will_get_notifications_for_content($username, $contentname) { 
+        $userid = $this->get_user_id($username);
+        $contentid = $this->get_content_id($contentname);
+        mod_openstudio\local\api\flags::toggle($contentid, mod_openstudio\local\api\flags::FOLLOW_CONTENT, 'on', $userid);
+    }
+
+    /**
+     * Get the content ID for a comment based on the name.
+     *
+     * @param $commentdata
+     * @return mixed
+     * @throws Exception
+     */
+    protected function preprocess_comment($commentdata) {
+        global $DB;
+        $studio = $this->get_openstudio_by_idnumber($commentdata['openstudio']);
+        $content = $DB->get_record('openstudio_contents', ['name' => $commentdata['content'], 'openstudioid' => $studio->id]);
+        if (!$content) {
+            throw new Exception('There is no content post called ' . $commentdata['content'] . ' in this studio.');
+        }
+        $commentdata['contentid'] = $content->id;
+        return $commentdata;
+    }
+
+    /**
+     * Get the ID of a content post by its name
+     *
+     * This requires that all posts in the test have unique names.
+     *
+     * @param string $name
+     * @return int
+     * @throws Exception
+     */
+    protected function get_content_id($name) {
+        global $DB;
+
+        try {
+            if (!$id = $DB->get_field('openstudio_contents', 'id', array('name' => $name))) {
+                throw new Exception('The content with name "' . $name . '" does not exist');
+            }
+        } catch (dml_multiple_records_exception $e) {
+            throw new Exception('More than one content record was found with the name ' . $name
+                    .'. For simplicity, please use unique content names in behat tests.');
+        }
+        return $id;
+    }
+
+    /**
+     * Set the follow flag for a user on a comment.
+     *
+     * @Given /^"(?P<username_string>(?:[^"]|\\")*)" will recieve notifications for openstudio comment "(?P<comment_string>(?:[^"]|\\")*)"$/
+     *
+     * @param $username
+     * @param $commenttext
+     */
+    public function user_will_get_notifications_for_comment($username, $commenttext) {
+        $userid = $this->get_user_id($username);
+        $comment = $this->get_comment($commenttext);
+        mod_openstudio\local\api\flags::comment_toggle($comment->contentid, $comment->id, $userid, 'on', false,
+                mod_openstudio\local\api\flags::FOLLOW_CONTENT);
+    }
+
+    /**
+     * Get the record for a comment by its text.
+     *
+     * This requires that all comment in the test have unique text.
+     *
+     * @param string $commenttext
+     * @return object
+     * @throws Exception
+     */
+    protected function get_comment($commenttext) {
+        global $DB;
+
+        try {
+            $where = $DB->sql_compare_text('commenttext') . ' = ?';
+            if (!$comment = $DB->get_record_select('openstudio_comments', $where, [$commenttext])) {
+                throw new Exception('The content with name "' . $commenttext . '" does not exist');
+            }
+        } catch (dml_multiple_records_exception $e) {
+            throw new Exception('More than one comment record was found with the text ' . $commenttext
+                    .'. For simplicity, please use unique comment text in behat tests.');
+        }
+        return $comment;
+    }
+
+    /**
+     * Get the ID for a comment by its text.
+     *
+     * This requires that all comment in the test have unique text.
+     *
+     * @param string $commenttext
+     * @return int
+     * @throws Exception
+     */
+    protected function get_comment_id($commenttext) {
+        return $this->get_comment($commenttext)->id;
     }
 }

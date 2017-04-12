@@ -26,9 +26,12 @@ defined('MOODLE_INTERNAL') || die();
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\levels;
 use mod_openstudio\local\api\subscription;
+use mod_openstudio\local\api\notifications;
 use mod_openstudio\local\renderer_utils;
 use mod_openstudio\local\api\flags;
 use mod_openstudio\local\api\lock;
+use mod_openstudio\local\util\defaults;
+use mod_openstudio\local\notifications\notification;
 
 /**
  * OpenStudio renderer.
@@ -53,7 +56,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
     public function siteheader(
             $coursedata, $permissions, $theme, $sitename = 'Design', $searchtext = '',
             $viewmode = content::VISIBILITY_MODULE) {
-        global $OUTPUT, $PAGE;
+        global $OUTPUT, $PAGE, $USER;
 
         $cm = $coursedata->cm;
         $cmid = $cm->id;
@@ -233,8 +236,22 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $data->navigation[] = $adminmenuitem;
         }
 
-        $data->notificationnumber = 3;
         $data->notificationicon = $OUTPUT->pix_url('notifications_rgb_32px', 'openstudio');
+        $data->notifications = [];
+        $notifications = notifications::get_current($cm->instance, $USER->id, defaults::NOTIFICATIONLIMITMAX);
+        foreach ($notifications as $notification) {
+            $data->notifications[] = $notification->export_for_template($this->output);
+        }
+        $data->notificationnumber = array_reduce($notifications, function($carry, notification $notification) {
+            $carry += $notification->timeread ? 0 : 1;
+            return $carry;
+        });
+        $stopstring = get_string('stopnotificationsforcontent', 'mod_openstudio');
+        $stopicon = new \pix_icon('stop_notification', $stopstring, 'mod_openstudio', [
+            'width' => 16,
+            'height' => 16
+        ]);
+        $data->notificationstopicon = $stopicon->export_for_template($this->output);
 
         $addtodashboard = block_externaldashboard_backend::render_favourites_button($PAGE->cm, false);
         $data->addtodashboard = $addtodashboard;
@@ -251,6 +268,13 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 'openstudioid' => $coursedata->cminstance->id,
                 'userid' => $permissions->activeuserid,
                 'cmid' => $cmid]]);
+
+        $this->page->requires->strings_for_js(['stopnotifications', 'stopnotificationsfor'], 'mod_openstudio');
+        $this->page->requires->strings_for_js(['closebuttontitle', 'cancel'], 'moodle');
+
+        $this->page->requires->js_call_amd('mod_openstudio/notificationlist', 'init', [
+                'cmid' => $cmid,
+                'followflag' => flags::FOLLOW_CONTENT]);
 
         $subscriptiondata = subscription::get(
                 $permissions->activeuserid,
@@ -290,7 +314,6 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             if ($permissions->addinstance) {
                 $redirectorurl = new moodle_url('/course/modedit.php',
                     array('update' => $cm->id, 'return' => 0, 'sr' => ''));
-
                 $submenuitem = array(
                         'name' => get_string('navadmineditsettings', 'openstudio'),
                         'url' => $redirectorurl

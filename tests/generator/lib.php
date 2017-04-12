@@ -596,7 +596,7 @@ class mod_openstudio_generator extends testing_module_generator {
             if (!isset($flagdata['flagid'])) {
                 $flagdata['flagid'] = flags::COMMENT_LIKE;
             }
-            return flags::comment_toggle($flagdata['contentid'], $flagdata['commentid'], $flagdata['userid'],
+            return flags::comment_toggle($flagdata['contentid'], $flagdata['commentid'], $flagdata['userid'], 'on',
                     true, $flagdata['flagid']);
         }
         return flags::toggle($flagdata['contentid'], $flagdata['flagid'], 'on', $flagdata['userid'], true);

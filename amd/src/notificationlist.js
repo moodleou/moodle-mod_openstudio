@@ -113,7 +113,7 @@ define(['jquery', 'core/ajax', 'core/modal', 'core/templates', 'theme_bootstrapb
                 var args = {
                     cmid: priv.cmid,
                     cid: target.data('contentid'),
-                    fid: priv.followflag,
+                    fid: priv.followflag
                 };
                 if (commentid) {
                     args.commentid = commentid;

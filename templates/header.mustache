@@ -29,8 +29,6 @@
     {
         "sitename": "Open Studio",
         "placeholdertext" : "My Module",
-        "notificationnumber" : 10,
-        "notificationicon" : "../../../theme/image.php?theme=osep&amp;component=openstudio&amp;image=notifications_rgb_32px",
         "navigation": [
             {
                 "name" : "Shared Content",
@@ -71,6 +69,40 @@
                    "name" : "Edit settings",
                     "url" : "https://example.com/mod/openstudio/view.php?id=4&vid=3&fblock=0&ftype=0&fflag=0&ftags&fsort=1&osort=0"
                  }
+            }
+        ],
+        "notificationnumber" : 2,
+        "notificationicon" : "../../../theme/image.php?theme=osep&amp;component=openstudio&amp;image=notifications_rgb_32px",
+        "notifications": [
+            {
+                "id": 1,
+                "picture": "<img src=\"http://placehold.it/48/48\" width=\"48\" height=\"48\" alt=\"Image of User 1\" />",
+                "message": "User 1 commented on your post '<a href=\"http://localhost\">Really cool image</a>'",
+                "messageplain": "User 1 commented on your post 'Really cool image'",
+                "icon": {
+                    "attributes": [
+                        {"name": "src", "value": "http://placehold.it/16/16"},
+                        {"name": "alt", "value": ""}
+                    ]
+                },
+                "url": "http://example.com",
+                "timecreated": "2 hours ago",
+                "isread": false
+            },
+            {
+                "id": 5,
+                "picture": "<img src=\"http://placehold.it/48/48\" width=\"48\" height=\"48\" alt=\"Image of User 1\" />",
+                "message": "User 1 liked your post '<a href=\"http://localhost\">Really cool image</a>'",
+                "messageplain": "User 1 liked your post 'Really cool image'",
+                "icon": {
+                    "attributes": [
+                        {"name": "src", "value": "http://placehold.it/16/16"},
+                        {"name": "alt", "value": ""}
+                    ]
+                },
+                "url": "http://example.com",
+                "timecreated": "3 hours ago",
+                "isread": true
             }
         ]
     }

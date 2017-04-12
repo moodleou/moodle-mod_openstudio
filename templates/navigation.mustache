@@ -20,15 +20,13 @@
     Navigation template of the OpenStudio UI.
 
     Classes required for JS:
-    * none
+    * .openstudio-header .dropdown.notifications
 
     Data attributes required for JS:
     * none
 
     Example context (json):
     {
-        "notificationnumber" : 10,
-        "notificationicon" : "../../../theme/image.php?theme=osep&amp;component=openstudio&amp;image=notifications_rgb_32px",
         "navigation": [
             {
                 "name" : "Shared Content",
@@ -77,6 +75,40 @@
                  },
                 "active": false
             }
+        ],
+        "notificationnumber" : 2,
+        "notificationicon" : "../../../theme/image.php?theme=osep&amp;component=openstudio&amp;image=notifications_rgb_32px",
+        "notifications": [
+            {
+                "id": 1,
+                "picture": "<img src=\"http://placehold.it/48/48\" width=\"48\" height=\"48\" alt=\"Image of User 1\" />",
+                "message": "User 1 commented on your post '<a href=\"http://localhost\">Really cool image</a>'",
+                "messageplain": "User 1 commented on your post 'Really cool image'",
+                "icon": {
+                    "attributes": [
+                        {"name": "src", "value": "http://placehold.it/16/16"},
+                        {"name": "alt", "value": ""}
+                    ]
+                },
+                "url": "http://example.com",
+                "timecreated": "2 hours ago",
+                "isread": false
+            },
+            {
+                "id": 5,
+                "picture": "<img src=\"http://placehold.it/48/48\" width=\"48\" height=\"48\" alt=\"Image of User 1\" />",
+                "message": "User 1 liked your post '<a href=\"http://localhost\">Really cool image</a>'",
+                "messageplain": "User 1 liked your post 'Really cool image'",
+                "icon": {
+                    "attributes": [
+                        {"name": "src", "value": "http://placehold.it/16/16"},
+                        {"name": "alt", "value": ""}
+                    ]
+                },
+                "url": "http://example.com",
+                "timecreated": "3 hours ago",
+                "isread": true
+            }
         ]
     }
 }}
@@ -108,16 +140,24 @@
             {{/hassubnavigation}}
         </li>
     {{/navigation}}
-    {{#notificationnumber}}
-    <li>
-        <span id="openstudio_navigation_notification">
-            <span class="openstudio-navigation-img">
-                <img src="{{notificationicon}}"
-                     alt="{{#str}} notificationlabel, mod_openstudio {{/str}}"
-                     class="openstudio-navigation-notification-icon" />
-            </span>
-            <span class="openstudio-navigation-notification-text">{{notificationnumber}}</span>
-        </span>
-    </li>
-    {{/notificationnumber}}
 </ul>
+<div role="presentation" class="dropdown notifications">
+    <a class="dropdown-toggle" data-toggle="dropdown" role="button"
+            aria-haspopup="true" aria-expanded="false" title="{{#str}} notificationlabel, mod_openstudio {{/str}}">
+            <span id="openstudio_navigation_notification">
+                <span class="openstudio-navigation-img">
+                    <img src="{{notificationicon}}"
+                         alt="{{#str}} notificationlabel, mod_openstudio {{/str}}"
+                         class="openstudio-navigation-notification-icon" />
+                </span>
+                {{#notificationnumber}}
+                    <span class="openstudio-navigation-notification-text">
+                        <span class="accesshide">{{#str}} youhavenotifications, mod_openstudio {{/str}}</span>
+                        <span class="openstudio-navigation-notification-number">{{notificationnumber}}</span>
+                        <span class="accesshide">{{#str}} unreadnotifications, mod_openstudio {{/str}}</span>
+                    </span>
+                {{/notificationnumber}}
+            </span>
+    </a>
+    {{>mod_openstudio/notificationlist}}
+</div>
