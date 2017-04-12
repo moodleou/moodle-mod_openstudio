@@ -33,8 +33,8 @@ use mod_openstudio\local\util;
 use mod_openstudio\local\util\defaults;
 use mod_openstudio\local\renderer_utils;
 use mod_openstudio\local\api\flags;
-use mod_openstudio\local\api\levels;
 use mod_openstudio\local\api\folder;
+use mod_openstudio\local\api\levels;
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
@@ -490,14 +490,12 @@ if ($finalviewpermissioncheck) {
             $content->locked = ($content->locktype == lock::ALL);
             $contentid = (int) $content->id;
 
-            if ($contentid !== 0) {
-                $contentids[] = $contentid;
-            }
-
             if ($contentid == 0) {
+                $contentexist = false;
                 // Contentid is 0 if it's a blank uncreated content, so create a unique ID so it can be stored in th array.
                 $contentid = uniqid('', true);
             } else {
+                $contentexist = true;
                 $contentslist[] = $contentid;
                 // Content feedback requested.
                 $content->isfeedbackrequested = false;
@@ -569,6 +567,7 @@ if ($finalviewpermissioncheck) {
 
             // Check content is folder.
             if ($content->contenttype == content::TYPE_FOLDER || $content->l3contenttype == content::TYPE_FOLDER) {
+                $contentexist = folder::get_first_content($content->id);
                 $content->isfolder = true;
                 $content->hascontent = false;
                 $folderthumbnailfileurl = $OUTPUT->pix_url('uploads_rgb_32px', 'openstudio');
@@ -595,6 +594,12 @@ if ($finalviewpermissioncheck) {
                                     'ssid' => 0, 'type' => content::TYPE_FOLDER_CONTENT));
                 }
             }
+
+            // If content exist, add it to content list.
+            if ($contentexist) {
+                $contentids[] = $contentid;
+            }
+
             $content->contenticon = $contenticon;
             $content->itemsharewith = $itemsharewith;
             $content->isonlyme = $isonlyme;

@@ -25,6 +25,8 @@ require_once(__DIR__ . '/../../config.php');
 use mod_openstudio\local\api\export;
 use mod_openstudio\local\api\stream;
 use mod_openstudio\local\util;
+use mod_openstudio\local\api\content;
+use mod_openstudio\local\api\folder;
 
 $id = required_param('id', PARAM_INT); // Course_module ID.
 $vid = required_param('vid', PARAM_INT); // Visibility.
@@ -51,8 +53,26 @@ util::add_breadcrumb($PAGE, $cm->id, navigation_node::TYPE_ACTIVITY, array(
 $contentdatatemp = stream::get_contents_by_ids($USER->id, $contentids);
 $contentdata = (object) array('contents' => array());
 $index = 1;
+$folderitemfilesizes = array();
 foreach ($contentdatatemp as $content) {
     $contentids[] = $content->id;
+
+    // Calculate folder size.
+    if ($content->contenttype == content::TYPE_FOLDER) {
+        // Get content IDs inside folder.
+        $foldercontentids = array();
+        $foldercontenttemp = folder::get_contents($content->id);
+        foreach($foldercontenttemp as $folderitem) {
+            $foldercontentids[] = $folderitem->id;
+        }
+
+        // Calculate content size with content type is file.
+        $rs = export::get_files($cminstance->id, $USER->id, null, $foldercontentids, 0, count($foldercontentids));
+        $folderitemfilesizes[$content->id] = 0;
+        foreach ($rs as $r) {
+            $folderitemfilesizes[$content->id] += $r->filesize;
+        }
+    }
 
     $content->icon = util::get_content_file_icon($content->contenttype);
 
@@ -78,6 +98,8 @@ foreach ($rs as $r) {
 foreach ($contentdata->contents as $key => $content) {
     if (isset($contentfilesizes[$content->id])) {
         $contentdata->contents[$key]->size = util::human_filesize(@$contentfilesizes[$content->id]);
+    } else if (isset($folderitemfilesizes[$content->id])) {
+        $contentdata->contents[$key]->size = util::human_filesize(@$folderitemfilesizes[$content->id]);
     } else {
         $contentdata->contents[$key]->size = 0;
     }

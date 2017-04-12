@@ -78,6 +78,8 @@ class portfolio_caller extends \portfolio_module_caller_base {
             $contentdata = studio_api_lock_determine_lock_status($contentandversions->contentdata);
             $contentdata->contentversions = array_values($contentandversions->contentversions);
             $contentdata->vid = $contentdata->visibilitycontext;
+            $contentdata->iscontentversion = false;
+            $contentdata->isarchiveversion = false;
 
             // After all, call renderer to get content page.
             $contentdata->contentpage = $renderer->content_page($coursedata->cm->id, $coursedata->permissions,
@@ -158,7 +160,7 @@ class portfolio_caller extends \portfolio_module_caller_base {
             if ($content->userid != $this->user->id) {
                 throw new \portfolio_caller_exception('exportwronguser', 'openstudio', '', $content->name);
             }
-            if ($content->contenttype === content::TYPE_FOLDER) {
+            if ($content->contenttype == content::TYPE_FOLDER) {
                 $foldercontents = folder::get_contents($content->id);
                 $this->load_contents($foldercontents, $content->id);
             } else {
