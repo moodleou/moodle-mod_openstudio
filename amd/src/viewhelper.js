@@ -31,6 +31,11 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
     t = {
 
         /**
+         * Isotope instance.
+         */
+        isotope: null,
+
+        /**
          * Initialise this module.
          *
          */
@@ -49,9 +54,9 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
          * @method handleTooltip
          */
         handleIsotope: function() {
-
-            $('.openstudio-grid').each(function() {
-                new Isotope('#' + this.id, {
+            var container = $('.openstudio-grid');
+            container.each(function() {
+                t.isotope = new Isotope('#' + this.id, {
                     layoutMode: 'masonry',
                     itemSelector: '.openstudio-grid-item',
                     masonry: {
@@ -61,6 +66,23 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
                 });
             });
 
+            // Once all images loaded, try to re-arrange all items.
+            var imgs = container.find('img').not(function() {
+                return this.complete;
+            });
+
+            var count = imgs.length;
+
+            if (count) {
+                imgs.load(function() {
+                    count--;
+                    if (!count) {
+                        t.isotope.layout();
+                    }
+                });
+            } else {
+                t.isotope.layout();
+            }
         },
 
         /**
