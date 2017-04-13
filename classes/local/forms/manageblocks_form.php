@@ -130,7 +130,7 @@ class manageblocks_form extends \moodleform {
                 }
             } else {
                 $blockname[] = $mform->createElement('image', 'deletebutton[' . $block->id . ']',
-                    $OUTPUT->pix_url('t/delete'), array('title' => 'delete'));
+                    $OUTPUT->pix_url('t/delete'), array('title' => get_string('deletelevel', 'openstudio')));
             }
             $mform->addGroup($blockname, null, $counter . '. ', ' ', null, true);
         }
