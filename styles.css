@@ -2840,14 +2840,43 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
         border-radius: 0px;
     }
 
+    /**
+     * Drop-down menu
+     */
+
+    /* For real mobile devices */
+    .android.path-mod-openstudio .shared-content .dropdown-menu,
+    .android.path-mod-openstudio .my-content .dropdown-menu,
+    .ios.path-mod-openstudio .shared-content .dropdown-menu,
+    .ios.path-mod-openstudio .my-content .dropdown-menu {
+        width: 100vw;
+    }
+
+    /* For chrome */
     .path-mod-openstudio .shared-content .dropdown-menu {
         margin-left: -20px;
-        width: 810px;
+        width: calc(100vw - 17px); /* Exclude scrollbar width */
     }
 
     .path-mod-openstudio .my-content .dropdown-menu {
-        margin-left: -250px;
-        width: 810px;
+        margin-left: -218px;
+        width: calc(100vw - 17px); /* Exclude scrollbar width */
+    }
+
+    /* For edge */
+    @supports (-ms-ime-align:auto) {
+        .path-mod-openstudio .shared-content .dropdown-menu,
+        .path-mod-openstudio .my-content .dropdown-menu {
+            width: calc(100vw - 15px); /* Exclude scrollbar width */
+        }
+    }
+
+    /* For firefox */
+    @-moz-document url-prefix() {
+        .path-mod-openstudio .shared-content .dropdown-menu,
+        .path-mod-openstudio .my-content .dropdown-menu {
+            width: 100vw;
+        }
     }
 
     .path-mod-openstudio .osep-moduleheading {
@@ -3437,7 +3466,6 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
 
     .path-mod-openstudio .my-content .dropdown-menu {
         margin-left: -170px;
-        width: 460px;
         margin-top: 4px;
     }
 
