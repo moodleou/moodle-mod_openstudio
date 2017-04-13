@@ -2574,7 +2574,7 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
     text-align: center;
     font-size: 16px;
     font-family: Arial;
-    padding-bottom: 74px;
+    padding-bottom: 52px;
 }
 
 
@@ -2751,6 +2751,11 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
 
 /* Mobile. */
 @media (max-width: 767px) {
+
+    .openstudio-paging {
+        padding-bottom: 70px;
+    }
+
     .openstudio-navigation-text {
         display: none;
     }
