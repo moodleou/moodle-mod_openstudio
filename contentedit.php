@@ -682,7 +682,7 @@ if ($contentform->is_cancelled()) {
                     array('id' => $id, 'sid' => $contentid, 'ssid' => $folderid));
         } else {
             $url = new moodle_url('/mod/openstudio/content.php',
-                    array('id' => $id, 'sid' => $contentid));
+                    array('id' => $id, 'sid' => $contentid, 'vuid' => $userid));
         }
 
         return redirect($url->out(false));
