@@ -137,7 +137,11 @@ if ($commenttemp) {
 
         // Check report capability.
         $comment->reportenable = ($permissions->activeuserid != $comment->userid) && !$permissions->managecontent;
-
+        if ($comment->reportenable) {
+            $comment->reporturl = util::render_report_abuse_link(
+                    'openstudio', $permissions->activecmcontextid, 'content', $comment->id,
+                    $pageurl, $pageurl, $permissions->activeuserid);
+        }
         $comment->timemodified = userdate($comment->timemodified, get_string('formattimedatetime', 'openstudio'));
 
         if (is_null($comment->inreplyto)) { // This is a new comment.
