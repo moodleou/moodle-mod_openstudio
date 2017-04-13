@@ -1234,7 +1234,7 @@ Supported websites are
 <a href="http://photobucket.com/">Photobucket</a>, and
 <a href="http://www.slideshare.net/">Slideshare</a>.';
 $string['tags'] = 'Tags';
-$string['tags_help'] = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.';
+$string['tags_help'] = 'Adding tags that describe an upload will allow it to be associated with other uploads with the same tags. This makes it easier to search for content relating to a specific topic.';
 $string['formattimedatetime'] = '%d/%m/%y, %H:%M';
 $string['contentviewownerpost'] = 'Owner of this post';
 $string['contentviewimagemetadata'] = 'Image meta-data';
