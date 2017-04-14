@@ -32,6 +32,9 @@ use mod_openstudio\local\renderer_utils;
 use mod_openstudio\local\api\flags;
 use mod_openstudio\local\api\lock;
 use mod_openstudio\local\api\user;
+use mod_openstudio\local\api\folder;
+use mod_openstudio\local\util\defaults;
+use mod_openstudio\local\notifications\notification;
 
 /**
  * OpenStudio renderer.
@@ -714,12 +717,13 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      * @param int $cmid The course module id.
      * @param object $permissions The permission object for the given user/view.
      * @param object $contentdata The content detail to display.
-     * @param int $openstudioid The openstudio id.
+     * @param int $cminstance The course module instance.
      * @return string The rendered HTML fragment.
      */
-    public function content_page($cmid, $permissions, $contentdata, $openstudioid = null) {
+    public function content_page($cmid, $permissions, $contentdata, $cminstance) {
         global $CFG, $PAGE, $OUTPUT;
 
+        $openstudioid = $cminstance->id;
         $contentdata->cmid = $cmid;
         if (!property_exists($contentdata, 'profilebarenable')) {
             $contentdata->profilebarenable = true;
@@ -755,6 +759,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
             // Process lock.
             renderer_utils::process_content_lock($contentdata, $permissions, $cmid);
+            // Process comment.
+            renderer_utils::process_content_comment($contentdata, $permissions, $cmid, $cminstance);
 
             // Get copies count.
             $contenthash = item::generate_hash($contentdata->id);
@@ -879,33 +885,6 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         $contentdata->hascontentversions = $hascontentversions;
         $contentdata->contentversions = $contentversions;
-
-        if ($contentdata->contentcommentenable) {
-
-            // Require strings for js.
-            $PAGE->requires->strings_for_js(
-                    array('contentcommentliked', 'contentcommentsdelete', 'modulejsdialogcommentdeleteconfirm',
-                            'modulejsdialogcancel', 'modulejsdialogdelete'), 'mod_openstudio');
-
-            $this->page->requires->js_call_amd('mod_openstudio/comment', 'init', [[
-                    'cmid' => $cmid,
-                    'cid' => $contentdata->id]]);
-
-            // Init OUMP module (Media player).
-            // We need to init oump here to make sure that oump is always loaded even when no comment loaded.
-            // As current behaviour, filter just call oump AMD module when has media markups found in filter input.
-            // So if no media found, we can not trigger oump feature after user added a new comment by ajax.
-
-            if (file_exists($CFG->dirroot.'/local/oump/classes/filteroump.php')) {
-                // OUMP installed.
-                require_once($CFG->dirroot.'/local/oump/classes/filteroump.php');
-                $PAGE->requires->js_call_amd('local_oump/mloader', 'initialise', array([
-                        'wwwroot' => $CFG->wwwroot . '/local/oump',
-                        'urlargs' => filter_oump::get_requirejs_urlargs(),
-                        'jsdependency' => filter_oump::get_js_dependency()
-                ]));
-            }
-        }
         $contentdata->viewuserworkurl = new \moodle_url('/mod/openstudio/view.php',
                 array('id' => $cmid, 'vuid' => $contentdata->userid, 'vid' => content::VISIBILITY_PRIVATE));
 
@@ -1007,9 +986,10 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      * @param int $cmid The course module id.
      * @param object $permissions The permission object for the given user/view.
      * @param object $contentdata The content detail to display.
+     * @param int $cminstance The course module instance.
      * @return string The rendered HTML fragment.
      */
-    public function folder_page($cmid, $permissions, $folderdata) {
+    public function folder_page($cmid, $permissions, $folderdata, $cminstance) {
         global $OUTPUT, $PAGE, $USER;
 
         $folderdata->cmid = $cmid;
@@ -1055,6 +1035,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         renderer_utils::process_content_delete($folderdata, $permissions, $cmid);
         // Process lock.
         renderer_utils::process_content_lock($folderdata, $permissions, $cmid);
+        // Process comment.
+        renderer_utils::process_content_comment($folderdata, $permissions, $cmid, $cminstance);
 
         return $this->render_from_template('mod_openstudio/folder_page', $folderdata);
     }

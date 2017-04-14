@@ -48,7 +48,7 @@
         "profilebarenable": true,
         "actionenable": true,
         "isinlockedfolder": false,
-         "reportabuselink" : http://example.com,
+        "reportabuselink" : http://example.com,
     }
 }}
 {{#contentmapenable}}
@@ -232,7 +232,7 @@
                         {{#contenteditenable}}
                             <a href="{{{contenteditlink}}}" class="openstudio-content-view-edit-button-link">
                                 <input id="id_editbutton" name="editbutton" class="openstudio-content-view-edit-button
-                                    openstudio-content-actions
+                                    openstudio-content-actions osep-smallbutton
                                     {{#locked}}
                                         locked
                                     {{/locked}}"
@@ -240,7 +240,8 @@
                             </a>
                         {{/contenteditenable}}
                         {{#contentdeleteenable}}
-                            <input id="id_deletebutton" name="deletebutton" class="openstudio-content-view-delete-button"
+                            <input id="id_deletebutton" name="deletebutton"
+                                    class="openstudio-content-view-delete-button osep-smallbutton"
                                    value="{{#str}}contentactiondelete, mod_openstudio{{/str}}" type="button">
                         {{/contentdeleteenable}}
                         {{#contentlockenable}}
@@ -255,6 +256,7 @@
                                            data-lockstate="unlocked"
                                             value="{{#str}}contentactionlockname, mod_openstudio{{/str}}"
                                         {{/locked}}
+                                        class="osep-smallbutton"
                                     >
                                 </a>
                             {{/isinlockedfolder}}
@@ -263,7 +265,8 @@
                 {{/actionenable}}
                 <div class="openstudio-content-view-actions-icons-right">
                     {{#contentrequestfeedbackenable}}
-                        <button id="content_view_icon_{{contentflagrequestfeedback}}" class="openstudio-request-feedback-button"
+                        <button id="content_view_icon_{{contentflagrequestfeedback}}"
+                                class="openstudio-request-feedback-button osep-smallbutton"
                                 data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagrequestfeedback}}"
                                 data-mode="{{#contentflagrequestfeedbackactive}}off{{/contentflagrequestfeedbackactive}}
                                 {{^contentflagrequestfeedbackactive}}on{{/contentflagrequestfeedbackactive}}">

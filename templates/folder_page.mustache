@@ -92,7 +92,7 @@
         <div class="openstudio-folder-view-primary clearfix" id="openstudio_folder_view_primary">
             <div id="openstudio_item_request_feedback"
                  class="{{#contentflagrequestfeedbackactive}}openstudio-item-request-feedback{{/contentflagrequestfeedbackactive}}
-                        {{^contentflagrequestfeedbackactive}}openstudio-item-request-feedback-cancel{{/contentflagrequestfeedbackactive}}">          
+                        {{^contentflagrequestfeedbackactive}}openstudio-item-request-feedback-cancel{{/contentflagrequestfeedbackactive}}">
                 <span>{{#pix}} request_feedback_white_rgb_32px, mod_openstudio, {{#str}} contentneedhelp, mod_openstudio {{/str}} {{/pix}}</span>
                 <span>{{#str}} contentneedhelp, mod_openstudio {{/str}}</span>
             </div>
@@ -184,8 +184,7 @@
             <div id="openstudio_folder_view_folder_comments" class="openstudio-content-view-block-content
                     openstudio-folder-block-content-background collapse clearfix">
                 <div class="openstudio-folder-view-comments clearfix">
-                    <input id="id_postcomment" class="osep-smallbutton" name="postcomment" value="{{#str}}contentcommentsformpostcomment, mod_openstudio{{/str}}"
-                           type="button" class="openstudio-content-actions {{#locked}} locked {{/locked}}">
+                    {{>mod_openstudio/comment}}
                 </div>
             </div>
 
@@ -207,6 +206,7 @@
                             value="{{#str}}folderlockfolder, mod_openstudio{{/str}}"
                             class="osep-smallbutton"
                         {{/locked}}
+                        class="osep-smallbutton"
                     />
                 {{/contentlockenable}}
             </div>

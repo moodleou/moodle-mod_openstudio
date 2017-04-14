@@ -28,7 +28,6 @@
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\lock;
 use mod_openstudio\local\util;
-use mod_openstudio\local\renderer_utils;
 use mod_openstudio\local\api\contentversion;
 use mod_openstudio\local\api\flags;
 use mod_openstudio\local\api\comments;
@@ -209,71 +208,6 @@ if ($contentdata->levelid == 0) {
     $contentisinpinboard = true;
 }
 
-// Get content comments in order.
-$commenttemp = comments::get_for_content($contentdata->id, $USER->id);
-$comments = [];
-$commentthreads = [];
-$contentdata->comments = [];
-
-if ($commenttemp) {
-    foreach ($commenttemp as $key => $comment) {
-
-        // Check comment attachment.
-        if ($file = comments::get_attachment($comment->id)) {
-            $comment->commenttext .= renderer_utils::get_media_filter_markup($file);
-        }
-
-        // Filter comment text.
-        $comment->commenttext = format_text($comment->commenttext);
-
-        $user = user::get_user_by_id($comment->userid);
-        $comment->fullname = fullname($user);
-
-        // User picture.
-        $picture = new user_picture($user);
-        $comment->userpictureurl = $picture->get_url($PAGE)->out(false);
-
-        // Check delete capability.
-        $comment->deleteenable = ($permissions->activeuserid == $comment->userid && $permissions->addcomment) ||
-            $permissions->managecontent;
-
-        // Check report capability.
-        $comment->reportenable = ($permissions->activeuserid != $comment->userid) && !$permissions->managecontent;
-        if ($comment->reportenable) {
-            $comment->reporturl = util::render_report_abuse_link(
-                    'openstudio', $permissions->activecmcontextid, 'content', $comment->id,
-                    $pageurl, $pageurl, $permissions->activeuserid);
-        }
-        $comment->timemodified = userdate($comment->timemodified, get_string('formattimedatetime', 'openstudio'));
-
-        if (is_null($comment->inreplyto)) { // This is a new comment.
-
-            $comments[$key] = $comment;
-
-        } else { // This is a reply.
-
-            $parentid = $comment->inreplyto;
-            if (!isset($commentthreads[$parentid])) {
-                $commentthreads[$parentid] = [];
-            }
-            $commentthreads[$parentid][] = $comment;
-        }
-    }
-    // Returns all the values from the array and indexes the array numerically.
-    // We need this because mustache requires it.
-    $contentdata->comments = array_values($comments);
-}
-
-// Attach replies to comments.
-foreach ($contentdata->comments as $key => $value) {
-    // There is a comment stream for this comment.
-    if (isset($commentthreads[$value->id])) {
-        $contentdata->comments[$key]->replies = $commentthreads[$value->id];
-    }
-}
-
-$contentdata->emptycomment = (empty($contentdata->comments));
-
 $contentdatavisibilitycontext = $contentdata->visibilitycontext;
 $crumbarray = array();
 switch ($contentdatavisibilitycontext) {
@@ -372,15 +306,6 @@ tracking::log_action($contentdata->id, $tracking, $USER->id);
 // risk of disabling the security check for this page.
 header('X-XSS-Protection: 0');
 
-// Add form after page_setup.
-$commentform = new comment_form(null, array(
-        'id' => $id,
-        'cid' => $contentdata->id,
-        'folderid' => property_exists($contentdata, 'ssid') ? $contentdata->ssid : 0,
-        'max_bytes' => $cminstance->contentmaxbytes,
-        'attachmentenable' => $permissions->feature_contentcommentusesaudio));
-$contentdata->commentform = $commentform->render();
-
 // Update flag and tracking.
 flags::toggle(
     $contentdata->id, flags::READ_CONTENT, 'on', $USER->id, $contentdata->id);
@@ -393,7 +318,7 @@ echo $OUTPUT->header(); // Header.
 
 echo $html;
 
-echo $renderer->content_page($cm->id, $permissions, $contentdata, $cminstance->id); // Content detail.
+echo $renderer->content_page($cm->id, $permissions, $contentdata, $cminstance); // Content detail.
 
 // Finish the page.
 echo $OUTPUT->footer();

@@ -12,6 +12,7 @@
     position: absolute;
     right: 15px;
     top: 0px;
+    text-align: right;
 }
 
 .path-mod-openstudio [data-toggle="collapse"] .openstudio-expand-image {
@@ -107,7 +108,7 @@
     clear: right;
 }
 
-.openstudio-content-actions.locked {
+.path-mod-openstudio .openstudio-content-actions.locked {
     display: none;
 }
 
@@ -138,32 +139,25 @@
     height: 54px;
 }
 
-.path-mod-openstudio [data-toggle="collapse"] {
-    position: relative;
-}
-
-.path-mod-openstudio [data-toggle="collapse"] .openstudio-expand-image,
-.path-mod-openstudio [data-toggle="collapse"] .openstudio-collapse-image {
-    display: block;
-    position: absolute;
+.path-mod-openstudio .openstudio-filter-text [data-toggle="collapse"] .openstudio-expand-image,
+.path-mod-openstudio .openstudio-filter-text [data-toggle="collapse"] .openstudio-collapse-image {
     right: 0px;
-    top: 0px;
     left: 40px;
 }
 
-.path-mod-openstudio [data-toggle="collapse"] .openstudio-expand-image {
+.path-mod-openstudio .openstudio-filter-text [data-toggle="collapse"] .openstudio-expand-image {
     display: block;
 }
 
-.path-mod-openstudio [data-toggle="collapse"] .openstudio-collapse-image {
+.path-mod-openstudio .openstudio-filter-text [data-toggle="collapse"] .openstudio-collapse-image {
     display: none;
 }
 
-.path-mod-openstudio [data-toggle="collapse"].collapsed .openstudio-expand-image {
+.path-mod-openstudio .openstudio-filter-text [data-toggle="collapse"].collapsed .openstudio-expand-image {
     display: none;
 }
 
-.path-mod-openstudio [data-toggle="collapse"].collapsed .openstudio-collapse-image {
+.path-mod-openstudio .openstudio-filter-text [data-toggle="collapse"].collapsed .openstudio-collapse-image {
     display: block;
 }
 
@@ -616,6 +610,7 @@ button.openstudio-notification-stopbutton:focus {
 .openstudio-comment-form-content .filepicker-filelist,
 .openstudio-comment-form-content .filemanager-container {
     min-height: 17px;
+    background: none;
 }
 
 .openstudio-comment-form-content,
@@ -743,15 +738,19 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
 }
 
 .openstudio-comment-thread-original-item .openstudio-comment-text {
-    min-height: 107px;
+    min-height: 94px;
 }
 
 .openstudio-comment-thread-original-item .openstudio-comment-metadata .openstudio-comment-rightcolumn {
-    margin-top: 7px;
+    margin-top: 3px;
 }
 
 .openstudio-comment-thread-original-item .openstudio-comment-thread-item {
     padding: 15px;
+}
+
+.openstudio-comment-thread-replied-items .openstudio-comment-text {
+    min-height: 60px;
 }
 
 .openstudio-comment-thread-replied-items .openstudio-comment-metadata .openstudio-comment-leftcolumn {
@@ -762,18 +761,12 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
     border-top: 1px solid #bfe2ef;
 }
 
-.openstudio-comment-thread-item.openstudio-comment-reply-form {
-    border-top: none;
+.openstudio-comment-thread-body {
     border-bottom: 1px solid #bfe2ef;
 }
 
 .openstudio-comment-thread-replied-items .openstudio-comment-thread-item {
-    padding: 15px 15px 8px 50px;
-}
-
-.openstudio-comment-thread-body .openstudio-comment-thread:last-child .openstudio-comment-thread-replied-items
-div.openstudio-comment-thread-item:nth-last-child(2) {
-    border-bottom: 1px solid #bfe2ef;
+    padding: 15px 10px 8px 50px;
 }
 
 .openstudio-comment-thread-replied-items div.openstudio-comment-thread-item:nth-last-child(2)
@@ -785,7 +778,7 @@ div.openstudio-comment-thread-item:nth-last-child(2) {
 
 .openstudio-comment-thread-replied-items div.openstudio-comment-thread-item:nth-last-child(2)
 .openstudio-comment-metadata .openstudio-comment-rightcolumn {
-    margin-top: 19px;
+    margin-top: 13px;
 }
 
 .openstudio-comment-owner img {
@@ -838,6 +831,19 @@ div.openstudio-comment-thread-item:nth-last-child(2) {
 .openstudio-comment-report-link {
     font-weight: bold;
     cursor: pointer;
+    display: inline;
+}
+
+.openstudio-comment-flag-link .openstudio-comment-like-long-link,
+.openstudio-comment-delete-link .openstudio-comment-delete-long-link,
+.openstudio-comment-report-link .openstudio-comment-report-long-link {
+    display: inline;
+}
+
+.openstudio-comment-flag-link .openstudio-comment-like-short-link,
+.openstudio-comment-delete-link .openstudio-comment-delete-short-link,
+.openstudio-comment-report-link .openstudio-comment-report-short-link {
+    display: none;
 }
 
 .openstudio-comment-owner-name {
@@ -856,6 +862,122 @@ div.openstudio-comment-thread-item:nth-last-child(2) {
 
 /**
  * End comment feature
+ */
+
+/**
+ * Folder comment feature
+ */
+
+.openstudio-folder-view-comments .openstudio-comment-thread-header {
+    display: none;
+}
+
+.openstudio-folder-view-comments .openstudio-comment-form-content {
+    padding: 20px 10px 0 10px;
+}
+
+.openstudio-folder-view-comments .openstudio-comment-thread-body {
+    border-bottom: 1px solid #b2bccd;
+    margin-bottom: 0px;
+}
+
+.openstudio-folder-view-comments .openstudio-comment-form-header {
+    display: none;
+}
+
+.openstudio-folder-view-comments .openstudio-comment-thread-list {
+    margin-top: 14px;
+}
+
+.openstudio-folder-view-comments .openstudio-comment-thread-header {
+    margin-bottom: 10px;
+    margin-left: 15px;
+}
+
+.openstudio-folder-view-comments .openstudio-comment-thread-original-item .openstudio-comment-thread-item {
+    padding: 15px;
+}
+
+.openstudio-folder-view-comments .openstudio-comment-owner img {
+    float: left;
+    width: 53px;
+}
+
+.openstudio-folder-view-comments .openstudio-comment-thread-original-item {
+    background: none;
+}
+
+.openstudio-folder-view-comments .openstudio-comment-owner-name {
+    margin-left: 8px;
+    float: left;
+    margin-top: -2px;
+    width: calc(100% - 56px);
+}
+
+.openstudio-folder-view-comments .openstudio-comment-time {
+    margin-left: 8px;
+    display: block;
+    float: left;
+}
+
+.openstudio-folder-view-comments .openstudio-comment-thread-item {
+    border-top: 1px solid #b2bccd;
+}
+
+.openstudio-folder-view-comments .openstudio-comment-thread-item .openstudio-comment-leftcolumn {
+    width: 100%;
+}
+
+.openstudio-folder-view-comments .openstudio-comment-flag-link .openstudio-comment-like-long-link,
+.openstudio-folder-view-comments .openstudio-comment-delete-link .openstudio-comment-delete-long-link,
+.openstudio-folder-view-comments .openstudio-comment-report-link .openstudio-comment-report-long-link {
+    display: none;
+}
+
+.openstudio-folder-view-comments .openstudio-comment-flag-link .openstudio-comment-like-short-link,
+.openstudio-folder-view-comments .openstudio-comment-delete-link .openstudio-comment-delete-short-link,
+.openstudio-folder-view-comments .openstudio-comment-report-link .openstudio-comment-report-short-link {
+    display: inline;
+}
+
+.openstudio-folder-view-comments .openstudio-comment-thread-item .openstudio-comment-metadata
+.openstudio-comment-leftcolumn {
+    width: 70px;
+}
+
+.openstudio-folder-view-comments #id_addcomment {
+    margin: 20px 15px 30px;
+}
+
+.openstudio-folder-view-comments .openstudio-comment-thread-item .openstudio-comment-metadata
+.openstudio-comment-rightcolumn {
+    width: calc(100% - 71px);
+    margin-top: 3px;
+}
+
+.openstudio-folder-view-comments .openstudio-comment-thread-item .openstudio-comment-text {
+    float: left;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.openstudio-folder-view-comments .openstudio-comment-thread-replied-items .openstudio-comment-thread-item {
+    padding-left: 30px;
+}
+
+.openstudio-folder-view-comments .openstudio-comment-thread-replied-items div.openstudio-comment-thread-item:nth-last-child(2)
+.openstudio-comment-metadata .openstudio-comment-rightcolumn {
+    margin-top: 14px;
+}
+
+.openstudio-folder-view-comments .openstudio-comment-thread-replied-items .openstudio-comment-text,
+.openstudio-folder-view-comments .openstudio-comment-thread-original-item .openstudio-comment-text {
+    padding-bottom: 20px;
+    min-height: 0;
+}
+
+/**
+ * End folder comment feature
  */
 
 /**
@@ -1524,26 +1646,6 @@ a.openstudio-add-title:hover  {
 
 .path-mod-openstudio .administration .dropdown-menu {
     min-width: 185px;
-}
-
-/* Moodle dialog box */
-.path-mod-openstudio .moodle-dialogue-base .moodle-dialogue-wrap .moodle-dialogue-hd,
-.path-mod-openstudio .moodle-dialogue-base .moodle-dialogue-wrap .moodle-dialogue-hd.yui3-widget-hd {
-    min-height: 37px;
-}
-
-.path-mod-openstudio .moodle-dialogue-base .moodle-dialogue .moodle-dialogue-bd {
-    padding: 10px 15px 13px;
-}
-
-.path-mod-openstudio .moodle-dialogue-base .moodle-dialogue .moodle-dialogue-content .moodle-dialogue-ft {
-    text-align: left;
-    padding: 0 0 30px 3px;
-}
-
-.moodle-dialogue-base .moodle-dialogue .moodle-dialogue-content .moodle-dialogue-ft {
-    text-align: left;
-    padding: 0 0 30px 15px;
 }
 
 /* Add/Edit Content. */
@@ -3070,10 +3172,6 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     margin-right: 0px;
 }
 
-.openstudio-folder-view-comments {
-    padding: 15px 0 20px 15px;
-}
-
 .openstudio-folder-view-primary {
     width: 580px;
     float: left;
@@ -3464,6 +3562,109 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-filter-buttons {
         margin-right: 39px;
     }
+
+    /**
+     * Comment feature 1024
+     */
+
+    .openstudio-comment-thread-replied-items .openstudio-comment-thread-item {
+        padding-left: 40px;
+    }
+
+    .openstudio-comment-thread-list {
+        margin-top: 10px;
+    }
+
+    .openstudio-comment-thread-header {
+        margin-bottom: 10px;
+        font-size: 1.428em;
+    }
+
+    .openstudio-comment-thread-original-item .openstudio-comment-thread-item {
+        padding: 10px;
+    }
+
+    .openstudio-comment-owner img {
+        float: left;
+        width: 53px;
+    }
+
+    .openstudio-comment-owner-name {
+        display: inline-block;
+        margin-left: 8px;
+        font-size: 0.928em;
+        float: left;
+        margin-top: -4px;
+        width: calc(100% - 56px);
+    }
+
+    .openstudio-comment-time {
+        font-size: 0.785em;
+        margin-left: 10px;
+        display: block;
+        float: left;
+    }
+
+    .openstudio-comment-text .text_to_html {
+        font-size: 1em;
+    }
+
+    .openstudio-comment-thread-item .openstudio-comment-leftcolumn {
+        width: 100%;
+    }
+
+    .openstudio-comment-thread-item .openstudio-comment-text {
+        float: left;
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    .openstudio-comment-thread-item .openstudio-comment-metadata .openstudio-comment-leftcolumn {
+        width: 70px;
+    }
+
+    .openstudio-comment-thread-item .openstudio-comment-metadata .openstudio-comment-rightcolumn {
+        width: calc(100% - 71px);
+        margin-top: 3px;
+    }
+
+    .openstudio-comment-thread-replied-items div.openstudio-comment-thread-item:nth-last-child(2)
+    .openstudio-comment-metadata .openstudio-comment-rightcolumn {
+        margin-top: 14px;
+    }
+
+    .openstudio-comment-thread-replied-items .openstudio-comment-text,
+    .openstudio-comment-thread-original-item .openstudio-comment-text {
+        padding-bottom: 10px;
+        min-height: 0;
+    }
+
+    .openstudio-comment-flag-link,
+    .openstudio-comment-delete-link,
+    .openstudio-comment-report-link,
+    .openstudio-comment-flag-count {
+        font-size: 0.857em;
+    }
+
+    .openstudio-comment-flag-link .openstudio-comment-like-long-link,
+    .openstudio-comment-delete-link .openstudio-comment-delete-long-link,
+    .openstudio-comment-report-link .openstudio-comment-report-long-link {
+        display: none;
+    }
+
+    .openstudio-comment-flag-link .openstudio-comment-like-short-link,
+    .openstudio-comment-delete-link .openstudio-comment-delete-short-link,
+    .openstudio-comment-report-link .openstudio-comment-report-short-link {
+        display: inline;
+    }
+
+    .openstudio-folder-view-comments .openstudio-comment-flag .openstudio-comment-flag-status {
+        margin-right: 9px;
+    }
+
+    /**
+     * End comment feature
+     */
 }
 
 /* Tablet Portrait. */
@@ -4920,6 +5121,44 @@ a.openstudio-add-new-content-link:hover  {
      * Comment feature
      */
 
+    .openstudio-comment-thread-list {
+        margin-top: 10px;
+    }
+
+    .openstudio-comment-thread-header {
+        margin-bottom: 10px;
+        font-size: 1.428em;
+    }
+
+    .openstudio-comment-thread-original-item .openstudio-comment-thread-item {
+        padding: 10px;
+    }
+
+    .openstudio-comment-owner img {
+        float: left;
+        width: 53px;
+    }
+
+    .openstudio-comment-owner-name {
+        display: inline-block;
+        margin-left: 8px;
+        font-size: 1.285em;
+        float: left;
+        margin-top: -4px;
+        width: calc(100% - 56px);
+    }
+
+    .openstudio-comment-time {
+        font-size: 1.142em;
+        margin-left: 10px;
+        display: block;
+        float: left;
+    }
+
+    .openstudio-comment-text .text_to_html {
+        font-size: 1.285em;
+    }
+
     .openstudio-comment-thread-item .openstudio-comment-leftcolumn {
         width: 100%;
     }
@@ -4935,8 +5174,25 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-comment-thread-item .openstudio-comment-metadata .openstudio-comment-rightcolumn {
-        width: 100%;
-        margin-top: 15px;
+        width: calc(100% - 76px);
+        margin-top: 3px;
+    }
+
+    .openstudio-comment-thread-replied-items div.openstudio-comment-thread-item:nth-last-child(2)
+    .openstudio-comment-metadata .openstudio-comment-rightcolumn {
+        margin-top: 14px;
+    }
+
+    .openstudio-comment-thread-replied-items .openstudio-comment-text,
+    .openstudio-comment-thread-original-item .openstudio-comment-text {
+        padding-bottom: 10px;
+        min-height: 0;
+    }
+
+    .openstudio-folder-view-comments #id_addcomment {
+        margin-top: 25px;
+        margin-bottom: 40px;
+        margin-left: 15px;
     }
 
     /**
@@ -4960,5 +5216,9 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-upload-new-content-to-folder,
     .openstudio-select-existing-post {
         margin-left: 65px;
+    }
+
+    .openstudio-comment-thread-replied-items .openstudio-comment-thread-item {
+        padding-left: 27px;
     }
 }

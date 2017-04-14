@@ -47,11 +47,6 @@ class comment_form extends \moodleform {
         $mform->setType('cid', PARAM_INT);
         $mform->setDefault('cid', $this->_customdata['cid']);
 
-        // Folder ID.
-        $mform->addElement('hidden', 'folderid');
-        $mform->setType('folderid', PARAM_INT);
-        $mform->setDefault('folderid', $this->_customdata['folderid']);
-
         // Comment parent ID.
         $mform->addElement('hidden', 'inreplyto');
         $mform->setType('inreplyto', PARAM_INT);

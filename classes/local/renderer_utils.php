@@ -31,6 +31,9 @@ use mod_openstudio\local\api\embedcode;
 use mod_openstudio\local\api\folder;
 use mod_openstudio\local\api\item;
 use mod_openstudio\local\util\defaults;
+use mod_openstudio\local\api\user;
+use mod_openstudio\local\api\comments;
+use mod_openstudio\local\forms\comment_form;
 
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
@@ -1255,5 +1258,117 @@ class renderer_utils {
         }
 
         return $deleteenable;
+    }
+
+    /**
+     * Check comment capability and set up data and include dependencies.
+     *
+     * @param $contentdata Object
+     * @param $permissions Object
+     * @param $cmid int Course module ID
+     * @param $cminstance object Course module instance
+     * @return bool
+     */
+    public static function process_content_comment(&$contentdata, $permissions, $cmid, $cminstance) {
+        global $PAGE, $CFG, $USER;
+
+        // Check comment permission.
+        $contentdata->contentcommentenable = $permissions->addcomment ? true : false;
+
+        if ($contentdata->contentcommentenable) {
+
+            // Add form after page_setup.
+            $commentform = new comment_form(null, array(
+                'id' => $cmid,
+                'cid' => $contentdata->id,
+                'max_bytes' => $cminstance->contentmaxbytes,
+                'attachmentenable' => $permissions->feature_contentcommentusesaudio));
+            $contentdata->commentform = $commentform->render();
+
+            // Get content comments in order.
+            $commenttemp = comments::get_for_content($contentdata->id, $USER->id);
+            $comments = [];
+            $commentthreads = [];
+            $contentdata->comments = [];
+
+            if ($commenttemp) {
+                foreach ($commenttemp as $key => $comment) {
+
+                    // Check comment attachment.
+                    if ($file = comments::get_attachment($comment->id)) {
+                        $comment->commenttext .= renderer_utils::get_media_filter_markup($file);
+                    }
+
+                    // Filter comment text.
+                    $comment->commenttext = format_text($comment->commenttext);
+
+                    $user = user::get_user_by_id($comment->userid);
+                    $comment->fullname = fullname($user);
+
+                    // User picture.
+                    $picture = new \user_picture($user);
+                    $comment->userpictureurl = $picture->get_url($PAGE)->out(false);
+
+                    // Check delete capability.
+                    $comment->deleteenable = ($permissions->activeuserid == $comment->userid && $permissions->addcomment) ||
+                        $permissions->managecontent;
+
+                    // Check report capability.
+                    $comment->reportenable = ($permissions->activeuserid != $comment->userid) && !$permissions->managecontent;
+
+                    $comment->timemodified = userdate($comment->timemodified, get_string('formattimedatetime', 'openstudio'));
+
+                    if (is_null($comment->inreplyto)) { // This is a new comment.
+
+                        $comments[$key] = $comment;
+
+                    } else { // This is a reply.
+
+                        $parentid = $comment->inreplyto;
+                        if (!isset($commentthreads[$parentid])) {
+                            $commentthreads[$parentid] = [];
+                        }
+                        $commentthreads[$parentid][] = $comment;
+                    }
+                }
+                // Returns all the values from the array and indexes the array numerically.
+                // We need this because mustache requires it.
+                $contentdata->comments = array_values($comments);
+            }
+
+            // Attach replies to comments.
+            foreach ($contentdata->comments as $key => $value) {
+                // There is a comment stream for this comment.
+                if (isset($commentthreads[$value->id])) {
+                    $contentdata->comments[$key]->replies = $commentthreads[$value->id];
+                }
+            }
+
+            $contentdata->emptycomment = (empty($contentdata->comments));
+
+            // Require strings for js.
+            $PAGE->requires->strings_for_js(
+                array('contentcommentliked', 'contentcommentsdelete', 'modulejsdialogcommentdeleteconfirm',
+                    'modulejsdialogcancel', 'modulejsdialogdelete'), 'mod_openstudio');
+
+            $PAGE->requires->js_call_amd('mod_openstudio/comment', 'init', [[
+                'cmid' => $cmid,
+                'cid' => $contentdata->id]]);
+
+            // Init OUMP module (Media player).
+            // We need to init oump here to make sure that oump is always loaded even when no comment loaded.
+            // As current behaviour, filter just call oump AMD module when has media markups found in filter input.
+            // So if no media found, we can not trigger oump feature after user added a new comment by ajax.
+
+            if (file_exists($CFG->dirroot.'/local/oump/classes/filteroump.php')) {
+                // OUMP installed.
+                require_once($CFG->dirroot.'/local/oump/classes/filteroump.php');
+                $PAGE->requires->js_call_amd('local_oump/mloader', 'initialise', array([
+                    'wwwroot' => $CFG->wwwroot . '/local/oump',
+                    'urlargs' => \filter_oump::get_requirejs_urlargs(),
+                    'jsdependency' => \filter_oump::get_js_dependency()
+                ]));
+            }
+        }
     }
 }

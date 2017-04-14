@@ -57,7 +57,7 @@
                 {{#inreplyto}} {{inreplyto}} {{/inreplyto}}
                 {{^inreplyto}} {{id}} {{/inreplyto}}"
                 value="{{#str}} contentcommentsreply, mod_openstudio {{/str}}"
-                class="openstudio-content-actions {{#locked}} locked {{/locked}}"
+                class="openstudio-content-actions {{#locked}} locked {{/locked}} osep-smallbutton"
             >
         </div>
         <div class="openstudio-comment-rightcolumn">
@@ -94,7 +94,12 @@
                 {{^userhasflagged}}
                     <a class="openstudio-comment-flag-link openstudio-content-actions {{#locked}} locked {{/locked}}"
                         href="" data-comment-id="{{id}}">
-                        {{#str}} contentcommentlike, mod_openstudio {{/str}}
+                        <span class="openstudio-comment-like-long-link">
+                            {{#str}} contentcommentlike, mod_openstudio {{/str}}
+                        </span>
+                        <span class="openstudio-comment-like-short-link">
+                            {{#str}} contentcommentlikeshort, mod_openstudio {{/str}}
+                        </span>
                     </a>
                 {{/userhasflagged}}
             </div>
@@ -103,14 +108,25 @@
                 <div class="openstudio-comment-action">
                     <a class="openstudio-comment-delete-link openstudio-content-actions {{#locked}} locked {{/locked}}"
                         href="" data-comment-id="{{id}}">
-                        {{#str}} contentcommentsdelete, mod_openstudio {{/str}}
+                        <span class="openstudio-comment-delete-long-link">
+                            {{#str}} contentcommentsdelete, mod_openstudio {{/str}}
+                        </span>
+                        <span class="openstudio-comment-delete-short-link">
+                            {{#str}} contentcommentsdeleteshort, mod_openstudio {{/str}}
+                        </span>
                     </a>
                 </div>
             {{/deleteenable}}
             {{#reportenable}}
                 <div class="openstudio-comment-action">
-                    <a class="openstudio-comment-report-link" href="{{reporturl}}">
-                        {{#str}} contentcommentsreport, mod_openstudio {{/str}}
+                    <a class="openstudio-comment-report-link openstudio-content-actions {{#locked}} locked {{/locked}}"
+                       href="{{reportabuselink}}">
+                        <span class="openstudio-comment-report-long-link">
+                            {{#str}} contentcommentsreport, mod_openstudio {{/str}}
+                        </span>
+                        <span class="openstudio-comment-report-short-link">
+                            {{#str}} contentcommentsreportshort, mod_openstudio {{/str}}
+                        </span>
                     </a>
                 </div>
             {{/reportenable}}

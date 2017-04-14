@@ -83,7 +83,7 @@ class portfolio_caller extends \portfolio_module_caller_base {
 
             // After all, call renderer to get content page.
             $contentdata->contentpage = $renderer->content_page($coursedata->cm->id, $coursedata->permissions,
-                    $contentdata, $coursedata->cminstance->id);
+                    $contentdata, $coursedata->cminstance);
             $contents[] = $contentdata;
         }
 

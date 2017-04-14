@@ -478,7 +478,6 @@ class mod_openstudio_external extends external_api {
         return new external_function_parameters(array(
                 'cmid' => new external_value(PARAM_INT, 'Course module ID'),
                 'cid' => new external_value(PARAM_INT, 'Content ID'),
-                'folderid' => new external_value(PARAM_INT, 'Folder ID'),
                 'commenttext' => new external_value(PARAM_RAW, 'Comment text'),
                 'commentattachment' => new external_value(PARAM_INT, 'Comment attachment'),
                 'inreplyto' => new external_value(PARAM_INT, 'Parent comment ID'))
@@ -490,7 +489,6 @@ class mod_openstudio_external extends external_api {
      *
      * @param int $cmid Course module ID
      * @param int $cid Content ID
-     * @param int $folderid Folder ID
      * @param string $commentext Comment text
      * @param string $commentattachment Comment attachment
      * @param int $inreplyto Parent comment ID
@@ -501,7 +499,7 @@ class mod_openstudio_external extends external_api {
      *  ]
      * @throws moodle_exception
      */
-    public static function add_comment($cmid, $cid, $folderid = 0, $commenttext = '',
+    public static function add_comment($cmid, $cid, $commenttext = '',
             $commentattachment = 0, $inreplyto = 0) {
         global $USER, $PAGE, $CFG;
         $userid = $USER->id;
@@ -517,7 +515,6 @@ class mod_openstudio_external extends external_api {
         $params = self::validate_parameters(self::add_comment_parameters(), array(
                 'cmid' => $cmid,
                 'cid' => $cid,
-                'folderid' => $folderid,
                 'commenttext' => $commenttext,
                 'commentattachment' => $commentattachment,
                 'inreplyto' => $inreplyto));
@@ -750,8 +747,9 @@ class mod_openstudio_external extends external_api {
         $coursedata = util::render_page_init($params['cmid'], array('mod/openstudio:addcomment'));
         $permissions = $coursedata->permissions;
 
-        $actionallowed = $permissions->addcomment || $permissions->managecontent;
         $comment = comments::get($params['commentid']);
+        $actionallowed = ($permissions->addcomment && $comment->userid == $USER->id)
+                || $permissions->managecontent;
 
         // Validate locking status.
         self::validate_locking_status($comment->contentid);

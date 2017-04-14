@@ -195,7 +195,6 @@ define([
                 args: {
                     cmid: formdata.cmid,
                     cid: formdata.cid,
-                    folderid: formdata.folderid,
                     inreplyto: parseInt(formdata.inreplyto.trim()),
                     commenttext: formdata['commentext[text]'],
                     commentattachment: hasAttachment ? formdata.commentattachment : 0
@@ -233,6 +232,8 @@ define([
                         // Scroll to added item.
                         t.scrollToEl($('[data-thread-items="' + res.commentid + '"]'));
                     }
+
+                    t.resize();
 
                     $(t.CSS.COMMENT_THREAD).show();
 
