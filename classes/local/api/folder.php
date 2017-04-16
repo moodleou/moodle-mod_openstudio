@@ -76,15 +76,15 @@ class folder {
                 if (isset($foldercontent->contentorder)) {
                     $counter = 0;
                     $position = 0;
-                    foreach ($foldercontents as $foldercontent) {
+                    foreach ($foldercontents as $foldercontentinstance) {
                         $counter++;
                         $realcontent = !isset($foldercontent->template);
-                        if ($realcontent && ($foldercontent->contentorder == $foldercontent->contentorder)) {
+                        if ($realcontent && ($foldercontentinstance->contentorder == $foldercontent->contentorder)) {
                             $position = $counter;
                         }
-                        if ($realcontent && ($foldercontent->contentorder > $foldercontent->contentorder)) {
+                        if ($realcontent && ($foldercontentinstance->contentorder > $foldercontent->contentorder)) {
                             $DB->set_field('openstudio_folder_contents', 'contentorder', $counter,
-                                    ['folderid' => $folderid, 'contentid' => $foldercontent->id]);
+                                    ['folderid' => $folderid, 'contentid' => $foldercontentinstance->id]);
                         }
                     }
                     $insertdata->contentorder = $position;

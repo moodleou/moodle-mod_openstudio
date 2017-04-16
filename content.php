@@ -271,6 +271,7 @@ if (!$permissions->contentismine) {
 
 $contentdata->vid = $vid;
 $contentdata->placeholdertext = $areaurlname;
+$contentdata->folderid = $folderid;
 
 $contentdata->folderid = $folderid;
 $contentdata->isfoldercontent = false;
@@ -284,6 +285,12 @@ if ($folderid) {
         $contentdata->isfoldercontent = true;
         $contentdata->folderid = $folderdata->id;
         $contentdata->isinlockedfolder = ($folderdata->locktype == lock::ALL);
+        $folderoverview = new moodle_url('/mod/openstudio/folder.php',
+                        array('id' => $id, 'sid' => $folderid, 'lid' => $contentdata->levelid,
+                                 'vuid' => $contentdata->userid));
+        $contentdata->foldereditenable = ($permissions->addcontent && $USER->id == $folderdata->userid)
+                || $permissions->managecontent;
+        $contentdata->folderlinkoverview = $folderoverview;
     }
 }
 

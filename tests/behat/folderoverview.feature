@@ -210,3 +210,174 @@ Feature: Folder Overview
       And I click on "Select" "button" in the "Browse posts" "dialogue"
       And I click on "Save changes" "button" in the "Browse posts" "dialogue"
       And I should see "TestContentFolders 3"
+
+  Scenario: Order Posts in Folder Overview
+      Given the following open studio "folders" exist:
+        | openstudio | user     | name                   | description                       | visibility | contenttype    |
+        | OS1        | teacher1 | Test Folder Overview   | My Folder Overview Description 1  | module     | folder_content |
+
+      # Add new content
+      And the following open studio "contents" exist:
+        | openstudio | user     | name                          | description                    | visibility   |
+        | OS1        | teacher1 | Test My Content Folder View 1 | Test My Content Details View 1 | infolderonly |
+        | OS1        | teacher1 | Test My Content Folder View 2 | Test My Content Details View 2 | infolderonly |
+        | OS1        | teacher1 | Test My Content Folder View 3 | Test My Content Details View 3 | infolderonly |
+
+      # Add content to folder
+      And the following open studio "folder contents" exist:
+        | openstudio | user     | folder                | content                       |
+        | OS1        | teacher1 | Test Folder Overview  | Test My Content Folder View 1 |
+        | OS1        | teacher1 | Test Folder Overview  | Test My Content Folder View 2 |
+        | OS1        | teacher1 | Test Folder Overview  | Test My Content Folder View 3 |
+
+      And I follow "Test Open Studio name 1"
+      And I follow "Shared content > My Module" in the openstudio navigation
+      And I follow "Test Folder Overview"
+
+      # Content position before order
+      And Open studio contents should be in the following order:
+        | Test My Content Folder View 1 |
+        | Test My Content Folder View 2 |
+        | Test My Content Folder View 3 |
+
+      And I press "Order posts"
+      And I click on ".openstudio-orderpost-item-movedown-button img" "css_element"
+      And I click on "Save order" "button" in the "Order posts" "dialogue"
+
+      # Update position content
+      And Open studio contents should be in the following order:
+        | Test My Content Folder View 2 |
+        | Test My Content Folder View 1 |
+        | Test My Content Folder View 3 |
+
+      And I press "Order posts"
+      And I set the field "Move to post number" to "3"
+      And I click on "Save order" "button" in the "Order posts" "dialogue"
+
+      # Update position content
+      And Open studio contents should be in the following order:
+        | Test My Content Folder View 1 |
+        | Test My Content Folder View 3 |
+        | Test My Content Folder View 2 |
+
+  Scenario: Content of order posts in folder overview
+      Given the following open studio "folders" exist:
+        | openstudio | user     | name                   | description                       | visibility | contenttype    |
+        | OS1        | teacher1 | Test Folder Overview   | My Folder Overview Description 1  | module     | folder_content |
+
+      # Add new content
+      And the following open studio "contents" exist:
+        | openstudio | user     | name                          | description                    | file                                              | visibility   |
+        | OS1        | teacher1 | Test My Content Folder View 1 | Test My Content Details View 1 | mod/openstudio/tests/importfiles/test1.jpg        | infolderonly |
+
+      # Add content to folder
+      And the following open studio "folder contents" exist:
+        | openstudio | user     | folder                | content                       |
+        | OS1        | teacher1 | Test Folder Overview  | Test My Content Folder View 1 |
+
+      And I follow "Test Open Studio name 1"
+      And I follow "Shared content > My Module" in the openstudio navigation
+      And I follow "Test Folder Overview"
+      And I press "Order posts"
+
+      # Only once content Move Up and Move Down Button disable
+      And the "Move Up" "button" should be disabled
+      And the "Move Down" "button" should be disabled
+
+      And I click on "Close" "button" in the "Order posts" "dialogue"
+      And I follow "Add new content"
+      And I press "Add file"
+      And I set the following fields to these values:
+        | Title                     | Test My Folder Overview                    |
+        | Description               | My Folder Overview Description             |
+        | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+      And I press "Save"
+      And I follow "Shared content > My Module" in the openstudio navigation
+      And I follow "Test Folder Overview"
+      And I press "Order posts"
+      # First content should disable Move Up button
+      And the "Move Up" "button" should be disabled
+      And the "Move Down" "button" should be enabled
+
+  Scenario: Folder Overview in My Activities with item can not be reordered
+      Given the following open studio "level1s" exist:
+          | openstudio  | name         | sortorder |
+          | OS1         | Block1       | 1         |
+      And the following open studio "level2s" exist:
+          | level1      | name         | sortorder |
+          | Block1      | Activity1    | 1         |
+      And the following open studio "level3s" exist:
+          | level2      | name         | sortorder | contenttype    |
+          | Activity1   | Content1.1   | 1         | folder         |
+      And the following open studio "folder templates" exist:
+            | level3         | additionalcontents  |
+            | Content1.1     | 10                  |
+      # Add 2 content can not be reordered
+      And the following open studio "folder content templates" exist:
+            | level3         | name       | contentpreventreorder |
+            | Content1.1     | Content 1  | 1                     |
+            | Content1.1     | Content 2  | 1                     |
+      And I follow "Course 1"
+      And I follow "Test Open Studio name 1"
+      And I follow "My Content > My Activities" in the openstudio navigation
+      And I follow "Content1.1"
+
+      # Redirect to  add folder page
+      And I set the following fields to these values:
+        | Who can view this folder  | My module                                  |
+        | Folder title              | Test my folder view 1                      |
+        | Folder description        | My folder view description 1               |
+      And I press "Create folder"
+      And I follow "Content 1"
+      And I press "Add file"
+      And I set the following fields to these values:
+        | Title                     | Test My Folder Overview 1                  |
+        | Description               | My Folder Overview Description 1           |
+        | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+      And I press "Save"
+      And I follow "My Content > My Activities" in the openstudio navigation
+      And I follow "Content1.1"
+      And I follow "Content 2"
+      And I press "Add file"
+      And I set the following fields to these values:
+        | Title                     | Test My Folder Overview 2                  |
+        | Description               | My Folder Overview Description 2           |
+        | Upload content            | mod/openstudio/tests/importfiles/test2.jpg |
+      And I press "Save"
+      And I follow "My Content > My Activities" in the openstudio navigation
+      And I follow "Content1.1"
+      And I press "Order posts"
+
+      # Content can not re-order. User click down button to move pass another fixed content, error message will display
+      And the "Save order" "button" should be disabled
+      And the "Move Up" "button" should be disabled
+      And I click on "#openstudio-folder-reorder-down-0" "css_element"
+      And I should see "You cannot move this content beyond other fixed contents."
+      
+      # User cannot input number to order fixed content, error message will display
+      And I set the field "Move to post number" to "2"
+      And I click on "Save order" "button" in the "Order posts" "dialogue"
+      And I should see "You cannot move this content beyond other fixed contents."
+
+      # Content can re-order
+      And I click on "Close" "button" in the "Order posts" "dialogue"
+      And I follow "Add new content"
+      And I press "Add file"
+      And I set the following fields to these values:
+        | Title                     | Test My Folder Overview 3                  |
+        | Description               | My Folder Overview Description 3           |
+        | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+      And I press "Save"
+      And I follow "My Content > My Activities" in the openstudio navigation
+      And I follow "Content1.1"
+      And I press "Order posts"
+      # User cannot input number to order fixed content, error message will display
+      And I click on "#openstudio-folder-reorder-down-1" "css_element"
+      And I should see "You cannot move this content beyond other fixed contents."
+      # User can click button to re-order content
+      And I click on "#openstudio-folder-reorder-up-2" "css_element"
+      And I click on "Save order" "button" in the "Order posts" "dialogue"
+      And Open studio contents should be in the following order:
+        | Test My Folder Overview 2 |
+        | Test My Folder Overview 1 |
+        | Test My Folder Overview 3 |

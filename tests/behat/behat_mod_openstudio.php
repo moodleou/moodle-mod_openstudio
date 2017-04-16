@@ -90,7 +90,10 @@ class behat_mod_openstudio extends behat_base {
             'folder contents' => array(
                 'datagenerator' => 'folder_contents',
                 'required' => array('openstudio', 'folder', 'content', 'user'),
-                'switchids' => array('status' => 'status', 'provenancestatus' => 'provenancestatus', 'user' => 'userid')
+                'switchids' => array(
+                    'status' => 'status',
+                    'user' => 'userid'
+                )
             ),
             'collected set contents' => array(
                 'datagenerator' => 'collected_set_contents',
@@ -799,5 +802,65 @@ EOF;
      */
     protected function get_comment_id($commenttext) {
         return $this->get_comment($commenttext)->id;
+    }
+
+    /**
+     * Checks that contents on the Re-order contents screen are displayed in the provided order
+     * A table with | title | fixed | filled | is expected.  The second and third columns are
+     * optional, and should contain "true" or "false".
+     *
+     * @Then /^Open studio contents should be in the following order:$/
+     */
+    public function openstudio_slots_should_be_in_the_following_order(TableNode $slots) {
+        global $CFG, $DB;
+
+        // Optional heading row.
+        $firstrow = $slots->getRow(0);
+        if (!in_array('title', $firstrow)) {
+            $headings = array_slice(array('title', 'fixed', 'filled'), 0, count($firstrow));
+            $rows = $slots->getRows();
+            array_unshift($rows, $headings);
+            $slots = new TableNode($rows);
+        }
+
+        $slotscopy = $slots->getHash();
+        foreach ($slots->getHash() as $key => $slot) {
+            $title = (string) $slot['title'];
+            $currentxpath = "//a[contains(., '" . $title . "')]";
+
+            if (isset($slotscopy[$key + 1])) {
+                $nextslot = $slotscopy[$key + 1];
+                $nextxpath = "//a[contains(., '" . $nextslot['title'] . "')]";
+
+                $this->execute('behat_general::should_appear_before',
+                        array($currentxpath, 'xpath_element', $nextxpath, 'xpath_element'));
+            }
+
+            if (isset($set['fixed'])) {
+                $fixed = strtolower($slot['fixed']) == 'true';
+                if ($slot['fixed']) {
+                    $not = '';
+                } else {
+                    $not = ' not_';
+                }
+
+                $this->execute('behat_general::should_' . $not . 'exist_in_the',
+                        array('//img[@alt=\'Order fixed\']', 'xpath_element', $currentxpath . '/../../', 'xpath_element'));
+            }
+
+            if (isset($slot['filled'])) {
+                $filled = strtolower($slot['filled']) == 'true';
+                if ($filled) {
+                    $enabled = 'enabled';
+                } else {
+                    $enabled = 'disabled';
+                }
+                $xpath = sprintf("%s/../..//input[contains(@class, 'studio-set-reorder-input')]",
+                        $currentxpath);
+
+                $this->execute('behat_general::the_element_should_be_' . $enabled,
+                        array($xpath, 'xpath_element'));
+            }
+        }
     }
 }

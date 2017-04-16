@@ -34,6 +34,8 @@ use mod_openstudio\local\util\defaults;
 use mod_openstudio\local\api\user;
 use mod_openstudio\local\api\comments;
 use mod_openstudio\local\forms\comment_form;
+use mod_openstudio\local\api\template;
+use mod_openstudio\local\uti;
 
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
@@ -173,8 +175,7 @@ class renderer_utils {
         }
 
         $userprogressdata = api\user::get_activity_status($openstudioid, $contentowner->id);
-
-        $activedate = userdate($userprogressdata, get_string('strftimerecent', 'openstudio'));
+        $activedate = $userprogressdata['lastactivedate'] > 0 ? date('j/m/y h:i', $userprogressdata['lastactivedate']) : null;
         $flagsdata = flags::count_by_user($openstudioid, $contentowner->id);
 
         if (array_key_exists(flags::READ_CONTENT, $flagsdata)) {
@@ -1148,27 +1149,45 @@ class renderer_utils {
      * @return object $folderdata
      */
     public static function folder_content($pinboardfolderlimit, $folderdata) {
+        global $OUTPUT;
         $context = \context_module::instance($folderdata->cmid);
-        $contentdatatemp = folder::get_contents($folderdata->id);
+        $context = \context_module::instance($folderdata->cmid);
+        $contentdatatemp = self::get_all_folder_content($folderdata->id);
+
         $folderdata->total = count($contentdatatemp);
 
         // Get folder limit.
         $limitadd = self::get_limit_add_content_folder($pinboardfolderlimit,
                     $folderdata->id, $folderdata->levelid, $folderdata->total);
         $folderdata->additionlimit = $limitadd;
-
         foreach ($contentdatatemp as $content) {
-            $content = self::content_type_image($content, $context);
-            $contentthumbnailfileurl = $content->contenttypeimage;
-
-            $contentdetail = new \moodle_url('/mod/openstudio/content.php', array(
-                    'id' => $folderdata->cmid, 'sid' => $content->id, 'vuid' => $content->userid,
-                    'folderid' => $folderdata->id));
-            $content->contentdetailurl = $contentdetail;
-            $content->contentthumbnailurl = $contentthumbnailfileurl;
-            $content->datetimeupdated = $content->timemodified ? date('j/m/y h:i', $content->timemodified) : null;
+            if (isset($content->foldertemplateid)) {
+                $content->thumbnailimg = false;
+                $contentthumbnailfileurl = $OUTPUT->pix_url('uploads_rgb_32px', 'openstudio');
+                $content->contentthumbnailurl = $contentthumbnailfileurl;
+                $contentdetail = new \moodle_url('/mod/openstudio/contentedit.php',
+                            array('id' => $folderdata->cmid, 'sid' => 0, 'ssid' => $folderdata->id, 'type' => 110,
+                                'sstsid' => $content->foldercontenttemplateid));
+                $content->contentdetailurl = $contentdetail;
+            } else {
+                if (!$content->deletedby && !$content->deletedtime) {
+                    $content = self::content_type_image($content, $context);
+                    $content->thumbnailimg = true;
+                    $contentthumbnailfileurl = $content->contenttypeimage;
+                    if ($content->contenttype != content::TYPE_IMAGE) {
+                        $content->thumbnailimg = false;
+                    }
+                    $contentdetail = new \moodle_url('/mod/openstudio/content.php', array(
+                            'id' => $folderdata->cmid, 'sid' => $content->id, 'vuid' => $content->userid,
+                            'folderid' => $folderdata->id));
+                    $content->contentdetailurl = $contentdetail;
+                    $content->contentthumbnailurl = $contentthumbnailfileurl;
+                    $content->datetimeupdated = $content->timemodified ? date('j/m/y h:i', $content->timemodified) : null;
+                }
+            }
             $folderdata->contents[] = $content;
         }
+
         return $folderdata;
     }
 
@@ -1188,6 +1207,99 @@ class renderer_utils {
             $limitadd = defaults::MAXPINBOARDFOLDERSCONTENTS - $contentexist;
         }
         return $limitadd;
+    }
+
+    /**
+     * This function will return all content of folder,
+     *
+     * @param int $folderid Optional, the ID of the folder
+     * @return object $contentdatatemp
+     */
+
+    public static function get_all_folder_content($folderid) {
+        $folderdata = content::get($folderid);
+        if ($folderdata->levelid) {
+            $contenttemplates = template::get_by_folderid($folderid);
+            if ($contenttemplates) {
+                $contenttemplates = template::get_contents($contenttemplates->id);
+            } else {
+                $contenttemplates = array();
+            }
+            $contentsbook = folder::get_contents_with_templates($folderid);
+            $contentsbook = util::folder_content_add_permissions($contentsbook, $contenttemplates);
+
+        } else {
+            $contentsbook = folder::get_contents($folderid);
+        }
+
+        return $contentsbook;
+    }
+
+    /**
+     * This function will return content for order post.
+     *
+     * @param int $cmid Course module ID
+     * @return object $contentdatatemp Content of Folder
+     * @return object ordercontent
+     */
+
+    public static function get_order_post_content($cmid, $contentdatatemp) {
+        global $OUTPUT;
+        $context = \context_module::instance($cmid);
+        $total = count($contentdatatemp);
+        $ordercontent = [];
+        $orderpos = 1;
+        foreach ($contentdatatemp as $key => $content) {
+            $folderitem = new \stdClass;
+            switch ($key) {
+                case 0:
+                    $isfirstcontent = true;
+                    $islastcontent = false;
+                    break;
+                case ($total - 1):
+                    $isfirstcontent = false;
+                    $islastcontent = true;
+                    break;
+                default:
+                    $isfirstcontent = false;
+                    $islastcontent = false;
+                    break;
+            }
+            if (!isset($content->canreorder)) {
+                $content->canreorder = true;
+            }
+            $folderitem->firstcontent = $isfirstcontent;
+            $folderitem->lastcontent = $islastcontent;
+            $folderitem->canreorder = $content->canreorder;
+            $folderitem->order = $orderpos;
+            $orderpos++;
+            $content->contentorder = $folderitem->order;
+            $folderitem->contentsbook = false;
+            if (isset($content->foldertemplateid)) {
+                $contentthumbnailfileurl = $OUTPUT->pix_url('uploads_rgb_32px', 'openstudio');
+                $folderitem->id = $content->id;
+                $folderitem->name = $content->name;
+                $folderitem->orderstring = str_pad($content->contentorder, 2, '0', STR_PAD_LEFT);
+                $folderitem->pictureurl = (string) $contentthumbnailfileurl;
+                $folderitem->contentsbook = true;
+            } else {
+                $content = self::content_type_image($content, $context);
+                $contentthumbnailfileurl = $content->contenttypeimage;
+                if ($content->contenttype != content::TYPE_IMAGE) {
+                    $contentthumbnailfileurl = (string) $contentthumbnailfileurl;
+                }
+                $folderitem->id = $content->id;
+                $folderitem->name = $content->name;
+                $folderitem->date = $content->timemodified ? date('j/m/y h:i', $content->timemodified) : null;
+
+                $folderitem->moveuporder = $content->contentorder - 1;
+                $folderitem->movedownorder = $content->contentorder + 1;
+                $folderitem->orderstring = str_pad($content->contentorder, 2, '0', STR_PAD_LEFT);
+                $folderitem->pictureurl = $contentthumbnailfileurl;
+            }
+            $ordercontent [] = $folderitem;
+        }
+        return $ordercontent;
     }
 
     /**

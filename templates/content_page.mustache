@@ -231,14 +231,16 @@
                 {{#actionenable}}
                     <div class="openstudio-content-view-actions-icons-left">
                         {{#contenteditenable}}
-                            <a href="{{{contenteditlink}}}" class="openstudio-content-view-edit-button-link">
-                                <input id="id_editbutton" name="editbutton" class="openstudio-content-view-edit-button
-                                    openstudio-content-actions osep-smallbutton
-                                    {{#locked}}
-                                        locked
-                                    {{/locked}}"
-                                    value="{{#str}}contentactioneditname, mod_openstudio{{/str}}" type="button">
-                            </a>
+                            {{#mycontent}}
+                                <a href="{{{contenteditlink}}}" class="openstudio-content-view-edit-button-link">
+                                    <input id="id_editbutton" name="editbutton" class="openstudio-content-view-edit-button
+                                        openstudio-content-actions osep-smallbutton
+                                        {{#locked}}
+                                            locked
+                                        {{/locked}}"
+                                        value="{{#str}}contentactioneditname, mod_openstudio{{/str}}" type="button">
+                                </a>
+                            {{/mycontent}}
                         {{/contenteditenable}}
                         {{#contentdeleteenable}}
                             <input id="id_deletebutton" name="deletebutton"

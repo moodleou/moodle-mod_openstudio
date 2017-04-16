@@ -1406,4 +1406,122 @@ class mod_openstudio_external extends external_api {
     public static function fetch_deleted_posts_in_folder_returns() {
         return new external_value(PARAM_RAW, 'Deleted posts with html format');
     }
+
+    /**
+     * Returns description of method parameters
+     *
+     * @return external_function_parameters
+     */
+    public static function order_posts_parameters() {
+        return new external_function_parameters(array(
+                'cmid' => new external_value(PARAM_INT, 'Course module ID'),
+                'folderid' => new external_value(PARAM_INT, 'Folder ID'),
+                'listorderporst' => new external_value(PARAM_TEXT, 'List order Posts Content'))
+        );
+    }
+
+    /**
+     * Order Posts content of folder
+     *
+     * @param int $folderid The open studio folder id
+     * @param string $listordercontentid list of content id
+     * @return array
+     *  [
+     *     success: boolean
+     *  ]
+     */
+    public static function order_posts($cmid, $folderid, $listorderporst) {
+        $result = '';
+        $params = self::validate_parameters(self::order_posts_parameters(), array(
+                'cmid' => $cmid,
+                'folderid' => $folderid,
+                'listorderporst' => $listorderporst));
+        // Checks to ensure that the user is allowed to perform the requested operation.
+        $context = context_module::instance($params['cmid']);
+        external_api::validate_context($context);
+
+        // Get list content.
+        $orderlist = explode(",", $params['listorderporst']);
+        $neworderlist = array();
+        foreach ($orderlist as $key => $value) {
+            list($index, $order) = explode('-', $value);
+            $neworderlist[$index] = $order;
+        }
+
+        // Update content position.
+        $success = folder::update_contentorders($params['folderid'], $neworderlist);
+        $result['success'] = $success;
+        return $result;
+    }
+
+    /**
+     * Returns description of method result value
+     *
+     * @return external_description
+     */
+    public static function order_posts_returns() {
+        return new external_single_structure(array(
+                'success' => new external_value(PARAM_BOOL, 'Save order posts success'))
+        );
+    }
+
+
+    /**
+     * Returns description of method parameters
+     *
+     * @return external_function_parameters
+     */
+    public static function get_order_posts_content_parameters() {
+        return new external_function_parameters(array(
+                'cmid' => new external_value(PARAM_INT, 'Course module ID'),
+                'folderid' => new external_value(PARAM_INT, 'Folder ID'))
+        );
+    }
+
+    /**
+     * Get Order Posts content of folder
+     *
+     * @param int $cmid Course module ID
+     * @param int $folderid The open studio folder id
+     * @return array
+     *  [
+     *     result: object
+     *  ]
+     */
+    public static function get_order_posts_content($cmid, $folderid) {
+        global $PAGE;
+        $result = '';
+        $params = self::validate_parameters(self::get_order_posts_content_parameters(), array(
+                'cmid' => $cmid,
+                'folderid' => $folderid));
+        // Checks to ensure that the user is allowed to perform the requested operation.
+        $context = context_module::instance($params['cmid']);
+        external_api::validate_context($context);
+        $contentemp = renderer_utils::get_all_folder_content($params['folderid']);
+        $listcontent = renderer_utils::get_order_post_content($params['cmid'], $contentemp);
+        $renderer = $PAGE->get_renderer('mod_openstudio');
+        $result = array();
+        $success = false;
+        $html = '';
+        if ($listcontent) {
+            $success = true;
+            $html = $renderer->order_posts($listcontent);
+        }
+        $result['success'] = $success;
+        $result['html'] = $html;
+
+        return $result;
+    }
+
+    /**
+     * Returns description of method result value
+     *
+     * @return external_description
+     */
+    public static function get_order_posts_content_returns() {
+        return new external_single_structure(array(
+                'success' => new external_value(PARAM_BOOL, 'Get order posts success'),
+                'html' => new external_value(PARAM_RAW, 'Order posts item list template'))
+        );
+    }
 }

@@ -619,8 +619,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $contentdata->placeholdertext = $placeholdertext;
         $contentdata->selectview = $selectview;
         $contentdata->myactivities = $myactivities;
-        $contentdata->blocksdata = property_exists($contentdata, 'openstudio_view_filters') ?
-                $contentdata->openstudio_view_filters->fblockdataarray : array();
+        $contentdata->blocksdata = property_exists($contentdata,
+            'openstudio_view_filters') ? $contentdata->openstudio_view_filters->fblockdataarray : array();
         $contentdata->viewedicon = $OUTPUT->pix_url('viewed_rgb_32px', 'openstudio');
         $contentdata->commentsicon = $OUTPUT->pix_url('comments_rgb_32px', 'openstudio');
         $contentdata->inspirationicon = $OUTPUT->pix_url('inspiration_rgb_32px', 'openstudio');
@@ -736,7 +736,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      * @return string The rendered HTML fragment.
      */
     public function content_page($cmid, $permissions, $contentdata, $cminstance) {
-        global $CFG, $PAGE, $OUTPUT;
+        global $CFG, $PAGE, $OUTPUT, $USER;
 
         $openstudioid = $cminstance->id;
         $contentdata->cmid = $cmid;
@@ -874,6 +874,12 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             if (lock::content_show_crud($contentdata, $permissions) || $permissions->managecontent) {
                 $contentdeleteenable = true;
             }
+        }
+
+        // Check owner content permission.
+        $contentdata->mycontent = false;
+        if ($contentdata->userid == $USER->id) {
+            $contentdata->mycontent = true;
         }
 
         $contentdata->contentviewversionlink = new moodle_url('/mod/openstudio/content.php',
@@ -1067,6 +1073,15 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         // Process view deleted post.
         renderer_utils::process_view_deleted_post($folderdata, $permissions, $cmid);
 
+        // Order-post functionality.
+        $this->page->requires->strings_for_js(
+            array('folderorderpost', 'folderreordercontentshint'), 'mod_openstudio');
+        $this->page->requires->js_call_amd('mod_openstudio/orderposts', 'init', [[
+            'cmid' => $folderdata->cmid,
+            'folderid' => $folderdata->id,
+            'total' => $folderdata->total
+        ]]);
+
         return $this->render_from_template('mod_openstudio/folder_page', $folderdata);
     }
 
@@ -1098,5 +1113,22 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         $data->deletedposts = $deletedposts;
         return $this->render_from_template('mod_openstudio/viewdeleted_dialog', $data);
+    }
+
+    /**
+     * This function renders the HTML fragment for the  order post of Open Studio.
+     *
+     * @param object $contents post items.
+     * @return string The rendered HTML fragment.
+     */
+    public function order_posts($contents) {
+        global $OUTPUT;
+
+        $data = new stdClass();
+
+        $data->contents = $contents;
+        $data->total = count($contents);
+
+        return $this->render_from_template('mod_openstudio/orderpost_dialog', $data);
     }
 }

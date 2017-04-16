@@ -808,6 +808,8 @@ $string['folderdeletedcontentsintro'] = 'The posts listed below have been delete
 $string['folderremovecontent'] = 'Remove content {$a}.';
 $string['foldermovecontentup'] = 'Move content {$a->name} up to position {$a->position}.';
 $string['foldermovecontentdown'] = 'Move content {$a->name} down to position {$a->position}.';
+$string['foldersaveorder'] = 'Save order';
+$string['foldermovetopostnumber'] = 'Move to post number';
 
 $string['errorinvalidrequest'] = 'Invalid request.';
 $string['errorinvalidcontent'] = 'Content cannot be found.';
@@ -1171,6 +1173,7 @@ $string['contentactionunlockname'] = 'Unlock';
 $string['contentlocked'] = 'Locked';
 $string['lockedbyusername'] = 'Locked by: {$a}';
 $string['contentavailiable'] = 'You have {$a->available} uploads available.';
+$string['contentlocked'] = 'Locked';
 
 $string['erroractivitynotavailable'] = 'This activity is not available until: {$a}';
 
@@ -1324,6 +1327,7 @@ $string['folderdeletedfolder'] = 'Delete folder';
 $string['folderlockfolder'] = 'Lock folder';
 $string['folderunlockfolder'] = 'Unlock folder';
 $string['foldermanagepost'] = 'Manage posts';
+$string['folderorderpost'] = 'Order posts';
 $string['foldereditandpermission'] = 'Edit folder title and permissions';
 $string['folderavailiable'] = 'You have {$a->available} posts available in this folder.';
 $string['updatecontenttofolder'] = 'Upload content to folder';
@@ -1352,3 +1356,11 @@ $string['folderoverview'] = 'Folder Overview';
 $string['foldertdevicetitle'] = 'Upload post';
 $string['foldertselectdevicetitle'] = 'Browse posts';
 $string['editfolder'] = 'Edit Folder';
+$string['btnmoveup'] = 'Move Up';
+$string['btnmovedown'] = 'Move Down';
+$string['errormoveslotnumeric'] = 'You must enter a number.';
+$string['postattop'] = 'Post is already at the top';
+$string['postatbottom'] = 'Post is already at the bottom';
+$string['postatbottom'] = 'You cannot enter a position that does not contain a slot.';
+$string['errormoveslotduplicate'] = 'You cannot enter the same number twice.';
+$string['errormoveslotoutofrange'] = 'You cannot enter a position that does not contain a slot.';

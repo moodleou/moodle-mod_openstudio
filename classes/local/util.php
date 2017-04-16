@@ -1413,26 +1413,26 @@ EOF;
     }
 
     /**
-     * Add attributes to the objects in $slots indicating the permissions they
+     * Add attributes to the objects in $content indicating the permissions they
      * allowed by the template
      *
      * @param array $content The slots in the set
      * @param array $contenttemplates The slot templates for the set
      * @return array Content array with template permissions added.
      */
-    public static function folder_content_add_permissions($content, $contenttemplates) {
-        foreach ($content as $slot) {
+    public static function folder_content_add_permissions($contents, $contenttemplates) {
+        foreach ($contents as $content) {
             $reorder = true;
-            if (!empty($slot->setslottemplateid) && array_key_exists($slot->setslottemplateid, $contenttemplates)) {
-                $template = $contenttemplates[$slot->setslottemplateid];
+            if (!empty($content->foldercontenttemplateid) && array_key_exists($content->foldercontenttemplateid, $contenttemplates)) {
+                $template = $contenttemplates[$content->foldercontenttemplateid];
                 $permissions = $template->permissions;
                 if (($permissions & folder::PERMISSION_REORDER) !== folder::PERMISSION_REORDER) {
                     $reorder = false;
                 }
             }
-            $slot->canreorder = $reorder;
+            $content->canreorder = $reorder;
         }
-        return $content;
+        return $contents;
     }
 
     /**

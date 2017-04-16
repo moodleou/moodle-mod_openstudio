@@ -151,6 +151,24 @@ $functions = array(
         'ajax' => true,
         'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
         'capabilities' => 'mod/openstudio:viewdeleted'
+    ),
+    'mod_openstudio_external_order_posts' => array(
+        'classname' => 'mod_openstudio_external',
+        'methodname' => 'order_posts',
+        'description' => 'Order Posts Content Folder',
+        'type' => 'write',
+        'ajax' => true,
+        'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
+        'capabilities' => 'mod/openstudio:view'
+    ),
+    'mod_openstudio_external_get_order_posts' => array(
+        'classname' => 'mod_openstudio_external',
+        'methodname' => 'get_order_posts_content',
+        'description' => 'Get Order Posts Content Folder',
+        'type' => 'write',
+        'ajax' => true,
+        'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
+        'capabilities' => 'mod/openstudio:view'
     )
 );
 
@@ -170,7 +188,12 @@ $services = array(
             'mod_openstudio_external_unlock',
             'mod_openstudio_external_read_notifications',
             'mod_openstudio_external_restore_content_in_folder',
-            'mod_openstudio_external_fetch_deleted_posts_in_folder'),
+            'mod_openstudio_external_fetch_deleted_posts_in_folder',
+            'mod_openstudio_external_restore_content_in_folder',
+            'mod_openstudio_external_read_notifications',
+            'mod_openstudio_external_order_posts',
+            'mod_openstudio_external_get_order_posts'
+        ),
         'restrictedusers' => 0,
         'enabled' => 1,
         'shortname' => 'openstudio_service',

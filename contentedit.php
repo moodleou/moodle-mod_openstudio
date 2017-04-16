@@ -588,7 +588,6 @@ if ($contentform->is_cancelled()) {
             }
         }
         $contentupdatemode = content::UPDATEMODE_CREATED;
-
         $contentid = content::create(
                 $cminstance->id,
                 $userid,

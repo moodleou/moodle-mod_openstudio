@@ -85,10 +85,13 @@
                     <img src="{{{visibilityicon}}}" alt="{{{mod_openstudio}}}">
                 </span>
             </div>
-
-            <div class="openstudio-folder-view-title-managepost">
-                <input id="id_managepost" class="osep-smallbutton" name="managepost" value="{{#str}}foldermanagepost, mod_openstudio{{/str}}" type="button">
-            </div>
+            {{#myfolder}}
+                <div class="openstudio-folder-view-title-managepost">
+                    <button id="id_orderpost" name="managepost" class="osep-smallbutton">
+                        {{#str}}folderorderpost, mod_openstudio{{/str}}
+                    </button>
+                </div>
+            {{/myfolder}}
         </div>
         <div class="openstudio-folder-view-primary clearfix" id="openstudio_folder_view_primary">
             <div id="openstudio_item_request_feedback"

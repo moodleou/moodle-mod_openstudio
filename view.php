@@ -595,13 +595,17 @@ if ($finalviewpermissioncheck) {
                 if ($firstcontent) {
                     $content->hascontent = true;
                     $content->thumbnailimg = true;
-                    $firsrcm = get_coursemodule_from_instance('openstudio', $firstcontent->openstudioid);
-                    $context = context_module::instance($firsrcm->id);
-                    $firstcontent = renderer_utils::content_type_image($firstcontent, $context);
-                    if ($firstcontent->contenttype != content::TYPE_IMAGE) {
-                        $content->thumbnailimg = false;
+                    if (isset($firstcontent->openstudioid)) {
+                        $firsrcm = get_coursemodule_from_instance('openstudio', $firstcontent->openstudioid);
+                        $context = context_module::instance($firsrcm->id);
+                        $firstcontent = renderer_utils::content_type_image($firstcontent, $context);
+                        if ($firstcontent->contenttype != content::TYPE_IMAGE) {
+                            $content->thumbnailimg = false;
+                        }
+                        $folderthumbnailfileurl = $firstcontent->contenttypeimage;
+                    } else {
+                         $content->thumbnailimg = false;
                     }
-                    $folderthumbnailfileurl = $firstcontent->contenttypeimage;
                 }
                 $content->folderthumbnail = $folderthumbnailfileurl;
                 $content->folderdefaultthumbnail = $OUTPUT->pix_url('openstudio_sets_preview_box', 'openstudio');
