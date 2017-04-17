@@ -44,6 +44,15 @@ $functions = array(
         'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
         'capabilities' => 'mod/openstudio:view'
     ),
+    'mod_openstudio_external_browse_posts' => array(
+        'classname' => 'mod_openstudio_external',
+        'methodname' => 'browse_posts',
+        'description' => 'Browse posts',
+        'type' => 'write',
+        'ajax' => true,
+        'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
+        'capabilities' => 'mod/openstudio:view'
+    ),
     'mod_openstudio_external_subscribe' => array(
         'classname' => 'mod_openstudio_external',
         'methodname' => 'subscribe',
@@ -132,6 +141,7 @@ $services = array(
     'Open Studio service' => array(
         'functions' => array(
             'mod_openstudio_external_flag_content',
+            'mod_openstudio_external_browse_posts',
             'mod_openstudio_external_subscribe',
             'mod_openstudio_external_unsubscribe',
             'mod_openstudio_external_delete_content',

@@ -514,6 +514,22 @@ class renderer_utils {
 
         $contentdata->contentvisibilityicon = self::content_visibility_icon($contentdata);
 
+        if (property_exists($contentdata, 'folderid')) {
+            $foldercontent = folder::get_content($contentdata->folderid, $contentdata->id);
+            if ($foldercontent) {
+                if ($foldercontent->provenanceid != null &&
+                    $foldercontent->provenancestatus == folder::PROVENANCE_EDITED
+                ) {
+                    if (!empty($foldercontent->fcname)) {
+                        $contentdata->contentdataname = $foldercontent->fcname;
+                    }
+                    if (!empty($foldercontent->fcdescription)) {
+                        $contentdata->description = $foldercontent->fcdescription;
+                    }
+                }
+            }
+        }
+
         return $contentdata;
     }
 

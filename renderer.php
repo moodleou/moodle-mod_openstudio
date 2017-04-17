@@ -1040,4 +1040,21 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         return $this->render_from_template('mod_openstudio/folder_page', $folderdata);
     }
+
+    /**
+     * This function renders the HTML fragment for the  brose posts to add to folder of Open Studio.
+     *
+     * @param object $contents post items.
+     * @return string The rendered HTML fragment.
+     */
+    public function browse_posts($contents) {
+        global $OUTPUT;
+
+        $data = new stdClass();
+
+        $data->contents = $contents;
+        $data->total = count($contents);
+
+        return $this->render_from_template('mod_openstudio/folder_browse_posts', $data);
+    }
 }

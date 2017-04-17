@@ -429,7 +429,7 @@ EOF;
                         );
                         // If the content is part of a folder and has provenance, then we need to folder
                         // the status to unlinked.
-                        if ($provenance->provenanceid == $provenance->contentid) {
+                        if ($provenance->provenanceid == $provenance->slotid) {
                             // If the folder content is currently just a soft-link, make it a full copy.
                             $newcontent = folder::copy_content($contentid, $provenance->userid, null, null, $cm);
                             if (array_key_exists('visibility', $data)) {
@@ -553,7 +553,7 @@ EOF;
             array_key_exists('thumbnail', $data) ? ($contentdata->thumbnail = $data['thumbnail']) : null;
             array_key_exists('urltitle', $data) ? ($contentdata->urltitle = $data['urltitle']) : null;
             if (array_key_exists('name', $data) || array_key_exists('description', $data)) {
-                if (!is_null($folderid)
+                if ($folderid
                         && ($provenance = folder::get_content_provenance($folderid, $contentdata->id)) && !$shouldversion) {
                     // If the content is part of a folder and has provenance, and the content hasn't been changed...
                     $provenanceupdate = (object) array(

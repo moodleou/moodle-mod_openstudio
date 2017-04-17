@@ -25,6 +25,9 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+use mod_openstudio\local\util\defaults;
+use mod_openstudio\local\api\search;
+use mod_openstudio\local\api\stream;
 use mod_openstudio\local\api\subscription;
 use mod_openstudio\local\api\flags;
 use mod_openstudio\local\api\notifications;
@@ -36,6 +39,7 @@ use mod_openstudio\local\api\comments;
 use mod_openstudio\local\api\lock;
 use mod_openstudio\local\api\folder;
 use mod_openstudio\local\api\user;
+use mod_openstudio\local\api\group;
 
 require_once($CFG->libdir . '/externallib.php');
 
@@ -68,6 +72,192 @@ class mod_openstudio_external extends external_api {
         }
 
         return false;
+    }
+
+    /**
+     * Returns description of method parameters
+     *
+     * @return external_function_parameters
+     */
+    public static function browse_posts_parameters() {
+        return new external_function_parameters(array(
+                'cmid' => new external_value(PARAM_INT, 'Course module ID'),
+                'folderid' => new external_value(PARAM_INT, 'Folder ID'),
+                'selectedposts' => new external_value(PARAM_TEXT, 'Selected posts ID'),
+                'search' => new external_value(PARAM_TEXT, 'Data search post'))
+        );
+    }
+
+    /**
+     * Browse posts.
+     *
+     * @param int $cmid Course module ID
+     * @param int $folderid Folder ID
+     * @param text $selectedposts selected post ID.
+     * @param text $search search value
+     * @return array
+     *  [
+     *      result: object
+     *  ]
+     */
+    public static function browse_posts($cmid, $folderid, $selectedposts, $search) {
+        global $PAGE, $USER, $OUTPUT;
+
+        $context = context_module::instance($cmid);
+        external_api::validate_context($context);
+
+        $userid = $USER->id;
+        $coursedata = util::render_page_init($cmid);
+        $cm = $coursedata->cm;
+        $cminstance = $coursedata->cminstance;
+        $permissions = $coursedata->permissions;
+
+        $total = 0;
+        $html = '';
+        $result = array();
+        $contents = array();
+        $contentdata = array();
+        $pagesize = defaults::FOLDERBROWSEPOSTPAGESIZE;
+
+        if ($permissions->feature_enablefoldersanycontent) {
+            $filter = 'openstudio_ousearch_filter_browseslots';
+        } else {
+            $filter = 'openstudio_ousearch_filter_browseslots_useronly';
+        }
+
+        // Filter types for browse post (exclude folder type).
+        $filtertypes = array(content::TYPE_NONE, content::TYPE_TEXT, content::TYPE_IMAGE, content::TYPE_IMAGE_EMBED,
+                content::TYPE_VIDEO, content::TYPE_VIDEO_EMBED, content::TYPE_AUDIO, content::TYPE_AUDIO_EMBED,
+                content::TYPE_DOCUMENT, content::TYPE_DOCUMENT_EMBED, content::TYPE_PRESENTATION,
+                content::TYPE_PRESENTATION_EMBED, content::TYPE_SPREADSHEET, content::TYPE_SPREADSHEET_EMBED,
+                content::TYPE_URL, content::TYPE_URL_IMAGE, content::TYPE_URL_VIDEO, content::TYPE_URL_AUDIO,
+                content::TYPE_URL_DOCUMENT, content::TYPE_URL_DOCUMENT_PDF, content::TYPE_URL_DOCUMENT_DOC,
+                content::TYPE_URL_PRESENTATION, content::TYPE_URL_PRESENTATION_PPT, content::TYPE_URL_SPREADSHEET,
+                content::TYPE_URL_SPREADSHEET_XLS);
+
+        if ($search) {
+            $searchresults = search::query($cm, $search, 0, $pagesize, 0, content::VISIBILITY_MODULE, $filter);
+            $contentdata = $searchresults->result;
+        } else {
+            $contentdatatemp = stream::get_contents(
+                    $cminstance->id, $permissions->groupingid, $userid, $userid, content::VISIBILITY_PRIVATE_PINBOARD,
+                    null, implode(',', $filtertypes), null, null, null, null,
+                    array('id' => stream::SORT_BY_DATE, 'desc' => stream::SORT_DESC), null, $pagesize, true, true,
+                    $permissions->managecontent, 0, $permissions->groupmode,
+                    false,
+                    $permissions->accessallgroups,
+                    false,
+                    $permissions->feature_contentreciprocalaccess, $permissions->tutorroles);
+
+            if (isset($contentdatatemp->contents)) {
+                $contentdata = $contentdatatemp->contents;
+            }
+        }
+
+        if ($contentdata) {
+
+            $contentsinfolder = folder::get_contents($folderid);
+
+            $selectedpostsids = array();
+            if ($selectedposts) {
+                $selectedpostsids = explode(',', $selectedposts);
+            }
+
+            foreach ($contentdata as $content) {
+
+                // Check item is folder or added to folder.
+                if ($content->contenttype == content::TYPE_FOLDER ||
+                        $content->visibility == content::VISIBILITY_INFOLDERONLY ||
+                        array_key_exists($content->id, $contentsinfolder) ||
+                        ($selectedpostsids && in_array($content->id, $selectedpostsids))) {
+                    continue;
+                }
+
+                $content = renderer_utils::content_type_image($content, $context);
+
+                $visibility = (int)$content->visibility;
+                if ($visibility < 0) {
+                    $visibility = content::VISIBILITY_GROUP;
+                }
+
+                // Set icon for content.
+                switch ($visibility) {
+                    case content::VISIBILITY_MODULE:
+                        $contenticon = $OUTPUT->pix_url('mymodule_rgb_32px', 'openstudio');
+                        $contentlocation = get_string('contentformvisibilitymodule', 'openstudio');
+                        break;
+
+                    case content::VISIBILITY_GROUP:
+                        $contenticon = $OUTPUT->pix_url('group_rgb_32px', 'openstudio');
+                        $contentlocation = group::get_name(abs($content->visibility));
+                        break;
+
+                    case content::VISIBILITY_WORKSPACE:
+                    case content::VISIBILITY_PRIVATE:
+                        $contenticon = $OUTPUT->pix_url('onlyme_rgb_32px', 'openstudio');
+                        $contentlocation = get_string('contentformvisibilityprivate', 'openstudio');
+                        break;
+
+                    case content::VISIBILITY_PRIVATE_PINBOARD:
+                        $contenticon = $OUTPUT->pix_url('onlyme_rgb_32px', 'openstudio');
+                        $contentlocation = get_string('contentformvisibilityprivate', 'openstudio');
+                        break;
+
+                    case content::VISIBILITY_TUTOR:
+                        $contenticon = $OUTPUT->pix_url('share_with_tutor_rgb_32px', 'openstudio');
+                        $contentlocation = get_string('contentitemsharewithmytutor', 'openstudio');
+                        break;
+                    default:
+                        $contenticon = $OUTPUT->pix_url('onlyme_rgb_32px', 'openstudio');
+                        $contentlocation = get_string('contentformvisibilityprivate', 'openstudio');
+                        break;
+                }
+
+                $content->contenticon = $contenticon;
+                $content->contentlocation = $contentlocation;
+                $content->datetime = userdate($content->timemodified, get_string('formattimedatetime', 'openstudio'));
+                $content->content = shorten_text($content->content, 30, true);
+                $contents[$content->id] = $content;
+            }
+        }
+
+        if ($contents) {
+            // Returns all the values from the array and indexes the array numerically.
+            // We need this because mustache requires it.
+            $contents = array_values($contents);
+            $total = count($contents);
+
+            $renderer = $PAGE->get_renderer('mod_openstudio');
+            $html = $renderer->browse_posts($contents);
+        }
+
+        // Get folder limit.
+        $folderdata = folder::get($folderid);
+        $contentdatatemp = folder::get_contents($folderdata->id);
+        $availableposts = renderer_utils::get_limit_add_content_folder($permissions->pinboardfolderlimit,
+            $folderdata->id, $folderdata->levelid, count($contentdatatemp));
+
+        $helpicon = $OUTPUT->help_icon('folderselectedpost', 'openstudio');
+        $result['helpicon'] = $helpicon;
+        $result['html'] = $html;
+        $result['total'] = $availableposts;
+        $result['foundnumberpostlabel'] = get_string('folderbrowsepostsfound', 'openstudio', array('number' => $total));
+
+        return $result;
+    }
+
+    /**
+     * Returns description of method result value
+     *
+     * @return external_description
+     */
+    public static function browse_posts_returns() {
+        return new external_single_structure(array(
+                'html' => new external_value(PARAM_RAW, 'Browse posts item list template'),
+                'foundnumberpostlabel' => new external_value(PARAM_RAW, 'Found number post label'),
+                'total' => new external_value(PARAM_INT, 'Total posts'),
+                'helpicon' => new external_value(PARAM_RAW, 'Help icon'))
+        );
     }
 
     /**

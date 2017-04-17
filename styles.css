@@ -2733,6 +2733,292 @@ div.openstudio-content-view-version div:nth-of-type(odd) {
     color: #ffffff;
 }
 
+/* Folder browse posts dialogue. */
+
+.path-mod-openstudio .moodle-dialogue-base .openstudio-folder-posts-dialogue .moodle-dialogue-content .moodle-dialogue-hd {
+    background-color: #d8dde6;
+    border-top: solid 2px #b2bccd;
+    border-bottom: solid 2px #b2bccd;
+}
+
+.path-mod-openstudio .moodle-dialogue-base .openstudio-folder-posts-dialogue .moodle-dialogue-content .moodle-dialogue-ft {
+    text-align: right;
+}
+
+.path-mod-openstudio .moodle-dialogue-base .openstudio-folder-posts-dialogue .moodle-dialogue-content button.browse-search-icon {
+    background: transparent none repeat scroll 0 0;
+    border: medium none;
+    box-shadow: none;
+    margin: 0;
+    padding: 2px 5px;
+    position: relative;
+    right: 35px;
+    top: -6px;
+    cursor: pointer;
+}
+
+.openstudio-folder-browse-posts-search-box {
+    margin-top: 17px;
+}
+
+.openstudio-folder-browse-posts-searched-header {
+    background-color: #d8dde6;
+    height: 43px;
+    border-top: solid 2px #b2bccd;
+    border-bottom: solid 1px #b2bccd;
+}
+
+.openstudio-folder-browse-posts-searched-header div {
+    color: #002158;
+    float: left;
+    font-size: 1em;
+    line-height: 40px;
+    text-align: left;
+}
+
+.openstudio-folder-browse-posts-searched-header div:nth-child(1) {
+    padding-left: 20px;
+    width: 79px;
+}
+
+.openstudio-folder-browse-posts-searched-header div:nth-child(2),
+.openstudio-folder-browse-posts-searched-header div:nth-child(3),
+.openstudio-folder-browse-posts-searched-header div:nth-child(4) {
+    width: 140px;
+}
+
+.openstudio-folder-browse-posts-header-result-label {
+    float: left;
+    padding-top: 2px;
+}
+
+.openstudio-folder-browse-posts-header-result {
+    padding-top: 5px;
+    padding-bottom: 15px;
+}
+
+.openstudio-folder-browse-posts-header-result-buttons {
+    float: right;
+}
+
+.openstudio-folder-browse-posts-header-result-buttons-bottom {
+    margin-top: 15px;
+    text-align: right;
+}
+
+.openstudio-folder-browse-posts-header-result-buttons button,
+.openstudio-folder-browse-posts-header-result-buttons-bottom button {
+    margin-right: 0px;
+}
+
+.path-mod-openstudio .folder-browse-post-remove-last-selection {
+    margin-right: 5px;
+}
+
+.openstudio-browse-post-item {
+    min-height: 74px;
+}
+
+div.openstudio-browse-post-item:first-child {
+    border-bottom: 1px solid #b2bccd;
+}
+
+div.openstudio-browse-post-item:nth-of-type(even) {
+    background: #ffffff;
+}
+
+div.openstudio-browse-post-item:nth-of-type(odd) {
+    background: #f2f3f6;
+    border-bottom: 1px solid #b2bccd;
+    border-top: 1px solid #b2bccd;
+}
+
+div.openstudio-browse-post-item:nth-of-type(even) div.openstudio-browse-post-item-filename {
+    border: 1px solid #ffffff;
+}
+
+div.openstudio-browse-post-item:nth-of-type(odd) div.openstudio-browse-post-item-filename {
+    border: 1px solid #f2f3f6;
+}
+
+.openstudio-browse-post-item-img {
+    float: left;
+    width: 79px;
+    padding: 13px 0px 0px 20px;
+}
+
+.openstudio-browse-post-item-img img {
+    width: 64px;
+    height: 44px;
+}
+
+.openstudio-browse-post-item-title-box,
+.openstudio-browse-post-item-filename,
+.openstudio-browse-post-item-location-box {
+    float: left;
+    width: 100px;
+    line-height: 17px;
+    padding-right: 38px;
+    position: relative;
+}
+
+.openstudio-browse-post-item-button {
+    position: relative;
+    top: 22px;
+}
+
+.openstudio-browse-post-item-title-box {
+    margin-top: 11px;
+}
+
+#browse_post_item_title_box_mobile {
+    display: none;
+}
+
+.openstudio-browse-post-item-title {
+    font-size: 0.928571em;
+    font-weight: bold;
+    color: #002158;
+}
+
+.openstudio-browse-post-item-date {
+    color: #464542;
+    font-size: 0.85714em;
+}
+
+.openstudio-browse-post-item-filename,
+.openstudio-browse-post-item-location-box {
+    font-size: 0.928571em;
+    position: relative;
+    top: 25px;
+}
+
+.openstudio-browse-post-item-filename {
+    padding-left: 2px;
+    color: #000000;
+}
+
+.openstudio-browse-post-item-location {
+    color: #002158;
+    padding-left: 2px;
+    padding-top: 2px;
+    vertical-align: middle;
+}
+
+.openstudio-browse-post-item-location-box img {
+    height: 22px;
+}
+
+#openstudio_search_post {
+    border-radius: 0px;
+    width: 180px;
+    padding-right: 32px;
+    border: 1px solid #d4d2d2;
+}
+
+#openstudio_search_post::-ms-clear {
+    display: none;
+}
+
+#browse_post_item_title_box_movile {
+    display: none;
+}
+
+.openstudio-folder-browseposts-selected {
+    background-color: #f0f0f1;
+    color: #002158;
+    font-weight: bold;
+    font-size: 1em;
+    min-height: 98px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    padding-left: 10px;
+    display: none;
+}
+
+.openstudio-folder-browseposts-selected label {
+    background-color: white;
+    border: 1px solid #3f3f3f;
+    border-radius: 3px;
+    margin-left: -1em;
+    margin-top: 3em;
+    padding: 0.2em;
+    position: absolute;
+    visibility: hidden;
+    z-index: 1;
+}
+
+.openstudio-folder-browseposts-selected .openstudio-folder-browseposts-deselect:hover + label,
+.openstudio-folder-browseposts-selected .openstudio-folder-browseposts-deselect:focus + label {
+    visibility: visible;
+}
+
+.openstudio-folder-browseposts-selected-box {
+    padding-top: 8px;
+}
+
+.openstudio-folder-browseposts-deselect {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: medium none;
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+    width: 48px;
+    margin-right: 15px;
+    margin-bottom: 10px;
+}
+
+.openstudio-folder-browseposts-deselect .openstudio-folder-remove-icon {
+    height: 17px;
+    margin-left: 24px;
+    position: relative;
+    visibility: hidden;
+    width: 17px;
+    z-index: 2;
+}
+
+.openstudio-folder-browseposts-deselect > .openstudio-folder-controls-crop,
+.openstudio-folder-browseposts-deselect > .openstudio-folder-browsesets-selectedthumb {
+    display: block;
+    margin-top: -13px;
+    position: relative;
+    width: 48px;
+    height: 33px;
+}
+
+.openstudio-folder-browseposts-deselect .openstudio-folder-remove-icon {
+    height: 17px;
+    padding-left: 10px;
+    position: relative;
+    visibility: hidden;
+    width: 17px;
+    z-index: 2;
+}
+
+.openstudio-folder-browseposts-deselect:hover,
+.openstudio-folder-browseposts-deselect:focus {
+    background: none;
+}
+
+.openstudio-folder-browseposts-deselect:hover .openstudio-folder-remove-icon,
+.openstudio-folder-browseposts-deselect:focus .openstudio-folder-remove-icon {
+    visibility: visible;
+}
+
+.path-mod-openstudio .openstudio-folder-browseposts-selected-items > label {
+    background-color: white;
+    border: 1px solid #3f3f3f;
+    border-radius: 3px;
+    margin-left: -25px;
+    margin-top: 50px;
+    padding: 3px;
+    position: absolute;
+    visibility: hidden;
+    z-index: 1;
+    display: inline;
+}
+
 /* People Page */
 .openstudio-profile-row {
     height: 48px;
@@ -3230,6 +3516,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     border: 1px dashed #676463;
     float: left;
     margin-bottom: 10px;
+    cursor: pointer;
 }
 .openstudio-select-content {
     margin-bottom: 15px;
@@ -4708,6 +4995,70 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-content-view-user-info-name {
         font-size: 1.28571em;
+    }
+
+    /* Browse posts */
+
+    .openstudio-folder-browse-posts-header-result-label {
+        float: none;
+        text-align: left;
+    }
+
+    .openstudio-folder-browse-posts-header-result-buttons {
+        float: left;
+        padding-top: 10px;
+        padding-bottom: 5px;
+    }
+
+    .openstudio-folder-browse-posts-searched-header,
+    .openstudio-browse-post-item-filename,
+    .openstudio-browse-post-item-location-box {
+        display: none;
+    }
+
+    .openstudio-browse-post-item-title {
+        font-size: 1.28571em;
+    }
+
+    .openstudio-browse-post-item-date {
+        font-size: 1.14285em;
+    }
+
+    .openstudio-browse-post-item-img {
+        width: 100%;
+    }
+
+    .openstudio-browse-post-item-img img {
+        height: auto;
+        width: 250px;
+    }
+
+    .openstudio-browse-post-item-title-box {
+        width: 100%;
+    }
+
+    #browse_post_item_title_box_mobile {
+        display: block;
+        padding: 0px 20px;
+    }
+
+    #browse_post_item_title_box {
+        display: none;
+    }
+
+    .openstudio-browse-post-item-button {
+        clear: both;
+        position: unset;
+        padding: 15px 0px 15px 20px;
+    }
+
+    .openstudio-folder-browse-posts-header-result-buttons-bottom {
+        float: left;
+        margin: 15px 0px 33px 0px;
+    }
+
+    .openstudio-browse-post-item-title-box {
+        line-height: 23px;
     }
 
     /**

@@ -1324,6 +1324,26 @@ $string['foldermanagepost'] = 'Manage posts';
 $string['foldereditandpermission'] = 'Edit folder title and permissions';
 $string['folderavailiable'] = 'You have {$a->available} posts available in this folder.';
 $string['updatecontenttofolder'] = 'Upload content to folder';
+$string['folderbrowseposts'] = 'Browse posts';
+$string['folderbrowsepostremovelastselection'] = 'Remove last selection';
+$string['folderbrowsepostsavechange'] = 'Save changes';
+$string['folderbrowseposterror'] = 'Browse posts error!';
+$string['folderbrowsepostshint'] = 'Below you will find a list of your 15 most recent posts. To add posts to this set, use the'
+    . '"Select" button to add each to your selection, then press "Save changes" to add your selection '
+    . 'for the content directly. When you are happy with the new order, click "Save Order" to apply it. '
+    . 'You can remove a content from the folder by using the "Remove" button.';
+$string['folderbrowsepostspost'] = 'Post';
+$string['folderbrowsepostsposttitle'] = 'Post title';
+$string['folderbrowsepostsfilename'] = 'File name';
+$string['folderbrowsepostslocation'] = 'Location';
+$string['folderbrowsepostsfound'] = 'Found {$a->number} posts.';
+$string['folderselectbtn'] = 'Select';
+$string['folderselectedpost'] = 'Selected posts';
+$string['folderselectedpost_help'] = 'These posts will be added to this folder when you click "Save changes". 
+Click a post to remove it from the selection. The count here shows the number of posts you can select. 
+If this reaches the limit, remove posts to enable selection of others.';
+$string['folderbrowseremovepostfromselection'] = 'Remove {$a} post from selection';
+$string['folderbrowssearch'] = 'Search';
 $string['foldernoname'] = 'Untitled Folder';
 $string['folderoverview'] = 'Folder Overview';
 $string['foldertdevicetitle'] = 'Upload post';

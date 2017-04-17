@@ -160,3 +160,53 @@ Feature: Folder Overview
       And I click on "img.openstudio-content-folder-img" "css_element"
       And I should see "Test My Folder Overview"
       And the "src" attribute of "div.openstudio-grid-item-folder-preview > a > img" "css_element" should contain "test1.jpg"
+
+  Scenario: Select existing post in Folder Overview
+      Given the following open studio "folders" exist:
+        | openstudio | user     | name                   | description                       | visibility | contenttype    |
+        | OS1        | teacher1 | Test Folder Overview   | My Folder Overview Description 1  | module     | folder_content |
+      And the following open studio "contents" exist:
+        | openstudio | user     | name                  | description                 | file                                               | visibility  |
+        | OS1        | teacher1 | TestContentFolders 1  | Test content 1 description  | mod/openstudio/tests/importfiles/test1.jpg         | private     |
+        | OS1        | student1 | TestContentFolders 2  | Test content 2 description  | mod/openstudio/tests/importfiles/test2.jpg         | module      |
+        | OS1        | student2 | TestContentFolders 3  | Test content 3 description  | mod/openstudio/tests/importfiles/test3.jpg         | module      |
+        | OS1        | student3 | TestContentFolders 4  | Test content 4 description  | mod/openstudio/tests/importfiles/test4.jpg         | module      |
+
+      # Enable Add any contents to folders
+      And I follow "Test Open Studio name 1"
+      And I follow "Administration > Edit" in the openstudio navigation
+      And I follow "Expand all"
+      And I set the field "Add any contents to folders" to "1"
+      And I press "Save and display"
+
+      # Go to folder overview
+      And I follow "Shared Content > My Module" in the openstudio navigation
+      And I follow "Test Folder Overview"
+      And I should not see "TestContentFolders 1"
+
+      # teacher1 most recent posts
+      And I press "Select existing post to add to folder"
+      And I should see "TestContentFolders 1"
+
+      # Select content of teacher1 to folder
+      And I click on "Select" "button" in the "Browse posts" "dialogue"
+      And I click on "Save changes" "button" in the "Browse posts" "dialogue"
+      And I should see "TestContentFolders 1"
+
+      # Select content of student1 to folder
+      And I press "Select existing post to add to folder"
+      And I set the field "search" to "TestContentFolders 2"
+      And I press "Search"
+      And I should see "TestContentFolders 2"
+      And I click on "Select" "button" in the "Browse posts" "dialogue"
+      And I click on "Save changes" "button" in the "Browse posts" "dialogue"
+      And I should see "TestContentFolders 2"
+
+      # Select content of student2 to folder
+      And I press "Select existing post to add to folder"
+      And I set the field "search" to "TestContentFolders 3"
+      And I press "Search"
+      And I should see "TestContentFolders 3"
+      And I click on "Select" "button" in the "Browse posts" "dialogue"
+      And I click on "Save changes" "button" in the "Browse posts" "dialogue"
+      And I should see "TestContentFolders 3"

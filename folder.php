@@ -22,10 +22,10 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_openstudio\local\api\content;
 use mod_openstudio\local\util;
 use mod_openstudio\local\api\contentversion;
 use mod_openstudio\local\api\folder;
-use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\lock;
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
@@ -64,13 +64,16 @@ if ($selectedposts && $folderid) {
     $contentdata = content::get($folderid);
     $contentrecords = array();
     $contents = explode(',', $selectedposts);
+    $contentsinfolder = folder::get_contents($folderid);
     foreach ($contents as $itemid) {
-        $selectedcontentdata = content::get($itemid);
-        if ($contentdata->userid == $selectedcontentdata->userid) {
-            folder::collect_content($folderid, $itemid, $USER->id, null, true);
-        } else {
-            $setdataslotid = folder::collect_content($folderid, $itemid,
-                $USER->id, null);
+        if (!array_key_exists($itemid, $contentsinfolder)) {
+            $selectedcontentdata = content::get($itemid);
+            if ($contentdata->userid == $selectedcontentdata->userid) {
+                folder::collect_content($folderid, $itemid, $USER->id, null, true);
+            } else {
+                $setdataslotid = folder::collect_content($folderid, $itemid,
+                    $USER->id, null);
+            }
         }
     }
 }
@@ -115,6 +118,15 @@ util::page_setup($PAGE, $pagetitle, $pageheading, $pageurl, $course, $cm);
 
 $PAGE->requires->js_call_amd('mod_openstudio/contentpage', 'init');
 $PAGE->requires->js_call_amd('mod_openstudio/folderhelper', 'init');
+
+// Require strings for folder browse posts.
+$PAGE->requires->strings_for_js(
+        array('folderbrowseposts', 'folderbrowsepostshint', 'folderbrowseremovepostfromselection'), 'mod_openstudio');
+
+$PAGE->requires->js_call_amd('mod_openstudio/folderbrowseposts', 'init', [[
+        'folderid' => $folderid,
+        'cmid' => $cm->id]]);
+
 // Generate stream html.
 $renderer = $PAGE->get_renderer('mod_openstudio');
 $PAGE->set_button($renderer->searchform($theme, $vid));

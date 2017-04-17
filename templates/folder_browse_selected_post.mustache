@@ -1,0 +1,46 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_openstudio/folder_browse_selected_post
+
+    Folder browse posts header template of the OpenStudio UI.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Example context (json):
+    {
+        "postid": 1,
+        "title: "Item 1",
+        "closeicon": "../../../mod/openstudio/pix/close_button_rgb_32px.svg",
+        "image": "../../../mod/openstudio/pix/viewed_rgb_32px.svg"
+    }
+
+}}
+<button class="openstudio-folder-browseposts-deselect"
+        value="{{postid}}" id="{{buttonid}}" name="deselectslot" type="submit">
+    <img src="{{closeicon}}" class="openstudio-folder-remove-icon"
+            alt="{{#str}} folderbrowseremovepostfromselection, openstudio {{/str}}">
+    <img src="{{image}}" class="openstudio-folder-browsesets-selectedthumb" alt="{{{title}}}">
+</button>
+<label for="{{buttonid}}">
+    <span class="accesshide">{{#str}} folderbrowseremovepostfromselection, openstudio {{/str}}</span>
+    <span aria-hidden="true">{{{title}}}</span>
+</label>
