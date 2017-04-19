@@ -46,7 +46,7 @@ $tasks = [
         'dayofweek' => '*'
     ],
     [
-        'classname' => 'mod_openstuido\task\delete_notifications',
+        'classname' => 'mod_openstudio\task\delete_notifications',
         'blocking' => 0,
         'minute' => 'R',
         'hour' => '*',
