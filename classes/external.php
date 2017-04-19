@@ -763,6 +763,7 @@ class mod_openstudio_external extends external_api {
             } else {
                 $success = content::empty_content($userid, $params['cid'], true, $cminstance->versioning, $cm);
             }
+            notifications::delete_unread_for_post($params['cid']);
         }
 
         if (!$success) {
