@@ -816,6 +816,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 }
             }
         }
+
         $contentdata->contentviewversionlink = new moodle_url('/mod/openstudio/content.php',
                 array('id' => $cmid, 'sid' => $contentdata->id, 'vuid' => $contentdata->userid, 'version' => 1));
         $contentdata->contenteditenable = $contenteditenable;
@@ -967,6 +968,9 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 'cmid' => $cmid,
                 'cid' => $contentdata->id,
                 'CONST' => $lockconst]]);
+
+        $contentdata->viewuserworkurl = new \moodle_url('/mod/openstudio/view.php',
+                array('id' => $cmid, 'vuid' => $contentdata->userid, 'vid' => content::VISIBILITY_PRIVATE));
 
         return $this->render_from_template('mod_openstudio/content_page', $contentdata);
     }
