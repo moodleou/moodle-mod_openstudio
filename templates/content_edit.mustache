@@ -66,16 +66,6 @@
                 {{/foldermode}}
             </span>
         </div>
-        {{^foldermode}}
-            {{#feature_enablefolders}}
-                <div class="openstudio-create-folder-button">
-                    <a href="{{{createfolderlink}}}">
-                        <input id="id_createnewfolder" name="createnewfolderbutton"
-                               value="{{#str}} contentformcreatefolderbutton, mod_openstudio {{/str}}" type="button">
-                    </a>
-                </div>
-            {{/feature_enablefolders}}
-        {{/foldermode}}
         <div class="openstudio-clear"></div>
         {{{editform}}}
     {{/isfolderlock}}

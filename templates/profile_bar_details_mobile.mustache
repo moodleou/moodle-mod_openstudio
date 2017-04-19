@@ -49,6 +49,9 @@
 <div class="openstudio-profile-paticipation-content clearfix">
     <div class="openstudio-profile-paticipation">
         {{#str}} contentflagparticipation, mod_openstudio {{/str}}
+        {{#pix}}
+            participation_rgb_32px, openstudio, {{#str}} participationlabel, openstudio {{/str}}
+        {{/pix}}
     </div>
     <div id="profile_comment_view_mobile" class="openstudio-profile-comment-view">
         {{>mod_openstudio/profile_bar_participation}}

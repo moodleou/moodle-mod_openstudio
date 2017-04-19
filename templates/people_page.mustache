@@ -108,6 +108,9 @@
     <div class="openstudio-filter">
         {{>mod_openstudio/people_filter}}
     </div>
+    <div class="openstudio-filter-mobile">
+        {{>mod_openstudio/people_filter_mobile}}
+    </div>
 
     <div class="openstudio-profile-details">
         {{#people}}
@@ -124,6 +127,7 @@
                         {{#str}} contentitemview, mod_openstudio {{/str}}
                         {{{firstname}}}’s
                         {{#str}} contentitemwork, mod_openstudio {{/str}}
+                        {{#pix}} t/right, core{{/pix}}
                     </a>
                 </div>
             </div>
@@ -140,6 +144,7 @@
             <div class="openstudio-profile-participation">
                 <div class="openstudio-profile-label-title">
                     {{#str}} participationlabel, mod_openstudio {{/str}}
+                    {{#pix}} participation_filters_rgb_32px, mod_openstudio{{/pix}}
                 </div>
                 <div class="openstudio-profile-participation-value">
                     <span class="openstudio-profile-participation-icon">

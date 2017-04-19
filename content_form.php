@@ -286,8 +286,11 @@ class mod_openstudio_content_form extends moodleform {
 
         $mform->disabledIf('ownershipdetail', 'ownership', 'neq', '2');
 
+        // Add custom class to style tag label align with input.
         $mform->addElement('tags', 'tags', get_string('tags'),
-                array('itemtype' => 'openstudio_contents', 'component' => 'mod_openstudio'));
+            array('itemtype' => 'openstudio_contents', 'component' => 'mod_openstudio'),
+            array('class' => 'openstudio_contentform_tag')
+        );
         $mform->addHelpButton('tags', 'tags', 'openstudio');
 
         $mform->addElement('html', html_writer::end_tag('div'));

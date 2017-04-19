@@ -53,32 +53,43 @@
     }
 
 }}
+<span class="openstudio-filter-text">
+    <span class="openstudio-filter-preferences">
+        {{#str}} filterpreferences, mod_openstudio {{/str}}
+    </span>
+</span>
+<span class="openstudio-filter-divider"></span>
 <span class="openstudio-filter-sort-devider">
     <span class="openstudio-filter-sort-text ">{{#str}} filtersortby, mod_openstudio {{/str}}
         <a href="{{nextsortactionurl}}&fsort=1" class="
             {{#sortbydate}}
                 openstudio-filter-text-selected
                 {{#sortdesc}}openstudio-filter-collapsed{{/sortdesc}}
-                {{#sortasc}}openstudio-filter-expanded{{/sortasc}}
-            {{/sortbydate}}">
+            {{#sortasc}}openstudio-filter-expanded{{/sortasc}}
+        {{/sortbydate}}">
             {{#str}} filterdate, mod_openstudio {{/str}}
+            {{#sortdesc}}{{#pix}} t/collapsed, core, {{#str}} filtersortactivedesc, openstudio {{/str}} {{/pix}}{{/sortdesc}}
+            {{#sortasc}}{{#pix}} t/expanded, core, {{#str}} filtersortactiveasc, openstudio {{/str}} {{/pix}}{{/sortasc}}
         </a>
     </span>
 </span>
+<span class="openstudio-filter-divider"></span>
 <span class="openstudio-filter-sort-devider">
     <span class="openstudio-filter-sort-text openstudio-filter-sort-text-title">
         <a href="{{nextsortactionurl}}&fsort=2" class="
             {{#sortbyusername}}
                     openstudio-filter-text-selected
                     {{#sortdesc}}openstudio-filter-collapsed{{/sortdesc}}
-                {{#sortasc}}openstudio-filter-expanded{{/sortasc}}
-            {{/sortbyusername}}">
+            {{#sortasc}}openstudio-filter-expanded{{/sortasc}}
+        {{/sortbyusername}}">
             {{#str}} filtersortbyname, mod_openstudio {{/str}}
+            {{#sortdesc}}{{#pix}} t/collapsed, core, {{#str}} filtersortactivedesc, openstudio {{/str}} {{/pix}}{{/sortdesc}}
+            {{#sortasc}}{{#pix}} t/expanded, core, {{#str}} filtersortactiveasc, openstudio {{/str}} {{/pix}}{{/sortasc}}
         </a>
     </span>
 </span>
-
-<span class="openstudio-filter-text">
+<span class="openstudio-filter-divider"></span>
+<span class="openstudio-filter-text openstudio-filter-select">
     <span>{{#str}} filtergroup, mod_openstudio {{/str}}:</span>
     {{#showmultigroup}}
         <input type="hidden" id="openstudio-people-sort-action-url" value="{{sortactionurl}}">

@@ -33,14 +33,33 @@
 
 }}
 <div class="openstudio-work-progress-container">
-    <div class="openstudio-work-progress openstudio-work-progress-green openstudio-work-progress-nostripes">
-        <span style="width: {{percentcompleted}}%"></span>
+    <div class="openstudio-progressbar">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:mydata="http://ns.open.ac.uk/it/vle/osep"
+             width="85%" height="22px" viewBox="0 0 85% 22" id="openstudio-progressbar" preserveAspectRatio="none"
+             aria-labelledby="openstudio-progressbar-title" role="img">
+            <defs>
+                <clipPath id="openstudio-progressbar-clip">
+                    <rect x="3" y="3" width="100%" height="16" rx="5" ry="5" stroke="blue"
+                          style="stroke-width:1;stroke:#d4d2d2"></rect>
+                </clipPath>
+                <linearGradient id="openstudio-progressbar-complete" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" class="openstudio-greycolour"></stop>
+                    <stop offset="60%" class="openstudio-completecolour"></stop>
+                </linearGradient>
+            </defs>
+            <g clip-path="url(#openstudio-progressbar-clip)" class="openstudio-incompletefill">
+                <g>
+                    <rect x="3" y="3" width="{{percentcompleted}}%" height="16" id="openstudio-progressbar-complete"
+                          fill="url(#openstudio-progressbar-complete)"></rect>
+                </g>
+            </g>
+        </svg>
+        <div class="openstudio-work-progress-percent">{{percentcompleted}}%</div>
+        <div class="openstudio-work-progress">
+            <div class="openstudio-work-progress-item">&nbsp;</div>
+            <div class="openstudio-work-progress-item">&nbsp;</div>
+            <div class="openstudio-work-progress-item">&nbsp;</div>
+            <div class="openstudio-work-progress-item">&nbsp;</div>
+        </div>
     </div>
-    <div class="openstudio-work-progress">
-        <div class="openstudio-work-progress-item">&nbsp;</div>
-        <div class="openstudio-work-progress-item">&nbsp;</div>
-        <div class="openstudio-work-progress-item">&nbsp;</div>
-        <div class="openstudio-work-progress-item">&nbsp;</div>
-    </div>
-    <div class="openstudio-work-progress-percent">{{percentcompleted}}%</div>
 </div>

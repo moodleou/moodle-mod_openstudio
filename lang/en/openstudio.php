@@ -148,6 +148,8 @@ $string['navfilterexpandoff'] = 'Close <span class="accesshide">filter panel</sp
 $string['navfilteroptionexpandon'] = 'Open filter options';
 $string['navfilteroptionexpandonfilteractive'] = 'Open filter options - <strong id="studio-filter-summary-openclose-message">Filter is active, RESET filters to see all available contents</strong>';
 $string['navfilteroptionexpandoff'] = 'Close filter options';
+$string['navprofileexpandon'] = 'Open profile panel';
+$string['navprofileexpandoff'] = 'Close profile panel';
 
 $string['navsearch'] = 'Search';
 $string['navsearchlabel'] = 'Search';
