@@ -27,6 +27,7 @@ global $CFG;
 require_once($CFG->libdir . '/formslib.php');
 
 use mod_openstudio\local\api\content;
+use mod_openstudio\local\api\group;
 
 /**
  * Studio content edit form.
@@ -75,11 +76,10 @@ class mod_openstudio_content_form extends moodleform {
                         // Users can only share contents to groups that they are a member of.
                         // This applies to all users and admins.
                         if ($this->_customdata['groupingid'] > 0) {
-                            $tutorgroups = studio_api_group_list(
+                            $tutorgroups = group::group_list(
                                     $this->_customdata['courseid'], $this->_customdata['groupingid'], $USER->id, 1);
                         } else {
-                            $tutorgroups = studio_api_group_list(
-                                    $this->_customdata['courseid'], 0, $USER->id, 1);
+                            $tutorgroups = group::group_list($this->_customdata['courseid'], 0, $USER->id, 1);
                         }
                         $firsttutorgroupid = false;
                         if ($tutorgroups !== false) {
@@ -406,7 +406,7 @@ class mod_openstudio_content_form extends moodleform {
                                         }
                                         // Set the ipynb's sort order to 1 so it's returned first when getting files from the
                                         // file area, and therefore it's seen as "the" file in the content when we call
-                                        // studio_api_content_create in contentedit.php. Since this is the only instance
+                                        // content::create in contentedit.php. Since this is the only instance
                                         // we'll ever have a ipynb file at that point, we can use it as an indication
                                         // that the content contains a notebook.
                                         $extractedfile->set_sortorder(1);

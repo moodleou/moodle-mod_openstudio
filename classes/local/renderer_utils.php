@@ -29,6 +29,7 @@ use mod_openstudio\local\api\levels;
 use mod_openstudio\local\api\lock;
 use mod_openstudio\local\api\embedcode;
 use mod_openstudio\local\api\folder;
+use mod_openstudio\local\api\item;
 use mod_openstudio\local\util\defaults;
 
 // Make sure this isn't being directly accessed.
@@ -163,13 +164,13 @@ class renderer_utils {
         $ismyprofile = true;
 
         if ($vuid && $vuid != $USER->id) {
-            $contentowner = studio_api_user_get_user_by_id($vuid);
+            $contentowner = api\user::get_user_by_id($vuid);
             $ismyprofile = false;
         } else {
             $contentowner = $USER;
         }
 
-        $userprogressdata = studio_api_user_get_activity_status($openstudioid, $contentowner->id);
+        $userprogressdata = api\user::get_activity_status($openstudioid, $contentowner->id);
 
         $activedate = userdate($userprogressdata, get_string('strftimerecent', 'openstudio'));
         $flagsdata = flags::count_by_user($openstudioid, $contentowner->id);
@@ -1108,8 +1109,8 @@ class renderer_utils {
         }
 
         // Get copies count.
-        $contenthash = studio_api_item_generate_hash($contentdata->id);
-        $contentdata->contentcopycount = studio_api_item_count_occurences($contenthash, $cmid);
+        $contenthash = item::generate_hash($contentdata->id);
+        $contentdata->contentcopycount = item::count_occurences($contenthash, $cmid);
         $contentdata->contentcopyenable = $contentdata->contentcopycount > 1 ? true : false;
 
         // Check Request feedback permission.
@@ -1224,7 +1225,7 @@ class renderer_utils {
         $deleteenable = false;
         if (($contentdata->isownedbyviewer || $permissions->managecontent)) {
             if (($contentdata->l1id > 0) || ($contentdata->l1id == 0) || $permissions->managecontent) {
-                if (studio_api_lock_slot_show_crud($contentdata, $permissions)
+                if (lock::content_show_crud($contentdata, $permissions)
                     || $permissions->managecontent) {
                     $deleteenable = true;
                 }

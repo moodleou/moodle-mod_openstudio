@@ -24,9 +24,11 @@
  */
 
 require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
+
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\flags;
 use mod_openstudio\local\api\lock;
+use mod_openstudio\local\util\feature;
 
 use Behat\Gherkin\Node\TableNode as TableNode,
     Behat\Mink\Exception\ExpectationException as ExpectationException;
@@ -150,19 +152,19 @@ class behat_mod_openstudio extends behat_base {
 
         $studio->reportingemail = 'teacher1@asd.com';
         $studio->versioning = 99;
-        $studio->themefeatures = STUDIO_FEATURE_MODULE;
-        $studio->themefeatures += STUDIO_FEATURE_GROUP;
-        $studio->themefeatures += STUDIO_FEATURE_STUDIO;
-        $studio->themefeatures += STUDIO_FEATURE_PINBOARD;
-        $studio->themefeatures += STUDIO_FEATURE_SLOTUSESFILEUPLOAD;
-        $studio->themefeatures += STUDIO_FEATURE_SLOTCOMMENTUSESAUDIO;
-        $studio->themefeatures += STUDIO_FEATURE_ENABLECOLLECTIONS;
-        $studio->themefeatures += STUDIO_FEATURE_ENABLERSS;
-        $studio->themefeatures += STUDIO_FEATURE_ENABLESUBSCRIPTION;
-        $studio->themefeatures += STUDIO_FEATURE_ENABLEEXPORTIMPORT;
-        $studio->themefeatures += STUDIO_FEATURE_SLOTUSESWEBLINK;
-        $studio->themefeatures += STUDIO_FEATURE_SLOTUSESEMBEDCODE;
-        $studio->themefeatures += STUDIO_FEATURE_ENABLELOCK;
+        $studio->themefeatures = feature::MODULE;
+        $studio->themefeatures += feature::GROUP;
+        $studio->themefeatures += feature::STUDIO;
+        $studio->themefeatures += feature::PINBOARD;
+        $studio->themefeatures += feature::CONTENTUSESFILEUPLOAD;
+        $studio->themefeatures += feature::CONTENTCOMMENTUSESAUDIO;
+        $studio->themefeatures += feature::ENABLEFOLDERS;
+        $studio->themefeatures += feature::ENABLERSS;
+        $studio->themefeatures += feature::ENABLESUBSCRIPTION;
+        $studio->themefeatures += feature::ENABLEEXPORTIMPORT;
+        $studio->themefeatures += feature::CONTENTUSESWEBLINK;
+        $studio->themefeatures += feature::CONTENTUSESEMBEDCODE;
+        $studio->themefeatures += feature::ENABLELOCK;
 
         $DB->update_record('openstudio', $studio);
     }
@@ -588,9 +590,8 @@ EOF;
      * @throws Exception
      */
     public function follow_first_content_in_my_activity() {
-        $this->getSession()->getPage()
-                ->find('css', '.openstudio-grid-item:first-child div.openstudio-grid-item-content-preview > a > img')
-                ->click();
+        $this->getSession()->getPage()->find(
+                'css', '.openstudio-grid-item:first-child div.openstudio-grid-item-content-preview > a > img')->click();
     }
 
     /**
@@ -620,7 +621,7 @@ EOF;
         global $DB;
         $shortnames = array_filter(explode(',', $tutorroles));
         $ids = array();
-        foreach($shortnames as $shortname) {
+        foreach ($shortnames as $shortname) {
             if (!$ids[] = $DB->get_field('role', 'id', array('shortname' => $shortname))) {
                 throw new Exception('The role with shortname "' . $shortname . '" does not exist');
             }
@@ -701,7 +702,7 @@ EOF;
      * @param $username
      * @param $contentname
      */
-    public function user_will_get_notifications_for_content($username, $contentname) { 
+    public function user_will_get_notifications_for_content($username, $contentname) {
         $userid = $this->get_user_id($username);
         $contentid = $this->get_content_id($contentname);
         mod_openstudio\local\api\flags::toggle($contentid, mod_openstudio\local\api\flags::FOLLOW_CONTENT, 'on', $userid);

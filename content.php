@@ -32,12 +32,12 @@ use mod_openstudio\local\renderer_utils;
 use mod_openstudio\local\api\contentversion;
 use mod_openstudio\local\api\flags;
 use mod_openstudio\local\api\comments;
-use mod_openstudio\local\forms\comment_form;
+use mod_openstudio\local\api\user;
 use mod_openstudio\local\api\tracking;
+use mod_openstudio\local\forms\comment_form;
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
-require_once(dirname(__FILE__).'/api/apiloader.php');
 
 // Course_module ID.
 $id = optional_param('id', 0, PARAM_INT);
@@ -99,7 +99,7 @@ if ($iscontentversion) {
     $contentdata = contentversion::get($contentid, $USER->id, $showdeletedcontentversions);
 } else {
     $contentandversions = contentversion::get_content_and_versions($contentid, $USER->id, $showdeletedcontentversions);
-    $contentdata = studio_api_lock_determine_lock_status($contentandversions->contentdata);
+    $contentdata = lock::determine_lock_status($contentandversions->contentdata);
 }
 
 if ($contentdata === false) {
@@ -226,7 +226,7 @@ if ($commenttemp) {
         // Filter comment text.
         $comment->commenttext = format_text($comment->commenttext);
 
-        $user = studio_api_user_get_user_by_id($comment->userid);
+        $user = user::get_user_by_id($comment->userid);
         $comment->fullname = fullname($user);
 
         // User picture.
@@ -363,7 +363,7 @@ if ($iscontentversion) {
 }
 
 flags::toggle($contentdata->id, flags::READ_CONTENT, 'on', $USER->id, $contentdata->id);
-studio_api_tracking_log_action($contentdata->id, $tracking, $USER->id);
+tracking::log_action($contentdata->id, $tracking, $USER->id);
 
 // Note: This header statement is needed because the slot form data contains
 // object and script code and browsers like webkit thinks this is a cross-site
@@ -384,7 +384,7 @@ $contentdata->commentform = $commentform->render();
 // Update flag and tracking.
 flags::toggle(
     $contentdata->id, flags::READ_CONTENT, 'on', $USER->id, $contentdata->id);
-studio_api_tracking_log_action($contentdata->id, flags::READ_CONTENT, $USER->id);
+tracking::log_action($contentdata->id, flags::READ_CONTENT, $USER->id);
 
 $html = $renderer->siteheader(
     $coursedata, $permissions, $theme, $cm->name, '', $vid);

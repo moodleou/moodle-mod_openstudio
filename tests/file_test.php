@@ -101,7 +101,7 @@ class mod_openstudio_file_testcase extends advanced_testcase {
         );
         $this->files['rtf']->contentdata = array(
                 'name' => 'simplefile',
-                'visibility' => STUDIO_VISIBILITY_MODULE,
+                'visibility' => mod_openstudio\local\api\content::VISIBILITY_MODULE,
                 'attachments' => $this->files['rtf']->draftid,
                 'content' => random_string(),
                 'description' => '',
@@ -149,7 +149,7 @@ class mod_openstudio_file_testcase extends advanced_testcase {
         );
         $this->files['nbk']->contentdata = array(
                 'name' => 'simplefile',
-                'visibility' => STUDIO_VISIBILITY_MODULE,
+                'visibility' => mod_openstudio\local\api\content::VISIBILITY_MODULE,
                 'attachments' => $this->files['nbk']->draftid,
                 'content' => random_string(),
                 'description' => '',

@@ -27,8 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 
-require_once($CFG->dirroot . '/mod/openstudio/api/group.php'); // Until this is refactored.
-
 class mod_openstudio_lastupload_test extends advanced_testcase {
 
     private $singleentrydata;
@@ -117,7 +115,7 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
                 'embedcode' => '',
                 'weblink' => 'http://www.open.ac.uk/',
                 'urltitle' => 'Lat Upload Studio',
-                'visibility' => STUDIO_VISIBILITY_MODULE,
+                'visibility' => mod_openstudio\local\api\content::VISIBILITY_MODULE,
                 'description' => 'Lat Upload Studio Description',
                 'tags' => array('AB1'),
                 'ownership' => 0,
@@ -135,7 +133,7 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
                 'embedcode' => '',
                 'weblink' => 'http://www.open.ac.uk/',
                 'urltitle' => 'Lat Upload Studio',
-                'visibility' => STUDIO_VISIBILITY_PRIVATE,
+                'visibility' => mod_openstudio\local\api\content::VISIBILITY_PRIVATE,
                 'description' => 'Lat Upload Studio Description',
                 'tags' => array('AB1'),
                 'ownership' => 0,
@@ -239,7 +237,7 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
 
         $slotparams = array(
                 'openstudioid'     => $studiid,
-                'stdcontenttype' => STUDIO_SLOT_ITEM_CONTAINER_SLOT,
+                'stdcontenttype' => mod_openstudio\local\api\item::CONTENT,
                 'timelimit' => $limittimeadd
         );
         return $DB->get_recordset_sql($sql, $slotparams);
@@ -256,7 +254,7 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
 
         $slotparams = array(
                 'openstudioid'     => $studiid,
-                'stdcontenttype' => STUDIO_SLOT_ITEM_CONTAINER_SLOT,
+                'stdcontenttype' => mod_openstudio\local\api\item::CONTENT,
                 'timelimit' => $time
         );
         $data = $DB->get_recordset_sql($sql, $slotparams);
@@ -368,7 +366,7 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
         // There are several slots in the studio and the student can view them all.
         $this->setUser($userid1);
         $n = 6;
-        $this->create_multi_slots_data($n, STUDIO_VISIBILITY_MODULE, $this->studiolevels->three);
+        $this->create_multi_slots_data($n, mod_openstudio\local\api\content::VISIBILITY_MODULE, $this->studiolevels->three);
         $record = $this->get_all_slot_with_time_add($this->studiolevels->three->id, $DB);
         // Update timeadd of n slot timeadd = timeadd - 1 days.
         foreach ($record as $key => $value) {
@@ -410,9 +408,9 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
         $limittimeadd1 = strtotime(date('Y-m-d', strtotime('-1 days')));
         $limittimeadd3 = strtotime(date('Y-m-d', strtotime('-3 days')));
         // There are several slots in the studio and the student can view the second, but not the first.
-        $this->create_multi_slots_data(1, STUDIO_VISIBILITY_MODULE, $this->studiolevels->four);
+        $this->create_multi_slots_data(1, mod_openstudio\local\api\content::VISIBILITY_MODULE, $this->studiolevels->four);
         $this->upload_timeadd_one_slot($DB, $limittimeadd3, $this->contentid);
-        $this->create_multi_slots_data(1, STUDIO_VISIBILITY_PRIVATE, $this->studiolevels->four);
+        $this->create_multi_slots_data(1, mod_openstudio\local\api\content::VISIBILITY_PRIVATE, $this->studiolevels->four);
         $this->upload_timeadd_one_slot($DB, $limittimeadd1, $this->contentid);
         $cm = get_coursemodule_from_instance('openstudio', $this->studiolevels->four->id);
         $result = mod_openstudio\local\util::get_last_modified($cm, $this->course);
@@ -445,7 +443,7 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
         $cm = get_coursemodule_from_instance('openstudio', $this->studiolevels->final->id);
         $cminstance = $DB->get_record('openstudio', array('id' => $cm->instance), '*', MUST_EXIST);
         $permissions = mod_openstudio\local\util::check_permission($cm, $cminstance, $this->course);
-        $this->create_multi_slots_data($n, STUDIO_VISIBILITY_MODULE, $this->studiolevels->final);
+        $this->create_multi_slots_data($n, mod_openstudio\local\api\content::VISIBILITY_MODULE, $this->studiolevels->final);
         $record = $this->get_all_slot_with_time_add($this->studiolevels->final->id, $DB);
         // Update timeadd of n slot timeadd = timeadd - 1 days;.
         foreach ($record as $key => $value) {

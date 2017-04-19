@@ -78,7 +78,7 @@ EOF;
                 throw new \moodle_exception('errorunexpectedbehaviour', 'studio', '');
             }
 
-            $ismember = studio_api_group_is_slot_group_member(
+            $ismember = group::is_content_group_member(
                     $cm->groupmode, $versiondata->visibility, $cm->groupingid, $versiondata->userid, $viewerid);
             if ($ismember) {
                 $versiondata->visibilitycontext = content::VISIBILITY_GROUP;

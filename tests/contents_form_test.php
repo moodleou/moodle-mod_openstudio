@@ -26,6 +26,7 @@
 
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
+
 class contents_form_testcase extends advanced_testcase {
 
     /**
@@ -36,12 +37,16 @@ class contents_form_testcase extends advanced_testcase {
      */
     public function test_content_nbk_validation() {
         global $CFG, $USER;
-        $this->setUser($this->users->students->one);
+        require_once($CFG->dirroot . '/mod/openstudio/content_form.php');
+
+        $user = $this->getDataGenerator()->create_user();
+        $course = $this->getDataGenerator()->create_course();
+        $this->setUser($user);
         $this->resetAfterTest(true);
         $context = context_user::instance($USER->id);
         $fs = get_file_storage();
         $options = array(
-                'courseid' => $this->course->id,
+                'courseid' => $course->id,
                 'feature_module' => 1,
                 'feature_group' => 0,
                 'isenrolled' => 1,
@@ -59,7 +64,9 @@ class contents_form_testcase extends advanced_testcase {
                 'contentid' => 0,
                 'contenttype' => '',
                 'contentname' => '',
-                'isfoldercontent' => false
+                'isfoldercontent' => false,
+                'iscreatefolder' => false,
+                'max_bytes' => $CFG->maxbytes
         );
         $form = new mod_openstudio_content_form(null, $options);
         $itemid = file_get_unused_draft_itemid();
@@ -111,7 +118,7 @@ class contents_form_testcase extends advanced_testcase {
         $data3 = array('attachments' => $itemid);
         $errors3 = $form->validation($data3, array());
 
-        $this->assertEquals(array('attachments' => get_string('errorcontentemptynotebook', 'mod_studio')), $errors3);
+        $this->assertEquals(array('attachments' => get_string('errorcontentemptynotebook', 'mod_openstudio')), $errors3);
 
         $itemid = file_get_unused_draft_itemid();
         $fullfile = (object) array(
@@ -128,7 +135,7 @@ class contents_form_testcase extends advanced_testcase {
         $data4 = array('attachments' => $itemid);
         $errors4 = $form->validation($data4, array());
 
-        $this->assertEquals(array('attachments' => get_string('errorcontentfullnotebook', 'mod_studio')), $errors4);
+        $this->assertEquals(array('attachments' => get_string('errorcontentfullnotebook', 'mod_openstudio')), $errors4);
 
         $itemid = file_get_unused_draft_itemid();
         $invalidfile = (object) array(
@@ -145,7 +152,7 @@ class contents_form_testcase extends advanced_testcase {
         $data5 = array('attachments' => $itemid);
         $errors5 = $form->validation($data5, array());
 
-        $this->assertEquals(array('attachments' => get_string('errorcontentinvalidnotebook', 'mod_studio')), $errors5);
+        $this->assertEquals(array('attachments' => get_string('errorcontentinvalidnotebook', 'mod_openstudio')), $errors5);
     }
 
 }

@@ -26,7 +26,6 @@ use mod_openstudio\local\api\export;
 use mod_openstudio\local\util;
 
 require_once(__DIR__.'/../../config.php');
-require_once(dirname(__FILE__).'/api/apiloader.php');
 require_once("$CFG->libdir/portfoliolib.php");
 
 $id = optional_param('id', 0, PARAM_INT); // Course_module ID

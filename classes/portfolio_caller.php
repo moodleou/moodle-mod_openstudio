@@ -21,12 +21,12 @@ use mod_openstudio\local\api\export;
 use mod_openstudio\local\api\stream;
 use mod_openstudio\local\api\contentversion;
 use mod_openstudio\local\api\folder;
+use mod_openstudio\local\api\lock;
 use mod_openstudio\local\util;
 
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/portfolio/caller.php');
-require_once($CFG->dirroot.'/mod/openstudio/api/apiloader.php');
 
 /**
  * Portfolio callback class for openstudio exports.
@@ -75,7 +75,7 @@ class portfolio_caller extends \portfolio_module_caller_base {
         foreach ($this->contentids as $contentid) {
             // Get content data.
             $contentandversions = contentversion::get_content_and_versions($contentid, $USER->id, $showdeletedcontentversions);
-            $contentdata = studio_api_lock_determine_lock_status($contentandversions->contentdata);
+            $contentdata = lock::determine_lock_status($contentandversions->contentdata);
             $contentdata->contentversions = array_values($contentandversions->contentversions);
             $contentdata->vid = $contentdata->visibilitycontext;
             $contentdata->iscontentversion = false;

@@ -513,7 +513,7 @@ EOF;
 
         // If the slot is shared with the module/group, check permissions.
         if ($content->visibility == content::VISIBILITY_MODULE) {
-            return studio_api_group_has_same_course(
+            return api\group::has_same_course(
                     $permissions->activecid,
                     $content->userid,
                     $permissions->activeuserid);
@@ -522,7 +522,7 @@ EOF;
                 return true;
             }
 
-            return studio_api_group_is_slot_group_member(
+            return api\group::is_content_group_member(
                     $permissions->groupmode,
                     $content->visibility,
                     $permissions->groupingid,

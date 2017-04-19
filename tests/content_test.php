@@ -124,7 +124,7 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
                             'embedcode' => '',
                             'weblink' => 'http://www.open.ac.uk/',
                             'urltitle' => 'Vesica Timeline',
-                            'visibility' => STUDIO_VISIBILITY_MODULE,
+                            'visibility' => mod_openstudio\local\api\content::VISIBILITY_MODULE,
                             'description' => 'YouTube link',
                             'tags' => array(random_string(), random_string(), random_string()),
                             'ownership' => 0,
@@ -241,7 +241,7 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
         $dataarray = $this->object_to_array($this->contentdata);
         $updateddata = $method->invokeArgs(null, array($dataarray, $this->file));
 
-        $this->assertEquals(STUDIO_CONTENTTYPE_IMAGE, $updateddata['contenttype']);
+        $this->assertEquals(mod_openstudio\local\api\content::TYPE_IMAGE, $updateddata['contenttype']);
         $this->assertEquals($this->file['file']->filename, $updateddata['content']);
     }
 
@@ -261,7 +261,7 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
 
         // Given the data $singleentrydata contains, urltitle should be empty and content should be populated.
         $this->assertNotEmpty($processeddata['content']);
-        $this->assertEquals($processeddata['contenttype'], STUDIO_CONTENTTYPE_URL);
+        $this->assertEquals($processeddata['contenttype'], mod_openstudio\local\api\content::TYPE_URL);
         // Ideally, we should check every data type. Perhaps later if we have time.
     }
 

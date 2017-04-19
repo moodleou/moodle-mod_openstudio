@@ -24,14 +24,13 @@ require_once(__DIR__ . '/../../config.php');
 require_once(dirname(__FILE__).'/lib.php');
 require_once($CFG->dirroot . '/mod/openstudio/content_form.php');
 
-require_once($CFG->dirroot . '/mod/openstudio/api/apiloader.php');
-
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\lock;
 use mod_openstudio\local\api\levels;
 use mod_openstudio\local\api\folder;
 use mod_openstudio\local\api\template;
 use mod_openstudio\local\api\flags;
+use mod_openstudio\local\api\user;
 use mod_openstudio\local\util\defaults;
 use mod_openstudio\local\util;
 
@@ -98,7 +97,7 @@ if (($lid > 0) && ($sid <= 0)) {
 
     // Process the level management locks.
     if ($contentdata !== false) {
-        $contentdata = studio_api_lock_determine_lock_status($contentdata);
+        $contentdata = lock::determine_lock_status($contentdata);
         $redirecturl = new moodle_url('/mod/openstudio/contentedit.php',
                 array('id' => $cm->id, 'sid' => $contentdata->id, 'userid' => $userid));
         redirect($redirecturl->out(false));
@@ -399,7 +398,7 @@ util::add_breadcrumb($PAGE, $cm->id, navigation_node::TYPE_ACTIVITY, $crumbarray
 
 $isfolderlock = false;
 if (isset($folderdata) && $folderdata->id !== 0) {
-    $isfolderlock = !studio_api_lock_slot_show_crud($folderdata, $permissions);
+    $isfolderlock = !lock::content_show_crud($folderdata, $permissions);
 }
 
 $urlparams = array('id' => $id, 'lid' => $lid, 'sid' => $sid,
@@ -424,7 +423,7 @@ if ($type === content::TYPE_FOLDER_CONTENT) {
 // Get user id that we need to show stream for.
 $vuid = optional_param('vuid', $USER->id, PARAM_INT);
 if ($vuid != $USER->id) {
-    $slotowner = studio_api_user_get_user_by_id($vuid);
+    $slotowner = user::get_user_by_id($vuid);
     $viewuser = $USER;
 } else {
     $slotowner = $viewuser = $USER;

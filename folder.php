@@ -25,10 +25,11 @@
 use mod_openstudio\local\util;
 use mod_openstudio\local\api\contentversion;
 use mod_openstudio\local\api\folder;
+use mod_openstudio\local\api\content;
+use mod_openstudio\local\api\lock;
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
-require_once(dirname(__FILE__).'/api/apiloader.php');
 
 // Course module id.
 $id = optional_param('id', 0, PARAM_INT);
@@ -82,7 +83,7 @@ if ($permissions->viewdeleted || $permissions->managecontent) {
 
 if ($folderid > 0) {
     $contentandversions = contentversion::get_content_and_versions($folderid, $USER->id, $showdeletedcontentversions);
-    $folderdata = studio_api_lock_determine_lock_status($contentandversions->contentdata);
+    $folderdata = lock::determine_lock_status($contentandversions->contentdata);
 } else {
     $folderdata = (object) array(
         'id' => 0,
@@ -92,7 +93,7 @@ if ($folderid > 0) {
         'levelid' => $lid,
         'visibility' => $vid,
         'timemodified' => time(),
-        'visibilitycontext' => STUDIO_VISIBILITY_PRIVATE,
+        'visibilitycontext' => content::VISIBILITY_PRIVATE,
         'deletedby' => null
     );
 }

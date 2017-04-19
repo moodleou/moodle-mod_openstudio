@@ -26,6 +26,8 @@ namespace mod_openstudio\event;
 
 defined('MOODLE_INTERNAL') || die();
 
+use mod_openstudio\local\api\lock;
+
 /**
  * The mod_openstudio content locked event class.
  *
@@ -35,7 +37,6 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once($CFG->dirroot.'/mod/openstudio/api/lock.php');
 class content_locked extends \core\event\base {
 
     /**
@@ -66,7 +67,7 @@ class content_locked extends \core\event\base {
             $locktype = $this->other['locktype'];
         }
 
-        $locktypename = studio_api_lock_type($locktype);
+        $locktypename = lock::type($locktype);
 
         $description = <<<EOF
 The user with id '$userid' changed a content on course module id '$this->contextinstanceid'

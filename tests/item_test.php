@@ -369,7 +369,7 @@ class mod_openstudio_item_testcase extends advanced_testcase  {
         );
         // Hash all the unique contents.
         foreach ($ids as $id) {
-            $this->assertNotEquals(studio_api_item_log($id), false);
+            $this->assertNotEquals(mod_openstudio\local\api\item::log($id), false);
         }
 
         // Verify that all items are created with unique hashes.
@@ -391,7 +391,7 @@ class mod_openstudio_item_testcase extends advanced_testcase  {
         );
 
         foreach ($emptyids as $id) {
-            $this->assertFalse(studio_api_item_log($id));
+            $this->assertFalse(mod_openstudio\local\api\item::log($id));
         }
 
         // Verify that item records where not created.
@@ -402,7 +402,7 @@ class mod_openstudio_item_testcase extends advanced_testcase  {
         // Create a duplicate hash.
         $dupid = $this->contents->dup1->id;
 
-        $this->assertNotEquals(studio_api_item_log($dupid), false);
+        $this->assertNotEquals(mod_openstudio\local\api\item::log($dupid), false);
 
         $params = array('containerid' => $dupid, 'containertype' => mod_openstudio\local\api\item::CONTENT);
         $dupitem = $DB->get_record('openstudio_content_items', $params);
@@ -410,11 +410,11 @@ class mod_openstudio_item_testcase extends advanced_testcase  {
 
         try {
             // Attempt to log an item for non-existant content.
-            studio_api_item_log($this->get_nonexistant_id('openstudio_contents'));
+            mod_openstudio\local\api\item::log($this->get_nonexistant_id('openstudio_contents'));
         } catch (coding_exception $expected1) {
             try {
                 // Attempt to log a second item for a content.
-                studio_api_item_log($this->contents->file1->id);
+                mod_openstudio\local\api\item::log($this->contents->file1->id);
             } catch (coding_exception $expected2) {
                 return;
             }
@@ -437,26 +437,28 @@ class mod_openstudio_item_testcase extends advanced_testcase  {
         $this->assertFalse($DB->record_exists('openstudio_content_items', $versionitemparams));
 
         // Move content item to version item.
-        studio_api_item_toversion($this->contents->web3->id, $this->contentversions->web3->id);
+        mod_openstudio\local\api\item::toversion($this->contents->web3->id, $this->contentversions->web3->id);
 
         $versionitemparams['contenthash'] = $contentitem->contenthash;
         $this->assertTrue($DB->record_exists('openstudio_content_items', $versionitemparams));
         $this->assertFalse($DB->record_exists('openstudio_content_items', $contentitemparams));
 
         // Try to move an item that doesn't exist, should fail silently.
-        studio_api_item_toversion($this->contents->web4->id, $this->contentversions->web4->id);
+        mod_openstudio\local\api\item::toversion($this->contents->web4->id, $this->contentversions->web4->id);
 
         try {
             // Try to move item for non-existant content.
-            studio_api_item_toversion($this->get_nonexistant_id('openstudio_contents'), $this->contentversions->web3->id);
+            mod_openstudio\local\api\item::toversion(
+                    $this->get_nonexistant_id('openstudio_contents'), $this->contentversions->web3->id);
         } catch (coding_exception $expected1) {
             try {
                 // Try to move item to non-existant version.
-                studio_api_item_toversion($this->contents->web3->id, $this->get_nonexistant_id('openstudio_content_versions'));
+                mod_openstudio\local\api\item::toversion(
+                        $this->contents->web3->id, $this->get_nonexistant_id('openstudio_content_versions'));
             } catch (coding_exception $expected2) {
                 try {
                     // Try to create a duplicate version item.
-                    studio_api_item_toversion($this->contents->web3->id, $this->contentversions->web3->id);
+                    mod_openstudio\local\api\item::toversion($this->contents->web3->id, $this->contentversions->web3->id);
                 } catch (coding_exception $expected3) {
                     return;
                 }
@@ -469,7 +471,7 @@ class mod_openstudio_item_testcase extends advanced_testcase  {
 
     public function test_studio_api_item_get_occurrences() {
         $hash = sha1(mod_openstudio\local\api\content::TYPE_URL . ':' . $this->contents->web5->content);
-        $occurences = studio_api_item_get_occurences($hash);
+        $occurences = mod_openstudio\local\api\item::get_occurences($hash);
 
         // NOTE: we use base64_encode as the hash value may contain funny characters which
         // causes PHPUnit to complain when running which results in a false error report.
@@ -486,7 +488,7 @@ class mod_openstudio_item_testcase extends advanced_testcase  {
         $this->assertEquals($firstoccurence->containertype, mod_openstudio\local\api\item::CONTENT);
         $this->assertEquals($firstoccurence->containerid, $this->contents->web5->id);
 
-        $occurences = studio_api_item_get_occurences($hash, false);
+        $occurences = mod_openstudio\local\api\item::get_occurences($hash, false);
         $this->assertEquals(3, count($occurences));
         $foundusernames = array();
         foreach ($occurences as $occurence) {
@@ -502,12 +504,12 @@ class mod_openstudio_item_testcase extends advanced_testcase  {
     }
 
     public function test_studio_api_item_count_occurrences() {
-        $this->assertEquals(2, studio_api_item_count_occurences($this->items->one->contenthash));
-        $this->assertEquals(3, studio_api_item_count_occurences($this->items->one->contenthash, 0, false));
-        $this->assertEquals(1, studio_api_item_count_occurences($this->items->four->contenthash));
-        $this->assertEquals(1, studio_api_item_count_occurences($this->items->four->contenthash, 0, false));
-        $this->assertEquals(0, studio_api_item_count_occurences($this->items->five->contenthash));
-        $this->assertEquals(1, studio_api_item_count_occurences($this->items->five->contenthash, 0, false));
+        $this->assertEquals(2, mod_openstudio\local\api\item::count_occurences($this->items->one->contenthash));
+        $this->assertEquals(3, mod_openstudio\local\api\item::count_occurences($this->items->one->contenthash, 0, false));
+        $this->assertEquals(1, mod_openstudio\local\api\item::count_occurences($this->items->four->contenthash));
+        $this->assertEquals(1, mod_openstudio\local\api\item::count_occurences($this->items->four->contenthash, 0, false));
+        $this->assertEquals(0, mod_openstudio\local\api\item::count_occurences($this->items->five->contenthash));
+        $this->assertEquals(1, mod_openstudio\local\api\item::count_occurences($this->items->five->contenthash, 0, false));
     }
 
 

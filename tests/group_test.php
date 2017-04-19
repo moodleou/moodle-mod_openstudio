@@ -26,8 +26,6 @@ defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 
-require_once($CFG->dirroot . '/mod/openstudio/api/group.php');
-
 class mod_openstudio_group_testcase extends advanced_testcase {
 
     private $course;
@@ -250,11 +248,11 @@ class mod_openstudio_group_testcase extends advanced_testcase {
     public function test_group_has_same_memberships() {
         $this->resetAfterTest(true);
 
-        $this->assertEquals(true, studio_api_group_has_same_memberships(
+        $this->assertEquals(true, mod_openstudio\local\api\group::has_same_memberships(
                 $this->groupings->a->id, $this->users->students->one->id,
                 $this->users->students->two->id, true));
 
-        $this->assertEquals(false, studio_api_group_has_same_memberships(
+        $this->assertEquals(false, mod_openstudio\local\api\group::has_same_memberships(
                 $this->groupings->a->id, $this->users->students->one->id,
                 $this->users->students->eight->id, true));
     }
@@ -265,13 +263,13 @@ class mod_openstudio_group_testcase extends advanced_testcase {
     public function test_group_has_same_course() {
         $this->resetAfterTest(true);
 
-        $this->assertEquals(true, studio_api_group_has_same_course(
+        $this->assertEquals(true, mod_openstudio\local\api\group::has_same_course(
                 $this->course->id, $this->users->students->one->id, $this->users->students->two->id));
 
-        $this->assertEquals(true, studio_api_group_has_same_course(
+        $this->assertEquals(true, mod_openstudio\local\api\group::has_same_course(
                 $this->course->id, $this->users->students->one->id, $this->users->students->eight->id));
 
-        $this->assertEquals(false, studio_api_group_has_same_course(
+        $this->assertEquals(false, mod_openstudio\local\api\group::has_same_course(
                 $this->course2->id, $this->users->students->six->id, $this->users->students->one->id));
     }
 

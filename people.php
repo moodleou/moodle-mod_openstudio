@@ -27,12 +27,13 @@
 
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\stream;
+use mod_openstudio\local\api\group;
 use mod_openstudio\local\util;
 use mod_openstudio\local\api\flags;
+use mod_openstudio\local\api\user;
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
-require_once(dirname(__FILE__).'/api/apiloader.php');
 
 $id = optional_param('id', 0, PARAM_INT); // Course_module ID.
 $groupid = optional_param('groupid', 0, PARAM_INT); // Group id to filter against.
@@ -69,7 +70,7 @@ if (! in_array($vid, array(content::VISIBILITY_GROUP, content::VISIBILITY_MODULE
 if (!$permissions->feature_module && !$groupid) {
     $vid = content::VISIBILITY_GROUP;
 
-    $grouplist = studio_api_group_list(
+    $grouplist = group::group_list(
             $permissions->activecid, $permissions->groupingid,
             $permissions->activeuserid, $permissions->groupmode);
 
@@ -106,7 +107,7 @@ $pagetitle = $pageheading = get_string('pageheader', 'openstudio',
 
 $peopledata = (object) array('people' => array(), 'total' => 0);
 
-$peopledatatemp = studio_api_user_get_all($cminstance->id,
+$peopledatatemp = user::get_all($cminstance->id,
     $permissions->groupmode, $permissions->groupingid, $groupid,
     $filterflag, $fsort, $osort, null, 0, true);
 
@@ -116,7 +117,7 @@ if (!empty($peopledatatemp)) {
     foreach ($peopledatatemp->people as $person) {
 
         $person->userpictureurl = new moodle_url('/user/pix.php/'.$person->id.'/f1.jpg');
-        $person->userprogressdata = studio_api_user_get_activity_status($cminstance->id, $person->id);
+        $person->userprogressdata = user::get_activity_status($cminstance->id, $person->id);
         $person->userprogressdata['lastactivedate'] = date('j/m/y, h:i', $person->userprogressdata['lastactivedate']);
         $person->viewuserworkurl = new moodle_url('/mod/openstudio/view.php',
                     array('id' => $id, 'vuid' => $person->id, 'vid' => content::VISIBILITY_PRIVATE));

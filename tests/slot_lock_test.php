@@ -25,7 +25,6 @@ defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 require_once('openstudio_testcase.php');
-require_once($CFG->dirroot . '/mod/openstudio/api/lock.php'); // Until this is refactored.
 
 class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
 
@@ -97,7 +96,7 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
 
         // Student adds a lock to the slot.
         $lockedtype = mod_openstudio\local\api\lock::CRUD;// Default lock button action.
-        $changedslot = studio_api_lock_slot(
+        $changedslot = mod_openstudio\local\api\lock::lock_content(
             $this->users->students->one->id, $this->contentid, $lockedtype);
         $timenow  = time();
         $this->assertEquals(true, $changedslot);
@@ -110,7 +109,7 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
 
         // Student removes a lock to the slot.
         $lockedtype = mod_openstudio\local\api\lock::NONE;
-        $changedslot = studio_api_lock_slot(
+        $changedslot = mod_openstudio\local\api\lock::lock_content(
             $this->users->students->one->id, $this->contentid, $lockedtype);
         $timenow  = time();
         $this->assertNotEquals(false, $changedslot);
@@ -123,7 +122,7 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
 
         // Teacher adds a lock to the slot.
         $lockedtype = mod_openstudio\local\api\lock::CRUD; // Default lock button action.
-        $changedslot = studio_api_lock_slot(
+        $changedslot = mod_openstudio\local\api\lock::lock_content(
             $this->users->teachers->one->id, $this->contentid, $lockedtype);
         $timenow  = time();
         $this->assertNotEquals(false, $changedslot);
@@ -153,7 +152,7 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
         $lockedtype = mod_openstudio\local\api\lock::ALL;
 
         // Student adds a lock to the slot.
-        $changedslot = studio_api_lock_slot(
+        $changedslot = mod_openstudio\local\api\lock::lock_content(
             $this->users->students->one->id, $this->contentid, $lockedtype);
         $this->assertEquals(true, $changedslot);
 
@@ -166,7 +165,7 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
         $lockedtype = mod_openstudio\local\api\lock::NONE;
 
         // Student removes a lock to the slot.
-        $changedslot = studio_api_lock_slot(
+        $changedslot = mod_openstudio\local\api\lock::lock_content(
             $this->users->students->one->id, $this->contentid, $lockedtype);
         $this->assertNotEquals(false, $changedslot);
 
@@ -178,7 +177,7 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
         $lockedtype = mod_openstudio\local\api\lock::SOCIAL_CRUD;
 
         // Teacher changes a lock to the slot.
-        $changedslot = studio_api_lock_slot(
+        $changedslot = mod_openstudio\local\api\lock::lock_content(
             $this->users->teachers->one->id, $this->contentid, $lockedtype);
         $this->assertNotEquals(false, $changedslot);
 
@@ -204,7 +203,7 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
         $lockedtype = mod_openstudio\local\api\lock::NONE;
 
         // Student removes a lock to the slot.
-        $changedslot = studio_api_lock_slot(
+        $changedslot = mod_openstudio\local\api\lock::lock_content(
             $this->users->students->one->id, $this->contentid, $lockedtype);
         $this->assertNotEquals(false, $changedslot);
 
@@ -215,7 +214,7 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
         $this->assertEquals(0, $updatedslotdata->lockedtime);
 
         // System checks the state of the now unlocked slot.
-        $checkslot = studio_api_lock_check($this->contentid);
+        $checkslot = mod_openstudio\local\api\lock::check($this->contentid);
 
         // Current check should be false as its unlocked.
         $this->assertEquals(false, $checkslot);
@@ -223,12 +222,12 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
         $lockedtype = mod_openstudio\local\api\lock::SOCIAL_CRUD;
 
         // Student changes the lock to the slot.
-        $changedslot = studio_api_lock_slot(
+        $changedslot = mod_openstudio\local\api\lock::lock_content(
             $this->users->students->one->id, $this->contentid, $lockedtype);
         $this->assertNotEquals(false, $changedslot);
 
         // System checks the state of the now unlocked slot.
-        $checkslot = studio_api_lock_check($this->contentid);
+        $checkslot = mod_openstudio\local\api\lock::check($this->contentid);
 
         // Current check should be student user its locked by.
         $this->assertEquals($this->users->students->one->id, $checkslot);
@@ -242,12 +241,12 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
         $lockedtype = mod_openstudio\local\api\lock::ALL;
 
         // Teacher adds a complete lock to the slot.
-        $changedslot = studio_api_lock_slot(
+        $changedslot = mod_openstudio\local\api\lock::lock_content(
             $this->users->teachers->one->id, $this->contentid, $lockedtype);
         $this->assertNotEquals(false, $changedslot);
 
         // System checks the state of the chenged slot.
-        $checkslot = studio_api_lock_check($this->contentid);
+        $checkslot = mod_openstudio\local\api\lock::check($this->contentid);
 
         // Current check should return teacher user its locked by.
         $this->assertEquals($this->users->teachers->one->id, $checkslot);
@@ -274,7 +273,7 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
         $lockedtype = mod_openstudio\local\api\lock::NONE;
 
         // Student removes a lock to the slot.
-        $changedslot = studio_api_lock_slot(
+        $changedslot = mod_openstudio\local\api\lock::lock_content(
                         $this->users->students->one->id, $this->contentid, $lockedtype);
         $this->assertNotEquals(false, $changedslot);
 
@@ -285,7 +284,7 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
         $this->assertEquals(0, $updatedslotdata->lockedtime);
 
         // System check the state of the now unlocked slot.
-        $checkslot = studio_api_lock_check($this->contentid);
+        $checkslot = mod_openstudio\local\api\lock::check($this->contentid);
 
         // Current check return false as its unlocked.
         $this->assertEquals(false, $checkslot);
@@ -293,12 +292,12 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
         $lockedtype = mod_openstudio\local\api\lock::SOCIAL_CRUD;
 
         // Student changes the lock on the slot.
-        $changedslot = studio_api_lock_slot(
+        $changedslot = mod_openstudio\local\api\lock::lock_content(
             $this->users->students->one->id, $this->contentid, $lockedtype);
         $this->assertNotEquals(false, $changedslot);
 
         // System check the state of the now unlocked slot.
-        $checkslot = studio_api_lock_check($this->contentid);
+        $checkslot = mod_openstudio\local\api\lock::check($this->contentid);
 
         // Current check should be student user its locked by.
         $this->assertEquals($this->users->students->one->id, $checkslot);
@@ -316,7 +315,7 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
         $_SERVER['REQUEST_URI'] = 'https://learn2.open.ac.uk/mod/openstudio/view.php?filteron=1&reset=0&id=498074';
 
         // Change the scheduled state of the slot.
-        $checkschedule = studio_api_lock_schedule($userid, $level3id, $locktype, $locktime, $unlocktime);
+        $checkschedule = mod_openstudio\local\api\lock::schedule($userid, $level3id, $locktype, $locktime, $unlocktime);
 
         $scheduledl3slotdata = mod_openstudio\local\api\levels::get_record($level, $level3id);
         $this->assertEquals($level3id, $scheduledl3slotdata->id);
@@ -343,7 +342,7 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
         $lockedtype = mod_openstudio\local\api\lock::NONE;
 
         // Student removes a lock from the slot.
-        $changedslot = studio_api_lock_slot(
+        $changedslot = mod_openstudio\local\api\lock::lock_content(
             $this->users->students->one->id, $this->contentid, $lockedtype);
         $this->assertNotEquals(false, $changedslot);
 
@@ -356,7 +355,7 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
         $lockedtype = mod_openstudio\local\api\lock::SOCIAL_CRUD;
 
         // Student changes the lock on the slot.
-        $changedslot = studio_api_lock_slot(
+        $changedslot = mod_openstudio\local\api\lock::lock_content(
             $this->users->students->one->id, $this->contentid, $lockedtype);
         $this->assertNotEquals(false, $changedslot);
 
@@ -372,7 +371,7 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
         $_SERVER['REQUEST_URI'] = 'https://learn2.open.ac.uk/mod/openstudio/view.php?filteron=1&reset=0&id=498074';
 
         // Change the schedules state of the slot.
-        $checkschedule = studio_api_lock_schedule($userid, $level3id, $locktype, $locktime, $unlocktime);
+        $checkschedule = mod_openstudio\local\api\lock::schedule($userid, $level3id, $locktype, $locktime, $unlocktime);
         $this->assertEquals(true, $checkschedule);
 
         // Check the state of the now unlocked slot.
@@ -385,7 +384,7 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
         $this->assertEquals($unlocktime, $scheduledl3slotdata->unlocktime);
 
         // Reset the schedule state of the slot.
-        $resetslotl3schedule = studio_api_lock_reset_schedule($userid, $level3id );
+        $resetslotl3schedule = mod_openstudio\local\api\lock::reset_schedule($userid, $level3id );
         $this->assertEquals(true, $resetslotl3schedule);
 
         // Check the state of the now unset slot.
@@ -412,7 +411,7 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
 
         // Student removes a lock from the slot.
         $lockedtype = mod_openstudio\local\api\lock::NONE;
-        $changedslot = studio_api_lock_slot(
+        $changedslot = mod_openstudio\local\api\lock::lock_content(
             $this->users->students->one->id, $this->contentid, $lockedtype);
         $this->assertNotEquals(false, $changedslot);
 
@@ -424,7 +423,7 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
 
         // Student sets default lock on the slot. Now redundant.
         $lockedtype = mod_openstudio\local\api\lock::CRUD;// Default for Users.
-        $changedslot = studio_api_lock_slot(
+        $changedslot = mod_openstudio\local\api\lock::lock_content(
             $this->users->students->one->id, $this->contentid, $lockedtype);
         $this->assertNotEquals(false, $changedslot);
 
@@ -443,7 +442,7 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
         $_SERVER['REQUEST_URI'] = 'https://learn2.open.ac.uk/mod/openstudio/view.php?filteron=1&reset=0&id=498074';
 
         // Change the schedule state of the slot.
-        $checkschedule = studio_api_lock_schedule($userid, $level3id, $locktype, $locktime, $unlocktime);
+        $checkschedule = mod_openstudio\local\api\lock::schedule($userid, $level3id, $locktype, $locktime, $unlocktime);
         $this->assertEquals(true, $checkschedule);
 
         // Check the state of the now unlocked slot.
@@ -451,7 +450,7 @@ class mod_openstudio_slot_lock_testcase extends openstudio_testcase {
 
         // Test the system lock.
         // Create $slotdata object.
-        // Call studio_api_lock_processing($slotdata);
+        // Call mod_openstudio\local\api\lock::processing($slotdata);
         // Test assertions for lock.
     }
 

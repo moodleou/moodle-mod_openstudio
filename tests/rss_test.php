@@ -24,7 +24,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once($CFG->dirroot . '/mod/openstudio/api/rss.php'); // Until this is refactored.
 
 class mod_openstudio_rss_testcase extends advanced_testcase {
 
@@ -194,7 +193,7 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
         $this->resetAfterTest(true);
         $this->define_key_salt();
         // See that the function generates a key which matches the expect sha1 hash.
-        $this->assertEquals(studio_api_rss_generate_key($this->users->students->three->id,
+        $this->assertEquals(mod_openstudio\local\api\rss::generate_key($this->users->students->three->id,
                 mod_openstudio\local\api\rss::MODULE),
                 sha1($this->users->students->three->id . '_' . mod_openstudio\local\api\rss::MODULE . '_' . $this->keysalt));
     }
@@ -206,13 +205,14 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
         $this->resetAfterTest(true);
         $this->define_key_salt();
         // Generate a key for student 3.
-        $key = studio_api_rss_generate_key($this->users->students->three->id, mod_openstudio\local\api\rss::ACTIVITY);
+        $key = mod_openstudio\local\api\rss::generate_key(
+                $this->users->students->three->id, mod_openstudio\local\api\rss::ACTIVITY);
         // Validate the key - should return true.
-        $isvalidated = studio_api_rss_validate_key(
+        $isvalidated = mod_openstudio\local\api\rss::validate_key(
                 $key, $this->users->students->three->id, mod_openstudio\local\api\rss::ACTIVITY);
         $this->assertEquals(true, $isvalidated);
         // Just because we're fun, pass garbage to the function and see if it does come back as false.
-        $this->assertEquals(false, studio_api_rss_validate_key('a6NJdkjda86nbGujdnAKh#&!jafkIU',
+        $this->assertEquals(false, mod_openstudio\local\api\rss::validate_key('a6NJdkjda86nbGujdnAKh#&!jafkIU',
                 $this->users->students->three->id, mod_openstudio\local\api\rss::ACTIVITY));
     }
 
@@ -263,7 +263,7 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
          * 5. The studio id should match that of studio_level.
          * 6. Total slots returned should be no more than 25.
          */
-        $pinboardrssslots = studio_api_rss_pinboard($this->users->students->one->id, $this->studiolevels->id, 0);
+        $pinboardrssslots = mod_openstudio\local\api\rss::pinboard($this->users->students->one->id, $this->studiolevels->id, 0);
         // Check 1.
         $this->assertNotEquals(false, $pinboardrssslots);
         $returnedslots = 0;
@@ -299,7 +299,7 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
         mod_openstudio\local\api\flags::toggle($pbslot18, mod_openstudio\local\api\flags::MADEMELAUGH,
                 'on', $this->users->students->ten->id);
         // Let's query everything again and make sure $pbslot18 is the first result that comes back.
-        $pinboardrssslots2 = studio_api_rss_pinboard($this->users->students->one->id,
+        $pinboardrssslots2 = mod_openstudio\local\api\rss::pinboard($this->users->students->one->id,
                 $this->studiolevels->id);
         // Just make sure we got something back!
         $this->assertNotEquals(false, $pinboardrssslots2);
@@ -376,7 +376,7 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
          * 6. The studio id should match that of studio_level.
          * 7. Total slots returned should be no more than 25.
          */
-        $activityslotsrss = studio_api_rss_activity($this->users->students->one->id, $this->studiolevels->id);
+        $activityslotsrss = mod_openstudio\local\api\rss::activity($this->users->students->one->id, $this->studiolevels->id);
         // Check 1.
         $this->assertNotEquals(false, $activityslotsrss);
         $returnedslots = 0;
@@ -453,19 +453,19 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
 
         // Should not be false for student1 even he/she is in a different group given the  slot is
         // shared with setting mod_openstudio\local\api\content\VISIBILITY_GROUP.
-        $groupslotsrssfalse = studio_api_rss_group($this->users->students->one->id, $this->studiolevels->id);
+        $groupslotsrssfalse = mod_openstudio\local\api\rss::group($this->users->students->one->id, $this->studiolevels->id);
         $this->assertNotEquals(false, $groupslotsrssfalse);
 
         // Should not be false for 6 as 6 is in the same group as 8.
-        $groupslotsrss = studio_api_rss_group($this->users->students->six->id, $this->studiolevels->id);
+        $groupslotsrss = mod_openstudio\local\api\rss::group($this->users->students->six->id, $this->studiolevels->id);
         $this->assertNotEquals(false, $groupslotsrss);
 
         // Should not be false for 7 as 7 does not exist.
-        $groupslotsrss = studio_api_rss_group($this->users->students->seven->id, $this->studiolevels->id);
+        $groupslotsrss = mod_openstudio\local\api\rss::group($this->users->students->seven->id, $this->studiolevels->id);
         $this->assertEquals(false, $groupslotsrss);
 
         // Should not be false for 8 as 8 is the creator!!.
-        $groupslotsrss = studio_api_rss_group($this->users->students->eight->id, $this->studiolevels->id);
+        $groupslotsrss = mod_openstudio\local\api\rss::group($this->users->students->eight->id, $this->studiolevels->id);
         $this->assertNotEquals(false, $groupslotsrss);
 
         $returnedslots = '';
@@ -544,7 +544,7 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
         }
 
         // Should not be false for another user on the course.
-        $moduleslotsrss = studio_api_rss_module($this->users->students->nine->id, $this->studiolevels->id);
+        $moduleslotsrss = mod_openstudio\local\api\rss::module($this->users->students->nine->id, $this->studiolevels->id);
         $this->assertNotEquals(false, $moduleslotsrss);
         $returnedslots = '';
 
@@ -592,7 +592,7 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
                 $myslotid, mod_openstudio\local\api\flags::MADEMELAUGH, 'on', $this->users->students->nine->id);
 
         // Should not be false.
-        $slotsrss = studio_api_rss_slot($myslotid);
+        $slotsrss = mod_openstudio\local\api\rss::slot($myslotid);
         $this->assertNotEquals(false, $slotsrss);
 
         $returnedparams = 0;

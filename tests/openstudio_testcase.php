@@ -49,7 +49,7 @@ class openstudio_testcase extends advanced_testcase {
                 'embedcode' => '',
                 'weblink' => 'http://www.open.ac.uk/',
                 'urltitle' => 'Vesica Timeline',
-                'visibility' => STUDIO_VISIBILITY_MODULE,
+                'visibility' => mod_openstudio\local\api\content::VISIBILITY_MODULE,
                 'description' => 'The Best YouTube Link Ever',
                 'tags' => array('Stark', 'Lannister', 'Targereyen'),
                 'ownership' => 0,

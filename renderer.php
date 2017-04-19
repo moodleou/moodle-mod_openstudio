@@ -26,13 +26,12 @@ defined('MOODLE_INTERNAL') || die();
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\levels;
 use mod_openstudio\local\api\subscription;
-use mod_openstudio\local\api\notifications;
+use mod_openstudio\local\api\group;
+use mod_openstudio\local\api\item;
 use mod_openstudio\local\renderer_utils;
 use mod_openstudio\local\api\flags;
 use mod_openstudio\local\api\lock;
-use mod_openstudio\local\api\folder;
-use mod_openstudio\local\util\defaults;
-use mod_openstudio\local\notifications\notification;
+use mod_openstudio\local\api\user;
 
 /**
  * OpenStudio renderer.
@@ -572,7 +571,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 break;
         }
 
-        $grouplist = studio_api_group_list(
+        $grouplist = group::group_list(
                     $permissions->activecid, $permissions->groupingid,
                     $permissions->activeuserid, $permissions->groupmode);
 
@@ -664,7 +663,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
     public function people_page($permissions, $peopledata) {
         global $OUTPUT;
 
-        $grouplist = studio_api_group_list(
+        $grouplist = group::group_list(
                 $permissions->activecid, $permissions->groupingid,
                 $permissions->activeuserid, $permissions->groupmode);
 
@@ -731,7 +730,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         }
 
         $contentdata = renderer_utils::content_details($cmid, $permissions, $contentdata, $contentdata->iscontentversion);
-       
+
         // Not need generate full data for a content version.
         if (!$contentdata->iscontentversion) {
             $tagsraw = array();
@@ -756,6 +755,11 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
             // Process lock.
             renderer_utils::process_content_lock($contentdata, $permissions, $cmid);
+
+            // Get copies count.
+            $contenthash = item::generate_hash($contentdata->id);
+            $contentdata->contentcopycount = item::count_occurences($contenthash, $cmid);
+            $contentdata->contentcopyenable = $contentdata->contentcopycount > 1 ? true : false;
 
             $contentexifinfo = array();
             $contentmapenable = false;
@@ -790,9 +794,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
                     $metadatamodel = empty($contentexifinfo['Model']) ? '' : $contentexifinfo['Model'];
 
-                    if (strlen($metadatamodel) < 2) {
-                        $metadatamodel = empty($contentexifinfo['UndefinedTag:0xA434']) ? '' : $contentexifinfo['UndefinedTag:0xA434'];
-                    }
+
 
                     $metadatafocal = empty($contentexifinfo['FocalLengthIn35mmFilm']) ? '' : $contentexifinfo['FocalLengthIn35mmFilm'];
 
@@ -840,7 +842,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $contenteditlink = new moodle_url('/mod/openstudio/contentedit.php', $editparams);
 
         if (($contentdata->l1id > 0) || ($contentdata->l1id == 0) || $permissions->managecontent) {
-            if (studio_api_lock_slot_show_crud($contentdata, $permissions) || $permissions->managecontent) {
+            if (lock::content_show_crud($contentdata, $permissions) || $permissions->managecontent) {
                 $contentdeleteenable = true;
             }
         }
@@ -1025,7 +1027,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $folderdata->myfolder = false;
         }
 
-        $user = studio_api_user_get_user_by_id($folderdata->userid);
+        $user = user::get_user_by_id($folderdata->userid);
         $folderdata->fullname = fullname($user);
         $folderdata->folderedit = $folderedit;
         $folderdata->folderlinkoverview = $folderoverview;
@@ -1033,7 +1035,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                     array('id' => $cmid, 'vuid' => $folderdata->userid, 'vid' => content::VISIBILITY_PRIVATE));
 
         if ($folderdata->userid) {
-            $user = studio_api_user_get_user_by_id($folderdata->userid);
+            $user = user::get_user_by_id($folderdata->userid);
             $picture = new user_picture($user);
             $folderdata->userpicturehtml = $OUTPUT->render($picture);
         }

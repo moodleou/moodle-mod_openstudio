@@ -36,6 +36,7 @@ use mod_openstudio\local\util\feature;
 use mod_openstudio\local\util\defaults;
 use mod_openstudio\local\api\comments;
 use mod_openstudio\local\api\levels;
+use mod_openstudio\local\api\search;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -490,7 +491,7 @@ EOF;
                 if ($sizecheck == 1) {
                     /*
                      * Request has been made to check the image file size
-                     * and if it is greater than STUDIO_DEFAULT_SLOTVIEWIMAGESIZELIMIT
+                     * and if it is greater than defaults::CONTENTVIEWIMAGESIZELIMIT
                      * then we force the use of thumbnail size image.
                      *
                      */
@@ -722,7 +723,7 @@ EOF;
             }
         } else {
             if (!$includeinsetslots) {
-                $slotdata = studio_api_slot_get($result->intref1);
+                $slotdata = content::get($result->intref1);
                 if ($slotdata->visibility == content::VISIBILITY_INFOLDERONLY) {
                     return false;
                 }
@@ -793,7 +794,7 @@ EOF;
         $cm = get_coursemodule_from_id('studio', $result->coursemoduleid);
         $cminstance = $DB->get_record('studio', array('id' => $cm->instance), '*', MUST_EXIST);
         $tutorroles = array_filter(explode(',', $cminstance->tutorroles));
-        return studio_api_slot_user_is_tutor($result->intref1, $USER->id, $tutorroles);
+        return content::user_is_tutor($result->intref1, $USER->id, $tutorroles);
     }
 
     return false;
@@ -852,9 +853,9 @@ EOF;
             foreach ($slots as $slotdata) {
                 $counter++;
                 if ($slotdata->contenttype == content::TYPE_NONE) {
-                    studio_api_search_delete($cm, $slotdata, true);
+                    search::delete($cm, $slotdata, true);
                 } else {
-                    studio_api_search_update($cm, $slotdata);
+                    search::update($cm, $slotdata);
                 }
             }
 
@@ -884,9 +885,9 @@ EOF;
                 foreach ($slots as $slotdata) {
                     $counter++;
                     if ($slotdata->contenttype == content::TYPE_NONE) {
-                        studio_api_search_delete($cm, $slotdata, true);
+                        search::delete($cm, $slotdata, true);
                     } else {
-                        studio_api_search_update($cm, $slotdata);
+                        search::update($cm, $slotdata);
                     }
                 }
 

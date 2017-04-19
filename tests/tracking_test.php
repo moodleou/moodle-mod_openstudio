@@ -27,8 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 
-require_once($CFG->dirroot . '/mod/openstudio/api/tracking.php'); // Until this is refactored.
-
 class mod_openstudio_tracking_testcase extends advanced_testcase {
 
     private $users;
@@ -72,27 +70,27 @@ class mod_openstudio_tracking_testcase extends advanced_testcase {
 
         // Pass an arbitrary slot ID.
         $this->assertEquals(true,
-                studio_api_tracking_log_action(
+                mod_openstudio\local\api\tracking::log_action(
                         2, tracking::READ_CONTENT, $this->users->students->three->id));
         // This should work as we will be allowed a duplicate. It should return an ID.
         $this->assertNotEquals(false,
-                studio_api_tracking_log_action(
+                mod_openstudio\local\api\tracking::log_action(
                         2, tracking::READ_CONTENT, $this->users->students->three->id, true));
         // Let's see if it tells us to write again - it shouldn't within 60 seconds!!
         $this->assertEquals(false,
-                studio_api_tracking_write_again(
+                mod_openstudio\local\api\tracking::write_again(
                         2, tracking::READ_CONTENT, $this->users->students->three->id));
         // Let's mimic a deletion tracking entry for our slot.
         $this->assertEquals(true,
-                studio_api_tracking_log_action(
+                mod_openstudio\local\api\tracking::log_action(
                         2, tracking::DELETE_CONTENT, $this->users->students->three->id));
         // Now let's try and delete again, we should get a false.
         $this->assertEquals(false,
-                studio_api_tracking_log_action(
+                mod_openstudio\local\api\tracking::log_action(
                         2, tracking::DELETE_CONTENT, $this->users->students->three->id));
         // We should also check the duplicate function directly.
         $this->assertEquals(true,
-                studio_api_tracking_is_duplicate(2, tracking::DELETE_CONTENT));
+                mod_openstudio\local\api\tracking::is_duplicate(2, tracking::DELETE_CONTENT));
     }
 
 }

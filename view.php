@@ -28,6 +28,7 @@
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\lock;
 use mod_openstudio\local\api\stream;
+use mod_openstudio\local\api\group;
 use mod_openstudio\local\api\notifications;
 use mod_openstudio\local\util;
 use mod_openstudio\local\util\defaults;
@@ -35,10 +36,10 @@ use mod_openstudio\local\renderer_utils;
 use mod_openstudio\local\api\flags;
 use mod_openstudio\local\api\folder;
 use mod_openstudio\local\api\levels;
+use mod_openstudio\local\api\user;
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
-require_once(dirname(__FILE__).'/api/apiloader.php');
 
 $id = optional_param('id', 0, PARAM_INT); // Course_module ID, or
 $groupid = optional_param('groupid', 0, PARAM_INT); // Group id to filter against.
@@ -70,7 +71,7 @@ if (!$permissions->managecontent) {
 // Get user id that we need to show stream for.
 $vuid = optional_param('vuid', $USER->id, PARAM_INT);
 if ($vuid != $USER->id) {
-    $contentowner = studio_api_user_get_user_by_id($vuid);
+    $contentowner = user::get_user_by_id($vuid);
     $viewuser = $USER;
 } else {
     $contentowner = $viewuser = $USER;
@@ -118,8 +119,7 @@ if (!$permissions->feature_module && ($vid == content::VISIBILITY_MODULE)) {
 }
 
 if ($vid == content::VISIBILITY_WORKSPACE) {
-    $ismember = studio_api_group_has_same_memberships
-            ($permissions->groupingid, $contentowner->id, $viewuser->id, true);
+    $ismember = group::has_same_memberships($permissions->groupingid, $contentowner->id, $viewuser->id, true);
     if ($ismember) {
         $vidd = content::VISIBILITY_GROUP;
     } else {
@@ -484,7 +484,7 @@ if ($finalviewpermissioncheck) {
         foreach ($contentdatatemp->contents as $content) {
             // Process content locking.
             if (($content->levelcontainer > 0) && ($content->userid == $permissions->activeuserid)) {
-                $content = studio_api_lock_determine_lock_status($content);
+                $content = lock::determine_lock_status($content);
             }
 
             $content->locked = ($content->locktype == lock::ALL);
@@ -531,7 +531,7 @@ if ($finalviewpermissioncheck) {
                 case content::VISIBILITY_GROUP:
                     $contenticon = $OUTPUT->pix_url('group_rgb_32px', 'openstudio');
                     $itemsharewith = get_string('contentitemsharewithgroup', 'openstudio',
-                            studio_api_group_get_name(abs($content->visibility)));
+                            group::get_name(abs($content->visibility)));
                     break;
 
                 case content::VISIBILITY_WORKSPACE:
@@ -612,7 +612,7 @@ if ($finalviewpermissioncheck) {
                     array('id' => $id, 'vuid' => $content->userid, 'vid' => content::VISIBILITY_PRIVATE));
 
             if ($content->userid) {
-                $user = studio_api_user_get_user_by_id($content->userid);
+                $user = user::get_user_by_id($content->userid);
                 $picture = new user_picture($user);
                 $content->userpictureurl = $picture->get_url($PAGE)->out(false);
             }

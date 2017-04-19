@@ -129,7 +129,7 @@ class mod_openstudio_search_testcase extends advanced_testcase {
                 'embedcode' => '',
                 'weblink' => 'http://www.youtube.com/watch?v=R4XSeW4B5Rg',
                 'urltitle' => 'Vesica Timeline',
-                'visibility' => STUDIO_VISIBILITY_MODULE,
+                'visibility' => mod_openstudio\local\api\content::VISIBILITY_MODULE,
                 'description' => 'The Best YouTube Link Ever',
                 'tags' => array('Stark', 'Lannister', 'Targereyen'),
                 'ownership' => 0,
@@ -141,7 +141,7 @@ class mod_openstudio_search_testcase extends advanced_testcase {
                 'embedcode' => '',
                 'weblink' => 'http://www.youtube.com/watch?v=R4XSeW4B5Rg',
                 'urltitle' => 'Vesica Timeline',
-                'visibility' => STUDIO_VISIBILITY_MODULE,
+                'visibility' => mod_openstudio\local\api\content::VISIBILITY_MODULE,
                 'description' => 'The Best YouTube Link Ever',
                 'tags' => array('Communist', 'Socialist', 'Democrat'),
                 'ownership' => 0,
@@ -153,7 +153,7 @@ class mod_openstudio_search_testcase extends advanced_testcase {
                 'embedcode' => '',
                 'weblink' => 'http://www.youtube.com/watch?v=R4XSeW4B5Rg',
                 'urltitle' => 'Vesica Timeline',
-                'visibility' => STUDIO_VISIBILITY_MODULE,
+                'visibility' => mod_openstudio\local\api\content::VISIBILITY_MODULE,
                 'description' => 'The Best YouTube Link Ever',
                 'tags' => array('Stark', 'Lannister', 'Targereyen', 'Communist'),
                 'ownership' => 0,
@@ -189,11 +189,11 @@ class mod_openstudio_search_testcase extends advanced_testcase {
     public function test_search() {
         $this->resetAfterTest(true);
 
-        $searchres = studio_api_search_query($this->cm, 'The First Slot');
+        $searchres = mod_openstudio\local\api\search::query($this->cm, 'The First Slot');
         $this->assertEquals(1, count($searchres->result));
-        $searchres = studio_api_search_query($this->cm, 'Socialist');
+        $searchres = mod_openstudio\local\api\search::query($this->cm, 'Socialist');
         $this->assertEquals(1, count($searchres->result));
-        $searchres = studio_api_search_query($this->cm, 'Lannister');
+        $searchres = mod_openstudio\local\api\search::query($this->cm, 'Lannister');
         $this->assertEquals(2, count($searchres->result));
     }
 
@@ -202,9 +202,9 @@ class mod_openstudio_search_testcase extends advanced_testcase {
      */
     public function test_search_get_slot_document() {
         $this->resetAfterTest(true);
-        $this->assertEquals(true, is_object(studio_api_search_get_slot_document(
+        $this->assertEquals(true, is_object(mod_openstudio\local\api\search::get_content_document(
                 $this->cm, mod_openstudio\local\api\content::get_record($this->users->students->one->id, $this->content1))));
-        $this->assertEquals(true, is_object(studio_api_search_get_slot_document(
+        $this->assertEquals(true, is_object(mod_openstudio\local\api\search::get_content_document(
                 $this->cm, mod_openstudio\local\api\content::get_record($this->users->students->one->id, $this->content1), true)));
     }
 
@@ -215,10 +215,10 @@ class mod_openstudio_search_testcase extends advanced_testcase {
         global $DB;
         $this->resetAfterTest(true);
         // This will NOT return true if the doc is deleted because of the function in searchlib.php.
-        studio_api_search_delete(
+        mod_openstudio\local\api\search::delete(
                 $this->cm, mod_openstudio\local\api\content::get_record($this->users->students->one->id, $this->content1));
         // Check if we can find slot 1 in search now, if we can't, this delete has worked.
-        $searchres = studio_api_search_query($this->cm, 'The First Slot');
+        $searchres = mod_openstudio\local\api\search::query($this->cm, 'The First Slot');
         $this->assertEquals(0, count($searchres->result));
     }
 
@@ -228,16 +228,16 @@ class mod_openstudio_search_testcase extends advanced_testcase {
     public function test_search_update() {
         $this->resetAfterTest(true);
         // Delete slot 1 first from the system.
-        studio_api_search_delete(
+        mod_openstudio\local\api\search::delete(
                 $this->cm, mod_openstudio\local\api\content::get_record($this->users->students->one->id, $this->content1));
         // Check that is infact deleted.
-        $searchres = studio_api_search_query($this->cm, 'The First Slot');
+        $searchres = mod_openstudio\local\api\search::query($this->cm, 'The First Slot');
         $this->assertEquals(0, count($searchres->result));
         // Add it back.
-        studio_api_search_update(
+        mod_openstudio\local\api\search::update(
                 $this->cm, mod_openstudio\local\api\content::get_record($this->users->students->one->id, $this->content1));
         // See that it can be found again.
-        $searchres = studio_api_search_query($this->cm, 'The First Slot');
+        $searchres = mod_openstudio\local\api\search::query($this->cm, 'The First Slot');
         $this->assertEquals(1, count($searchres->result));
     }
 

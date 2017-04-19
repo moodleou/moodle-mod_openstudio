@@ -245,7 +245,7 @@ class flags {
             }
 
             if ($folderid) {
-                studio_api_tracking_log_action($folderid, tracking::MODIFY_FOLDER, $userid);
+                tracking::log_action($folderid, tracking::MODIFY_FOLDER, $userid);
             }
             return true;
         } catch (\Exception $e) {

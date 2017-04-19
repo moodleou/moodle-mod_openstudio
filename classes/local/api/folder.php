@@ -108,25 +108,25 @@ class folder {
                 if (isset($foldercontent->provenanceid) && $content->contenttype <= content::TYPE_TEXT) {
                     // If we've just copied a textual content to a folder, update its contenthash
                     // to use the provenance ID, so its content hash matches the original.
-                    studio_api_item_delete($contentid, item::CONTENT);
-                    studio_api_item_log($contentid);
+                    item::delete($contentid, item::CONTENT);
+                    item::log($contentid);
                 }
 
                 // Update folder content last modified time.
                 $DB->set_field('openstudio_contents', 'timemodified', time(), ['id' => $folderid]);
-                studio_api_tracking_log_action($folderid, tracking::MODIFY_FOLDER, $userid);
+                tracking::log_action($folderid, tracking::MODIFY_FOLDER, $userid);
                 switch ($context) {
                     case 1:
-                        studio_api_tracking_log_action($contentid, tracking::LINK_CONTENT_TO_FOLDER, $userid, $folderid);
+                        tracking::log_action($contentid, tracking::LINK_CONTENT_TO_FOLDER, $userid, $folderid);
                         break;
 
                     case 2:
-                        studio_api_tracking_log_action($contentid, tracking::COPY_CONTENT_TO_FOLDER, $userid, $folderid);
+                        tracking::log_action($contentid, tracking::COPY_CONTENT_TO_FOLDER, $userid, $folderid);
                         break;
 
                     case 0:
                     default:
-                        studio_api_tracking_log_action($contentid, tracking::ADD_CONTENT_TO_FOLDER, $userid, $folderid);
+                        tracking::log_action($contentid, tracking::ADD_CONTENT_TO_FOLDER, $userid, $folderid);
                         break;
                 }
                 return $foldercontentid;
@@ -202,7 +202,7 @@ class folder {
             }
             $newcontent = self::copy_content($contentid, $set->userid, null, null, $cm);
 
-            studio_api_tracking_log_action($contentid, tracking::COPY_CONTENT, $userid);
+            tracking::log_action($contentid, tracking::COPY_CONTENT, $userid);
             if (self::add_content($folderid, $newcontent->id, $set->userid, $setslottemplate, 2)) {
                 return $newcontent->id;
             } else {
@@ -614,7 +614,7 @@ EOF;
                     }
                 }
 
-                studio_api_tracking_log_action($folderid, tracking::MODIFY_FOLDER, $userid);
+                tracking::log_action($folderid, tracking::MODIFY_FOLDER, $userid);
                 return true;
             }
             return false;
@@ -648,7 +648,7 @@ EOF;
             }
         }
 
-        studio_api_tracking_log_action($folderid, tracking::MODIFY_FOLDER, $userid);
+        tracking::log_action($folderid, tracking::MODIFY_FOLDER, $userid);
 
         return count($foldercontents);
     }
@@ -821,11 +821,11 @@ EOF;
         // Index new content for search.
         if ($cm != null) {
             $newcontentdata = content::get_record($userid, $insertdata->id);
-            studio_api_search_update($cm, $newcontentdata);
+            search::update($cm, $newcontentdata);
         }
 
         // Log the contenthash for the new slot.
-        studio_api_item_log($insertdata->id);
+        item::log($insertdata->id);
 
         return $insertdata;
     }

@@ -51,8 +51,6 @@ class process_subscriptions extends \core\task\scheduled_task {
     public function execute() {
         global $CFG, $DB;
 
-        require_once($CFG->dirroot . '/mod/openstudio/api/subscription.php');
-
         /*
          * We wrap the code in exception blocks to prevent one job from
          * killing other jobs.
@@ -81,11 +79,11 @@ class process_subscriptions extends \core\task\scheduled_task {
             }
 
             // Process hourly subscriptions.
-            studio_api_notification_process_subscriptions(
+            subscription::process(
                     0, subscription::FREQUENCY_HOURLY, $numberofhourlysubscriptions);
 
             // Process daily subscriptions.
-            studio_api_notification_process_subscriptions(
+            subscription::process(
                     0, subscription::FREQUENCY_DAILY, $numberofdailysubscriptions);
         } catch (\Exception $e) {
             mtrace("Open Studio exception occurred processing subscriptions: " .

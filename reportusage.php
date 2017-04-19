@@ -22,10 +22,10 @@
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
-require_once($CFG->dirroot . '/mod/openstudio/api/apiloader.php');
 
 use mod_openstudio\local\util;
 use mod_openstudio\local\api\levels;
+use mod_openstudio\local\api\reports;
 
 $id = optional_param('id', 0, PARAM_INT); // Course module id.
 $studioid = optional_param('studioid', 0, PARAM_INT);
@@ -59,11 +59,11 @@ echo $OUTPUT->header(); // Header.
 
 $studioid = util::get_studioid_from_coursemodule($cm->id);
 
-$summarydata = studio_api_reports_get_activity_summary($course->id, $studioid);
-$contentdata = studio_api_reports_get_total_slots($studioid);
-$flagdata = studio_api_reports_get_total_flags($studioid);
-$storage = studio_api_reports_get_total_storage($studioid);
-$activitylog = studio_api_reports_get_activity_log($course->id, $cm->id);
+$summarydata = reports::get_activity_summary($course->id, $studioid);
+$contentdata = reports::get_total_slots($studioid);
+$flagdata = reports::get_total_flags($studioid);
+$storage = reports::get_total_storage($studioid);
+$activitylog = reports::get_activity_log($course->id, $cm->id);
 
 $contentdataactivity = array();
 foreach ($contentdata->slotactivity as $value) {

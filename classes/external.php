@@ -35,10 +35,9 @@ use mod_openstudio\local\renderer_utils;
 use mod_openstudio\local\api\comments;
 use mod_openstudio\local\api\lock;
 use mod_openstudio\local\api\folder;
+use mod_openstudio\local\api\user;
 
-require_once($CFG->dirroot . '/mod/openstudio/api/user.php');
 require_once($CFG->libdir . '/externallib.php');
-require_once($CFG->dirroot . '/mod/openstudio/api/lock.php');
 
 /**
  * OpenStudio external functions
@@ -60,7 +59,7 @@ class mod_openstudio_external extends external_api {
      */
     public static function validate_locking_status($cid, $errorthrown = true) {
         $cid = (int)$cid;
-        if (studio_api_lock_check($cid) === false) {
+        if (lock::check($cid) === false) {
             return true;
         }
 
@@ -567,7 +566,7 @@ class mod_openstudio_external extends external_api {
                     $commentdata->timemodified = userdate($commentdata->timemodified,
                             get_string('formattimedatetime', 'openstudio'));
 
-                    $user = studio_api_user_get_user_by_id($commentdata->userid);
+                    $user = user::get_user_by_id($commentdata->userid);
                     $commentdata->fullname = fullname($user);
 
                     // User picture.
@@ -933,7 +932,7 @@ class mod_openstudio_external extends external_api {
         $success = false;
 
         if ($locktype == lock::ALL) {
-            $success = studio_api_lock_slot($userid, $params['cid'], $params['locktype']);
+            $success = lock::lock_content($userid, $params['cid'], $params['locktype']);
             util::trigger_event($params['cmid'], 'content_locked', "{$userid}/{$params['locktype']}",
                     "view.php?id={$params['cid']}", util::format_log_info($params['cid']));
         }
@@ -998,7 +997,7 @@ class mod_openstudio_external extends external_api {
         $success = false;
 
         if ($locktype == lock::NONE) {
-            $success = studio_api_lock_slot($userid, $params['cid'], $params['locktype']);
+            $success = lock::lock_content($userid, $params['cid'], $params['locktype']);
             util::trigger_event($params['cmid'], 'content_unlocked', "{$userid}/{$params['locktype']}",
                     "view.php?id={$params['cid']}", util::format_log_info($params['cid']));
         }

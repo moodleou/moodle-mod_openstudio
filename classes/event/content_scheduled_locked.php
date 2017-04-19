@@ -26,6 +26,8 @@ namespace mod_openstudio\event;
 
 defined('MOODLE_INTERNAL') || die();
 
+use mod_openstudio\local\api\lock;
+
 /**
  * The mod_openstudio scheduled lock event class.
  *
@@ -64,7 +66,7 @@ class content_scheduled_locked extends \core\event\base {
             $locktype = $this->other['locktype'];
         }
 
-        $locktypename = studio_api_lock_type($locktype);
+        $locktypename = lock::type($locktype);
 
         $description = <<<EOF
 The user with id '$userid' changed a content on course module id '$this->contextinstanceid'

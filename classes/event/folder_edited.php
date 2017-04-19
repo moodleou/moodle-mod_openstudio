@@ -109,7 +109,7 @@ EOF;
         $type = get_string('notification_folder', 'openstudio');
         return new notification((object) [
             'contentid' => $this->objectid,
-            'userid' => $this->userid,
+            'userfrom' => $this->userid,
             'icon' => 'share_with_tutor',
             'message' => get_string('notification_shared', 'openstudio', $type),
             'cmid' => $this->context->instanceid

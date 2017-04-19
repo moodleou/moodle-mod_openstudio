@@ -29,15 +29,6 @@ use mod_openstudio\local\util;
 
 defined('MOODLE_INTERNAL') || die();
 
-// Remove after these APIs are refactored.
-if(function_exists('studio_api_item_log')){
-    return ;
-}
-require_once($CFG->dirroot . '/mod/openstudio/api/tracking.php');
-require_once($CFG->dirroot . '/mod/openstudio/api/search.php');
-require_once($CFG->dirroot . '/mod/openstudio/api/item.php');
-require_once($CFG->dirroot . '/mod/openstudio/api/group.php');
-
 
 class content {
     const INFO_IMAGEDATA = 2;
@@ -338,21 +329,21 @@ EOF;
                         $data['folderid'] = null;
                     }
                 }
-                \studio_api_tracking_log_action($contentid, tracking::CREATE_CONTENT, $userid, $data['folderid']);
+                tracking::log_action($contentid, tracking::CREATE_CONTENT, $userid, $data['folderid']);
 
                 if (isset($data['visibility']) && ($data['visibility'] == self::VISIBILITY_TUTOR)) {
-                    \studio_api_tracking_log_action(
+                    tracking::log_action(
                             $contentid, tracking::UPDATE_CONTENT_VISIBILITY_TUTOR, $userid, $data['folderid']);
                 }
 
                 // Update search index for slot.
                 $slotdata = self::get_record($userid, $contentid);
                 if (($cm != null) && ($slotdata != false)) {
-                    \studio_api_search_update($cm, $slotdata);
+                    search::update($cm, $slotdata);
                 }
 
                 // Log content hash for slot.
-                \studio_api_item_log($contentid);
+                item::log($contentid);
             }
 
             return $contentid;
@@ -503,7 +494,7 @@ EOF;
                         throw new \Exception('Failed to add content version during content update.');
                     }
 
-                    studio_api_item_toversion($contentdata->id, $contentversionid);
+                    item::toversion($contentdata->id, $contentversionid);
 
                     $existingversioncount = contentversion::count($contentdata->id);
                     if ($existingversioncount > $addversion) {
@@ -611,8 +602,8 @@ EOF;
 
             $result = $DB->update_record('openstudio_contents', $contentdata);
             if ($shouldversion) {
-                studio_api_item_delete($contentdata->id);
-                studio_api_item_log($contentdata->id);
+                item::delete($contentdata->id);
+                item::log($contentdata->id);
             }
             if ($result === false) {
                 throw new \Exception('Failed to update content.');
@@ -641,13 +632,13 @@ EOF;
 
                 }
                 if ($trackingvisibiltyflag) {
-                    studio_api_tracking_log_action($contentdata->id, $trackingvisibiltyflag, $userid);
+                    tracking::log_action($contentdata->id, $trackingvisibiltyflag, $userid);
                 }
             }
 
-            studio_api_tracking_log_action($contentdata->id, tracking::UPDATE_CONTENT, $userid, $folderid);
+            tracking::log_action($contentdata->id, tracking::UPDATE_CONTENT, $userid, $folderid);
             if ($folderid) {
-                studio_api_tracking_log_action($folderid, tracking::MODIFY_FOLDER, $userid);
+                tracking::log_action($folderid, tracking::MODIFY_FOLDER, $userid);
             }
 
             $transaction->allow_commit();
@@ -656,12 +647,12 @@ EOF;
             if (($provenanceupdate == null) || ($provenanceupdate->provenancestatus < folder::PROVENANCE_UNLINKED)) {
                 // Delete search index for old record.
                 if (($cm != null) && ($contentdataold != false)) {
-                    studio_api_search_delete($cm, $contentdataold);
+                    search::delete($cm, $contentdataold);
                 }
             }
             $contentdata = self::get_record($userid, $contentdata->id);
             if (($cm != null) && ($contentdata != false)) {
-                studio_api_search_update($cm, $contentdata);
+                search::update($cm, $contentdata);
             }
 
             return $contentdata->id;
@@ -709,7 +700,7 @@ EOF;
             }
 
             // Update tracking.
-            \studio_api_tracking_log_action($contentversionid, tracking::DELETE_CONTENT_VERSION, $userid);
+            tracking::log_action($contentversionid, tracking::DELETE_CONTENT_VERSION, $userid);
 
             return true;
         } catch (\Exception $e) {
@@ -741,7 +732,7 @@ EOF;
 
             // Delete search index for old record.
             if (($cm != null) && ($contentdata != false)) {
-                \studio_api_search_delete($cm, $contentdata);
+                search::delete($cm, $contentdata);
             }
 
             // We version the current content, so that existing data is preserved.
@@ -774,7 +765,7 @@ EOF;
                     throw new \Exception('Failed to add content version during content delete.');
                 }
 
-                \studio_api_item_toversion($contentid, $contentversionid);
+                item::toversion($contentid, $contentversionid);
 
                 $existingversioncount = contentversion::count($contentdata->id);
                 if ($existingversioncount > $versioncount) {
@@ -853,7 +844,7 @@ EOF;
             flags::clear($contentid);
 
             // Update tracking.
-            \studio_api_tracking_log_action($contentid, tracking::DELETE_CONTENT, $userid);
+            tracking::log_action($contentid, tracking::DELETE_CONTENT, $userid);
 
             $transaction->allow_commit();
 
@@ -903,12 +894,12 @@ EOF;
                     throw new \Exception('Failed to update content.');
                 }
 
-                studio_api_tracking_log_action($contentdata->id, tracking::UPDATE_CONTENT, $userid);
+                tracking::log_action($contentdata->id, tracking::UPDATE_CONTENT, $userid);
 
                 // Update search index for content.
                 $contentdata = self::get_record($userid, $contentversiondata->contentid);
                 if (($cm != null) && ($contentdata != false)) {
-                    studio_api_search_update($cm, $contentdata);
+                    search::update($cm, $contentdata);
                 }
 
                 return $contentdata;
@@ -989,7 +980,7 @@ EOF;
                 throw new \moodle_exception('errorunexpectedbehaviour', 'openstudio', '');
             }
 
-            $ismember = studio_api_group_is_slot_group_member(
+            $ismember = group::is_content_group_member(
                     $cm->groupmode, $contentdata->visibility, $cm->groupingid, $contentdata->userid, $viewerid);
             if ($ismember) {
                 $contentdata->visibilitycontext = self::VISIBILITY_GROUP;
@@ -1220,11 +1211,11 @@ EOF;
                 throw new \Exception('Failed to add content version during content delete.');
             }
 
-            studio_api_item_toversion($contentid, $contentversionid);
+            item::toversion($contentid, $contentversionid);
 
             // Update tracking.
             if ($logaction) {
-                studio_api_tracking_log_action($contentid, tracking::ARCHIVE_CONTENT, $userid);
+                tracking::log_action($contentid, tracking::ARCHIVE_CONTENT, $userid);
             }
 
             return true;

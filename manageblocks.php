@@ -23,7 +23,6 @@
  */
 
 require_once(__DIR__ . '/../../config.php');
-require_once($CFG->dirroot . '/mod/openstudio/api/apiloader.php');
 
 use mod_openstudio\local\util;
 use mod_openstudio\local\api\levels;
