@@ -81,7 +81,7 @@ if ($vuid != $USER->id) {
 $pageurl = util::get_current_url();
 
 // Set stream view.
-$vid = optional_param('vid', -1, PARAM_INT);
+$vid = optional_param('vid', content::VISIBILITY_MODULE, PARAM_INT);
 if (! in_array($vid, array(content::VISIBILITY_PRIVATE,
         content::VISIBILITY_PRIVATE_PINBOARD,
         content::VISIBILITY_GROUP,
