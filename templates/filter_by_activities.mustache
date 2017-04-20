@@ -27,34 +27,27 @@
 
     Example context (json):
     {
-        "showmultigroup": true,
-        "groupitems" : [
+        "blocksdata" : [
             {
                "id" : "1",
-               "name" : "Group 1"
+               "name" : "Activity 1",
+               "selected" : false
             },
             {
                "id" : "2",
-               "name" : "Group 2"
+               "name" : "Activity 2",
+               "selected" : true
             }
         ]
     }
 
 }}
 <span class="openstudio-filter-select">
-    <label for="filter_groupid">{{#str}} filtergroup, mod_openstudio {{/str}}:</label>
-    {{#showmultigroup}}
-        <select id="filter_groupid">
-            {{#groupitems}}
-                <option value="{{groupid}}" name="{{name}}"
-                        {{#selectedgroup}}selected="selected"{{/selectedgroup}}>{{name}}
-                </option>
-            {{/groupitems}}
-        </select>
-    {{/showmultigroup}}
-    {{^showmultigroup}}
-        {{#groupitems}}
-            <span>{{name}}</span>
-        {{/groupitems}}
-    {{/showmultigroup}}
+    <label for="filter_block_activity">{{#str}} filterwork, mod_openstudio {{/str}}:</label>
+    <select id="filter_block_activity">
+            <option value="0">{{#str}} filterall, mod_openstudio {{/str}}</option>
+        {{#blocksdata}}
+            <option value="{{id}}" {{#selected}}selected="selected"{{/selected}}>{{name}}</option>
+        {{/blocksdata}}
+    </select>
 </span>
