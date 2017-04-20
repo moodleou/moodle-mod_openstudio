@@ -130,55 +130,6 @@
                 {{/myworkview}}
             </div>
         </div>
-        {{#socialdatatotal}}
-            {{#socialdata}}
-                <div class="openstudio-grid-item-content-detail-info">
-                   <span class="openstudio-grid-item-content-detail-info-box">
-                        <span>
-                            <img src="{{commentsicon}}"
-                                 alt="{{#str}} commentslabel, openstudio {{/str}}"
-                                 class="openstudio-grid-item-content-detail-info-icon
-                                        {{^comments}}openstudio-icon-inactive{{/comments}}" />
-                        </span>
-                        <span class="openstudio-grid-item-content-detail-info-text{{#commentsnew}}-new{{/commentsnew}}">
-                            {{#comments}} {{comments}} {{/comments}}
-                        </span>
-                   </span>
-                   <span class="openstudio-grid-item-content-detail-info-box">
-                        <span>
-                            <img src="{{inspirationicon}}"
-                                 alt="{{#str}} inspirationlabel, openstudio {{/str}}"
-                                 class="openstudio-grid-item-content-detail-info-icon
-                                        {{^inpsired}}openstudio-icon-inactive{{/inpsired}}" />
-                        </span>
-                        <span class="openstudio-grid-item-content-detail-info-text{{#inspirednew}}-new{{/inspirednew}}">
-                            {{#inspired}} {{inspired}} {{/inspired}}
-                        </span>
-                   </span>
-                   <span class="openstudio-grid-item-content-detail-info-box">
-                        <span>
-                            <img src="{{participationicon}}"
-                                 alt="{{#str}} participationlabel, openstudio {{/str}}"
-                                 class="openstudio-grid-item-content-detail-info-icon
-                                        {{^mademelaugh}}openstudio-icon-inactive{{/mademelaugh}}" />
-                        </span>
-                        <span class="openstudio-grid-item-content-detail-info-text{{#mademelaughnew}}-new{{/mademelaughnew}}">
-                            {{#mademelaugh}} {{mademelaugh}} {{/mademelaugh}}
-                        </span>
-                   </span>
-                   <span class="openstudio-grid-item-content-detail-info-box">
-                        <span>
-                            <img src="{{favouriteicon}}"
-                                 alt="{{#str}} favouritelabel, openstudio {{/str}}"
-                                 class="openstudio-grid-item-content-detail-info-icon
-                                        {{^favourite}}openstudio-icon-inactive{{/favourite}}" />
-                        </span>
-                        <span class="openstudio-grid-item-content-detail-info-text{{#favouritenew}}-new{{/favouritenew}}">
-                            {{#favourite}} {{favourite}} {{/favourite}}
-                        </span>
-                   </span>
-                </div>
-            {{/socialdata}}
-        {{/socialdatatotal}}
+        {{>mod_openstudio/content_block_social}}
     </div>
 </div>

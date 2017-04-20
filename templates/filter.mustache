@@ -107,8 +107,9 @@
 {{#myactivities}}
     {{>mod_openstudio/filter_by_activities}}
 {{/myactivities}}
-
-{{>mod_openstudio/filter_by_pagesizes}}
+{{^myactivities}}
+    {{>mod_openstudio/filter_by_pagesizes}}
+{{/myactivities}}
 
 <div class="openstudio-filter-active {{^filteractive}}openstudio-hidden{{/filteractive}}">
     <div id="filter_active_container" class="openstudio-filter-arrow-box">

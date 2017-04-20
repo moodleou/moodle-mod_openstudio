@@ -631,6 +631,11 @@ if ($finalviewpermissioncheck) {
             if ($vid == content::VISIBILITY_WORKSPACE || $vid == content::VISIBILITY_PRIVATE) {
                 $activityid = $content->l2id;
 
+                // Should only display a maximum of two lines for the activity title.
+                if (strlen($content->name) > 70) {
+                    $content->name = substr($content->name, 0, 67) . '...';
+                }
+
                 if (array_key_exists($activityid, $activityitems)) {
                     $activityitems[$activityid]->activities[] = (object) $content;
                 } else {

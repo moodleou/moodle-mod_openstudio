@@ -89,19 +89,20 @@
             {{total}}
         </span>
     </div>
-    <div class="openstudio-preference-item">
-        {{>mod_openstudio/filter_by_pagesizes}}
-    </div>
-
+    {{^myactivities}}
+        <div class="openstudio-preference-item">
+            {{>mod_openstudio/filter_by_pagesizes}}
+        </div>
+    {{/myactivities}}
     {{#myactivities}}
         <div class="openstudio-preference-item">
-            {{>mod_openstudio/filter_by_group}}
+            {{>mod_openstudio/filter_by_activities}}
         </div>
     {{/myactivities}}
 
     {{#selectview}}
         <div class="openstudio-preference-item">
-            {{>mod_openstudio/filter_by_activities}}
+            {{>mod_openstudio/filter_by_group}}
         </div>
     {{/selectview}}
 

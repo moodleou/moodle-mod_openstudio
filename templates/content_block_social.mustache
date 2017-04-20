@@ -1,0 +1,82 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_openstudio/content_block_social
+
+    Content block social icons template of the OpenStudio UI.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Example context (json):
+    {
+        "socialdatatotal" : 6,
+        "socialdata" : {
+            "comments" : 1,
+            "commentsnew" : 1,
+            "inpsired" : 2,
+            "mademelaugh" : 3,
+            "mademelaughnew" : 1,
+            "favourite" : 0
+         }
+     }
+}}
+{{#socialdatatotal}}
+    {{#socialdata}}
+        <div class="openstudio-grid-item-content-detail-info">
+            <span class="openstudio-grid-item-content-detail-info-box">
+                <span>
+                    <img src="{{commentsicon}}" alt="{{#str}} commentslabel, openstudio {{/str}}"
+                         class="openstudio-grid-item-content-detail-info-icon {{^comments}}openstudio-icon-inactive{{/comments}}" />
+                </span>
+                <span class="openstudio-grid-item-content-detail-info-text{{#commentsnew}}-new{{/commentsnew}}">
+                    {{#comments}} {{comments}} {{/comments}}
+                </span>
+            </span>
+            <span class="openstudio-grid-item-content-detail-info-box">
+                <span>
+                    <img src="{{inspirationicon}}" alt="{{#str}} inspirationlabel, openstudio {{/str}}"
+                        class="openstudio-grid-item-content-detail-info-icon {{^inspired}}openstudio-icon-inactive{{/inspired}}" />
+                </span>
+                <span class="openstudio-grid-item-content-detail-info-text{{#inspirednew}}-new{{/inspirednew}}">
+                    {{#inspired}} {{inspired}} {{/inspired}}
+                </span>
+            </span>
+            <span class="openstudio-grid-item-content-detail-info-box">
+                <span>
+                    <img src="{{participationicon}}" alt="{{#str}} participationlabel, openstudio {{/str}}"
+                        class="openstudio-grid-item-content-detail-info-icon {{^mademelaugh}}openstudio-icon-inactive{{/mademelaugh}}" />
+                </span>
+                <span class="openstudio-grid-item-content-detail-info-text{{#mademelaughnew}}-new{{/mademelaughnew}}">
+                    {{#mademelaugh}} {{mademelaugh}} {{/mademelaugh}}
+                </span>
+            </span>
+            <span class="openstudio-grid-item-content-detail-info-box">
+                <span>
+                    <img src="{{favouriteicon}}" alt="{{#str}} favouritelabel, openstudio {{/str}}"
+                        class="openstudio-grid-item-content-detail-info-icon {{^favourite}}openstudio-icon-inactive{{/favourite}}" />
+                </span>
+                <span class="openstudio-grid-item-content-detail-info-text{{#favouritenew}}-new{{/favouritenew}}">
+                    {{#favourite}} {{favourite}} {{/favourite}}
+                </span>
+            </span>
+        </div>
+    {{/socialdata}}
+{{/socialdatatotal}}
