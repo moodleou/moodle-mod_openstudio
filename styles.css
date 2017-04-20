@@ -1900,6 +1900,10 @@ a.openstudio-add-title:hover  {
     vertical-align: middle;
 }
 
+.openstudio-default-folder-background.hascontent img {
+    border: none;
+}
+
 .openstudio-grid-item-content-detail-owner-img {
     float: left;
     margin-right: 5px;
