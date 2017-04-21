@@ -178,12 +178,14 @@
                 </div>
             </div>
             <div class="openstudio-profile-work-progress">
-                <div class="openstudio-profile-label-title">
-                    {{#str}} mystudioworkprogress, mod_openstudio {{/str}}
-                </div>
-                <div class="openstudio-profile-work-progress">
-                    {{>mod_openstudio/work_progress}}
-                </div>
+                {{#progressenable}}
+                    <div class="openstudio-profile-label-title">
+                        {{#str}} mystudioworkprogress, mod_openstudio {{/str}}
+                    </div>
+                    <div class="openstudio-profile-work-progress">
+                        {{>mod_openstudio/work_progress}}
+                    </div>
+                {{/progressenable}}
             </div>
         </div>
         {{/people}}

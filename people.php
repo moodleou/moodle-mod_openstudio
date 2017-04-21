@@ -130,7 +130,9 @@ if (!empty($peopledatatemp)) {
         }
 
         $person->flagscontentread = $flagscontentread;
-        if ($person->userprogressdata['totalslots'] > 0) {
+
+        $person->progressenable = $person->userprogressdata['totalslots'] > 0;
+        if ($person->progressenable) {
             $percentcompleted = round($person->userprogressdata['filledslots'] / $person->userprogressdata['totalslots'] * 100);
             $person->percentcompleted = $percentcompleted;
         }
