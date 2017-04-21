@@ -581,13 +581,6 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $showmultigroup = false;
         $groupitem = array();
         if ($grouplist) {
-            $groupitem[0] = (object) [
-                'groupid' => 0,
-                'selectedgroup' => $contentdata->selectedgroupid == 0 ? true : false,
-                'vid' => content::VISIBILITY_GROUP,
-                'name' => get_string('filterall', 'openstudio')
-            ];
-
             foreach ($grouplist as $group) {
                 $groupitem[$group->groupid] = (object) [
                     'groupid' => $group->groupid,
@@ -597,7 +590,16 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 ];
             }
 
-            $showmultigroup = (count($groupitem) > 1);
+            // Add All option to group select box when number of group > 1.
+            if (count($groupitem) > 1) {
+                $showmultigroup = true;
+                $groupitem[0] = (object) [
+                    'groupid' => 0,
+                    'selectedgroup' => $contentdata->selectedgroupid == 0 ? true : false,
+                    'vid' => content::VISIBILITY_GROUP,
+                    'name' => get_string('filterall', 'openstudio')
+                ];
+            }
         }
 
         $contentdata->cmid = $cmid;
