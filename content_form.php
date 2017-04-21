@@ -38,6 +38,16 @@ use mod_openstudio\local\api\group;
  */
 class mod_openstudio_content_form extends moodleform {
 
+    const ACCEPT_TYPE = array(
+            '.jpg', '.jpe', '.jpeg', '.gif', '.png', // Image.
+            '.avi', '.mpg', '.mpeg', '.mov', '.mp4', '.mv4', '.flv', '.gif', // Video.
+            '.aiff', '.wav', '.mp3', // Audio.
+            '.doc', '.docx', '.rtf', '.pdf', '.odt', '.fdf', '.nbk', // Document.
+            '.ppt', '.pptx', '.odp', // Presentation.
+            '.xls', '.xlsx', '.csv', '.ods', // Spreadsheet.
+            '.dwg', '.stl', '.stp', '.eps', '.dxf', // CAD.
+            '.zip');
+
     protected function definition() {
         global $CFG, $USER, $DB;
 
@@ -199,7 +209,7 @@ class mod_openstudio_content_form extends moodleform {
 
                 $mform->addElement('filemanager', 'attachments', get_string('contentformattachments', 'openstudio'), null,
                         array('maxbytes' => $maxbytes, 'subdirs' => false,
-                              'maxfiles' => 1, 'accepted_types' => '*'));
+                              'maxfiles' => 1, 'accepted_types' => self::ACCEPT_TYPE));
 
             }
 
