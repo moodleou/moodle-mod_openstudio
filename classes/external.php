@@ -850,7 +850,7 @@ class mod_openstudio_external extends external_api {
         $actionallowed = ($contentdata->userid == $userid) && $permissions->addcontent;
         $actionallowed = $actionallowed || $permissions->managecontent;
         if ($actionallowed) {
-            if ($params['containingfolder']) {
+            if ($params['containingfolder']) { // This is a content in folder.
                 if ($contentdata) {
                     $provenance = folder::get_content_provenance($params['containingfolder'], $contentdata->id);
                     $success = folder::remove_content($params['containingfolder'], $contentdata->id, $userid);
@@ -860,9 +860,16 @@ class mod_openstudio_external extends external_api {
                     }
                 }
             } else {
+                if ($contentdata->contenttype == content::TYPE_FOLDER) {
+                    // If this is folder, remove contents inside it.
+                    $removedslots = folder::remove_contents($contentdata->id, $userid);
+                }
+
                 if ($contentdata->levelid > 0 && $contentdata->levelcontainer > 0 && $permissions->versioningon) {
+                    // If content is an activity, archive it.
                     $success = content::delete($userid, $params['cid'], $cminstance->versioning, $cm);
                 } else {
+                    // If content is not an activity, delete it completely.
                     $success = content::empty_content($userid, $params['cid'], true, $cminstance->versioning, $cm);
                 }
             }
