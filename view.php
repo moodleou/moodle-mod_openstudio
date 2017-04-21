@@ -304,13 +304,15 @@ if ($fblockdataarray === false) {
         }
 
         // Check if the block being checked as been selected by the user for filtering.
-        if (is_array($fblockarray) && ($fblockarray !== null) && in_array((int) $blockdata->id, $fblockarray)) {
+        if ((is_array($fblockarray) && ($fblockarray !== null) && in_array((int) $blockdata->id, $fblockarray))
+                || $blockdata->id == $blockid) {
             $fblockdataarray[$key]->checked = $isblockchecked = true;
         } else {
             $fblockdataarray[$key]->checked = false;
         }
     }
 }
+
 if (!$isblockchecked) {
     $fblockarray = null;
 }
@@ -459,11 +461,14 @@ $contentdata = (object) array('contents' => array(), 'total' => 0);
 $contentdata->openstudio_view_filters = $SESSION->openstudio_view_filters[$vid];
 
 if ($finalviewpermissioncheck) {
-    // In My Module view, if block filter is on and set to one block only,
+    // When view My Ativity or
+    // In My Module/Group view, if block filter is on and set to one block only,
     // then pagination behaves differently.  In this state, we display all the activity/content rather limiting
     // it to the default stream page size.  To  achieve this, we remove the pagination limit
     // by setting it to 0.
-    if (($vid == content::VISIBILITY_PRIVATE) && ($fblock > 0) && (count($fblockarray) == 1)) {
+
+    if ((($vid == content::VISIBILITY_MODULE || $vid == content::VISIBILITY_GROUP) && ($fblock > 0) && (count($fblockarray) == 1))
+            || $vid == content::VISIBILITY_PRIVATE) {
         $streamdatapagesize = 0;
     }
 
@@ -632,8 +637,8 @@ if ($finalviewpermissioncheck) {
                 $activityid = $content->l2id;
 
                 // Should only display a maximum of two lines for the activity title.
-                if (strlen($content->name) > 65) {
-                    $content->name = substr($content->name, 0, 65) . '...';
+                if (strlen($content->name) > 55) {
+                    $content->name = substr($content->name, 0, 55) . '...';
                 }
 
                 if (array_key_exists($activityid, $activityitems)) {

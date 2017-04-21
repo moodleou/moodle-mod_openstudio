@@ -31,12 +31,12 @@
             {
                "id" : "1",
                "name" : "Activity 1",
-               "selected" : false
+               "checked" : false
             },
             {
                "id" : "2",
                "name" : "Activity 2",
-               "selected" : true
+               "checked" : true
             }
         ]
     }
@@ -47,7 +47,7 @@
     <select id="filter_block_activity">
             <option value="0">{{#str}} filterall, mod_openstudio {{/str}}</option>
         {{#blocksdata}}
-            <option value="{{id}}" {{#selected}}selected="selected"{{/selected}}>{{name}}</option>
+            <option value="{{id}}" {{#checked}}selected="selected"{{/checked}}>{{name}}</option>
         {{/blocksdata}}
     </select>
 </span>
