@@ -462,6 +462,9 @@ button.openstudio-notification-stopbutton:focus {
         top: -17px;
         left: 335px;
     }
+    .openstudio-profile-progress-content .openstudio-profile-progress-content-description {
+        margin-top: 8px;
+    }
 }
 
 @media (max-width: 419px) {
@@ -5362,6 +5365,8 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-work-progress-percent {
         font-size: 1.14285em;
         color: #464542;
+        line-height: 30px;
+        margin-top: -3px;
     }
 
     /**
