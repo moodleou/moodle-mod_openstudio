@@ -3044,6 +3044,118 @@ div.openstudio-browse-post-item:nth-of-type(odd) div.openstudio-browse-post-item
     display: inline;
 }
 
+/**
+ * View deleted post
+ */
+#id_viewdeletedpostbutton {
+    margin-top: 15px;
+}
+
+.path-mod-openstudio .moodle-dialogue-base .openstudio-view-deleted-dialogue.moodle-dialogue .moodle-dialogue-content
+.moodle-dialogue-ft {
+    display: none;
+}
+
+.openstudio-view-deleted-dialogue .moodle-dialogue-bd {
+    background: #f2f3f6;
+}
+
+.openstudio-view-deleted-header-hint {
+    margin-bottom: 20px;
+    font-size: 1em;
+    font-family: Arial;
+    color: #000;
+}
+
+.openstudio-view-deleted-header-save,
+.openstudio-view-deleted-footer-save {
+    margin: 14px 0;
+}
+
+.openstudio-view-deleted-header-save span {
+    width: 52%;
+    display: inline-block;
+}
+
+.openstudio-view-deleted-body {
+    max-height: 230px;
+    overflow-y: auto;
+}
+
+button.openstudio-view-deleted-save-button {
+    float: right;
+    margin-right: 0px;
+}
+
+.openstudio-view-deleted-item {
+    display: table;
+    width: 100%;
+    border-top: 1px solid #b2bccd;
+    padding: 4px 0;
+}
+
+.openstudio-view-deleted-item:last-child {
+    border-bottom: 1px solid #b2bccd;
+}
+
+.openstudio-view-deleted-item-row {
+    display: table-row;
+}
+
+.openstudio-view-deleted-item-row > div {
+    display: table-cell;
+    min-height: 1px;
+    vertical-align: top;
+}
+
+.openstudio-view-deleted-item-column1 {
+    width: 79px;
+    padding-top: 9px;
+    padding-bottom: 9px;
+}
+
+.openstudio-view-deleted-item-column2 {
+    padding-top: 11px;
+    padding-bottom: 9px;
+    width: 235px;
+}
+
+.openstudio-view-deleted-item-row > div.openstudio-view-deleted-item-column3 {
+    vertical-align: middle;
+}
+
+.openstudio-view-deleted-item-picture img {
+    width: 64px;
+}
+
+.openstudio-view-deleted-item-name {
+    display: block;
+    font-family: Arial;
+    font-weight: bold;
+    font-size: 0.928em;
+    color: #002158;
+    line-height: 22px;
+    margin-top: -7px;
+}
+
+.openstudio-view-deleted-item-date {
+    display: block;
+    font-family: Arial;
+    font-size: 0.857em;
+    color: #464542;
+    margin-top: -8px;
+}
+
+.openstudio-view-deleted-item-ordernumber-guide {
+    font-family: Arial;
+    font-size: 0.857em;
+    color: #464542;
+}
+
+/**
+ * End view deleted posts
+ */
+
 /* People Page */
 .openstudio-profile-row {
     height: 48px;
@@ -5335,6 +5447,83 @@ a.openstudio-add-new-content-link:hover  {
         font-family: Arial;
         font-size: 1em;
     }
+
+    /**
+     * View deleted posts
+     */
+
+    .openstudio-view-deleted-body {
+        max-height: none;
+        overflow-y: none;
+    }
+
+    .openstudio-view-deleted-item-row > div {
+        display: inline-block;
+    }
+
+
+    .openstudio-view-deleted-item-picture img {
+        width: 100%;
+    }
+
+    .openstudio-view-deleted-item-ordernumber-guide {
+        display: inline-block;
+        padding-right: 6px;
+        padding-top: 2px;
+    }
+
+    .openstudio-view-deleted-item {
+        display: block;
+    }
+
+    .openstudio-view-deleted-item-row {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .openstudio-view-deleted-item-column1 {
+        order: 2;
+        width: 100%;
+        padding-top: 4px;
+        padding-bottom: 13px;
+    }
+
+    .openstudio-view-deleted-item-column2 {
+        order: 1;
+        width: 100%;
+        padding-bottom: 0;
+        padding-top: 0;
+    }
+
+    .openstudio-view-deleted-item-column3 {
+        order: 3;
+        width: 100%;
+        padding-left: 0;
+    }
+
+    .openstudio-view-deleted-item {
+        padding: 15px;
+        width: auto;
+    }
+
+    .openstudio-view-deleted-header-hint {
+        margin-bottom: 4px;
+    }
+
+    .openstudio-view-deleted-item-name {
+        font-size: 1.285em;
+        margin-top: -5px;
+        word-break: break-word;
+    }
+
+    .openstudio-view-deleted-item-date {
+        font-size: 1.142em;
+        margin-top: -2px;
+    }
+
+    /**
+     * End view deleted posts
+     */
 }
 /* Mobile small. */
 @media (max-width: 419px) {

@@ -25,6 +25,8 @@
 namespace mod_openstudio\local\api;
 
 use mod_openstudio\local\util\defaults;
+use mod_openstudio\local\api\levels;
+use mod_openstudio\local\api\tracking;
 use mod_openstudio\local\util;
 
 defined('MOODLE_INTERNAL') || die();
@@ -1453,5 +1455,140 @@ EOF;
         }
 
         return $data;
+    }
+
+    /**
+     * Restore deleted content in folder.
+     *
+     * @param int $userid Content owner id.
+     * @param int $contentdata Content data.
+     * @param int $versionid Version id.
+     * @param int $folderid Set id.
+     * @throws \moodle_exception.
+     * @return int|bool Returns the restored folder id.
+     */
+    public static function undelete_in_folder($userid, $contentdata, $versionid, $folderid, $cm = null) {
+        global $DB;
+        $newcontentid = 0;
+        try {
+            if ($contentdata->visibility == self::VISIBILITY_INFOLDERONLY) {
+                self::undelete($userid, $contentdata->id, $versionid, $cm);
+            } else {
+                // Insert record, copy content version to new content.
+                $contentversiondata = $DB->get_record('openstudio_content_versions',
+                        array('contentid' => $contentdata->id, 'id' => $versionid), '*', MUST_EXIST);
+
+                $insertdata = array(
+                    'openstudioid' => $contentdata->openstudioid,
+                    'levelid' => $contentdata->levelid,
+                    'levelcontainer' => $contentdata->levelcontainer,
+                    'contenttype' => $contentversiondata->contenttype,
+                    'content' => $contentversiondata->content,
+                    'thumbnail' => $contentversiondata->thumbnail,
+                    'urltitle' => $contentversiondata->urltitle,
+                    'name' => $contentversiondata->name,
+                    'description' => $contentversiondata->description,
+                    'textformat' => $contentversiondata->textformat,
+                    'mimetype' => $contentversiondata->mimetype,
+                    'fileid' => $contentversiondata->fileid,
+                    'visibility' => self::VISIBILITY_INFOLDERONLY,
+                    'userid' => $userid,
+                    'deletedby' => null,
+                    'deletedtime' => null,
+                    'timemodified' => time(),
+                    'timeflagged' => time()
+                );
+
+                $newcontentid = $DB->insert_record('openstudio_contents', (object)$insertdata);
+                $DB->set_field('openstudio_folder_contents', 'contentid', $newcontentid,
+                        array('folderid' => $folderid, 'contentid' => $contentdata->id, 'status' => levels::SOFT_DELETED));
+                $DB->set_field('openstudio_folder_contents', 'provenancestatus', null,
+                        array('folderid' => $folderid, 'contentid' => $newcontentid));
+            }
+            if ($newcontentid > 0) {
+                $contentdata->id = $newcontentid;
+            }
+
+            $result = $DB->get_records('openstudio_folder_contents',
+                    array('folderid' => $folderid, 'contentid' => $contentdata->id, 'status' => levels::SOFT_DELETED),
+                    null, '*');
+
+            if ($result) {
+                $foldercontentsversion = reset($result);
+                // Get all content in folder with status default.
+                $foldercontents = $DB->get_records('openstudio_folder_contents',
+                        array('folderid' => $folderid, 'status' => levels::ACTIVE), 'contentorder ASC', '*');
+                // Update status content version to status default.
+                $DB->set_field('openstudio_folder_contents', 'status', levels::ACTIVE,
+                        array('id' => $foldercontentsversion->id));
+                // Change content version to first order.
+                array_unshift($foldercontents, $foldercontentsversion);
+                $counter = 0;
+                foreach ($foldercontents as $foldercontentinstance) {
+                    $counter++;
+                    $DB->set_field('openstudio_folder_contents', 'contentorder', $counter,
+                            array('folderid' => $folderid, 'id' => $foldercontentinstance->id));
+                }
+            }
+            return $folderid;
+
+        } catch (\moodle_exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Restore deleted content.
+     * @param int $userid User id.
+     * @param int $contentversionid Content id.
+     * @param int $versionid Version id.
+     * @throws \moodle_exception.
+     * @return object|bool Returns the restored content data.
+     */
+    public static function undelete($userid, $contentversionid, $versionid, $cm = null) {
+        global $DB;
+        try {
+            $contentversiondata = $DB->get_record('openstudio_content_versions',
+                    array('contentid' => $contentversionid, 'id' => $versionid), '*', MUST_EXIST);
+
+            $contentdata = $DB->get_record('openstudio_contents',
+                    array('id' => $contentversiondata->contentid), '*', MUST_EXIST);
+
+            $contentdata->contenttype = $contentversiondata->contenttype;
+            $contentdata->content = $contentversiondata->content;
+            $contentdata->thumbnail = $contentversiondata->thumbnail;
+            $contentdata->urltitle = $contentversiondata->urltitle;
+            $contentdata->name = $contentversiondata->name;
+            $contentdata->description = $contentversiondata->description;
+            $contentdata->textformat = $contentversiondata->textformat;
+            $contentdata->mimetype = $contentversiondata->mimetype;
+            $contentdata->fileid = $contentversiondata->fileid;
+            $contentdata->deletedby = null;
+            $contentdata->deletedtime = null;
+            $contentdata->timemodified = time();
+
+            // Restore content from content version choose.
+            $result = $DB->update_record('openstudio_contents', $contentdata);
+            if ($result === false) {
+                return false;
+            } else {
+                // Delete content version after restore.
+                $resultdelete = $DB->delete_records('openstudio_content_versions', array('id' => $versionid));
+                if ($resultdelete === false) {
+                    return false;
+                }
+            }
+            tracking::log_action($contentdata->id, tracking::UPDATE_CONTENT, $userid);
+
+            // Update search index for content.
+            $contentdata = self::get_record($userid, $contentversiondata->contentid);
+            if (($cm != null) && ($contentdata != false)) {
+                search::update($cm, $contentdata);
+            }
+
+            return $contentdata;
+        } catch (\moodle_exception $e) {
+            return false;
+        }
     }
 }

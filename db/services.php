@@ -133,6 +133,15 @@ $functions = array(
         'ajax' => true,
         'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
         'capabilities' => 'mod/openstudio:view'
+    ),
+    'mod_openstudio_external_restore_content_in_folder' => array(
+        'classname' => 'mod_openstudio_external',
+        'methodname' => 'restore_content_in_folder',
+        'description' => 'Restore deleted content in folder',
+        'type' => 'write',
+        'ajax' => true,
+        'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
+        'capabilities' => 'mod/openstudio:viewdeleted'
     )
 );
 
@@ -150,7 +159,8 @@ $services = array(
             'mod_openstudio_external_delete_comment',
             'mod_openstudio_external_lock',
             'mod_openstudio_external_unlock',
-            'mod_openstudio_external_read_notifications'),
+            'mod_openstudio_external_read_notifications',
+            'mod_openstudio_external_restore_content_in_folder'),
         'restrictedusers' => 0,
         'enabled' => 1,
         'shortname' => 'openstudio_service',

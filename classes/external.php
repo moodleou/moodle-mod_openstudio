@@ -1269,4 +1269,69 @@ class mod_openstudio_external extends external_api {
     public static function read_notifications_returns() {
         return new external_value(PARAM_BOOL, 'Success');
     }
+
+    /**
+     * Parameters for restore_content_in_folder
+     *
+     * @return external_function_parameters
+     */
+    public static function restore_content_in_folder_parameters() {
+        return new external_function_parameters([
+                'cmid' => new external_value(PARAM_INT, 'Course module ID'),
+                'cvid' => new external_value(PARAM_INT, 'Content version ID'),
+                'folderid' => new external_value(PARAM_INT, 'Containing folder ID')
+        ]);
+    }
+
+    /**
+     * Restore deleted content in folder.
+     *
+     * @param int $cmid Course module ID
+     * @param int $cvid Content version ID
+     * @param int $folderid Containing folder ID
+     */
+    public static function restore_content_in_folder($cmid, $cvid, $folderid) {
+        $params = self::validate_parameters(self::restore_content_in_folder_parameters(), [
+            'cmid' => $cmid,
+            'cvid' => $cvid,
+            'folderid' => $folderid
+        ]);
+        $context = context_module::instance($params['cmid']);
+        external_api::validate_context($context);
+
+        global $USER;
+        $userid = $USER->id;
+        $coursedata = util::render_page_init($params['cmid']);
+        $permissions = $coursedata->permissions;
+
+        $contetversiondata = contentversion::get($params['cvid'], $userid, $coursedata->cm);
+        $contentdata = null;
+        if ($contetversiondata != false) {
+            $contentdata = content::get($contetversiondata->contentid);
+        }
+
+        if ($contetversiondata && $contentdata) {
+            $actionallowed = ($permissions->viewdeleted && $contentdata->userid == $userid)
+                || $permissions->managecontent;
+            if ($actionallowed) {
+                if (content::undelete_in_folder($contentdata->userid, $contentdata, $contetversiondata->id,
+                        $params['folderid'], $coursedata->cm) === false) {
+                    throw new moodle_exception('errorcontentrestoreinfolder', 'openstudio');
+                }
+            }
+        } else {
+            throw new moodle_exception('errorinvalidcontent', 'openstudio');
+        }
+
+        return true;
+    }
+
+    /**
+     * Return values for restore_content_in_folder.
+     *
+     * @return external_value
+     */
+    public static function restore_content_in_folder_returns() {
+        return new external_value(PARAM_BOOL, 'Success');
+    }
 }

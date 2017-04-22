@@ -717,13 +717,14 @@ class renderer_utils {
      *
      * @param object $contentdata The content records to display.
      * @param object $context Moodle context object.
+     * @param bool $iscontentversion Is content version
      * @return object $contentdata
      */
-    public static function content_type_image($contentdata, $context) {
+    public static function content_type_image($contentdata, $context, $iscontentversion = false) {
         global $CFG, $OUTPUT;
 
         $contenttypedefaultimage = true;
-        $contentthumbnailarea = 'contentthumbnail';
+        $contentthumbnailarea = $iscontentversion ? 'contentthumbnailversion' : 'contentthumbnail';
         switch ($contentdata->contenttype) {
             case content::TYPE_IMAGE:
                 if ($contentdata->mimetype == 'image/bmp') {
@@ -1155,7 +1156,8 @@ class renderer_utils {
                 $contentthumbnailfileurl = $content->contenttypeimage;
 
                 $contentdetail = new \moodle_url('/mod/openstudio/content.php', array(
-                        'id' => $folderdata->cmid, 'sid' => $content->id, 'vuid' => $content->userid, 'folderid' => $folderdata->id));
+                        'id' => $folderdata->cmid, 'sid' => $content->id, 'vuid' => $content->userid,
+                        'folderid' => $folderdata->id));
                 $content->contentdetailurl = $contentdetail;
                 $content->contentthumbnailurl = $contentthumbnailfileurl;
                 $content->datetimeupdated = $content->timemodified ? date('j/m/y h:i', $content->timemodified) : null;
@@ -1277,7 +1279,6 @@ class renderer_utils {
      * @param $permissions Object
      * @param $cmid int Course module ID
      * @param $cminstance object Course module instance
-     * @return bool
      */
     public static function process_content_comment(&$contentdata, $permissions, $cmid, $cminstance) {
         global $PAGE, $CFG, $USER;
@@ -1306,7 +1307,7 @@ class renderer_utils {
 
                     // Check comment attachment.
                     if ($file = comments::get_attachment($comment->id)) {
-                        $comment->commenttext .= renderer_utils::get_media_filter_markup($file);
+                        $comment->commenttext .= self::get_media_filter_markup($file);
                     }
 
                     // Filter comment text.
@@ -1379,6 +1380,51 @@ class renderer_utils {
                     'jsdependency' => \filter_oump::get_js_dependency()
                 ]));
             }
+        }
+    }
+
+    /**
+     * Check view-deleted-post capability and set up data and include dependencies.
+     *
+     * @param $contentdata Object
+     * @param $permissions Object
+     * @param $cmid int Course module ID
+     */
+    public static function process_view_deleted_post(&$contentdata, $permissions, $cmid) {
+        global $PAGE;
+
+        if ($contentdata->contenttype != content::TYPE_FOLDER) {
+            return;
+        }
+
+        $context = \context_module::instance($cmid);
+
+        // Check comment permission.
+        $contentdata->viewdeletedpostenable = ($permissions->viewdeleted && $contentdata->isownedbyviewer)
+                || $permissions->managecontent;
+
+        if ($contentdata->viewdeletedpostenable) {
+
+            $deletedposttemp = folder::get_deleted_contents($contentdata->id);
+            $deletedposts = [];
+            foreach ($deletedposttemp as $post) {
+                $post = self::content_type_image($post, $context, true);
+
+                $deletedposts[] = (object)array(
+                    'pictureurl' => (string) $post->contenttypeimage,
+                    'name' => $post->name,
+                    'date' => $post->deletedtime ? date('j/m/y h:i', $post->deletedtime) : '',
+                    'id' => $post->id
+                );
+            }
+
+            // Require strings for js.
+            $PAGE->requires->strings_for_js(array('folderdeletedposts'), 'mod_openstudio');
+
+            $PAGE->requires->js_call_amd('mod_openstudio/viewdeleted', 'init', [[
+                'deletedposts' => $deletedposts,
+                'cmid' => $cmid,
+                'folderid' => $contentdata->id]]);
         }
     }
 }

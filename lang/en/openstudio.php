@@ -68,6 +68,7 @@ $string['event:contentlocked'] = 'Content locked';
 $string['event:contentunlocked'] = 'Content unlocked';
 $string['errorcontentlock'] = 'Lock content error!';
 $string['errorcontentunlock'] = 'Unlock content error!';
+$string['errorcontentrestoreinfolder'] = 'Restore content in folder error!';
 
 $string['event:foldercreated'] = 'Folder created';
 $string['event:foldercontentcreated'] = 'Folder content created';
@@ -802,7 +803,8 @@ $string['foldereditdescription'] = 'Edit description';
 $string['foldertitle'] = 'Folder';
 $string['foldertitlepinboard'] = 'Pinboard folder';
 $string['folderdeletedcontents'] = 'Deleted contents';
-$string['folderdeletedcontentsintro'] = 'The contents listed below have been deleted from this folder. Click the thumbnail of a content below to view the archived version of the content.';
+$string['folderdeletedposts'] = 'Deleted posts';
+$string['folderdeletedcontentsintro'] = 'The posts listed below have been deleted from this folder. Click the thumbnail of a post below to view the archived version of the post.';
 $string['folderremovecontent'] = 'Remove content {$a}.';
 $string['foldermovecontentup'] = 'Move content {$a->name} up to position {$a->position}.';
 $string['foldermovecontentdown'] = 'Move content {$a->name} down to position {$a->position}.';

@@ -256,7 +256,6 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         ]);
         $data->notificationstopicon = $stopicon->export_for_template($this->output);
 
-
         $addtodashboard = block_externaldashboard_backend::render_favourites_button($PAGE->cm, false);
         $data->addtodashboard = $addtodashboard;
 
@@ -805,14 +804,20 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                     $metadatamake = empty($contentexifinfo['Make']) ? '' : $contentexifinfo['Make'];
 
                     if (strlen($metadatamake) < 2) {
-                        $metadatamake = empty($contentexifinfo['UndefinedTag:0xA433']) ? '' : $contentexifinfo['UndefinedTag:0xA433'];
+                        if (empty($contentexifinfo['UndefinedTag:0xA433'])) {
+                            $metadatamake = '';
+                        } else {
+                            $metadatamake = $contentexifinfo['UndefinedTag:0xA433'];
+                        }
                     }
 
                     $metadatamodel = empty($contentexifinfo['Model']) ? '' : $contentexifinfo['Model'];
 
-
-
-                    $metadatafocal = empty($contentexifinfo['FocalLengthIn35mmFilm']) ? '' : $contentexifinfo['FocalLengthIn35mmFilm'];
+                    if (empty($contentexifinfo['FocalLengthIn35mmFilm'])) {
+                        $metadatafocal = '';
+                    } else {
+                        $metadatafocal = $contentexifinfo['FocalLengthIn35mmFilm'];
+                    }
 
                     $metadataexposure = empty($contentexifinfo['ExposureTime']) ? '' : $contentexifinfo['ExposureTime'];
 
@@ -1049,6 +1054,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         renderer_utils::process_content_lock($folderdata, $permissions, $cmid);
         // Process comment.
         renderer_utils::process_content_comment($folderdata, $permissions, $cmid, $cminstance);
+        // Process view deleted post.
+        renderer_utils::process_view_deleted_post($folderdata, $permissions, $cmid);
 
         return $this->render_from_template('mod_openstudio/folder_page', $folderdata);
     }

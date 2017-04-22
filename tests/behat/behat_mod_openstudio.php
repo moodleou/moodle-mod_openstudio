@@ -87,9 +87,9 @@ class behat_mod_openstudio extends behat_base {
                     'contenttype' => 'contenttype'
                 )
             ),
-            'folders contents' => array(
-                'datagenerator' => 'folders_contents',
-                'required' => array('openstudio', 'set', 'content', 'user'),
+            'folder contents' => array(
+                'datagenerator' => 'folder_contents',
+                'required' => array('openstudio', 'folder', 'content', 'user'),
                 'switchids' => array('status' => 'status', 'provenancestatus' => 'provenancestatus', 'user' => 'userid')
             ),
             'collected set contents' => array(
