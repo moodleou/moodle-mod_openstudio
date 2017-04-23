@@ -66,36 +66,44 @@ Feature: Create and edit contents
         Then I should not see "Next"
 
     Scenario: Test Pagination with contents
-        When I follow "Test Open Studio name 1"
+        When I log out
+        And I log in as "admin"
+        And I navigate to "Open Studio" node in "Site administration > Plugins >Activity modules > Open Studio"
+        And I set the field "Stream pagination size" to "12"
+        And I press "Save changes"
+        And I log out
+        And I log in as "teacher1"
+        And I follow "Course 1"
+        And I follow "Test Open Studio name 1"
         And the following open studio "contents" exist:
             | openstudio | user     | name       | description             | visibility |
-            | OS1        | student1 | TestSlot 1 | Test slot 1 description | module     |
+            | OS1        | student1 | TestSlot A | Test slot 1 description | module     |
         And I wait "1" seconds
         And the following open studio "contents" exist:
             | openstudio | user     | name        | description              | visibility |
-            | OS1        | student1 | TestSlot 2  | Test slot 2 description  | module     |
-            | OS1        | student1 | TestSlot 3  | Test slot 3 description  | module     |
-            | OS1        | student1 | TestSlot 4  | Test slot 4 description  | module     |
-            | OS1        | student1 | TestSlot 5  | Test slot 5 description  | module     |
-            | OS1        | student1 | TestSlot 6  | Test slot 6 description  | module     |
-            | OS1        | student1 | TestSlot 7  | Test slot 7 description  | module     |
-            | OS1        | student1 | TestSlot 8  | Test slot 8 description  | module     |
-            | OS1        | student1 | TestSlot 9  | Test slot 9 description  | module     |
-            | OS1        | student1 | TestSlot 10 | Test slot 10 description | module     |
-            | OS1        | student1 | TestSlot 11 | Test slot 11 description | module     |
-            | OS1        | student1 | TestSlot 12 | Test slot 12 description | module     |
+            | OS1        | student1 | TestSlot B  | Test slot 2 description  | module     |
+            | OS1        | student1 | TestSlot C  | Test slot 3 description  | module     |
+            | OS1        | student1 | TestSlot D  | Test slot 4 description  | module     |
+            | OS1        | student1 | TestSlot E  | Test slot 5 description  | module     |
+            | OS1        | student1 | TestSlot F  | Test slot 6 description  | module     |
+            | OS1        | student1 | TestSlot G  | Test slot 7 description  | module     |
+            | OS1        | student1 | TestSlot H  | Test slot 8 description  | module     |
+            | OS1        | student1 | TestSlot I  | Test slot 9 description  | module     |
+            | OS1        | student1 | TestSlot K | Test slot 10 description | module     |
+            | OS1        | student1 | TestSlot L | Test slot 11 description | module     |
+            | OS1        | student1 | TestSlot M | Test slot 12 description | module     |
         And I wait "1" seconds
         And the following open studio "contents" exist:
             | openstudio | user     | name        | description              | visibility |
-            | OS1        | student1 | TestSlot 13 | Test slot 13 description | module     |
+            | OS1        | student1 | TestSlot N | Test slot 13 description | module     |
 
         When I reload the page
         And I follow "Shared content > My Module" in the openstudio navigation
-        Then I should see "TestSlot 13"
-        And I should see "Next"
-        When I follow "Next"
-        Then I should see "TestSlot 1"
-        And I should not see "TestSlot 13"
-        And I should see "Prev"
-        When I follow "Prev"
-        Then I should see "TestSlot 13"
+        Then I should see "TestSlot N"
+        And I should see "2"
+        When I follow "2"
+        Then I should see "TestSlot A"
+        And I should not see "TestSlot N"
+        And I should see "1"
+        When I follow "1"
+        Then I should see "TestSlot N"

@@ -540,8 +540,13 @@ class mod_openstudio_external extends external_api {
                     }
 
                     // Do add comment.
+                    $folderid = null;
+                    $containingfolder = folder::get_containing_folder($params['cid']);
+                    if ($containingfolder) {
+                        $folderid = $containingfolder->id;
+                    }
                     $context = context_module::instance($cm->id);
-                    $commentid = comments::create($params['cid'], $userid, $commenttext, $params['folderid'],
+                    $commentid = comments::create($params['cid'], $userid, $commenttext, $folderid,
                         ['id' => $params['commentattachment']], $context, $inreplyto);
                     $eventurl = new moodle_url('/mod/openstudio/content.php', ['id' => $params['cmid'], 'sid' => $params['cid']]);
                     if ($inreplyto) {

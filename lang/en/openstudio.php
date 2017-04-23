@@ -1290,6 +1290,7 @@ $string['postlocked'] = 'Post locked';
 
 $string['notification_post'] = 'post';
 $string['notification_folder'] = 'folder';
+$string['notification_folderposted'] = 'added a post to folder';
 $string['notification_commentcreated'] = 'left a comment on ';
 $string['notification_commentliked'] = 'liked a comment on ';
 $string['notification_commentreplied'] = 'replied to a comment on ';

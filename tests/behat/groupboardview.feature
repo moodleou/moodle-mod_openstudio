@@ -65,7 +65,7 @@ Feature: Create and edit contents
         # Add new content view Group
         When I follow "Test Open Studio name 1"
         Then I should see "Test Open Studio name 1"
-        And I click on "div.openstudio-upload-container" "css_element"
+       And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | Group - group1                             |
@@ -95,7 +95,7 @@ Feature: Create and edit contents
         Then I should not see "Test My Group Board View 1"
 
         # Student add new content when in Separate Groups mode
-        And I click on "div.openstudio-upload-container" "css_element"
+       And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | Group - group3                             |
@@ -122,7 +122,7 @@ Feature: Create and edit contents
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
         And I follow "Shared content > My Group" in the openstudio navigation
-        And I click on "div.openstudio-upload-container" "css_element"
+       And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | Group - group2                             |

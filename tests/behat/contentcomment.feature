@@ -80,7 +80,7 @@ Feature: Add/Reply/Flag/Delete comment
 
         # Delete comment
         And I follow "Delete comment"
-        And I press "Delete"
+        And I click on "Delete" "button" in the "Delete comment" "dialogue"
         Then I should not see "Comment text reply 2"
     
     @javascript

@@ -59,7 +59,6 @@ Feature: Create and edit Folder
             | Enable pinboard              | 100                          |
             | Abuse reports are emailed to | teacher1@asd.com             |
             | ID number                    | OS1                          |
-        And Open Studio test instance is configured for "Test Open Studio name 1"
         And all users have accepted the plagarism statement for "OS1" openstudio
 
     Scenario: Enable folders in openstudio settings
@@ -190,7 +189,8 @@ Feature: Create and edit Folder
 
         # edit folder in My Module view
         And I go to content edit view
-        And I set the field "Title" to "Test my folder view 2"
+        And I follow "Edit folder title and permissions"
+        And I set the field "Folder title" to "Test my folder view 2"
         And I press "Save"
         And I follow "Shared content > My Module" in the openstudio navigation
         And I should not see "Test my folder view 1"

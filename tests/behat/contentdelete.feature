@@ -46,8 +46,8 @@ Feature: Delete my content/other contents
             | level1 | name | sortorder |
             | B1     | A1   | 1         |
         And the following open studio "level3s" exist:
-            | level2 | name | sortorder | contenttype |
-            | A1     | S1   | 1         | folder      |
+            | level2 | name | sortorder |
+            | A1     | S1   | 1         |
         And the following open studio "folder templates" exist:
             | level3 | additionalcontents |
             | S1     | 2                  |
@@ -66,7 +66,7 @@ Feature: Delete my content/other contents
         And I follow "Sharing Studio"
         And I follow "Student content 1"
         And I press "Delete"
-        And I click on ".openstudio-delete-ok-btn" "css_element"
+        And I click on "Delete" "button" in the "Delete post?" "dialogue"
         Then I should not see "Student content 1"
 
         # Can not delete other user's content wihout manage content permission
@@ -86,7 +86,7 @@ Feature: Delete my content/other contents
         And I follow "Sharing Studio"
         And I follow "Student content 2"
         And I press "Delete"
-        And I click on ".openstudio-delete-ok-btn" "css_element"
+        And I click on "Delete" "button" in the "Delete post?" "dialogue"
         Then I should not see "Student content 2"
 
     Scenario: Delete my content in my activities
@@ -106,9 +106,9 @@ Feature: Delete my content/other contents
             | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
         And I press "Delete"
-        And I click on ".openstudio-delete-ok-btn" "css_element"
+        And I click on "Delete" "button" in the "Delete post?" "dialogue"
 
         # See post archive.
-        And I follow the first content in my activity
-        And I click on "div[data-target='#openstudio_content_view_post_archive']" "css_element"
+        And I follow "S1"
+        And I press "Post archive"
         Then I should see "Student content 3"

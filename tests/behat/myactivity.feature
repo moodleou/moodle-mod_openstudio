@@ -6,26 +6,26 @@ Feature: My Activity
 
   Background: Setup course and studio
     Given the following "users" exist:
-      | username | firstname | lastname | email |
-      | teacher1 | Teacher | 1 | teacher1@asd.com |
+      | username | firstname | lastname | email            |
+      | teacher1 | Teacher   | 1        | teacher1@asd.com |
     And the following "courses" exist:
       | fullname | shortname | category |
-      | Course 1 | C1 | 0 |
+      | Course 1 | C1        | 0        |
     And the following "course enrolments" exist:
-      | user | course | role |
-      | teacher1 | C1 | editingteacher |
+      | user     | course    | role           |
+      | teacher1 | C1        | editingteacher |
     And the following "groups" exist:
-      | name   | course | idnumber |
-      | group1 | C1     | G1       |
+      | name     | course    | idnumber |
+      | group1   | C1        | G1       |
     And the following "groupings" exist:
-      | name      | course | idnumber |
-      | grouping1 | C1     | GI1      |
+      | name     | course    | idnumber |
+      | grouping1| C1        | GI1      |
     And the following "grouping groups" exist:
       | grouping | group |
       | GI1      | G1    |
     And the following "group members" exist:
-      | user     | group  |
-      | teacher1 | G1 |
+      | user     | group |
+      | teacher1 | G1    |
     And I log in as "teacher1"
     And I am on site homepage
     And I follow "Course 1"
@@ -79,14 +79,14 @@ Feature: My Activity
     And I follow "My Content > My Activities" in the openstudio navigation
     And I follow "Content 1.1 Required"
     And I set the following fields to these values:
-      | Who can view this content | My module |
-      | Title | Test My Activities View 1|
-      | Description | My Activities Description 1|
+      | Who can view this content | My module                   |
+      | Title                     | Test My Activities View 1   |
+      | Description               | My Activities Description 1 |
     And I press "Save"
     And I follow "My Content > My Activities" in the openstudio navigation
     And I should see "Test My Activities View 1"
     And I should see "Content 1.1 Required"
-    Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "mod/openstudio/pix/openstudio_preview_image.png"
+    Then the "src" attribute of "img.openstudio-grid-item-thumbnail" "css_element" should contain "online_rgb_32px"
 
   Scenario: Upload a new content with file upload
     When I follow "Test Open Studio name 1"
@@ -102,7 +102,7 @@ Feature: My Activity
     And I follow "My Content > My Activities" in the openstudio navigation
     And I should see "Test My Activities View 2"
     And I should see "Content 1.1 Required"
-    Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test1.jpg"
+    Then the "src" attribute of "img.openstudio-grid-item-thumbnail" "css_element" should contain "test1.jpg"
 
   Scenario: Upload a new content with Add web/embed link
     When I follow "Test Open Studio name 1"
@@ -118,7 +118,7 @@ Feature: My Activity
     And I follow "My Content > My Activities" in the openstudio navigation
     And I should see "Test My Activities View 3"
     And I should see "Content 1.1 Required"
-    Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "Youtube-61px"
+    Then the "src" attribute of "img.openstudio-grid-item-thumbnail" "css_element" should contain "online_rgb_32px"
 
   Scenario:  Edit the setting of the new content uploaded
     When I follow "Test Open Studio name 1"
@@ -143,5 +143,5 @@ Feature: My Activity
     And I should see "Test My Activities View 5"
     And I should not see "Test My Activities View 4"
     And I should see "Content 1.1 Required"
-    Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test2.jpg"
+    Then the "src" attribute of "img.openstudio-grid-item-thumbnail" "css_element" should contain "test2.jpg"
   

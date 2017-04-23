@@ -64,7 +64,7 @@ Feature: Create and edit contents detail
         When I am on site homepage
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
-        And I click on "div.openstudio-upload-container" "css_element"
+        And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | My module                                  |
@@ -262,7 +262,7 @@ Feature: Create and edit contents detail
         When I am on site homepage
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
-        And I click on "div.openstudio-upload-container" "css_element"
+        And I follow "Add new content"
         And I press "Add web/embed link"
         And I set the following fields to these values:
           | Who can view this content | My module                                            |
@@ -507,6 +507,7 @@ Feature: Create and edit contents detail
 
         # Test show Requested feedback
         And I press "Request feedback"
+        And I reload the page
         And "Cancel feedback request" "button" should exist
         And "Request feedback" "button" should not exist
         And I should see "Feedback requested" in the "div#openstudio_item_request_feedback" "css_element"

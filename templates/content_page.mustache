@@ -208,11 +208,12 @@
                         {{/tagsraw}}
                     </ul>
                 </div>
-                {{#contentarchivepostenable}}
-                    {{^contenttypenone}}
+                {{^contenttypenone}}
                     <div class="openstudio-content-view-archive">
-                        <input id="id_archivebutton" name="archivebutton"
+                        {{#contentarchivepostenable}}
+                            <input id="id_archivebutton" name="archivebutton"
                                value="{{#str}}contentactionarchivepost, mod_openstudio{{/str}}" type="button">
+                        {{/contentarchivepostenable}}
                         {{#reportabuselink}}
                             <a id="id_reportbutton_link" href="{{{reportabuselink}}}">
                                 <input id="id_reportbutton" name="reportbutton"
@@ -220,8 +221,7 @@
                             <a>
                         {{/reportabuselink}}
                     </div>
-                    {{/contenttypenone}}
-                {{/contentarchivepostenable}}
+                {{/contenttypenone}}
             </div>
 
             {{>mod_openstudio/content_flags}}

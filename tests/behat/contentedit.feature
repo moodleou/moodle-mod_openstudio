@@ -59,7 +59,7 @@ Feature: Create and edit contents
           | ID number                    | OS1                          |
         And all users have accepted the plagarism statement for "OS1" openstudio
         And I follow "Test Open Studio name 1"
-        And I click on "div.openstudio-upload-container" "css_element"
+        And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | My module                         |
@@ -93,7 +93,7 @@ Feature: Create and edit contents
           | ID number                    | OS1                          |
         And all users have accepted the plagarism statement for "OS1" openstudio
         And I follow "Test Open Studio name 1"
-        And I click on "div.openstudio-upload-container" "css_element"
+        And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | My module                                  |
@@ -126,7 +126,7 @@ Feature: Create and edit contents
           | ID number                    | OS1                          |
         And all users have accepted the plagarism statement for "OS1" openstudio
         And I follow "Test Open Studio name 1"
-        And I click on "div.openstudio-upload-container" "css_element"
+        And I follow "Add new content"
         And I press "Add web/embed link"
         And I set the following fields to these values:
           | Who can view this content | My module                         |
@@ -145,7 +145,7 @@ Feature: Create and edit contents
           | Web link                  | https://www.youtube.com/watch?v=BGD6L-4yceY |
         And I press "Save"
         And I follow "Shared content" in the openstudio navigation
-        Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "Youtube-61px"
+        Then the "src" attribute of "img.openstudio-grid-item-thumbnail" "css_element" should contain "online_rgb_32px"
         And I should see "Test My Group Board View modify 1"
         And I should not see "Test My Group Board View 1"
 
@@ -160,7 +160,7 @@ Feature: Create and edit contents
           | ID number                    | OS1                          |
         And all users have accepted the plagarism statement for "OS1" openstudio
         And I follow "Test Open Studio name 1"
-        And I click on "div.openstudio-upload-container" "css_element"
+        And I follow "Add new content"
         And I press "Add web/embed link"
         And I set the following fields to these values:
           | Who can view this content | My module                                   |
@@ -179,6 +179,6 @@ Feature: Create and edit contents
           | Web link                  | https://www.youtube.com/watch?v=R4_rYoK4aLE |
         And I press "Save"
         And I follow "Shared content" in the openstudio navigation
-        Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "Youtube-61px"
+        Then the "src" attribute of "img.openstudio-grid-item-thumbnail" "css_element" should contain "online_rgb_32px"
         And I should see "Test My Group Board View modify 1"
         And I should not see "Test My Group Board View 1"

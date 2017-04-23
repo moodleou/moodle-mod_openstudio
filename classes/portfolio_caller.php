@@ -80,7 +80,12 @@ class portfolio_caller extends \portfolio_module_caller_base {
             $contentdata->vid = $contentdata->visibilitycontext;
             $contentdata->iscontentversion = false;
             $contentdata->isarchiveversion = false;
-
+            $folderid = 0;
+            $containingfolder = folder::get_containing_folder($contentdata->id);
+            if ($containingfolder) {
+                $folderid = $containingfolder->id;
+            }
+            $contentdata->folderid = $folderid;
             // After all, call renderer to get content page.
             $contentdata->contentpage = $renderer->content_page($coursedata->cm->id, $coursedata->permissions,
                     $contentdata, $coursedata->cminstance);

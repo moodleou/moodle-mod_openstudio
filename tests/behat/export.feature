@@ -53,7 +53,7 @@ Feature: Export to my contents
 
         # Export all contents
         And I follow "My Content"
-        And I click on "#osep-bottombutton-export" "css_element"
+        And I follow "Export"
         And I press "All content shown"
         Then I should see "Downloading ..."
 
@@ -64,6 +64,6 @@ Feature: Export to my contents
         And I follow "My Content"
         And I follow "Export"
         And I press "Selected posts"
-        And I click on "//label[contains(normalize-space(.), 'Content 1')]" "xpath_element"
+        And I set the field "Content 1" to "1"
         And I press "Export selected posts"
         Then I should see "Downloading ..."

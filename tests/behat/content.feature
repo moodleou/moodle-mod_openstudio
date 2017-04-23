@@ -65,7 +65,7 @@ Feature: Create and edit contents
     Scenario: Add new content just a title and description
         When I follow "Test Open Studio name 1"
         And I should see "Test Open Studio name 1"
-        And I click on "div.openstudio-upload-container" "css_element"
+        And I follow "Add new content"
         And I set the following fields to these values:
           | Who can view this content | My module                         |
           | Title                     | Test My Group Board View 1        |
@@ -79,11 +79,11 @@ Feature: Create and edit contents
         And I should not see "Details"
         And I press "Save"
         And I follow "Shared content > My Module" in the openstudio navigation
-        Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "mod/openstudio/pix/openstudio_preview_image.png"
+        Then the "src" attribute of "img.openstudio-grid-item-thumbnail" "css_element" should contain "online_rgb_32p"
 
     Scenario: Add new content just a title and description with a file
         When I follow "Test Open Studio name 1"
-        And I click on "div.openstudio-upload-container" "css_element"
+        And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | My module                                  |
@@ -97,7 +97,7 @@ Feature: Create and edit contents
 
     Scenario: Add new content just a title and description with an image including GPS and EXIF data
         When I follow "Test Open Studio name 1"
-        And I click on "div.openstudio-upload-container" "css_element"
+        And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | My module                                  |
@@ -113,7 +113,7 @@ Feature: Create and edit contents
 
     Scenario: Add new content just a title and description with a file, ownership data
         When I follow "Test Open Studio name 1"
-        And I click on "div.openstudio-upload-container" "css_element"
+        And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | My module                                            |
@@ -126,7 +126,7 @@ Feature: Create and edit contents
         Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test3.jpg"
         And I should see "Test My Group Board View 4 ownership All my own work"
 
-        And I click on "div.openstudio-upload-container" "css_element"
+        And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | My module                                            |
@@ -142,7 +142,7 @@ Feature: Create and edit contents
 
     Scenario: Add new content just a title and description with a file and tags
         When I follow "Test Open Studio name 1"
-        And I click on "div.openstudio-upload-container" "css_element"
+        And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | My module                                  |
@@ -159,7 +159,7 @@ Feature: Create and edit contents
 
     Scenario: Add new content just a title and description with a weblink
         When I follow "Test Open Studio name 1"
-        And I click on "div.openstudio-upload-container" "css_element"
+        And I follow "Add new content"
         And I press "Add web/embed link"
         And I set the following fields to these values:
           | Who can view this content | My module                                            |
@@ -172,7 +172,7 @@ Feature: Create and edit contents
 
     Scenario: Add new content just a title and description with a weblink, ownership data
         When I follow "Test Open Studio name 1"
-        And I click on "div.openstudio-upload-container" "css_element"
+        And I follow "Add new content"
         And I press "Add web/embed link"
         And I set the following fields to these values:
           | Who can view this content | My module                                            |
@@ -184,7 +184,7 @@ Feature: Create and edit contents
         And I follow "Shared content > My Module" in the openstudio navigation
         Then I should see "Test My Group Board View 5 ownership All my own work"
 
-        And I click on "div.openstudio-upload-container" "css_element"
+        And I follow "Add new content"
         And I press "Add web/embed link"
         And I set the following fields to these values:
           | Who can view this content | My module                                            |
@@ -199,7 +199,7 @@ Feature: Create and edit contents
 
     Scenario: Add new content just a title and description with a weblink and tags
         When I follow "Test Open Studio name 1"
-        And I click on "div.openstudio-upload-container" "css_element"
+        And I follow "Add new content"
         And I press "Add web/embed link"
         And I set the following fields to these values:
           | Who can view this content | My module                                   |

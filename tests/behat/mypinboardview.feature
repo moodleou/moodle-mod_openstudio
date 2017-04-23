@@ -6,22 +6,22 @@ Feature: Create and edit contents
 
     Background: Setup course and studio
         Given the following "users" exist:
-            | username | firstname | lastname | email |
-            | teacher1 | Teacher | 1 | teacher1@asd.com |
-            | student1 | Student | 1 | student1@asd.com |
-            | student2 | Student | 2 | student2@asd.com |
-            | student3 | Student | 3 | student3@asd.com |
-            | student4 | Student | 4 | student4@asd.com |
+            | username | firstname | lastname | email            |
+            | teacher1 | Teacher   | 1        | teacher1@asd.com |
+            | student1 | Student   | 1        | student1@asd.com |
+            | student2 | Student   | 2        | student2@asd.com |
+            | student3 | Student   | 3        | student3@asd.com |
+            | student4 | Student   | 4        | student4@asd.com |
         And the following "courses" exist:
             | fullname | shortname | category |
-            | Course 1 | C1 | 0 |
+            | Course 1 | C1        | 0        |
         And the following "course enrolments" exist:
-            | user | course | role |
+            | user | course | role           |
             | teacher1 | C1 | editingteacher |
-            | student1 | C1 | student |
-            | student2 | C1 | student |
-            | student3 | C1 | student |
-            | student4 | C1 | student |
+            | student1 | C1 | student        |
+            | student2 | C1 | student        |
+            | student3 | C1 | student        |
+            | student4 | C1 | student        |
         And the following "groups" exist:
             | name   | course | idnumber |
             | group1 | C1     | G1       |
@@ -37,15 +37,15 @@ Feature: Create and edit contents
             | GI1      | G3    |
         And the following "group members" exist:
             | user     | group  |
-            | teacher1 | G1 |
-            | student1 | G1 |
-            | student2 | G1 |
-            | teacher1 | G2 |
-            | student2 | G2 |
-            | student3 | G2 |
-            | teacher1 | G3 |
-            | student3 | G3 |
-            | student4 | G3 |
+            | teacher1 | G1     |
+            | student1 | G1     |
+            | student2 | G1     |
+            | teacher1 | G2     |
+            | student2 | G2     |
+            | student3 | G2     |
+            | teacher1 | G3     |
+            | student3 | G3     |
+            | student4 | G3     |
         And I log in as "teacher1"
         And I am on site homepage
         And I follow "Course 1"
@@ -67,7 +67,7 @@ Feature: Create and edit contents
         # Add new content view Only me
         When I follow "Test Open Studio name 1"
         Then I should see "Test Open Studio name 1"
-        And I click on "div.openstudio-upload-container" "css_element"
+        And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | Only me                                    |
@@ -90,7 +90,7 @@ Feature: Create and edit contents
         Then I should not see "Test My Pinboard View"
 
         # Add Module view
-        And I click on "div.openstudio-upload-container" "css_element"
+        And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | My module                                       |

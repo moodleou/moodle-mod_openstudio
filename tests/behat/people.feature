@@ -102,7 +102,7 @@ Feature: Create and edit contents
           | ID number                     | OS1                            |
         And all users have accepted the plagarism statement for "OS1" openstudio
         And I follow "Test Open Studio name 1"
-        And I click on "div.openstudio-upload-container" "css_element"
+        And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | My module                                  |
@@ -118,7 +118,7 @@ Feature: Create and edit contents
         And I log in as "student1"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
-        And I click on "div.openstudio-upload-container" "css_element"
+        And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | Only me                                    |
@@ -135,7 +135,7 @@ Feature: Create and edit contents
         And I log in as "student2"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
-        And I click on "div.openstudio-upload-container" "css_element"
+        And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | Only me                                    |
@@ -153,7 +153,7 @@ Feature: Create and edit contents
         And I log in as "student5"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
-        And I click on "div.openstudio-upload-container" "css_element"
+        And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | Only me                                    |
@@ -199,7 +199,7 @@ Feature: Create and edit contents
         And I log in as "student2"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
-        And I click on "div.openstudio-upload-container" "css_element"
+        And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | My module                                  |
@@ -213,7 +213,7 @@ Feature: Create and edit contents
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
         And I follow "My content" in the openstudio navigation
-        And I click on "div.openstudio-upload-container" "css_element"
+        And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | My module                                  |
