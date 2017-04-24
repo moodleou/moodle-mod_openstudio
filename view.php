@@ -165,13 +165,6 @@ if ($vid == content::VISIBILITY_PRIVATE_PINBOARD) {
     $fblock = -1;
 }
 
-$blockid = optional_param('blockid', 0, PARAM_INT); // Block id to filter against.
-
-// Stream get contents need to pass block array if existed.
-if ($blockid) {
-    array_push($fblockarray, $blockid);
-}
-
 $finalviewpermissioncheck = true;
 if ((($vid == content::VISIBILITY_MODULE) || ($vid == content::VISIBILITY_GROUP) || ($vid == content::VISIBILITY_WORKSPACE))
     && !$permissions->managecontent) {
@@ -270,24 +263,32 @@ if (isset($SESSION->openstudio_view_filters)) {
 }
 $fblockarray = optional_param_array('fblockarray', $fblockarraydefault, PARAM_INT);
 $pinboardonly = false;
-switch ($fblock) {
-    case stream::FILTER_AREA_ALL:
-    case stream::FILTER_AREA_PINBOARD:
-        $fblockarray = null;
-        break;
-    default:
-        if (empty($fblockarray)) {
-            $fblockarray = explode(",", $fblock);
-            $fblock = implode(",", $fblockarray);
-        } else {
-            $fblock = implode(",", $fblockarray);
-        }
-        break;
-}
 
-if (trim($fblock) == '') {
-    // If fblock is not set, then set it to default.
-    $fblock = 0;
+$blockid = optional_param('blockid', 0, PARAM_INT); // Block id from Block drop down.
+
+// Stream get contents need to pass block array if existed.
+if ($blockid) {
+    array_push($fblockarray, $blockid);
+} else {
+    switch ($fblock) {
+        case stream::FILTER_AREA_ALL:
+        case stream::FILTER_AREA_PINBOARD:
+            $fblockarray = null;
+            break;
+        default:
+            if (empty($fblockarray)) {
+                $fblockarray = explode(",", $fblock);
+                $fblock = implode(",", $fblockarray);
+            } else {
+                $fblock = implode(",", $fblockarray);
+            }
+            break;
+    }
+
+    if (trim($fblock) == '') {
+        // If fblock is not set, then set it to default.
+        $fblock = 0;
+    }
 }
 
 $isblockchecked = false;
@@ -313,7 +314,7 @@ if ($fblockdataarray === false) {
     }
 }
 
-if (!$isblockchecked) {
+if (!$isblockchecked && !$blockid) {
     $fblockarray = null;
 }
 
@@ -438,7 +439,7 @@ if (!isset($SESSION->openstudio_view_filters[$vid])) {
 
 $ftags = null;
 $SESSION->openstudio_view_filters[$vid]->fblock = $fblock;
-$SESSION->openstudio_view_filters[$vid]->fblockarray = $fblockarray;
+$SESSION->openstudio_view_filters[$vid]->fblockarray = !$blockid ? $fblockarray : array();
 $SESSION->openstudio_view_filters[$vid]->ftype = $ftype;
 $SESSION->openstudio_view_filters[$vid]->ftypearray = $ftypearray;
 $SESSION->openstudio_view_filters[$vid]->fscope = $fscope;
