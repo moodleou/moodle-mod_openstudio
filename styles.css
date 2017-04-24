@@ -2237,8 +2237,9 @@ a.openstudio-actvity-title:hover  {
     font-weight: bold;
     color: #002158;
     line-height: 28px;
+    min-height: 28px;
     padding: 0;
-    margin: 0 0 15px 0;
+    margin: 0 0 20px 0;
     float: left;
 }
 
