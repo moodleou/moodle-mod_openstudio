@@ -216,7 +216,7 @@
                             <a id="id_reportbutton_link" href="{{{reportabuselink}}}">
                                 <input id="id_reportbutton" name="reportbutton"
                                    value="{{#str}}contentactionreportpost, mod_openstudio{{/str}}" type="button">
-                            <a>
+                            </a>
                         {{/reportabuselink}}
                     </div>
                 {{/contenttypenone}}
@@ -327,7 +327,7 @@
                 {{#hascontentversions}}
                     <div class="openstudio-content-view-block collapsed
                          {{#isfoldercontent}}openstudio-folder-global-background{{/isfoldercontent}}" data-toggle="collapse"
-                         data-target="#openstudio_content_view_post_archive" role="button">
+                         data-target="#openstudio_content_view_post_archive" id="openstudio_content_view_post_archive_panel" role="button">
                         <span>{{#str}} contentviewpostarchive, mod_openstudio {{/str}}</span>
                     </div>
                     <div id="openstudio_content_view_post_archive"

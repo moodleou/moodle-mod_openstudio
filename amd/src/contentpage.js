@@ -329,6 +329,11 @@ define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/templates', 'core
                                 } else {
                                     // Remove from post type list.
                                     $('#content_version_id_' + delete_item.attr('data-cvid')).remove();
+
+                                    // Check if do not has any post archive we will remove Archive panel.
+                                    if ($('.openstudio-content-view-version-detail').length == 0) {
+                                        $('#openstudio_content_view_post_archive_panel').remove();
+                                    }
                                 }
                             })
                             .fail(function(ex) {
