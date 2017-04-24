@@ -163,7 +163,6 @@ class renderer_utils {
 
         $vuid = optional_param('vuid', $USER->id, PARAM_INT);
         $flagscontentread = 0;
-        $showownfile = false;
         $ismyprofile = true;
 
         if ($vuid && $vuid != $USER->id) {
@@ -188,11 +187,6 @@ class renderer_utils {
             $contentdata->percentcompleted = $userprogresspercentage;
         }
 
-        if ($permissions->feature_studio || ($permissions->activitydata->used > 0)) {
-            $showownfile = true;
-        }
-
-        $contentdata->showownfile = $showownfile;
         $contentdata->ismyprofile = $ismyprofile;
         $contentdata->fullusername = $contentowner->firstname.' '.$contentowner->lastname;
         $contentdata->activedate = $activedate;

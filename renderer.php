@@ -536,7 +536,6 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $selectview = false;
         $myactivities = false;
         $blocksdata = array();
-        $showprofilebarview = false;
         $contentdata->ismypinboard = false;
         $contentdata->ismyactivity = false;
 
@@ -555,7 +554,6 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 $placeholdertext = $theme->themestudioname;
                 $myactivities = true;
                 $blocksdata = levels::get_records(1, $permissions->activecminstanceid);
-                $showprofilebarview = true;
                 $contentdata->ismyactivity = true;
 
                 // Set selected block.
@@ -569,7 +567,6 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
             case content::VISIBILITY_PRIVATE_PINBOARD:
                 $placeholdertext = $theme->themepinboardname;
-                $showprofilebarview = true;
                 $contentdata->ismypinboard = true;
                 break;
         }
@@ -606,7 +603,6 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $contentdata = renderer_utils::profile_bar($permissions, $openstudioid, $contentdata);
 
         $contentdata->groupitems = array_values($groupitem);
-        $contentdata->showprofilebarview = $showprofilebarview;
         $contentdata->showmultigroup = $showmultigroup;
         $contentdata->placeholdertext = $placeholdertext;
         $contentdata->selectview = $selectview;

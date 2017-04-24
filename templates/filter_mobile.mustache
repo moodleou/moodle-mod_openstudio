@@ -37,7 +37,6 @@
         "flagscontentread" : "100",
         "totalpostedcomments" : "100",
         "userporgresspercentage" : "100",
-        "showprofilebarview" : "true",
         "fullusername" : "Admin User",
         "contentediturl": "http://exmaple/mod/openstudio/contentedit.php?id=4&lid=0&sid=0&type=0&sstsid=0",
         "myactivities" : "true",
@@ -56,12 +55,8 @@
     }
 
 }}
-{{#showownfile}}
-    {{#showprofilebarview}}
-        {{>mod_openstudio/profile_bar}}
-        <div class="openstudio-profile-rule"></div>
-    {{/showprofilebarview}}
-{{/showownfile}}
+{{>mod_openstudio/profile_bar}}
+<div class="openstudio-profile-rule"></div>
 
 <div class="openstudio-filter-preference-text openstudio-filter-link">
     <span class="openstudio-filter-text">
