@@ -606,6 +606,9 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                     'name' => get_string('filterall', 'openstudio')
                 ];
             }
+
+            // Sort group by key to make sure All option on the first.
+            ksort($groupitem);
         }
 
         $contentdata->cmid = $cmid;

@@ -110,12 +110,10 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
          * @method handleGroupSwitcher
          */
         handleGroupSwitcher: function() {
-            $('#filter_groupid').change(function() {
-
+            // This should work for mobile also.
+            $(document).on('change','#filter_groupid',function(){
                 t.redirectURL();
-
             });
-
         },
 
         /**
@@ -124,12 +122,10 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
          * @method handleBlockSwitcher
          */
         handleBlockSwitcher: function() {
-            $('#filter_block_activity').change(function() {
-
+            // This should work for mobile also.
+            $(document).on('change','#filter_block_activity',function(){
                 t.redirectURL();
-
             });
-
         },
 
         /**
@@ -138,12 +134,10 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
          * @method handleViewSizeSwitcher
          */
         handleViewSizeSwitcher: function() {
-            $('#filter_pagesize').change(function() {
-
+            // This should work for mobile also.
+            $(document).on('change','#filter_pagesize',function(){
                 t.redirectURL();
-
             });
-
         },
 
         /**
@@ -157,20 +151,10 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
 
             url = url + '&vid=' + vid;
 
-            if ($('#filter_groupid').length) {
-                var groupid = $('#filter_groupid').val();
-                url = url + '&groupid=' + groupid;
-            }
-
-            if ($('#filter_pagesize').length) {
-                var pagesize = $('#filter_pagesize').val();
-                url = url + '&pagesize=' + pagesize;
-            }
-
-            if ($('#filter_block_activity').length) {
-                var blockid = $('#filter_block_activity').val();
-                url = url + '&blockid=' + blockid;
-            }
+            $('.openstudio-filter-select-box:visible').each(function() {
+                var name = $(this).attr('name');
+                url = url + '&' + name + '=' + $(this).val();
+            });
 
             window.location.href = url;
 
