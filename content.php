@@ -106,7 +106,7 @@ if ($contentdata === false) {
 }
 
 // Check the viewing user has permission to view content.
-if (!util::can_read_content($cminstance, $permissions, $contentdata, '')) {
+if (!util::can_read_content($cminstance, $permissions, $contentdata, $folderid)) {
     print_error('errornopermissiontoviewcontent', 'openstudio', $returnurliferror->out(false));
 }
 
