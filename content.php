@@ -85,6 +85,9 @@ if ($restoreversion) {
             // Else process for view content version detail.
             if ($restoredata) {
                 $contentid = $restoredata->id;
+                $redirectorurl = new moodle_url('/mod/openstudio/content.php',
+                        array('id' => $cm->id, 'sid' => $contentid,  'vuid' => $restoredata->userid, 'ssid' => $folderid));
+                return redirect($redirectorurl);
             }
         }
     }
