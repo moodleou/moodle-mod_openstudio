@@ -338,7 +338,7 @@ define([
                     t.dialogue.show();
                 }
 
-                $('body').after($(t.CSS.BOUNDINGBOX).parent());
+                $(t.CSS.BOUNDINGBOX).parent().appendTo($('body'));
             }
         }
     };

@@ -555,10 +555,6 @@ button.openstudio-notification-stopbutton:focus {
 
 /* Common dialog body */
 .path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue .moodle-dialogue-bd {
-    padding: 20px 15px;
-}
-
-.path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue .moodle-dialogue-bd {
     padding: 12px 15px;
 }
 
@@ -566,7 +562,8 @@ button.openstudio-notification-stopbutton:focus {
 .path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue.moodle-dialogue .moodle-dialogue-content
 .moodle-dialogue-ft {
     text-align: left;
-    margin: 7px 10px 30px 15px;
+    padding: 7px 10px 30px 15px;
+    margin: 0;
 }
 
 .path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue.moodle-dialogue .moodle-dialogue-ft
@@ -999,8 +996,6 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
 }
 
 .moodle-dialogue-base .openstudio-subscribe-dialog-container.moodle-dialogue .moodle-dialogue-content .moodle-dialogue-ft {
-    margin: 0px;
-    padding: 20px 10px 30px 15px;
     border-top: 1px solid #bfe2ef;
 }
 
@@ -1012,6 +1007,11 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
 /* Body */
 .moodle-dialogue-base .openstudio-subscribe-dialog-container.moodle-dialogue .moodle-dialogue-bd {
     padding: 0px;
+}
+
+.path-mod-openstudio .moodle-dialogue-base .openstudio-subscribe-dialog-container.moodle-dialogue
+.moodle-dialogue-content .moodle-dialogue-ft {
+    padding-top: 20px;
 }
 
 .openstudio-fd-subscription {
@@ -4276,6 +4276,34 @@ a.openstudio-add-new-content-link:hover  {
 @media (max-width: 767px) {
 
     /**
+     * Common dialogue
+     */
+
+    .path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue .moodle-dialogue-hd span:first-child {
+        padding: 8px 20px;
+    }
+
+    .path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue.moodle-dialogue .moodle-dialogue-ft
+    .yui3-widget-buttons {
+        padding-right: 10px;
+    }
+
+    .moodle-dialogue-base .openstudio-dialogue.moodle-dialogue .moodle-dialogue-bd {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue.moodle-dialogue .moodle-dialogue-content
+    .moodle-dialogue-ft {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .moodle-dialogue-base .openstudio-dialogue.moodle-dialogue .moodle-dialogue-content .moodle-dialogue-ft {
+        margin: 0;
+    }
+
+    /**
      * Grid
      */
     .openstudio-grid {
@@ -4902,6 +4930,7 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-folder-header .openstudio-folder-header-left {
         padding-top: 4px;
+        max-width: 100%;
     }
 
     .openstudio-folder-header .openstudio-folder-header-right {
@@ -5415,27 +5444,27 @@ a.openstudio-add-new-content-link:hover  {
      */
 
     .moodle-dialogue-base .openstudio-subscribe-dialog-container.moodle-dialogue .moodle-dialogue-bd {
-        padding: 1px 0;
+        padding: 1px 5px;
     }
 
-    .moodle-dialogue-base .openstudio-subscribe-dialog-container.moodle-dialogue .moodle-dialogue-content
-    .moodle-dialogue-ft {
+    .path-mod-openstudio .moodle-dialogue-base .openstudio-subscribe-dialog-container.moodle-dialogue
+    .moodle-dialogue-content .moodle-dialogue-ft {
         padding-top: 29px;
     }
 
     .moodle-dialogue-base .openstudio-subscribe-dialog-container .moodle-dialogue-wrap .moodle-dialogue-hd,
     .moodle-dialogue-base .openstudio-subscribe-dialog-container .moodle-dialogue-wrap
     .moodle-dialogue-hd.yui3-widget-hd {
-        padding: 11px 40px 8px 15px;
+        padding: 11px 40px 8px 20px;
     }
 
     .openstudio-fd-subscription {
-        margin: 8px 0;
+        margin: 18px 0;
     }
 
     .openstudio-fd-subscription-tablecell {
         padding: 6px 5px;
-        font-size: 1.1428em;
+        font-size: 1.28571em;
     }
 
     .openstudio-fd-subscription-tablecell:nth-child(2) {
@@ -5444,8 +5473,7 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-fd-subscription-tablecell select {
         height: 25px;
-        font-size: 1em;
-        padding: 2px 3px 0;
+        font-size: 1.14285em;
     }
 
     .openstudio-subscription-header {
