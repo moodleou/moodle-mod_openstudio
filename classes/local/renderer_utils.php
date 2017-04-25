@@ -182,7 +182,8 @@ class renderer_utils {
         }
 
         $contentdata->percentcompleted = 0;
-        if ($userprogressdata['totalslots'] > 0) {
+        $contentdata->showprofileactivities = $userprogressdata['totalslots'] > 0;
+        if ($contentdata->showprofileactivities) {
             $userprogresspercentage = ceil(($userprogressdata['filledslots'] / $userprogressdata['totalslots']) * 100);
             $contentdata->percentcompleted = $userprogresspercentage;
         }
@@ -198,9 +199,7 @@ class renderer_utils {
         $contentdata->viewedicon = $OUTPUT->pix_url('viewed_rgb_32px', 'openstudio');
         $contentdata->commentsicon = $OUTPUT->pix_url('comments_rgb_32px', 'openstudio');
 
-        $contentdata->showprofileactivities = false;
         if (isset($userprogressdata['progressdetail']) && $userprogressdata['progressdetail']) {
-            $contentdata->showprofileactivities = true;
             $profileactivityitems = [];
 
             if (!empty($userprogressdata['progressdetail'])) {

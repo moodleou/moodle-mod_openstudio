@@ -58,16 +58,18 @@
     </div>
 </div>
 
-<div class="openstudio-profile-progress-content">
-    <div class="openstudio-profile-progress-percent">
-        <div class="openstudio-profile-progress-title">
-            {{#str}} mystudioworkprogress, mod_openstudio {{/str}}
+{{#showprofileactivities}}
+    <div class="openstudio-profile-progress-content">
+        <div class="openstudio-profile-progress-percent">
+            <div class="openstudio-profile-progress-title">
+                {{#str}} mystudioworkprogress, mod_openstudio {{/str}}
+            </div>
+            <div class="openstudio-profile-progress-bar">
+                {{>mod_openstudio/work_progress}}
+            </div>
         </div>
-        <div class="openstudio-profile-progress-bar">
-            {{>mod_openstudio/work_progress}}
+        <div id="profile_percent" class="openstudio-profile-progress-content-description collapse">
+            {{>mod_openstudio/profile_bar_activities}}
         </div>
     </div>
-    <div id="profile_percent" class="openstudio-profile-progress-content-description collapse">
-        {{>mod_openstudio/profile_bar_activities}}
-    </div>
-</div>
+{{/showprofileactivities}}
