@@ -167,6 +167,7 @@ define([
             $(t.CSS.COMMENT_FORM_CONTENT).find('.editor_atto_content').html('');
             // Reset inreplyto field.
             $(t.CSS.COMMENT_FORM_CONTENT).find('form input[name="inreplyto"]').val(0);
+            $(t.CSS.COMMENT_FORM_CONTENT).find('form').get(0).reset();
             // Reset attachment field. Just a hack on UI.
             $(t.CSS.COMMENT_ATTACHMENT).remove();
         },
@@ -188,6 +189,11 @@ define([
                 formdata[field.name] = field.value;
             });
             var hasAttachment = $(t.CSS.COMMENT_ATTACHMENT).length > 0;
+
+            // Prevent from submitting to server if no content of comment is found.
+            if (!hasAttachment && formdata['commentext[text]'].length == 0) {
+                return;
+            }
 
             M.util.js_pending('openstudioPostComment');
             var promises = Ajax.call([{
