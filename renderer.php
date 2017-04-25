@@ -854,6 +854,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 $contentdata->contentgpslng = $contentgpslng;
                 $contentdata->contentmapenable = $contentmapenable;
             }
+        } else {
+            $contentdata->contentlockenable = false;
         }
 
         // Process delete.
