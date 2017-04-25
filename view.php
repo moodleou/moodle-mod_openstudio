@@ -46,6 +46,7 @@ $groupid = optional_param('groupid', 0, PARAM_INT); // Group id to filter agains
 $n  = optional_param('n', 0, PARAM_INT);  // ... openstudio instance ID - it should be named as the first character of the module.
 $filteropen = optional_param('filteropen', 0, PARAM_INT);
 $filteractive = optional_param('filteractive', 0, PARAM_INT);
+$userid = optional_param('vuid', 0, PARAM_INT); // User id.
 
 // Page init and security checks.
 
@@ -757,19 +758,20 @@ if ($exportenable) {
 }
 
 // Sort action url.
-$sortactionurl = new moodle_url('/mod/openstudio/view.php', ['id' => $id, 'osort' => $osort, 'fsort' => $fsort]);
+$sortactionurl = new moodle_url('/mod/openstudio/view.php', ['id' => $id, 'osort' => $osort, 'fsort' => $fsort,
+        'vuid' => $vuid]);
 $sortactionurl = $sortactionurl->out(false);
 $contentdata->sortactionurl = $sortactionurl;
 
 $nextosort = 1 - $osort;
 $sortbydateurl = new moodle_url('/mod/openstudio/view.php',
-        ['id' => $id, 'vid' => $vid, 'groupid' => $groupid, 'pagesize' => $streamdatapagesize,
+        ['id' => $id, 'vid' => $vid, 'groupid' => $groupid, 'pagesize' => $streamdatapagesize, 'vuid' => $vuid,
                 'blockid' => $blockid, 'osort' => $nextosort, 'fsort' => stream::SORT_BY_DATE]);
 
 $contentdata->sortbydateurl = $sortbydateurl->out(false);
 
 $sortbytitleurl = new moodle_url('/mod/openstudio/view.php',
-        ['id' => $id, 'vid' => $vid, 'groupid' => $groupid, 'pagesize' => $streamdatapagesize,
+        ['id' => $id, 'vid' => $vid, 'groupid' => $groupid, 'pagesize' => $streamdatapagesize, 'vuid' => $vuid,
                 'blockid' => $blockid, 'osort' => $nextosort, 'fsort' => stream::SORT_BY_ACTIVITYTITLE]);
 
 $contentdata->sortbytitleurl = $sortbytitleurl->out(false);
@@ -821,6 +823,7 @@ $contentdata->blockid = $blockid;
 // Set params used for preferences filter.
 $contentdata->id = $id;
 $contentdata->vid = $vid;
+$contentdata->vuid = $vuid;
 $contentdata->fsort = $fsort;
 $contentdata->osort = $osort;
 $contentdata->page = $streamdatapagesize;
