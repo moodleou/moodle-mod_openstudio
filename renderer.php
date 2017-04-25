@@ -627,11 +627,13 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $contentdata->requestfeedbackicon = $OUTPUT->pix_url('request_feedback_white_rgb_32px', 'openstudio');
         $contentdata->createcontentthumbnail = $OUTPUT->pix_url('uploads_rgb_32px', 'openstudio');
 
-        $contentdata->contentediturl = new moodle_url('/mod/openstudio/contentedit.php',
-                   array('id' => $cmid, 'lid' => 0, 'sid' => 0, 'type' => 0, 'sstsid' => 0));
+        $contentdata->contentediturl = new moodle_url('/mod/openstudio/contentedit.php', array(
+                   'id' => $cmid, 'vid' => $viewmode, 'lid' => 0, 'sid' => 0, 'type' => 0, 'sstsid' => 0));
         if ($permissions->feature_enablefolders) {
-            $folderlink = new moodle_url('/mod/openstudio/contentedit.php',
-                    array('id' => $cmid, 'lid' => 0, 'sid' => 0, 'ssid' => 0, 'type' => content::TYPE_FOLDER_CONTENT));
+            $folderlink = new moodle_url('/mod/openstudio/contentedit.php', array(
+                    'id' => $cmid, 'vid' => $viewmode, 'lid' => 0, 'sid' => 0, 'ssid' => 0,
+                    'type' => content::TYPE_FOLDER_CONTENT));
+
             $contentdata->folderediturl = $folderlink;
             $contentdata->createfolderthumbnail = $OUTPUT->pix_url('create_folder_rgb_32px', 'openstudio');
         }

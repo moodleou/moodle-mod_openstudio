@@ -59,6 +59,10 @@ class mod_openstudio_content_form extends moodleform {
             return;
         }
 
+        $mform->addElement('hidden', 'vid');
+        $mform->setType('vid', PARAM_INT);
+        $mform->setDefault('vid', $this->_customdata['vid']);
+
         if ($this->_customdata['isfoldercontent'] == true && $this->_customdata['iscreatefolder'] == false) {
             $mform->addElement('hidden', 'visibility');
             $mform->setType('visibility', PARAM_INT);

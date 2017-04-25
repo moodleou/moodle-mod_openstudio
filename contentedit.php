@@ -45,6 +45,9 @@ $sid = optional_param('sid', 0, PARAM_INT);
 // Content level id.
 $lid = optional_param('lid', 0, PARAM_INT);
 
+// Visibility id.
+$vid = optional_param('vid', content::VISIBILITY_PRIVATE_PINBOARD, PARAM_INT);
+
 // Content type.
 $type = optional_param('type', content::TYPE_NONE, PARAM_INT);
 if (!in_array($type, array(content::TYPE_NONE,
@@ -381,7 +384,6 @@ util::page_setup($PAGE, $strpagetitle, $strpageheading, $strpageurl, $course, $c
 $crumbarray = array();
 $strareaurl = new moodle_url('/mod/openstudio/view.php', array('id' => $cm->id, 'vid' => 1));
 if ($contentisinpinboard) {
-    $vid = content::VISIBILITY_PRIVATE_PINBOARD;
     $strareaurl = new moodle_url('/mod/openstudio/view.php',
             array('id' => $cm->id, 'vid' => content::VISIBILITY_PRIVATE_PINBOARD, 'fblock' => -1));
     $crumbarray[get_string('navmypinboard', 'openstudio')] = $strareaurl->out(false);
@@ -432,37 +434,6 @@ if ($vuid != $USER->id) {
 // Get page url.
 $strpageurl = util::get_current_url();
 
-// Set stream view.
-$vid = optional_param('vid', -1, PARAM_INT);
-if (! in_array($vid, array(content::VISIBILITY_PRIVATE,
-                           content::VISIBILITY_PRIVATE_PINBOARD,
-                           content::VISIBILITY_GROUP,
-                           content::VISIBILITY_MODULE,
-                           content::VISIBILITY_WORKSPACE))) {
-
-    $vid = $theme->homedefault;
-}
-
-// If group mode is not on, then redirect request to module workspace.
-if (!$permissions->feature_group && ($vid == content::VISIBILITY_GROUP)) {
-    $vid = content::VISIBILITY_MODULE;
-}
-
-// If activity mode is not on, then redirect request to module workspace.
-if (!$permissions->feature_studio && ($vid == content::VISIBILITY_PRIVATE)) {
-    $vid = content::VISIBILITY_MODULE;
-}
-
-// If pinboard mode is not on, then redirect request to module workspace.
-if (!$permissions->feature_pinboard && ($vid == content::VISIBILITY_PRIVATE_PINBOARD)) {
-    $vid = content::VISIBILITY_MODULE;
-}
-
-// If module mode is not on, then redirect request to module first available workspace.
-if (!$permissions->feature_module && ($vid == content::VISIBILITY_MODULE)) {
-    $vid = $permissions->allow_visibilty_modes[0];
-}
-
 // Set default visibility.
 $allowedvisibility = explode(",", $cminstance->allowedvisibility);
 
@@ -496,6 +467,7 @@ $options = array(
         'contentdetails' => $sid ? true : false,
         'isfolderlock' => $isfolderlock,
         'cmid' => $cm->id,
+        'vid' => $vid,
         'max_bytes' => $cminstance->contentmaxbytes
 );
 $contentform = new mod_openstudio_content_form($url->out(false), $options,
@@ -503,7 +475,7 @@ $contentform = new mod_openstudio_content_form($url->out(false), $options,
 
 if ($contentform->is_cancelled()) {
 
-    $urlparams = array('id' => $id, 'sid' => $sid);
+    $urlparams = array('id' => $id, 'sid' => $sid, 'vid' => $vid);
     if (!is_null($folderid)) {
         $urlparams['ssid'] = $folderid;
     }
@@ -524,7 +496,7 @@ if ($contentform->is_cancelled()) {
             if (isset($foldertemplatecontentid)) {
                 $urlparams['sstsid'] = $foldertemplatecontentid;
             }
-            $urlparams['vid'] = $vid;
+
             $url = new moodle_url('/mod/openstudio/view.php', $urlparams);
         }
     }

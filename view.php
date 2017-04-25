@@ -595,7 +595,7 @@ if ($finalviewpermissioncheck) {
                         array('id' => $id, 'lid' => $content->l3id, 'vid' => content::VISIBILITY_PRIVATE, 'sid' => $content->id));
                 if (!$content->id) {
                     $content->folderlink = new moodle_url('/mod/openstudio/contentedit.php',
-                            array('id' => $id, 'sid' => 0, 'lid' => $content->l3id,
+                            array('id' => $id, 'sid' => 0, 'lid' => $content->l3id, 'vid' => $vid,
                                     'ssid' => 0, 'type' => content::TYPE_FOLDER_CONTENT));
                 }
             }
@@ -624,10 +624,10 @@ if ($finalviewpermissioncheck) {
 
             if (!$content->timemodified) {
                 $content->contentediturl = new moodle_url('/mod/openstudio/contentedit.php',
-                    array('id' => $id, 'sid' => 0, 'lid' => $content->l3id));
+                    array('id' => $id, 'vid' => $vid, 'sid' => 0, 'lid' => $content->l3id));
             } else {
                 $content->contentediturl = new moodle_url('/mod/openstudio/contentedit.php',
-                    array('id' => $id, 'sid' => $content->id));
+                    array('id' => $id, 'vid' => $vid, 'sid' => $content->id));
             }
 
             $contentdata->contents[$contentid] = $content;
