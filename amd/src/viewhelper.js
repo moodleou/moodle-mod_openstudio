@@ -32,8 +32,9 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
 
         /**
          * Isotope instance.
+         * There are more than a grid in a page
          */
-        isotope: null,
+        isotope: [],
 
         /**
          * Module config. Passed from server side.
@@ -75,14 +76,14 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
         handleIsotope: function() {
             var container = $('.openstudio-grid');
             container.each(function() {
-                t.isotope = new Isotope('#' + this.id, {
+                t.isotope.push(new Isotope('#' + this.id, {
                     layoutMode: 'masonry',
                     itemSelector: '.openstudio-grid-item',
                     masonry: {
                         columnWidth: 243,
                         gutter: 20
                     }
-                });
+                }));
             });
 
             // Once all images loaded, try to re-arrange all items.
@@ -96,12 +97,25 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
                 imgs.load(function() {
                     count--;
                     if (!count) {
-                        t.isotope.layout();
+                        t.reArrangeItems();
                     }
                 });
             } else {
-                t.isotope.layout();
+                t.reArrangeItems();
             }
+        },
+
+        /**
+         * Re-arrange items
+         *
+         * @method reArrangeItems
+         */
+        reArrangeItems: function() {
+            setTimeout(function() {
+                $.each(t.isotope, function(i, grid) {
+                    grid.layout();
+                });
+            }, 1000);
         },
 
         /**

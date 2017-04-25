@@ -31,6 +31,7 @@
         "placeholdertext" : "My module",
         "adddisable": false,
         "filterdisable": false,
+        "hasnormalshareditems": false,
         "contents": [
             {
                 "firstname" : "Admin",
@@ -159,6 +160,13 @@
                 {{/activities}}
             </div>
         {{/activityitems}}
+        {{#hasnormalshareditems}}
+            <div class="openstudio-grid openstudio-activity-cutting-edge" id="openstudio_grid">
+                {{#normalshareditems}}
+                    <div class="openstudio-grid-item">{{>mod_openstudio/content_block}}</div>
+                {{/normalshareditems}}
+            </div>
+        {{/hasnormalshareditems}}
     {{/myactivities}}
     {{^myactivities}}
         <div class="openstudio-grid" id="openstudio_grid">

@@ -2173,6 +2173,11 @@ iframe.openstudio-content-view-iframe {
 }
 
 /* Activity. */
+.openstudio-grid.openstudio-activity-cutting-edge {
+    border-top: 1px solid #fff;
+    padding-top: 20px;
+    margin-top: 0px;
+}
 .openstudio-activity-title {
     font-size: 1.28571em;
     font-weight: bold;

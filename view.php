@@ -484,6 +484,7 @@ if ($finalviewpermissioncheck) {
         $contentslist = array();
         $contentdata->total = $contentdatatemp->total;
         $activityitems = [];
+        $normalshareditems = []; // Just have items if a user view another user's work.
         foreach ($contentdatatemp->contents as $content) {
             // Process content locking.
             if (($content->levelcontainer > 0) && ($content->userid == $permissions->activeuserid)) {
@@ -638,16 +639,21 @@ if ($finalviewpermissioncheck) {
                     $content->name = substr($content->name, 0, 55) . '...';
                 }
 
-                if (array_key_exists($activityid, $activityitems)) {
-                    $activityitems[$activityid]->activities[] = (object) $content;
-                } else {
-                    $activityitem = (object) [
-                            'activities' => [(object) $content],
-                            'activityname' => $content->l2name,
-                            'activityid' => $activityid
-                    ];
+                if ($content->l2id != '') {
+                    // Activity content
+                    if (array_key_exists($activityid, $activityitems)) {
+                        $activityitems[$activityid]->activities[] = (object)$content;
+                    } else {
+                        $activityitem = (object)[
+                                'activities' => [(object)$content],
+                                'activityname' => $content->l2name,
+                                'activityid' => $activityid
+                        ];
 
-                    $activityitems[$activityid] = $activityitem;
+                        $activityitems[$activityid] = $activityitem;
+                    }
+                } else {
+                    $normalshareditems[] = $content;
                 }
             }
         }
@@ -655,6 +661,8 @@ if ($finalviewpermissioncheck) {
         // Returns all the values from the array and indexes the array numerically.
         // We need this because mustache requires it.
         $contentdata->activityitems = array_values($activityitems);
+        $contentdata->normalshareditems = array_values($normalshareditems);
+        $contentdata->hasnormalshareditems = !empty($normalshareditems);
 
         $contentdata->pagestart = $pagestart;
         $contentdata->streamdatapagesize = $streamdatapagesize;
