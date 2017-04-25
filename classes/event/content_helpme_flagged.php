@@ -44,6 +44,7 @@ class content_helpme_flagged extends \core\event\base {
      * @return void
      */
     protected function init() {
+        $this->data['objecttable'] = 'openstudio_contents';
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
