@@ -313,6 +313,11 @@
 
 .openstudio-navigation-notification-icon {
     cursor: pointer;
+    border: 0 none;
+    margin-top: 10px;
+    position: absolute;
+    vertical-align: middle;
+    width: 28px;
 }
 
 .openstudio-nav-primary .notifications .openstudio-notifications-arrow {
@@ -334,7 +339,7 @@
 
 .path-mod-openstudio .openstudio-notifications.dropdown-menu {
     padding: 0;
-    top: 62px;
+    top: 50px;
     left: -222px;
 }
 
@@ -1410,14 +1415,6 @@ label.openstudio-export-item-name {
     border: 0 none;
     margin-top: 8px;
     margin-left: -34px;
-    position: absolute;
-    vertical-align: middle;
-    width: 28px;
-}
-
-.openstudio-navigation-notification-icon {
-    border: 0 none;
-    margin-top: 18px;
     position: absolute;
     vertical-align: middle;
     width: 28px;
@@ -4415,6 +4412,7 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-navigation-notification-icon {
         width: 64px;
+        height: 64px;
         margin-top: 8px;
     }
 
@@ -5571,10 +5569,6 @@ a.openstudio-add-new-content-link:hover  {
         margin-top: 6px;
     }
 
-    .openstudio-navigation-notification-icon {
-        width: 48px;
-    }
-
     .openstudio-subscribe-button {
         float: left;
     }
@@ -5599,6 +5593,8 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-navigation-notification-icon {
         margin-top: 8px;
+        width: 48px;
+        height: 48px;
     }
 
     .openstudio-navigation-notification-text {

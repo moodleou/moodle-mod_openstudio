@@ -32,6 +32,7 @@ use mod_openstudio\local\renderer_utils;
 use mod_openstudio\local\api\flags;
 use mod_openstudio\local\api\lock;
 use mod_openstudio\local\api\user;
+use mod_openstudio\local\api\notifications;
 use mod_openstudio\local\api\folder;
 use mod_openstudio\local\util\defaults;
 use mod_openstudio\local\notifications\notification;
