@@ -211,12 +211,8 @@ if ($pagestart < 0) {
     $pagestart = 0;
 }
 
+// Currently,  we respect view page size on preference bar and ignore settings.
 $streamdatapagesize = defaults::STREAMPAGESIZE;
-if (isset(get_config('openstudio')->streampagesize)) {
-    if (get_config('openstudio')->streampagesize > 0) {
-        $streamdatapagesize = get_config('openstudio')->streampagesize;
-    }
-}
 if (isset($SESSION->openstudio_view_filters)) {
     if (isset($SESSION->openstudio_view_filters[$vid]->pagesize)) {
         $streamdatapagesize = $SESSION->openstudio_view_filters[$vid]->pagesize;
