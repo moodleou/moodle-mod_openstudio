@@ -1086,4 +1086,17 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         return $this->render_from_template('mod_openstudio/folder_browse_posts', $data);
     }
+
+    /**
+     * This function renders the HTML fragment for the view-deleted-posts dialogue body.
+     *
+     * @param $deletedposts array Deleted posts
+     * @return bool|string
+     */
+    public function view_deleted_posts($deletedposts) {
+        $data = new stdClass();
+
+        $data->deletedposts = $deletedposts;
+        return $this->render_from_template('mod_openstudio/viewdeleted_dialog', $data);
+    }
 }

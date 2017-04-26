@@ -816,6 +816,7 @@ $string['errordeletesubscription'] = 'Sorry, you have either already unsubscribe
 $string['errornopermissiontoviewcontent'] = 'You do not have the permissions to view this content.';
 $string['errornopermissiontoviewcontents'] = 'You do not have the permissions to view the Studio activities.';
 $string['errornopermissiontoaddcontent'] = 'You do not have the permissions to add/edit this content.';
+$string['errornopermissiontoviewdeleted'] = 'You do not have the permissions to view deleted contents.';
 $string['errorunexpectedbehaviour'] = 'Unexpected error; contact your system administrator.';
 $string['errorpinboardisdisabled'] = 'The Pinboard feature is currently disabled.';
 $string['errorpinboardexceedlimit'] = 'You cannot create anymore Pinboard contents.';

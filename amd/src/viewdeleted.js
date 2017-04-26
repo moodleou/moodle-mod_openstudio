@@ -28,20 +28,16 @@ define([
     'jquery',
     'core/ajax',
     'core/str',
-    'core/templates',
     'require'
-], function($, Ajax, Str, Templates, require) {
+], function($, Ajax, Str, require) {
     var t;
     t = {
 
         /**
          * Module config. Passed from server side.
          * {
-         *     deletedposts: [
-         *         thumnail: string,
-          *        title: string,
-          *        date: string
-         *     ]
+         *     cmid: int,
+         *     folderid: int
          * }
          */
         mconfig: null,
@@ -112,12 +108,26 @@ define([
              * @method setBody
              */
             function setBody() {
-                Templates
-                    .render('mod_openstudio/viewdeleted_dialog', {
-                        'deletedposts': t.mconfig.deletedposts
-                    })
+
+                M.util.js_pending('openstudioFetchDeletedContent');
+
+                var promises = Ajax.call([{
+                    methodname: 'mod_openstudio_external_fetch_deleted_posts_in_folder',
+                    args: {
+                        cmid: t.mconfig.cmid,
+                        folderid: t.mconfig.folderid
+                    }
+                }]);
+
+                promises[0]
                     .done(function(html) {
                         dialogue.set('bodyContent', html);
+                    })
+                    .always(function() {
+                        M.util.js_complete('openstudioFetchDeletedContent');
+                    })
+                    .fail(function(ex) {
+                        window.console.error('Log request failed ' + ex.message);
                     });
             }
 

@@ -1289,6 +1289,8 @@ class mod_openstudio_external extends external_api {
      * @param int $cmid Course module ID
      * @param int $cvid Content version ID
      * @param int $folderid Containing folder ID
+     * @return bool
+     * @throws moodle_exception
      */
     public static function restore_content_in_folder($cmid, $cvid, $folderid) {
         $params = self::validate_parameters(self::restore_content_in_folder_parameters(), [
@@ -1333,5 +1335,77 @@ class mod_openstudio_external extends external_api {
      */
     public static function restore_content_in_folder_returns() {
         return new external_value(PARAM_BOOL, 'Success');
+    }
+
+    /**
+     * Parameters for fetch_deleted_posts_in_folder
+     *
+     * @return external_function_parameters
+     */
+    public static function fetch_deleted_posts_in_folder_parameters() {
+        return new external_function_parameters([
+            'cmid' => new external_value(PARAM_INT, 'Course module ID'),
+            'folderid' => new external_value(PARAM_INT, 'Folder ID')
+        ]);
+    }
+
+    /**
+     * Fetch deleted contents in folder and return html markup.
+     *
+     * @param int $cmid Course module ID
+     * @param int $folderid Folder ID
+     * @return string
+     * @throws moodle_exception
+     */
+    public static function fetch_deleted_posts_in_folder($cmid, $folderid) {
+        $params = self::validate_parameters(self::fetch_deleted_posts_in_folder_parameters(), [
+            'cmid' => $cmid,
+            'folderid' => $folderid
+        ]);
+        $context = context_module::instance($params['cmid']);
+        external_api::validate_context($context);
+
+        global $USER, $PAGE;
+        $userid = $USER->id;
+        $coursedata = util::render_page_init($params['cmid']);
+        $permissions = $coursedata->permissions;
+
+        $contentdata = folder::get($params['folderid']);
+
+        if ($contentdata) {
+            $actionallowed = ($permissions->viewdeleted && $contentdata->userid == $userid)
+                || $permissions->managecontent;
+            if ($actionallowed) {
+                $deletedposttemp = folder::get_deleted_contents($contentdata->id);
+                $deletedposts = [];
+                foreach ($deletedposttemp as $post) {
+                    $post = renderer_utils::content_type_image($post, $context, true);
+
+                    $deletedposts[] = (object)array(
+                        'pictureurl' => (string) $post->contenttypeimage,
+                        'name' => $post->name,
+                        'date' => $post->deletedtime ? date('j/m/y h:i', $post->deletedtime) : '',
+                        'id' => $post->id
+                    );
+                }
+
+                $renderer = $PAGE->get_renderer('mod_openstudio');
+                $html = $renderer->view_deleted_posts($deletedposts);
+                return $html;
+            } else {
+                throw new \moodle_exception('errornopermissiontoviewdeleted', 'openstudio');
+            }
+        } else {
+            throw new moodle_exception('errorinvalidcontent', 'openstudio');
+        }
+    }
+
+    /**
+     * Return values for restore_content_in_folder.
+     *
+     * @return external_value
+     */
+    public static function fetch_deleted_posts_in_folder_returns() {
+        return new external_value(PARAM_RAW, 'Deleted posts with html format');
     }
 }

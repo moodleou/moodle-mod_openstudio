@@ -1301,6 +1301,7 @@ class renderer_utils {
             $comments = [];
             $commentthreads = [];
             $contentdata->comments = [];
+            $pageurl = util::get_current_url();
 
             if ($commenttemp) {
                 foreach ($commenttemp as $key => $comment) {
@@ -1327,6 +1328,8 @@ class renderer_utils {
                     // Check report capability.
                     $comment->reportenable = ($permissions->activeuserid != $comment->userid) && !$permissions->managecontent;
 
+                    $comment->reportabuselink = util::render_report_abuse_link('openstudio', $permissions->activecmcontextid,
+                        'content', $comment->id, $pageurl, $pageurl, $permissions->activeuserid);
                     $comment->timemodified = userdate($comment->timemodified, get_string('formattimedatetime', 'openstudio'));
 
                     if (is_null($comment->inreplyto)) { // This is a new comment.
@@ -1422,7 +1425,6 @@ class renderer_utils {
             $PAGE->requires->strings_for_js(array('folderdeletedposts'), 'mod_openstudio');
 
             $PAGE->requires->js_call_amd('mod_openstudio/viewdeleted', 'init', [[
-                'deletedposts' => $deletedposts,
                 'cmid' => $cmid,
                 'folderid' => $contentdata->id]]);
         }
