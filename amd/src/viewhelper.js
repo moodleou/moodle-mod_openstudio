@@ -94,7 +94,7 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
             var count = imgs.length;
 
             if (count) {
-                imgs.load(function() {
+                imgs.on('load', function() {
                     count--;
                     if (!count) {
                         t.reArrangeItems();
