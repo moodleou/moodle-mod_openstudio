@@ -477,7 +477,7 @@ if ($contentform->is_cancelled()) {
 
     $urlparams = array('id' => $id, 'sid' => $sid, 'vid' => $vid);
     if (!is_null($folderid)) {
-        $urlparams['ssid'] = $folderid;
+        $urlparams['folderid'] = $folderid;
     }
     if ($sid > 0) {
         $url = new moodle_url('/mod/openstudio/content.php', $urlparams);

@@ -899,7 +899,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         if (!empty($contentdata->contentversions)) {
             foreach ($contentdata->contentversions as $contentversion) {
                 $contentviewversionlink = new moodle_url('/mod/openstudio/content.php', array(
-                        'id' => $cmid, 'sid' => $contentversion->id, 'vuid' => $contentdata->userid, 'contentversion' => 1));
+                        'id' => $cmid, 'sid' => $contentversion->id, 'vuid' => $contentdata->userid,
+                        'folderid' => $contentdata->folderid, 'contentversion' => 1));
                 $contentversion->contentviewversionlink = $contentviewversionlink->out(false);
                 $contentversions[] = renderer_utils::content_details($cmid, $permissions, $contentversion, true);
             }
@@ -912,7 +913,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 array('id' => $cmid, 'vuid' => $contentdata->userid, 'vid' => content::VISIBILITY_PRIVATE));
 
         $contentrestoreversionurl = new moodle_url('/mod/openstudio/content.php', array(
-                'id' => $cmid, 'sid' => $contentdata->id, 'vuid' => $contentdata->userid, 'restoreversion' => 1));
+                'id' => $cmid, 'sid' => $contentdata->id, 'vuid' => $contentdata->userid,
+                'folderid' => $contentdata->folderid, 'restoreversion' => 1));
         $contentdata->contentrestoreversionurl = $contentrestoreversionurl->out(false);
 
         return $this->render_from_template('mod_openstudio/content_page', $contentdata);

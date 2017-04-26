@@ -86,7 +86,7 @@ if ($restoreversion) {
             if ($restoredata) {
                 $contentid = $restoredata->id;
                 $redirectorurl = new moodle_url('/mod/openstudio/content.php',
-                        array('id' => $cm->id, 'sid' => $contentid,  'vuid' => $restoredata->userid, 'ssid' => $folderid));
+                        array('id' => $cm->id, 'sid' => $contentid,  'vuid' => $restoredata->userid, 'folderid' => $folderid));
                 return redirect($redirectorurl);
             }
         }
@@ -129,7 +129,7 @@ if ($archiveversion) {
             }
         }
         $redirectorurl = new moodle_url('/mod/openstudio/content.php',
-                array('id' => $cm->id, 'sid' => $contentdata->id,  'vuid' => $contentdata->userid, 'ssid' => $folderid));
+                array('id' => $cm->id, 'sid' => $contentdata->id,  'vuid' => $contentdata->userid, 'folderid' => $folderid));
         return redirect($redirectorurl);
     }
 }
@@ -138,7 +138,7 @@ $contentdata->iscontentversion = false;
 if ($iscontentversion) {
     $contentdata->iscontentversion = true;
     $contentcurrenteversionurl = new moodle_url('/mod/openstudio/content.php',
-            array('id' => $cm->id, 'sid' => $contentdata->contentid, 'vuid' => $contentdata->userid));
+            array('id' => $cm->id, 'sid' => $contentdata->contentid, 'vuid' => $contentdata->userid, 'folderid' => $folderid));
 
     $contentdata->contentcurrenteversionurl = $contentcurrenteversionurl->out(false);
 
@@ -151,6 +151,7 @@ if ($iscontentversion) {
                     'id' => $cmid,
                     'sid' => $contentdata->previousversionid,
                     'vuid' => $contentdata->userid,
+                    'folderid' => $folderid,
                     'contentversion' => 1
             ));
 
@@ -162,6 +163,7 @@ if ($iscontentversion) {
                     'id' => $cmid,
                     'sid' => $contentdata->nextversionid,
                     'vuid' => $contentdata->userid,
+                    'folderid' => $folderid,
                     'contentversion' => 1
             ));
 
