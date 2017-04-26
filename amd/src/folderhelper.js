@@ -40,18 +40,25 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
         },
 
         /**
+         * Isotope instance
+         */
+        isoTope: null,
+
+        /**
          * Handle items will be shown via Isotope masonry template.
          *
          * @method handleTooltip
          */
         handleIsotope: function() {
+
+            var containerCLass = '.openstudio-folder-items';
             var colWidth = 200;
             var gutters = 65;
             if ($(window).width() <= 1024) {
                 colWidth = 150;
                 gutters = 50;
             }
-            new Isotope('.openstudio-folder-items', {
+            t.isoTope = new Isotope(containerCLass, {
                 layoutMode: 'masonry',
                 itemSelector: '.openstudio-folder-item',
                 masonry: {
@@ -60,7 +67,36 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
                 }
             });
 
-        }
+            // Once all images loaded, try to re-arrange all items.
+            var imgs = $(containerCLass).find('img').not(function() {
+                return this.complete;
+            });
+
+            var count = imgs.length;
+
+            if (count) {
+                imgs.on('load', function() {
+                    count--;
+                    if (!count) {
+                        t.reArrangeItems();
+                    }
+                });
+            } else {
+                t.reArrangeItems();
+            }
+
+        },
+
+        /**
+         * Re-arrange items
+         *
+         * @method reArrangeItems
+         */
+        reArrangeItems: function() {
+            setTimeout(function() {
+                t.isoTope.layout();
+            }, 1000);
+        },
     };
 
     return t;
