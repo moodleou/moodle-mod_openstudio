@@ -1265,7 +1265,8 @@ class renderer_utils {
                 'id' => $cmid,
                 'cid' => $contentdata->id,
                 'folderid' => property_exists($contentdata, 'folderid') ? $contentdata->folderid : null,
-                'isfolder' => $isfolder]]);
+                'isfolder' => $isfolder,
+                'isactivitycontent' => ($contentdata->levelid > 0)]]);
         }
 
         return $deleteenable;

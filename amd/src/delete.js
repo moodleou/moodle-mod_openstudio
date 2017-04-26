@@ -39,7 +39,10 @@ define([
          * {
          *     id: int,
          *     folderid: int,
-         *     isfolder: bool
+         *     isfolder: bool,
+         *     folderid: int (optional),
+         *     isactivitycontent: bool
+         *
          * }
          */
         mconfig: null,
@@ -193,7 +196,11 @@ define([
                     if (t.mconfig.folderid) {
                         url = SiteConfig.wwwroot + '/mod/openstudio/folder.php?sid=' + t.mconfig.folderid;
                     } else {
-                        url = SiteConfig.wwwroot + '/mod/openstudio/view.php?vid=' + res.vid;
+                        if (t.mconfig.isactivitycontent) {
+                            url = window.location.href;
+                        } else {
+                            url = SiteConfig.wwwroot + '/mod/openstudio/view.php?vid=' + res.vid;
+                        }
                     }
 
                     url += '&id=' + t.mconfig.id;
