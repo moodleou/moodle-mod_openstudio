@@ -511,6 +511,10 @@ class renderer_utils {
         $contentdata->contentdatatitle = $contentdatatitle;
         $contentdata->contentdatadate = userdate($contentdata->timemodified, get_string('formattimedatetime', 'openstudio'));
 
+        if (property_exists($contentdata, 'isfoldercontent') && $contentdata->isfoldercontent) {
+            $folder = folder::get($contentdata->folderid);
+            $contentdata->visibility = $folder->visibility;
+        }
         $contentdata->contentvisibilityicon = self::content_visibility_icon($contentdata);
 
         if (property_exists($contentdata, 'folderid')) {
