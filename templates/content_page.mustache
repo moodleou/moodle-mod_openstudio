@@ -80,29 +80,6 @@
             {{/iscontentversion}}
             {{#iscontentversion}}
                 <div class="openstudio-content-view-version-title-box">
-                    <span class="openstudio-content-view-title">{{{contentdataname}}}</span>
-                    {{#contentpreviousversionlink}}
-                        <span class="openstudio-content-view-version openstudio-content-view-version-previous">
-                           <a href="{{contentpreviousversionlink}}">
-                               {{#pix}} t/left, core, {{#str}} contentactionolderversion, openstudio {{/str}} {{/pix}}
-                               <span class="openstudio-content-view-version-label
-                                    {{#contentnextversionlink}}openstudio-content-view-version-divider{{/contentnextversionlink}}
-                                ">
-                                    {{#str}} contentactionolderversion, openstudio {{/str}}
-                               </span>
-                           </a>
-                         </span>
-                    {{/contentpreviousversionlink}}
-                    {{#contentnextversionlink}}
-                        <span class="openstudio-content-view-version openstudio-content-view-version-next">
-                            <a href="{{contentnextversionlink}}">
-                                <span class="openstudio-content-view-version-label">
-                                    {{#str}} contentactionnewerversion, openstudio {{/str}}
-                                </span>
-                                {{#pix}} t/right, core, {{#str}} contentactionnewerversion, openstudio {{/str}} {{/pix}}
-                            </a>
-                        </span>
-                    {{/contentnextversionlink}}
                     <span class="openstudio-content-view-current-version">
                         <a href="{{contentcurrenteversionurl}}">
                             <button id="id_currentversionbutton" class="openstudio-current-version-button">
@@ -111,6 +88,30 @@
                             </button>
                         </a>
                     </span>
+                    <span class="openstudio-content-view-title">{{{contentdataname}}}</span>
+                    <div class="openstudio-content-view-version-navigation">
+                        {{#contentpreviousversionlink}}
+                            <span class="openstudio-content-view-version openstudio-content-view-version-previous
+                                {{#contentnextversionlink}} openstudio-content-view-version-divider {{/contentnextversionlink}}">
+                               <a href="{{contentpreviousversionlink}}">
+                                   {{#pix}} t/left, core, {{#str}} contentactionolderversion, openstudio {{/str}} {{/pix}}
+                                   <span class="openstudio-content-view-version-label">
+                                        {{#str}} contentactionolderversion, openstudio {{/str}}
+                                   </span>
+                               </a>
+                             </span>
+                        {{/contentpreviousversionlink}}
+                        {{#contentnextversionlink}}
+                            <span class="openstudio-content-view-version openstudio-content-view-version-next">
+                                <a href="{{contentnextversionlink}}">
+                                    <span class="openstudio-content-view-version-label">
+                                        {{#str}} contentactionnewerversion, openstudio {{/str}}
+                                    </span>
+                                    {{#pix}} t/right, core, {{#str}} contentactionnewerversion, openstudio {{/str}} {{/pix}}
+                                </a>
+                            </span>
+                        {{/contentnextversionlink}}
+                    </div>
                 </div>
             {{/iscontentversion}}
         </div>
