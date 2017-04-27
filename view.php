@@ -223,6 +223,20 @@ $streamdatapagesize = optional_param('pagesize', $streamdatapagesize, PARAM_INT)
 
 // Check if filter reset request givem, if so, then clear all the filters by redirecting the browser.
 $resetfilter = optional_param('reset', 0, PARAM_INT);
+
+// If all filter type checked as default, it same as reset applied.
+$filteractive = optional_param('filteractive', 0, PARAM_INT);
+$fblock = optional_param('fblock', 0, PARAM_INT);
+$fflagarray = optional_param_array('fflagarray', array(), PARAM_INT);
+$ftypearray = optional_param_array('ftypearray', array(), PARAM_INT);
+$fstatus = optional_param('fstatus', 0, PARAM_INT);
+$fscope = optional_param('fscope', 0, PARAM_INT);
+
+if ($filteractive && $fblock == stream::FILTER_AREA_ALL && isset($fflagarray[0]) && $fflagarray[0] == 0 &&
+        isset($ftypearray[0]) && $ftypearray[0] == 0 && $fstatus == 0 && $fscope == stream::SCOPE_EVERYONE  ) {
+    $resetfilter = true;
+}
+
 if ($resetfilter) {
     if (!isset($SESSION->openstudio_view_filters[$vid])) {
         // Completely reset the filters.
@@ -246,7 +260,9 @@ if ($resetfilter) {
     $SESSION->openstudio_view_filters[$vid]->pagesize = defaults::STREAMPAGESIZE;
     $SESSION->openstudio_view_filters[$vid]->filteractive = 0;
 
-    $reseturl = new moodle_url('/mod/openstudio/view.php', array('id' => $id, 'vid' => $vid, 'page' => 0));
+    $reseturl = new moodle_url('/mod/openstudio/view.php', array(
+            'id' => $id, 'vid' => $vid, 'page' => 0, 'pagesize' => $streamdatapagesize));
+
     redirect($reseturl);
 }
 // Record whether filtering is active.
@@ -836,7 +852,7 @@ $contentdata->fsort = $fsort;
 $contentdata->osort = $osort;
 $contentdata->page = $streamdatapagesize;
 $contentdata->filteropen = $filteropen;
-$contentdata->filteractive = ($filteropen || $resetfilter) ? 0 : $filteractive;;
+$contentdata->filteractive = $filteractive;
 
 // Generate stream html.
 $renderer = $PAGE->get_renderer('mod_openstudio');
