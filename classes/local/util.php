@@ -139,6 +139,9 @@ class util {
             $theme->helpname = get_string('helplink', 'openstudio');
         }
 
+        // Init javascript.
+        self::init_js();
+
         return (object) array(
                 'cm' => $cm,
                 'cminstance' => $instance,
@@ -1606,5 +1609,13 @@ EOF;
         }
 
         return $reportabuselink;
+    }
+
+    /**
+     * Init necessary javascript modules for every pages.
+     */
+    public static function init_js() {
+        global $PAGE;
+        $PAGE->requires->js_call_amd('mod_openstudio/accessibility', 'init');
     }
 }

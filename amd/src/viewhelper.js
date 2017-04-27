@@ -273,6 +273,19 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
                     $('.openstudio-filter-block').prop("checked", false);
                 }
             });
+
+            // Some works to help page accessible.
+            // Because collapse/expand mechanism of bootstrap is that setting the height of target element to 0
+            // and overflow to hidden. So target element is invisible but focusable.
+            // So when pressing tab key, the invisible elements is focused also.
+            $('.openstudio-filter-link a').on('click', function() {
+                var isCollapsed = !($(this).hasClass('collapsed'));
+                $($(this).data('target')).find('input, select').attr('tabindex', isCollapsed ? -1 : 0);
+            });
+
+            $('.openstudio-filter-link a.collapsed').each(function() {
+                $($(this).data('target')).find('input, select').attr('tabindex', -1);
+            });
         },
 
         /**

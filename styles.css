@@ -2129,6 +2129,10 @@ a.openstudio-add-title:hover  {
     padding-bottom: 10px;
 }
 
+.openstudio-grid-item-content-preview {
+    display: block;
+}
+
 .openstudio-grid-item-content-preview img {
     height: 100%;
     width: 100%;
@@ -2232,6 +2236,10 @@ a.openstudio-add-title:hover  {
     padding: 10px 14px 14px 14px;
     margin-right: auto;
     margin-bottom: 10px;
+}
+
+.openstudio-folder-background a {
+    display: block;
 }
 
 .openstudio-folder-background .openstudio-default-folder-background {
@@ -2797,12 +2805,15 @@ span.openstudio-content-view-title {
     background-image: url([[pix:t/collapsed]]);
 }
 
-.openstudio-content-view-block span {
+.openstudio-content-view-block a,
+.openstudio-content-view-block a:hover,
+.openstudio-content-view-block a:focus{
     color: #002158;
     font-weight: normal;
     padding-left: 15px;
     font-size: 1.28571em;
     line-height: 35px;
+    text-decoration: none;
 }
 
 .openstudio-content-view-user-picture {

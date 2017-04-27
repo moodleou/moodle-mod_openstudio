@@ -80,7 +80,7 @@
             <div class ="openstudio-folder-content">
                 <img class="openstudio-folder-tab" src="{{{folderdefaultthumbnail}}}" alt="{{{name}}}">
                 <div class ="openstudio-folder-background">
-                    <a href="{{{folderlink}}}">
+                    <a href="{{{folderlink}}}" class="clearfix">
                         {{#hascontent}}
                             {{#thumbnailimg}}
                                 <img class="openstudio-content-folder-img" src="{{{folderthumbnail}}}" alt="{{{name}}}">
@@ -102,7 +102,7 @@
         {{/isfolder}}
         {{^isfolder}}
                 <div class="openstudio-grid-item-content-preview{{#contenttypedefaultimage}}-default{{/contenttypedefaultimage}}">
-                    <a href="{{{contentlink}}}">
+                    <a href="{{{contentlink}}}" class="clearfix">
                         <img class="openstudio-grid-item-thumbnail" src="{{{contentthumbnailurl}}}" alt="{{{name}}}">
                     </a>
                 </div>
