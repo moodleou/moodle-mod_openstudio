@@ -183,8 +183,9 @@ define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/templates', 'core
                                 .removeClass(res.flagremoveclass)
                                 .addClass(res.flagaddclass);
                         } else {
-                            flagcontainer.html(res.flagtext);
-                            flagcontainer.removeClass(res.flagremoveclass).addClass(res.flagaddclass);
+                            flagcontainer.find('.openstudio-content-view-icon-text').text(res.flagtext);
+                            flagcontainer.toggleClass('openstudio-content-view-icon-active', res.mode == 'off');
+                            flagcontainer.attr('title', res.accessiblemessage);
                         }
                     }
                 })

@@ -494,7 +494,8 @@ class mod_openstudio_external extends external_api {
      *      flagtext: text,
      *      flagremoveclass: text,
      *      flagaddclass: text,
-     *      fid: int
+     *      fid: int,
+     *      accessiblemessage: text
      *  ]
      */
     public static function flag_content($cmid, $cid, $fid, $mode) {
@@ -563,18 +564,17 @@ class mod_openstudio_external extends external_api {
 
             $iscontentflagrequestfeedback = false;
             $total = flags::count_for_content($params['cid'], $params['fid']) + 0;
+            $flagaccessiblemessage = '';
             switch ($params['fid']) {
                 case flags::FAVOURITE:
                     $flagtext = get_string('contentflagxfavourites', 'openstudio',
                             array('number' => $total));
                     switch ($mode) {
                         case 'on':
-                            $flagremoveclass = 'openstudio-content-view-icon-favourite';
-                            $flagaddclass = 'openstudio-content-view-icon-favourite-active';
+                            $flagaccessiblemessage = get_string('contentclicktounfavourite', 'openstudio');
                         break;
                         case 'off':
-                            $flagremoveclass = 'openstudio-content-view-icon-favourite-active';
-                            $flagaddclass = 'openstudio-content-view-icon-favourite';
+                            $flagaccessiblemessage = get_string('contentclicktofavourite', 'openstudio');
                             break;
                     }
                     break;
@@ -583,12 +583,10 @@ class mod_openstudio_external extends external_api {
                             array('number' => $total));
                     switch ($mode) {
                         case 'on':
-                            $flagremoveclass = 'openstudio-content-view-icon-participation';
-                            $flagaddclass = 'openstudio-content-view-icon-participation-active';
+                            $flagaccessiblemessage = get_string('contentclicktounsmile', 'openstudio');
                             break;
                         case 'off':
-                            $flagremoveclass = 'openstudio-content-view-icon-participation-active';
-                            $flagaddclass = 'openstudio-content-view-icon-participation';
+                            $flagaccessiblemessage = get_string('contentclicktosmile', 'openstudio');
                             break;
                     }
                     break;
@@ -597,12 +595,10 @@ class mod_openstudio_external extends external_api {
                             array('number' => $total));
                     switch ($mode) {
                         case 'on':
-                            $flagremoveclass = 'openstudio-content-view-icon-inspiration';
-                            $flagaddclass = 'openstudio-content-view-icon-inspiration-active';
+                            $flagaccessiblemessage = get_string('contentclicktouninspire', 'openstudio');
                             break;
                         case 'off':
-                            $flagremoveclass = 'openstudio-content-view-icon-inspiration-active';
-                            $flagaddclass = 'openstudio-content-view-icon-inspiration';
+                            $flagaccessiblemessage = get_string('contentclicktoinspire', 'openstudio');
                             break;
                     }
                     break;
@@ -638,6 +634,7 @@ class mod_openstudio_external extends external_api {
         $results['flagaddclass'] = $flagaddclass;
         $results['fid'] = $params['fid'];
         $results['iscontentflagrequestfeedback'] = $iscontentflagrequestfeedback;
+        $results['accessiblemessage'] = $flagaccessiblemessage;
 
         return $results;
     }
@@ -655,7 +652,8 @@ class mod_openstudio_external extends external_api {
                 'flagremoveclass' => new external_value(PARAM_TEXT, 'flag remove class'),
                 'flagaddclass' => new external_value(PARAM_TEXT, 'flag add new class'),
                 'fid' => new external_value(PARAM_INT, 'flag ID'),
-                'iscontentflagrequestfeedback' => new external_value(PARAM_BOOL, 'is content flag request feedback')
+                'iscontentflagrequestfeedback' => new external_value(PARAM_BOOL, 'is content flag request feedback'),
+                'accessiblemessage' => new external_value(PARAM_TEXT, 'Accessible message')
         ));
     }
 

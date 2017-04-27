@@ -41,50 +41,128 @@
            data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagfavourite}}"
            {{#contentflagfavouriteactive}}data-mode="on"{{/contentflagfavouriteactive}}
            {{^contentflagfavouriteactive}}data-mode="off"{{/contentflagfavouriteactive}}
-           class="openstudio-content-view-flag-icon openstudio-content-view-icon-favourite
+           {{#contentflagfavouriteactive}}
+               title="{{#str}} contentclicktounfavourite, openstudio {{/str}}"
+           {{/contentflagfavouriteactive}}
+           {{^contentflagfavouriteactive}}
+               title="{{#str}} contentclicktofavourite, openstudio {{/str}}"
+           {{/contentflagfavouriteactive}}
+           class="openstudio-content-view-flag-icon openstudio-content-view-icon-favourite has-hover
                     {{#contentflagfavouriteactive}}
-                        openstudio-content-view-icon-favourite-active
+                        openstudio-content-view-icon-active
                     {{/contentflagfavouriteactive}}">
-            {{#str}}
-                contentflagxfavourites, mod_openstudio,
-                { "number": {{#quote}}{{contentfavouritetotal}}{{/quote}} }
-            {{/str}}
+            <span class="openstudio-content-view-icon-active-image">
+                {{#pix}}
+                    favourite_btn_blue_rgb_32px, openstudio, {{#str}} contentclicktofavourite, openstudio {{/str}}
+                {{/pix}}
+            </span>
+            <span class="openstudio-content-view-icon-inactive-image">
+                {{#pix}}
+                    favourite_btn_grey_rgb_32px, openstudio, {{#str}} contentclicktounfavourite, openstudio {{/str}}
+                {{/pix}}
+            </span>
+            <span class="openstudio-content-view-icon-text">
+                {{#str}}
+                    contentflagxfavourites, mod_openstudio,
+                    { "number": {{#quote}}{{contentfavouritetotal}}{{/quote}} }
+                {{/str}}
+            </span>
         </a>
         <a id="content_view_icon_{{contentflagsmile}}"
            data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagsmile}}"
            {{#contentflagsmileactive}}data-mode="off"{{/contentflagsmileactive}}
            {{^contentflagsmileactive}}data-mode="on"{{/contentflagsmileactive}}
-           class="openstudio-content-view-flag-icon openstudio-content-view-icon-participation
+           {{#contentflagsmileactive}}
+                title="{{#str}} contentclicktounsmile, openstudio {{/str}}"
+           {{/contentflagsmileactive}}
+           {{^contentflagsmileactive}}
+                title="{{#str}} contentclicktosmile, openstudio {{/str}}"
+           {{/contentflagsmileactive}}
+           class="openstudio-content-view-flag-icon openstudio-content-view-icon-participation has-hover
                     {{#contentflagsmileactive}}
-                        openstudio-content-view-icon-participation-active
+                        openstudio-content-view-icon-active
                     {{/contentflagsmileactive}}">
-            {{#str}}
-                contentflagxsmiles, mod_openstudio, { "number": {{#quote}}{{contentsmiletotal}}{{/quote}} }
-            {{/str}}
+            <span class="openstudio-content-view-icon-active-image">
+                {{#pix}}
+                    participation_btn_blue_rgb_32px, openstudio, {{#str}} contentclicktounsmile, openstudio {{/str}}
+                {{/pix}}
+            </span>
+            <span class="openstudio-content-view-icon-inactive-image">
+                {{#pix}}
+                    participation_btn_grey_rgb_32px, openstudio, {{#str}} contentclicktosmile, openstudio {{/str}}
+                {{/pix}}
+            </span>
+            <span class="openstudio-content-view-icon-text">
+                {{#str}}
+                    contentflagxsmiles, mod_openstudio, { "number": {{#quote}}{{contentsmiletotal}}{{/quote}} }
+                {{/str}}
+            </span>
         </a>
         <a id="content_view_icon_{{contentflaginspire}}"
            data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflaginspire}}"
            {{#contentflaginspireactive}}data-mode="off"{{/contentflaginspireactive}}
            {{^contentflaginspireactive}}data-mode="on"{{/contentflaginspireactive}}
-           class="openstudio-content-view-flag-icon openstudio-content-view-icon-inspiration
+           {{#contentflaginspireactive}}
+               title="{{#str}} contentclicktouninspire, openstudio {{/str}}"
+           {{/contentflaginspireactive}}
+           {{^contentflaginspireactive}}
+               title="{{#str}} contentclicktoinspire, openstudio {{/str}}"
+           {{/contentflaginspireactive}}
+           class="openstudio-content-view-flag-icon openstudio-content-view-icon-inspiration has-hover
                     {{#contentflaginspireactive}}
-                        openstudio-content-view-icon-inspiration-active
+                        openstudio-content-view-icon-active
                     {{/contentflaginspireactive}}">
-            {{#str}}
-                contentflagxinspired, mod_openstudio, { "number": {{#quote}}{{contentinspiretotal}}{{/quote}} }
-            {{/str}}
+            <span class="openstudio-content-view-icon-active-image">
+                {{#pix}}
+                    inspiration_btn_blue_rgb_32px, openstudio, {{#str}} contentclicktoinspire, openstudio {{/str}}
+                {{/pix}}
+            </span>
+            <span class="openstudio-content-view-icon-inactive-image">
+                {{#pix}}
+                    inspiration_btn_grey_rgb_32px, openstudio, {{#str}} contentclicktouninspire, openstudio {{/str}}
+                {{/pix}}
+            </span>
+            <span class="openstudio-content-view-icon-text">
+                {{#str}}
+                    contentflagxinspired, mod_openstudio, { "number": {{#quote}}{{contentinspiretotal}}{{/quote}} }
+                {{/str}}
+            </span>
         </a>
     </div>
     <div class="openstudio-content-view-animation-icons-right">
         {{#contentcopyenable}}
-            <span class="openstudio-content-view-flag-icon openstudio-content-view-icon-copies-active">
+            <span class="openstudio-content-view-flag-icon openstudio-content-view-icon-copies openstudio-content-view-icon-active">
+                <span class="openstudio-content-view-icon-active-image">
+                    {{#pix}}
+                        copies_btn_blue_rgb_32px, openstudio,
+                        {{#str}}
+                            contentflagxcopies, mod_openstudio, { "number": {{#quote}}{{contentcopycount}}{{/quote}} }
+                        {{/str}}
+                    {{/pix}}
+                </span>
                 {{#str}}
                     contentflagxcopies, mod_openstudio, { "number": {{#quote}}{{contentcopycount}}{{/quote}} }
                 {{/str}}
             </span>
         {{/contentcopyenable}}
         <span class="openstudio-content-view-flag-icon openstudio-content-view-icon-views
-                    {{#contentviewtotal}}openstudio-content-view-icon-views-active{{/contentviewtotal}}">
+                    {{#contentviewtotal}}openstudio-content-view-icon-active{{/contentviewtotal}}">
+            <span class="openstudio-content-view-icon-active-image">
+                {{#pix}}
+                    viewed_btn_blue_rgb_32px, openstudio,
+                    {{#str}}
+                        contentflagxviews, mod_openstudio, { "number": {{#quote}}{{contentviewtotal}}{{/quote}} }
+                    {{/str}}
+                {{/pix}}
+            </span>
+            <span class="openstudio-content-view-icon-inactive-image">
+                {{#pix}}
+                    viewed_btn_grey_rgb_32px, openstudio,
+                    {{#str}}
+                        contentflagxviews, mod_openstudio, { "number": {{#quote}}{{contentviewtotal}}{{/quote}} }
+                    {{/str}}
+                {{/pix}}
+            </span>
             {{#str}}
                 contentflagxviews, mod_openstudio, { "number": {{#quote}}{{contentviewtotal}}{{/quote}} }
             {{/str}}

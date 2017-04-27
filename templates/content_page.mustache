@@ -143,10 +143,12 @@
                     {{/contenttypedownloadfile}}
 
                 {{#contenttypeuseimagedefault}}
-                    <div class="openstudio-content-view-type-img-box">
-                        <img class="openstudio-content-view-type-img"
-                             src="{{{contenttypeiconurl}}}" alt="{{{contentdatatitle}}}">
-                    </div>
+                    {{^contenttypeiframe}}
+                        <div class="openstudio-content-view-type-img-box">
+                            <img class="openstudio-content-view-type-img"
+                                 src="{{{contenttypeiconurl}}}" alt="{{{contentdatatitle}}}">
+                        </div>
+                    {{/contenttypeiframe}}
                 {{/contenttypeuseimagedefault}}
 
                 {{#contenttypefileurl}}

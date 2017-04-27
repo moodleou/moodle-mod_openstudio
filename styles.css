@@ -2457,71 +2457,55 @@ span.openstudio-content-view-title {
 
 .openstudio-content-view-flag-icon {
     background-color: transparent;
-    background-repeat: no-repeat;
-    background-position: center;
     font-size: 1em;
     color: #0b55a8;
-    background-size: 40px 40px;
     display: inline-block;
-    height: 0;
-    padding-top: 40px;
+    height: 40px;
+    width: auto;
     border: none;
     cursor: pointer;
 }
 
 .openstudio-content-view-icon-favourite {
-    background-image: url([[pix:openstudio|favourite_btn_grey_rgb_32px]]);
     margin-left: 15px;
-}
-
-.openstudio-content-view-icon-favourite-active,
-.openstudio-content-view-icon-favourite:hover {
-    background-image: url([[pix:openstudio|favourite_btn_blue_rgb_32px]]);
-    margin-left: 15px;
-}
-
-.openstudio-content-view-icon-participation {
-    background-image: url([[pix:openstudio|participation_btn_grey_rgb_32px]]);
-}
-
-.openstudio-content-view-icon-participation-active,
-.openstudio-content-view-icon-participation:hover {
-    background-image: url([[pix:openstudio|participation_btn_blue_rgb_32px]]);
 }
 
 .openstudio-content-view-icon-inspiration {
-    background-image: url([[pix:openstudio|inspiration_btn_grey_rgb_32px]]);
     margin-left: 8px;
 }
 
-.openstudio-content-view-icon-inspiration-active,
-.openstudio-content-view-icon-inspiration:hover {
-    background-image: url([[pix:openstudio|inspiration_btn_blue_rgb_32px]]);
-    margin-left: 8px;
+.openstudio-content-view-flag-icon span {
+    display: block;
+    width: 100%;
+}
+
+.openstudio-content-view-flag-icon span img {
+    height: 40px;
+    width: 40px;
+    margin: 0 auto;
+    display: block;
+}
+
+.openstudio-content-view-flag-icon span.openstudio-content-view-icon-inactive-image,
+.openstudio-content-view-flag-icon.has-hover:hover .openstudio-content-view-icon-active-image,
+.openstudio-content-view-flag-icon.openstudio-content-view-icon-active span.openstudio-content-view-icon-active-image {
+    display: block;
+}
+
+.openstudio-content-view-flag-icon span.openstudio-content-view-icon-active-image,
+.openstudio-content-view-flag-icon.has-hover:hover .openstudio-content-view-icon-inactive-image,
+.openstudio-content-view-flag-icon.openstudio-content-view-icon-active span.openstudio-content-view-icon-inactive-image {
+    display: none;
 }
 
 .openstudio-content-view-icon-copies {
-    background-image: url([[pix:openstudio|copies_btn_grey_rgb_32px]]);
-    margin-right: 17px;
-    cursor: default;
-}
-
-.openstudio-content-view-icon-copies-active {
-    background-image: url([[pix:openstudio|copies_btn_blue_rgb_32px]]);
     margin-right: 17px;
     cursor: default;
 }
 
 .openstudio-content-view-icon-views {
-    background-image: url([[pix:openstudio|viewed_btn_grey_rgb_32px]]);
-    margin-right: 12px;
     cursor: default;
-}
-
-.openstudio-content-view-icon-views-active {
-    background-image: url([[pix:openstudio|viewed_btn_blue_rgb_32px]]);
     margin-right: 12px;
-    cursor: default;
 }
 
 .openstudio-content-view-actions {
