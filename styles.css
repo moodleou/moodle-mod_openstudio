@@ -3263,7 +3263,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 }
 
 .openstudio-work-progress {
-    width: 85%;
+    width: 241px;
     height: 16px;
     border-radius: 5px;
     border: 1px solid #d4d2d2;
@@ -3273,8 +3273,12 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 }
 
 .openstudio-work-progress-item {
-    width: 64px;
+    width: 25%;
     float: left;
+}
+
+.openstudio-work-progress-item:last-child {
+    width: 23%;
 }
 
 .openstudio-work-progress div:nth-child(n+2) {
@@ -3285,7 +3289,8 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 .openstudio-work-progress-percent {
     float: right;
     width: 15%;
-    text-align: right;
+    text-align: left;
+    padding-left: 10px;
 }
 
 .openstudio-completecolour {
@@ -3823,11 +3828,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-work-progress {
-        width: 85%;
-    }
-
-    .openstudio-work-progress-item {
-        width: 53px;
+        width: 197px;
     }
 
     .openstudio-work-progress-container {
@@ -4102,11 +4103,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-work-progress {
-        width: 85%;
-    }
-
-    .openstudio-work-progress-item {
-        width: 51px;
+        width: 197px;
     }
 
     .openstudio-work-progress-container {
@@ -4795,10 +4792,6 @@ a.openstudio-add-new-content-link:hover  {
         padding-top: 5px;
     }
 
-    .openstudio-work-progress-item {
-        width: 50px;
-    }
-
     .openstudio-profile-name {
         font-size: 1.42857em;
         height: 15px;
@@ -4829,9 +4822,13 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-work-progress {
-        width: 85%;
-        /*width: 208px;
-        margin-top: 5px;*/
+        width: 189px;
+    }
+
+    .openstudio-work-progress-percent {
+        width: 20%;
+        text-align: right;
+        padding-left: 0;
     }
 
     .ios .openstudio-work-progress {
