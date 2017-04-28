@@ -49,9 +49,18 @@
 <div class="openstudio-profile-paticipation-content clearfix">
     <div class="openstudio-profile-paticipation">
         {{#str}} contentflagparticipation, mod_openstudio {{/str}}
-        {{#pix}}
-            participation_rgb_32px, openstudio, {{#str}} participationlabel, openstudio {{/str}}
-        {{/pix}}
+        {{#participationenable}}
+            {{#participationlow}}
+                {{#pix}}
+                    openstudio_icon_participation_low, openstudio, {{#str}} contentparticipationlow, openstudio {{/str}}
+                {{/pix}}
+            {{/participationlow}}
+            {{^participationlow}}
+                {{#pix}}
+                    openstudio_icon_participation_high, openstudio, {{#str}} contentparticipationhigh, openstudio {{/str}}
+                {{/pix}}
+            {{/participationlow}}
+        {{/participationenable}}
     </div>
     <div id="profile_comment_view" class="openstudio-profile-comment-view collapse">
         {{>mod_openstudio/profile_bar_participation}}

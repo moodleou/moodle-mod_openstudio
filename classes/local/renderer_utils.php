@@ -198,6 +198,10 @@ class renderer_utils {
                     array('id' => $openstudioid, 'vuid' => $contentowner->id, 'vid' => content::VISIBILITY_PRIVATE));
         $contentdata->viewedicon = $OUTPUT->pix_url('viewed_rgb_32px', 'openstudio');
         $contentdata->commentsicon = $OUTPUT->pix_url('comments_rgb_32px', 'openstudio');
+        $contentdata->participationenable = ($permissions->feature_participationsmiley &&
+                $userprogressdata['totalslots'] > 0);
+        $contentdata->participationlow = isset($userprogressdata['participationstatus'])
+                && ($userprogressdata['participationstatus'] == 'low');
 
         if (isset($userprogressdata['progressdetail']) && $userprogressdata['progressdetail']) {
             $profileactivityitems = [];
