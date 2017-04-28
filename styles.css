@@ -4533,6 +4533,10 @@ a.openstudio-add-new-content-link:hover  {
         position: absolute;
         left: 360px;
     }
+
+    select.openstudio-filter-pagesize {
+        width: 80px;
+    }
 }
 
 /* Mobile. */
