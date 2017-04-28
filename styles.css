@@ -1659,9 +1659,13 @@ label.openstudio-export-item-name {
 }
 
 .openstudio-content-edit-form {
-    border-top: 1px solid #cccccc;
+    border-top: 1px solid #d4d2d2;
     padding-top: 20px;
     margin-top: 30px;
+}
+
+.path-mod-openstudio .filemanager .fp-restrictions {
+    font-size: 0.85714em;
 }
 
 .openstudio-create-folder-button {

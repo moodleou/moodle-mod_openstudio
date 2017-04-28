@@ -65,7 +65,12 @@
         {{#locked}}
             <div class="openstudio-item-lock">
                 <span><img src="{{lockicon}}" alt="{{#str}} postlocked, mod_openstudio {{/str}}"></span>
-                <span>{{#str}} postlocked, mod_openstudio {{/str}}</span>
+                {{#isfolder}}
+                    <span>{{#str}} folderlocked, mod_openstudio {{/str}}</span>
+                {{/isfolder}}
+                {{^isfolder}}
+                    <span>{{#str}} postlocked, mod_openstudio {{/str}}</span>
+                {{/isfolder}}
             </div>
         {{/locked}}
         {{^locked}}
