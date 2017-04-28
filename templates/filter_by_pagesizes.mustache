@@ -34,7 +34,7 @@
 }}
 <span class="openstudio-filter-select">
     <label for="filter_pagesize" >{{#str}} filterview, mod_openstudio {{/str}}:</label>
-    <select id="filter_pagesize" class="openstudio-filter-select-box" name="pagesize">
+    <select id="filter_pagesize" class="openstudio-filter-select-box openstudio-filter-pagesize" name="pagesize">
         {{#viewsizes}}
             <option value="{{size}}" {{#selected}}selected="selected"{{/selected}}>{{size}}</option>
         {{/viewsizes}}

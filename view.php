@@ -226,13 +226,13 @@ $resetfilter = optional_param('reset', 0, PARAM_INT);
 
 // If all filter type checked as default, it same as reset applied.
 $filteractive = optional_param('filteractive', 0, PARAM_INT);
-$fblock = optional_param('fblock', 0, PARAM_INT);
+$farea = optional_param('fblock', 0, PARAM_INT);
 $fflagarray = optional_param_array('fflagarray', array(), PARAM_INT);
 $ftypearray = optional_param_array('ftypearray', array(), PARAM_INT);
 $fstatus = optional_param('fstatus', 0, PARAM_INT);
 $fscope = optional_param('fscope', 0, PARAM_INT);
 
-if ($filteractive && $fblock == stream::FILTER_AREA_ALL && isset($fflagarray[0]) && $fflagarray[0] == 0 &&
+if ($filteractive && $farea == stream::FILTER_AREA_ALL && isset($fflagarray[0]) && $fflagarray[0] == 0 &&
         isset($ftypearray[0]) && $ftypearray[0] == 0 && $fstatus == 0 && $fscope == stream::SCOPE_EVERYONE  ) {
     $resetfilter = true;
 }
@@ -755,7 +755,7 @@ $crumbarray[$placeholdertext] = $viewpageurl;
 util::add_breadcrumb($PAGE, $cm->id, navigation_node::TYPE_ACTIVITY, $crumbarray);
 
 // Only content owner can import.
-$importenable = $importenable && ($vuid === $USER->id);
+$importenable = $importenable && ($vuid == $USER->id);
 if ($importenable) {
     $importurl = new moodle_url('/mod/openstudio/import.php', array('id' => $id));
     $importstr = get_string('openstudio:import', 'mod_openstudio');
@@ -766,7 +766,7 @@ if ($importenable) {
 $PAGE->requires->js_call_amd('mod_openstudio/viewhelper', 'init');
 
 // Only content owner can export.
-$exportenable = $exportenable && ($vuid === $USER->id);
+$exportenable = $exportenable && ($vuid == $USER->id);
 if ($exportenable) {
     \theme_osep\bottom_buttons::add(\theme_osep\bottom_buttons::TYPE_EXPORT);
 

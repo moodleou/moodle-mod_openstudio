@@ -1543,6 +1543,10 @@ label.openstudio-export-item-name {
     display: inline;
 }
 
+select.openstudio-filter-pagesize {
+    width: 100px;
+}
+
 .openstudio-content {
     display: inline-block;
     height: 100%;

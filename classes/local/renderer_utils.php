@@ -1158,18 +1158,16 @@ class renderer_utils {
         $folderdata->additionlimit = $limitadd;
 
         foreach ($contentdatatemp as $content) {
-            if (!$content->deletedby && !$content->deletedtime) {
-                $content = self::content_type_image($content, $context);
-                $contentthumbnailfileurl = $content->contenttypeimage;
+            $content = self::content_type_image($content, $context);
+            $contentthumbnailfileurl = $content->contenttypeimage;
 
-                $contentdetail = new \moodle_url('/mod/openstudio/content.php', array(
-                        'id' => $folderdata->cmid, 'sid' => $content->id, 'vuid' => $content->userid,
-                        'folderid' => $folderdata->id));
-                $content->contentdetailurl = $contentdetail;
-                $content->contentthumbnailurl = $contentthumbnailfileurl;
-                $content->datetimeupdated = $content->timemodified ? date('j/m/y h:i', $content->timemodified) : null;
-                $folderdata->contents[] = $content;
-            }
+            $contentdetail = new \moodle_url('/mod/openstudio/content.php', array(
+                    'id' => $folderdata->cmid, 'sid' => $content->id, 'vuid' => $content->userid,
+                    'folderid' => $folderdata->id));
+            $content->contentdetailurl = $contentdetail;
+            $content->contentthumbnailurl = $contentthumbnailfileurl;
+            $content->datetimeupdated = $content->timemodified ? date('j/m/y h:i', $content->timemodified) : null;
+            $folderdata->contents[] = $content;
         }
         return $folderdata;
     }
