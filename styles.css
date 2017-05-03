@@ -2138,7 +2138,7 @@ a.openstudio-add-title:hover  {
 }
 
 .openstudio-grid-item-content-preview img {
-    height: 100%;
+    height: auto;
     width: 100%;
 }
 
@@ -2459,6 +2459,12 @@ iframe.openstudio-content-view-iframe {
     margin: 0 20px 15px 25px;
 }
 
+.openstudio-profile-progress-content-description .openstudio-profile-progress-step.activity-locked {
+    background: #ea0000;
+    border-color: #ea0000;
+    cursor: pointer;
+}
+
 .openstudio-activity-title:nth-child(n+5) {
     border-top: 1px solid #ffffff;
     padding-top: 20px;
@@ -2481,6 +2487,10 @@ a.openstudio-actvity-title:hover  {
 .openstudio-filter-select {
     color: #002158;
     padding-left: 15px;
+}
+
+.openstudio-add-new-lock-message {
+    margin-bottom: 25px;
 }
 
 .openstudio-grid-item-add-new-required {

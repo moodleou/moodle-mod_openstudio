@@ -47,7 +47,7 @@
         "contentcopyenable" : true,
         "profilebarenable": true,
         "actionenable": true,
-        "isinlockedfolder": false,
+        "isfoldercontent": false,
         "reportabuselink" : http://example.com,
     }
 }}
@@ -217,6 +217,7 @@
                     <div class="openstudio-content-view-archive">
                         {{#contentarchivepostenable}}
                             <input id="id_archivebutton" name="archivebutton"
+                                   class="{{#contentcrudlocked}} locked {{/contentcrudlocked}} openstudio-content-actions"
                                value="{{#str}}contentactionarchivepost, mod_openstudio{{/str}}" type="button">
                         {{/contentarchivepostenable}}
                         {{#reportabuselink}}
@@ -239,9 +240,9 @@
                                 <a href="{{{contenteditlink}}}" class="openstudio-content-view-edit-button-link">
                                     <input id="id_editbutton" name="editbutton" class="openstudio-content-view-edit-button
                                         openstudio-content-actions osep-smallbutton
-                                        {{#locked}}
+                                        {{#contentcrudlocked}}
                                             locked
-                                        {{/locked}}"
+                                        {{/contentcrudlocked}}"
                                         value="{{#str}}contentactioneditname, mod_openstudio{{/str}}" type="button">
                                 </a>
                             {{/mycontent}}
@@ -252,7 +253,7 @@
                                    value="{{#str}}contentactiondelete, mod_openstudio{{/str}}" type="button">
                         {{/contentdeleteenable}}
                         {{#contentlockenable}}
-                            {{^isinlockedfolder}}
+                            {{^isfoldercontent}}
                                 <a>
                                     <input id="id_lockbutton" name="lockbutton" type="button"
                                         {{#locked}}
@@ -266,7 +267,7 @@
                                         class="osep-smallbutton"
                                     >
                                 </a>
-                            {{/isinlockedfolder}}
+                            {{/isfoldercontent}}
                         {{/contentlockenable}}
                     </div>
                 {{/actionenable}}

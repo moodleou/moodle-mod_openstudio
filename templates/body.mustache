@@ -150,11 +150,11 @@
                 {{#activities}}
                     {{^adddisable}}
                         <div class="openstudio-grid-item
-                            {{^timemodified}}
+                            {{#contentempty}}
                                 openstudio-grid-item-add-new{{#l3required}}-required{{/l3required}}
-                            {{/timemodified}}">
-                            {{#timemodified}}{{>mod_openstudio/activity_content_block}}{{/timemodified}}
-                            {{^timemodified}}{{>mod_openstudio/add_activity_content_block}}{{/timemodified}}
+                            {{/contentempty}}">
+                            {{^contentempty}}{{>mod_openstudio/activity_content_block}}{{/contentempty}}
+                            {{#contentempty}}{{>mod_openstudio/add_activity_content_block}}{{/contentempty}}
                         </div>
                     {{/adddisable}}
                 {{/activities}}

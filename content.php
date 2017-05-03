@@ -277,6 +277,7 @@ $contentdata->folderid = $folderid;
 $contentdata->isfoldercontent = false;
 if ($folderid) {
     $folderdata = content::get($folderid);
+    $folderdata = lock::determine_lock_status($folderdata);
     if ($folderdata) {
         $contentdata->name = $folderdata->name;
         $folderedit = new moodle_url('/mod/openstudio/contentedit.php',
@@ -284,7 +285,7 @@ if ($folderid) {
         $contentdata->folderedit = $folderedit->out(false);
         $contentdata->isfoldercontent = true;
         $contentdata->folderid = $folderdata->id;
-        $contentdata->isinlockedfolder = ($folderdata->locktype == lock::ALL);
+        $contentdata->containingfolderlocktype = ($folderdata->locktype);
         $folderoverview = new moodle_url('/mod/openstudio/folder.php',
                         array('id' => $id, 'sid' => $folderid, 'lid' => $contentdata->levelid,
                                  'vuid' => $contentdata->userid));

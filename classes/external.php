@@ -40,6 +40,7 @@ use mod_openstudio\local\api\lock;
 use mod_openstudio\local\api\folder;
 use mod_openstudio\local\api\user;
 use mod_openstudio\local\api\group;
+use mod_openstudio\local\api\levels;
 
 require_once($CFG->libdir . '/externallib.php');
 
@@ -61,17 +62,22 @@ class mod_openstudio_external extends external_api {
      * @return bool
      * @throws moodle_exception
      */
-    public static function validate_locking_status($cid, $errorthrown = true) {
+    public static function validate_locking_status($cid, $locktype = lock::ALL, $errorthrown = true) {
         $cid = (int)$cid;
-        if (lock::check($cid) === false) {
-            return true;
+
+        $contentdata = content::get($cid);
+
+        if (!$contentdata) {
+            throw new \moodle_exception('errorinvalidcontent', 'openstudio');
         }
 
-        if ($errorthrown) {
+        $contentdata = lock::determine_lock_status($contentdata);
+        $islocked = ($contentdata->locktype == lock::ALL || $contentdata->locktype == $locktype);
+        if ($islocked && $errorthrown) {
             throw new \moodle_exception('event:contentlocked', 'openstudio');
         }
 
-        return false;
+        return $islocked;
     }
 
     /**
@@ -520,7 +526,7 @@ class mod_openstudio_external extends external_api {
 
         list($course, $cm) = get_course_and_cm_from_cmid($params['cmid'], 'openstudio');
         // Validate locking status.
-        self::validate_locking_status($params['cid']);
+        self::validate_locking_status($params['cid'], lock::SOCIAL);
 
         $coursedata = util::render_page_init($params['cmid'], array('mod/openstudio:view'));
         $cm = $coursedata->cm;
@@ -708,7 +714,7 @@ class mod_openstudio_external extends external_api {
                 'inreplyto' => $inreplyto));
 
         // Validate locking status.
-        self::validate_locking_status($params['cid']);
+        self::validate_locking_status($params['cid'], lock::COMMENT);
 
         // Check if user has permission to add content.
         $actionallowed = $permissions->addcomment || $permissions->managecontent;
@@ -846,7 +852,7 @@ class mod_openstudio_external extends external_api {
                 'fid' => $flagid));
 
         // Validate locking status.
-        self::validate_locking_status($params['cid']);
+        self::validate_locking_status($params['cid'], lock::COMMENT);
 
         // Init and check permission.
         $coursedata = util::render_page_init($params['cmid'], array('mod/openstudio:view'));
@@ -945,7 +951,7 @@ class mod_openstudio_external extends external_api {
                 || $permissions->managecontent;
 
         // Validate locking status.
-        self::validate_locking_status($comment->contentid);
+        self::validate_locking_status($comment->contentid, lock::COMMENT);
 
         if ($actionallowed) {
             try {
@@ -1523,5 +1529,96 @@ class mod_openstudio_external extends external_api {
                 'success' => new external_value(PARAM_BOOL, 'Get order posts success'),
                 'html' => new external_value(PARAM_RAW, 'Order posts item list template'))
         );
+    }
+
+    /**
+     * Returns description of method parameters
+     *
+     * @return external_function_parameters
+     */
+    public static function unlock_override_activity_parameters() {
+        return new external_function_parameters(array(
+                'cmid' => new external_value(PARAM_INT, 'Course module ID'),
+                'level3id' => new external_value(PARAM_INT, 'Level 3 ID'),
+                'vuid' => new external_value(PARAM_INT, 'View user ID'))
+        );
+    }
+
+    /**
+     * Unlock override activity. If An activity is locked and it's content has never been created.
+     * Then unlocking will create an new empty for specific user's activity.
+     *
+     * @param int $cmid Course module ID
+     * @param int $level3id
+     * @param int $vuid View user ID
+     * @return bool Successfull or not
+     * @throws moodle_exception
+     */
+    public static function unlock_override_activity($cmid, $level3id, $vuid) {
+
+        $params = self::validate_parameters(self::unlock_override_activity_parameters(), array(
+                'cmid' => $cmid,
+                'level3id' => $level3id,
+                'vuid' => $vuid));
+        $context = context_module::instance($params['cmid']);
+        self::validate_context($context);
+
+        global $USER;
+        $success = false;
+        $coursedata = util::render_page_init($params['cmid']);
+        $permissions = $coursedata->permissions;
+        $cminstance = $coursedata->cminstance;
+
+        if (!$permissions->managecontent && $permissions->canlockothers) {
+            throw new \moodle_exception('errornopermissiontounlockactivity', 'openstudio');
+        }
+
+        $contentcheck = content::get_record_via_levels(
+                $permissions->activecminstanceid, $params['vuid'], 3, $params['level3id']);
+        if ($contentcheck === false) {
+            $contentcreatedid = false;
+            $contentlevel = levels::get_record(3, $params['level3id']);
+            if ($contentlevel !== false) {
+                if ($contentlevel->contenttype == STUDIO_CONTENTTYPE_SET) {
+                    $contentcreatedid = content::create(
+                            $studioid = $permissions->activecminstanceid,
+                            $userid = $params['vuid'],
+                            $level = 3,
+                            $levelid = $params['level3id'],
+                            $data = array('contenttype' => content::TYPE_FOLDER,
+                                    'visibility' => $cminstance->defaultvisibility,
+                                    'embedcode' => '', 'urltitle' => '', 'weblink' => '',
+                                    'name' => '', 'description' => ''));
+                } else {
+                    $contentcreatedid = content::create(
+                            $studioid = $permissions->activecminstanceid,
+                            $userid = $params['vuid'],
+                            $level = 3,
+                            $levelid = $params['level3id'],
+                            $data = array('contenttype' => content::TYPE_NONE,
+                                    'visibility' => $cminstance->defaultvisibility,
+                                    'embedcode' => '', 'urltitle' => '', 'weblink' => '',
+                                    'name' => '', 'description' => ''));
+                }
+            }
+            if ($contentcreatedid !== false) {
+                $success = lock::lock_content($USER->id, $contentcreatedid, lock::NONE);
+            }
+        }
+
+        if (!$success) {
+            throw new moodle_exception('errorcontentunlock', 'openstudio');
+        }
+
+        return true;
+    }
+
+    /**
+     * Returns description of method result value
+     *
+     * @return external_description
+     */
+    public static function unlock_override_activity_returns() {
+        return new external_value(PARAM_BOOL, 'Unlock override successfully');
     }
 }

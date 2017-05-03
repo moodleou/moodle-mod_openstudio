@@ -889,9 +889,6 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $contentdata->actionenable = $contentdata->contentdeleteenable || $contentdata->contenteditenable
                 || $contentdata->contentlockenable;
 
-        // Check comment permission.
-        $contentdata->contentcommentenable = $permissions->addcomment;
-
         // Check if maximize feature is enable.
         $contentdata->maximizeenable = ($contentdata->contenttypeimage || $contentdata->contenttypeiframe);
 

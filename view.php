@@ -665,6 +665,15 @@ if ($finalviewpermissioncheck) {
 
                 if ($content->l2id != '') {
                     // Activity content.
+
+                    if (!$content->id) {
+                        // Process lock when content has not uploaded yet.
+                        $lockdata = renderer_utils::content_lock_data((object) array('l3id' => $content->l3id));
+                        $content->contentislocked = $lockdata->contentislock;
+                        $content->contentislockmessage = $lockdata->contentislockmessage;
+                    }
+
+                    $content->contentempty = $content->contenttype == content::TYPE_NONE;
                     if (array_key_exists($activityid, $activityitems)) {
                         $activityitems[$activityid]->activities[] = (object)$content;
                     } else {

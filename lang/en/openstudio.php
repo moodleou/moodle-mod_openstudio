@@ -819,6 +819,7 @@ $string['errornopermissiontoviewcontent'] = 'You do not have the permissions to 
 $string['errornopermissiontoviewcontents'] = 'You do not have the permissions to view the Studio activities.';
 $string['errornopermissiontoaddcontent'] = 'You do not have the permissions to add/edit this content.';
 $string['errornopermissiontoviewdeleted'] = 'You do not have the permissions to view deleted contents.';
+$string['errornopermissiontounlockactivity'] = 'You do not have the permissions to unlock activity.';
 $string['errorunexpectedbehaviour'] = 'Unexpected error; contact your system administrator.';
 $string['errorpinboardisdisabled'] = 'The Pinboard feature is currently disabled.';
 $string['errorpinboardexceedlimit'] = 'You cannot create anymore Pinboard contents.';

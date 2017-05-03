@@ -36,7 +36,8 @@
     }
 }}
 <div class="openstudio-content-view-animation-icons clearfix">
-    <div class="openstudio-content-view-animation-icons-left openstudio-content-actions {{#locked}}locked{{/locked}}">
+    <div class="openstudio-content-view-animation-icons-left openstudio-content-actions
+        {{#contentflaglocked}} locked {{/contentflaglocked}}">
         <a id="content_view_icon_{{contentflagfavourite}}"
            href=""
            data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagfavourite}}"

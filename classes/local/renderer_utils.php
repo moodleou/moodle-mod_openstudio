@@ -161,7 +161,7 @@ class renderer_utils {
      * @return object $contentdata
      */
     public static function profile_bar($permissions, $openstudioid, $contentdata) {
-        global $USER, $OUTPUT;
+        global $USER, $OUTPUT, $PAGE;
 
         $vuid = optional_param('vuid', $USER->id, PARAM_INT);
         $flagscontentread = 0;
@@ -189,6 +189,7 @@ class renderer_utils {
             $contentdata->percentcompleted = $userprogresspercentage;
         }
 
+        $contentdata->userprofileid =  $vuid;
         $contentdata->ismyprofile = $ismyprofile;
         $contentdata->fullusername = $contentowner->firstname.' '.$contentowner->lastname;
         $contentdata->activedate = $activedate;
@@ -208,6 +209,7 @@ class renderer_utils {
             $profileactivityitems = [];
 
             if (!empty($userprogressdata['progressdetail'])) {
+                $contentdata->unlockactivityenable = $permissions->canlockothers ||  $permissions->managecontent;
                 foreach ($userprogressdata['progressdetail'] as $values) {
                     foreach ($values as $level2id => $activities) {
                         $activityname = '';
@@ -225,17 +227,27 @@ class renderer_utils {
                                     $activities[$key]->activityediturl = new \moodle_url('/mod/openstudio/folder.php',
                                             array('id' => $contentdata->cmid, 'sid' => $activity->id,
                                                     'vuid' => $contentowner->id, 'lid' => $activity->level3id));
+                                } else {
+                                    $lockdata = self::content_lock_data((object) array('l3id' => $activities[$key]->level3id));
+                                    $activities[$key]->contentislocked = $lockdata->contentislock;
                                 }
                             } else {
                                 $activities[$key]->activityediturl = new \moodle_url('/mod/openstudio/contentedit.php',
                                         array('id' => $contentdata->cmid, 'sid' => 0, 'lid' => $activity->level3id));
 
                                 if ($activity->id) {
-                                    $activities[$key]->isactive = true;
+                                    if ($activity->slotcontenttype != content::TYPE_NONE) {
+                                        $activities[$key]->isactive = true;
+                                    }
                                     $activities[$key]->activityediturl = new \moodle_url('/mod/openstudio/content.php',
                                             array('id' => $contentdata->cmid, 'sid' => $activity->id, 'vuid' => $contentowner->id));
+                                } else {
+                                    $lockdata = self::content_lock_data((object) array(
+                                            'l3id' => $activities[$key]->level3id));
+                                    $activities[$key]->contentislocked = $lockdata->contentislock;
                                 }
                             }
+
                             $activities[$key]->activitytitle = implode(" - ", array($activity->level1name,
                                 $activity->level2name, $activity->level3name));
                         }
@@ -252,6 +264,16 @@ class renderer_utils {
                 // Returns all the values from the array and indexes the array numerically.
                 // We need this because mustache requires it.
                 $contentdata->profileactivities = array_values($profileactivityitems);
+
+                // Javascript module to handle activity lock.
+                if ($contentdata->unlockactivityenable) {
+                    $PAGE->requires->strings_for_js(
+                            array('contentactionunlockname', 'modulejsdialogcancel', 'modulejsdialogcontentunlock'),
+                            'mod_openstudio');
+
+                    $PAGE->requires->js_call_amd('mod_openstudio/lockactivity', 'init', [[
+                            'cmid' => $contentdata->cmid]]);
+                }
             }
         }
         return $contentdata;
@@ -600,7 +622,7 @@ class renderer_utils {
      * @param object $contentdata The content records to display.
      * @return object $contentdata
      */
-    protected static function content_lock_data($contentdata) {
+    public static function content_lock_data($contentdata) {
         $contentislock = false;
         $contentislockmessage = '';
         if ($contentdata->l3id > 0) {
@@ -1333,10 +1355,8 @@ class renderer_utils {
         global $PAGE;
 
         // Check lock permission.
-        if (property_exists($contentdata, 'isinlockedfolder') && $contentdata->isinlockedfolder == true) {
-            $locked = true;
-        } else {
-            $locked = ($contentdata->locktype == lock::ALL);
+        if (property_exists($contentdata, 'containingfolderlocktype')) {
+            $contentdata->locktype = $contentdata->containingfolderlocktype;
         }
 
         $lockconst = array(
@@ -1345,22 +1365,39 @@ class renderer_utils {
 
         // Check permission for processing lock.
         if ($contentdata->isownedbyviewer) {
-            $contentlockenable = $permissions->canlock;
+            if ($contentdata->levelid) {
+                // Activity content is only locked by teacher/manager.
+                $contentlockenable = $permissions->managecontent;
+            } else {
+                // Only normal content is locked by owner who is student.
+                $contentlockenable = $permissions->canlock;
+            }
         } else {
-            $contentlockenable = $permissions->managecontent;
+            $contentlockenable = $permissions->canlockothers && $permissions->managecontent;
         }
 
         $contentdata->contentlockenable = $contentlockenable;
-        $contentdata->locked = $locked;
 
-        $PAGE->requires->strings_for_js(
-            array('contentactionunlockname', 'contentactionlockname'), 'mod_openstudio');
+        $contentdata->contentcommentlocked = ($contentdata->locktype == lock::COMMENT
+                || $contentdata->locktype == lock::ALL);
+        $contentdata->contentflaglocked = ($contentdata->locktype == lock::SOCIAL
+                || $contentdata->locktype == lock::ALL);
+        $contentdata->contentcrudlocked = ($contentdata->locktype == lock::CRUD
+                || $contentdata->locktype == lock::ALL);
 
-        $PAGE->requires->js_call_amd('mod_openstudio/lock', 'init', [[
-            'cmid' => $cmid,
-            'cid' => $contentdata->id,
-            'isfolder' => $contentdata->contenttype == content::TYPE_FOLDER,
-            'CONST' => $lockconst]]);
+        $contentdata->locked = $contentdata->contentcommentlocked || $contentdata->contentflaglocked
+                || $contentdata->contentcrudlocked;
+
+        if ($contentlockenable) {
+            $PAGE->requires->strings_for_js(
+                    array('contentactionunlockname', 'contentactionlockname'), 'mod_openstudio');
+
+            $PAGE->requires->js_call_amd('mod_openstudio/lock', 'init', [[
+                    'cmid' => $cmid,
+                    'cid' => $contentdata->id,
+                    'isfolder' => $contentdata->contenttype == content::TYPE_FOLDER,
+                    'CONST' => $lockconst]]);
+        }
     }
 
     /**

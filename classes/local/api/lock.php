@@ -294,11 +294,11 @@ EOF;
                 }
             }
 
-            if (($schedule->slotlocktype == self::NONE) && !$scheduleislock) {
+            if (($schedule->contentlocktype == self::NONE) && !$scheduleislock) {
                 return $slot;
             }
 
-            if (($schedule->slotlocktype == $schedule->locktype) && $scheduleislock) {
+            if (($schedule->contentlocktype == $schedule->locktype) && $scheduleislock) {
                 return $slot;
             }
 

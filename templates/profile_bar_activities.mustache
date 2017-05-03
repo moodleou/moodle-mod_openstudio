@@ -60,14 +60,23 @@
                     </a>
                 {{/isactive}}
                 {{^isactive}}
-                    {{#ismyprofile}}
-                        <a class="openstudio-profile-progress-step" href="{{{activityediturl}}}"
-                           title="{{{activitytitle}}}" >
-                        </a>
-                    {{/ismyprofile}}
-                    {{^ismyprofile}}
-                        <span class="openstudio-profile-progress-step" title="{{{activitytitle}}}" ></span>
-                    {{/ismyprofile}}
+                    {{#contentislocked}}
+                        <span
+                            class="openstudio-profile-progress-step {{#unlockactivityenable}}activity-locked{{/unlockactivityenable}}"
+                            title="{{{activitytitle}}}" name="activitylockbutton"
+                            data-level3id="{{level3id}}"
+                            data-vuid="{{userprofileid}}"></span>
+                    {{/contentislocked}}
+                    {{^contentislocked}}
+                        {{#ismyprofile}}
+                            <a class="openstudio-profile-progress-step" href="{{{activityediturl}}}"
+                               title="{{{activitytitle}}}" >
+                            </a>
+                        {{/ismyprofile}}
+                        {{^ismyprofile}}
+                            <span class="openstudio-profile-progress-step" title="{{{activitytitle}}}" ></span>
+                        {{/ismyprofile}}
+                    {{/contentislocked}}
                 {{/isactive}}
             {{/activities}}
         </div>

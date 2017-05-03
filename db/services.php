@@ -169,6 +169,15 @@ $functions = array(
         'ajax' => true,
         'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
         'capabilities' => 'mod/openstudio:view'
+    ),
+    'mod_openstudio_external_unlock_override_activity' => array(
+            'classname' => 'mod_openstudio_external',
+            'methodname' => 'unlock_override_activity',
+            'description' => 'Unlock override activity',
+            'type' => 'write',
+            'ajax' => true,
+            'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
+            'capabilities' => 'mod/openstudio:canlockothers'
     )
 );
 
@@ -192,7 +201,8 @@ $services = array(
             'mod_openstudio_external_restore_content_in_folder',
             'mod_openstudio_external_read_notifications',
             'mod_openstudio_external_order_posts',
-            'mod_openstudio_external_get_order_posts'
+            'mod_openstudio_external_get_order_posts',
+            'mod_openstudio_external_unlock_override_activity'
         ),
         'restrictedusers' => 0,
         'enabled' => 1,

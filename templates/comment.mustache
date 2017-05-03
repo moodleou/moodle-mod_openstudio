@@ -82,9 +82,8 @@
     </div>
 
     <button id="id_addcomment" name="addcommentbutton" class="openstudio-content-actions
-           {{#locked}}
-                locked
-           {{/locked}} osep-smallbutton">{{#str}} contentcommentsaddnewcomment, mod_openstudio {{/str}}
+           {{#contentcommentlocked}} locked {{/contentcommentlocked}}
+           osep-smallbutton">{{#str}} contentcommentsaddnewcomment, mod_openstudio {{/str}}
     </button>
 
     <div class="openstudio-comment-form openstudio-content-actions">
