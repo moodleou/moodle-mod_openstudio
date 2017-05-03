@@ -584,7 +584,9 @@ if ($contentform->is_cancelled()) {
             $contentformdata->contenttype = content::TYPE_FOLDER;
             if ($lid) {
                 $contentformdata->levelid = $lid;
-                $contentformdata->levelcontainer = $contentformdata->visibility;
+
+                // This value should get from default not from visibility.
+                $contentformdata->levelcontainer = defaults::CONTENTLEVELCONTAINER;
             }
         }
         $contentupdatemode = content::UPDATEMODE_CREATED;
