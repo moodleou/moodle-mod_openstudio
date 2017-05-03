@@ -315,6 +315,11 @@ class renderer_utils {
                     . "/pluginfile.php/{$context->id}/mod_openstudio"
                     . "/{$contentarea}/{$contentdata->id}/" . rawurlencode($contentdata->content);
 
+                // Add folder id to thumbnail url.
+                // A post with visibility is Only me, thmbnail doesn't load although folder shared.
+                if (isset($contentdata->folderid) && $contentdata->folderid) {
+                    $contentfileurl .= '/'.$contentdata->folderid;
+                }
                 break;
 
             case content::TYPE_VIDEO:
@@ -1176,6 +1181,10 @@ class renderer_utils {
                     $contentthumbnailfileurl = $content->contenttypeimage;
                     if ($content->contenttype != content::TYPE_IMAGE) {
                         $content->thumbnailimg = false;
+                    } else if ($folderdata->id) {
+                        // Add folder id to thumbnail url.
+                        // A post with visibility is Only me, thumbnail doesn't load although folder shared.
+                        $contentthumbnailfileurl .= '/'.$folderdata->id;
                     }
                     $contentdetail = new \moodle_url('/mod/openstudio/content.php', array(
                             'id' => $folderdata->cmid, 'sid' => $content->id, 'vuid' => $content->userid,

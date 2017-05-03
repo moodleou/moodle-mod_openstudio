@@ -3809,7 +3809,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     position: relative;
     font-size: 1em;
     margin-left: 4px;
-    color: #002158;
+    color: #0b55a8;
 }
 
 .openstudio-folder-header img {
@@ -3904,10 +3904,12 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     height: 68px;
     width: 100%;
     border-radius : 4px;
+    background-color: #fff;
     border: 1px dashed #676463;
     float: left;
     margin-bottom: 10px;
     cursor: pointer;
+    background-color: #fff;
 }
 .openstudio-select-content {
     margin-bottom: 10px;
@@ -3928,9 +3930,16 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     font-weight: bold;
     text-align: center;
     color: #676463;
-    padding: 13px 0 0 70px;
     text-align: left;
     display: block;
+}
+
+.openstudio-new-folder-title {
+    padding: 25px 0 0 70px;
+}
+
+.openstudio-select-post-title {
+    padding: 17px 0 0 70px;
 }
 
 .openstudio-upload-folder .openstudio-new-folder-title-device,

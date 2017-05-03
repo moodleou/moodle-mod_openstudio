@@ -599,10 +599,14 @@ if ($finalviewpermissioncheck) {
                         $firsrcm = get_coursemodule_from_instance('openstudio', $firstcontent->openstudioid);
                         $context = context_module::instance($firsrcm->id);
                         $firstcontent = renderer_utils::content_type_image($firstcontent, $context);
+                        $folderthumbnailfileurl = $firstcontent->contenttypeimage;
                         if ($firstcontent->contenttype != content::TYPE_IMAGE) {
                             $content->thumbnailimg = false;
+                        } else if ($content->id) {
+                            // Add folder id to thumbnail url.
+                            // A post with visibility is Only me, thmbnail doesn't load although folder shared.
+                            $folderthumbnailfileurl .= '/'.$content->id;
                         }
-                        $folderthumbnailfileurl = $firstcontent->contenttypeimage;
                     } else {
                          $content->thumbnailimg = false;
                     }
@@ -660,7 +664,7 @@ if ($finalviewpermissioncheck) {
                 }
 
                 if ($content->l2id != '') {
-                    // Activity content
+                    // Activity content.
                     if (array_key_exists($activityid, $activityitems)) {
                         $activityitems[$activityid]->activities[] = (object)$content;
                     } else {
