@@ -367,6 +367,7 @@ class renderer_utils {
                 }
             case content::TYPE_PRESENTATION:
             case content::TYPE_SPREADSHEET:
+            case content::TYPE_CAD:
                 $contenttypedownloadfile = true;
                 $contentfileurl = $CFG->wwwroot
                     . "/pluginfile.php/{$context->id}/mod_openstudio"
@@ -450,6 +451,9 @@ class renderer_utils {
                     $contenttypeiconurl = $OUTPUT->pix_url('video_rgb_32px', 'openstudio');
                     break;
                 case content::TYPE_AUDIO:
+                    if ($contentdata->mimetype == 'audio/x-aiff') {
+                        $contenttypeuseimagedefault = true;
+                    }
                     $contenttypeiconurl = $OUTPUT->pix_url('audio_rgb_32px', 'openstudio');
                     break;
                 case content::TYPE_DOCUMENT:
@@ -497,6 +501,10 @@ class renderer_utils {
                     } else {
                         $contenttypeiconurl = $OUTPUT->pix_url('online_rgb_32px', 'openstudio');
                     }
+                    break;
+                case content::TYPE_CAD:
+                    $contenttypeuseimagedefault = true;
+                    $contenttypeiconurl = $OUTPUT->pix_url('word_rgb_32px', 'openstudio');
                     break;
                 default:
                     $contenttypeiconurl = $OUTPUT->pix_url('unknown_rgb_32px', 'openstudio');
@@ -795,6 +803,9 @@ class renderer_utils {
             case content::TYPE_URL_VIDEO:
             case content::TYPE_URL_AUDIO:
                 $contenttypeimage = $OUTPUT->pix_url('online_rgb_32px', 'openstudio');
+                break;
+            case content::TYPE_CAD:
+                $contenttypeimage = $OUTPUT->pix_url('word_rgb_32px', 'openstudio');
                 break;
             default:
                 $contenttypeimage = $OUTPUT->pix_url('unknown_rgb_32px', 'openstudio');

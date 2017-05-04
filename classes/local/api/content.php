@@ -63,6 +63,7 @@ class content {
     const TYPE_URL_SPREADSHEET_XLS = 80;
     const TYPE_FOLDER = 100;
     const TYPE_FOLDER_CONTENT = 110;
+    const TYPE_CAD = 120;
 
     const OWNERSHIP_MYOWNWORK = 0;
     const OWNERSHIP_FOUNDONLINE = 1;
@@ -1348,8 +1349,17 @@ EOF;
                         $contenttype = self::TYPE_PRESENTATION;
                     } else if (in_array($fileextension, array('xls', 'xlsx', 'csv', 'ods'))) {
                         $contenttype = self::TYPE_SPREADSHEET;
+                    } else if (in_array($fileextension, array('dwg', 'stl', 'stp', 'eps', 'dxf'))) {
+                        $contenttype = self::TYPE_CAD;
                     }
                 }
+            }
+        }
+
+        // If mime type is application/postscript force studio content type to cad (Moodle says image).
+        if (array_key_exists('mimetype', $file)) {
+            if ($file['mimetype']['type'] == 'application/postscript') {
+                $contenttype = self::TYPE_CAD;
             }
         }
 

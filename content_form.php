@@ -171,12 +171,17 @@ class mod_openstudio_content_form extends moodleform {
                 $defaultcontentuploadtype = 'addfile';
                 $buttonaddfileactive = 'openstudio-button-active';
             }
-    
+
             if ($contenttype >= content::TYPE_URL) {
                 if ($this->_customdata['contenttype'] != content::TYPE_FOLDER_CONTENT) {
                     $defaultcontentuploadtype = 'addlink';
                     $buttonaddlinkactive = 'openstudio-button-active';
                 }
+            }
+
+            if ($contenttype == content::TYPE_CAD) {
+                $defaultcontentuploadtype = 'addfile';
+                $buttonaddfileactive = 'openstudio-button-active';
             }
 
             $mform->addElement('html', html_writer::start_tag('div',

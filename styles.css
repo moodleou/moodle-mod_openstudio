@@ -2665,7 +2665,7 @@ span.openstudio-content-view-title {
 }
 
 .openstudio-folder-global-background .openstudio-content-view-tag-item > li {
-    background: #f2f3f6;
+    background: #e5e8ee;
 }
 
 .openstudio-content-view-archive {
@@ -2824,6 +2824,15 @@ span.openstudio-content-view-title {
     padding: 15px;
     float: left;
     display: inline-block;
+}
+
+.openstudio-content-view-block span {
+    color: #002158;
+    font-weight: normal;
+    padding-left: 15px;
+    font-size: 1.28571em;
+    line-height: 35px;
+    text-decoration: none;
 }
 
 .openstudio-content-view-user-picture img {
