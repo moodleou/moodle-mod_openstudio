@@ -1026,7 +1026,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                     array('id' => $cmid, 'lid' => 0, 'sid' => 0,
                             'ssid' => $folderdata->id, 'type' => content::TYPE_FOLDER_CONTENT));
         $folderedit = new moodle_url('/mod/openstudio/contentedit.php',
-                    array('id' => $cmid, 'lid' => 0, 'sid' => $folderdata->id, 'type' => content::TYPE_FOLDER_CONTENT));
+                    array('id' => $cmid, 'lid' => 0, 'sid' => $folderdata->id, 'type' => content::TYPE_FOLDER));
         $folderoverview = new moodle_url('/mod/openstudio/folder.php',
                         array('id' => $cmid, 'sid' => $folderdata->id, 'lid' => $folderdata->levelid,
                                 'vuid' => $folderdata->userid));
