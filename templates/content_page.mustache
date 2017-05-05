@@ -335,39 +335,41 @@
             </div>
             {{^iscontentversion}}
                 {{#hascontentversions}}
-                    <div class="openstudio-content-view-block collapsed
-                         {{#isfoldercontent}}openstudio-folder-global-background{{/isfoldercontent}}" data-toggle="collapse"
-                         data-target="#openstudio_content_view_post_archive" id="openstudio_content_view_post_archive_panel" role="button">
-                        <span>{{#str}} contentviewpostarchive, mod_openstudio {{/str}}</span>
-                    </div>
-                    <div id="openstudio_content_view_post_archive"
-                            class="openstudio-content-view-block-content
-                            {{#isfoldercontent}}openstudio-folder-block-content-background{{/isfoldercontent}}
-                            openstudio-content-view-version collapse clearfix">
-                        {{#contentversions}}
-                            <div class="openstudio-content-view-version-detail clearfix" id="content_version_id_{{id}}">
-                                <span class="openstudio-content-view-version-img"><img src="{{{contenttypeiconurl}}}"></span>
-                                <span class="openstudio-content-view-version-info">
-                                    <h4 class="openstudio-content-view-version-info-name">{{{name}}}</h4>
-                                    <span class="openstudio-content-view-version-date">{{contentdatadate}}</span>
-                                </span>
-                                <span class="openstudio-content-view-version-actions clearfix">
-                                    <a href="{{{contentviewversionlink}}}" class="openstudio-content-view-version-button-link">
-                                    <input id="id_viewversionbutton" name="viewversionbutton"
-                                           class="openstudio-content-view-version-button osep-smallbutton"
-                                           value="{{#str}}contentactionview, mod_openstudio{{/str}}" type="button">
-                                    </a>
-                                    {{#contentdeleteenable}}
-                                        <input data-cmid="{{cmid}}" data-cid="{{contentid}}"
-                                               data-cvid="{{id}}"
-                                               id="deleteversionbutton" name="deleteversionbutton"
-                                               class="openstudio-delete-content-version osep-smallbutton"
-                                               value="{{#str}}contentactiondelete, mod_openstudio{{/str}}" type="button">
-                                    {{/contentdeleteenable}}
-                                </span>
-                            </div>
-                        {{/contentversions}}
-                    </div>
+                    {{#contentarchivepostenable}}
+                        <div class="openstudio-content-view-block collapsed
+                             {{#isfoldercontent}}openstudio-folder-global-background{{/isfoldercontent}}" data-toggle="collapse"
+                             data-target="#openstudio_content_view_post_archive" id="openstudio_content_view_post_archive_panel" role="button">
+                            <span>{{#str}} contentviewpostarchive, mod_openstudio {{/str}}</span>
+                        </div>
+                        <div id="openstudio_content_view_post_archive"
+                                class="openstudio-content-view-block-content
+                                {{#isfoldercontent}}openstudio-folder-block-content-background{{/isfoldercontent}}
+                                openstudio-content-view-version collapse clearfix">
+                            {{#contentversions}}
+                                <div class="openstudio-content-view-version-detail clearfix" id="content_version_id_{{id}}">
+                                    <span class="openstudio-content-view-version-img"><img src="{{{contenttypeiconurl}}}"></span>
+                                    <span class="openstudio-content-view-version-info">
+                                        <h4 class="openstudio-content-view-version-info-name">{{{name}}}</h4>
+                                        <span class="openstudio-content-view-version-date">{{contentdatadate}}</span>
+                                    </span>
+                                    <span class="openstudio-content-view-version-actions clearfix">
+                                        <a href="{{{contentviewversionlink}}}" class="openstudio-content-view-version-button-link">
+                                        <input id="id_viewversionbutton" name="viewversionbutton"
+                                               class="openstudio-content-view-version-button osep-smallbutton"
+                                               value="{{#str}}contentactionview, mod_openstudio{{/str}}" type="button">
+                                        </a>
+                                        {{#contentdeleteenable}}
+                                            <input data-cmid="{{cmid}}" data-cid="{{contentid}}"
+                                                   data-cvid="{{id}}"
+                                                   id="deleteversionbutton" name="deleteversionbutton"
+                                                   class="openstudio-delete-content-version osep-smallbutton"
+                                                   value="{{#str}}contentactiondelete, mod_openstudio{{/str}}" type="button">
+                                        {{/contentdeleteenable}}
+                                    </span>
+                                </div>
+                            {{/contentversions}}
+                        </div>
+                    {{/contentarchivepostenable}}
                 {{/hascontentversions}}
                 {{#contentmetadataenable}}
                     <div class="openstudio-content-view-block collapsed

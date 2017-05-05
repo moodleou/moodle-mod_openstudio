@@ -893,7 +893,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $contentdata->maximizeenable = ($contentdata->contenttypeimage || $contentdata->contenttypeiframe);
 
         // Check archive post permission.
-        $contentdata->contentarchivepostenable = $contentdata->isownedbyviewer;
+        $contentdata->contentarchivepostenable = $contentdata->isownedbyviewer && empty($contentdata->isfoldercontent);
 
         // Render content versions.
         $contentversions = array();
