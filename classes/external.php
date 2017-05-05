@@ -222,7 +222,21 @@ class mod_openstudio_external extends external_api {
                 $content->contenticon = $contenticon;
                 $content->contentlocation = $contentlocation;
                 $content->datetime = userdate($content->timemodified, get_string('formattimedatetime', 'openstudio'));
-                $content->content = shorten_text($content->content, 30, true);
+                if ($content->contenttype == content::TYPE_URL) {
+                    $content->content = shorten_text($content->content, 30, true);
+                } else {
+                    if (strlen($content->content) > 30) {
+                        $pathinfo = pathinfo($content->content);
+                        if (!empty($pathinfo['extension'])) {
+                            $extensionlength = strlen($pathinfo['extension']);
+                            $content->content = shorten_text($content->content, 30 - $extensionlength, true) .
+                                    substr($content->content, $extensionlength * -1);
+                        } else {
+                            $content->content = shorten_text($content->content, 30, true);
+                        }
+
+                    }
+                }
                 $contents[$content->id] = $content;
             }
         }
