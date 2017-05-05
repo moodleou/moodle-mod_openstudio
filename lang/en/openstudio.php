@@ -1320,7 +1320,7 @@ $string['stopnotificationsfor'] = 'Are you sure you want to stop notifications f
 $string['stopnotificationsforcommenton'] = 'Are you sure you want to stop notifications for your comment on "{$a}"?';
 $string['stopnotificationsforcontent'] = 'Stop notifications for this content';
 $string['stopnotificationsforcomment'] = 'Stop notifications for this comment';
-$string['notificationslistheader'] = 'My notifications';
+$string['notificationslistheader'] = 'My Notifications';
 $string['youhavenotifications'] = 'You have';
 $string['unreadnotifications'] = 'unread notifications';
 

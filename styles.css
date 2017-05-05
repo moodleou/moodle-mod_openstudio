@@ -322,7 +322,7 @@
     display: block;
     position: absolute;
     top: -20px;
-    left: 223px
+    left: 235px;
 }
 
 .openstudio-notifications {
@@ -334,7 +334,7 @@
 .path-mod-openstudio .openstudio-notifications.dropdown-menu {
     padding: 0;
     top: 50px;
-    left: -222px;
+    left: -230px;
 }
 
 .openstudio-notifications-heading {
@@ -349,8 +349,8 @@
 }
 
 .openstudio-notifications-heading img {
-    width: 24px;
-    margin-right: 2px;
+    width: 16px;
+    margin-right: 8px;
 }
 
 .openstudio-notifications-list {
@@ -366,8 +366,18 @@
     border-bottom: 1px solid #bfe2ef;
 }
 
+.openstudio-notification:last-child {
+    border-bottom: 2px solid #0b55a8;
+}
+
 .openstudio-notification-unread {
     background-color: #e7f4fa;
+}
+
+.openstudio-notification-none {
+    padding-top: 5px;
+    padding-bottom: 10px;
+    color: #312b39;
 }
 
 .openstudio-notification .userpicture,
@@ -392,6 +402,7 @@
 
 .openstudio-notification-body .openstudio-notification-details {
     font-size: 0.85714em;
+    color: #676463;
 }
 
 .openstudio-notification-body .openstudio-notification-details img {
@@ -405,7 +416,9 @@
     margin-right: 0;
 }
 
+.openstudio-notification-stopbutton,
 .openstudio-notification-stopbutton:hover,
+.openstudio-notification-stopbutton:active,
 button.openstudio-notification-stopbutton:focus {
     background-color: transparent;
 }
@@ -422,7 +435,7 @@ button.openstudio-notification-stopbutton:focus {
         left: -290px;
     }
     .openstudio-nav-primary .notifications.open .openstudio-notifications-arrow {
-        left: 291px;
+        left: 295px;
     }
 }
 

@@ -79,7 +79,7 @@
 <div class="openstudio-notifications dropdown-menu">
     <h2 class="openstudio-notifications-heading">
         <div class="openstudio-notifications-arrow">{{#pix}} notifications_arrow, mod_openstudio {{/pix}}</div>
-        {{#pix}} notifications_rgb_32px, mod_openstudio {{/pix}}{{#str}} notificationslistheader, mod_openstudio {{/str}}</h2>
+        {{#pix}} notifications_white_rgb_32px, mod_openstudio {{/pix}}{{#str}} notificationslistheader, mod_openstudio {{/str}}</h2>
     <ul class="openstudio-notifications-list">
 {{#notifications}}
     <li data-id="{{id}}" class="openstudio-notification openstudio-notification-{{#isread}}read{{/isread}}{{^isread}}unread{{/isread}}">
@@ -101,7 +101,7 @@
     </li>
 {{/notifications}}
 {{^notifications}}
-    <li>{{#str}} nonotifications, mod_openstudio {{/str}}</li>
+    <li class="openstudio-notification openstudio-notification-none">{{#str}} nonotifications, mod_openstudio {{/str}}</li>
 {{/notifications}}
     </ul>
 </div>
