@@ -60,11 +60,11 @@ class import {
         $packer->extract_to_pathname($temppath, $files['location']);
         $files['files'] = $archive->list_files();
         $archive->close();
-        $acceptabletypes = ['jpeg', 'jpg', 'png', 'gif', 'avi', 'audio', 'aiff',
-                'wav', 'mp3', 'text', 'txt', 'word', 'docx', 'doc',
-                'pdf', 'odt', 'odm', 'writer', 'powerpoint', 'pptx',
+        $acceptabletypes = ['jpeg', 'jpe', 'jpg', 'png', 'gif', 'avi', 'audio', 'aiff',
+                'wav', 'mp3', 'text', 'txt', 'word', 'docx', 'doc', 'rtf', 'fdf', 'nbk',
+                'pdf', 'odt', 'odm', 'writer', 'powerpoint', 'pptx', 'ppt',
                 'ppsx', 'odp', 'impress', 'excel', 'xlsx', 'xls', 'csv',
-                'ods', 'avi', 'mpg', 'mov', 'flv', 'mp4'];
+                'ods', 'avi', 'mpg', 'mov', 'flv', 'm4v', 'mp4'];
         foreach ($files['files'] as $key => $file) {
             if ($file->pathname == 'contents.txt') {
                 unset($files['files'][$key]);
