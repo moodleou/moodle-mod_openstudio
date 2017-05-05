@@ -132,6 +132,11 @@ if (!empty($peopledatatemp)) {
         $person->flagscontentread = $flagscontentread;
 
         $person->progressenable = $person->userprogressdata['totalslots'] > 0;
+        $person->participationenable = ($permissions->feature_participationsmiley
+                && $person->userprogressdata['totalslots'] > 0);
+        $person->participationlow = isset($person->userprogressdata['participationstatus'])
+                && ($person->userprogressdata['participationstatus'] == 'low');
+
         if ($person->progressenable) {
             $percentcompleted = round($person->userprogressdata['filledslots'] / $person->userprogressdata['totalslots'] * 100);
             $person->percentcompleted = $percentcompleted;

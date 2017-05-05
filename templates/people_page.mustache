@@ -144,7 +144,18 @@
             <div class="openstudio-profile-participation">
                 <div class="openstudio-profile-label-title">
                     {{#str}} participationlabel, mod_openstudio {{/str}}
-                    {{#pix}} participation_filters_rgb_32px, mod_openstudio{{/pix}}
+                    {{#participationenable}}
+                        {{#participationlow}}
+                            {{#pix}}
+                                participation_sad_rgb_32px, openstudio, {{#str}} contentparticipationlow, openstudio {{/str}}
+                            {{/pix}}
+                        {{/participationlow}}
+                        {{^participationlow}}
+                            {{#pix}}
+                                participation_happy_rgb_32px, openstudio, {{#str}} contentparticipationhigh, openstudio {{/str}}
+                            {{/pix}}
+                        {{/participationlow}}
+                    {{/participationenable}}
                 </div>
                 <div class="openstudio-profile-participation-value">
                     <span class="openstudio-profile-participation-icon">
