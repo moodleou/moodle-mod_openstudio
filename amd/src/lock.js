@@ -111,6 +111,9 @@ define([
 
                     // Hide othes action items like flags, edit, add new comment, ...
                     $(t.CSS.ACTIONITEMS).addClass('locked');
+
+                    // Show lock banner.
+                    $('#openstudio_item_lock').removeClass('openstudio-item-unlock').addClass('openstudio-item-lock');
                 })
                 .always(function() {
                     M.util.js_complete('openstudioLockContent');
@@ -150,6 +153,9 @@ define([
 
                     // Show othes action items like flags, edit, delete, ...
                     $(t.CSS.ACTIONITEMS).removeClass('locked');
+
+                    // Hide lock banner.
+                    $('#openstudio_item_lock').addClass('openstudio-item-unlock').removeClass('openstudio-item-lock');
                 })
                 .always(function() {
                     M.util.js_complete('openstudioUnlockContent');

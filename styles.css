@@ -2144,6 +2144,7 @@ a.openstudio-add-title:hover  {
 
 .openstudio-grid-item-content-preview-default {
     height: 137px;
+    width: 213px;
     background: #ddf0f8;
     clear: left;
     text-align: center;
@@ -2164,13 +2165,14 @@ a.openstudio-add-title:hover  {
     height: 22px;
     position: absolute;
     width: 100%;
+    z-index: 2;
 }
 
 .openstudio-item-lock img {
     width: 14px;
     height: 14px;
-    padding-left: 10px;
-    padding-right: 1px;
+    padding-left: 8px;
+    padding-right: 3px;
 }
 
 .openstudio-item-lock span {
@@ -2187,7 +2189,7 @@ a.openstudio-add-title:hover  {
     background-color: #464542;
     color: #ffffff;
     text-align: center;
-    border-radius: 4px;
+    border-radius: 3px;
     padding: 5px 3px;
     position: absolute;
     z-index: 1;
@@ -2204,8 +2206,8 @@ a.openstudio-add-title:hover  {
 }
 
 .openstudio-tooltip .openstudio-tooltiptext-onlyme {
-    width: 140px;
-    margin-left: -65px;
+    width: 60px;
+    margin-left: -25px;
 }
 
 .openstudio-tooltip .openstudio-tooltiptext::after {
@@ -2214,7 +2216,7 @@ a.openstudio-add-title:hover  {
     top: 100%;
     left: 50%;
     margin-left: -5px;
-    border-width: 5px;
+    border-width: 6px;
     border-style: solid;
     border-color: #464542 transparent transparent transparent;
 }
@@ -2401,18 +2403,45 @@ iframe.openstudio-content-view-iframe {
     width: 16px;
     height: 16px;
     padding-left: 10px;
-    padding-right: 1px;
+    padding-right: 3px;
 }
 
 .openstudio-item-request-feedback span {
     color: #ffffff;
 }
 
-.openstudio-item-request-feedback-cancel {
+.openstudio-grid-item-content .openstudio-item-request-feedback span,
+.openstudio-grid-item-content .openstudio-item-lock span {
+    font-size: 1em;
+}
+
+.openstudio-content-view-primary .openstudio-item-request-feedback span,
+.openstudio-content-view-primary .openstudio-item-lock span {
+    font-size: 1.14285em;
+}
+
+.openstudio-content-view-primary .openstudio-item-request-feedback,
+.openstudio-content-view-primary .openstudio-item-lock {
+    height: 26px;
+}
+
+.openstudio-content-view-primary .openstudio-item-request-feedback img {
+    width: 18px;
+    height: 18px;
+}
+
+.openstudio-content-view-primary .openstudio-item-lock img {
+    width: 16px;
+    height: 16px;
+}
+
+.openstudio-item-request-feedback-cancel,
+.openstudio-item-unlock {
     display: none;
 }
 
-.openstudio-modal-content .openstudio-item-request-feedback {
+.openstudio-modal-content .openstudio-item-request-feedback,
+.openstudio-modal-content .openstudio-item-unlock {
     display: none;
 }
 
@@ -3873,10 +3902,6 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     padding-right: 20px;
 }
 
-.openstudio-folder-global-background .openstudio-item-request-feedback {
-    position: relative;
-}
-
 .openstudio-folder-items {
     padding: 0px 37px;
 }
@@ -4262,6 +4287,15 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-filter-buttons {
         margin-top: 96px;
         margin-right: -25px;
+    }
+
+    .openstudio-content-view-title-box h1 {
+        width: 90%;
+    }
+
+    .openstudio-content-view-actions-icons-right {
+        float: left;
+        padding-bottom: 20px;
     }
 
     /**
@@ -5209,6 +5243,11 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-work-progress-percent {
         font-size: 1.14285em;
+    }
+
+    .openstudio-content-view-primary .openstudio-item-request-feedback span,
+    .openstudio-content-view-primary .openstudio-item-lock span {
+        font-size: 1.28571em;
     }
 
     /**
