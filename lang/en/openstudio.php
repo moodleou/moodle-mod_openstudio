@@ -1355,7 +1355,7 @@ If this reaches the limit, remove posts to enable selection of others.';
 $string['folderbrowseremovepostfromselection'] = 'Remove {$a} post from selection';
 $string['folderbrowssearch'] = 'Search';
 $string['foldernoname'] = 'Untitled Folder';
-$string['folderoverview'] = 'Folder Overview';
+$string['folderoverview'] = 'Folder overview';
 $string['foldertdevicetitle'] = 'Upload post';
 $string['foldertselectdevicetitle'] = 'Browse posts';
 $string['editfolder'] = 'Edit Folder';

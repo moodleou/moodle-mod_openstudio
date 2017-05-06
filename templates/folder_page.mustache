@@ -218,10 +218,6 @@
                     />
                 {{/contentlockenable}}
             </div>
-            {{#viewdeletedpostenable}}
-                <input id="id_viewdeletedpostbutton" name="viewdeletedpostbutton" type="button"
-                       class="osep-smallbutton" value="{{#str}}openstudio:viewdeleted, mod_openstudio{{/str}}"/>
-            {{/viewdeletedpostenable}}
             <div class="openstudio-folder-view-request-feedback">
                 {{#contentrequestfeedbackenable}}
                     <button id="content_view_icon_{{contentflagrequestfeedback}}"
@@ -234,6 +230,10 @@
                     </button>
                 {{/contentrequestfeedbackenable}}
             </div>
+            {{#viewdeletedpostenable}}
+                <input id="id_viewdeletedpostbutton" name="viewdeletedpostbutton" type="button"
+                       class="osep-smallbutton" value="{{#str}}openstudio:viewdeleted, mod_openstudio{{/str}}"/>
+            {{/viewdeletedpostenable}}
         </div>
     </div>
 </div>
