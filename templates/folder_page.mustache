@@ -100,6 +100,11 @@
                 <span>{{#pix}} request_feedback_white_rgb_32px, mod_openstudio, {{#str}} contentneedhelp, mod_openstudio {{/str}} {{/pix}}</span>
                 <span>{{#str}} contentneedhelp, mod_openstudio {{/str}}</span>
             </div>
+            <div id="openstudio_item_lock"
+                 class="{{#locked}}openstudio-item-lock{{/locked}}{{^locked}}openstudio-item-unlock{{/locked}}">
+                <span>{{#pix}} lock_grey_rgb_32px, mod_openstudio, {{#str}} folderlocked, mod_openstudio {{/str}} {{/pix}}</span>
+                <span>{{#str}} folderlocked, mod_openstudio {{/str}}</span>
+            </div>
             <div class="openstudio-folder-items clearfix">
                 <div class="openstudio-folder-item openstudio-folder-view-content">
                     {{#myfolder}}

@@ -2415,21 +2415,27 @@ iframe.openstudio-content-view-iframe {
 }
 
 .openstudio-content-view-primary .openstudio-item-request-feedback span,
-.openstudio-content-view-primary .openstudio-item-lock span {
+.openstudio-content-view-primary .openstudio-item-lock span,
+.openstudio-folder-view-primary .openstudio-item-request-feedback span,
+.openstudio-folder-view-primary .openstudio-item-lock span {
     font-size: 1.14285em;
 }
 
 .openstudio-content-view-primary .openstudio-item-request-feedback,
-.openstudio-content-view-primary .openstudio-item-lock {
+.openstudio-content-view-primary .openstudio-item-lock,
+.openstudio-folder-view-primary .openstudio-item-request-feedback,
+.openstudio-folder-view-primary .openstudio-item-lock {
     height: 26px;
 }
 
-.openstudio-content-view-primary .openstudio-item-request-feedback img {
+.openstudio-content-view-primary .openstudio-item-request-feedback img,
+.openstudio-folder-view-primary .openstudio-item-request-feedback img {
     width: 18px;
     height: 18px;
 }
 
-.openstudio-content-view-primary .openstudio-item-lock img {
+.openstudio-content-view-primary .openstudio-item-lock img,
+.openstudio-folder-view-primary .openstudio-item-lock img {
     width: 16px;
     height: 16px;
 }
@@ -3939,6 +3945,15 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     margin-right: 20px;
 }
 
+.openstudio-folder-view-primary .openstudio-item-request-feedback,
+.openstudio-folder-view-primary .openstudio-item-lock {
+    position: relative;
+}
+
+.openstudio-folder-view-primary > .openstudio-item-request-feedback ~ .openstudio-item-lock {
+    margin-top: -26px;
+}
+
 /* Handle folder overview*/
 
 .openstudio-folder-global-background {
@@ -5265,7 +5280,9 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-content-view-primary .openstudio-item-request-feedback span,
-    .openstudio-content-view-primary .openstudio-item-lock span {
+    .openstudio-content-view-primary .openstudio-item-lock span,
+    .openstudio-folder-view-primary .openstudio-item-request-feedback span,
+    .openstudio-folder-view-primary .openstudio-item-lock span {
         font-size: 1.28571em;
     }
 
