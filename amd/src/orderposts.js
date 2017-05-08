@@ -294,7 +294,7 @@ define([
                 return;
             }
             M.util.js_pending('openstudioOrderPostsFolderContent');
-            var textlistcontent = t.getListOrderPost();
+            var textlistcontent = t.getListOrderPost(true);
             var newlistcontent = {};
             var currentorder = '';
             var neworder = '';
@@ -379,6 +379,7 @@ define([
 
             t.enableSaveOrder(currentorder, neworder);
             t.checkReorder();
+            t.disableContentButton();
             t.disableFirstLastButton();
             t.inputPosition();
         },
@@ -414,11 +415,16 @@ define([
          * @return {string} textlistcontent list of order post
          * @method getListOrderPost
          */
-        getListOrderPost: function() {
+        getListOrderPost: function(filterBookContent) {
             var listorderporst = {};
             // Re-range the order numbers.
             $(t.CSS.ITEM_CONTAINER).each(function() {
                 var orderElement = $(this).find(t.CSS.ITEM_ORDER);
+                if (filterBookContent) {
+                    if (orderElement.hasClass('openstudio-orderpost-item-book')) {
+                        return;
+                    }
+                }
                 listorderporst[orderElement.attr('data-order')]
                     = orderElement.attr('data-original-order');
             });
