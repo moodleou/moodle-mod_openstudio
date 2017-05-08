@@ -91,16 +91,15 @@ define([
             // Register events.
             $(t.CSS.ORDER_POSTS_BUTTON).on('click', function() {
                 if (t.dialogue) {
+                    $('.openstudio-folder-posts-dialogue .openstudio-orderpost').remove();
+                    t.setBody(t.dialogue);
                     t.dialogue.show();
-                    $(t.CSS.SAVE_ORDER_BUTTON).attr("disabled", "disabled");
                     var listorder = t.getListOrderPost();
                     var sortedlistorderpost = [];
                     $.each(listorder, function(index, value) {
                         sortedlistorderpost[index] = value[0];
                     });
                     t.mconfig.listorder = sortedlistorderpost.join(',');
-
-                    t.inputPosition();
                     setTimeout(function() {
                         t.resize();
                     }, 200);
@@ -137,38 +136,6 @@ define([
                     });
             }
 
-            /**
-             * Set body for dialog
-             * @method setBody
-             */
-            function setBody() {
-
-                M.util.js_pending('openstudioGetOrderPostsFolderContent');
-                var promises = Ajax.call([{
-                    methodname: 'mod_openstudio_external_get_order_posts',
-                    args: {
-                        cmid: t.mconfig.cmid,
-                        folderid: t.mconfig.folderid
-                    }
-                }]);
-
-                promises[0]
-                    .done(function(res) {
-                       dialogue.set('bodyContent', res.html);
-
-                       // Disable first move up button and last move down button.
-                        t.disableFirstLastButton();
-
-                        t.checkReorder();
-                    })
-                    .always(function() {
-                        M.util.js_complete('openstudioGetOrderPostsFolderContent');
-                    })
-                    .fail(function(ex) {
-                        window.console.error('Log request failed ' + ex.message);
-                    });
-            }
-
             var dialogue = new osDialogue({
                 closeButton: true,
                 visible: false,
@@ -185,9 +152,43 @@ define([
             });
 
             setHeader();
-            setBody();
+            t.setBody(dialogue);
 
             return dialogue;
+        },
+
+        /**
+         * Set body for dialog
+         * @param {object} dialogue object
+         * @method setBody
+         */
+        setBody: function(dialogue) {
+
+            M.util.js_pending('openstudioGetOrderPostsFolderContent');
+            var promises = Ajax.call([{
+                methodname: 'mod_openstudio_external_get_order_posts',
+                args: {
+                    cmid: t.mconfig.cmid,
+                    folderid: t.mconfig.folderid
+                }
+            }]);
+
+            promises[0]
+                .done(function(res) {
+                   dialogue.set('bodyContent', res.html);
+                    // Disable first move up button and last move down button.
+                    t.disableFirstLastButton();
+                    t.disableContentButton();
+                    t.checkReorder();
+                    t.inputPosition();
+                    $(t.CSS.SAVE_ORDER_BUTTON).attr("disabled", "disabled");
+                })
+                .always(function() {
+                    M.util.js_complete('openstudioGetOrderPostsFolderContent');
+                })
+                .fail(function(ex) {
+                    window.console.error('Log request failed ' + ex.message);
+                });
         },
 
         /**
@@ -379,6 +380,7 @@ define([
             t.enableSaveOrder(currentorder, neworder);
             t.checkReorder();
             t.disableFirstLastButton();
+            t.inputPosition();
         },
 
         /**
@@ -533,8 +535,6 @@ define([
                     var nextItem = $(this).next();
                     if (nextItem.find(t.CSS.ITEM_ORDER).hasClass(classCheck)) {
                         t.disableContentButton();
-                    } else {
-                        t.showErrorMessage('');
                     }
                 }
 
