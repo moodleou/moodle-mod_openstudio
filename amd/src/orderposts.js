@@ -239,7 +239,8 @@ define([
             var lastOrder = $(t.CSS.ITEM_CONTAINER).last().find(t.CSS.ITEM_ORDER).attr('data-order');
             lastOrder = parseInt(lastOrder);
 
-            var currentorder = $('div[data-order=' + $(this).attr('data-order') + ']').hasClass('openstudio-orderpost-item-canreorder');
+            var currentorder = $('div[data-order=' +
+                $(this).attr('data-order') + ']').hasClass('openstudio-orderpost-item-canreorder');
             var itemMove = $('div[data-order=' + desiredOrder + ']').hasClass('openstudio-orderpost-item-canreorder');
             if (currentorder && itemMove) {
                 Str
@@ -276,7 +277,8 @@ define([
                 var itemOrder = item.find(t.CSS.ITEM_ORDER).attr('data-order');
                 itemOrder = parseInt(itemOrder);
                 if (order != itemOrder) {
-                    var currentorder = $('div[data-order=' + $(this).attr('data-order') + ']').hasClass('openstudio-orderpost-item-canreorder');
+                    var currentorder = $('div[data-order=' +
+                        $(this).attr('data-order') + ']').hasClass('openstudio-orderpost-item-canreorder');
                     var itemMove = $('div[data-order=' + order + ']').hasClass('openstudio-orderpost-item-canreorder');
                     if (currentorder && itemMove) {
                         saveAllowed = false;
@@ -345,7 +347,18 @@ define([
          * @method swapItems
          */
         swapItems: function(fromOrderNumber, toOrderNumber, element) {
+            var reoderLock = false;
             var targetElement = $(t.CSS.ITEM_ORDER + '[data-order="' + toOrderNumber + '"]');
+            reoderLock = t.checkReorderLock(fromOrderNumber, toOrderNumber);
+            if (reoderLock == true) {
+                Str
+                .get_string('foldercontentcannotreorder', 'mod_openstudio')
+                .done(function(s) {
+                   t.showErrorMessage(s);
+                });
+                return;
+            }
+
             if (targetElement.length > 0) {
                 if (fromOrderNumber < toOrderNumber) {
                     // Move down
@@ -413,7 +426,9 @@ define([
          * Get list order porst according to their new positions
          *
          * @return {string} textlistcontent list of order post
+         * @param {bool} filterBookContent book content
          * @method getListOrderPost
+         * @return {Array} sortable
          */
         getListOrderPost: function(filterBookContent) {
             var listorderporst = {};
@@ -546,6 +561,38 @@ define([
                 }
 
             });
+        },
+
+        /**
+         * Handle reorder lock content
+         *
+         * @param {int} currentOrderNumber Original order
+         * @param {int} toOrderNumber Desired order
+         * @return {bool} true when move this content beyond other fixed contents.
+         */
+        checkReorderLock: function(currentOrderNumber, toOrderNumber) {
+            var firstitem = '';
+            var lastitem = '';
+            var classCheck = 'openstudio-orderpost-item-canreorder';
+            if (currentOrderNumber > toOrderNumber) {
+                firstitem = toOrderNumber;
+                lastitem = currentOrderNumber;
+            } else {
+                firstitem = currentOrderNumber;
+                lastitem = toOrderNumber;
+            }
+
+            if ((lastitem - firstitem) > 1) {
+                while (firstitem <= lastitem) {
+                    var currentElement = $(t.CSS.ITEM_ORDER + '[data-order="' + firstitem + '"]');
+                    if (currentElement.hasClass(classCheck) && (firstitem < currentOrderNumber || firstitem < toOrderNumber)) {
+                        return true;
+                    }
+                    firstitem++;
+                }
+            }
+
+            return false;
         },
 
         /**
