@@ -173,10 +173,13 @@ class mod_openstudio_external extends external_api {
 
                 // Check item is folder or added to folder.
                 if ($content->contenttype == content::TYPE_FOLDER ||
-                        $content->visibility == content::VISIBILITY_INFOLDERONLY ||
                         array_key_exists($content->id, $contentsinfolder) ||
                         ($selectedpostsids && in_array($content->id, $selectedpostsids))) {
                     continue;
+                }
+
+                if ($content->visibility == content::VISIBILITY_INFOLDERONLY ) {
+                    $content->folder = folder::get_containing_folder($content->id);
                 }
 
                 $content = renderer_utils::content_type_image($content, $context);
@@ -212,6 +215,11 @@ class mod_openstudio_external extends external_api {
                     case content::VISIBILITY_TUTOR:
                         $contenticon = $OUTPUT->pix_url('share_with_tutor_rgb_32px', 'openstudio');
                         $contentlocation = get_string('contentitemsharewithmytutor', 'openstudio');
+                        break;
+                    case content::VISIBILITY_INFOLDERONLY:
+                        $contenticon = $OUTPUT->pix_url('folder_darkblue_rgb_32px', 'openstudio');
+                        $folder = folder::get_containing_folder($content->id);
+                        $contentlocation = $folder->name;
                         break;
                     default:
                         $contenticon = $OUTPUT->pix_url('onlyme_rgb_32px', 'openstudio');
