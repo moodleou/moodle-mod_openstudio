@@ -2768,13 +2768,13 @@ span.openstudio-content-view-title {
 }
 
 .openstudio-content-view-flag-icon span.openstudio-content-view-icon-inactive-image,
-.openstudio-content-view-flag-icon.has-hover:hover .openstudio-content-view-icon-active-image,
+body:not(.ios):not(.android) .openstudio-content-view-flag-icon.has-hover:hover .openstudio-content-view-icon-active-image,
 .openstudio-content-view-flag-icon.openstudio-content-view-icon-active span.openstudio-content-view-icon-active-image {
     display: block;
 }
 
 .openstudio-content-view-flag-icon span.openstudio-content-view-icon-active-image,
-.openstudio-content-view-flag-icon.has-hover:hover .openstudio-content-view-icon-inactive-image,
+body:not(.ios):not(.android) .openstudio-content-view-flag-icon.has-hover:hover .openstudio-content-view-icon-inactive-image,
 .openstudio-content-view-flag-icon.openstudio-content-view-icon-active span.openstudio-content-view-icon-inactive-image {
     display: none;
 }
