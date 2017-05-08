@@ -139,7 +139,7 @@ class mod_openstudio_external extends external_api {
                 content::TYPE_URL, content::TYPE_URL_IMAGE, content::TYPE_URL_VIDEO, content::TYPE_URL_AUDIO,
                 content::TYPE_URL_DOCUMENT, content::TYPE_URL_DOCUMENT_PDF, content::TYPE_URL_DOCUMENT_DOC,
                 content::TYPE_URL_PRESENTATION, content::TYPE_URL_PRESENTATION_PPT, content::TYPE_URL_SPREADSHEET,
-                content::TYPE_URL_SPREADSHEET_XLS);
+                content::TYPE_URL_SPREADSHEET_XLS, content::TYPE_CAD, content::TYPE_ZIP);
 
         if ($search) {
             $searchresults = search::query($cm, $search, 0, $pagesize, 0, content::VISIBILITY_MODULE, $filter);

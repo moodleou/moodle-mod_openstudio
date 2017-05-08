@@ -60,29 +60,11 @@
         <img class="openstudio-grid-item-content-icon" src="{{{contenticon}}}" alt="{{{name}}}">
         <span class="openstudio-tooltiptext {{#isonlyme}}openstudio-tooltiptext-onlyme{{/isonlyme}}">{{itemsharewith}}</span>
     </div>
-    <div class="openstudio-grid-item-content-box">
-        {{#locked}}
-            <div class="openstudio-item-lock">
-                <span><img src="{{lockicon}}" alt="{{#str}} postlocked, mod_openstudio {{/str}}"></span>
-                {{#isfolder}}
-                    <span>{{#str}} folderlocked, mod_openstudio {{/str}}</span>
-                {{/isfolder}}
-                {{^isfolder}}
-                    <span>{{#str}} postlocked, mod_openstudio {{/str}}</span>
-                {{/isfolder}}
-            </div>
-        {{/locked}}
-        {{^locked}}
-            {{#isfeedbackrequested}}
-                <div class="openstudio-item-request-feedback">
-                    <span><img src="{{requestfeedbackicon}}" alt="{{#str}} contentneedhelp, mod_openstudio {{/str}}"></span>
-                    <span>{{#str}} contentneedhelp, mod_openstudio {{/str}}</span>
-                </div>
-            {{/isfeedbackrequested}}
-        {{/locked}}
-    </div>
     {{#isfolder}}
         <div class ="openstudio-folder-content">
+            <div class="openstudio-grid-item-content-box">
+                {{>mod_openstudio/content_block_banner_status}}
+            </div>
             <img class="openstudio-folder-tab" src="{{{folderdefaultthumbnail}}}" alt="{{{name}}}">
             <div class ="openstudio-folder-background">
                 <a href="{{{folderlink}}}">
@@ -106,6 +88,9 @@
         </div>
     {{/isfolder}}
     {{^isfolder}}
+        <div class="openstudio-grid-item-content-box">
+            {{>mod_openstudio/content_block_banner_status}}
+        </div>
         <div class="openstudio-grid-item-content-preview{{#contenttypedefaultimage}}-default{{/contenttypedefaultimage}}">
             <a href="{{{contentlink}}}">
                 <img class="openstudio-grid-item-thumbnail" src="{{{contentthumbnailurl}}}" alt="{{{name}}}">

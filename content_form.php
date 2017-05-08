@@ -179,7 +179,7 @@ class mod_openstudio_content_form extends moodleform {
                 }
             }
 
-            if ($contenttype == content::TYPE_CAD) {
+            if ($contenttype == content::TYPE_CAD || $contenttype == content::TYPE_ZIP) {
                 $defaultcontentuploadtype = 'addfile';
                 $buttonaddfileactive = 'openstudio-button-active';
             }

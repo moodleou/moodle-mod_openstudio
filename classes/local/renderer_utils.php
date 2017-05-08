@@ -390,6 +390,7 @@ class renderer_utils {
             case content::TYPE_PRESENTATION:
             case content::TYPE_SPREADSHEET:
             case content::TYPE_CAD:
+            case content::TYPE_ZIP:
                 $contenttypedownloadfile = true;
                 $contentfileurl = $CFG->wwwroot
                     . "/pluginfile.php/{$context->id}/mod_openstudio"
@@ -483,14 +484,15 @@ class renderer_utils {
                 case content::TYPE_URL_DOCUMENT_DOC:
                     $contenttypeuseimagedefault = true;
                     switch ($contentdata->mimetype) {
-                        case 'application/vnd.oasis.opendocument.text':
+                        case 'application/msword':
+                        case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
                             $contenttypeiconurl = $OUTPUT->pix_url('word_rgb_32px', 'openstudio');
                             break;
                         case 'application/pdf':
                             $contenttypeiconurl = $OUTPUT->pix_url('pdf_rgb_32px', 'openstudio');
                             break;
                         default:
-                            $contenttypeiconurl = $OUTPUT->pix_url('word_rgb_32px', 'openstudio');
+                            $contenttypeiconurl = $OUTPUT->pix_url('document_rgb_32px', 'openstudio');
                             break;
                     }
                     break;
@@ -526,7 +528,11 @@ class renderer_utils {
                     break;
                 case content::TYPE_CAD:
                     $contenttypeuseimagedefault = true;
-                    $contenttypeiconurl = $OUTPUT->pix_url('word_rgb_32px', 'openstudio');
+                    $contenttypeiconurl = $OUTPUT->pix_url('cad_rgb_32px', 'openstudio');
+                    break;
+                case content::TYPE_ZIP:
+                    $contenttypeuseimagedefault = true;
+                    $contenttypeiconurl = $OUTPUT->pix_url('zip_archive_rgb_32px', 'openstudio');
                     break;
                 default:
                     $contenttypeiconurl = $OUTPUT->pix_url('unknown_rgb_32px', 'openstudio');
@@ -795,14 +801,15 @@ class renderer_utils {
             case content::TYPE_URL_DOCUMENT:
             case content::TYPE_URL_DOCUMENT_DOC:
                 switch ($contentdata->mimetype) {
-                    case 'application/vnd.oasis.opendocument.text':
+                    case 'application/msword':
+                    case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
                         $contenttypeimage = $OUTPUT->pix_url('word_rgb_32px', 'openstudio');
                         break;
                     case 'application/pdf':
                         $contenttypeimage = $OUTPUT->pix_url('pdf_rgb_32px', 'openstudio');
                         break;
                     default:
-                        $contenttypeimage = $OUTPUT->pix_url('word_rgb_32px', 'openstudio');
+                        $contenttypeimage = $OUTPUT->pix_url('document_rgb_32px', 'openstudio');
                         break;
                 }
                 break;
@@ -827,7 +834,10 @@ class renderer_utils {
                 $contenttypeimage = $OUTPUT->pix_url('online_rgb_32px', 'openstudio');
                 break;
             case content::TYPE_CAD:
-                $contenttypeimage = $OUTPUT->pix_url('word_rgb_32px', 'openstudio');
+                $contenttypeimage = $OUTPUT->pix_url('cad_rgb_32px', 'openstudio');
+                break;
+            case content::TYPE_ZIP:
+                $contenttypeimage = $OUTPUT->pix_url('zip_archive_rgb_32px', 'openstudio');
                 break;
             default:
                 $contenttypeimage = $OUTPUT->pix_url('unknown_rgb_32px', 'openstudio');

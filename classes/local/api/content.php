@@ -64,6 +64,7 @@ class content {
     const TYPE_FOLDER = 100;
     const TYPE_FOLDER_CONTENT = 110;
     const TYPE_CAD = 120;
+    const TYPE_ZIP = 130;
 
     const OWNERSHIP_MYOWNWORK = 0;
     const OWNERSHIP_FOUNDONLINE = 1;
@@ -1351,6 +1352,8 @@ EOF;
                         $contenttype = self::TYPE_SPREADSHEET;
                     } else if (in_array($fileextension, array('dwg', 'stl', 'stp', 'eps', 'dxf'))) {
                         $contenttype = self::TYPE_CAD;
+                    } else if (in_array($fileextension, array('zip'))) {
+                        $contenttype = self::TYPE_ZIP;
                     }
                 }
             }

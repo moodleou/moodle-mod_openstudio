@@ -725,6 +725,7 @@ if ($contentform->is_cancelled()) {
             case content::TYPE_PRESENTATION:
             case content::TYPE_SPREADSHEET:
             case content::TYPE_CAD:
+            case content::TYPE_ZIP:
                 file_prepare_draft_area(
                         $draftitemid, $context->id, 'mod_openstudio', 'content', $contentdata->fileid);
                 $contentdata->attachments = $draftitemid;
