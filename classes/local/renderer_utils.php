@@ -315,6 +315,12 @@ class renderer_utils {
         $contentiframesrc = '';
         $context = \context_module::instance($cmid);
 
+        if (!empty($contentdata->folderid)) {
+            $folderid = $contentdata->folderid;
+        } else {
+            $folderid = null;
+        }
+
         // Get content file url.
         switch ($contentdata->contenttype) {
             case content::TYPE_NONE:
@@ -333,24 +339,20 @@ class renderer_utils {
                 break;
             case content::TYPE_IMAGE:
                 $contenttypeimage = true;
-                $contentfileurl = $CFG->wwwroot
-                    . "/pluginfile.php/{$context->id}/mod_openstudio"
-                    . "/{$contentarea}/{$contentdata->id}/" . rawurlencode($contentdata->content);
 
                 // Add folder id to thumbnail url.
                 // A post with visibility is Only me, thmbnail doesn't load although folder shared.
-                if (isset($contentdata->folderid) && $contentdata->folderid) {
-                    $contentfileurl .= '/'.$contentdata->folderid;
-                }
+                $contentfileurl = self::make_plugin_file($context->id, $contentarea, $contentdata->id,
+                        $contentdata->content, $folderid);
+
                 break;
 
             case content::TYPE_VIDEO:
             case content::TYPE_AUDIO:
                 $contenttypemedia = true;
                 $contenttypedownloadfile = true;
-                $contentfileurl = $CFG->wwwroot
-                    . "/pluginfile.php/{$context->id}/mod_openstudio"
-                    . "/{$contentarea}/{$contentdata->id}/" . rawurlencode($contentdata->content);
+                $contentfileurl = self::make_plugin_file($context->id, $contentarea, $contentdata->id,
+                        $contentdata->content, $folderid);
 
                 // This used for media filter.
                 $contentdatahtml = \html_writer::start_tag('a',
@@ -378,9 +380,8 @@ class renderer_utils {
                         $filename = $contentfile->get_filename();
                         if ($filename != '.') {
                             $extension = pathinfo($filename, PATHINFO_EXTENSION);
-                            $contentfileurls[$extension] = $CFG->wwwroot
-                                . "/pluginfile.php/{$context->id}/mod_openstudio"
-                                . "/{$contentarea}/{$contentdata->id}/" . rawurlencode($filename);
+                            $contentfileurls[$extension] = self::make_plugin_file($context->id, $contentarea,
+                                    $contentdata->id, $filename, $folderid);
                         }
                     }
                     $contentiframesrc = $contentfileurls['html'];
@@ -392,9 +393,8 @@ class renderer_utils {
             case content::TYPE_CAD:
             case content::TYPE_ZIP:
                 $contenttypedownloadfile = true;
-                $contentfileurl = $CFG->wwwroot
-                    . "/pluginfile.php/{$context->id}/mod_openstudio"
-                    . "/{$contentarea}/{$contentdata->id}/" . rawurlencode($contentdata->content);
+                $contentfileurl = self::make_plugin_file($context->id, $contentarea, $contentdata->id,
+                        $contentdata->content, $folderid);
 
                 break;
             case content::TYPE_URL:
@@ -464,9 +464,8 @@ class renderer_utils {
                     if ($contentdata->mimetype == 'image/bmp') {
                         $contenttypeiconurl = $OUTPUT->pix_url('image_rgb_32px', 'openstudio');
                     } else {
-                        $contenttypeiconurl = $CFG->wwwroot
-                            . "/pluginfile.php/{$context->id}/mod_openstudio"
-                            . "/{$contentthumbnailarea}/{$contentdata->id}/" . rawurlencode($contentdata->content);
+                        $contentfileurl = self::make_plugin_file($context->id, $contentthumbnailarea, $contentdata->id,
+                                $contentdata->content, $folderid);
                     }
                     break;
 
@@ -772,6 +771,12 @@ class renderer_utils {
     public static function content_type_image($contentdata, $context, $iscontentversion = false) {
         global $CFG, $OUTPUT;
 
+        if (!empty($contentdata->folderid)) {
+            $folderid = $contentdata->folderid;
+        } else {
+            $folderid = null;
+        }
+
         $contenttypedefaultimage = true;
         $contentthumbnailarea = $iscontentversion ? 'contentthumbnailversion' : 'contentthumbnail';
         switch ($contentdata->contenttype) {
@@ -780,9 +785,8 @@ class renderer_utils {
                     $contenttypeimage = $OUTPUT->pix_url('unknown_rgb_32px', 'openstudio');
                 } else {
                     if ($contentdata->content) {
-                        $contenttypeimage = $CFG->wwwroot
-                            . "/pluginfile.php/{$context->id}/mod_openstudio"
-                            . "/{$contentthumbnailarea}/{$contentdata->id}/". rawurlencode($contentdata->content);
+                        $contenttypeimage = self::make_plugin_file($context->id, $contentthumbnailarea, $contentdata->id,
+                                $contentdata->content, $folderid);
                         if ($contentdata->thumbnail) {
                             $contenttypeimage = $contentdata->thumbnail;
                         }
@@ -1224,10 +1228,6 @@ class renderer_utils {
                     $contentthumbnailfileurl = $content->contenttypeimage;
                     if ($content->contenttype != content::TYPE_IMAGE) {
                         $content->thumbnailimg = false;
-                    } else if ($folderdata->id) {
-                        // Add folder id to thumbnail url.
-                        // A post with visibility is Only me, thumbnail doesn't load although folder shared.
-                        $contentthumbnailfileurl .= '/'.$folderdata->id;
                     }
                     $contentdetail = new \moodle_url('/mod/openstudio/content.php', array(
                             'id' => $folderdata->cmid, 'sid' => $content->id, 'vuid' => $content->userid,
@@ -1613,5 +1613,31 @@ class renderer_utils {
                 'cmid' => $cmid,
                 'folderid' => $contentdata->id]]);
         }
+    }
+
+    /**
+     * Return plugin file url.
+     *
+     * @param $contextid
+     * @param $area
+     * @param $itemid
+     * @param $filename
+     * @param null $folderid
+     * @return string
+     */
+    public static function make_plugin_file($contextid, $area, $itemid, $filename, $folderid = null) {
+        global $CFG;
+
+        $pluginfileurl = $CFG->wwwroot
+            . "/pluginfile.php/{$contextid}/mod_openstudio"
+            . "/{$area}/{$itemid}/";
+
+        if ($folderid) {
+            $pluginfileurl .= "{$folderid}/";
+        }
+
+        $pluginfileurl .= rawurlencode($filename);
+
+        return $pluginfileurl;
     }
 }

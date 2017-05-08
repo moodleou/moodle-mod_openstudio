@@ -602,10 +602,6 @@ if ($finalviewpermissioncheck) {
                         $folderthumbnailfileurl = $firstcontent->contenttypeimage;
                         if ($firstcontent->contenttype != content::TYPE_IMAGE) {
                             $content->thumbnailimg = false;
-                        } else if ($content->id) {
-                            // Add folder id to thumbnail url.
-                            // A post with visibility is Only me, thmbnail doesn't load although folder shared.
-                            $folderthumbnailfileurl .= '/'.$content->id;
                         }
                     } else {
                          $content->thumbnailimg = false;

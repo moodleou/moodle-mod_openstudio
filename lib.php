@@ -386,15 +386,21 @@ EOF;
         }
     }
     $visibility = $contentdata->visibility;
-    $folderid = array_pop($args);
+    if (count($args) > 1) {
+        // $Args contains 1 item is filename or 2 items are folder id and file name if content is inside foler.
+        // E.g: [15, small.mp3].
+        // or ["small.mp3"].
+        // The filename must end by file name because we must follow media url pattern.
+        $folderid = (int)(array_slice($args, -2, 1)[0]);
+    } else {
+        $folderid = 0;
+    }
     if (is_numeric($folderid)) {
         if ($DB->record_exists('openstudio_folder_contents', array('folderid' => $folderid, 'contentid' => $contentdata->id))) {
             if ($folder = $DB->get_record('openstudio_contents', array('id' => $folderid))) {
                 $visibility = $folder->visibility;
             }
         }
-    } else {
-        array_push($args, $folderid);
     }
 
     // Permission check.
@@ -415,7 +421,7 @@ EOF;
             }
 
             // If the content is shared with the course users, then proceed.
-            if ($visibility == content::VISIBILITY_PRIVATE) {
+            if ($visibility == content::VISIBILITY_MODULE) {
                 $sql = <<<EOF
 SELECT ue1.id
   FROM {user_enrolments} ue1
@@ -482,7 +488,7 @@ EOF;
     }
 
     if ($filearea === 'contentcomment') {
-        $relativepath = implode('/', $args);
+        $relativepath = array_pop($args);
         $fullpath = "/{$context->id}/mod_openstudio/$filearea/{$itemid}/$relativepath";
     } else {
         switch ($record->contenttype) {
@@ -522,7 +528,7 @@ EOF;
                 return false;
         }
 
-        $relativepath = implode('/', $args);
+        $relativepath = array_pop($args);
         $fullpath = "/{$context->id}/mod_openstudio/$filearea/{$record->fileid}/$relativepath";
     }
 
