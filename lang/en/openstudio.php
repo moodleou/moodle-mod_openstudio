@@ -1187,6 +1187,7 @@ $string['contentwillbelockedfromtill'] = 'This activity will be locked and canno
 
 $string['cron_subscriptions'] = 'Studio process subscriptions job';
 $string['cron_cleanup'] = 'Studio cleanup files job';
+$string['cron_deletenotifications'] = 'Delete notification job';
 
 $string['accesscurrentpage'] = 'Current Page';
 $string['accesscurrentcontent'] = 'Current Content';

@@ -511,8 +511,10 @@ EOF;
                     OFFSET ?";
             $ids = array_merge($ids, $DB->get_fieldset_sql($sql, [$user->userid, $user->studioid, $limit]));
         }
-        list($dsql, $params) = $DB->get_in_or_equal($ids);
-        $DB->delete_records_select('openstudio_notifications', 'id ' . $dsql, $params);
+        if (!empty($ids)) {
+            list($dsql, $params) = $DB->get_in_or_equal($ids);
+            $DB->delete_records_select('openstudio_notifications', 'id ' . $dsql, $params);
+        }
     }
 
     /**
