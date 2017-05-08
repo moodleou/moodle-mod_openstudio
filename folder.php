@@ -27,6 +27,7 @@ use mod_openstudio\local\util;
 use mod_openstudio\local\api\contentversion;
 use mod_openstudio\local\api\folder;
 use mod_openstudio\local\api\lock;
+use mod_openstudio\local\api\flags;
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
@@ -115,6 +116,8 @@ $pageurl = util::get_current_url();
 $pagetitle = $pageheading = get_string('pageheader', 'openstudio',
         array('cname' => $course->shortname, 'cmname' => $cm->name, 'title' => $folderdataname));
 util::page_setup($PAGE, $pagetitle, $pageheading, $pageurl, $course, $cm);
+
+flags::toggle($folderdata->id, flags::READ_CONTENT, 'on', $USER->id, $folderdata->id);
 
 $PAGE->requires->js_call_amd('mod_openstudio/contentpage', 'init');
 $PAGE->requires->js_call_amd('mod_openstudio/folderhelper', 'init');
