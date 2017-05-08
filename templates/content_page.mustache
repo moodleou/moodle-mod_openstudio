@@ -217,7 +217,7 @@
                     <div class="openstudio-content-view-archive">
                         {{#contentarchivepostenable}}
                             <input id="id_archivebutton" name="archivebutton"
-                                   class="{{#contentcrudlocked}} locked {{/contentcrudlocked}} openstudio-content-actions"
+                                   class="{{#contentcrudlocked}} locked {{/contentcrudlocked}} openstudio-content-actions osep-smallbutton"
                                value="{{#str}}contentactionarchivepost, mod_openstudio{{/str}}" type="button">
                         {{/contentarchivepostenable}}
                         {{#reportabuselink}}
@@ -311,8 +311,7 @@
         </div>
         <div class="openstudio-content-view-secondary">
             <div id="openstudio_content_view_post_owner_heading" class="openstudio-content-view-block
-                    {{^iscontentversion}}collapsed{{/iscontentversion}}
-                    {{#isfoldercontent}}openstudio-folder-global-background{{/isfoldercontent}} collapsed"
+                    {{#isfoldercontent}}openstudio-folder-global-background{{/isfoldercontent}}"
                  data-toggle="collapse"
                  data-target="#openstudio_content_view_post_owner">
                 <a href="">{{#str}} contentviewownerpost, mod_openstudio {{/str}}</a>
@@ -320,7 +319,7 @@
             <div id="openstudio_content_view_post_owner" class="openstudio-content-view-block-content
 
                 {{#isfoldercontent}}openstudio-folder-block-content-background{{/isfoldercontent}}
-                openstudio-content-view-block-post-owner collapse clearfix">
+                openstudio-content-view-block-post-owner clearfix">
                 <div class="openstudio-content-view-user-picture">
                     <img src="{{{userpictureurl}}}">
                 </div>
@@ -330,6 +329,7 @@
                         {{#str}} contentitemview, mod_openstudio {{/str}}
                         {{{firstname}}}’s
                         {{#str}} contentitemwork, mod_openstudio {{/str}}
+                        {{#pix}} t/right, core{{/pix}}
                     </a>
                 </div>
             </div>

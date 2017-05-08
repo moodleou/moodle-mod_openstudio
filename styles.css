@@ -41,7 +41,7 @@
     margin-top: 20px;
     margin-bottom: 18px;
     background-color: #bfe2ef;
-    padding-bottom: 20px;
+    padding-bottom: 56px;
 }
 
 .path-mod-openstudio .dropdown-menu > li > a.menuitem-active {
@@ -2547,7 +2547,7 @@ a.openstudio-actvity-title:hover  {
 /* Content detail page */
 .openstudio-content-view-container {
     background: #ffffff none repeat scroll 0 0;
-    margin: 20px;
+    margin: 24px;
     padding: 8px 20px 40px 20px;
     position: relative;
 }
@@ -2590,7 +2590,7 @@ span.openstudio-content-view-title {
 }
 
 .openstudio-content-view-version img {
-    height: 10px;
+    height: auto;
 }
 
 .openstudio-content-view-version-divider {
@@ -2687,11 +2687,6 @@ span.openstudio-content-view-title {
     font-size: 1em;
     margin-top: 10px;
 }
-
-.openstudio-content-view-tags-container {
-    padding-top: 7px;
-}
-
 
 .openstudio-content-view-tags {
     width: 55%;
@@ -2801,7 +2796,7 @@ body:not(.ios):not(.android) .openstudio-content-view-flag-icon.has-hover:hover 
 }
 
 .openstudio-content-view-actions {
-    padding-top: 28px;
+    padding-top: 30px;
 }
 
 .path-mod-openstudio .openstudio-content-view-restore-button,
@@ -2851,7 +2846,7 @@ body:not(.ios):not(.android) .openstudio-content-view-flag-icon.has-hover:hover 
 }
 
 .openstudio-content-view-block-post-owner {
-    background: #ddf0f8 none repeat scroll 0 0;
+    background: #f4fafc none repeat scroll 0 0;
     height: 100px;
 }
 
@@ -2871,7 +2866,7 @@ body:not(.ios):not(.android) .openstudio-content-view-flag-icon.has-hover:hover 
 }
 
 .openstudio-content-view-user-picture {
-    padding: 15px;
+    padding: 15px 10px 15px 15px;
     float: left;
     display: inline-block;
 }
@@ -2908,15 +2903,15 @@ body:not(.ios):not(.android) .openstudio-content-view-flag-icon.has-hover:hover 
     font-size: 0.85714em;
     color: #0b55a8;
     border-right: none;
-    background-image: url([[pix:t/right]]);
     border-left: 0 none;
     border-right: medium none;
-    background-size: 10px 10px;
-    background-color: transparent;
-    background-repeat: no-repeat;
-    background-position: right;
     display: inline-block;
     padding-right: 16px;
+}
+
+.openstudio-content-view-user-info-view img {
+    width: 10px;
+    height: 10px;
 }
 
 .openstudio-content-view-date-box {
@@ -2968,7 +2963,7 @@ div.openstudio-content-view-image-metadata div:nth-of-type(odd) {
 
 .openstudio-content-view-version-img img {
     width: 64px;
-    height: 44px;
+    height: auto;
     float: left;
 }
 
@@ -2976,13 +2971,15 @@ div.openstudio-content-view-image-metadata div:nth-of-type(odd) {
     padding-left: 10px;
     display: table;
     vertical-align: top;
+    float: left;
+    width: 134px;
 }
 
 .openstudio-content-view-version-info-name {
     font-size: 0.92857em;
     font-family: Arial;
     font-weight: Bold;
-    color: #312b39;
+    color: #002158;
     line-height: 17px;
     margin-bottom: 0px;
     margin-top: 0px;
@@ -3014,6 +3011,7 @@ div.openstudio-content-view-version div:nth-of-type(odd) {
 .openstudio-content-view-version-actions {
     display: inline-block;
     float: right;
+    margin-top: 7px;
 }
 
 #openstudio_content_view_map_canvas {
@@ -4175,7 +4173,7 @@ a.openstudio-add-new-content-link:hover  {
         clear: left;
         display: table;
         float: left;
-        padding-top: 15px;
+        padding-top: 5px;
     }
 
     .openstudio-content-view-tags {
@@ -5292,6 +5290,7 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-content-view-container {
         padding : 8px 15px 25px;
+        margin: 0px 20px 20px 20px;
     }
 
     .openstudio-content-view-primary {
@@ -5489,13 +5488,14 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     #openstudio_content_view_post_owner_heading {
+        font-size: 1em;
         margin-top: 30px;
     }
 
     .openstudio-content-view-block {
         height: 50px;
         line-height: 50px;
-        font-size: 1.28571em;
+        font-size: 1em;
         color: #002158;
     }
 
@@ -5517,10 +5517,6 @@ a.openstudio-add-new-content-link:hover  {
         float: left;
     }
 
-    .openstudio-content-view-tags-container {
-        padding-top: 13px;
-    }
-
     .openstudio-content-view-tag-item {
         margin: 0px;
     }
@@ -5536,7 +5532,6 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-content-view-add-comment {
         margin-bottom: 10px;
-        margin-top: 25px;
     }
 
     .openstudio-content-view-user-info-name {
@@ -5616,7 +5611,6 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-content-view-user-picture img,
     .openstudio-content-view-version-img img {
-        height: 38px;
         width: 48px;
     }
 
@@ -6104,11 +6098,6 @@ a.openstudio-add-new-content-link:hover  {
         float: right;
     }
 
-    .openstudio-content-view-version img {
-        height: 20px;
-        margin-top: -10px;
-    }
-
     .openstudio-content-view-version-divider {
         height: 20px;
         display: inline-block;
@@ -6128,6 +6117,15 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-content-view-version-title-box .openstudio-content-view-title {
         font-size: 1.5714em;
+    }
+
+    .openstudio-content-view-user-info-view img {
+        width: 15px;
+        height: 15px;
+    }
+
+    .openstudio-content-view-archive {
+        margin-bottom: 2px;
     }
 }
 /* Mobile small. */
