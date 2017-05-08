@@ -1037,8 +1037,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         $user = user::get_user_by_id($folderdata->userid);
         $folderdata->fullname = fullname($user);
-        $folderdata->foldereditenable = ($permissions->addcontent && $USER->id == $folderdata->userid)
-                || $permissions->managecontent;
+        $folderdata->foldereditenable = ($permissions->addcontent && $USER->id == $folderdata->userid);
         $folderdata->folderedit = $folderedit;
         $folderdata->folderlinkoverview = $folderoverview;
         $folderdata->viewuserworkurl = new moodle_url('/mod/openstudio/view.php',

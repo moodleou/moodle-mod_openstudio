@@ -261,9 +261,6 @@ define([
 
             // Swap items.
             t.swapItems(itemOrder, desiredOrder, item);
-
-            // Reset input.
-            $(t.CSS.ORDER_NUMBER_INPUT).val('');
         },
 
         /**
@@ -275,24 +272,24 @@ define([
             var saveAllowed = true;
             $(t.CSS.ORDER_NUMBER_INPUT).each(function() {
                 var order = $(this).val().trim();
-                if (order == '') {
-                    return;
-                }
                 var item = $(this).closest(t.CSS.ITEM_CONTAINER);
                 var itemOrder = item.find(t.CSS.ITEM_ORDER).attr('data-order');
                 itemOrder = parseInt(itemOrder);
-                var currentorder = $('div[data-order=' + $(this).attr('data-order') + ']').hasClass('openstudio-orderpost-item-canreorder');
-                var itemMove = $('div[data-order=' + order + ']').hasClass('openstudio-orderpost-item-canreorder');
-                if (currentorder && itemMove) {
-                    saveAllowed = false;
-                    Str
-                    .get_string('foldercontentcannotreorder', 'mod_openstudio')
-                    .done(function(s) {
-                       t.showErrorMessage(s);
-                    });
+                if (order != itemOrder) {
+                    var currentorder = $('div[data-order=' + $(this).attr('data-order') + ']').hasClass('openstudio-orderpost-item-canreorder');
+                    var itemMove = $('div[data-order=' + order + ']').hasClass('openstudio-orderpost-item-canreorder');
+                    if (currentorder && itemMove) {
+                        saveAllowed = false;
+                        Str
+                        .get_string('foldercontentcannotreorder', 'mod_openstudio')
+                        .done(function(s) {
+                           t.showErrorMessage(s);
+                        });
+                    }
+                    t.swapItems(itemOrder, order, item);
                 }
-                t.swapItems(itemOrder, order, item);
             });
+
             if (!saveAllowed) {
                 return;
             }
@@ -365,6 +362,9 @@ define([
                     $(this).find(t.CSS.ITEM_ORDER)
                         .attr('data-order', index)
                         .text(orderNumberString);
+
+                    $(this).find(t.CSS.ORDER_NUMBER_INPUT)
+                        .attr('value', index);
                 });
             }
 
@@ -483,7 +483,6 @@ define([
                             t.showErrorMessage('');
                         }
                     }
-                    $(t.CSS.ORDER_NUMBER_INPUT).val('');
                     $(this).val(order);
                 });
             });
@@ -535,6 +534,8 @@ define([
                     var nextItem = $(this).next();
                     if (nextItem.find(t.CSS.ITEM_ORDER).hasClass(classCheck)) {
                         t.disableContentButton();
+                    } else {
+                        t.showErrorMessage('');
                     }
                 }
 
