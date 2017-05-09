@@ -1062,6 +1062,10 @@ class mod_openstudio_external extends external_api {
         $contentandversions = contentversion::get_content_and_versions($params['cid'], $userid, $showdeletedcontentversions);
         $contentdata = $contentandversions->contentdata;
 
+        if (!$contentdata || $contentdata->deletedtime > 0) {
+            throw new moodle_exception('errorinvalidcontent', 'openstudio');
+        }
+
         // Delete content.
         $actionallowed = ($contentdata->userid == $userid) && $permissions->addcontent;
         $actionallowed = $actionallowed || $permissions->managecontent;
@@ -1087,6 +1091,19 @@ class mod_openstudio_external extends external_api {
                 } else {
                     // If content is not an activity, delete it completely.
                     $success = content::empty_content($userid, $params['cid'], true, $cminstance->versioning, $cm);
+                }
+
+                // If content is linked to other ones, then make copies from this.
+                if ($contentdata->contenttype != content::TYPE_FOLDER) {
+                    $copies = folder::get_content_softlinks($contentdata->id);
+                    if (!empty($copies)) {
+                        foreach ($copies as $copy) {
+                            $copy->provenancestatus = folder::PROVENANCE_UNLINKED;
+                            $newslot = folder::copy_content($contentdata->id, $userid, null, null, $cm);
+                            $copy->contentid = $newslot->id;
+                            folder::update_content($copy);
+                        }
+                    }
                 }
             }
             notifications::delete_unread_for_post($params['cid']);
