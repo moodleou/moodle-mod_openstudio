@@ -62,7 +62,7 @@ I need to be able to search within OpenStudio
         And I follow "Sharing Studio"
         And I follow "My Content > My Pinboard" in the openstudio navigation
         And I set the field "query" to "content"
-        And I press key "13" in the field "query"
+        And I click on "//img[@alt='Search']" "xpath_element"
         Then I should see "Student content 1"
         Then I should see "Student content 2"
         Then I should see "Student content 3"
@@ -72,7 +72,7 @@ I need to be able to search within OpenStudio
         # Search my activity
         And I follow "My Content > My Activities" in the openstudio navigation
         And I set the field "query" to "content"
-        And I press key "13" in the field "query"
+        And I click on "//img[@alt='Search']" "xpath_element"
         Then I should see "Student content 5"
         Then I should not see "Student content 1"
         Then I should not see "Student content 2"
@@ -83,7 +83,7 @@ I need to be able to search within OpenStudio
         # Search my module
         And I follow "Shared Content"
         And I set the field "query" to "content"
-        And I press key "13" in the field "query"
+        And I click on "//img[@alt='Search']" "xpath_element"
         Then I should see "Student content 1"
         Then I should see "Student content 2"
         Then I should see "Student content 3"
@@ -99,7 +99,7 @@ I need to be able to search within OpenStudio
         And I press "Expand all"
         And I follow "Sharing Studio"
         And I set the field "query" to "content"
-        And I press key "13" in the field "query"
+        And I click on "//img[@alt='Search']" "xpath_element"
         Then I should see "Student content 3"
         Then I should see "Student content 5"
         Then I should not see "Student content 1"

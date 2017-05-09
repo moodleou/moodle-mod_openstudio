@@ -62,7 +62,7 @@ foreach ($contentdatatemp as $content) {
         // Get content IDs inside folder.
         $foldercontentids = array();
         $foldercontenttemp = folder::get_contents($content->id);
-        foreach($foldercontenttemp as $folderitem) {
+        foreach ($foldercontenttemp as $folderitem) {
             $foldercontentids[] = $folderitem->id;
         }
 
@@ -107,7 +107,7 @@ foreach ($contentdata->contents as $key => $content) {
 
 // Render page.
 $renderer = $PAGE->get_renderer('mod_openstudio');
-$PAGE->set_button($renderer->searchform($theme, $vid));
+$PAGE->set_button($renderer->searchform($theme, $vid, $id));
 
 echo $OUTPUT->header(); // Header.
 

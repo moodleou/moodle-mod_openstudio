@@ -41,7 +41,7 @@
         "contentediturl": "http://exmaple/mod/openstudio/contentedit.php?id=4&lid=0&sid=0&type=0&sstsid=0",
         "myactivities" : "true",
         "percentcompleted" : "70",
-        "showownfile" : true,
+        "showprofilebarview" : true,
         "groupitems" : [
             {
                "id" : "1",
@@ -55,8 +55,10 @@
     }
 
 }}
-{{>mod_openstudio/profile_bar}}
-<div class="openstudio-profile-rule"></div>
+{{#showprofilebarview}}
+    {{>mod_openstudio/profile_bar}}
+    <div class="openstudio-profile-rule"></div>
+{{/showprofilebarview}}
 
 <div class="openstudio-filter-preference-text openstudio-filter-link">
     <span class="openstudio-filter-text">

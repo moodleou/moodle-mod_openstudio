@@ -46,6 +46,7 @@
         "sortdesc" : true,
         "sortasc" : false,
         "sortbytitle" : true,
+        "showprofilebarview" : true,
         "nextsortactionurl" : "http://example.com/mod/openstudio/view.php?id=7&vid=2&fsort=1&osort=0",
         "groupitems" : [
             {
@@ -61,8 +62,10 @@
 
 }}
 
-{{>mod_openstudio/profile_bar}}
-<div class="openstudio-profile-rule"></div>
+{{#showprofilebarview}}
+    {{>mod_openstudio/profile_bar}}
+    <div class="openstudio-profile-rule"></div>
+{{/showprofilebarview}}
 
 <span class="openstudio-filter-divider">
 <span class="openstudio-filter-text">

@@ -542,6 +542,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $placeholdertext = '';
         $selectview = false;
         $myactivities = false;
+        $showprofilebarview = false;
         $blocksdata = array();
         $contentdata->ismypinboard = false;
         $contentdata->ismyactivity = false;
@@ -558,6 +559,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
             case content::VISIBILITY_WORKSPACE:
             case content::VISIBILITY_PRIVATE:
+                $showprofilebarview = true;
                 $placeholdertext = $theme->themestudioname;
                 if (!$issearch) {
                     $myactivities = true;
@@ -575,6 +577,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 break;
 
             case content::VISIBILITY_PRIVATE_PINBOARD:
+                $showprofilebarview = true;
                 $placeholdertext = $theme->themepinboardname;
                 $contentdata->ismypinboard = true;
                 break;
@@ -614,6 +617,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $contentdata->cmid = $cmid;
         $contentdata = renderer_utils::profile_bar($permissions, $openstudioid, $contentdata);
 
+        $contentdata->showprofilebarview = $showprofilebarview;
         $contentdata->groupitems = array_values($groupitem);
         $contentdata->showmultigroup = $showmultigroup;
         $contentdata->placeholdertext = $placeholdertext;

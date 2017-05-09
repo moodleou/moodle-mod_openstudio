@@ -440,6 +440,7 @@ Feature: Preference
       And I should see "Test My Preferences View 4"
 
       # Filter by Select from Blocks:
+      And I press "Filter"
       And I set the field "Block1" to "1"
       And I press "Apply"
       And I should see "Test My Preferences View 1"

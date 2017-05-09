@@ -62,48 +62,84 @@ Feature: Create and edit contents
 
     Scenario: Test Pagination without contents
         When I follow "Test Open Studio name 1"
-        Then I should not see "TestSlot 12"
+        Then I should not see "Test content 12"
         Then I should not see "Next"
 
     Scenario: Test Pagination with contents
         When I log out
-        And I log in as "admin"
-        And I navigate to "Open Studio" node in "Site administration > Plugins >Activity modules > Open Studio"
-        And I set the field "Stream pagination size" to "12"
-        And I press "Save changes"
-        And I log out
         And I log in as "teacher1"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
         And the following open studio "contents" exist:
-            | openstudio | user     | name       | description             | visibility |
-            | OS1        | student1 | TestSlot A | Test slot 1 description | module     |
-        And I wait "1" seconds
+            | openstudio | user     | name           | description                | visibility |
+            | OS1        | student1 | Test content A | Test content 1 description | module     |
+        And I wait "2" seconds
         And the following open studio "contents" exist:
-            | openstudio | user     | name        | description              | visibility |
-            | OS1        | student1 | TestSlot B  | Test slot 2 description  | module     |
-            | OS1        | student1 | TestSlot C  | Test slot 3 description  | module     |
-            | OS1        | student1 | TestSlot D  | Test slot 4 description  | module     |
-            | OS1        | student1 | TestSlot E  | Test slot 5 description  | module     |
-            | OS1        | student1 | TestSlot F  | Test slot 6 description  | module     |
-            | OS1        | student1 | TestSlot G  | Test slot 7 description  | module     |
-            | OS1        | student1 | TestSlot H  | Test slot 8 description  | module     |
-            | OS1        | student1 | TestSlot I  | Test slot 9 description  | module     |
-            | OS1        | student1 | TestSlot K | Test slot 10 description | module     |
-            | OS1        | student1 | TestSlot L | Test slot 11 description | module     |
-            | OS1        | student1 | TestSlot M | Test slot 12 description | module     |
-        And I wait "1" seconds
+            | openstudio | user     | name         | description                  | visibility |
+            | OS1        | student1 | Test content | Test content 2 description   | module     |
+            | OS1        | student1 | Test content | Test content 3 description   | module     |
+            | OS1        | student1 | Test content | Test content 4 description   | module     |
+            | OS1        | student1 | Test content | Test content 5 description   | module     |
+            | OS1        | student1 | Test content | Test content 6 description   | module     |
+            | OS1        | student1 | Test content | Test content 7 description   | module     |
+            | OS1        | student1 | Test content | Test content 8 description   | module     |
+            | OS1        | student1 | Test content | Test content 9 description   | module     |
+            | OS1        | student1 | Test content | Test content 10 description  | module     |
+            | OS1        | student1 | Test content | Test content 11 description  | module     |
+            | OS1        | student1 | Test content | Test content 12 description  | module     |
+            | OS1        | student1 | Test content | Test content 13 description  | module     |
+            | OS1        | student1 | Test content | Test content 14 description  | module     |
+            | OS1        | student1 | Test content | Test content 15 description  | module     |
+            | OS1        | student1 | Test content | Test content 16 description  | module     |
+            | OS1        | student1 | Test content | Test content 17 description  | module     |
+            | OS1        | student1 | Test content | Test content 18 description  | module     |
+            | OS1        | student1 | Test content | Test content 19 description  | module     |
+            | OS1        | student1 | Test content | Test content 20 description  | module     |
+            | OS1        | student1 | Test content | Test content 21 description  | module     |
+            | OS1        | student1 | Test content | Test content 22 description  | module     |
+            | OS1        | student1 | Test content | Test content 23 description  | module     |
+            | OS1        | student1 | Test content | Test content 24 description  | module     |
+            | OS1        | student1 | Test content | Test content 25 description  | module     |
+            | OS1        | student1 | Test content | Test content 26 description  | module     |
+            | OS1        | student1 | Test content | Test content 27 description  | module     |
+            | OS1        | student1 | Test content | Test content 28 description  | module     |
+            | OS1        | student1 | Test content | Test content 29 description  | module     |
+            | OS1        | student1 | Test content | Test content 30 description  | module     |
+            | OS1        | student1 | Test content | Test content 31 description  | module     |
+            | OS1        | student1 | Test content | Test content 32 description  | module     |
+            | OS1        | student1 | Test content | Test content 33 description  | module     |
+            | OS1        | student1 | Test content | Test content 34 description  | module     |
+            | OS1        | student1 | Test content | Test content 35 description  | module     |
+            | OS1        | student1 | Test content | Test content 36 description  | module     |
+            | OS1        | student1 | Test content | Test content 37 description  | module     |
+            | OS1        | student1 | Test content | Test content 38 description  | module     |
+            | OS1        | student1 | Test content | Test content 39 description  | module     |
+            | OS1        | student1 | Test content | Test content 40 description  | module     |
+            | OS1        | student1 | Test content | Test content 41 description  | module     |
+            | OS1        | student1 | Test content | Test content 42 description  | module     |
+            | OS1        | student1 | Test content | Test content 43 description  | module     |
+            | OS1        | student1 | Test content | Test content 44 description  | module     |
+            | OS1        | student1 | Test content | Test content 45 description  | module     |
+            | OS1        | student1 | Test content | Test content 46 description  | module     |
+            | OS1        | student1 | Test content | Test content 47 description  | module     |
+            | OS1        | student1 | Test content | Test content 48 description  | module     |
+            | OS1        | student1 | Test content | Test content 49 description  | module     |
+            | OS1        | student1 | Test content | Test content 50 description  | module     |
+            | OS1        | student1 | Test content | Test content 51 description  | module     |
+        And I wait "2" seconds
         And the following open studio "contents" exist:
-            | openstudio | user     | name        | description              | visibility |
-            | OS1        | student1 | TestSlot N | Test slot 13 description | module     |
+            | openstudio | user     | name            | description              | visibility |
+            | OS1        | student1 | Test content N  | Test content 13 description | module     |
 
         When I reload the page
         And I follow "Shared content > My Module" in the openstudio navigation
-        Then I should see "TestSlot N"
+        Then I should see "Test content N"
         And I should see "2"
-        When I follow "2"
-        Then I should see "TestSlot A"
-        And I should not see "TestSlot N"
+        And I click on "select#filter_pagesize" "css_element"
+        And I click on "option[value='50']" "css_element"
+        When I follow "Next"
+        Then I should see "Test content A"
+        And I should not see "Test content N"
         And I should see "1"
-        When I follow "1"
-        Then I should see "TestSlot N"
+        And I follow "Previous"
+        Then I should see "Test content N"

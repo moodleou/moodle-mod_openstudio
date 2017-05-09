@@ -102,7 +102,7 @@ Feature: Create and edit contents detail
         And "Request feedback" "button" should exist
 
         # Post archive Block
-        And I click on "#openstudio_content_view_post_owner_heading > span" "css_element"
+        And I press "Owner of this post"
         Then "#openstudio_content_view_post_owner > div.openstudio-content-view-user-info > a" "css_element" should exist
 
     Scenario: Add new content and check content details with img exif
@@ -153,7 +153,7 @@ Feature: Create and edit contents detail
         And "Request feedback" "button" should exist
 
         # Post archive Block
-        And I click on "#openstudio_content_view_post_owner_heading > span" "css_element"
+        And I press "Owner of this post"
         And "#openstudio_content_view_post_owner > div.openstudio-content-view-user-info > a" "css_element" should exist
 
     Scenario: Add new content and check content details with video file
@@ -204,7 +204,7 @@ Feature: Create and edit contents detail
         And "Request feedback" "button" should exist
 
         # Post archive Block
-        And I click on "#openstudio_content_view_post_owner_heading > span" "css_element"
+        And I press "Owner of this post"
         And "#openstudio_content_view_post_owner > div.openstudio-content-view-user-info > a" "css_element" should exist
 
     Scenario: Add new content and check content details with audio file
@@ -255,7 +255,7 @@ Feature: Create and edit contents detail
         And "Request feedback" "button" should exist
 
         # Post archive Block
-        And I click on "#openstudio_content_view_post_owner_heading > span" "css_element"
+        And I press "Owner of this post"
         And "#openstudio_content_view_post_owner > div.openstudio-content-view-user-info > a" "css_element" should exist
 
     Scenario: Add new content and check content details with web/embed link
@@ -302,7 +302,7 @@ Feature: Create and edit contents detail
         And "Request feedback" "button" should exist
 
         # Post archive Block
-        And I click on "#openstudio_content_view_post_owner_heading > span" "css_element"
+        And I press "Owner of this post"
         And "#openstudio_content_view_post_owner > div.openstudio-content-view-user-info > a" "css_element" should exist
 
     Scenario: Add new content and check content details with Documents
@@ -353,7 +353,7 @@ Feature: Create and edit contents detail
         And "Request feedback" "button" should exist
 
         # Post archive Block
-        And I click on "#openstudio_content_view_post_owner_heading > span" "css_element"
+        And I press "Owner of this post"
         And "#openstudio_content_view_post_owner > div.openstudio-content-view-user-info > a" "css_element" should exist
 
     Scenario: Add new content and check content details with Spreadsheets (subject to the OS Setting)
@@ -404,7 +404,7 @@ Feature: Create and edit contents detail
         And "Request feedback" "button" should exist
 
         # Post archive Block
-        And I click on "#openstudio_content_view_post_owner_heading > span" "css_element"
+        And I press "Owner of this post"
         And "#openstudio_content_view_post_owner > div.openstudio-content-view-user-info > a" "css_element" should exist
 
     Scenario: Add new content and check content details with dulicated

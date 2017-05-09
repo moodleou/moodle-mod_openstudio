@@ -214,7 +214,7 @@ Feature: My Activity
       And I follow "Course 1"
       And I follow "Test Open Studio name 2"
       And I follow "My Content"
-      And I should not see "Participation"
+      And I should see "Participation"
       And I should not see "My studio work progress"
 
       # switch other user

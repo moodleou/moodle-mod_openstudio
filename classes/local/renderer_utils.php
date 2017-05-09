@@ -189,7 +189,7 @@ class renderer_utils {
             $contentdata->percentcompleted = $userprogresspercentage;
         }
 
-        $contentdata->userprofileid =  $vuid;
+        $contentdata->userprofileid = $vuid;
         $contentdata->ismyprofile = $ismyprofile;
         $contentdata->fullusername = $contentowner->firstname.' '.$contentowner->lastname;
         $contentdata->activedate = $activedate;
@@ -729,16 +729,18 @@ class renderer_utils {
         $pb = new \paging_bar($contentdata->total, $contentdata->pagestart,
                     $contentdata->streamdatapagesize, $contentdata->pageurl);
         $page = optional_param('page', 0, PARAM_INT);
-        $totalpage = ceil($contentdata->total / $contentdata->streamdatapagesize);
-        if ($totalpage <= 7) {
-              return $pb;
-        }
+        if ($contentdata->streamdatapagesize > 0) {
+            $totalpage = ceil($contentdata->total / $contentdata->streamdatapagesize);
+            if ($totalpage <= 7) {
+                  return $pb;
+            }
 
-        if ($page < 5) {
-              $pb->maxdisplay = 6;
-        } else {
-              $maxdisplay = $totalpage - 3 * ($totalpage - $page + 1 );
-              $pb->maxdisplay = $maxdisplay > 5 ? $maxdisplay : 5;
+            if ($page < 5) {
+                  $pb->maxdisplay = 6;
+            } else {
+                  $maxdisplay = $totalpage - 3 * ($totalpage - $page + 1 );
+                  $pb->maxdisplay = $maxdisplay > 5 ? $maxdisplay : 5;
+            }
         }
         return $pb;
     }
