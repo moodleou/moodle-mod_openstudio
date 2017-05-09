@@ -2703,6 +2703,16 @@ span.openstudio-content-view-title {
     vertical-align: middle;
 }
 
+.openstudio-content-view-maximize img {
+    display: inline-block;
+    margin-bottom: 2px;
+    margin-right: 3px;
+}
+
+.openstudio-content-view-maximize.minimize img {
+    margin-right: 2px;
+}
+
 .openstudio-content-view-description {
     color: #000000;
     font-size: 1em;
