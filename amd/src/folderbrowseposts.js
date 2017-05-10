@@ -46,7 +46,7 @@ define([
          * List out all of css selector used in this module.
          */
         CSS: {
-            BROWSEPOSTLINK: '.openstudio-select-post-title',
+            BROWSEPOSTLINK: '.openstudio-select-content',
             BROWSEPOSTSSELECTEDIDS: '#browse_posts_selected_ids',
             BROWSEPOSTSSELECTEDITEMS: '#browse_posts_selected_items',
             SELECTPOSTBTN: '.openstudio-folder-select-post-btn',
@@ -77,8 +77,8 @@ define([
 
             // Create browse posts dialog.
             Y.use('moodle-core-notification-dialogue', function() {
-                require(['mod_openstudio/osdialogue'], function(osDialogue) {
-                    t.dialogue = t.createBrowseDialogue(osDialogue);
+                require(['mod_openstudio/osdialogue'], function(OSDialogue) {
+                    t.dialogue = t.createBrowseDialogue(OSDialogue);
 
                 });
             });
@@ -101,6 +101,8 @@ define([
                                 t.doBrowsePosts();
                                 return false;
                             }
+
+                            return true;
                         });
 
                         // Click event on search icon.
@@ -165,6 +167,13 @@ define([
 
                     t.showHideSelectButton();
 
+                    // Click event on Remove last selection button.
+                    $(t.CSS.REMOVELASTSELECTED).on('click', function() {
+                        t.removeLastPostSelected();
+                    });
+
+                    // Update odd/even background row.
+                    t.updateBackgroundRow();
                 })
                 .fail(function(ex) {
                     window.console.error('Browse posts failed ' + ex.message);
@@ -174,11 +183,11 @@ define([
         /**
          * Create browse posts dialogue and some events on it.
          *
-         * @param {object} osDialogue object
+         * @param {object} OSDialogue object
          * @return {object} OSDialogue instance
          * @method createBrowseDialogue
          */
-        createBrowseDialogue: function(osDialogue) {
+        createBrowseDialogue: function(OSDialogue) {
             /**
              * Set header for dialog
              * @method setHeader
@@ -194,7 +203,7 @@ define([
                     });
             }
 
-            var dialogue = new osDialogue({
+            var dialogue = new OSDialogue({
                 closeButton: true,
                 visible: false,
                 centered: true,
@@ -221,7 +230,7 @@ define([
 
             var postid = $(event).attr('value');
             var postimage = $('#browse_post_item_img_' + postid).attr('src');
-            var closeicon = M.util.image_url('close_button_rgb_32px', 'mod_openstudio');
+            var closeicon = M.util.image_url('close_button_whitecross_rgb_32px', 'mod_openstudio');
             var itemTitle = $('#browse_post_item_name_' + postid).val();
 
             var buttonid = 'deselect-' + postid;
@@ -253,6 +262,9 @@ define([
             $(t.CSS.BROWSEPOSTSCOUNTSELECTED).html(totalselectedpost);
 
             t.showSaveButtons();
+
+            // Update odd/even background row.
+            t.updateBackgroundRow();
         },
 
         /**
@@ -281,6 +293,9 @@ define([
 
             // Show hide select button
             t.showHideSelectButton();
+
+            // Update odd/even background row.
+            t.updateBackgroundRow();
         },
 
         /**
@@ -344,7 +359,7 @@ define([
         },
 
         /**
-         * Shoe/hide Select button added post equal available total post .
+         * Show/hide Select button added post equal available total post.
          *
          * @method showHideSelectButton
          */
@@ -354,8 +369,18 @@ define([
             } else {
                 $('.openstudio-folder-select-post-btn').prop('disabled', false);
             }
-        }
+        },
 
+        /**
+         * Update odd/even background color when show/hide a row.
+         *
+         * @method updateBackgroundRow
+         */
+        updateBackgroundRow: function() {
+            $(".openstudio-browse-post-item").removeClass('browse-post-item-even').removeClass('browse-post-item-odd');
+            $(".openstudio-browse-post-item:visible:even").addClass('browse-post-item-even');
+            $(".openstudio-browse-post-item:visible:odd").addClass('browse-post-item-odd');
+        }
     };
 
     return t;

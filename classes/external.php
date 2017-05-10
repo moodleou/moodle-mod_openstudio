@@ -245,6 +245,20 @@ class mod_openstudio_external extends external_api {
 
                     }
                 }
+
+                // Process content locking.
+                if (($content->levelcontainer > 0) && ($content->userid == $permissions->activeuserid)) {
+                    $content = lock::determine_lock_status($content);
+                }
+                $content->locked = ($content->locktype == lock::ALL);
+
+                // Content feedback requested.
+                $content->isfeedbackrequested = false;
+                $flagstatus = flags::get_for_content_by_user($content->id, $content->userid);
+                if (in_array(flags::NEEDHELP, $flagstatus)) {
+                    $content->isfeedbackrequested = true;
+                }
+
                 $contents[$content->id] = $content;
             }
         }

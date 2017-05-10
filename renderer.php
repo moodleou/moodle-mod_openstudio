@@ -1098,6 +1098,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         $data->contents = $contents;
         $data->total = count($contents);
+        $data->lockicon = $OUTPUT->pix_url('lock_grey_rgb_32px', 'openstudio');
+        $data->requestfeedbackicon = $OUTPUT->pix_url('request_feedback_white_rgb_32px', 'openstudio');
 
         return $this->render_from_template('mod_openstudio/folder_browse_posts', $data);
     }

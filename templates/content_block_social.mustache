@@ -42,39 +42,39 @@
     {{#socialdata}}
         <div class="openstudio-grid-item-content-detail-info">
             <span class="openstudio-grid-item-content-detail-info-box">
+                <span class="openstudio-grid-item-content-detail-info-text{{#commentsnew}}-new{{/commentsnew}}">
+                    {{#comments}} {{comments}} {{/comments}}
+                </span>
                 <span>
                     <img src="{{commentsicon}}" alt="{{#str}} commentslabel, openstudio {{/str}}"
                          class="openstudio-grid-item-content-detail-info-icon {{^comments}}openstudio-icon-inactive{{/comments}}" />
                 </span>
-                <span class="openstudio-grid-item-content-detail-info-text{{#commentsnew}}-new{{/commentsnew}}">
-                    {{#comments}} {{comments}} {{/comments}}
-                </span>
             </span>
             <span class="openstudio-grid-item-content-detail-info-box">
+                <span class="openstudio-grid-item-content-detail-info-text{{#inspirednew}}-new{{/inspirednew}}">
+                    {{#inspired}} {{inspired}} {{/inspired}}
+                </span>
                 <span>
                     <img src="{{inspirationicon}}" alt="{{#str}} inspirationlabel, openstudio {{/str}}"
                         class="openstudio-grid-item-content-detail-info-icon {{^inspired}}openstudio-icon-inactive{{/inspired}}" />
                 </span>
-                <span class="openstudio-grid-item-content-detail-info-text{{#inspirednew}}-new{{/inspirednew}}">
-                    {{#inspired}} {{inspired}} {{/inspired}}
-                </span>
             </span>
             <span class="openstudio-grid-item-content-detail-info-box">
+                <span class="openstudio-grid-item-content-detail-info-text{{#mademelaughnew}}-new{{/mademelaughnew}}">
+                    {{#mademelaugh}} {{mademelaugh}} {{/mademelaugh}}
+                </span>
                 <span>
                     <img src="{{participationicon}}" alt="{{#str}} participationlabel, openstudio {{/str}}"
                         class="openstudio-grid-item-content-detail-info-icon {{^mademelaugh}}openstudio-icon-inactive{{/mademelaugh}}" />
                 </span>
-                <span class="openstudio-grid-item-content-detail-info-text{{#mademelaughnew}}-new{{/mademelaughnew}}">
-                    {{#mademelaugh}} {{mademelaugh}} {{/mademelaugh}}
-                </span>
             </span>
             <span class="openstudio-grid-item-content-detail-info-box">
+                <span class="openstudio-grid-item-content-detail-info-text{{#favouritenew}}-new{{/favouritenew}}">
+                    {{#favourite}} {{favourite}} {{/favourite}}
+                </span>
                 <span>
                     <img src="{{favouriteicon}}" alt="{{#str}} favouritelabel, openstudio {{/str}}"
                         class="openstudio-grid-item-content-detail-info-icon {{^favourite}}openstudio-icon-inactive{{/favourite}}" />
-                </span>
-                <span class="openstudio-grid-item-content-detail-info-text{{#favouritenew}}-new{{/favouritenew}}">
-                    {{#favourite}} {{favourite}} {{/favourite}}
                 </span>
             </span>
         </div>

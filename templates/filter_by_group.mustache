@@ -44,7 +44,7 @@
 <span class="openstudio-filter-select">
     {{#showmultigroup}}
         <label for="filter_groupid">{{#str}} filtergroup, mod_openstudio {{/str}}:</label>
-        <select id="filter_groupid" class="openstudio-filter-select-box" name="groupid">
+        <select id="filter_groupid" class="openstudio-filter-select-group openstudio-filter-select-box" name="groupid">
             {{#groupitems}}
                 <option value="{{groupid}}" name="{{name}}"
                         {{#selectedgroup}}selected="selected"{{/selectedgroup}}>{{name}}

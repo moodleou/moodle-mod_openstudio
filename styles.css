@@ -39,10 +39,9 @@
 .openstudio-container {
     min-height: 500px;
     margin-top: 20px;
-    margin-bottom: 18px;
-    /*margin-bottom: 24px;*/
+    margin-bottom: 17px;
     background-color: #bfe2ef;
-    padding-bottom: 56px;
+    padding-bottom: 18px;
 }
 
 .path-mod-openstudio .dropdown-menu > li > a.menuitem-active {
@@ -230,8 +229,11 @@
 .openstudio-filter-buttons {
     float: right;
     margin-right: -2px;
-    margin-top: 95px;
-    margin-bottom: 22px;
+    margin-top: 72px;
+}
+
+.openstudio-filter-buttons-pinboard {
+    margin-top: 167px;
 }
 
 .path-mod-openstudio .openstudio-filter-box div > label {
@@ -802,7 +804,7 @@ div.openstudio-orderpost-item:nth-of-type(odd) {
 
 /* Common dialog body */
 .path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue .moodle-dialogue-bd {
-    padding: 12px 15px;
+    padding: 13px 15px 3px;
 }
 
 /* Common dialog footer */
@@ -1735,10 +1737,6 @@ label.openstudio-export-item-name {
     color: #002158;
 }
 
-.openstudio-filter-text .openstudio-collapse-image > img {
-    margin-left: -3px;
-}
-
 .openstudio-filter-sort-text img {
     width: 10px;
     padding-left: 3px;
@@ -1871,11 +1869,12 @@ a.openstudio-add-title:hover  {
     display: inline-block;
     margin-bottom: 10px;
     text-align: center;
+    background: #ffffff;
 }
 
 .openstudio-upload-container img {
-    width: 74px;
-    margin-top: 30px;
+    height: 72px;
+    margin-top: 32px;
 }
 
 .openstudio-available {
@@ -1885,7 +1884,7 @@ a.openstudio-add-title:hover  {
 .openstudio-create-new-content {
     float: left;
     height: 66px;
-    width: 100%;
+    width: calc(100% - 2px);
     border-radius : 4px;
     border: 1px dashed #676463;
     display: inline-block;
@@ -2121,7 +2120,7 @@ a.openstudio-add-title:hover  {
 .openstudio-grid-item {
     float: left;
     width: 244px;
-    margin-bottom: 23px;
+    margin-bottom: 20px;
     border-radius: 4px;
     background-color: #ffffff;
 }
@@ -2129,7 +2128,7 @@ a.openstudio-add-title:hover  {
 .openstudio-grid-item-add-new {
     float: left;
     width: 244px;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     border-radius: 4px;
     background-color: #f0f0f1;
 }
@@ -2200,6 +2199,7 @@ a.openstudio-add-title:hover  {
     position: absolute;
     width: 100%;
     z-index: 2;
+    text-align: left;
 }
 
 .openstudio-item-lock img {
@@ -2320,7 +2320,7 @@ a.openstudio-add-title:hover  {
 }
 
 .openstudio-grid-item-content-detail-owner {
-    margin-bottom: 18px;
+    margin-bottom: 14px;
     min-height: 35px;
 }
 
@@ -2338,8 +2338,9 @@ a.openstudio-add-title:hover  {
 .openstudio-grid-item-content-detail-info{
     text-align: center;
     border-top: 1px solid #f0f0f1;
-    height: 30px;
+    height: 45px;
     margin-left: -15px;
+    padding-top: 3px;
 }
 
 .openstudio-grid-item-content-detail-info-box{
@@ -2357,14 +2358,20 @@ a.openstudio-add-title:hover  {
     opacity: 0.4;
 }
 
-.openstudio-grid-item-content-detail-info-text {
-    bottom: 5px;
-    color: #0b55a8;
-    display: inline-block;
+.openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-text,
+.openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-text-new {
     font-size: 0.85714em;
-    width: 10px;
-    position: absolute;
+    margin-left: 31px;
+    margin-top: 1px;
+    margin-bottom: -12px;
     text-align: center;
+    display: block;
+    height: 16px;
+}
+
+.openstudio-grid-item-content-detail-info-text {
+    color: #0b55a8;
+    width: 10px;
 }
 
 .openstudio-grid-item-content-detail-info-text-new {
@@ -2372,14 +2379,8 @@ a.openstudio-add-title:hover  {
     border-radius: 20px;
     bottom: 13px;
     color: #ffffff;
-    display: inline-block;
-    font-size: 0.85714em;
     font-weight: bold;
-    height: 16px;
-    margin-left: -2px;
     width: 16px;
-    position: absolute;
-    text-align: center;
 }
 
 .openstudio-content-view-edit {
@@ -2430,6 +2431,7 @@ iframe.openstudio-content-view-iframe {
     position: absolute;
     width: 100%;
     z-index: 1;
+    text-align: left;
 }
 
 .openstudio-item-request-feedback img {
@@ -2455,6 +2457,8 @@ iframe.openstudio-content-view-iframe {
     font-size: 1.14285em;
 }
 
+.openstudio-browse-post-item-img .openstudio-item-request-feedback,
+.openstudio-browse-post-item-img .openstudio-item-lock,
 .openstudio-content-view-primary .openstudio-item-request-feedback,
 .openstudio-content-view-primary .openstudio-item-lock,
 .openstudio-folder-view-primary .openstudio-item-request-feedback,
@@ -2462,12 +2466,14 @@ iframe.openstudio-content-view-iframe {
     height: 26px;
 }
 
+.openstudio-browse-post-item-img .openstudio-item-request-feedback img,
 .openstudio-content-view-primary .openstudio-item-request-feedback img,
 .openstudio-folder-view-primary .openstudio-item-request-feedback img {
     width: 18px;
     height: 18px;
 }
 
+.openstudio-browse-post-item-img .openstudio-item-lock img,
 .openstudio-content-view-primary .openstudio-item-lock img,
 .openstudio-folder-view-primary .openstudio-item-lock img {
     width: 16px;
@@ -2617,10 +2623,6 @@ span.openstudio-content-view-title {
     border: 0px;
     width: 24px;
     height: 24px;
-}
-
-.openstudio-content-view-version {
-    line-height: 29px;
 }
 
 .openstudio-content-view-version img {
@@ -2886,7 +2888,7 @@ body:not(.ios):not(.android) .openstudio-content-view-flag-icon.has-hover:hover 
 
 .openstudio-content-view-block-post-owner {
     background: #f4fafc none repeat scroll 0 0;
-    height: 100px;
+    height: 94px;
 }
 
 .openstudio-content-view-secondary .collapsed {
@@ -3002,16 +3004,16 @@ div.openstudio-content-view-image-metadata div:nth-of-type(odd) {
 
 .openstudio-content-view-version-img img {
     width: 64px;
-    height: auto;
+    height: 44px;
     float: left;
 }
 
 .openstudio-content-view-version-info {
-    padding-left: 10px;
+    padding-left: 9px;
     display: table;
     vertical-align: top;
     float: left;
-    width: 134px;
+    width: 136px;
 }
 
 .openstudio-content-view-version-info-name {
@@ -3019,14 +3021,16 @@ div.openstudio-content-view-image-metadata div:nth-of-type(odd) {
     font-family: Arial;
     font-weight: Bold;
     color: #002158;
-    line-height: 17px;
+    line-height: 15px;
     margin-bottom: 0px;
     margin-top: 0px;
+    height: 29px;
+    overflow: hidden;
 }
 
 .openstudio-content-view-version-detail {
     border-bottom: 1px solid #bfe2ef;
-    padding: 15px 10px 15px 15px;
+    padding: 15px 10px 10px 15px;
 }
 
 div.openstudio-content-view-version div:nth-of-type(even) {
@@ -3045,12 +3049,13 @@ div.openstudio-content-view-version div:nth-of-type(odd) {
     color: #676463;
     float: left;
     font-size: 0.85714em;
+    padding-top: 3px;
 }
 
 .openstudio-content-view-version-actions {
     display: inline-block;
     float: right;
-    margin-top: 7px;
+    margin-top: 10px;
 }
 
 #openstudio_content_view_map_canvas {
@@ -3118,6 +3123,16 @@ div.openstudio-content-view-version div:nth-of-type(odd) {
     cursor: pointer;
 }
 
+.path-mod-openstudio .moodle-dialogue-base .openstudio-folder-posts-dialogue .moodle-dialogue-content .yui3-button.closebutton::before {
+    content: url([[pix:openstudio|close_button_whitecross_rgb_32px]]);
+}
+
+.openstudio-folder-browse-posts-header-hint {
+    font-size: 1em;
+    line-height: 21px;
+    color: #000000;
+}
+
 .openstudio-folder-browse-posts-search-box {
     margin-top: 17px;
 }
@@ -3126,7 +3141,7 @@ div.openstudio-content-view-version div:nth-of-type(odd) {
     background-color: #d8dde6;
     height: 43px;
     border-top: solid 2px #b2bccd;
-    border-bottom: solid 1px #b2bccd;
+    border-bottom: solid 2px #b2bccd;
 }
 
 .openstudio-folder-browse-posts-searched-header div {
@@ -3143,9 +3158,12 @@ div.openstudio-content-view-version div:nth-of-type(odd) {
 }
 
 .openstudio-folder-browse-posts-searched-header div:nth-child(2),
-.openstudio-folder-browse-posts-searched-header div:nth-child(3),
 .openstudio-folder-browse-posts-searched-header div:nth-child(4) {
     width: 140px;
+}
+
+.openstudio-folder-browse-posts-searched-header div:nth-child(3) {
+    width: 154px;
 }
 
 .openstudio-folder-browse-posts-header-result-label {
@@ -3163,7 +3181,7 @@ div.openstudio-content-view-version div:nth-of-type(odd) {
 }
 
 .openstudio-folder-browse-posts-header-result-buttons-bottom {
-    margin-top: 15px;
+    margin-top: 14px;
     text-align: right;
 }
 
@@ -3180,35 +3198,36 @@ div.openstudio-content-view-version div:nth-of-type(odd) {
     min-height: 74px;
 }
 
-div.openstudio-browse-post-item:first-child {
+.openstudio-browse-post-item {
     border-bottom: 1px solid #b2bccd;
 }
 
-div.openstudio-browse-post-item:nth-of-type(even) {
+.browse-post-item-odd {
     background: #ffffff;
 }
 
-div.openstudio-browse-post-item:nth-of-type(odd) {
+.browse-post-item-even {
     background: #f2f3f6;
     border-bottom: 1px solid #b2bccd;
-    border-top: 1px solid #b2bccd;
 }
 
-div.openstudio-browse-post-item:nth-of-type(even) div.openstudio-browse-post-item-filename {
-    border: 1px solid #ffffff;
-}
-
-div.openstudio-browse-post-item:nth-of-type(odd) div.openstudio-browse-post-item-filename {
-    border: 1px solid #f2f3f6;
+div.openstudio-browse-post-item-filename {
+    border: 0px;
 }
 
 .openstudio-browse-post-item-img {
     float: left;
     width: 79px;
     padding: 13px 0px 0px 20px;
+    position: relative;
 }
 
-.openstudio-browse-post-item-img img {
+.openstudio-browse-post-item-img .openstudio-item-request-feedback,
+.openstudio-browse-post-item-img .openstudio-item-lock {
+    display: none;
+}
+
+.openstudio-browse-post-item-img .openstudio-browse-post-item-thumbnail {
     width: 64px;
     height: 44px;
 }
@@ -3251,7 +3270,7 @@ div.openstudio-browse-post-item:nth-of-type(odd) div.openstudio-browse-post-item
 .openstudio-browse-post-item-location-box {
     font-size: 0.928571em;
     position: relative;
-    top: 25px;
+    margin-top: 25px;
 }
 
 .openstudio-browse-post-item-filename {
@@ -3268,6 +3287,11 @@ div.openstudio-browse-post-item:nth-of-type(odd) div.openstudio-browse-post-item
 
 .openstudio-browse-post-item-location-box img {
     height: 22px;
+}
+
+.openstudio-browse-post-item-location-box {
+    padding-left: 16px;
+    width: 100px;
 }
 
 #openstudio_search_post {
@@ -3293,7 +3317,8 @@ div.openstudio-browse-post-item:nth-of-type(odd) div.openstudio-browse-post-item
     min-height: 98px;
     margin-top: 15px;
     margin-bottom: 15px;
-    padding-left: 10px;
+    padding-left: 14px;
+    padding-bottom: 5px;
     display: none;
 }
 
@@ -3650,7 +3675,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 }
 
 .openstudio-profile-rule {
-    border: 1px solid #d4d2d2;
+    border-top: 1px solid #d4d2d2;
     margin-top: 5px;
     margin-bottom: 10px;
     margin-left: 15px;
@@ -4667,7 +4692,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-filter-select select {
-        width: 109px;
+        width: 90px;
     }
 
     .openstudio-profile-row {
@@ -4677,7 +4702,7 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-profile-bar .openstudio-profile-paticipation-content {
         position: absolute;
-        left: 360px;
+        left: 363px;
     }
 
     select.openstudio-filter-pagesize {
@@ -4771,7 +4796,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .path-mod-openstudio .openstudio-create-new-content:first-of-type {
-        margin-bottom: 13px;
+        margin-bottom: 15px;
     }
 
     .path-mod-openstudio .openstudio-create-new-content img {
@@ -4983,11 +5008,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-filter-text a {
-        font-size: 1.28571em;
-    }
-
-    .openstudio-filter-text {
-        font-size: 1.28571em;
+        font-size: 1.428571em;
     }
 
     .openstudio-filter-divider {
@@ -5032,7 +5053,11 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-add-new {
-        padding-bottom: 12px;
+        padding-bottom: 25px;
+    }
+
+    .openstudio-actvity-title {
+        font-size: 1.57142em;
     }
 
     .openstudio-upload-container {
@@ -5041,7 +5066,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-upload-container  img {
-        width: 100px;
+        height: 100px;
     }
 
     .openstudio-create-new-folder {
@@ -5063,7 +5088,7 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-grid-item-content-title {
         font-size: 1.57142em;
-        padding-top: 9px;
+        padding-top: 2px;
         padding-bottom: 23px;
     }
 
@@ -5100,7 +5125,10 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-grid-item-content-detail-info {
-        height: 50px;
+        height: 48px;
+        margin-left: 0;
+        text-align: left;
+        padding-top: 7px;
     }
 
     .openstudio-grid-item-content-detail-info-icon {
@@ -5108,12 +5136,25 @@ a.openstudio-add-new-content-link:hover  {
         height: 24px;
     }
 
-    .openstudio-grid-item-content-detail-info-text {
-        font-size: 1.28571em;
+    .openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-text-new {
+        margin-left: 28px;
+        margin-top: 1px;
+        margin-bottom: -5px;
     }
 
-    .openstudio-grid-item-content-detail-info-box {
-        width: 72px;
+    .openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-text {
+        font-size: 1.28571em;
+        margin-top: -5px;
+        margin-bottom: -5px;
+    }
+
+    .openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-box {
+        width: 45px;
+        text-align: left;
+    }
+
+    .openstudio-grid-item-content-detail-info-box:nth-child(n+2) {
+        margin-left: 102px;
     }
 
     .openstudio-grid-item-content-preview-default {
@@ -5354,6 +5395,13 @@ a.openstudio-add-new-content-link:hover  {
         font-size: 1.14285em;
     }
 
+    .openstudio-browse-post-item-img .openstudio-item-request-feedback,
+    .openstudio-browse-post-item-img .openstudio-item-lock {
+        display: block;
+    }
+
+    .openstudio-browse-post-item-img .openstudio-item-request-feedback span,
+    .openstudio-browse-post-item-img .openstudio-item-lock span,
     .openstudio-content-view-primary .openstudio-item-request-feedback span,
     .openstudio-content-view-primary .openstudio-item-lock span,
     .openstudio-folder-view-primary .openstudio-item-request-feedback span,
@@ -5650,9 +5698,11 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-browse-post-item-img {
         width: 100%;
+        padding-top: 9px;
+        width: 235px;
     }
 
-    .openstudio-browse-post-item-img img {
+    .openstudio-browse-post-item-img .openstudio-browse-post-item-thumbnail {
         height: auto;
         width: 250px;
     }
@@ -5663,7 +5713,7 @@ a.openstudio-add-new-content-link:hover  {
 
     #browse_post_item_title_box_mobile {
         display: block;
-        padding: 0px 20px;
+        padding: 0px 15px;
     }
 
     #browse_post_item_title_box {
@@ -5673,7 +5723,29 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-browse-post-item-button {
         clear: both;
         position: unset;
-        padding: 15px 0px 15px 20px;
+        padding: 13px 0px 15px 15px;
+    }
+
+    .openstudio-browse-post-item-img {
+        padding-left: 15px;
+    }
+
+    .openstudio-browse-post-item-img-default {
+        background: #ddf0f8;
+        clear: left;
+        height: 160px;
+        text-align: center;
+        width: 250px;
+        margin-left: 15px;
+        margin-top: 10px;
+        padding-left: 0px;
+        padding-top: 0px;
+        position: relative;
+    }
+
+    .openstudio-browse-post-item-img-default .openstudio-browse-post-item-thumbnail {
+        height: 80px;
+        margin-top: 47px;
     }
 
     .openstudio-folder-browse-posts-header-result-buttons-bottom {
@@ -5683,6 +5755,10 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-browse-post-item-title-box {
         line-height: 23px;
+    }
+
+    div.browse-post-item-even:first-child {
+        border-top: 1px solid #b2bccd;
     }
 
     /**
@@ -5717,7 +5793,7 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-grid-item-content-icon {
         height: 24px;
-        margin-top: 13px;
+        margin-top: 10px;
         width: 24px;
     }
 
@@ -5766,7 +5842,6 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-filter-text {
         width: 100%;
         display: block;
-        font-size: 1.42857em;
     }
 
     .openstudio-preference-item {
@@ -5789,11 +5864,16 @@ a.openstudio-add-new-content-link:hover  {
         margin-bottom: 25px;
     }
 
+    .openstudio-profile-rule {
+        margin-bottom: 0px;
+    }
+
     .openstudio-filter-link,
-    .openstudio-filter-preference-icon {
+    a.openstudio-filter-preference-icon {
         width: 100%;
         display: block;
-        line-height: 40px;
+        line-height: 54px;
+        text-decoration: none;
     }
 
     .path-mod-openstudio [data-toggle="collapse"] .openstudio-expand-image,
@@ -5820,7 +5900,11 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-filter-select select#filter_block_activity {
-        width: 67%;
+        width: 176px;
+    }
+
+    .openstudio-filter-select-group {
+        width: 168px;
     }
 
     .path-mod-openstudio .openstudio-filter-select label {
@@ -5833,13 +5917,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-filter-collapsed, .openstudio-filter-icon {
-        padding-right: 4px;
-    }
-
-    .openstudio-grid-item-content-icon {
-        height: 22px;
-        margin-top: 13px;
-        width: 22px;
+        padding-right: 0px;
     }
 
     .openstudio-profile-bar .collapsed {
@@ -6306,9 +6384,8 @@ a.openstudio-add-new-content-link:hover  {
         text-align: left;
     }
 
-    .openstudio-grid-item-content-detail-info-box {
-        width: 56px;
-        text-align: left;
+    .openstudio-grid-item-content-detail-info-box:nth-child(n+2) {
+        margin-left: 20px;
     }
 
     .openstudio-buttons-settings {

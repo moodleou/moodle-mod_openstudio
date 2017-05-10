@@ -47,20 +47,21 @@
             <div class="openstudio-browse-post-item-title">{{name}}</div>
             <div class="openstudio-browse-post-item-date">{{datetime}}</div>
         </div>
-        <div class="openstudio-browse-post-item-img">
-            <img id="browse_post_item_img_{{id}}" src="{{contenttypeimage}}" alt="{{name}}">
+        <div class="openstudio-browse-post-item-img {{#contenttypedefaultimage}}openstudio-browse-post-item-img-default{{/contenttypedefaultimage}}">
+            {{>mod_openstudio/content_block_banner_status}}
+            <img id="browse_post_item_img_{{id}}" src="{{contenttypeimage}}" alt="{{name}}" class="openstudio-browse-post-item-thumbnail">
         </div>
         <div class="openstudio-browse-post-item-title-box" id="browse_post_item_title_box">
             <div class="openstudio-browse-post-item-title">{{name}}</div>
             <div class="openstudio-browse-post-item-date">{{datetime}}</div>
         </div>
         <div class="openstudio-browse-post-item-filename">{{content}}</div>
-        <div class="openstudio-browse-post-item-title-box">
+        <div class="openstudio-browse-post-item-location-box">
             <img src="{{contenticon}}" alt="{{contentlocation}}">
             <span class="openstudio-browse-post-item-location">{{contentlocation}}</span>
         </div>
         <div class="openstudio-browse-post-item-button">
-            <button value="{{id}}" name="openstudio-folder-select-post-btn" class="openstudio-folder-select-post-btn">
+            <button value="{{id}}" name="openstudio-folder-select-post-btn" class="osep-smallbutton openstudio-folder-select-post-btn">
                 {{#str}} folderselectbtn, mod_openstudio {{/str}}
             </button>
         </div>
