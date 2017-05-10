@@ -1131,4 +1131,58 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         return $this->render_from_template('mod_openstudio/orderpost_dialog', $data);
     }
+
+    /**
+     * Override theme's render_paging_bar function
+     * @see core_renderer::render_paging_bar()
+     */
+    public function render_paging_bar(paging_bar $pagingbar) {
+        $pagingbar = clone($pagingbar);
+
+        // Render for mobile.
+        $pagingbar->prepare_for_mobile($this, $this->page, $this->target);
+        $data = new stdClass();
+        $data->currentpage = $pagingbar->currentpage;
+        $data->firstlink = $pagingbar->firstlink;
+        $data->previouslink = $pagingbar->previouslink;
+        $data->nextlink = $pagingbar->nextlink;
+
+        $mobilepagingbar = '';
+        if ($pagingbar->totalcount > $pagingbar->perpage) {
+            $mobilepagingbar = $this->render_from_template('mod_openstudio/paging_bar', $data);
+        }
+
+        // Render for desktop.
+        $pagingbar->prepare($this, $this->page, $this->target);
+        $output = '';
+        if ($pagingbar->totalcount > $pagingbar->perpage) {
+
+            if (!empty($pagingbar->previouslink)) {
+                $output .= ' ' . $pagingbar->previouslink . ' ';
+            }
+
+            $output .= get_string('page') . ':';
+
+            if (!empty($pagingbar->firstlink)) {
+                $output .= ' ' . $pagingbar->firstlink . ' ...';
+            }
+
+            foreach ($pagingbar->pagelinks as $link) {
+                $output .= "  $link";
+            }
+
+            if (!empty($pagingbar->lastlink)) {
+                $output .= ' ...' . $pagingbar->lastlink . ' ';
+            }
+
+            if (!empty($pagingbar->nextlink)) {
+                $output .= ' ' . $pagingbar->nextlink;
+            }
+        }
+
+        $desktoppagingbar = html_writer::tag('div', $output, array(
+                'class' =>'paging openstudio-desktop-paging'));
+
+        return $mobilepagingbar . $desktoppagingbar;
+    }
 }

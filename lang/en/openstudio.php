@@ -706,6 +706,7 @@ $string['streamlayoutactivitydate'] = 'Activty date';
 $string['streampagerviewallblocks'] = 'View all blocks';
 $string['streampagertitle'] = 'Page:';
 $string['streampagetitle'] = 'Page {$a->page}';
+$string['streampagerfirst'] = 'First';
 $string['streampagerprevious'] = 'Previous';
 $string['streampagernext'] = 'Next';
 $string['streamblockpagerprevious'] = '< <span class="accesshide">Previous</span>';

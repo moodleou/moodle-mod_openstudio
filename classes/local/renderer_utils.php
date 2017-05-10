@@ -726,7 +726,7 @@ class renderer_utils {
      * @return object paging_bar
      */
     public static function openstudio_render_paging_bar ($contentdata) {
-        $pb = new \paging_bar($contentdata->total, $contentdata->pagestart,
+        $pb = new \mod_openstudio\output\paging_bar($contentdata->total, $contentdata->pagestart,
                     $contentdata->streamdatapagesize, $contentdata->pageurl);
         $page = optional_param('page', 0, PARAM_INT);
         if ($contentdata->streamdatapagesize > 0) {

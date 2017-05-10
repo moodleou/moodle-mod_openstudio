@@ -4162,6 +4162,21 @@ a.openstudio-add-new-content-link:hover  {
     }
 }
 
+.openstudio-mobile-paging {
+    text-transform: capitalize;
+    display: none;
+}
+
+.openstudio-mobile-paging a,
+.openstudio-mobile-paging a:hover,
+.openstudio-mobile-paging a:focus {
+    text-decoration: none;
+}
+
+.openstudio-mobile-paging-first img:nth-child(2) {
+    margin-left: -20px;
+}
+
 /* Tablet. */
 @media only screen and (max-device-width: 1024px) {
     .openstudio-nav-settings {
@@ -4677,6 +4692,27 @@ a.openstudio-add-new-content-link:hover  {
 
 /* Mobile. */
 @media (max-width: 767px) {
+
+    div.paging.openstudio-desktop-paging {
+        display: none;
+    }
+
+    div.paging.openstudio-mobile-paging {
+        white-space: normal;
+        word-spacing: normal;
+    }
+
+    .openstudio-mobile-paging {
+        display: block;
+    }
+
+    .openstudio-mobile-paging-first img:nth-child(2) {
+        margin-left: -11px;
+    }
+
+    .openstudio-mobile-paging-current {
+        padding: 0 5px;
+    }
 
     /**
      * Common dialogue

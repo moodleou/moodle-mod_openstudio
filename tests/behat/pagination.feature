@@ -137,9 +137,20 @@ Feature: Create and edit contents
         And I should see "2"
         And I click on "select#filter_pagesize" "css_element"
         And I click on "option[value='50']" "css_element"
-        When I follow "Next"
+        When I click on ".openstudio-desktop-paging .next" "css_element"
         Then I should see "Test content A"
         And I should not see "Test content N"
         And I should see "1"
-        And I follow "Previous"
+        And I click on ".openstudio-desktop-paging .previous" "css_element"
         Then I should see "Test content N"
+
+        # Mobile view
+        When I change viewport size to "320x768"
+        And "Next" "link" should exist
+        And I should not see "1" in the ".paging" "css_element"
+        When I click on ".openstudio-mobile-paging-next" "css_element"
+        Then I should see "Page 2" in the ".openstudio-mobile-paging-current" "css_element"
+        Then I should see "Test content A"
+        And I click on ".openstudio-mobile-paging-previous" "css_element"
+        Then I should not see "Page 2"
+        Then "Next" "link" should exist
