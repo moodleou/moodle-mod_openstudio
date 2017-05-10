@@ -1019,7 +1019,7 @@ class mod_openstudio_external extends external_api {
         return new external_function_parameters(array(
                 'id' => new external_value(PARAM_INT, 'Open studio instance ID'),
                 'cid' => new external_value(PARAM_INT, 'Content ID'),
-                'containingfolder' => new external_value(PARAM_INT, 'Folder ID', VALUE_OPTIONAL, 0))
+                'containingfolder' => new external_value(PARAM_INT, 'Folder ID'))
         );
     }
 

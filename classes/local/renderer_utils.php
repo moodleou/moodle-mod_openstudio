@@ -1449,7 +1449,7 @@ class renderer_utils {
             $PAGE->requires->js_call_amd('mod_openstudio/delete', 'init', [[
                 'id' => $cmid,
                 'cid' => $contentdata->id,
-                'folderid' => property_exists($contentdata, 'folderid') ? $contentdata->folderid : null,
+                'folderid' => property_exists($contentdata, 'folderid') ? $contentdata->folderid : 0,
                 'isfolder' => $isfolder,
                 'isactivitycontent' => ($contentdata->levelid > 0)]]);
         }
