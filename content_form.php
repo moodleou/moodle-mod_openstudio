@@ -131,6 +131,10 @@ class mod_openstudio_content_form extends moodleform {
                 $contenttitle = get_string('folderformname', 'openstudio');
                 $contentdescription = get_string('folderformdescription', 'openstudio');
                 $submitbuttontitle = get_string('folderformsubmitbutton', 'openstudio');
+            } else if ($this->_customdata['isfolderediting'] == true) {
+                $visibilitytitle = get_string('folderformvisibility', 'openstudio');
+                $contenttitle = get_string('folderformname', 'openstudio');
+                $contentdescription = get_string('folderformdescription', 'openstudio');
             }
             $mform->addElement('select', 'visibility', $visibilitytitle, $options,
                     array('class' => 'openstudio-content-form-select-visibility'));

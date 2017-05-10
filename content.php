@@ -281,7 +281,7 @@ if ($folderid) {
     if ($folderdata) {
         $contentdata->name = $folderdata->name;
         $folderedit = new moodle_url('/mod/openstudio/contentedit.php',
-                array('id' => $cm->id, 'lid' => 0, 'sid' => $folderdata->id, 'type' => content::TYPE_FOLDER_CONTENT));
+                array('id' => $cm->id, 'lid' => 0, 'sid' => $folderdata->id, 'type' => content::TYPE_FOLDER));
         $contentdata->folderedit = $folderedit->out(false);
         $contentdata->isfoldercontent = true;
         $contentdata->folderid = $folderdata->id;

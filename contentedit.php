@@ -267,6 +267,11 @@ if ($sid > 0) {
 
     $strcontenturl = new moodle_url('/mod/openstudio/content.php',
             array('id' => $cm->id, 'sid' => $sid));
+
+    if ($type == content::TYPE_FOLDER) {
+        $strcontenturl = new moodle_url('/mod/openstudio/folder.php', array('id' => $cm->id, 'sid' => $sid));
+    }
+
     $strpageurl = new moodle_url('/mod/openstudio/contentedit.php',
             array('id' => $cm->id, 'sid' => $sid));
 } else {
@@ -312,6 +317,12 @@ if ($sid > 0) {
         }
     }
     $strcontenturl = '';
+    if ($type == content::TYPE_FOLDER_CONTENT && !empty($folderid)) {
+        // Is folder content.
+        $strcontenturl = new moodle_url('/mod/openstudio/folder.php', array('id' => $id, 'lid' => $lid,
+                'sid' => $folderid));
+    }
+
     $strpageurl = new moodle_url('/mod/openstudio/contentedit.php',
             array('id' => $cm->id, 'lid' => $contentdata->levelid, 'sid' => $sid));
 
@@ -392,8 +403,15 @@ if ($contentisinpinboard) {
     $crumbarray[get_string('navmystudiowork', 'openstudio')] = $strareaurl->out(false);
 }
 
-$crumbarray[$contentdataname] = $strcontenturl;
-$crumbarray[get_string('navedit', 'openstudio')] = $strpageurl;
+if (!empty($contentdataname)) {
+    $crumbarray[$contentdataname] = $strcontenturl;
+}
+
+if (empty($sid)) {
+    $crumbarray[get_string('navcreate', 'openstudio')] = $strpageurl;
+} else {
+    $crumbarray[get_string('navedit', 'openstudio')] = $strpageurl;
+}
 util::add_breadcrumb($PAGE, $cm->id, navigation_node::TYPE_ACTIVITY, $crumbarray);
 
 // This part of the code processes the content edit form.
@@ -460,8 +478,9 @@ $options = array(
         'contentid' => $contentdata->sid,
         'contenttype' => $contentdata->contenttype,
         'contentname' => $formcontentname,
-        'isfoldercontent' => ($type == content::TYPE_FOLDER_CONTENT) ? true : false,
-        'iscreatefolder' => ($type == content::TYPE_FOLDER_CONTENT && !$folderid) ? true : false,
+        'isfoldercontent' => ($type == content::TYPE_FOLDER_CONTENT && !empty($folderid)) ? true : false,
+        'iscreatefolder' => ($type == content::TYPE_FOLDER_CONTENT && empty($sid) && empty($folderid)) ? true : false,
+        'isfolderediting' => ($type == content::TYPE_FOLDER && !empty($sid)) ? true : false,
         'contentfolder' => $folderid ? true : false,
         'folderdetails' => ($sid && $type == content::TYPE_FOLDER_CONTENT) ? true : false,
         'contentdetails' => $sid ? true : false,

@@ -13,8 +13,8 @@ Feature: Create and edit Folder
             | student3 | Student | 3 | student3@asd.com |
             | student4 | Student | 4 | student4@asd.com |
         And the following "courses" exist:
-            | fullname | shortname | category |
-            | Course 1 | C1 | 0 |
+            | fullname | shortname | category | format      |
+            | Course 1 | C1        | 0        | oustudyplan |
         And the following "course enrolments" exist:
             | user | course | role |
             | teacher1 | C1 | editingteacher |
@@ -50,7 +50,7 @@ Feature: Create and edit Folder
         And I am on site homepage
         And I follow "Course 1"
         And I turn editing mode on
-        And I add a "Open Studio" to section "1" and I fill the form with:
+        And I add a "Open Studio" to section "0" and I fill the form with:
             | Name                         | Test Open Studio name 1      |
             | Description                  | Test Open Studio description |
             | Your word for 'My Module'    | Module 1                     |
@@ -133,6 +133,12 @@ Feature: Create and edit Folder
         And the "src" attribute of "div.openstudio-folder-content img.openstudio-folder-tab" "css_element" should contain "openstudio_sets_preview_box"
 
     Scenario: Create Folder in other view
+        Given I am on site homepage
+        And I log out
+        And I am using the OSEP theme
+        And I log in as "teacher1" (in the OSEP theme)
+        And I follow "Course 1"
+        And I press "Expand all"
         When I follow "Test Open Studio name 1"
         And I follow "Administration > Edit" in the openstudio navigation
         And I follow "Expand all"
@@ -141,6 +147,7 @@ Feature: Create and edit Folder
 
         # Create new folder in My Module view
         And I follow "Create new folder"
+        Then "Create" "text" should exist in the ".breadcrumb-nav" "css_element"
         And I set the following fields to these values:
           | Who can view this folder  | My module                                  |
           | Folder title              | Test my folder view 1                      |
@@ -173,6 +180,12 @@ Feature: Create and edit Folder
         And the "src" attribute of "div.openstudio-folder-content img.openstudio-folder-tab" "css_element" should contain "openstudio_sets_preview_box"
     
     Scenario: Edit Folder in other view
+        Given I am on site homepage
+        And I log out
+        And I am using the OSEP theme
+        And I log in as "teacher1" (in the OSEP theme)
+        And I follow "Course 1"
+        And I press "Expand all"
         When I follow "Test Open Studio name 1"
         And I follow "Administration > Edit" in the openstudio navigation
         And I follow "Expand all"
@@ -190,6 +203,8 @@ Feature: Create and edit Folder
         # edit folder in My Module view
         And I go to content edit view
         And I follow "Edit folder title and permissions"
+        Then "Test my folder view 1" "text" should exist in the ".breadcrumb-nav" "css_element"
+        Then "Edit" "text" should exist in the ".breadcrumb-nav" "css_element"
         And I set the field "Folder title" to "Test my folder view 2"
         And I press "Save"
         And I follow "Shared content > My Module" in the openstudio navigation

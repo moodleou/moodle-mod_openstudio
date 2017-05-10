@@ -128,6 +128,7 @@ $string['navall'] = 'All';
 $string['navpinboard'] = 'Pinboard';
 $string['navpeople'] = 'People';
 $string['navedit'] = 'Edit';
+$string['navcreate'] = 'Create';
 $string['navversions'] = 'Versions';
 $string['navversionhistory'] = 'Version History';
 $string['navsearchsubmit'] = 'Go';
