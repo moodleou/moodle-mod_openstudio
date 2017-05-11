@@ -702,15 +702,10 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         }
 
         $showmultigroup = false;
-        if ($grouplist) {
-            $groupitem[0] = (object) [
-                    'groupid' => 0,
-                    'selectedgroup' => $peopledata->selectedgroupid == 0 ? true : false,
-                    'vid' => content::VISIBILITY_GROUP,
-                    'name' => get_string('filterallgroup', 'openstudio')
-            ];
-
+        if ($grouplist && $permissions->feature_group) {
+            $groupcount = 0;
             foreach ($grouplist as $group) {
+                $groupcount ++;
                 $groupitem[$group->groupid] = (object) [
                         'groupid' => $group->groupid,
                         'selectedgroup' => $peopledata->selectedgroupid == $group->groupid ? true : false,
@@ -718,6 +713,19 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                         'name' => $group->name
                 ];
             }
+
+            // Show all option when number of group > 1
+            if ($groupcount > 1) {
+                $groupitem[0] = (object)[
+                    'groupid' => 0,
+                    'selectedgroup' => $peopledata->selectedgroupid == 0 ? true : false,
+                    'vid' => content::VISIBILITY_GROUP,
+                    'name' => get_string('filterallgroup', 'openstudio')
+                ];
+            }
+
+            // Sort group by key to make sure All option on the first.
+            ksort($groupitem);
         }
 
         $showmultigroup = (count($groupitem) > 1);

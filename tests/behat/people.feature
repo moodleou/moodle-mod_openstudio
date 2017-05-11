@@ -263,3 +263,17 @@ Feature: Create and edit contents
         And I click on "select#openstudio-people-groupid" "css_element"
         And I click on "option[name='group2']" "css_element"
         And I should see "Student 3"
+
+        #  Should only show My Module option in case Group Mode is not configured
+        And I am on site homepage
+        And I log out
+        And I log in as "teacher1"
+        And I follow "Course 1"
+        And I follow "Test Open Studio name 1"
+        And I follow "Administration > Edit" in the openstudio navigation
+        And I follow "Expand all"
+        And I set the field "Grouping" to "None"
+        And I press "Save and display"
+        And I follow "People" in the openstudio navigation
+        And I should see "My module" in the "span.openstudio-filter-text.openstudio-filter-select" "css_element"
+        And "select#openstudio-people-groupid" "css_element" should not exist
