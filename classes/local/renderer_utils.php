@@ -464,7 +464,7 @@ class renderer_utils {
                     if ($contentdata->mimetype == 'image/bmp') {
                         $contenttypeiconurl = $OUTPUT->pix_url('image_rgb_32px', 'openstudio');
                     } else {
-                        $contentfileurl = self::make_plugin_file($context->id, $contentthumbnailarea, $contentdata->id,
+                        $contenttypeiconurl = self::make_plugin_file($context->id, $contentthumbnailarea, $contentdata->id,
                                 $contentdata->content, $folderid);
                     }
                     break;
@@ -1430,6 +1430,11 @@ class renderer_utils {
                 }
             }
         }
+
+        if ($contentdata->iscontentversion && ($contentdata->isownedbyviewer || $permissions->managecontent)) {
+            $deleteenable = true;
+        }
+
         $contentdata->contentdeleteenable = $deleteenable;
 
         if ($deleteenable) {

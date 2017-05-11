@@ -6,22 +6,24 @@ Feature: Create and edit contents detail
 
     Background: Setup course and studio
         And the following "users" exist:
-            | username | firstname | lastname | email |
-            | teacher1 | Teacher | 1 | teacher1@asd.com |
-            | student1 | Student | 1 | student1@asd.com |
-            | student2 | Student | 2 | student2@asd.com |
-            | student3 | Student | 3 | student3@asd.com |
-            | student4 | Student | 4 | student4@asd.com |
+            | username | firstname | lastname | email            |
+            | teacher1 | Teacher   | 1        | teacher1@asd.com |
+            | student1 | Student   | 1        | student1@asd.com |
+            | student2 | Student   | 2        | student2@asd.com |
+            | student3 | Student   | 3        | student3@asd.com |
+            | student4 | Student   | 4        | student4@asd.com |
+            | teacher2 | Teacher   | 2        | teacher2@asd.com |
         And the following "courses" exist:
             | fullname | shortname | category |
-            | Course 1 | C1 | 0 |
+            | Course 1 | C1        | 0        |
         And the following "course enrolments" exist:
-            | user | course | role |
-            | teacher1 | C1 | editingteacher |
-            | student1 | C1 | student |
-            | student2 | C1 | student |
-            | student3 | C1 | student |
-            | student4 | C1 | student |
+            | user     | course | role           |
+            | teacher1 | C1     | editingteacher |
+            | student1 | C1     | student        |
+            | student2 | C1     | student        |
+            | student3 | C1     | student        |
+            | student4 | C1     | student        |
+            | teacher2 | C1     | editingteacher |
         And the following "groups" exist:
             | name   | course | idnumber |
             | group1 | C1     | G1       |
@@ -44,6 +46,7 @@ Feature: Create and edit contents detail
             | student2 | G2 |
             | student3 | G2 |
             | student3 | G3 |
+            | teacher2 | G1 |
         And I log in as "teacher1"
         And I am on site homepage
         And I follow "Course 1"
@@ -665,7 +668,45 @@ Feature: Create and edit contents detail
         And I follow "Shared content > My Module" in the openstudio navigation
         And I should see "Test My Content Details View Archive 1"
 
+        # switch to teacher2, delete button will be show
+        And I am on site homepage
+        And I log out
+        And I log in as "teacher2"
+        And I follow "Course 1"
+        And I follow "Test Open Studio name 1"
+        And I follow "Test My Content Details View Archive 1"
+        And I press "Post archive"
+        And I press "View"
+        And "Delete" "button" should exist
+
+        # switch to student1, delete button will be hide
+        And I am on site homepage
+        And I log out
+        And I log in as "student1"
+        And I follow "Course 1"
+        And I follow "Test Open Studio name 1"
+        And I follow "Test My Content Details View Archive 1"
+        And I press "Post archive"
+        And I press "View"
+        And I should not see "Delete"
+
+        # switch to student2, delete button will be hide
+        And I am on site homepage
+        And I log out
+        And I log in as "student2"
+        And I follow "Course 1"
+        And I follow "Test Open Studio name 1"
+        And I follow "Test My Content Details View Archive 1"
+        And I press "Post archive"
+        And I press "View"
+        And I should not see "Delete"
+
         # Delete Archive post
+        And I am on site homepage
+        And I log out
+        And I log in as "teacher1"
+        And I follow "Course 1"
+        And I follow "Test Open Studio name 1"
         And I follow "Test My Content Details View Archive 1"
         And I press "Post archive"
         And I should see "Test My Content Details View Archive 2"
