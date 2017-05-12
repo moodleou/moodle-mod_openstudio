@@ -1340,7 +1340,7 @@ EOF;
                     $fileextension = $file['mimetype']['extension'];
                     if (in_array($fileextension, array('jpg', 'jpe', 'jpeg', 'gif', 'png'))) {
                         $contenttype = self::TYPE_IMAGE;
-                    } else if (in_array($fileextension, array('avi', 'mpg', 'mpeg', 'mov', 'mp4', 'mv4', 'flv', 'gif'))) {
+                    } else if (in_array($fileextension, array('avi', 'mpg', 'mpeg', 'mov', 'mp4', 'm4v', 'flv', 'gif'))) {
                         $contenttype = self::TYPE_VIDEO;
                     } else if (in_array($fileextension, array('aiff', 'wav', 'mp3'))) {
                         $contenttype = self::TYPE_AUDIO;
