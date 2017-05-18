@@ -2923,7 +2923,7 @@ body:not(.ios):not(.android) .openstudio-content-view-flag-icon.has-hover:hover 
 
 .openstudio-content-view-user-picture img {
     width: 64px;
-    height: 100%;
+    height: auto;
 }
 
 .openstudio-content-view-user-info {
