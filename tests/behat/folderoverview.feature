@@ -372,7 +372,7 @@ Feature: Folder Overview
       And I follow "Content1.1"
       And I press "Order posts"
       # User cannot input number to order fixed content, error message will display
-      And I click on "#openstudio-folder-reorder-down-1" "css_element"
+      And I click on "#openstudio-folder-reorder-down-0" "css_element"
       And I should see "You cannot move this content beyond other fixed contents."
       # User can click button to re-order content
       And I click on "#openstudio-folder-reorder-up-2" "css_element"
@@ -381,3 +381,33 @@ Feature: Folder Overview
         | Test My Folder Overview 2 |
         | Test My Folder Overview 1 |
         | Test My Folder Overview 3 |
+
+      And I follow "Add new content"
+      And I press "Add file"
+      And I set the following fields to these values:
+        | Title          | Test My Folder Overview 4                  |
+        | Description    | My Folder Overview Description 4           |
+        | Upload content | mod/openstudio/tests/importfiles/test1.jpg |
+      And I press "Save"
+      And I follow "My Content > My Activities" in the openstudio navigation
+      And I follow "Content1.1"
+      And I press "Order posts"
+      And I set the field "Move to post number" to "4"
+      And I click on "Save order" "button" in the "Order posts" "dialogue"
+      And I should see "You cannot move this content beyond other fixed contents."
+      And I click on "Close" "button" in the "Order posts" "dialogue"
+      And Open studio contents should be in the following order:
+        | Test My Folder Overview 2 |
+        | Test My Folder Overview 1 |
+        | Test My Folder Overview 3 |
+        | Test My Folder Overview 4 |
+
+      # User cannot input a zero number
+      And I press "Order posts"
+      And I set the field "Move to post number" to "0"
+      Then I should see "You cannot enter a position that does not contain a slot."
+
+        # Lose input focus
+      And I set the field "Move to post number" to "4"
+      And I click on "Move to post number" "text"
+      Then I should see "You cannot move this content beyond other fixed contents."

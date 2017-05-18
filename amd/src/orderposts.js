@@ -110,7 +110,8 @@ define([
                 .delegate(t.CSS.SAVE_ORDER_BUTTON, 'click', t.saveOrder)
                 .delegate(t.CSS.MOVE_UP_BUTTON, 'click', t.moveUp)
                 .delegate(t.CSS.MOVE_DOWN_BUTTON, 'click', t.moveDown)
-                .delegate(t.CSS.ORDER_NUMBER_INPUT, 'keyup', t.moveTo);
+                .delegate(t.CSS.ORDER_NUMBER_INPUT, 'keyup', t.handleNumberInputEnter)
+                .delegate(t.CSS.ORDER_NUMBER_INPUT, 'blur', t.handleNumberInputBlur);
 
             // Responsive.
             $(window).resize(t.resize.bind(t));
@@ -178,7 +179,7 @@ define([
                    dialogue.set('bodyContent', res.html);
                     // Disable first move up button and last move down button.
                     t.disableFirstLastButton();
-                    t.disableContentButton();
+                    $(document).ready(t.disableContentButton);
                     t.checkReorder();
                     t.inputPosition();
                     $(t.CSS.SAVE_ORDER_BUTTON).attr("disabled", "disabled");
@@ -222,13 +223,9 @@ define([
         /**
          * Move item to certain position.
          *
-         * @param {object} e Dom Event
          * @method moveTo
          */
-        moveTo: function(e) {
-            if (e.which != 13) { // Press enter key.
-                return;
-            }
+        moveTo: function() {
 
             var desiredOrder = $(this).val();
 
@@ -277,17 +274,6 @@ define([
                 var itemOrder = item.find(t.CSS.ITEM_ORDER).attr('data-order');
                 itemOrder = parseInt(itemOrder);
                 if (order != itemOrder) {
-                    var currentorder = $('div[data-order=' +
-                        $(this).attr('data-order') + ']').hasClass('openstudio-orderpost-item-canreorder');
-                    var itemMove = $('div[data-order=' + order + ']').hasClass('openstudio-orderpost-item-canreorder');
-                    if (currentorder && itemMove) {
-                        saveAllowed = false;
-                        Str
-                        .get_string('foldercontentcannotreorder', 'mod_openstudio')
-                        .done(function(s) {
-                           t.showErrorMessage(s);
-                        });
-                    }
                     t.swapItems(itemOrder, order, item);
                 }
             });
@@ -349,7 +335,11 @@ define([
         swapItems: function(fromOrderNumber, toOrderNumber, element) {
             var reoderLock = false;
             var targetElement = $(t.CSS.ITEM_ORDER + '[data-order="' + toOrderNumber + '"]');
-            reoderLock = t.checkReorderLock(fromOrderNumber, toOrderNumber);
+
+            if (element.find(t.CSS.ITEM_ORDER).hasClass('openstudio-orderpost-item-canreorder')) {
+                reoderLock = t.checkReorderLock(fromOrderNumber, toOrderNumber);
+            }
+
             if (reoderLock == true) {
                 Str
                 .get_string('foldercontentcannotreorder', 'mod_openstudio')
@@ -394,7 +384,6 @@ define([
             t.checkReorder();
             t.disableContentButton();
             t.disableFirstLastButton();
-            t.inputPosition();
         },
 
         /**
@@ -488,13 +477,7 @@ define([
                            t.showErrorMessage(s);
                         });
                     } else {
-                        if (parseInt(order) <= 0) {
-                            Str
-                            .get_string('errormoveslotduplicate', 'mod_openstudio')
-                            .done(function(s) {
-                               t.showErrorMessage(s);
-                            });
-                        } else if (parseInt(order) > t.mconfig.total) {
+                        if (parseInt(order) > t.mconfig.total || parseInt(order) <= 0) {
                             Str
                             .get_string('errormoveslotoutofrange', 'mod_openstudio')
                             .done(function(s) {
@@ -515,9 +498,10 @@ define([
          * @method disableFirstLastButton
          */
         disableFirstLastButton: function() {
-            // Enable all buttons first when move one button.
-            $(t.CSS.MOVE_UP_BUTTON).removeAttr("disabled");
-            $(t.CSS.MOVE_DOWN_BUTTON).removeAttr("disabled");
+            // Enable all move-up, move-down buttons except booked item.
+            // Book items are back contents that have never uploaded yet.
+            $(t.CSS.MOVE_UP_BUTTON + ':not(.openstudio-orderpost-item-book)').removeAttr("disabled");
+            $(t.CSS.MOVE_DOWN_BUTTON + ':not(.openstudio-orderpost-item-book)').removeAttr("disabled");
 
             $(t.CSS.MOVE_UP_BUTTON + ':first').attr("disabled", "disabled");
             $(t.CSS.MOVE_DOWN_BUTTON + ':last').attr("disabled", "disabled");
@@ -530,17 +514,7 @@ define([
          * @method enableSaveOrder
          */
         disableContentButton: function() {
-            $(document).ready(function() {
-                $('.openstudio-orderpost-item-book').attr("disabled", "disabled");
-                $('.openstudio-orderpost-item-disabled').click(function() {
-                    Str
-                    .get_string('foldercontentcannotreorder', 'mod_openstudio')
-                    .done(function(s) {
-                       t.showErrorMessage(s);
-                    });
-                    return false;
-                });
-            });
+            $('.openstudio-orderpost-item-book').attr("disabled", "disabled");
         },
 
         /**
@@ -582,13 +556,23 @@ define([
                 lastitem = toOrderNumber;
             }
 
-            if ((lastitem - firstitem) > 1) {
+            if (currentOrderNumber < toOrderNumber) {
+                firstitem = firstitem + 1;
                 while (firstitem <= lastitem) {
                     var currentElement = $(t.CSS.ITEM_ORDER + '[data-order="' + firstitem + '"]');
-                    if (currentElement.hasClass(classCheck) && (firstitem < currentOrderNumber || firstitem < toOrderNumber)) {
+                    if (currentElement.hasClass(classCheck)) {
                         return true;
                     }
                     firstitem++;
+                }
+            } else {
+                lastitem = lastitem - 1;
+                while (lastitem >= firstitem) {
+                    var currentElement = $(t.CSS.ITEM_ORDER + '[data-order="' + firstitem + '"]');
+                    if (currentElement.hasClass(classCheck)) {
+                        return true;
+                    }
+                    lastitem--;
                 }
             }
 
@@ -603,6 +587,29 @@ define([
          */
         showErrorMessage: function(message) {
             $('.openstudio-message-error').text(message);
+        },
+
+        /**
+         * Triggered whenever user press enter key on order input.
+         *
+         * @method handleNumberInputEnter
+         * @param {object} e Dom Event
+         */
+        handleNumberInputEnter: function(e) {
+            if (e.which !== 13) { // Press enter key.
+                return;
+            }
+
+            t.moveTo.call(this);
+        },
+
+        /**
+         * Triggered whenever order input is lost focus.
+         *
+         * @method handleNumberInputBlur
+         */
+        handleNumberInputBlur: function() {
+            t.moveTo.call(this);
         }
     };
 
