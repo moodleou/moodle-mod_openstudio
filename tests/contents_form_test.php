@@ -17,17 +17,17 @@
 /**
  * Unit tests for OpenStudio content form
  *
- * TODO: New form class isn't yet in place, so this won't run yet.
- *
  * @package mod_studio
  * @copyright The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_openstudio;
+
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
-class contents_form_testcase extends advanced_testcase {
+class contents_form_testcase extends \advanced_testcase {
 
     /**
      * Test validation of Notebook files uploaded to a content.
@@ -43,10 +43,11 @@ class contents_form_testcase extends advanced_testcase {
         $course = $this->getDataGenerator()->create_course();
         $this->setUser($user);
         $this->resetAfterTest(true);
-        $context = context_user::instance($USER->id);
+        $context = \context_user::instance($USER->id);
         $fs = get_file_storage();
         $options = array(
                 'courseid' => $course->id,
+                'vid' => 0,
                 'feature_module' => 1,
                 'feature_group' => 0,
                 'isenrolled' => 1,
@@ -66,9 +67,11 @@ class contents_form_testcase extends advanced_testcase {
                 'contentname' => '',
                 'isfoldercontent' => false,
                 'iscreatefolder' => false,
+                'isfolderediting' => false,
+                'folderdetails' => false,
                 'max_bytes' => $CFG->maxbytes
         );
-        $form = new mod_openstudio_content_form(null, $options);
+        $form = new \mod_openstudio_content_form(null, $options);
         $itemid = file_get_unused_draft_itemid();
         $validfile = (object) array(
                 'contextid' => $context->id,

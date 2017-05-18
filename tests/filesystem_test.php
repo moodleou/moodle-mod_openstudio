@@ -21,9 +21,12 @@
  * @copyright  2017 The Open University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+namespace mod_openstudio;
+
 defined('MOODLE_INTERNAL') || die();
 
-class mod_openstudio_filesystem_testcase extends advanced_testcase {
+class filesystem_testcase extends \advanced_testcase {
 
     protected $users;
     protected $course;
@@ -42,8 +45,8 @@ class mod_openstudio_filesystem_testcase extends advanced_testcase {
         $this->course = $this->getDataGenerator()->create_course();
 
         // Create user.
-        $this->users = new stdClass();
-        $this->users->students = new stdClass();
+        $this->users = new \stdClass();
+        $this->users->students = new \stdClass();
         $this->users->students->one = $this->getDataGenerator()->create_user(
                 array('email' => 'student1@ouunittest.com', 'username' => 'student1'));
         $this->users->students->two = $this->getDataGenerator()->create_user(
@@ -59,14 +62,14 @@ class mod_openstudio_filesystem_testcase extends advanced_testcase {
                 $studentroleid, 'manual');
 
         // Create generic studios.
-        $this->studios = new stdClass();
+        $this->studios = new \stdClass();
         $this->studios->one = $this->generator->create_instance(array('course' => $this->course->id, 'idnumber' => 'OS1'));
         $this->studios->two = $this->generator->create_instance(array('course' => $this->course->id, 'idnumber' => 'OS2'));
-        $this->contexts = new stdClass();
-        $this->contexts->one = context_module::instance($this->studios->one->cmid);
-        $this->contexts->two = context_module::instance($this->studios->two->cmid);
+        $this->contexts = new \stdClass();
+        $this->contexts->one = \context_module::instance($this->studios->one->cmid);
+        $this->contexts->two = \context_module::instance($this->studios->two->cmid);
 
-        $this->contents = new stdClass();
+        $this->contents = new \stdClass();
         $this->contents->one = $this->generator->create_contents([
             'openstudio' => 'OS1',
             'name' => 'active1',
@@ -88,7 +91,7 @@ class mod_openstudio_filesystem_testcase extends advanced_testcase {
             'userid' => $this->users->students->one->id,
             'file' => 'mod/openstudio/tests/importfiles/test3.jpg',
             'deletedby' => $this->users->students->one->id,
-            'deletedtime' => (new DateTime('8 days ago', core_date::get_server_timezone_object()))->getTimestamp()
+            'deletedtime' => (new \DateTime('8 days ago', \core_date::get_server_timezone_object()))->getTimestamp()
         ]);
         $this->contents->four = $this->generator->create_contents([
             'openstudio' => 'OS1',
@@ -113,7 +116,7 @@ class mod_openstudio_filesystem_testcase extends advanced_testcase {
             'userid' => $this->users->students->one->id,
             'file' => 'mod/openstudio/tests/importfiles/test.ods',
             'deletedby' => $this->users->students->one->id,
-            'deletedtime' => (new DateTime('8 days ago', core_date::get_server_timezone_object()))->getTimestamp()
+            'deletedtime' => (new \DateTime('8 days ago', \core_date::get_server_timezone_object()))->getTimestamp()
         ]);
     }
 
@@ -125,7 +128,7 @@ class mod_openstudio_filesystem_testcase extends advanced_testcase {
         $this->assertCount(4, $fs->get_area_files($this->contexts->one->id, 'mod_openstudio', 'content', false, 'itemid', false));
         $this->assertCount(
                 4, $fs->get_area_files($this->contexts->one->id, 'mod_openstudio', 'contentthumbnail', false, 'itemid', false));
-        mod_openstudio\local\api\filesystem::remove_content_files($this->contexts->one->id, $this->studios->one->id);
+        \mod_openstudio\local\api\filesystem::remove_content_files($this->contexts->one->id, $this->studios->one->id);
         $this->assertCount(0, $fs->get_area_files($this->contexts->one->id, 'mod_openstudio', 'content', false, 'itemid', false));
         $this->assertCount(
                 0, $fs->get_area_files($this->contexts->one->id, 'mod_openstudio', 'contentthumbnail', false, 'itemid', false));
@@ -143,7 +146,7 @@ class mod_openstudio_filesystem_testcase extends advanced_testcase {
         $this->assertCount(4, $fs->get_area_files($this->contexts->one->id, 'mod_openstudio', 'content', false, 'itemid', false));
         $this->assertCount(
                 4, $fs->get_area_files($this->contexts->one->id, 'mod_openstudio', 'contentthumbnail', false, 'itemid', false));
-        mod_openstudio\local\api\filesystem::remove_deleted_files();
+        \mod_openstudio\local\api\filesystem::remove_deleted_files();
         // Each studio instance has 1 deleted file older than the threshold.  All other files should remain.
         $this->assertCount(3, $fs->get_area_files($this->contexts->one->id, 'mod_openstudio', 'content', false, 'itemid', false));
         $this->assertCount(
@@ -167,7 +170,7 @@ class mod_openstudio_filesystem_testcase extends advanced_testcase {
         }
         $this->assertTrue(check_dir_exists($tempdir, false));
         $this->assertTrue(check_dir_exists($tempdir . '/2/4', false));
-        mod_openstudio\local\api\filesystem::rrmdir($tempdir);
+        \mod_openstudio\local\api\filesystem::rrmdir($tempdir);
         $this->assertFalse(check_dir_exists($tempdir, false));
     }
 }

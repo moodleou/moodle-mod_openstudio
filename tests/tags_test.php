@@ -20,13 +20,19 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_openstudio;
+
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
-require_once('openstudio_testcase.php');
+class tags_testcase extends \advanced_testcase {
 
-class mod_openstudio_tags_testcase extends openstudio_testcase {
-
+    protected $users;
+    protected $course;
+    protected $generator; // Contains mod_openstudio specific data generator functions.
+    protected $studiolevels; // Generic studio instance with no levels or slots.
+    protected $singleentrydata;
+    protected $contentid;
     private $tags;
 
     /**
@@ -34,10 +40,7 @@ class mod_openstudio_tags_testcase extends openstudio_testcase {
      */
     protected function setUp() {
         $this->resetAfterTest(true);
-        $teacherroleid = 3;
         $studentroleid = 5;
-        $this->totalcontents = 24; // This is what the scripts below create for ONE CMID.
-        $this->pinboardslots = 3; // This is what the scripts below create for ONE CMID.
 
         // Our test data has 1 course, 2 groups, 2 teachers and 10 students.
 
@@ -45,8 +48,8 @@ class mod_openstudio_tags_testcase extends openstudio_testcase {
         $this->course = $this->getDataGenerator()->create_course();
 
         // Create Users.
-        $this->users = new stdClass();
-        $this->users->students = new stdClass();
+        $this->users = new \stdClass();
+        $this->users->students = new \stdClass();
         $this->users->students->one = $this->getDataGenerator()->create_user(
                 ['email' => 'student1@ouunittest.com', 'username' => 'student1']);
 
@@ -80,9 +83,9 @@ class mod_openstudio_tags_testcase extends openstudio_testcase {
      * Test that tags are set correctly.
      */
     public function test_set() {
-        $this->assertCount(0, core_tag_tag::get_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid));
-        mod_openstudio\local\api\tags::set($this->contentid, $this->tags);
-        $settags = core_tag_tag::get_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid);
+        $this->assertCount(0, \core_tag_tag::get_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid));
+        \mod_openstudio\local\api\tags::set($this->contentid, $this->tags);
+        $settags = \core_tag_tag::get_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid);
         $this->assertCount(count($this->tags), $settags);
         // Check that the returned tags are those set for the content, and no more.
         foreach ($settags as $settag) {
@@ -98,9 +101,9 @@ class mod_openstudio_tags_testcase extends openstudio_testcase {
      */
     public function test_set_by_string() {
         $tagstring = implode(',', $this->tags);
-        $this->assertCount(0, core_tag_tag::get_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid));
-        mod_openstudio\local\api\tags::set($this->contentid, $tagstring);
-        $settags = core_tag_tag::get_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid);
+        $this->assertCount(0, \core_tag_tag::get_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid));
+        \mod_openstudio\local\api\tags::set($this->contentid, $tagstring);
+        $settags = \core_tag_tag::get_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid);
         $this->assertCount(count($this->tags), $settags);
         // Check that the returned tags are those set for the content, and no more.
         foreach ($settags as $settag) {
@@ -115,42 +118,42 @@ class mod_openstudio_tags_testcase extends openstudio_testcase {
      * Test that passing an empty array of tags doesn't set any.
      */
     public function test_set_no_tags() {
-        $this->assertCount(0, core_tag_tag::get_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid));
-        mod_openstudio\local\api\tags::set($this->contentid, []);
-        $this->assertCount(0, core_tag_tag::get_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid));
+        $this->assertCount(0, \core_tag_tag::get_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid));
+        \mod_openstudio\local\api\tags::set($this->contentid, []);
+        $this->assertCount(0, \core_tag_tag::get_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid));
     }
 
     /**
      * Test that we get an exception if we try to set tags on a non-existant content post.
      */
     public function test_set_no_content() {
-        $this->setExpectedException('dml_missing_record_exception');
-        mod_openstudio\local\api\tags::set($this->contentid + 1, [random_string()]);
+        $this->expectException('dml_missing_record_exception');
+        \mod_openstudio\local\api\tags::set($this->contentid + 1, [random_string()]);
     }
 
     /**
      * Test that tags are removed correctly.
      */
     public function test_remove() {
-        $context = context_module::instance($this->studiolevels->cmid);
-        core_tag_tag::set_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid, $context, $this->tags);
+        $context = \context_module::instance($this->studiolevels->cmid);
+        \core_tag_tag::set_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid, $context, $this->tags);
         $this->assertCount(
-                count($this->tags), core_tag_tag::get_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid));
+                count($this->tags), \core_tag_tag::get_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid));
 
-        mod_openstudio\local\api\tags::remove($this->contentid);
-        $this->assertCount(0, core_tag_tag::get_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid));
+        \mod_openstudio\local\api\tags::remove($this->contentid);
+        $this->assertCount(0, \core_tag_tag::get_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid));
     }
 
     public function test_remove_no_content() {
-        $this->setExpectedException('dml_missing_record_exception');
-        mod_openstudio\local\api\tags::remove($this->contentid + 1);
+        $this->expectException('dml_missing_record_exception');
+        \mod_openstudio\local\api\tags::remove($this->contentid + 1);
     }
 
     public function test_get() {
-        $context = context_module::instance($this->studiolevels->cmid);
-        core_tag_tag::set_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid, $context, $this->tags);
+        $context = \context_module::instance($this->studiolevels->cmid);
+        \core_tag_tag::set_item_tags('mod_openstudio', 'openstudio_contents', $this->contentid, $context, $this->tags);
 
-        $settags = mod_openstudio\local\api\tags::get($this->contentid);
+        $settags = \mod_openstudio\local\api\tags::get($this->contentid);
         $this->assertCount(count($this->tags), $settags);
 
         foreach ($settags as $settag) {
@@ -162,12 +165,12 @@ class mod_openstudio_tags_testcase extends openstudio_testcase {
     }
 
     public function test_get_no_tags() {
-        $this->assertEmpty(mod_openstudio\local\api\tags::get($this->contentid));
+        $this->assertEmpty(\mod_openstudio\local\api\tags::get($this->contentid));
     }
 
     public function test_get_no_content() {
-        $this->setExpectedException('dml_missing_record_exception');
-        mod_openstudio\local\api\tags::get($this->contentid + 1);
+        $this->expectException('dml_missing_record_exception');
+        \mod_openstudio\local\api\tags::get($this->contentid + 1);
     }
 
 }

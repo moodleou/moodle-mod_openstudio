@@ -22,9 +22,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_openstudio;
+
 defined('MOODLE_INTERNAL') || die();
 
-class mod_openstudio_template_testcase extends advanced_testcase {
+class template_testcase extends \advanced_testcase {
 
     private $users;
     private $permissions;
@@ -57,8 +59,8 @@ class mod_openstudio_template_testcase extends advanced_testcase {
         $this->course = $this->getDataGenerator()->create_course();
 
         // Create Users.
-        $this->users = new stdClass();
-        $this->users->students = new stdClass();
+        $this->users = new \stdClass();
+        $this->users->students = new \stdClass();
         $this->users->students->one = $this->getDataGenerator()->create_user(
                 ['email' => 'student1@ouunittest.com', 'username' => 'student1']);
         $this->users->students->two = $this->getDataGenerator()->create_user(
@@ -79,7 +81,7 @@ class mod_openstudio_template_testcase extends advanced_testcase {
         $this->studiolevels->leveldata = $this->generator->create_mock_levels($this->studiolevels->id);
 
         // Create a folder without a template.
-        $this->folder = mod_openstudio\local\api\content::create($this->studiolevels->id,
+        $this->folder = \mod_openstudio\local\api\content::create($this->studiolevels->id,
                 $this->users->students->two->id,
                 3, $this->contentlevelid, $this->generate_folder_data());
 
@@ -106,21 +108,21 @@ class mod_openstudio_template_testcase extends advanced_testcase {
         $this->templatecontents[1]->foldertemplateid = $this->foldertemplate->id;
         // 1 in the template but deleted.
         $this->templatecontents[2]->foldertemplateid = $this->foldertemplate->id;
-        $this->templatecontents[2]->status = mod_openstudio\local\api\levels::SOFT_DELETED;
+        $this->templatecontents[2]->status = \mod_openstudio\local\api\levels::SOFT_DELETED;
 
         $this->templatecontents[0]->id = $DB->insert_record('openstudio_content_templates', $this->templatecontents[0]);
         $this->templatecontents[1]->id = $DB->insert_record('openstudio_content_templates', $this->templatecontents[1]);
         $this->templatecontents[2]->id = $DB->insert_record('openstudio_content_templates', $this->templatecontents[2]);
 
         $this->templatedfolders = [];
-        $this->templatedfolders['full'] = mod_openstudio\local\api\content::create($this->studiolevels->id,
+        $this->templatedfolders['full'] = \mod_openstudio\local\api\content::create($this->studiolevels->id,
                 $this->users->students->one->id,
                 3, $this->contentlevelid, $this->generate_folder_data());
 
         // Add 2 contents to 1 templated folder.
         for ($i = 0; $i < 2; $i++) {
             $this->templatedcontents[$i] = $this->generate_content_data();
-            $this->templatedcontents[$i]->id = mod_openstudio\local\api\content::create($this->studiolevels->id,
+            $this->templatedcontents[$i]->id = \mod_openstudio\local\api\content::create($this->studiolevels->id,
                     $this->users->students->one->id,
                     0, 0, $this->templatedcontents[$i]);
             $this->templatedfoldercontents[$i] = (object) [
@@ -149,8 +151,8 @@ class mod_openstudio_template_testcase extends advanced_testcase {
                 'embedcode' => '',
                 'weblink' => '',
                 'urltitle' => '',
-                'visibility' => mod_openstudio\local\api\content::VISIBILITY_MODULE,
-                'contenttype' => mod_openstudio\local\api\content::TYPE_FOLDER,
+                'visibility' => \mod_openstudio\local\api\content::VISIBILITY_MODULE,
+                'contenttype' => \mod_openstudio\local\api\content::TYPE_FOLDER,
                 'description' => random_string(),
                 'tags' => [random_string(), random_string(), random_string()],
                 'ownership' => 0,
@@ -165,7 +167,7 @@ class mod_openstudio_template_testcase extends advanced_testcase {
                 'embedcode' => '',
                 'weblink' => 'http://example.com',
                 'urltitle' => 'An example weblink',
-                'visibility' => mod_openstudio\local\api\content::VISIBILITY_INFOLDERONLY,
+                'visibility' => \mod_openstudio\local\api\content::VISIBILITY_INFOLDERONLY,
                 'description' => random_string(),
                 'tags' => [random_string(), random_string(), random_string()],
                 'ownership' => 0,
@@ -179,7 +181,7 @@ class mod_openstudio_template_testcase extends advanced_testcase {
                 'levelid' => 0,
                 'guidance' => random_string(),
                 'additionalslots' => 0,
-                'status' => mod_openstudio\local\api\levels::ACTIVE
+                'status' => \mod_openstudio\local\api\levels::ACTIVE
         ];
     }
 
@@ -189,7 +191,7 @@ class mod_openstudio_template_testcase extends advanced_testcase {
                 'name' => 'Dolor sit amet ' . random_string(),
                 'guidance' => random_string(),
                 'permissions' => 0,
-                'status' => mod_openstudio\local\api\levels::ACTIVE,
+                'status' => \mod_openstudio\local\api\levels::ACTIVE,
                 'contentorder' => $this->contenttemplatecount
         ];
     }
@@ -214,7 +216,7 @@ class mod_openstudio_template_testcase extends advanced_testcase {
         $params = [
                 'levelcontainer' => 3,
                 'levelid'        => $levelid,
-                'status'         => mod_openstudio\local\api\levels::ACTIVE
+                'status'         => \mod_openstudio\local\api\levels::ACTIVE
         ];
         $this->assertFalse($DB->record_exists('openstudio_folder_templates', $params));
 
@@ -222,7 +224,7 @@ class mod_openstudio_template_testcase extends advanced_testcase {
                 'guidance' => random_string(),
                 'additionalcontents' => 1
         ];
-        mod_openstudio\local\api\template::create($levelid, $template);
+        \mod_openstudio\local\api\template::create($levelid, $template);
 
         $select = <<<EOF
             levelcontainer = :levelcontainer
@@ -246,10 +248,10 @@ EOF;
         $template = [
                 'name' => random_string(),
                 'guidance' => random_string(),
-                'permissions' => mod_openstudio\local\api\folder::PERMISSION_REORDER
+                'permissions' => \mod_openstudio\local\api\folder::PERMISSION_REORDER
         ];
 
-        $template['id'] = mod_openstudio\local\api\template::create_content($foldertemplate->id, $template);
+        $template['id'] = \mod_openstudio\local\api\template::create_content($foldertemplate->id, $template);
         $this->assertNotEmpty($template['id']);
 
         // Check that we've added a slot to the template.
@@ -266,25 +268,25 @@ EOF;
         $templatedfolderid = $this->templatedfolders['full'];
         // This folder has a template, but there is also a deleted template
         // for this level. Make sure we get the right one.
-        $template = mod_openstudio\local\api\template::get_by_folderid($templatedfolderid);
+        $template = \mod_openstudio\local\api\template::get_by_folderid($templatedfolderid);
         $this->assertNotEmpty($template);
         $this->assertEquals($this->foldertemplate->id, $template->id);
     }
 
     public function test_get_by_folderid_no_template() {
         // This folder has no template, so should return false.
-        $this->assertFalse(mod_openstudio\local\api\template::get_by_folderid($this->folder));
+        $this->assertFalse(\mod_openstudio\local\api\template::get_by_folderid($this->folder));
     }
 
     public function test_get_by_folderid_no_folder() {
         $id = $this->get_nonexistant_id('openstudio_contents');
-        $this->assertFalse(mod_openstudio\local\api\template::get_by_folderid($id));
+        $this->assertFalse(\mod_openstudio\local\api\template::get_by_folderid($id));
     }
 
     public function test_get_template_by_levelid() {
         // This level has a template, but there is also a deleted template
         // for this level. Make sure we get the right one.
-        $template = mod_openstudio\local\api\template::get_by_levelid($this->contentlevelid);
+        $template = \mod_openstudio\local\api\template::get_by_levelid($this->contentlevelid);
         $this->assertNotEmpty($template);
         $this->assertEquals($this->foldertemplate->id, $template->id);
     }
@@ -295,27 +297,27 @@ EOF;
         $emptycontentlevel = end($contentlevels);
 
         // This level has no template, so should return false.
-        $this->assertFalse(mod_openstudio\local\api\template::get_by_levelid($emptycontentlevel));
+        $this->assertFalse(\mod_openstudio\local\api\template::get_by_levelid($emptycontentlevel));
     }
 
     public function test_get() {
         global $DB;
         $templateid = $this->foldertemplate->id;
         $templaterecord = $DB->get_record('openstudio_folder_templates', ['id' => $templateid]);
-        $template = mod_openstudio\local\api\template::get($templateid);
+        $template = \mod_openstudio\local\api\template::get($templateid);
         $this->assertEquals($templaterecord, $template);
     }
 
     public function test_get_no_template() {
         $id = $this->get_nonexistant_id('openstudio_folder_templates');
-        $this->assertFalse(mod_openstudio\local\api\template::get($id));
+        $this->assertFalse(\mod_openstudio\local\api\template::get($id));
     }
 
     public function test_get_contents() {
         $templateid = $this->foldertemplate->id;
 
         // There are 2 active slots and 1 deleted slot in the template, check we only get the active ones.
-        $templateslots = mod_openstudio\local\api\template::get_contents($templateid);
+        $templateslots = \mod_openstudio\local\api\template::get_contents($templateid);
         $this->assertEquals(2, count($templateslots));
         for ($i = 0; $i < 2; $i++) {
             $this->assertTrue(array_key_exists($this->templatecontents[$i]->id, $templateslots));
@@ -325,7 +327,7 @@ EOF;
 
     public function test_get_contents_no_template() {
         $id = $this->get_nonexistant_id('openstudio_folder_templates');
-        $this->assertEmpty(mod_openstudio\local\api\template::get_contents($id));
+        $this->assertEmpty(\mod_openstudio\local\api\template::get_contents($id));
     }
 
     public function test_get_content() {
@@ -333,13 +335,13 @@ EOF;
         $slottemplateid = reset($this->templatecontents)->id;
         $templaterecord = $DB->get_record('openstudio_content_templates', ['id' => $slottemplateid]);
 
-        $template = mod_openstudio\local\api\template::get_content($slottemplateid);
+        $template = \mod_openstudio\local\api\template::get_content($slottemplateid);
         $this->assertEquals($templaterecord, $template);
     }
 
     public function test_get_content_no_template() {
         $id = $this->get_nonexistant_id('openstudio_content_templates');
-        $this->assertFalse(mod_openstudio\local\api\template::get_content($id));
+        $this->assertFalse(\mod_openstudio\local\api\template::get_content($id));
     }
 
     public function test_get_content_by_contentorder() {
@@ -353,7 +355,7 @@ EOF;
         $templaterecord = $DB->get_record('openstudio_content_templates', $params);
 
         // Check that we get the correct template for the content.
-        $template = mod_openstudio\local\api\template::get_content_by_contentorder(
+        $template = \mod_openstudio\local\api\template::get_content_by_contentorder(
                 $templateid, $contenttemplate->contentorder);
         $this->assertEquals($templaterecord, $template);
     }
@@ -362,7 +364,7 @@ EOF;
         $templateid = $this->foldertemplate->id;
         // This content exists in the template, but has been deleted.
         $deletedslot = $this->templatecontents[2];
-        $this->assertFalse(mod_openstudio\local\api\template::get_content_by_contentorder(
+        $this->assertFalse(\mod_openstudio\local\api\template::get_content_by_contentorder(
                 $templateid, $deletedslot->contentorder));
     }
 
@@ -370,7 +372,7 @@ EOF;
         // This content is in a different template.
         $templateid = $this->foldertemplate->id;
         $otherslot = end($this->templatecontents);
-        $this->assertFalse(mod_openstudio\local\api\template::get_content_by_contentorder(
+        $this->assertFalse(\mod_openstudio\local\api\template::get_content_by_contentorder(
                 $templateid, $otherslot->contentorder));
     }
 
@@ -379,13 +381,13 @@ EOF;
         $otherslot = end($this->templatecontents);
         // There is no content template with this slotorder.
         $fakeslotorder = $otherslot->contentorder + 1;
-        $this->assertFalse(mod_openstudio\local\api\template::get_content_by_contentorder($templateid, $fakeslotorder));
+        $this->assertFalse(\mod_openstudio\local\api\template::get_content_by_contentorder($templateid, $fakeslotorder));
     }
 
     public function test_get_content_by_contentorder_no_folder() {
         // This folder template doesn't exist.
         $templateslot = $this->templatecontents[rand(0, 1)];
-        $this->assertFalse(mod_openstudio\local\api\template::get_content_by_contentorder(
+        $this->assertFalse(\mod_openstudio\local\api\template::get_content_by_contentorder(
                 $this->get_nonexistant_id('openstudio_folder_templates'),
                 $templateslot->contentorder));
     }
@@ -402,7 +404,7 @@ EOF;
                 'additionalcontents' => mt_rand(10, 20)
         ];
 
-        mod_openstudio\local\api\template::update($templateupdate);
+        \mod_openstudio\local\api\template::update($templateupdate);
 
         $updatedtemplate = $DB->get_record('openstudio_folder_templates', ['id' => $foldertemplate->id]);
 
@@ -417,16 +419,16 @@ EOF;
                 'id' => $this->get_nonexistant_id('openstudio_folder_templates'),
                 'guidance' => random_string()
         ];
-        $this->setExpectedException('coding_exception');
-        mod_openstudio\local\api\template::update($faketemplate);
+        $this->expectException('coding_exception');
+        \mod_openstudio\local\api\template::update($faketemplate);
     }
 
     public function test_update_no_id() {
         $faketemplate = (object) [
                 'guidance' => random_string()
         ];
-        $this->setExpectedException('coding_exception');
-        mod_openstudio\local\api\template::update($faketemplate);
+        $this->expectException('coding_exception');
+        \mod_openstudio\local\api\template::update($faketemplate);
     }
 
     public function test_update_content() {
@@ -441,7 +443,7 @@ EOF;
                 'guidance' => random_string()
         ];
 
-        mod_openstudio\local\api\template::update_content($templateupdate);
+        \mod_openstudio\local\api\template::update_content($templateupdate);
 
         $updatedtemplate = $DB->get_record('openstudio_content_templates', ['id' => $contenttemplate->id]);
 
@@ -456,16 +458,16 @@ EOF;
                 'id' => $this->get_nonexistant_id('openstudio_content_templates'),
                 'guidance' => random_string()
         ];
-        $this->setExpectedException('coding_exception');
-        mod_openstudio\local\api\template::update_content($faketemplate);
+        $this->expectException('coding_exception');
+        \mod_openstudio\local\api\template::update_content($faketemplate);
     }
 
     public function test_update_content_no_id() {
         $faketemplate = (object) [
                 'guidance' => random_string()
         ];
-        $this->setExpectedException('coding_exception');
-        mod_openstudio\local\api\template::update_content($faketemplate);
+        $this->expectException('coding_exception');
+        \mod_openstudio\local\api\template::update_content($faketemplate);
     }
 
     public function test_delete() {
@@ -473,46 +475,46 @@ EOF;
 
         $template = $this->foldertemplate;
         // Verify that the template exists and has content templates.
-        $folder = ['id' => $template->id, 'status' => mod_openstudio\local\api\levels::ACTIVE];
-        $contentparams = ['foldertemplateid' => $template->id, 'status' => mod_openstudio\local\api\levels::ACTIVE];
+        $folder = ['id' => $template->id, 'status' => \mod_openstudio\local\api\levels::ACTIVE];
+        $contentparams = ['foldertemplateid' => $template->id, 'status' => \mod_openstudio\local\api\levels::ACTIVE];
         $this->assertTrue($DB->record_exists('openstudio_folder_templates', $folder));
         $this->assertTrue($DB->record_exists('openstudio_content_templates', $contentparams));
 
-        mod_openstudio\local\api\template::delete($template->id);
+        \mod_openstudio\local\api\template::delete($template->id);
 
         // Check that the template records have been marked deleted.
         $this->assertFalse($DB->record_exists('openstudio_folder_templates', $folder));
         $this->assertFalse($DB->record_exists('openstudio_content_templates', $contentparams));
-        $folder['status'] = mod_openstudio\local\api\levels::SOFT_DELETED;
-        $contentparams['status'] = mod_openstudio\local\api\levels::SOFT_DELETED;
+        $folder['status'] = \mod_openstudio\local\api\levels::SOFT_DELETED;
+        $contentparams['status'] = \mod_openstudio\local\api\levels::SOFT_DELETED;
         $this->assertTrue($DB->record_exists('openstudio_folder_templates', $folder));
         $this->assertTrue($DB->record_exists('openstudio_content_templates', $contentparams));
     }
 
     public function test_delete_no_template() {
-        $this->setExpectedException('coding_exception');
-        mod_openstudio\local\api\template::delete($this->get_nonexistant_id('openstudio_folder_templates'));
+        $this->expectException('coding_exception');
+        \mod_openstudio\local\api\template::delete($this->get_nonexistant_id('openstudio_folder_templates'));
     }
 
     public function test_delete_content() {
         global $DB;
 
         $template = reset($this->templatecontents);
-        $slotparams = ['id' => $template->id, 'status' => mod_openstudio\local\api\levels::ACTIVE];
+        $slotparams = ['id' => $template->id, 'status' => \mod_openstudio\local\api\levels::ACTIVE];
         $this->assertTrue($DB->record_exists('openstudio_content_templates', $slotparams));
 
         // Get the other slots in the template.
         $params = [
                 'foldertemplateid' => $template->foldertemplateid,
-                'status' => mod_openstudio\local\api\levels::ACTIVE
+                'status' => \mod_openstudio\local\api\levels::ACTIVE
         ];
         $slottemplates = $DB->get_records('openstudio_content_templates', $params);
         unset($slottemplates[$template->id]);
 
-        mod_openstudio\local\api\template::delete_content($template->id);
+        \mod_openstudio\local\api\template::delete_content($template->id);
 
         $this->assertFalse($DB->record_exists('openstudio_content_templates', $slotparams));
-        $slotparams['status'] = mod_openstudio\local\api\levels::SOFT_DELETED;
+        $slotparams['status'] = \mod_openstudio\local\api\levels::SOFT_DELETED;
         $this->assertTrue($DB->record_exists('openstudio_content_templates', $slotparams));
 
         // Verify that slotorder is changed for other slots.
@@ -523,8 +525,8 @@ EOF;
     }
 
     public function test_delete_content_no_template() {
-        $this->setExpectedException('coding_exception');
-        mod_openstudio\local\api\template::delete_content($this->get_nonexistant_id('openstudio_content_templates'));
+        $this->expectException('coding_exception');
+        \mod_openstudio\local\api\template::delete_content($this->get_nonexistant_id('openstudio_content_templates'));
     }
 
 }

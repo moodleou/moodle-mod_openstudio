@@ -20,12 +20,12 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_openstudio;
+
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
-global $CFG;
-
-class mod_openstudio_rss_testcase extends advanced_testcase {
+class rss_testcase extends \advanced_testcase {
 
     private $course;
     private $users;
@@ -55,8 +55,8 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
         $this->course = $this->getDataGenerator()->create_course();
 
         // Create course groups.
-        $this->groups = new stdClass();
-        $this->groupings = new stdClass();
+        $this->groups = new \stdClass();
+        $this->groupings = new \stdClass();
         $this->groupings->a  = $this->getDataGenerator()->create_grouping(
                 array('name' => 'Grouping A', 'courseid' => $this->course->id));
         $this->groups->one = $this->getDataGenerator()->create_group(
@@ -64,7 +64,7 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
         $this->groups->two = $this->getDataGenerator()->create_group(
                 array('courseid' => $this->course->id, 'name' => 'The Lannisters'));
         // Add groups to our groupings.
-        $insert = new stdClass();
+        $insert = new \stdClass();
         $insert->groupingid = $this->groupings->a->id;
         $insert->groupid = $this->groups->one->id;
 
@@ -74,8 +74,8 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
         $DB->insert_record('groupings_groups', $insert);
 
         // Create Users.
-        $this->users = new stdClass();
-        $this->users->students = new stdClass();
+        $this->users = new \stdClass();
+        $this->users->students = new \stdClass();
         $this->users->students->one = $this->getDataGenerator()->create_user(
                 array('email' => 'student1@ouunittest.com', 'username' => 'student1'));
         $this->users->students->two = $this->getDataGenerator()->create_user(
@@ -96,7 +96,7 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
                 array('email' => 'student9@ouunittest.com', 'username' => 'student9'));
         $this->users->students->ten = $this->getDataGenerator()->create_user(
                 array('email' => 'student10@ouunittest.com', 'username' => 'student10'));
-        $this->users->teachers = new stdClass();
+        $this->users->teachers = new \stdClass();
         $this->users->teachers->one = $this->getDataGenerator()->create_user(
                 array('email' => 'teacher1@ouunittest.com', 'username' => 'teacher1'));
         $this->users->teachers->two = $this->getDataGenerator()->create_user(
@@ -178,7 +178,7 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
                         'embedcode' => '',
                         'weblink' => 'http://www.open.ac.uk/',
                         'urltitle' => 'Vesica Timeline',
-                        'visibility' => mod_openstudio\local\api\content::VISIBILITY_MODULE,
+                        'visibility' => \mod_openstudio\local\api\content::VISIBILITY_MODULE,
                         'description' => mt_rand(). ' - The Best YouTube Link Ever',
                         'tags' => array('Stark', 'Lannister', 'Targereyen'),
                         'ownership' => 0,
@@ -193,9 +193,9 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
         $this->resetAfterTest(true);
         $this->define_key_salt();
         // See that the function generates a key which matches the expect sha1 hash.
-        $this->assertEquals(mod_openstudio\local\api\rss::generate_key($this->users->students->three->id,
-                mod_openstudio\local\api\rss::MODULE),
-                sha1($this->users->students->three->id . '_' . mod_openstudio\local\api\rss::MODULE . '_' . $this->keysalt));
+        $this->assertEquals(\mod_openstudio\local\api\rss::generate_key($this->users->students->three->id,
+                \mod_openstudio\local\api\rss::MODULE),
+                sha1($this->users->students->three->id . '_' . \mod_openstudio\local\api\rss::MODULE . '_' . $this->keysalt));
     }
 
     /**
@@ -205,15 +205,15 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
         $this->resetAfterTest(true);
         $this->define_key_salt();
         // Generate a key for student 3.
-        $key = mod_openstudio\local\api\rss::generate_key(
-                $this->users->students->three->id, mod_openstudio\local\api\rss::ACTIVITY);
+        $key = \mod_openstudio\local\api\rss::generate_key(
+                $this->users->students->three->id, \mod_openstudio\local\api\rss::ACTIVITY);
         // Validate the key - should return true.
-        $isvalidated = mod_openstudio\local\api\rss::validate_key(
-                $key, $this->users->students->three->id, mod_openstudio\local\api\rss::ACTIVITY);
+        $isvalidated = \mod_openstudio\local\api\rss::validate_key(
+                $key, $this->users->students->three->id, \mod_openstudio\local\api\rss::ACTIVITY);
         $this->assertEquals(true, $isvalidated);
         // Just because we're fun, pass garbage to the function and see if it does come back as false.
-        $this->assertEquals(false, mod_openstudio\local\api\rss::validate_key('a6NJdkjda86nbGujdnAKh#&!jafkIU',
-                $this->users->students->three->id, mod_openstudio\local\api\rss::ACTIVITY));
+        $this->assertEquals(false, \mod_openstudio\local\api\rss::validate_key('a6NJdkjda86nbGujdnAKh#&!jafkIU',
+                $this->users->students->three->id, \mod_openstudio\local\api\rss::ACTIVITY));
     }
 
     /**
@@ -226,23 +226,23 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
         // Let's create 30 pinboard slots for student1.
         for ($i = 0; $i < 30; $i++) {
             $this->singleentrydata['name'] = 'Slot No. ' . $i;
-            ${'pbslot' . $i} = mod_openstudio\local\api\content::create_in_pinboard(
+            ${'pbslot' . $i} = \mod_openstudio\local\api\content::create_in_pinboard(
                     $this->studiolevels->id, $this->users->students->one->id, $this->singleentrydata);
 
             // Let's add eight flags to each slot. 4 FAVOURITES & 4 MADEMELAUGH.
-            mod_openstudio\local\api\flags::toggle(${'pbslot' . $i}, mod_openstudio\local\api\flags::FAVOURITE,
+            \mod_openstudio\local\api\flags::toggle(${'pbslot' . $i}, \mod_openstudio\local\api\flags::FAVOURITE,
                     'on', $this->users->students->three->id);
-            mod_openstudio\local\api\flags::toggle(${'pbslot' . $i}, mod_openstudio\local\api\flags::FAVOURITE,
+            \mod_openstudio\local\api\flags::toggle(${'pbslot' . $i}, \mod_openstudio\local\api\flags::FAVOURITE,
                     'on', $this->users->students->four->id);
-            mod_openstudio\local\api\flags::toggle(${'pbslot' . $i}, mod_openstudio\local\api\flags::FAVOURITE,
+            \mod_openstudio\local\api\flags::toggle(${'pbslot' . $i}, \mod_openstudio\local\api\flags::FAVOURITE,
                     'on', $this->users->students->five->id);
-            mod_openstudio\local\api\flags::toggle(${'pbslot' . $i}, mod_openstudio\local\api\flags::MADEMELAUGH,
+            \mod_openstudio\local\api\flags::toggle(${'pbslot' . $i}, \mod_openstudio\local\api\flags::MADEMELAUGH,
                     'on', $this->users->students->six->id);
-            mod_openstudio\local\api\flags::toggle(${'pbslot' . $i}, mod_openstudio\local\api\flags::MADEMELAUGH,
+            \mod_openstudio\local\api\flags::toggle(${'pbslot' . $i}, \mod_openstudio\local\api\flags::MADEMELAUGH,
                     'on', $this->users->students->seven->id);
-            mod_openstudio\local\api\flags::toggle(${'pbslot' . $i}, mod_openstudio\local\api\flags::MADEMELAUGH,
+            \mod_openstudio\local\api\flags::toggle(${'pbslot' . $i}, \mod_openstudio\local\api\flags::MADEMELAUGH,
                     'on', $this->users->students->eight->id);
-            mod_openstudio\local\api\flags::toggle(${'pbslot' . $i}, mod_openstudio\local\api\flags::MADEMELAUGH,
+            \mod_openstudio\local\api\flags::toggle(${'pbslot' . $i}, \mod_openstudio\local\api\flags::MADEMELAUGH,
                     'on', $this->users->students->nine->id);
 
             // So time modified is different.
@@ -263,7 +263,7 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
          * 5. The studio id should match that of studio_level.
          * 6. Total slots returned should be no more than 25.
          */
-        $pinboardrssslots = mod_openstudio\local\api\rss::pinboard($this->users->students->one->id, $this->studiolevels->id, 0);
+        $pinboardrssslots = \mod_openstudio\local\api\rss::pinboard($this->users->students->one->id, $this->studiolevels->id, 0);
         // Check 1.
         $this->assertNotEquals(false, $pinboardrssslots);
         $returnedslots = 0;
@@ -295,11 +295,11 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
         // So timemodified increases.
         sleep(1);
         // Randomly picked $pbslot18 from those created in this function above.
-        mod_openstudio\local\api\content::update($this->users->students->one->id, $pbslot18, $this->singleentrydata);
-        mod_openstudio\local\api\flags::toggle($pbslot18, mod_openstudio\local\api\flags::MADEMELAUGH,
+        \mod_openstudio\local\api\content::update($this->users->students->one->id, $pbslot18, $this->singleentrydata);
+        \mod_openstudio\local\api\flags::toggle($pbslot18, \mod_openstudio\local\api\flags::MADEMELAUGH,
                 'on', $this->users->students->ten->id);
         // Let's query everything again and make sure $pbslot18 is the first result that comes back.
-        $pinboardrssslots2 = mod_openstudio\local\api\rss::pinboard($this->users->students->one->id,
+        $pinboardrssslots2 = \mod_openstudio\local\api\rss::pinboard($this->users->students->one->id,
                 $this->studiolevels->id);
         // Just make sure we got something back!
         $this->assertNotEquals(false, $pinboardrssslots2);
@@ -333,27 +333,27 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
                         'embedcode' => '',
                         'weblink' => 'http://www.open.ac.uk/',
                         'urltitle' => 'Vesica Timeline',
-                        'visibility' => mod_openstudio\local\api\content::VISIBILITY_PRIVATE,
+                        'visibility' => \mod_openstudio\local\api\content::VISIBILITY_PRIVATE,
                         'description' => 'YouTube link',
                         'tags' => array(random_string(), random_string(), random_string()),
                         'ownership' => 0,
                         'sid' => 0 // For a new slot.
                     );
-                    $slots[$slotlevelid][$slotcount] = mod_openstudio\local\api\content::create($this->studiolevels->id,
+                    $slots[$slotlevelid][$slotcount] = \mod_openstudio\local\api\content::create($this->studiolevels->id,
                             $this->users->students->one->id, 3, $slotlevelid, $data); // Level 3 is for slots.
 
                     // Let's add some flags to each slot.
-                    mod_openstudio\local\api\flags::toggle(
-                            $slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::FAVOURITE,
+                    \mod_openstudio\local\api\flags::toggle(
+                            $slots[$slotlevelid][$slotcount], \mod_openstudio\local\api\flags::FAVOURITE,
                             'on', $this->users->students->three->id);
-                    mod_openstudio\local\api\flags::toggle(
-                            $slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::INSPIREDME,
+                    \mod_openstudio\local\api\flags::toggle(
+                            $slots[$slotlevelid][$slotcount], \mod_openstudio\local\api\flags::INSPIREDME,
                             'on', $this->users->students->four->id);
-                    mod_openstudio\local\api\flags::toggle(
-                            $slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::NEEDHELP,
+                    \mod_openstudio\local\api\flags::toggle(
+                            $slots[$slotlevelid][$slotcount], \mod_openstudio\local\api\flags::NEEDHELP,
                             'on', $this->users->students->five->id);
-                    mod_openstudio\local\api\flags::toggle(
-                            $slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::MADEMELAUGH,
+                    \mod_openstudio\local\api\flags::toggle(
+                            $slots[$slotlevelid][$slotcount], \mod_openstudio\local\api\flags::MADEMELAUGH,
                             'on', $this->users->students->six->id);
 
                     // So time modified is different.
@@ -376,7 +376,7 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
          * 6. The studio id should match that of studio_level.
          * 7. Total slots returned should be no more than 25.
          */
-        $activityslotsrss = mod_openstudio\local\api\rss::activity($this->users->students->one->id, $this->studiolevels->id);
+        $activityslotsrss = \mod_openstudio\local\api\rss::activity($this->users->students->one->id, $this->studiolevels->id);
         // Check 1.
         $this->assertNotEquals(false, $activityslotsrss);
         $returnedslots = 0;
@@ -428,21 +428,21 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
                         'sid' => 0 // For a new slot.
                     );
                     // These slots will be created by student 8, who is in the same group as students 6, 9, 10.
-                    $slots[$slotlevelid][$slotcount] = mod_openstudio\local\api\content::create($this->studiolevels->id,
+                    $slots[$slotlevelid][$slotcount] = \mod_openstudio\local\api\content::create($this->studiolevels->id,
                             $this->users->students->eight->id, 3, $slotlevelid, $data); // Level 3 is for slots.
 
                     // Let's add some flags to each slot.
-                    mod_openstudio\local\api\flags::toggle(
-                            $slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::FAVOURITE,
+                    \mod_openstudio\local\api\flags::toggle(
+                            $slots[$slotlevelid][$slotcount], \mod_openstudio\local\api\flags::FAVOURITE,
                             'on', $this->users->students->three->id);
-                    mod_openstudio\local\api\flags::toggle(
-                            $slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::INSPIREDME,
+                    \mod_openstudio\local\api\flags::toggle(
+                            $slots[$slotlevelid][$slotcount], \mod_openstudio\local\api\flags::INSPIREDME,
                             'on', $this->users->students->four->id);
-                    mod_openstudio\local\api\flags::toggle(
-                            $slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::NEEDHELP,
+                    \mod_openstudio\local\api\flags::toggle(
+                            $slots[$slotlevelid][$slotcount], \mod_openstudio\local\api\flags::NEEDHELP,
                             'on', $this->users->students->five->id);
-                    mod_openstudio\local\api\flags::toggle(
-                            $slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::MADEMELAUGH,
+                    \mod_openstudio\local\api\flags::toggle(
+                            $slots[$slotlevelid][$slotcount], \mod_openstudio\local\api\flags::MADEMELAUGH,
                             'on', $this->users->students->six->id);
 
                     // So time modified is different.
@@ -452,20 +452,20 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
         }
 
         // Should not be false for student1 even he/she is in a different group given the  slot is
-        // shared with setting mod_openstudio\local\api\content\VISIBILITY_GROUP.
-        $groupslotsrssfalse = mod_openstudio\local\api\rss::group($this->users->students->one->id, $this->studiolevels->id);
+        // shared with setting \mod_openstudio\local\api\content\VISIBILITY_GROUP.
+        $groupslotsrssfalse = \mod_openstudio\local\api\rss::group($this->users->students->one->id, $this->studiolevels->id);
         $this->assertNotEquals(false, $groupslotsrssfalse);
 
         // Should not be false for 6 as 6 is in the same group as 8.
-        $groupslotsrss = mod_openstudio\local\api\rss::group($this->users->students->six->id, $this->studiolevels->id);
+        $groupslotsrss = \mod_openstudio\local\api\rss::group($this->users->students->six->id, $this->studiolevels->id);
         $this->assertNotEquals(false, $groupslotsrss);
 
         // Should not be false for 7 as 7 does not exist.
-        $groupslotsrss = mod_openstudio\local\api\rss::group($this->users->students->seven->id, $this->studiolevels->id);
+        $groupslotsrss = \mod_openstudio\local\api\rss::group($this->users->students->seven->id, $this->studiolevels->id);
         $this->assertEquals(false, $groupslotsrss);
 
         // Should not be false for 8 as 8 is the creator!!.
-        $groupslotsrss = mod_openstudio\local\api\rss::group($this->users->students->eight->id, $this->studiolevels->id);
+        $groupslotsrss = \mod_openstudio\local\api\rss::group($this->users->students->eight->id, $this->studiolevels->id);
         $this->assertNotEquals(false, $groupslotsrss);
 
         $returnedslots = '';
@@ -484,7 +484,7 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
             // This we have established by checking for user 7 and a false returning for users in other groups).
             // Let's then make sure all our slots are either module or group visibility.
             $this->assertContains($slot->visibility,
-                    array(mod_openstudio\local\api\content::VISIBILITY_GROUP, mod_openstudio\local\api\content::VISIBILITY_MODULE));
+                    [\mod_openstudio\local\api\content::VISIBILITY_GROUP, \mod_openstudio\local\api\content::VISIBILITY_MODULE]);
         }
         // Make sure total is less than or equal to 25.
         $this->assertLessThanOrEqual(25, $returnedslots);
@@ -509,7 +509,7 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
                         'embedcode' => '',
                         'weblink' => 'http://www.open.ac.uk/',
                         'urltitle' => 'Vesica Timeline',
-                        'visibility' => mod_openstudio\local\api\content::VISIBILITY_MODULE,
+                        'visibility' => \mod_openstudio\local\api\content::VISIBILITY_MODULE,
                         'description' => 'YouTube link',
                         'tags' => array(random_string(), random_string(), random_string()),
                         'ownership' => 0,
@@ -518,23 +518,23 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
 
                     // These slots will be created by student 7, who is in the same group as students 6, 8, 9, 10.
                     // Level 3 is for slots.
-                    $slots[$slotlevelid][$slotcount] = mod_openstudio\local\api\content::create(
+                    $slots[$slotlevelid][$slotcount] = \mod_openstudio\local\api\content::create(
                             $this->studiolevels->id, $this->users->students->eight->id, 3, $slotlevelid, $data);
                     $data['name'] = 'Slot No. ' . $slotcount + 1;
-                    $slots[$slotlevelid][$slotcount + 1] = mod_openstudio\local\api\content::create(
+                    $slots[$slotlevelid][$slotcount + 1] = \mod_openstudio\local\api\content::create(
                             $this->studiolevels->id, $this->users->students->six->id, 3, $slotlevelid, $data);
                     // Let's add some flags to each slot.
-                    mod_openstudio\local\api\flags::toggle(
-                            $slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::FAVOURITE,
+                    \mod_openstudio\local\api\flags::toggle(
+                            $slots[$slotlevelid][$slotcount], \mod_openstudio\local\api\flags::FAVOURITE,
                             'on', $this->users->students->three->id);
-                    mod_openstudio\local\api\flags::toggle(
-                            $slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::INSPIREDME,
+                    \mod_openstudio\local\api\flags::toggle(
+                            $slots[$slotlevelid][$slotcount], \mod_openstudio\local\api\flags::INSPIREDME,
                             'on', $this->users->students->four->id);
-                    mod_openstudio\local\api\flags::toggle(
-                            $slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::NEEDHELP,
+                    \mod_openstudio\local\api\flags::toggle(
+                            $slots[$slotlevelid][$slotcount], \mod_openstudio\local\api\flags::NEEDHELP,
                             'on', $this->users->students->five->id);
-                    mod_openstudio\local\api\flags::toggle(
-                            $slots[$slotlevelid][$slotcount], mod_openstudio\local\api\flags::MADEMELAUGH,
+                    \mod_openstudio\local\api\flags::toggle(
+                            $slots[$slotlevelid][$slotcount], \mod_openstudio\local\api\flags::MADEMELAUGH,
                             'on', $this->users->students->nine->id);
 
                     // So time modified is different.
@@ -544,7 +544,7 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
         }
 
         // Should not be false for another user on the course.
-        $moduleslotsrss = mod_openstudio\local\api\rss::module($this->users->students->nine->id, $this->studiolevels->id);
+        $moduleslotsrss = \mod_openstudio\local\api\rss::module($this->users->students->nine->id, $this->studiolevels->id);
         $this->assertNotEquals(false, $moduleslotsrss);
         $returnedslots = '';
 
@@ -560,7 +560,7 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
             $this->assertContains($slot->userid,
                     array($this->users->students->six->id, $this->users->students->eight->id));
             // Let's make sure all our slots are group visibility.
-            $this->assertEquals(mod_openstudio\local\api\content::VISIBILITY_MODULE, $slot->visibility);
+            $this->assertEquals(\mod_openstudio\local\api\content::VISIBILITY_MODULE, $slot->visibility);
         }
         // Make sure total is less than or equal to 25.
         $this->assertLessThanOrEqual(25, $returnedslots);
@@ -573,26 +573,26 @@ class mod_openstudio_rss_testcase extends advanced_testcase {
         $this->resetAfterTest(true);
         $this->populate_single_data_array();
         // To keep the test simple, we'll create a pinboard slot and test on that.
-        $myslotid = mod_openstudio\local\api\content::create_in_pinboard(
+        $myslotid = \mod_openstudio\local\api\content::create_in_pinboard(
                 $this->studiolevels->id, $this->users->students->three->id, $this->singleentrydata);
         // Let's add eight flags to each slot. 3 FAVOURITES & 4 MADEMELAUGH. CONCLUSION: TOTAL = 7.
-        mod_openstudio\local\api\flags::toggle(
-                $myslotid, mod_openstudio\local\api\flags::FAVOURITE, 'on',  $this->users->students->one->id);
-        mod_openstudio\local\api\flags::toggle(
-                $myslotid, mod_openstudio\local\api\flags::FAVOURITE, 'on', $this->users->students->four->id);
-        mod_openstudio\local\api\flags::toggle(
-                $myslotid, mod_openstudio\local\api\flags::FAVOURITE, 'on', $this->users->students->five->id);
-        mod_openstudio\local\api\flags::toggle(
-                $myslotid, mod_openstudio\local\api\flags::MADEMELAUGH, 'on', $this->users->students->six->id);
-        mod_openstudio\local\api\flags::toggle(
-                $myslotid, mod_openstudio\local\api\flags::MADEMELAUGH, 'on', $this->users->students->ten->id);
-        mod_openstudio\local\api\flags::toggle(
-                $myslotid, mod_openstudio\local\api\flags::MADEMELAUGH, 'on', $this->users->students->eight->id);
-        mod_openstudio\local\api\flags::toggle(
-                $myslotid, mod_openstudio\local\api\flags::MADEMELAUGH, 'on', $this->users->students->nine->id);
+        \mod_openstudio\local\api\flags::toggle(
+                $myslotid, \mod_openstudio\local\api\flags::FAVOURITE, 'on',  $this->users->students->one->id);
+        \mod_openstudio\local\api\flags::toggle(
+                $myslotid, \mod_openstudio\local\api\flags::FAVOURITE, 'on', $this->users->students->four->id);
+        \mod_openstudio\local\api\flags::toggle(
+                $myslotid, \mod_openstudio\local\api\flags::FAVOURITE, 'on', $this->users->students->five->id);
+        \mod_openstudio\local\api\flags::toggle(
+                $myslotid, \mod_openstudio\local\api\flags::MADEMELAUGH, 'on', $this->users->students->six->id);
+        \mod_openstudio\local\api\flags::toggle(
+                $myslotid, \mod_openstudio\local\api\flags::MADEMELAUGH, 'on', $this->users->students->ten->id);
+        \mod_openstudio\local\api\flags::toggle(
+                $myslotid, \mod_openstudio\local\api\flags::MADEMELAUGH, 'on', $this->users->students->eight->id);
+        \mod_openstudio\local\api\flags::toggle(
+                $myslotid, \mod_openstudio\local\api\flags::MADEMELAUGH, 'on', $this->users->students->nine->id);
 
         // Should not be false.
-        $slotsrss = mod_openstudio\local\api\rss::slot($myslotid);
+        $slotsrss = \mod_openstudio\local\api\rss::slot($myslotid);
         $this->assertNotEquals(false, $slotsrss);
 
         $returnedparams = 0;

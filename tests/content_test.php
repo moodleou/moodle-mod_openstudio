@@ -22,13 +22,21 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_openstudio;
+
 defined('MOODLE_INTERNAL') || die();
 
-require_once('openstudio_testcase.php'); // Until this is moved to generator.
+class content_testcase extends \advanced_testcase {
 
-class mod_openstudio_content_testcase extends openstudio_testcase {
-
-    private $pinboardcontents;
+    protected $users;
+    protected $file;
+    protected $course;
+    protected $generator; // Contains mod_openstudio specific data generator functions.
+    protected $studiolevels; // Generic studio instance with no levels or slots.
+    protected $totalcontents;
+    protected $pinboardslots;
+    protected $singleentrydata;
+    protected $contentdata;
 
     /**
      * Sets up our fixtures.
@@ -38,7 +46,6 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
         $teacherroleid = 3;
         $studentroleid = 5;
         $this->totalcontents = 24; // This is what the scripts below create for ONE CMID.
-        $this->pinboardcontents = 3; // This is what the scripts below create for ONE CMID.
 
         // Our test data has 1 course, 2 groups, 2 teachers and 10 students.
 
@@ -46,14 +53,14 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
         $this->course = $this->getDataGenerator()->create_course();
 
         // Create user.
-        $this->users = new stdClass();
-        $this->users->students = new stdClass();
+        $this->users = new \stdClass();
+        $this->users->students = new \stdClass();
         $this->users->students->one = $this->getDataGenerator()->create_user(
                 array('email' => 'student1@ouunittest.com', 'username' => 'student1'));
         $this->users->students->two = $this->getDataGenerator()->create_user(
                 array('email' => 'student2@ouunittest.com', 'username' => 'student2'));
 
-        $this->users->teachers = new stdClass();
+        $this->users->teachers = new \stdClass();
         $this->users->teachers->one = $this->getDataGenerator()->create_user(
                 array('email' => 'teacher1@ouunittest.com', 'username' => 'teacher1'));
 
@@ -106,7 +113,7 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
     }
 
     /**
-     * Tests the mod_openstudio\local\api\content::create() function in the content api.
+     * Tests the \mod_openstudio\local\api\content::create() function in the content api.
      */
     public function test_create() {
         $this->resetAfterTest(true);
@@ -124,13 +131,13 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
                             'embedcode' => '',
                             'weblink' => 'http://www.open.ac.uk/',
                             'urltitle' => 'Vesica Timeline',
-                            'visibility' => mod_openstudio\local\api\content::VISIBILITY_MODULE,
+                            'visibility' => \mod_openstudio\local\api\content::VISIBILITY_MODULE,
                             'description' => 'YouTube link',
                             'tags' => array(random_string(), random_string(), random_string()),
                             'ownership' => 0,
                             'sid' => 0 // For a new content.
                     );
-                    $contents[$contentlevelid][$contentcount] = mod_openstudio\local\api\content::create(
+                    $contents[$contentlevelid][$contentcount] = \mod_openstudio\local\api\content::create(
                             $this->studiolevels->id,  $this->users->students->one->id,
                             3, $contentlevelid, $data); // Level 3 is for contents.
                     $this->assertGreaterThan(0, $contents[$contentlevelid][$contentcount],
@@ -148,9 +155,10 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
     public function test_get_record() {
         $this->resetAfterTest(true);
 
-        $this->populate_single_data_array();
-        $this->populate_content_data();
-        $this->assertGreaterThan(0, $this->contentid, 'Slot creation failed - no contentid returned.');
+        $this->singleentrydata = $this->generator->generate_single_data_array($this->users->students->one);
+        $this->contentdata = $this->generator->generate_content_data(
+                $this->studiolevels, $this->users->students->one->id, $this->singleentrydata);
+        $this->assertGreaterThan(0, $this->contentdata->id, 'Slot creation failed - no contentid returned.');
         $this->assertNotEquals(false, $this->contentdata);
         $this->assertEquals($this->contentdata->name, $this->singleentrydata['name']);
         $this->assertEquals($this->contentdata->description, $this->singleentrydata['description']);
@@ -166,10 +174,11 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
     public function test_empty_content() {
         $this->resetAfterTest(true);
 
-        $this->populate_single_data_array();
-        $this->populate_content_data();
+        $this->singleentrydata = $this->generator->generate_single_data_array($this->users->students->one);
+        $this->contentdata = $this->generator->generate_content_data(
+                $this->studiolevels, $this->users->students->one->id, $this->singleentrydata);
         $this->setUser($this->users->students->one);
-        $emptyresult = mod_openstudio\local\api\content::empty_content($this->users->students->one->id, $this->contentid);
+        $emptyresult = \mod_openstudio\local\api\content::empty_content($this->users->students->one->id, $this->contentdata->id);
         $this->assertNotEquals(false, $emptyresult);
     }
 
@@ -179,10 +188,11 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
     public function test_delete() {
         $this->resetAfterTest(true);
 
-        $this->populate_single_data_array();
-        $this->populate_content_data();
+        $this->singleentrydata = $this->generator->generate_single_data_array($this->users->students->one);
+        $this->contentdata = $this->generator->generate_content_data(
+                $this->studiolevels, $this->users->students->one->id, $this->singleentrydata);
         $this->setUser($this->users->students->one);
-        $deleteresult = mod_openstudio\local\api\content::delete($this->users->students->one->id, $this->contentid);
+        $deleteresult = \mod_openstudio\local\api\content::delete($this->users->students->one->id, $this->contentdata->id);
         $this->assertNotEquals(false, $deleteresult);
     }
 
@@ -193,21 +203,22 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
         global $CFG;
         $this->resetAfterTest(true);
 
-        $class = new ReflectionClass('mod_openstudio\local\api\content');
+        $class = new \ReflectionClass('\mod_openstudio\local\api\content');
         $method = $class->getMethod('create_thumbnail');
         $method->setAccessible(true);
 
         // Local file to upload to server to simulate file upload.
         $filepath = $CFG->dirroot . '/mod/openstudio/tests/importfiles/test1.jpg';
 
-        $this->populate_single_data_array();
-        $this->populate_file_data();
-        $this->populate_content_data();
+        $this->singleentrydata = $this->generator->generate_single_data_array($this->users->students->one);
+        $this->file = $this->generator->generate_file_data($this->users->students->one);
+        $this->contentdata = $this->generator->generate_content_data(
+                $this->studiolevels, $this->users->students->one->id, $this->singleentrydata);
         $this->setUser($this->users->students->one);
-        $context = context_module::instance($this->studiolevels->cmid);
+        $context = \context_module::instance($this->studiolevels->cmid);
         $this->file->contextid = $context->id;
         // Override our YouTube video upload with type image.
-        $this->contentdata->contenttype = mod_openstudio\local\api\content::TYPE_IMAGE;
+        $this->contentdata->contenttype = \mod_openstudio\local\api\content::TYPE_IMAGE;
         $fs = get_file_storage();
         $fs->create_file_from_pathname($this->file, $filepath);
 
@@ -222,17 +233,18 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
     public function test_get_contenttype() {
         $this->resetAfterTest(true);
 
-        $class = new ReflectionClass('mod_openstudio\local\api\content');
+        $class = new \ReflectionClass('\mod_openstudio\local\api\content');
         $method = $class->getMethod('get_contenttype');
         $method->setAccessible(true);
 
-        $this->populate_single_data_array();
-        $this->populate_file_data();
-        $this->populate_content_data();
+        $this->singleentrydata = $this->generator->generate_single_data_array($this->users->students->one);
+        $this->file = $this->generator->generate_file_data($this->users->students->one);
+        $this->contentdata = $this->generator->generate_content_data(
+                $this->studiolevels, $this->users->students->one->id, $this->singleentrydata);
         // X Do a check on jpg for images. But first arrange our ...
         // X $file object the wya the application expects it!
         $x = $this->file;
-        $this->file = '';
+        $this->file = [];
         $this->file['file'] = $x;
         $this->file['mimetype'] = array();
         $this->file['mimetype']['extension'] = 'jpg';
@@ -241,7 +253,7 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
         $dataarray = $this->object_to_array($this->contentdata);
         $updateddata = $method->invokeArgs(null, array($dataarray, $this->file));
 
-        $this->assertEquals(mod_openstudio\local\api\content::TYPE_IMAGE, $updateddata['contenttype']);
+        $this->assertEquals(\mod_openstudio\local\api\content::TYPE_IMAGE, $updateddata['contenttype']);
         $this->assertEquals($this->file['file']->filename, $updateddata['content']);
     }
 
@@ -251,17 +263,17 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
     public function test_process_data() {
         $this->resetAfterTest(true);
 
-        $class = new ReflectionClass('mod_openstudio\local\api\content');
+        $class = new \ReflectionClass('\mod_openstudio\local\api\content');
         $method = $class->getMethod('process_data');
         $method->setAccessible(true);
 
-        $this->populate_single_data_array();
+        $this->singleentrydata = $this->generator->generate_single_data_array($this->users->students->one);
 
         $processeddata = $method->invokeArgs(null, array($this->singleentrydata));
 
         // Given the data $singleentrydata contains, urltitle should be empty and content should be populated.
         $this->assertNotEmpty($processeddata['content']);
-        $this->assertEquals($processeddata['contenttype'], mod_openstudio\local\api\content::TYPE_URL);
+        $this->assertEquals($processeddata['contenttype'], \mod_openstudio\local\api\content::TYPE_URL);
         // Ideally, we should check every data type. Perhaps later if we have time.
     }
 
@@ -271,11 +283,11 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
     public function test_create_in_pinboard() {
         $this->resetAfterTest(true);
 
-        $this->populate_single_data_array();
-        $pinboardcontentid = mod_openstudio\local\api\content::create_in_pinboard($this->studiolevels->id,
+        $this->singleentrydata = $this->generator->generate_single_data_array($this->users->students->one);
+        $pinboardcontentid = \mod_openstudio\local\api\content::create_in_pinboard($this->studiolevels->id,
                 $this->users->students->one->id, $this->singleentrydata);
         $this->assertGreaterThan(0, $pinboardcontentid, 'Pinboard content creation failed.');
-        $pinboardcontentdata = mod_openstudio\local\api\content::get_record($this->users->students->one->id,
+        $pinboardcontentdata = \mod_openstudio\local\api\content::get_record($this->users->students->one->id,
                 $pinboardcontentid);
         $this->assertNotEquals(false, $pinboardcontentdata);
         $this->assertEquals($pinboardcontentdata->name, $this->singleentrydata['name']);
@@ -286,23 +298,24 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
     }
 
     /**
-     * Tests the mod_openstudio\local\api\content::update() function
+     * Tests the \mod_openstudio\local\api\content::update() function
      */
     public function test_update() {
         $this->resetAfterTest(true);
 
         $this->setUser($this->users->students->one);
-        $this->populate_single_data_array();
-        $this->populate_content_data();
-        $this->assertGreaterThan(0, $this->contentid, 'Slot creation failed - no contentid returned.');
+        $this->singleentrydata = $this->generator->generate_single_data_array($this->users->students->one);
+        $this->contentdata = $this->generator->generate_content_data(
+                $this->studiolevels, $this->users->students->one->id, $this->singleentrydata);
+        $this->assertGreaterThan(0, $this->contentdata->id, 'Slot creation failed - no contentid returned.');
         $this->singleentrydata['name'] = 'This is the new name!!';
         $this->singleentrydata['descriptions'] = 'This is the new description!!';
 
-        $updatedcontentid = mod_openstudio\local\api\content::update(
-                $this->users->students->one->id, $this->contentid, $this->singleentrydata);
+        $updatedcontentid = \mod_openstudio\local\api\content::update(
+                $this->users->students->one->id, $this->contentdata->id, $this->singleentrydata);
         $this->assertNotEquals(false, $updatedcontentid);
-        $updatedcontentdata = mod_openstudio\local\api\content::get_record($this->users->students->one->id, $updatedcontentid);
-        $this->assertEquals($updatedcontentid, $this->contentid);
+        $updatedcontentdata = \mod_openstudio\local\api\content::get_record($this->users->students->one->id, $updatedcontentid);
+        $this->assertEquals($updatedcontentid, $this->contentdata->id);
         $this->assertEquals($updatedcontentdata->name, $this->singleentrydata['name']);
         $this->assertEquals($updatedcontentdata->description, $this->singleentrydata['description']);
     }
@@ -317,23 +330,24 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
 
         // Create a content, update it so it has a version, then let's try to delete the version.
         $this->setUser($this->users->students->one);
-        $this->populate_single_data_array();
-        $this->populate_content_data();
-        $this->assertGreaterThan(0, $this->contentid, 'Slot creation failed - no contentid returned.');
+        $this->singleentrydata = $this->generator->generate_single_data_array($this->users->students->one);
+        $this->contentdata = $this->generator->generate_content_data(
+                $this->studiolevels, $this->users->students->one->id, $this->singleentrydata);
+        $this->assertGreaterThan(0, $this->contentdata->id, 'Slot creation failed - no contentid returned.');
         $this->singleentrydata['name'] = 'This is the new name!!';
         $this->singleentrydata['descriptions'] = 'This is the new description!!';
         $this->singleentrydata['weblink'] = 'http://open.edu';
 
-        $context = context_module::instance($this->studiolevels->cmid);
+        $context = \context_module::instance($this->studiolevels->cmid);
 
-        $updatedcontentid = mod_openstudio\local\api\content::update(
-                $this->users->students->one->id, $this->contentid, $this->singleentrydata, null, $context, true);
+        $updatedcontentid = \mod_openstudio\local\api\content::update(
+                $this->users->students->one->id, $this->contentdata->id, $this->singleentrydata, null, $context, true);
         $this->assertNotEquals(false, $updatedcontentid);
-        $this->assertEquals($updatedcontentid, $this->contentid);
+        $this->assertEquals($updatedcontentid, $this->contentdata->id);
         // Update successful, now get the version number and delete it.
         $version = $DB->get_record('openstudio_content_versions', array('contentid' => $updatedcontentid), '*', MUST_EXIST);
 
-        mod_openstudio\local\api\content::version_delete($this->users->students->one->id, $version->id);
+        \mod_openstudio\local\api\content::version_delete($this->users->students->one->id, $version->id);
 
         $this->assertFalse($DB->record_exists('openstudio_content_versions',
                 array('id' => $version->id, 'deletedby' => null, 'deletedtime' => null)));
@@ -344,7 +358,7 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
         // Setup tutor groups.
         $tutorrole = $DB->get_record('role', array('shortname' => 'teacher'));
         $tutorrole2 = $DB->get_record('role', array('shortname' => 'editingteacher'));
-        $this->users->tutors = new stdClass();
+        $this->users->tutors = new \stdClass();
         $this->users->tutors->one = $this->getDataGenerator()->create_user(
                 array('email' => 'tutor1@ouunittest.com', 'username' => 'tutor1'));
         $this->users->tutors->two = $this->getDataGenerator()->create_user(
@@ -361,12 +375,12 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
                 $tutorrole2->id, 'manual');
 
         // Create tutor groups.
-        $groups = new stdClass();
+        $groups = new \stdClass();
         $groups->one = $this->getDataGenerator()->create_group(array('courseid' => $this->course->id));
         $groups->two = $this->getDataGenerator()->create_group(array('courseid' => $this->course->id));
         $groups->three = $this->getDataGenerator()->create_group(array('courseid' => $this->course->id));
 
-        $groupings = new stdClass();
+        $groupings = new \stdClass();
         $groupings->one = $this->getDataGenerator()->create_grouping(array('courseid' => $this->course->id));
         $groupings->two = $this->getDataGenerator()->create_grouping(array('courseid' => $this->course->id));
 
@@ -424,28 +438,28 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
 
         $tutorroles = array($tutorrole->id);
         // Student 1 in in the right group, but isn't a tutor.
-        $this->assertFalse(mod_openstudio\local\api\content::user_is_tutor(
+        $this->assertFalse(\mod_openstudio\local\api\content::user_is_tutor(
                 $tutorcontentid, $this->users->students->one->id, $tutorroles));
         // Student 2 isn't a tutor or in the right group.
-        $this->assertFalse(mod_openstudio\local\api\content::user_is_tutor(
+        $this->assertFalse(\mod_openstudio\local\api\content::user_is_tutor(
                 $tutorcontentid, $this->users->students->two->id, $tutorroles));
         // Tutor 2 is a tutor, but is in the wrong group.
-        $this->assertFalse(mod_openstudio\local\api\content::user_is_tutor(
+        $this->assertFalse(\mod_openstudio\local\api\content::user_is_tutor(
                 $tutorcontentid, $this->users->tutors->two->id, $tutorroles));
         // Tutor 1 is a tutor, and is in the right group.
-        $this->assertTrue(mod_openstudio\local\api\content::user_is_tutor(
+        $this->assertTrue(\mod_openstudio\local\api\content::user_is_tutor(
                 $tutorcontentid, $this->users->tutors->one->id, $tutorroles));
         // Tutor 3 is a tutor and in a group with student1, but the group is not in the right grouping.
-        $this->assertFalse(mod_openstudio\local\api\content::user_is_tutor(
+        $this->assertFalse(\mod_openstudio\local\api\content::user_is_tutor(
                 $tutorcontentid, $this->users->tutors->three->id, $tutorroles));
 
         // Tutor 4 is in the right group, but has the wrong role.
-        $this->assertFalse(mod_openstudio\local\api\content::user_is_tutor(
+        $this->assertFalse(\mod_openstudio\local\api\content::user_is_tutor(
                 $tutorcontentid, $this->users->tutors->four->id, $tutorroles));
 
         // Tutor 4 is in the right group, and their role is now included in the list.
         $tutorroles[] = $tutorrole2->id;
-        $this->assertTrue(mod_openstudio\local\api\content::user_is_tutor(
+        $this->assertTrue(\mod_openstudio\local\api\content::user_is_tutor(
                 $tutorcontentid, $this->users->tutors->four->id, $tutorroles));
 
     }
@@ -460,7 +474,7 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
         );
         $contentid = $this->generator->create_contents($contentdata);
 
-        $content = mod_openstudio\local\api\content::get($contentid);
+        $content = \mod_openstudio\local\api\content::get($contentid);
         $this->assertEquals($contentdata['name'], $content->name);
         $this->assertEquals($contentdata['description'], $content->description);
     }
@@ -478,7 +492,7 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
             $this->generator->create_contents($contentdata);
         }
 
-        $content = mod_openstudio\local\api\content::get_all_records($this->studiolevels->id);
+        $content = \mod_openstudio\local\api\content::get_all_records($this->studiolevels->id);
         $this->assertEquals($contentcount, iterator_count($content));
 
         // Create another instance to check filtering by studio ID.
@@ -493,10 +507,10 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
             );
             $this->generator->create_contents($contentdata);
         }
-        $content = mod_openstudio\local\api\content::get_all_records($studio2->id);
+        $content = \mod_openstudio\local\api\content::get_all_records($studio2->id);
         $this->assertEquals($contentcount2, iterator_count($content));
 
-        $content = mod_openstudio\local\api\content::get_all_records();
+        $content = \mod_openstudio\local\api\content::get_all_records();
         $this->assertEquals($contentcount + $contentcount2, iterator_count($content));
 
     }
@@ -517,7 +531,7 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
         );
         $contentid = $this->generator->create_contents($contentdata);
 
-        $content = mod_openstudio\local\api\content::get_record_via_levels($this->studiolevels->id,
+        $content = \mod_openstudio\local\api\content::get_record_via_levels($this->studiolevels->id,
                 $this->users->students->one->id, 3, $level3);
 
         $this->assertEquals($contentid, $content->id);
@@ -578,7 +592,7 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
         // Set one content so it looks like it's been emptied.
         $contentdata['name'] = '';
         $contentdata['description'] = '';
-        $contentdata['contenttype'] = mod_openstudio\local\api\content::TYPE_NONE;
+        $contentdata['contenttype'] = \mod_openstudio\local\api\content::TYPE_NONE;
         $contentdata['id'] = $lastid;
         unset($contentdata['openstudio']);
         $DB->update_record('openstudio_contents', (object)$contentdata);
@@ -598,25 +612,26 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
         global $DB;
         // Create a content, update it so it has a version, then restore the version.
         $this->setUser($this->users->students->one);
-        $this->populate_single_data_array();
-        $this->populate_content_data();
-        $this->assertGreaterThan(0, $this->contentid, 'Slot creation failed - no contentid returned.');
+        $this->singleentrydata = $this->generator->generate_single_data_array($this->users->students->one);
+        $this->contentdata = $this->generator->generate_content_data(
+                $this->studiolevels, $this->users->students->one->id, $this->singleentrydata);
+        $this->assertGreaterThan(0, $this->contentdata->id, 'Slot creation failed - no contentid returned.');
         $this->singleentrydata['name'] = 'This is the new name!!';
         $this->singleentrydata['descriptions'] = 'This is the new description!!';
         $this->singleentrydata['weblink'] = 'http://open.edu';
 
-        $context = context_module::instance($this->studiolevels->cmid);
+        $context = \context_module::instance($this->studiolevels->cmid);
 
-        $updatedcontentid = mod_openstudio\local\api\content::update(
-                $this->users->students->one->id, $this->contentid, $this->singleentrydata, null, $context, true);
+        $updatedcontentid = \mod_openstudio\local\api\content::update(
+                $this->users->students->one->id, $this->contentdata->id, $this->singleentrydata, null, $context, true);
         $this->assertNotEquals(false, $updatedcontentid);
-        $this->assertEquals($updatedcontentid, $this->contentid);
+        $this->assertEquals($updatedcontentid, $this->contentdata->id);
         $this->assertEquals($this->singleentrydata['weblink'],
                 $DB->get_field('openstudio_contents', 'content', array('id' => $updatedcontentid)));
         // Update successful, now get the version number and restore it.
         $version = $DB->get_record('openstudio_content_versions', array('contentid' => $updatedcontentid), '*', MUST_EXIST);
 
-        mod_openstudio\local\api\content::restore_version($this->users->students->one->id, $version->id);
+        \mod_openstudio\local\api\content::restore_version($this->users->students->one->id, $version->id);
 
         $this->assertNotEquals($this->singleentrydata['weblink'],
                 $DB->get_field('openstudio_contents', 'content', array('id' => $updatedcontentid)));
@@ -627,7 +642,7 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
         $this->resetAfterTest(true);
 
         // Local file to upload to server to simulate file upload.
-        $context = context_module::instance($this->studiolevels->cmid);
+        $context = \context_module::instance($this->studiolevels->cmid);
         $filepath = $CFG->dirroot . '/mod/openstudio/tests/importfiles/geotagged.jpg';
         $filedata = (object)array(
             'filearea' => 'content',
@@ -642,7 +657,7 @@ class mod_openstudio_content_testcase extends openstudio_testcase {
         $fs = get_file_storage();
         $fs->create_file_from_pathname($filedata, $filepath);
 
-        $info = mod_openstudio\local\api\content::get_image_exif_data(
+        $info = \mod_openstudio\local\api\content::get_image_exif_data(
                 $context->id, 'mod_openstudio', 'content', 1, '/', 'geotagged.jpg');
 
         // Check we've extracted the known GPS data from the image.

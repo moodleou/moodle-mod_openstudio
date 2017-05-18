@@ -21,9 +21,11 @@
  * @copyright  2017 The Open University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+namespace mod_openstudio;
+
 defined('MOODLE_INTERNAL') || die();
 
-class mod_openstudio_embedcode_testcase extends advanced_testcase {
+class embedcode_testcase extends \advanced_testcase {
 
     /**
      * Test the parsing function.
@@ -33,9 +35,9 @@ class mod_openstudio_embedcode_testcase extends advanced_testcase {
      */
     public function test_parse() {
         $testurl = 'http://youtube.com/';
-        $embedapi = new mod_openstudio\local\tests\mock_filter_ouembed_api();
-        $embedresponse = mod_openstudio\local\api\embedcode::parse($embedapi, $testurl);
-        $this->assertEquals(mod_openstudio\local\api\content::TYPE_URL, $embedresponse->type);
+        $embedapi = new \mod_openstudio\local\tests\mock_filter_ouembed_api();
+        $embedresponse = \mod_openstudio\local\api\embedcode::parse($embedapi, $testurl);
+        $this->assertEquals(\mod_openstudio\local\api\content::TYPE_URL, $embedresponse->type);
         $this->assertEquals($testurl, $embedresponse->url);
         $this->assertContains($testurl, $embedresponse->html);
     }

@@ -20,12 +20,12 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_openstudio;
+
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
-global $CFG;
-
-class mod_openstudio_search_testcase extends advanced_testcase {
+class search_testcase extends \advanced_testcase {
 
     private $users;
     private $course;
@@ -39,7 +39,6 @@ class mod_openstudio_search_testcase extends advanced_testcase {
     private $content3;
 
     protected function setUp() {
-        global $DB;
         $this->resetAfterTest(true);
         $teacherroleid = 3;
         $studentroleid = 5;
@@ -52,8 +51,8 @@ class mod_openstudio_search_testcase extends advanced_testcase {
         $this->course = $this->getDataGenerator()->create_course();
 
         // Create Users.
-        $this->users = new stdClass();
-        $this->users->students = new stdClass();
+        $this->users = new \stdClass();
+        $this->users->students = new \stdClass();
         $this->users->students->one = $this->getDataGenerator()->create_user(
                 array('email' => 'student1@ouunittest.com', 'username' => 'student1'));
         $this->users->students->two = $this->getDataGenerator()->create_user(
@@ -74,7 +73,7 @@ class mod_openstudio_search_testcase extends advanced_testcase {
                 array('email' => 'student9@ouunittest.com', 'username' => 'student9'));
         $this->users->students->ten = $this->getDataGenerator()->create_user(
                 array('email' => 'student10@ouunittest.com', 'username' => 'student10'));
-        $this->users->teachers = new stdClass();
+        $this->users->teachers = new \stdClass();
         $this->users->teachers->one = $this->getDataGenerator()->create_user(
                 array('email' => 'teacher1@ouunittest.com', 'username' => 'teacher1'));
         $this->users->teachers->two = $this->getDataGenerator()->create_user(
@@ -129,7 +128,7 @@ class mod_openstudio_search_testcase extends advanced_testcase {
                 'embedcode' => '',
                 'weblink' => 'http://www.youtube.com/watch?v=R4XSeW4B5Rg',
                 'urltitle' => 'Vesica Timeline',
-                'visibility' => mod_openstudio\local\api\content::VISIBILITY_MODULE,
+                'visibility' => \mod_openstudio\local\api\content::VISIBILITY_MODULE,
                 'description' => 'The Best YouTube Link Ever',
                 'tags' => array('Stark', 'Lannister', 'Targereyen'),
                 'ownership' => 0,
@@ -141,7 +140,7 @@ class mod_openstudio_search_testcase extends advanced_testcase {
                 'embedcode' => '',
                 'weblink' => 'http://www.youtube.com/watch?v=R4XSeW4B5Rg',
                 'urltitle' => 'Vesica Timeline',
-                'visibility' => mod_openstudio\local\api\content::VISIBILITY_MODULE,
+                'visibility' => \mod_openstudio\local\api\content::VISIBILITY_MODULE,
                 'description' => 'The Best YouTube Link Ever',
                 'tags' => array('Communist', 'Socialist', 'Democrat'),
                 'ownership' => 0,
@@ -153,7 +152,7 @@ class mod_openstudio_search_testcase extends advanced_testcase {
                 'embedcode' => '',
                 'weblink' => 'http://www.youtube.com/watch?v=R4XSeW4B5Rg',
                 'urltitle' => 'Vesica Timeline',
-                'visibility' => mod_openstudio\local\api\content::VISIBILITY_MODULE,
+                'visibility' => \mod_openstudio\local\api\content::VISIBILITY_MODULE,
                 'description' => 'The Best YouTube Link Ever',
                 'tags' => array('Stark', 'Lannister', 'Targereyen', 'Communist'),
                 'ownership' => 0,
@@ -161,15 +160,15 @@ class mod_openstudio_search_testcase extends advanced_testcase {
         );
         $this->setUser($this->users->students->one);
         $this->cm = get_coursemodule_from_id('openstudio', $this->studiolevels->cmid);
-        $this->content1 = mod_openstudio\local\api\content::create(
+        $this->content1 = \mod_openstudio\local\api\content::create(
                 $this->studiolevels->id,  $this->users->students->one->id, 3,
                 $this->studiolevels->leveldata['contentslevels'][$blockid][$activityid][$content1id], $contententry1,
                 null, null, $this->cm);
-        $this->content2 = mod_openstudio\local\api\content::create(
+        $this->content2 = \mod_openstudio\local\api\content::create(
                 $this->studiolevels->id,  $this->users->students->one->id, 3,
                 $this->studiolevels->leveldata['contentslevels'][$blockid][$activityid][$content2id], $contententry3,
                 null, null, $this->cm);
-        $this->content3 = mod_openstudio\local\api\content::create_in_pinboard(
+        $this->content3 = \mod_openstudio\local\api\content::create_in_pinboard(
                 $this->studiolevels->id, $this->users->students->one->id, $contententry2, $this->cm);
     }
 
@@ -189,11 +188,11 @@ class mod_openstudio_search_testcase extends advanced_testcase {
     public function test_search() {
         $this->resetAfterTest(true);
 
-        $searchres = mod_openstudio\local\api\search::query($this->cm, 'The First Slot');
+        $searchres = \mod_openstudio\local\api\search::query($this->cm, 'The First Slot');
         $this->assertEquals(1, count($searchres->result));
-        $searchres = mod_openstudio\local\api\search::query($this->cm, 'Socialist');
+        $searchres = \mod_openstudio\local\api\search::query($this->cm, 'Socialist');
         $this->assertEquals(1, count($searchres->result));
-        $searchres = mod_openstudio\local\api\search::query($this->cm, 'Lannister');
+        $searchres = \mod_openstudio\local\api\search::query($this->cm, 'Lannister');
         $this->assertEquals(2, count($searchres->result));
     }
 
@@ -202,10 +201,10 @@ class mod_openstudio_search_testcase extends advanced_testcase {
      */
     public function test_search_get_slot_document() {
         $this->resetAfterTest(true);
-        $this->assertEquals(true, is_object(mod_openstudio\local\api\search::get_content_document(
-                $this->cm, mod_openstudio\local\api\content::get_record($this->users->students->one->id, $this->content1))));
-        $this->assertEquals(true, is_object(mod_openstudio\local\api\search::get_content_document(
-                $this->cm, mod_openstudio\local\api\content::get_record($this->users->students->one->id, $this->content1), true)));
+        $this->assertEquals(true, is_object(\mod_openstudio\local\api\search::get_content_document(
+                $this->cm, \mod_openstudio\local\api\content::get_record($this->users->students->one->id, $this->content1))));
+        $this->assertEquals(true, is_object(\mod_openstudio\local\api\search::get_content_document(
+                $this->cm, \mod_openstudio\local\api\content::get_record($this->users->students->one->id, $this->content1), true)));
     }
 
     /**
@@ -215,10 +214,10 @@ class mod_openstudio_search_testcase extends advanced_testcase {
         global $DB;
         $this->resetAfterTest(true);
         // This will NOT return true if the doc is deleted because of the function in searchlib.php.
-        mod_openstudio\local\api\search::delete(
-                $this->cm, mod_openstudio\local\api\content::get_record($this->users->students->one->id, $this->content1));
+        \mod_openstudio\local\api\search::delete(
+                $this->cm, \mod_openstudio\local\api\content::get_record($this->users->students->one->id, $this->content1));
         // Check if we can find slot 1 in search now, if we can't, this delete has worked.
-        $searchres = mod_openstudio\local\api\search::query($this->cm, 'The First Slot');
+        $searchres = \mod_openstudio\local\api\search::query($this->cm, 'The First Slot');
         $this->assertEquals(0, count($searchres->result));
     }
 
@@ -228,16 +227,16 @@ class mod_openstudio_search_testcase extends advanced_testcase {
     public function test_search_update() {
         $this->resetAfterTest(true);
         // Delete slot 1 first from the system.
-        mod_openstudio\local\api\search::delete(
-                $this->cm, mod_openstudio\local\api\content::get_record($this->users->students->one->id, $this->content1));
+        \mod_openstudio\local\api\search::delete(
+                $this->cm, \mod_openstudio\local\api\content::get_record($this->users->students->one->id, $this->content1));
         // Check that is infact deleted.
-        $searchres = mod_openstudio\local\api\search::query($this->cm, 'The First Slot');
+        $searchres = \mod_openstudio\local\api\search::query($this->cm, 'The First Slot');
         $this->assertEquals(0, count($searchres->result));
         // Add it back.
-        mod_openstudio\local\api\search::update(
-                $this->cm, mod_openstudio\local\api\content::get_record($this->users->students->one->id, $this->content1));
+        \mod_openstudio\local\api\search::update(
+                $this->cm, \mod_openstudio\local\api\content::get_record($this->users->students->one->id, $this->content1));
         // See that it can be found again.
-        $searchres = mod_openstudio\local\api\search::query($this->cm, 'The First Slot');
+        $searchres = \mod_openstudio\local\api\search::query($this->cm, 'The First Slot');
         $this->assertEquals(1, count($searchres->result));
     }
 

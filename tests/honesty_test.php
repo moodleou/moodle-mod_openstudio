@@ -20,10 +20,12 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_openstudio;
+
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
-class mod_openstudio_honesty_testcase extends advanced_testcase  {
+class honesty_testcase extends \advanced_testcase  {
 
     /**
      * Tests the honesty api.
@@ -33,11 +35,11 @@ class mod_openstudio_honesty_testcase extends advanced_testcase  {
         $mockstudioid = 2;
         $mockuserid = 7;
 
-        $this->assertEquals(false, mod_openstudio\local\api\honesty::get($mockstudioid, $mockuserid));
-        $this->assertEquals(true, mod_openstudio\local\api\honesty::set($mockstudioid, $mockuserid, true));
-        $this->assertNotEquals(true, mod_openstudio\local\api\honesty::get($mockstudioid, $mockuserid));
-        $this->assertEquals(true, mod_openstudio\local\api\honesty::set($mockstudioid, $mockuserid, false));
-        $this->assertEquals(false, mod_openstudio\local\api\honesty::get($mockstudioid, $mockuserid));
+        $this->assertEquals(false, \mod_openstudio\local\api\honesty::get($mockstudioid, $mockuserid));
+        $this->assertEquals(true, \mod_openstudio\local\api\honesty::set($mockstudioid, $mockuserid, true));
+        $this->assertNotEquals(true, \mod_openstudio\local\api\honesty::get($mockstudioid, $mockuserid));
+        $this->assertEquals(true, \mod_openstudio\local\api\honesty::set($mockstudioid, $mockuserid, false));
+        $this->assertEquals(false, \mod_openstudio\local\api\honesty::get($mockstudioid, $mockuserid));
     }
 
 }

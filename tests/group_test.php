@@ -20,13 +20,13 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_openstudio;
+
 // Make sure this isn't being directly accessed.
 
 defined('MOODLE_INTERNAL') || die();
 
-global $CFG;
-
-class mod_openstudio_group_testcase extends advanced_testcase {
+class group_testcase extends \advanced_testcase {
 
     private $course;
     private $course2;
@@ -63,8 +63,8 @@ class mod_openstudio_group_testcase extends advanced_testcase {
         $this->course2 = $this->getDataGenerator()->create_course();
 
         // Create course groups.
-        $this->groups = new stdClass();
-        $this->groupings = new stdClass();
+        $this->groups = new \stdClass();
+        $this->groupings = new \stdClass();
         $this->groupings->a  = $this->getDataGenerator()->create_grouping(
                 array('name' => 'Grouping A', 'courseid' => $this->course->id));
         $this->groups->one = $this->getDataGenerator()->create_group(array(
@@ -73,7 +73,7 @@ class mod_openstudio_group_testcase extends advanced_testcase {
                 'courseid' => $this->course->id, 'name' => 'The Lannisters'));
 
         // Add groups to our groupings.
-        $insert = new stdClass();
+        $insert = new \stdClass();
         $insert->groupingid = $this->groupings->a->id;
         $insert->groupid = $this->groups->one->id;
         $DB->insert_record('groupings_groups', $insert);
@@ -82,8 +82,8 @@ class mod_openstudio_group_testcase extends advanced_testcase {
         $DB->insert_record('groupings_groups', $insert);
 
         // Create Users.
-        $this->users = new stdClass();
-        $this->users->students = new stdClass();
+        $this->users = new \stdClass();
+        $this->users->students = new \stdClass();
         $this->users->students->one = $this->getDataGenerator()->create_user(
                 array('email' => 'student1@ouunittest.com', 'username' => 'student1'));
         $this->users->students->two = $this->getDataGenerator()->create_user(
@@ -104,7 +104,7 @@ class mod_openstudio_group_testcase extends advanced_testcase {
                 array('email' => 'student9@ouunittest.com', 'username' => 'student9'));
         $this->users->students->ten = $this->getDataGenerator()->create_user(
                 array('email' => 'student10@ouunittest.com', 'username' => 'student10'));
-        $this->users->teachers = new stdClass();
+        $this->users->teachers = new \stdClass();
         $this->users->teachers->one = $this->getDataGenerator()->create_user(
                 array('email' => 'teacher1@ouunittest.com', 'username' => 'teacher1'));
         $this->users->teachers->two = $this->getDataGenerator()->create_user(
@@ -164,10 +164,10 @@ class mod_openstudio_group_testcase extends advanced_testcase {
         $this->studioprivate->leveldata = $this->generator->create_mock_levels($this->studioprivate->id);
 
         // Now let's create and populate some slots.
-        $this->studioprivate->slotinstances = new stdClass();
+        $this->studioprivate->slotinstances = new \stdClass();
         $this->studioprivate->slotinstances->student = $this->generator->create_mock_contents($this->studioprivate->id,
                 $this->studioprivate->leveldata, $this->users->students->one->id,
-                mod_openstudio\local\api\content::VISIBILITY_PRIVATE); // Student1 is owner of 24 normal and 3 pin slots of
+                \mod_openstudio\local\api\content::VISIBILITY_PRIVATE); // Student1 is owner of 24 normal and 3 pin slots of
                                                                         // 24 normal and 3 pin slots.
 
         $this->studiomodule = $this->generator->create_instance(array('course' => $this->course->id));
@@ -175,10 +175,10 @@ class mod_openstudio_group_testcase extends advanced_testcase {
         $this->studiomodule->leveldata = $this->generator->create_mock_levels($this->studiomodule->id);
 
         // Now let's create and populate some slots.
-        $this->studiomodule->slotinstances = new stdClass();
+        $this->studiomodule->slotinstances = new \stdClass();
         $this->studiomodule->slotinstances->student = $this->generator->create_mock_contents($this->studiomodule->id,
                 $this->studiomodule->leveldata, $this->users->students->five->id,
-                mod_openstudio\local\api\content::VISIBILITY_MODULE); // Student5 is owner of 24 normal and 3 pin slots of
+                \mod_openstudio\local\api\content::VISIBILITY_MODULE); // Student5 is owner of 24 normal and 3 pin slots of
                                                                 // 24 normal and 3 pin slots.
 
         $this->studiogroup = $this->generator->create_instance(array('course' => $this->course->id),
@@ -187,35 +187,35 @@ class mod_openstudio_group_testcase extends advanced_testcase {
         $this->studiogroup->leveldata = $this->generator->create_mock_levels($this->studiogroup->id);
 
         // Now let's create and populate some slots.
-        $this->studiogroup->slotinstances = new stdClass();
+        $this->studiogroup->slotinstances = new \stdClass();
         $this->studiogroup->slotinstances->student6 = $this->generator->create_mock_contents($this->studiogroup->id,
                 $this->studiogroup->leveldata, $this->users->students->six->id,
-                mod_openstudio\local\api\content::VISIBILITY_GROUP);
+                \mod_openstudio\local\api\content::VISIBILITY_GROUP);
         $this->studiogroup->slotinstances->student8 = $this->generator->create_mock_contents($this->studiogroup->id,
                 $this->studiogroup->leveldata, $this->users->students->eight->id,
-                mod_openstudio\local\api\content::VISIBILITY_GROUP);
+                \mod_openstudio\local\api\content::VISIBILITY_GROUP);
 
         $this->studioworkspace = $this->generator->create_instance(array('course' => $this->course->id));
         // Let's create and populate our mock levels.
         $this->studioworkspace->leveldata = $this->generator->create_mock_levels($this->studioworkspace->id);
 
         // Now let's create and populate some slots.
-        $this->studioworkspace->slotinstances = new stdClass();
+        $this->studioworkspace->slotinstances = new \stdClass();
         $this->studioworkspace->slotinstances->student8 = $this->generator->create_mock_contents($this->studioworkspace->id,
                 $this->studioworkspace->leveldata, $this->users->students->eight->id,
-                mod_openstudio\local\api\content::VISIBILITY_PRIVATE);
+                \mod_openstudio\local\api\content::VISIBILITY_PRIVATE);
         $this->studioworkspace->slotinstances->student9 = $this->generator->create_mock_contents($this->studioworkspace->id,
                 $this->studioworkspace->leveldata, $this->users->students->nine->id,
-                mod_openstudio\local\api\content::VISIBILITY_MODULE);
+                \mod_openstudio\local\api\content::VISIBILITY_MODULE);
         $this->studioworkspace->slotinstances->student10 = $this->generator->create_mock_contents($this->studioworkspace->id,
                 $this->studioworkspace->leveldata, $this->users->students->ten->id,
-                mod_openstudio\local\api\content::VISIBILITY_MODULE);
+                \mod_openstudio\local\api\content::VISIBILITY_MODULE);
         $this->studioworkspace->slotinstances->student3 = $this->generator->create_mock_contents($this->studioworkspace->id,
                 $this->studioworkspace->leveldata, $this->users->students->four->id,
-                mod_openstudio\local\api\content::VISIBILITY_GROUP);
+                \mod_openstudio\local\api\content::VISIBILITY_GROUP);
         $this->studioworkspace->slotinstances->student4 = $this->generator->create_mock_contents($this->studioworkspace->id,
                 $this->studioworkspace->leveldata, $this->users->students->three->id,
-                mod_openstudio\local\api\content::VISIBILITY_GROUP);
+                \mod_openstudio\local\api\content::VISIBILITY_GROUP);
 
         // Create generic studios.
         $this->studiogeneric = $this->generator->create_instance(array('course' => $this->course->id));
@@ -248,11 +248,11 @@ class mod_openstudio_group_testcase extends advanced_testcase {
     public function test_group_has_same_memberships() {
         $this->resetAfterTest(true);
 
-        $this->assertEquals(true, mod_openstudio\local\api\group::has_same_memberships(
+        $this->assertEquals(true, \mod_openstudio\local\api\group::has_same_memberships(
                 $this->groupings->a->id, $this->users->students->one->id,
                 $this->users->students->two->id, true));
 
-        $this->assertEquals(false, mod_openstudio\local\api\group::has_same_memberships(
+        $this->assertEquals(false, \mod_openstudio\local\api\group::has_same_memberships(
                 $this->groupings->a->id, $this->users->students->one->id,
                 $this->users->students->eight->id, true));
     }
@@ -263,13 +263,13 @@ class mod_openstudio_group_testcase extends advanced_testcase {
     public function test_group_has_same_course() {
         $this->resetAfterTest(true);
 
-        $this->assertEquals(true, mod_openstudio\local\api\group::has_same_course(
+        $this->assertEquals(true, \mod_openstudio\local\api\group::has_same_course(
                 $this->course->id, $this->users->students->one->id, $this->users->students->two->id));
 
-        $this->assertEquals(true, mod_openstudio\local\api\group::has_same_course(
+        $this->assertEquals(true, \mod_openstudio\local\api\group::has_same_course(
                 $this->course->id, $this->users->students->one->id, $this->users->students->eight->id));
 
-        $this->assertEquals(false, mod_openstudio\local\api\group::has_same_course(
+        $this->assertEquals(false, \mod_openstudio\local\api\group::has_same_course(
                 $this->course2->id, $this->users->students->six->id, $this->users->students->one->id));
     }
 

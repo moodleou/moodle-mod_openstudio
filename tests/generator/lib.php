@@ -32,6 +32,73 @@ defined('MOODLE_INTERNAL') || die();
 
 class mod_openstudio_generator extends testing_module_generator {
 
+    /**
+     * Populates array with content data to create content(s).
+     */
+    public function generate_single_data_array() {
+        return [
+            'name' => 'The GoT Vesica Timeline',
+            'attachments' => '',
+            'embedcode' => '',
+            'weblink' => 'http://www.open.ac.uk/',
+            'urltitle' => 'Vesica Timeline',
+            'visibility' => content::VISIBILITY_MODULE,
+            'description' => 'The Best YouTube Link Ever',
+            'tags' => array('Stark', 'Lannister', 'Targereyen'),
+            'ownership' => 0,
+            'sid' => 0 // For a new content.
+        ];
+    }
+
+    /**
+     * Creates a new stdClass() with information for a file.
+     *
+     * @param object $user User to use as the file author.
+     * @return object File data.
+     */
+    public function generate_file_data($user) {
+        $file = new \stdClass();
+        $file->filearea = 'content';
+        $file->filename = 'Test file';
+        $file->filepath = '/';
+        $file->sortorder = 0;
+        $file->author = fullname($user);
+        $file->license = 'allrightsreserved';
+        $file->datemodified = 1365590964;
+        $file->datecreated = 1365590864;
+        $file->component = 'mod_openstudio';
+        $file->itemid = 0;
+
+        return $file;
+    }
+
+    /**
+     * Creates and returns a new content post using pre-geneated content data.
+     *
+     * @param object $studiolevels Studio level structure
+     * @param int $userid User ID for content creation
+     * @param array $contentdata Content data for content creation.
+     *
+     * @return object
+     */
+    public function generate_content_data($studiolevels, $userid, $contentdata) {
+        current($studiolevels->leveldata['contentslevels']);
+        $blockid = key($studiolevels->leveldata['contentslevels']);
+
+        current($studiolevels->leveldata['contentslevels'][$blockid]);
+        $activityid = key($studiolevels->leveldata['contentslevels'][$blockid]);
+
+        current($studiolevels->leveldata['contentslevels'][$blockid][$activityid]);
+        $contentid = key($studiolevels->leveldata['contentslevels'][$blockid][$activityid]);
+
+        $contentid = content::create(
+                $studiolevels->id, $userid, 3,
+                $studiolevels->leveldata['contentslevels'][$blockid][$activityid][$contentid], $contentdata);
+        return content::get_record($userid, $contentid);
+    }
+
+
+
     public function create_mock_levels($studioid) {
         global $DB;
         $blocks = array();

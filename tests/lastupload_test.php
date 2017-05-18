@@ -22,13 +22,14 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_openstudio;
+
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
-global $CFG;
+class lastupload_test extends \advanced_testcase {
 
-class mod_openstudio_lastupload_test extends advanced_testcase {
-
+    private $users;
     private $singleentrydata;
     private $singleentrydataprivate;
     private $course;
@@ -39,8 +40,8 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
 
     protected function setUp() {
         $this->resetAfterTest(true);
-        $this->teacherroleid = 3;
-        $this->studentroleid = 5;
+        $teacherroleid = 3;
+        $studentroleid = 5;
         $this->totalcontents = 24; // This is what the scripts below create for ONE CMID.
         $this->pinboardcontents = 3; // This is what the scripts below create for ONE CMID.
 
@@ -50,8 +51,8 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
         $this->course = $this->getDataGenerator()->create_course();
 
         // Create user.
-        $this->users = new stdClass();
-        $this->users->students = new stdClass();
+        $this->users = new \stdClass();
+        $this->users->students = new \stdClass();
         $this->users->students->one = $this->getDataGenerator()->create_user(
                 array('email' => 'student1@ouunittest.com', 'username' => 'student1'));
         $this->users->students->two = $this->getDataGenerator()->create_user(
@@ -59,7 +60,7 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
         $this->users->students->three = $this->getDataGenerator()->create_user(
                 array('email' => 'student3@ouunittest.com', 'username' => 'student3'));
 
-        $this->users->teachers = new stdClass();
+        $this->users->teachers = new \stdClass();
         $this->users->teachers->one = $this->getDataGenerator()->create_user(
                 array('email' => 'teacher1@ouunittest.com', 'username' => 'teacher1'));
 
@@ -68,15 +69,15 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
 
         // Enroll our student in the course.
         $this->getDataGenerator()->enrol_user($this->users->students->one->id, $this->course->id,
-                $this->studentroleid, 'manual');
+                $studentroleid, 'manual');
         $this->getDataGenerator()->enrol_user($this->users->students->two->id, $this->course->id,
-                $this->studentroleid, 'manual');
+                $studentroleid, 'manual');
 
         $this->getDataGenerator()->enrol_user($this->users->students->three->id, $this->course->id,
-                $this->studentroleid, 'manual');
+                $studentroleid, 'manual');
 
         $this->getDataGenerator()->enrol_user(
-                $this->users->teachers->one->id, $this->course->id, $this->teacherroleid, 'manual');
+                $this->users->teachers->one->id, $this->course->id, $teacherroleid, 'manual');
 
         // Create generic studios.
         $this->studiolevels = $this->generator->create_instance(array('course' => $this->course->id, 'idnumber' => 'OS1'));
@@ -115,7 +116,7 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
                 'embedcode' => '',
                 'weblink' => 'http://www.open.ac.uk/',
                 'urltitle' => 'Lat Upload Studio',
-                'visibility' => mod_openstudio\local\api\content::VISIBILITY_MODULE,
+                'visibility' => \mod_openstudio\local\api\content::VISIBILITY_MODULE,
                 'description' => 'Lat Upload Studio Description',
                 'tags' => array('AB1'),
                 'ownership' => 0,
@@ -133,7 +134,7 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
                 'embedcode' => '',
                 'weblink' => 'http://www.open.ac.uk/',
                 'urltitle' => 'Lat Upload Studio',
-                'visibility' => mod_openstudio\local\api\content::VISIBILITY_PRIVATE,
+                'visibility' => \mod_openstudio\local\api\content::VISIBILITY_PRIVATE,
                 'description' => 'Lat Upload Studio Description',
                 'tags' => array('AB1'),
                 'ownership' => 0,
@@ -171,10 +172,10 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
 
         $contentarray = current($this->studiolevels->leveldata['contentslevels'][$blockid][$activityid]);
         $contentid = key($this->studiolevels->leveldata['contentslevels'][$blockid][$activityid]);
-        $this->contentid = mod_openstudio\local\api\content::create($this->studiolevels->id,
+        $this->contentid = \mod_openstudio\local\api\content::create($this->studiolevels->id,
                 $this->users->students->one->id, 3,
                 $this->studiolevels->leveldata['contentslevels'][$blockid][$activityid][$contentid], $this->singleentrydata);
-        $this->contentdata = mod_openstudio\local\api\content::get_record($this->users->students->one->id, $this->contentid);
+        $this->contentdata = \mod_openstudio\local\api\content::get_record($this->users->students->one->id, $this->contentid);
     }
 
     /**
@@ -189,11 +190,11 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
 
         $contentarray = current($this->studiolevels->two->leveldata['contentslevels'][$blockid][$activityid]);
         $contentid = key($this->studiolevels->two->leveldata['contentslevels'][$blockid][$activityid]);
-        $this->contentid = mod_openstudio\local\api\content::create($this->studiolevels->two->id,
+        $this->contentid = \mod_openstudio\local\api\content::create($this->studiolevels->two->id,
                 $this->users->students->one->id, 0,
                 $this->studiolevels->two->leveldata['contentslevels'][$blockid][$activityid][$contentid],
                 $this->singleentrydataprivate);
-        $this->contentdata = mod_openstudio\local\api\content::get_record($this->users->students->one->id, $this->contentid);
+        $this->contentdata = \mod_openstudio\local\api\content::get_record($this->users->students->one->id, $this->contentid);
     }
 
     /**
@@ -216,10 +217,10 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
             $tag = 'Tag Add'.$i.$number;
             $sid = $i.$number;
             $data = $this->create_public_multi_data_array($name, $description, $visibility, $tag, $sid);
-            $this->contentid = mod_openstudio\local\api\content::create($studio->id,
+            $this->contentid = \mod_openstudio\local\api\content::create($studio->id,
                     $this->users->students->one->id, 0,
                     $studio->leveldata['contentslevels'][$blockid][$activityid][$contentid], $data);
-            $this->contentdata = mod_openstudio\local\api\content::get_record($this->users->students->one->id, $this->contentid);
+            $this->contentdata = \mod_openstudio\local\api\content::get_record($this->users->students->one->id, $this->contentid);
         }
     }
 
@@ -237,7 +238,7 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
 
         $slotparams = array(
                 'openstudioid'     => $studiid,
-                'stdcontenttype' => mod_openstudio\local\api\item::CONTENT,
+                'stdcontenttype' => \mod_openstudio\local\api\item::CONTENT,
                 'timelimit' => $limittimeadd
         );
         return $DB->get_recordset_sql($sql, $slotparams);
@@ -254,7 +255,7 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
 
         $slotparams = array(
                 'openstudioid'     => $studiid,
-                'stdcontenttype' => mod_openstudio\local\api\item::CONTENT,
+                'stdcontenttype' => \mod_openstudio\local\api\item::CONTENT,
                 'timelimit' => $time
         );
         $data = $DB->get_recordset_sql($sql, $slotparams);
@@ -293,23 +294,23 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
         $n = 5;
         $cm = get_coursemodule_from_instance('openstudio', $this->studiolevels->id);
         $cminstance = $DB->get_record('openstudio', array('id' => $cm->instance), '*', MUST_EXIST);
-        $permissions = mod_openstudio\local\util::check_permission($cm, $cminstance, $this->course);
-        $this->create_multi_slots_data($n, mod_openstudio\local\api\content::VISIBILITY_MODULE, $this->studiolevels);
+        $permissions = \mod_openstudio\local\util::check_permission($cm, $cminstance, $this->course);
+        $this->create_multi_slots_data($n, \mod_openstudio\local\api\content::VISIBILITY_MODULE, $this->studiolevels);
         $record = $this->get_all_slot_with_time_add($this->studiolevels->id, $DB);
         // Update timeadd of n slot timeadd = timeadd - 1 days.
         foreach ($record as $key => $value) {
-            $checkpermission = mod_openstudio\local\util::can_read_content($cminstance, $permissions, $value);
+            $checkpermission = \mod_openstudio\local\util::can_read_content($cminstance, $permissions, $value);
             $this->assertEquals(true, $checkpermission);
             $limittimeadd = strtotime(date('Y-m-d', strtotime('-'.$n.' days')));
             $this->upload_timeadd_one_slot($DB, $limittimeadd, $value->id);
             $n--;
         }
-        $result = mod_openstudio\local\util::get_last_modified($cm, $this->course, $userid1);
+        $result = \mod_openstudio\local\util::get_last_modified($cm, $this->course, $userid1);
         $lastuploadtime = strtotime(date('Y-m-d', strtotime('-1 days')));
         $this->assertEquals($lastuploadtime, $result);
 
         $this->setUser($userid2);
-        $result = mod_openstudio\local\util::get_last_modified($cm, $this->course, $userid2);
+        $result = \mod_openstudio\local\util::get_last_modified($cm, $this->course, $userid2);
         $this->assertEquals($lastuploadtime, $result);
     }
 
@@ -324,12 +325,12 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
         $this->setUser($userid1);
         // Studio not have slot return null.
         $cm = get_coursemodule_from_instance('openstudio', $this->studiolevels->one->id);
-        $result = mod_openstudio\local\util::get_last_modified($cm, $this->course, $userid1);
+        $result = \mod_openstudio\local\util::get_last_modified($cm, $this->course, $userid1);
         $record = $this->get_all_slot_with_time_add($this->studiolevels->one->id, $DB);
         $this->assertEquals(false, $record->valid());
 
         $this->setUser($userid2);
-        $result = mod_openstudio\local\util::get_last_modified($cm, $this->course, $userid2);
+        $result = \mod_openstudio\local\util::get_last_modified($cm, $this->course, $userid2);
         $record = $this->get_all_slot_with_time_add($this->studiolevels->one->id, $DB);
         $this->assertEquals(false, $record->valid());
     }
@@ -347,11 +348,11 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
         // User 1 can see.
         $this->upload_timeadd_slot($this->studiolevels->two->id, $DB, $limittimeadd);
         $cm = get_coursemodule_from_instance('openstudio', $this->studiolevels->two->id);
-        $result = mod_openstudio\local\util::get_last_modified($cm, $this->course, $userid1);
+        $result = \mod_openstudio\local\util::get_last_modified($cm, $this->course, $userid1);
         $this->assertEquals($limittimeadd, $result);
         // User 2 can't see.
         $this->setUser($userid2);
-        $result = mod_openstudio\local\util::get_last_modified($cm, $this->course, $userid2);
+        $result = \mod_openstudio\local\util::get_last_modified($cm, $this->course, $userid2);
         $this->assertEmpty($result);
     }
 
@@ -366,7 +367,7 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
         // There are several slots in the studio and the student can view them all.
         $this->setUser($userid1);
         $n = 6;
-        $this->create_multi_slots_data($n, mod_openstudio\local\api\content::VISIBILITY_MODULE, $this->studiolevels->three);
+        $this->create_multi_slots_data($n, \mod_openstudio\local\api\content::VISIBILITY_MODULE, $this->studiolevels->three);
         $record = $this->get_all_slot_with_time_add($this->studiolevels->three->id, $DB);
         // Update timeadd of n slot timeadd = timeadd - 1 days.
         foreach ($record as $key => $value) {
@@ -376,23 +377,23 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
         }
         $cm = get_coursemodule_from_instance('openstudio', $this->studiolevels->three->id);
         $cminstance = $DB->get_record('openstudio', array('id' => $cm->instance), '*', MUST_EXIST);
-        $permissions = mod_openstudio\local\util::check_permission($cm, $cminstance, $this->course);
+        $permissions = \mod_openstudio\local\util::check_permission($cm, $cminstance, $this->course);
         $record = $this->get_all_slot_with_time_add($this->studiolevels->three->id, $DB);
         foreach ($record as $key => $value) {
-            $checkpermission = mod_openstudio\local\util::can_read_content($cminstance, $permissions, $value);
+            $checkpermission = \mod_openstudio\local\util::can_read_content($cminstance, $permissions, $value);
             $this->assertEquals(true, $checkpermission);
         }
         $lastuploadtime = strtotime(date('Y-m-d', strtotime('-1 days')));
         // User 1 can view last upload.
-        $result = mod_openstudio\local\util::get_last_modified($cm, $this->course, $userid1);
+        $result = \mod_openstudio\local\util::get_last_modified($cm, $this->course, $userid1);
         $this->assertEquals($lastuploadtime, $result);
         // User 2 can view last upload too. Same lastuploadtime.
         $this->setUser($userid2);
         foreach ($record as $key => $value) {
-            $checkpermission = mod_openstudio\local\util::can_read_content($cminstance, $permissions, $value);
+            $checkpermission = \mod_openstudio\local\util::can_read_content($cminstance, $permissions, $value);
             $this->assertEquals(true, $checkpermission);
         }
-        $result = mod_openstudio\local\util::get_last_modified($cm, $this->course, $userid1);
+        $result = \mod_openstudio\local\util::get_last_modified($cm, $this->course, $userid1);
         $this->assertEquals($lastuploadtime, $result);
     }
 
@@ -408,22 +409,22 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
         $limittimeadd1 = strtotime(date('Y-m-d', strtotime('-1 days')));
         $limittimeadd3 = strtotime(date('Y-m-d', strtotime('-3 days')));
         // There are several slots in the studio and the student can view the second, but not the first.
-        $this->create_multi_slots_data(1, mod_openstudio\local\api\content::VISIBILITY_MODULE, $this->studiolevels->four);
+        $this->create_multi_slots_data(1, \mod_openstudio\local\api\content::VISIBILITY_MODULE, $this->studiolevels->four);
         $this->upload_timeadd_one_slot($DB, $limittimeadd3, $this->contentid);
-        $this->create_multi_slots_data(1, mod_openstudio\local\api\content::VISIBILITY_PRIVATE, $this->studiolevels->four);
+        $this->create_multi_slots_data(1, \mod_openstudio\local\api\content::VISIBILITY_PRIVATE, $this->studiolevels->four);
         $this->upload_timeadd_one_slot($DB, $limittimeadd1, $this->contentid);
         $cm = get_coursemodule_from_instance('openstudio', $this->studiolevels->four->id);
-        $result = mod_openstudio\local\util::get_last_modified($cm, $this->course);
+        $result = \mod_openstudio\local\util::get_last_modified($cm, $this->course);
         // User 1 can see 2 slot, last upload is slot private. one day before.
         $this->assertEquals($limittimeadd1, $result);
 
         $this->setUser($userid2);
-        $result = mod_openstudio\local\util::get_last_modified($cm, $this->course);
+        $result = \mod_openstudio\local\util::get_last_modified($cm, $this->course);
         // User 2 can see 1 slot, last upload is slot module. three day before, limittimeadd3.
         $this->assertEquals($limittimeadd3, $result);
 
         $this->setUser($userid3);
-        $result = mod_openstudio\local\util::get_last_modified($cm, $this->course);
+        $result = \mod_openstudio\local\util::get_last_modified($cm, $this->course);
         // User 3 can see 1 slot, last upload is slot module. three day before, limittimeadd3.
         $this->assertEquals($limittimeadd3, $result);
     }
@@ -442,25 +443,25 @@ class mod_openstudio_lastupload_test extends advanced_testcase {
         $n = 5;
         $cm = get_coursemodule_from_instance('openstudio', $this->studiolevels->final->id);
         $cminstance = $DB->get_record('openstudio', array('id' => $cm->instance), '*', MUST_EXIST);
-        $permissions = mod_openstudio\local\util::check_permission($cm, $cminstance, $this->course);
-        $this->create_multi_slots_data($n, mod_openstudio\local\api\content::VISIBILITY_MODULE, $this->studiolevels->final);
+        $permissions = \mod_openstudio\local\util::check_permission($cm, $cminstance, $this->course);
+        $this->create_multi_slots_data($n, \mod_openstudio\local\api\content::VISIBILITY_MODULE, $this->studiolevels->final);
         $record = $this->get_all_slot_with_time_add($this->studiolevels->final->id, $DB);
         // Update timeadd of n slot timeadd = timeadd - 1 days;.
         foreach ($record as $key => $value) {
-            $checkpermission = mod_openstudio\local\util::can_read_content($cminstance, $permissions, $value);
+            $checkpermission = \mod_openstudio\local\util::can_read_content($cminstance, $permissions, $value);
             // Check user have permission view slot.
             $this->assertEquals(true, $checkpermission);
             $limittimeadd = strtotime(date('Y-m-d', strtotime('(-31-'.$n.') days')));
             $this->upload_timeadd_one_slot($DB, $limittimeadd, $value->id);
             $n--;
         }
-        $result = mod_openstudio\local\util::get_last_modified($cm, $this->course);
+        $result = \mod_openstudio\local\util::get_last_modified($cm, $this->course);
         // User 1 can't see last upload of slot module. Slot was created more than 30 day before.
         $this->assertEmpty($result);
 
         // User 2 can't see last upload of slot module. Slot was created more than 30 day before.
         $this->setUser($userid2);
-        $result = mod_openstudio\local\util::get_last_modified($cm, $this->course);
+        $result = \mod_openstudio\local\util::get_last_modified($cm, $this->course);
         $this->assertEmpty($result);
     }
 }

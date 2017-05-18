@@ -20,12 +20,12 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_openstudio;
+
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
-global $CFG;
-
-class mod_openstudio_file_testcase extends advanced_testcase {
+class file_testcase extends \advanced_testcase {
 
     protected $course;
     protected $generator; // Contains mod_openstudio specific data generator functions.
@@ -36,6 +36,8 @@ class mod_openstudio_file_testcase extends advanced_testcase {
     protected $fs;
     protected $filesizes;
     protected $filenames;
+    protected $files;
+    protected $users;
 
     /**
      * Prepares things before this test case is initialised.
@@ -51,8 +53,7 @@ class mod_openstudio_file_testcase extends advanced_testcase {
     protected function setUp() {
         global $CFG, $DB;
         $this->resetAfterTest(true);
-        $this->teacherroleid = 3;
-        $this->studentroleid = 5;
+        $studentroleid = 5;
         $this->totalcontents = 24; // This is what the scripts below create for ONE CMID.
         $this->pinboardcontents = 3; // This is what the scripts below create for ONE CMID.
         $this->fs = get_file_storage();
@@ -65,8 +66,8 @@ class mod_openstudio_file_testcase extends advanced_testcase {
         $this->course = $this->getDataGenerator()->create_course();
 
         // Create user.
-        $this->users = new stdClass();
-        $this->users->students = new stdClass();
+        $this->users = new \stdClass();
+        $this->users->students = new \stdClass();
         $this->users->students->one = $this->getDataGenerator()->create_user(
                 array('email' => 'student1@ouunittest.com', 'username' => 'student1'));
         $this->users->students->two = $this->getDataGenerator()->create_user(
@@ -77,9 +78,9 @@ class mod_openstudio_file_testcase extends advanced_testcase {
 
         // Enroll our student in the course.
         $this->getDataGenerator()->enrol_user($this->users->students->one->id, $this->course->id,
-                $this->studentroleid, 'manual');
+                $studentroleid, 'manual');
         $this->getDataGenerator()->enrol_user($this->users->students->two->id, $this->course->id,
-                $this->studentroleid, 'manual');
+                $studentroleid, 'manual');
 
         // Create generic studios.
         $this->studiolevels = $this->generator->create_instance(array('course' => $this->course->id));
@@ -90,8 +91,8 @@ class mod_openstudio_file_testcase extends advanced_testcase {
 
         $this->setUser($this->users->students->one);
         $this->cm = $DB->get_record('course_modules', array('id' => $this->studiolevels->cmid));
-        $this->context = context_module::instance($this->studiolevels->cmid);
-        $usercontext = context_user::instance($this->users->students->one->id);
+        $this->context = \context_module::instance($this->studiolevels->cmid);
+        $usercontext = \context_user::instance($this->users->students->one->id);
 
         $this->files = array();
         $this->files['rtf'] = (object)array(
@@ -101,7 +102,7 @@ class mod_openstudio_file_testcase extends advanced_testcase {
         );
         $this->files['rtf']->contentdata = array(
                 'name' => 'simplefile',
-                'visibility' => mod_openstudio\local\api\content::VISIBILITY_MODULE,
+                'visibility' => \mod_openstudio\local\api\content::VISIBILITY_MODULE,
                 'attachments' => $this->files['rtf']->draftid,
                 'content' => random_string(),
                 'description' => '',
@@ -149,7 +150,7 @@ class mod_openstudio_file_testcase extends advanced_testcase {
         );
         $this->files['nbk']->contentdata = array(
                 'name' => 'simplefile',
-                'visibility' => mod_openstudio\local\api\content::VISIBILITY_MODULE,
+                'visibility' => \mod_openstudio\local\api\content::VISIBILITY_MODULE,
                 'attachments' => $this->files['nbk']->draftid,
                 'content' => random_string(),
                 'description' => '',
@@ -196,7 +197,7 @@ class mod_openstudio_file_testcase extends advanced_testcase {
                 'filesize' => filesize($CFG->dirroot.'/mod/openstudio/tests/importfiles/nbk/test.ipynb')
         );
         $extractedfilenames = $this->files['nbk']->file->extract_to_storage(
-                new zip_packer(),
+                new \zip_packer(),
                 $usercontext->id,
                 'user',
                 'draft',
@@ -249,9 +250,9 @@ class mod_openstudio_file_testcase extends advanced_testcase {
                 )
         );
         $this->files['nbk']->file->delete();
-        $this->files['rtf']->contentdata['id'] = mod_openstudio\local\api\content::create($studioid, $userid, 0, 0,
+        $this->files['rtf']->contentdata['id'] = \mod_openstudio\local\api\content::create($studioid, $userid, 0, 0,
                 $this->files['rtf']->contentdata, $this->files['rtf']->filedata, $this->context);
-        $this->files['nbk']->contentdata['id'] = mod_openstudio\local\api\content::create($studioid, $userid, 0, 0,
+        $this->files['nbk']->contentdata['id'] = \mod_openstudio\local\api\content::create($studioid, $userid, 0, 0,
                 $this->files['nbk']->contentdata, $this->files['ipynb']->filedata, $this->context);
         $this->files['html']->filename = 'openstudio_' . $this->files['nbk']->contentdata['id'] . '_notebook.html';
         $this->files['ipynb']->filename = 'openstudio_' . $this->files['nbk']->contentdata['id'] . '_notebook.ipynb';
@@ -281,7 +282,7 @@ class mod_openstudio_file_testcase extends advanced_testcase {
 
         try {
             header('X-Header-Test: test');
-        } catch (PHPUnit_Framework_Error_Warning $e) {
+        } catch (\PHPUnit_Framework_Error_Warning $e) {
             $this->markTestSkipped('Cannot run test_studio_pluginfile due to a problem with Moodle\'s PHPUnit integration. ' .
                 'To workaround the problem, add ob_start(); at the start of the phpunit_util::bootstrap_moodle_info() '.
                 'method. See MDL-49713 for more information.');

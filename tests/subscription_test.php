@@ -20,26 +20,29 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_openstudio;
+
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
-global $CFG;
-require_once('openstudio_testcase.php');
+class subscription_testcase extends \advanced_testcase {
 
-class mod_openstudio_subscription_testcase extends openstudio_testcase {
-
+    protected $users;
+    protected $course;
+    protected $generator; // Contains mod_openstudio specific data generator functions.
+    protected $studiolevels; // Generic studio instance with no levels or slots.
+    protected $pinboardslots;
+    protected $singleentrydata;
+    protected $contentdata;
     private $pbslotid;
 
     /**
      * Sets up our fixtures.
      */
     protected function setUp() {
-        global $DB;
         $this->resetAfterTest(true);
-        $this->teacherroleid = 3;
-        $this->studentroleid = 5;
-        $this->totalcontents = 24; // This is what the scripts below create for ONE CMID.
-        $this->pinboardslots = 3; // This is what the scripts below create for ONE CMID.
+        $teacherroleid = 3;
+        $studentroleid = 5;
 
         // Our test data has 1 course, 2 groups, 2 teachers and 10 students.
 
@@ -47,8 +50,8 @@ class mod_openstudio_subscription_testcase extends openstudio_testcase {
         $this->course = $this->getDataGenerator()->create_course();
 
         // Create Users.
-        $this->users = new stdClass();
-        $this->users->students = new stdClass();
+        $this->users = new \stdClass();
+        $this->users->students = new \stdClass();
         $this->users->students->one = $this->getDataGenerator()->create_user(
                 array('email' => 'student1@ouunittest.com', 'username' => 'student1',
                         'firstname' => 'John', 'lastname' => 'Smith'));
@@ -79,7 +82,7 @@ class mod_openstudio_subscription_testcase extends openstudio_testcase {
         $this->users->students->ten = $this->getDataGenerator()->create_user(
                 array('email' => 'student10@ouunittest.com', 'username' => 'student10',
                         'firstname' => 'John', 'lastname' => 'Smith'));
-        $this->users->teachers = new stdClass();
+        $this->users->teachers = new \stdClass();
         $this->users->teachers->one = $this->getDataGenerator()->create_user(
                 array('email' => 'teacher1@ouunittest.com', 'username' => 'teacher1',
                         'firstname' => 'John', 'lastname' => 'Smith'));
@@ -89,27 +92,27 @@ class mod_openstudio_subscription_testcase extends openstudio_testcase {
 
         // Enroll our students and teacher (users) in the course.
         $this->getDataGenerator()->enrol_user(
-                $this->users->students->one->id, $this->course->id, $this->studentroleid, 'manual');
+                $this->users->students->one->id, $this->course->id, $studentroleid, 'manual');
         $this->getDataGenerator()->enrol_user(
-                $this->users->students->two->id, $this->course->id, $this->studentroleid, 'manual');
+                $this->users->students->two->id, $this->course->id, $studentroleid, 'manual');
         $this->getDataGenerator()->enrol_user(
-                $this->users->students->three->id, $this->course->id, $this->studentroleid, 'manual');
+                $this->users->students->three->id, $this->course->id, $studentroleid, 'manual');
         $this->getDataGenerator()->enrol_user(
-                $this->users->students->four->id, $this->course->id, $this->studentroleid, 'manual');
+                $this->users->students->four->id, $this->course->id, $studentroleid, 'manual');
         $this->getDataGenerator()->enrol_user(
-                $this->users->students->five->id, $this->course->id, $this->studentroleid, 'manual');
+                $this->users->students->five->id, $this->course->id, $studentroleid, 'manual');
         $this->getDataGenerator()->enrol_user(
-                $this->users->students->six->id, $this->course->id, $this->studentroleid, 'manual');
+                $this->users->students->six->id, $this->course->id, $studentroleid, 'manual');
         $this->getDataGenerator()->enrol_user(
-                $this->users->students->eight->id, $this->course->id, $this->studentroleid, 'manual');
+                $this->users->students->eight->id, $this->course->id, $studentroleid, 'manual');
         $this->getDataGenerator()->enrol_user(
-                $this->users->students->nine->id, $this->course->id, $this->studentroleid, 'manual');
+                $this->users->students->nine->id, $this->course->id, $studentroleid, 'manual');
         $this->getDataGenerator()->enrol_user(
-                $this->users->students->ten->id, $this->course->id, $this->studentroleid, 'manual');
+                $this->users->students->ten->id, $this->course->id, $studentroleid, 'manual');
         $this->getDataGenerator()->enrol_user(
-                $this->users->teachers->one->id, $this->course->id, $this->teacherroleid, 'manual');
+                $this->users->teachers->one->id, $this->course->id, $teacherroleid, 'manual');
         $this->getDataGenerator()->enrol_user(
-                $this->users->teachers->two->id, $this->course->id, $this->teacherroleid, 'manual');
+                $this->users->teachers->two->id, $this->course->id, $teacherroleid, 'manual');
 
         // Studio generator.
         $this->generator = $this->getDataGenerator()->get_plugin_generator('mod_openstudio');
@@ -138,7 +141,7 @@ class mod_openstudio_subscription_testcase extends openstudio_testcase {
             'embedcode' => '',
             'weblink' => 'http://www.open.ac.uk/',
             'urltitle' => 'Vesica Timeline',
-            'visibility' => mod_openstudio\local\api\content::VISIBILITY_MODULE,
+            'visibility' => \mod_openstudio\local\api\content::VISIBILITY_MODULE,
             'description' => mt_rand(). ' - The Best YouTube Link Ever',
             'tags' => array('Stark', 'Lannister', 'Targereyen'),
             'ownership' => 0,
@@ -152,64 +155,64 @@ class mod_openstudio_subscription_testcase extends openstudio_testcase {
     public function test_create_update_delete_subscription() {
         $this->resetAfterTest(true);
 
-        $this->populate_single_data_array();
-
         // To keep the test simple, we'll create a pinboard slot and one non pinboard slot.
         // Visibility on both is module.
-        $this->populate_content_data();
+        $this->singleentrydata = $this->generator->generate_single_data_array($this->users->students->one);
+        $this->contentdata = $this->generator->generate_content_data(
+                $this->studiolevels, $this->users->students->one->id, $this->singleentrydata);
         $this->singleentrydata['name'] = 'Slot Pinboarder';
-        $this->pbslotid = mod_openstudio\local\api\content::create_in_pinboard(
+        $this->pbslotid = \mod_openstudio\local\api\content::create_in_pinboard(
                 $this->studiolevels->id, $this->users->students->two->id, $this->singleentrydata);
-        $this->assertGreaterThan(0, mod_openstudio\local\api\subscription::create(
-                mod_openstudio\local\api\subscription::MODULE,
+        $this->assertGreaterThan(0, \mod_openstudio\local\api\subscription::create(
+                \mod_openstudio\local\api\subscription::MODULE,
                 $this->users->students->three->id, $this->studiolevels->id,
-                mod_openstudio\local\api\subscription::FORMAT_HTML));
+                \mod_openstudio\local\api\subscription::FORMAT_HTML));
 
         // The first one is an odd check as they also work with equalsTrue
         // because if it returns the ID 1 it is true!
-        $this->assertGreaterThan(1, mod_openstudio\local\api\subscription::create(
-                mod_openstudio\local\api\subscription::MODULE,
+        $this->assertGreaterThan(1, \mod_openstudio\local\api\subscription::create(
+                \mod_openstudio\local\api\subscription::MODULE,
                 $this->users->students->three->id, $this->studiolevels->id,
-                mod_openstudio\local\api\subscription::FORMAT_HTML, $this->contentid));
+                \mod_openstudio\local\api\subscription::FORMAT_HTML, $this->contentdata->id));
 
         // Check that duplicate only returns true.
-        $this->assertEquals(true, mod_openstudio\local\api\subscription::create(
-                mod_openstudio\local\api\subscription::MODULE,
+        $this->assertEquals(true, \mod_openstudio\local\api\subscription::create(
+                \mod_openstudio\local\api\subscription::MODULE,
                 $this->users->students->three->id, $this->studiolevels->id,
-                mod_openstudio\local\api\subscription::FORMAT_HTML, $this->contentid));
+                \mod_openstudio\local\api\subscription::FORMAT_HTML, $this->contentdata->id));
 
         // This one is not a duplicate but should return an id larger than 1.
-        $this->assertGreaterThan(1, mod_openstudio\local\api\subscription::create(
-                mod_openstudio\local\api\subscription::MODULE,
+        $this->assertGreaterThan(1, \mod_openstudio\local\api\subscription::create(
+                \mod_openstudio\local\api\subscription::MODULE,
                 $this->users->students->three->id, $this->studiolevels->id,
-                mod_openstudio\local\api\subscription::FORMAT_HTML, $this->pbslotid));
+                \mod_openstudio\local\api\subscription::FORMAT_HTML, $this->pbslotid));
 
         // Check that duplicate only returns true again.
-        $this->assertEquals(true, mod_openstudio\local\api\subscription::create(
-                mod_openstudio\local\api\subscription::MODULE,
+        $this->assertEquals(true, \mod_openstudio\local\api\subscription::create(
+                \mod_openstudio\local\api\subscription::MODULE,
                 $this->users->students->three->id, $this->studiolevels->id,
-                mod_openstudio\local\api\subscription::FORMAT_HTML, $this->pbslotid));
+                \mod_openstudio\local\api\subscription::FORMAT_HTML, $this->pbslotid));
 
         // Let's Create something now and then delete it.
-        $x = mod_openstudio\local\api\subscription::create(
-                mod_openstudio\local\api\subscription::MODULE, $this->users->students->eight->id,
-                $this->studiolevels->id, mod_openstudio\local\api\subscription::FORMAT_HTML, $this->contentid);
+        $x = \mod_openstudio\local\api\subscription::create(
+                \mod_openstudio\local\api\subscription::MODULE, $this->users->students->eight->id,
+                $this->studiolevels->id, \mod_openstudio\local\api\subscription::FORMAT_HTML, $this->contentdata->id);
         $this->assertGreaterThan(1, $x);
 
         // Let's try and update this first.
-        $this->assertEquals(true, mod_openstudio\local\api\subscription::update(
-                $x, mod_openstudio\local\api\subscription::FORMAT_PLAIN,
-                mod_openstudio\local\api\subscription::FREQUENCY_HOURLY));
-        $this->assertEquals(true, mod_openstudio\local\api\subscription::update($x, '', '', time()));
+        $this->assertEquals(true, \mod_openstudio\local\api\subscription::update(
+                $x, \mod_openstudio\local\api\subscription::FORMAT_PLAIN,
+                \mod_openstudio\local\api\subscription::FREQUENCY_HOURLY));
+        $this->assertEquals(true, \mod_openstudio\local\api\subscription::update($x, '', '', time()));
 
         // Let's try and make up an update.
-        $this->assertEquals(false, mod_openstudio\local\api\subscription::update(99999, '', '', time()));
+        $this->assertEquals(false, \mod_openstudio\local\api\subscription::update(99999, '', '', time()));
 
         // Another user should not be able to delete.
-        $this->assertEquals(false, mod_openstudio\local\api\subscription::delete($x, $this->users->students->five->id, true));
+        $this->assertEquals(false, \mod_openstudio\local\api\subscription::delete($x, $this->users->students->five->id, true));
 
         // Student 8 him/her self should be able to delete it.
-        $this->assertEquals(true, mod_openstudio\local\api\subscription::delete($x, $this->users->students->eight->id, true));
+        $this->assertEquals(true, \mod_openstudio\local\api\subscription::delete($x, $this->users->students->eight->id, true));
     }
 
     /**
@@ -236,12 +239,12 @@ class mod_openstudio_subscription_testcase extends openstudio_testcase {
             'userid' => $emailuser->id,
             'name' => 'Test',
             'description' => 'Test',
-            'visibility' => mod_openstudio\local\api\content::VISIBILITY_MODULE,
-            'contenttype' => mod_openstudio\local\api\content::TYPE_TEXT
+            'visibility' => \mod_openstudio\local\api\content::VISIBILITY_MODULE,
+            'contenttype' => \mod_openstudio\local\api\content::TYPE_TEXT
         ]);
 
-        $this->assertEquals(true, mod_openstudio\local\api\subscription::create(mod_openstudio\local\api\subscription::MODULE,
-                $emailuser->id, $this->studiolevels->id, mod_openstudio\local\api\subscription::FORMAT_HTML));
+        $this->assertEquals(true, \mod_openstudio\local\api\subscription::create(\mod_openstudio\local\api\subscription::MODULE,
+                $emailuser->id, $this->studiolevels->id, \mod_openstudio\local\api\subscription::FORMAT_HTML));
 
         $this->generator->create_notification([
             'userid' => $emailuser->id,
@@ -264,7 +267,7 @@ class mod_openstudio_subscription_testcase extends openstudio_testcase {
         // Add a studio level subscription for student 2 who is on the same module as
         // one and three who own courses.
 
-        $emails = mod_openstudio\local\api\subscription::process($this->studiolevels->id);
+        $emails = \mod_openstudio\local\api\subscription::process($this->studiolevels->id);
         $this->assertEquals(true, $emails);
     }
 

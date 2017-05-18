@@ -22,9 +22,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_openstudio;
+
 defined('MOODLE_INTERNAL') || die();
 
-class mod_openstudio_import_testcase extends \advanced_testcase {
+class import_testcase extends \advanced_testcase {
 
     private $tempdir;
     private $studio;
@@ -50,19 +52,19 @@ class mod_openstudio_import_testcase extends \advanced_testcase {
      * Clean up temporary directory.
      */
     public function tearDown() {
-        mod_openstudio\local\api\filesystem::rrmdir($this->tempdir);
+        \mod_openstudio\local\api\filesystem::rrmdir($this->tempdir);
     }
 
     /**
      * Create a stored_file object from a fixture file.
      *
      * @param $filename
-     * @return stored_file
+     * @return \stored_file
      */
     private function create_storedfile_from_fixture($filename) {
         global $CFG, $USER;
         $fs = get_file_storage();
-        $usercontext = context_user::instance($USER->id);
+        $usercontext = \context_user::instance($USER->id);
         $filedata = (object) [
             'component' => 'user',
             'filearea' => 'draft',
@@ -82,7 +84,7 @@ class mod_openstudio_import_testcase extends \advanced_testcase {
         $user = $USER;
         $this->setUser($this->student->id);
         $importfile = $this->create_storedfile_from_fixture('importtest.zip');
-        $files = mod_openstudio\local\api\import::get_archive_contents($importfile);
+        $files = \mod_openstudio\local\api\import::get_archive_contents($importfile);
 
         $this->assertCount(4, $files['files']); // Zip contains 5 files, but 1 is not permitted.
         $fixturefiles = ['test.pdf', 'test.odt', 'test.ods', 'test.pptx'];
@@ -101,9 +103,9 @@ class mod_openstudio_import_testcase extends \advanced_testcase {
         $underarray = [1, 2, 3, 4];
         $exactarray = [1, 2, 3, 4, 5];
         $overarray = [1, 2, 3, 4, 5, 6];
-        $this->assertTrue(mod_openstudio\local\api\import::check_import_limit($this->studio->id, $this->student->id, $underarray));
-        $this->assertTrue(mod_openstudio\local\api\import::check_import_limit($this->studio->id, $this->student->id, $exactarray));
-        $this->assertFalse(mod_openstudio\local\api\import::check_import_limit($this->studio->id, $this->student->id, $overarray));
+        $this->assertTrue(\mod_openstudio\local\api\import::check_import_limit($this->studio->id, $this->student->id, $underarray));
+        $this->assertTrue(\mod_openstudio\local\api\import::check_import_limit($this->studio->id, $this->student->id, $exactarray));
+        $this->assertFalse(\mod_openstudio\local\api\import::check_import_limit($this->studio->id, $this->student->id, $overarray));
     }
 
     /**
@@ -122,9 +124,9 @@ class mod_openstudio_import_testcase extends \advanced_testcase {
         $underarray = [1, 2, 3];
         $exactarray = [1, 2, 3, 4];
         $overarray = [1, 2, 3, 4, 5];
-        $this->assertTrue(mod_openstudio\local\api\import::check_import_limit($this->studio->id, $this->student->id, $underarray));
-        $this->assertTrue(mod_openstudio\local\api\import::check_import_limit($this->studio->id, $this->student->id, $exactarray));
-        $this->assertFalse(mod_openstudio\local\api\import::check_import_limit($this->studio->id, $this->student->id, $overarray));
+        $this->assertTrue(\mod_openstudio\local\api\import::check_import_limit($this->studio->id, $this->student->id, $underarray));
+        $this->assertTrue(\mod_openstudio\local\api\import::check_import_limit($this->studio->id, $this->student->id, $exactarray));
+        $this->assertFalse(\mod_openstudio\local\api\import::check_import_limit($this->studio->id, $this->student->id, $overarray));
     }
 
     /**
@@ -135,9 +137,9 @@ class mod_openstudio_import_testcase extends \advanced_testcase {
         $user = $USER;
         $this->setUser($this->student->id);
         $importfile = $this->create_storedfile_from_fixture('importtest.zip');
-        $files = mod_openstudio\local\api\import::get_archive_contents($importfile);
+        $files = \mod_openstudio\local\api\import::get_archive_contents($importfile);
         $cm = get_coursemodule_from_id('openstudio', $this->studio->cmid);
-        mod_openstudio\local\api\import::import_files($files, $cm, $this->student->id);
+        \mod_openstudio\local\api\import::import_files($files, $cm, $this->student->id);
 
         $contents = $DB->get_records('openstudio_contents', ['openstudioid' => $this->studio->id, 'userid' => $this->student->id]);
         $this->assertCount(4, $contents);

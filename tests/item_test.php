@@ -20,10 +20,12 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_openstudio;
+
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
-class mod_openstudio_item_testcase extends advanced_testcase  {
+class item_testcase extends \advanced_testcase  {
 
     private $course;
     private $generator; // Contains mod_openstudio specific data generator functions.
@@ -50,8 +52,8 @@ class mod_openstudio_item_testcase extends advanced_testcase  {
         $this->course = $this->getDataGenerator()->create_course();
 
         // Create Users.
-        $this->users = new stdClass();
-        $this->users->students = new stdClass();
+        $this->users = new \stdClass();
+        $this->users->students = new \stdClass();
         $this->users->students->one = $this->getDataGenerator()->create_user(
                 array('email' => 'student1@ouunittest.com', 'username' => 'student1'));
         $this->users->students->two = $this->getDataGenerator()->create_user(
@@ -62,7 +64,7 @@ class mod_openstudio_item_testcase extends advanced_testcase  {
                 array('email' => 'student4@ouunittest.com', 'username' => 'student4'));
         $this->users->students->five = $this->getDataGenerator()->create_user(
                 array('email' => 'student5@ouunittest.com', 'username' => 'student5'));
-        $this->users->teachers = new stdClass();
+        $this->users->teachers = new \stdClass();
         $this->users->teachers->one = $this->getDataGenerator()->create_user(
                 array('email' => 'teacher1@ouunittest.com', 'username' => 'teacher1'));
 
@@ -87,99 +89,99 @@ class mod_openstudio_item_testcase extends advanced_testcase  {
         $this->studiolevels = $this->generator->create_instance(array('course' => $this->course->id, 'enablefolders' => 1));
         $this->studiolevels->leveldata = $this->generator->create_mock_levels($this->studiolevels->id);
 
-        $this->contents = new stdClass();
+        $this->contents = new \stdClass();
 
         // 2 contents containing files.
         $file1 = $this->create_file($CFG->dirroot . '/mod/openstudio/tests/importfiles/test1.jpg');
-        $this->contents->file1 = $this->generate_content_data(mod_openstudio\local\api\content::TYPE_IMAGE,
+        $this->contents->file1 = $this->generate_content_data(\mod_openstudio\local\api\content::TYPE_IMAGE,
                 'test1.jpg',
                 $this->users->students->one->id,
                 $file1->get_itemid());
         $this->contents->file1->id = $DB->insert_record('openstudio_contents', $this->contents->file1);
         $file2 = $this->create_file($CFG->dirroot . '/mod/openstudio/tests/importfiles/test2.jpg');
-        $this->contents->file2 = $this->generate_content_data(mod_openstudio\local\api\content::TYPE_IMAGE,
+        $this->contents->file2 = $this->generate_content_data(\mod_openstudio\local\api\content::TYPE_IMAGE,
                 'test2.jpg',
                 $this->users->students->one->id,
                 $file2->get_itemid());
         $this->contents->file2->id = $DB->insert_record('openstudio_contents', $this->contents->file2);
 
         // 2 contents containing web links.
-        $this->contents->web1 = $this->generate_content_data(mod_openstudio\local\api\content::TYPE_URL,
+        $this->contents->web1 = $this->generate_content_data(\mod_openstudio\local\api\content::TYPE_URL,
                 'http://bbc.co.uk',
                 $this->users->students->one->id);
         $this->contents->web1->id = $DB->insert_record('openstudio_contents', $this->contents->web1);
 
-        $this->contents->web2 = $this->generate_content_data(mod_openstudio\local\api\content::TYPE_URL,
+        $this->contents->web2 = $this->generate_content_data(\mod_openstudio\local\api\content::TYPE_URL,
                 'http://open.ac.uk',
                 $this->users->students->one->id);
         $this->contents->web2->id = $DB->insert_record('openstudio_contents', $this->contents->web2);
 
         // 2 contents containing embed code.
-        $this->contents->embed1 = $this->generate_content_data(mod_openstudio\local\api\content::TYPE_URL_VIDEO,
+        $this->contents->embed1 = $this->generate_content_data(\mod_openstudio\local\api\content::TYPE_URL_VIDEO,
                 'https://www.youtube.com/watch?v=9bZkp7q19f0',
                 $this->users->students->one->id);
         $this->contents->embed1->id = $DB->insert_record('openstudio_contents', $this->contents->embed1);
 
-        $this->contents->embed2 = $this->generate_content_data(mod_openstudio\local\api\content::TYPE_URL_VIDEO,
+        $this->contents->embed2 = $this->generate_content_data(\mod_openstudio\local\api\content::TYPE_URL_VIDEO,
                 'https://www.youtube.com/watch?v=8U_GEa4bM1M',
                 $this->users->students->one->id);
         $this->contents->embed2->id = $DB->insert_record('openstudio_contents', $this->contents->embed2);
 
         // 2 empty contents.
-        $this->contents->empty1 = $this->generate_content_data(mod_openstudio\local\api\content::TYPE_NONE, '',
+        $this->contents->empty1 = $this->generate_content_data(\mod_openstudio\local\api\content::TYPE_NONE, '',
                 $this->users->students->one->id);
         $this->contents->empty1->id = $DB->insert_record('openstudio_contents', $this->contents->empty1);
 
-        $this->contents->empty2 = $this->generate_content_data(mod_openstudio\local\api\content::TYPE_NONE, '',
+        $this->contents->empty2 = $this->generate_content_data(\mod_openstudio\local\api\content::TYPE_NONE, '',
                 $this->users->students->one->id);
         $this->contents->empty2->id = $DB->insert_record('openstudio_contents', $this->contents->empty2);
 
         // A content containing duplicate content.
-        $this->contents->dup1 = $this->generate_content_data(mod_openstudio\local\api\content::TYPE_URL_VIDEO,
+        $this->contents->dup1 = $this->generate_content_data(\mod_openstudio\local\api\content::TYPE_URL_VIDEO,
                 'https://www.youtube.com/watch?v=9bZkp7q19f0',
                 $this->users->students->two->id);
         $this->contents->dup1->id = $DB->insert_record('openstudio_contents', $this->contents->dup1);
 
-        $this->contents->web3 = $this->generate_content_data(mod_openstudio\local\api\content::TYPE_URL,
+        $this->contents->web3 = $this->generate_content_data(\mod_openstudio\local\api\content::TYPE_URL,
                 'http://example.com',
                 $this->users->students->one->id);
         $this->contents->web3->id = $DB->insert_record('openstudio_contents', $this->contents->web3);
 
-        $this->contents->web4 = $this->generate_content_data(mod_openstudio\local\api\content::TYPE_URL,
+        $this->contents->web4 = $this->generate_content_data(\mod_openstudio\local\api\content::TYPE_URL,
                 'http://example.co.uk',
                 $this->users->students->one->id);
         $this->contents->web4->id = $DB->insert_record('openstudio_contents', $this->contents->web4);
 
-        $this->contentversions = new stdClass();
+        $this->contentversions = new \stdClass();
         // Old version of a content, with item record attached to current content.
-        $contentrecord = mod_openstudio\local\api\content::get($this->contents->web3->id);
+        $contentrecord = \mod_openstudio\local\api\content::get($this->contents->web3->id);
         $this->contentversions->web3 = $this->generate_version_data($contentrecord, 'http://example.ac.uk');
         $this->contentversions->web3->id = $DB->insert_record('openstudio_content_versions', $this->contentversions->web3);
         $contentitem = (object) array(
                 'contenthash' => sha1($this->contentversions->web3->contenttype . ':' . $this->contentversions->web3->content),
-                'containertype' => mod_openstudio\local\api\item::CONTENT,
+                'containertype' => \mod_openstudio\local\api\item::CONTENT,
                 'containerid' => $this->contents->web3->id,
                 'timeadded' => time()
         );
         $DB->insert_record('openstudio_content_items', $contentitem);
 
         // Old version of a content, with no item record attached to current content.
-        $contentrecord = mod_openstudio\local\api\content::get($this->contents->web4->id);
+        $contentrecord = \mod_openstudio\local\api\content::get($this->contents->web4->id);
         $this->contentversions->web4 = $this->generate_version_data($contentrecord, 'http://example.net');
         $this->contentversions->web4->id = $DB->insert_record('openstudio_content_versions', $this->contentversions->web4);
 
         // Some additional items for testing occurrence count.
-        $this->items = new stdClass();
+        $this->items = new \stdClass();
         $this->items->contents = (object) array(
-                'one' => $this->generate_content_data(mod_openstudio\local\api\content::TYPE_TEXT, 'foo',
+                'one' => $this->generate_content_data(\mod_openstudio\local\api\content::TYPE_TEXT, 'foo',
                         $this->users->students->one->id),
-                'two' => $this->generate_content_data(mod_openstudio\local\api\content::TYPE_TEXT, 'foo',
+                'two' => $this->generate_content_data(\mod_openstudio\local\api\content::TYPE_TEXT, 'foo',
                         $this->users->students->one->id),
-                'three' => $this->generate_content_data(mod_openstudio\local\api\content::TYPE_TEXT, 'oof',
+                'three' => $this->generate_content_data(\mod_openstudio\local\api\content::TYPE_TEXT, 'oof',
                         $this->users->students->one->id),
-                'four' => $this->generate_content_data(mod_openstudio\local\api\content::TYPE_TEXT, 'bar',
+                'four' => $this->generate_content_data(\mod_openstudio\local\api\content::TYPE_TEXT, 'bar',
                         $this->users->students->one->id),
-                'five' => $this->generate_content_data(mod_openstudio\local\api\content::TYPE_TEXT, 'bad',
+                'five' => $this->generate_content_data(\mod_openstudio\local\api\content::TYPE_TEXT, 'bad',
                         $this->users->students->one->id)
         );
         $this->items->contents->one->id = $DB->insert_record('openstudio_contents', $this->items->contents->one);
@@ -197,31 +199,31 @@ class mod_openstudio_item_testcase extends advanced_testcase  {
 
         $this->items->one = (object) array(
                 'containerid' => $this->items->contents->one->id,
-                'containertype' => mod_openstudio\local\api\item::CONTENT,
+                'containertype' => \mod_openstudio\local\api\item::CONTENT,
                 'contenthash' => sha1('foo'),
                 'timeadded' => time(),
         );
         $this->items->two = (object) array(
                 'containerid' => $this->items->contents->two->id,
-                'containertype' => mod_openstudio\local\api\item::CONTENT,
+                'containertype' => \mod_openstudio\local\api\item::CONTENT,
                 'contenthash' => sha1('foo'),
                 'timeadded' => time(),
         );
         $this->items->three = (object) array(
                 'containerid' => $this->items->versions->three->id,
-                'containertype' => mod_openstudio\local\api\item::VERSION,
+                'containertype' => \mod_openstudio\local\api\item::VERSION,
                 'contenthash' => sha1('foo'),
                 'timeadded' => time(),
         );
         $this->items->four = (object) array(
                 'containerid' => $this->items->contents->four->id,
-                'containertype' => mod_openstudio\local\api\item::CONTENT,
+                'containertype' => \mod_openstudio\local\api\item::CONTENT,
                 'contenthash' => sha1('bar'),
                 'timeadded' => time(),
         );
         $this->items->five = (object) array(
                 'containerid' => $this->items->versions->five->id,
-                'containertype' => mod_openstudio\local\api\item::VERSION,
+                'containertype' => \mod_openstudio\local\api\item::VERSION,
                 'contenthash' => sha1('baz'),
                 'timeadded' => time(),
         );
@@ -232,40 +234,40 @@ class mod_openstudio_item_testcase extends advanced_testcase  {
         $this->items->five->id = $DB->insert_record('openstudio_content_items', $this->items->five);
 
         // Some additional contents with attached items for testing occurences with user data.
-        $this->contents->web5 = $this->generate_content_data(mod_openstudio\local\api\content::TYPE_URL,
+        $this->contents->web5 = $this->generate_content_data(\mod_openstudio\local\api\content::TYPE_URL,
                 'http://example.org',
                 $this->users->students->one->id);
         $this->contents->web5->id = $DB->insert_record('openstudio_contents', $this->contents->web5);
-        $contentrecord = mod_openstudio\local\api\content::get($this->contents->web5->id);
+        $contentrecord = \mod_openstudio\local\api\content::get($this->contents->web5->id);
         $contentitem = (object) array(
                 'contenthash' => sha1($contentrecord->contenttype . ':' . $contentrecord->content),
-                'containertype' => mod_openstudio\local\api\item::CONTENT,
+                'containertype' => \mod_openstudio\local\api\item::CONTENT,
                 'containerid' => $this->contents->web5->id,
                 'timeadded' => time()
         );
         $DB->insert_record('openstudio_content_items', $contentitem);
 
-        $this->contents->web6 = $this->generate_content_data(mod_openstudio\local\api\content::TYPE_URL,
+        $this->contents->web6 = $this->generate_content_data(\mod_openstudio\local\api\content::TYPE_URL,
                 'http://example.org',
                 $this->users->students->two->id);
         $this->contents->web6->id = $DB->insert_record('openstudio_contents', $this->contents->web6);
-        $contentrecord = mod_openstudio\local\api\content::get($this->contents->web6->id);
+        $contentrecord = \mod_openstudio\local\api\content::get($this->contents->web6->id);
         $contentitem = (object) array(
                 'contenthash' => sha1($contentrecord->contenttype . ':' . $contentrecord->content),
-                'containertype' => mod_openstudio\local\api\item::CONTENT,
+                'containertype' => \mod_openstudio\local\api\item::CONTENT,
                 'containerid' => $this->contents->web6->id,
                 'timeadded' => time() + 1
         );
 
         $DB->insert_record('openstudio_content_items', $contentitem);
-        $this->contents->web7 = $this->generate_content_data(mod_openstudio\local\api\content::TYPE_URL,
+        $this->contents->web7 = $this->generate_content_data(\mod_openstudio\local\api\content::TYPE_URL,
                 'http://example.org.uk',
                 $this->users->students->three->id);
         $this->contents->web7->id = $DB->insert_record('openstudio_contents', $this->contents->web7);
-        $contentrecord = mod_openstudio\local\api\content::get($this->contents->web7->id);
+        $contentrecord = \mod_openstudio\local\api\content::get($this->contents->web7->id);
         $contentitem = (object) array(
                 'contenthash' => sha1($contentrecord->contenttype . ':' . $contentrecord->content),
-                'containertype' => mod_openstudio\local\api\item::CONTENT,
+                'containertype' => \mod_openstudio\local\api\item::CONTENT,
                 'containerid' => $this->contents->web7->id,
                 'timeadded' => time() + 2
         );
@@ -274,7 +276,7 @@ class mod_openstudio_item_testcase extends advanced_testcase  {
         $this->contentversions->web7->id = $DB->insert_record('openstudio_content_versions', $this->contentversions->web7);
         $contentitem = (object) array(
                 'contenthash' => sha1($this->contentversions->web7->contenttype . ':' . $this->contentversions->web7->content),
-                'containertype' => mod_openstudio\local\api\item::VERSION,
+                'containertype' => \mod_openstudio\local\api\item::VERSION,
                 'containerid' => $this->contentversions->web7->id,
                 'timeadded' => time() - 10
         );
@@ -295,10 +297,10 @@ class mod_openstudio_item_testcase extends advanced_testcase  {
                 'description' => random_string(),
                 'textformat' => 0,
                 'commentformat' => 0,
-                'ownership' => mod_openstudio\local\api\content::OWNERSHIP_MYOWNWORK,
+                'ownership' => \mod_openstudio\local\api\content::OWNERSHIP_MYOWNWORK,
                 'ownershipdetail' => '',
                 'showextradata' => false,
-                'visibility' => mod_openstudio\local\api\content::VISIBILITY_INFOLDERONLY,
+                'visibility' => \mod_openstudio\local\api\content::VISIBILITY_INFOLDERONLY,
                 'userid' => $userid,
                 'timemodified' => time(),
         );
@@ -323,7 +325,7 @@ class mod_openstudio_item_testcase extends advanced_testcase  {
     protected function create_file($path) {
         static $itemid;
         $itemid++;
-        $this->file = new stdClass();
+        $this->file = new \stdClass();
         $this->file->filearea = 'content';
         $this->file->filename = basename($path);
         $this->file->filepath = '/';
@@ -334,7 +336,7 @@ class mod_openstudio_item_testcase extends advanced_testcase  {
         $this->file->datecreated = time();
         $this->file->component = 'mod_openstudio';
         $this->file->itemid = $itemid;
-        $context = context_module::instance($this->studiolevels->cmid);
+        $context = \context_module::instance($this->studiolevels->cmid);
         $this->file->contextid = $context->id;
         $fs = get_file_storage();
         return $fs->create_file_from_pathname($this->file, $path);
@@ -369,12 +371,12 @@ class mod_openstudio_item_testcase extends advanced_testcase  {
         );
         // Hash all the unique contents.
         foreach ($ids as $id) {
-            $this->assertNotEquals(mod_openstudio\local\api\item::log($id), false);
+            $this->assertNotEquals(\mod_openstudio\local\api\item::log($id), false);
         }
 
         // Verify that all items are created with unique hashes.
         list($usql, $params) = $DB->get_in_or_equal($ids);
-        $params = array_merge($params, array('containertype' => mod_openstudio\local\api\item::CONTENT));
+        $params = array_merge($params, array('containertype' => \mod_openstudio\local\api\item::CONTENT));
         $items = $DB->get_records_select('openstudio_content_items', 'containerid ' . $usql, $params);
         $this->assertEquals(6, count($items));
 
@@ -391,31 +393,31 @@ class mod_openstudio_item_testcase extends advanced_testcase  {
         );
 
         foreach ($emptyids as $id) {
-            $this->assertFalse(mod_openstudio\local\api\item::log($id));
+            $this->assertFalse(\mod_openstudio\local\api\item::log($id));
         }
 
         // Verify that item records where not created.
         list($usql, $params) = $DB->get_in_or_equal($emptyids);
-        $params = array_merge($params, array('containertype' => mod_openstudio\local\api\item::CONTENT));
+        $params = array_merge($params, array('containertype' => \mod_openstudio\local\api\item::CONTENT));
         $this->assertFalse($DB->record_exists_select('openstudio_content_items', 'containerid ' . $usql, $params));
 
         // Create a duplicate hash.
         $dupid = $this->contents->dup1->id;
 
-        $this->assertNotEquals(mod_openstudio\local\api\item::log($dupid), false);
+        $this->assertNotEquals(\mod_openstudio\local\api\item::log($dupid), false);
 
-        $params = array('containerid' => $dupid, 'containertype' => mod_openstudio\local\api\item::CONTENT);
+        $params = array('containerid' => $dupid, 'containertype' => \mod_openstudio\local\api\item::CONTENT);
         $dupitem = $DB->get_record('openstudio_content_items', $params);
         $this->assertContains($dupitem->contenthash, $foundhashes);
 
         try {
             // Attempt to log an item for non-existant content.
-            mod_openstudio\local\api\item::log($this->get_nonexistant_id('openstudio_contents'));
-        } catch (coding_exception $expected1) {
+            \mod_openstudio\local\api\item::log($this->get_nonexistant_id('openstudio_contents'));
+        } catch (\coding_exception $expected1) {
             try {
                 // Attempt to log a second item for a content.
-                mod_openstudio\local\api\item::log($this->contents->file1->id);
-            } catch (coding_exception $expected2) {
+                \mod_openstudio\local\api\item::log($this->contents->file1->id);
+            } catch (\coding_exception $expected2) {
                 return;
             }
         }
@@ -427,39 +429,39 @@ class mod_openstudio_item_testcase extends advanced_testcase  {
         global $DB;
         $contentitemparams = array(
             'containerid' => $this->contents->web3->id,
-            'containertype' => mod_openstudio\local\api\item::CONTENT
+            'containertype' => \mod_openstudio\local\api\item::CONTENT
         );
         $versionitemparams = array(
             'containerid' => $this->contentversions->web3->id,
-            'containertype' => mod_openstudio\local\api\item::VERSION
+            'containertype' => \mod_openstudio\local\api\item::VERSION
         );
         $contentitem = $DB->get_record('openstudio_content_items', $contentitemparams);
         $this->assertFalse($DB->record_exists('openstudio_content_items', $versionitemparams));
 
         // Move content item to version item.
-        mod_openstudio\local\api\item::toversion($this->contents->web3->id, $this->contentversions->web3->id);
+        \mod_openstudio\local\api\item::toversion($this->contents->web3->id, $this->contentversions->web3->id);
 
         $versionitemparams['contenthash'] = $contentitem->contenthash;
         $this->assertTrue($DB->record_exists('openstudio_content_items', $versionitemparams));
         $this->assertFalse($DB->record_exists('openstudio_content_items', $contentitemparams));
 
         // Try to move an item that doesn't exist, should fail silently.
-        mod_openstudio\local\api\item::toversion($this->contents->web4->id, $this->contentversions->web4->id);
+        \mod_openstudio\local\api\item::toversion($this->contents->web4->id, $this->contentversions->web4->id);
 
         try {
             // Try to move item for non-existant content.
-            mod_openstudio\local\api\item::toversion(
+            \mod_openstudio\local\api\item::toversion(
                     $this->get_nonexistant_id('openstudio_contents'), $this->contentversions->web3->id);
-        } catch (coding_exception $expected1) {
+        } catch (\coding_exception $expected1) {
             try {
                 // Try to move item to non-existant version.
-                mod_openstudio\local\api\item::toversion(
+                \mod_openstudio\local\api\item::toversion(
                         $this->contents->web3->id, $this->get_nonexistant_id('openstudio_content_versions'));
-            } catch (coding_exception $expected2) {
+            } catch (\coding_exception $expected2) {
                 try {
                     // Try to create a duplicate version item.
-                    mod_openstudio\local\api\item::toversion($this->contents->web3->id, $this->contentversions->web3->id);
-                } catch (coding_exception $expected3) {
+                    \mod_openstudio\local\api\item::toversion($this->contents->web3->id, $this->contentversions->web3->id);
+                } catch (\coding_exception $expected3) {
                     return;
                 }
             }
@@ -470,8 +472,8 @@ class mod_openstudio_item_testcase extends advanced_testcase  {
     }
 
     public function test_studio_api_item_get_occurrences() {
-        $hash = sha1(mod_openstudio\local\api\content::TYPE_URL . ':' . $this->contents->web5->content);
-        $occurences = mod_openstudio\local\api\item::get_occurences($hash);
+        $hash = sha1(\mod_openstudio\local\api\content::TYPE_URL . ':' . $this->contents->web5->content);
+        $occurences = \mod_openstudio\local\api\item::get_occurences($hash);
 
         // NOTE: we use base64_encode as the hash value may contain funny characters which
         // causes PHPUnit to complain when running which results in a false error report.
@@ -485,10 +487,10 @@ class mod_openstudio_item_testcase extends advanced_testcase  {
         $this->assertContains(base64_encode(fullname($this->users->students->two)), $foundusernames);
         $this->assertNotContains(base64_encode(fullname($this->users->students->three)), $foundusernames);
         $firstoccurence = reset($occurences);
-        $this->assertEquals($firstoccurence->containertype, mod_openstudio\local\api\item::CONTENT);
+        $this->assertEquals($firstoccurence->containertype, \mod_openstudio\local\api\item::CONTENT);
         $this->assertEquals($firstoccurence->containerid, $this->contents->web5->id);
 
-        $occurences = mod_openstudio\local\api\item::get_occurences($hash, false);
+        $occurences = \mod_openstudio\local\api\item::get_occurences($hash, false);
         $this->assertEquals(3, count($occurences));
         $foundusernames = array();
         foreach ($occurences as $occurence) {
@@ -499,17 +501,17 @@ class mod_openstudio_item_testcase extends advanced_testcase  {
         $this->assertContains(base64_encode(fullname($this->users->students->three)), $foundusernames);
 
         $firstoccurence = reset($occurences);
-        $this->assertEquals($firstoccurence->containertype, mod_openstudio\local\api\item::VERSION);
+        $this->assertEquals($firstoccurence->containertype, \mod_openstudio\local\api\item::VERSION);
         $this->assertEquals($firstoccurence->containerid, $this->contentversions->web7->id);
     }
 
     public function test_studio_api_item_count_occurrences() {
-        $this->assertEquals(2, mod_openstudio\local\api\item::count_occurences($this->items->one->contenthash));
-        $this->assertEquals(3, mod_openstudio\local\api\item::count_occurences($this->items->one->contenthash, 0, false));
-        $this->assertEquals(1, mod_openstudio\local\api\item::count_occurences($this->items->four->contenthash));
-        $this->assertEquals(1, mod_openstudio\local\api\item::count_occurences($this->items->four->contenthash, 0, false));
-        $this->assertEquals(0, mod_openstudio\local\api\item::count_occurences($this->items->five->contenthash));
-        $this->assertEquals(1, mod_openstudio\local\api\item::count_occurences($this->items->five->contenthash, 0, false));
+        $this->assertEquals(2, \mod_openstudio\local\api\item::count_occurences($this->items->one->contenthash));
+        $this->assertEquals(3, \mod_openstudio\local\api\item::count_occurences($this->items->one->contenthash, 0, false));
+        $this->assertEquals(1, \mod_openstudio\local\api\item::count_occurences($this->items->four->contenthash));
+        $this->assertEquals(1, \mod_openstudio\local\api\item::count_occurences($this->items->four->contenthash, 0, false));
+        $this->assertEquals(0, \mod_openstudio\local\api\item::count_occurences($this->items->five->contenthash));
+        $this->assertEquals(1, \mod_openstudio\local\api\item::count_occurences($this->items->five->contenthash, 0, false));
     }
 
 

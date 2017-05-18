@@ -22,26 +22,28 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_openstudio;
+
 defined('MOODLE_INTERNAL') || die();
 
-class mod_openstudioexport_testcase extends \advanced_testcase {
+class export_testcase extends \advanced_testcase {
     public function test_encode_ids() {
         // Encode a single ID.
-        self::assertEquals('bac', mod_openstudio\local\api\export::encode_ids([102]));
+        self::assertEquals('bac', \mod_openstudio\local\api\export::encode_ids([102]));
         // Encode multiple IDs.
-        self::assertEquals('bacxhij', mod_openstudio\local\api\export::encode_ids([102, 789]));
+        self::assertEquals('bacxhij', \mod_openstudio\local\api\export::encode_ids([102, 789]));
         // Attempt to encode something else.
-        $this->setExpectedException('coding_exception');
-        mod_openstudio\local\api\export::encode_ids(['abc', 345]);
+        $this->expectException('coding_exception');
+        \mod_openstudio\local\api\export::encode_ids(['abc', 345]);
     }
 
     public function test_decode_ids() {
         // Decode a single ID.
-        self::assertEquals([102], mod_openstudio\local\api\export::decode_ids('bac'));
+        self::assertEquals([102], \mod_openstudio\local\api\export::decode_ids('bac'));
         // Decode multiple IDs.
-        self::assertEquals([102, 789], mod_openstudio\local\api\export::decode_ids('bacxhij'));
+        self::assertEquals([102, 789], \mod_openstudio\local\api\export::decode_ids('bacxhij'));
         // Attempt to decode something else.
-        $this->setExpectedException('coding_exception');
-        mod_openstudio\local\api\export::decode_ids('abcw!');
+        $this->expectException('coding_exception');
+        \mod_openstudio\local\api\export::decode_ids('abcw!');
     }
 }

@@ -20,14 +20,14 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_openstudio;
+
 // Make sure this isn't being directly accessed.
 use mod_openstudio\local\api\tracking;
 
 defined('MOODLE_INTERNAL') || die();
 
-global $CFG;
-
-class mod_openstudio_tracking_testcase extends advanced_testcase {
+class tracking_testcase extends \advanced_testcase {
 
     private $users;
     private $generator;
@@ -45,8 +45,8 @@ class mod_openstudio_tracking_testcase extends advanced_testcase {
         $course = $this->getDataGenerator()->create_course();
 
         // Create Users.
-        $this->users = new stdClass();
-        $this->users->students = new stdClass();
+        $this->users = new \stdClass();
+        $this->users->students = new \stdClass();
         $this->users->students->three = $this->getDataGenerator()->create_user(
                 array('email' => 'student3@ouunittest.com', 'username' => 'student3'));
 
@@ -70,27 +70,27 @@ class mod_openstudio_tracking_testcase extends advanced_testcase {
 
         // Pass an arbitrary slot ID.
         $this->assertEquals(true,
-                mod_openstudio\local\api\tracking::log_action(
+                \mod_openstudio\local\api\tracking::log_action(
                         2, tracking::READ_CONTENT, $this->users->students->three->id));
         // This should work as we will be allowed a duplicate. It should return an ID.
         $this->assertNotEquals(false,
-                mod_openstudio\local\api\tracking::log_action(
+                \mod_openstudio\local\api\tracking::log_action(
                         2, tracking::READ_CONTENT, $this->users->students->three->id, true));
         // Let's see if it tells us to write again - it shouldn't within 60 seconds!!
         $this->assertEquals(false,
-                mod_openstudio\local\api\tracking::write_again(
+                \mod_openstudio\local\api\tracking::write_again(
                         2, tracking::READ_CONTENT, $this->users->students->three->id));
         // Let's mimic a deletion tracking entry for our slot.
         $this->assertEquals(true,
-                mod_openstudio\local\api\tracking::log_action(
+                \mod_openstudio\local\api\tracking::log_action(
                         2, tracking::DELETE_CONTENT, $this->users->students->three->id));
         // Now let's try and delete again, we should get a false.
         $this->assertEquals(false,
-                mod_openstudio\local\api\tracking::log_action(
+                \mod_openstudio\local\api\tracking::log_action(
                         2, tracking::DELETE_CONTENT, $this->users->students->three->id));
         // We should also check the duplicate function directly.
         $this->assertEquals(true,
-                mod_openstudio\local\api\tracking::is_duplicate(2, tracking::DELETE_CONTENT));
+                \mod_openstudio\local\api\tracking::is_duplicate(2, tracking::DELETE_CONTENT));
     }
 
 }

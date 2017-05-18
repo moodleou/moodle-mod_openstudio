@@ -21,9 +21,11 @@
  * @copyright  2017 The Open University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+namespace mod_openstudio;
+
 defined('MOODLE_INTERNAL') || die();
 
-class mod_openstudio_contentversion_testcase extends advanced_testcase {
+class contentversion_testcase extends \advanced_testcase {
 
     private $users;
     private $studio;
@@ -39,8 +41,8 @@ class mod_openstudio_contentversion_testcase extends advanced_testcase {
         $this->course = $this->getDataGenerator()->create_course();
 
         // Create user.
-        $this->users = new stdClass();
-        $this->users->students = new stdClass();
+        $this->users = new \stdClass();
+        $this->users->students = new \stdClass();
         $this->users->students->one = $this->getDataGenerator()->create_user(
                 array('email' => 'student1@ouunittest.com', 'username' => 'student1'));
         $this->users->students->two = $this->getDataGenerator()->create_user(
@@ -60,14 +62,14 @@ class mod_openstudio_contentversion_testcase extends advanced_testcase {
                 'name' => 'version1',
                 'description' => 'this is version1',
                 'content' => 'http://example.com/1',
-                'contenttype' => mod_openstudio\local\api\content::TYPE_URL,
+                'contenttype' => \mod_openstudio\local\api\content::TYPE_URL,
                 'timemodified' => time() - 1000
             ],
             'deleted' => (object) [
                 'name' => 'versiondeleted',
                 'description' => 'this is versiondeleted',
                 'content' => 'http://example.com/deleted',
-                'contenttype' => mod_openstudio\local\api\content::TYPE_URL,
+                'contenttype' => \mod_openstudio\local\api\content::TYPE_URL,
                 'timemodified' => time() - 500,
                 'deletedtime' => time() - 500,
                 'deletedby' => $this->users->students->one->id
@@ -76,14 +78,14 @@ class mod_openstudio_contentversion_testcase extends advanced_testcase {
                 'name' => 'version2',
                 'description' => 'this is version2',
                 'content' => 'http://example.com/2',
-                'contenttype' => mod_openstudio\local\api\content::TYPE_URL,
+                'contenttype' => \mod_openstudio\local\api\content::TYPE_URL,
                 'timemodified' => time() - 300
             ],
             'three' => (object) [
                 'name' => 'version3',
                 'description' => 'this is version3',
                 'content' => 'http://example.com/3',
-                'contenttype' => mod_openstudio\local\api\content::TYPE_URL,
+                'contenttype' => \mod_openstudio\local\api\content::TYPE_URL,
                 'timemodified' => time() - 100
             ]
         ];
@@ -94,7 +96,7 @@ class mod_openstudio_contentversion_testcase extends advanced_testcase {
             'name' => 'version4',
             'description' => 'this is version4',
             'weblink' => 'http://example.com/4',
-            'contenttype' => mod_openstudio\local\api\content::TYPE_URL
+            'contenttype' => \mod_openstudio\local\api\content::TYPE_URL
         ];
 
         $this->studio = $this->generator->create_instance(array('course' => $this->course->id, 'idnumber' => 'OS1'));
@@ -111,7 +113,7 @@ class mod_openstudio_contentversion_testcase extends advanced_testcase {
     }
 
     public function test_get() {
-        $version = mod_openstudio\local\api\contentversion::get($this->versions->two->id, $this->users->students->one->id);
+        $version = \mod_openstudio\local\api\contentversion::get($this->versions->two->id, $this->users->students->one->id);
         $this->assertEquals($this->versions->two->name, $version->name);
         $this->assertEquals(2, $version->versionnumber);
         $this->assertEquals(3, $version->numberofversions);
@@ -122,7 +124,7 @@ class mod_openstudio_contentversion_testcase extends advanced_testcase {
     }
 
     public function test_get_including_deleted() {
-        $version = mod_openstudio\local\api\contentversion::get(
+        $version = \mod_openstudio\local\api\contentversion::get(
                 $this->versions->two->id, $this->users->students->one->id, true);
         $this->assertEquals($this->versions->two->name, $version->name);
         $this->assertEquals(3, $version->versionnumber);
@@ -134,18 +136,18 @@ class mod_openstudio_contentversion_testcase extends advanced_testcase {
     }
 
     public function test_count() {
-        $this->assertEquals(3, mod_openstudio\local\api\contentversion::count($this->content->id));
+        $this->assertEquals(3, \mod_openstudio\local\api\contentversion::count($this->content->id));
     }
 
     public function test_count_including_deleted() {
-        $this->assertEquals(4, mod_openstudio\local\api\contentversion::count($this->content->id, true));
+        $this->assertEquals(4, \mod_openstudio\local\api\contentversion::count($this->content->id, true));
     }
 
     public function test_delete_oldest() {
-        $this->assertTrue(mod_openstudio\local\api\contentversion::delete_oldest(
+        $this->assertTrue(\mod_openstudio\local\api\contentversion::delete_oldest(
                 $this->content->id, $this->users->students->one->id));
 
-        $version = mod_openstudio\local\api\contentversion::get($this->versions->one->id, $this->users->students->one->id);
+        $version = \mod_openstudio\local\api\contentversion::get($this->versions->one->id, $this->users->students->one->id);
         $this->assertNotEmpty($version->deletedtime);
         $this->assertEquals($this->users->students->one->id, $version->deletedby);
         $this->assertEquals(2, $version->numberofversionsnotdeleted);
@@ -153,14 +155,14 @@ class mod_openstudio_contentversion_testcase extends advanced_testcase {
     }
 
     public function test_get_content_and_versions() {
-        $content = mod_openstudio\local\api\contentversion::get_content_and_versions(
+        $content = \mod_openstudio\local\api\contentversion::get_content_and_versions(
                 $this->content->id, $this->users->students->one->id);
         $this->assertEquals($this->content->name, $content->contentdata->name);
         $this->assertCount(3, $content->contentversions);
     }
 
     public function test_get_content_and_versions_including_deleted() {
-        $content = mod_openstudio\local\api\contentversion::get_content_and_versions(
+        $content = \mod_openstudio\local\api\contentversion::get_content_and_versions(
                 $this->content->id, $this->users->students->one->id, true);
         $this->assertEquals($this->content->name, $content->contentdata->name);
         $this->assertCount(4, $content->contentversions);
