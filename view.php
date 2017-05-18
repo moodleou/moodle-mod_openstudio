@@ -138,11 +138,17 @@ switch ($vidd) {
         break;
 
     case content::VISIBILITY_PRIVATE:
+        $pagetitle = $pageheading = get_string('pageheader', 'openstudio',
+            array('cname' => $course->shortname, 'cmname' => $cm->name,
+                'title' => $theme->themestudioname));
+        $vidviewname = 'work';
+        break;
+
     case content::VISIBILITY_PRIVATE_PINBOARD:
         $pagetitle = $pageheading = get_string('pageheader', 'openstudio',
                 array('cname' => $course->shortname, 'cmname' => $cm->name,
-                      'title' => $theme->themestudioname));
-        $vidviewname = 'work';
+                      'title' => $theme->themepinboardname));
+        $vidviewname = 'pinboard';
         break;
 
     case content::VISIBILITY_MODULE:
@@ -734,9 +740,6 @@ if ($finalviewpermissioncheck) {
         $contentdata->contents = array_values($contentdata->contents);
     }
 }
-
-// Render page header and crumb trail.
-util::page_setup($PAGE, $pagetitle, $pageheading, $pageurl, $course, $cm);
 
 // Breadcrumb.
 $importenable = false;
