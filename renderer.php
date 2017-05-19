@@ -630,6 +630,10 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $contentdata->inspirationicon = $OUTPUT->pix_url('inspiration_rgb_32px', 'openstudio');
         $contentdata->participationicon = $OUTPUT->pix_url('participation_rgb_32px', 'openstudio');
         $contentdata->favouriteicon = $OUTPUT->pix_url('favourite_rgb_32px', 'openstudio');
+        $contentdata->commentsgreyicon = $OUTPUT->pix_url('comments_grey_rgb_32px', 'openstudio');
+        $contentdata->inspirationgreyicon = $OUTPUT->pix_url('inspiration_grey_rgb_32px', 'openstudio');
+        $contentdata->participationgreyicon = $OUTPUT->pix_url('participation_grey_rgb_32px', 'openstudio');
+        $contentdata->favouritegreyicon = $OUTPUT->pix_url('favourite_grey_rgb_32px', 'openstudio');
         $contentdata->vid = $viewmode;
         $contentdata->lockicon = $OUTPUT->pix_url('lock_grey_rgb_32px', 'openstudio');
         $contentdata->requestfeedbackicon = $OUTPUT->pix_url('request_feedback_white_rgb_32px', 'openstudio');

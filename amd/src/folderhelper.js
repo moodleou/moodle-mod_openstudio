@@ -52,11 +52,11 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
         handleIsotope: function() {
 
             var containerCLass = '.openstudio-folder-items';
-            var colWidth = 200;
-            var gutters = 65;
+            var colWidth = 243;
+            var gutters = 20;
             if ($(window).width() <= 1024) {
-                colWidth = 150;
-                gutters = 50;
+                colWidth = 175;
+                gutters = 15;
             }
             t.isoTope = new Isotope(containerCLass, {
                 layoutMode: 'masonry',

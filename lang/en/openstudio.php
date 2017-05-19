@@ -50,6 +50,7 @@ $string['openstudio:import'] = 'Import';
 $string['openstudio:managecontent'] = 'Manage content';
 $string['openstudio:view'] = 'View';
 $string['openstudio:viewdeleted'] = 'View deleted';
+$string['openstudio:viewdeletedposts'] = 'View deleted posts';
 $string['openstudio:viewothers'] = 'View others';
 $string['openstudio:viewparticipation'] = 'View user progress';
 $string['lastmodified'] = 'Last upload: {$a}';

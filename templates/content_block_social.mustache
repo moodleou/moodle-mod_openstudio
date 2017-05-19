@@ -46,8 +46,8 @@
                     {{#comments}} {{comments}} {{/comments}}
                 </span>
                 <span>
-                    <img src="{{commentsicon}}" alt="{{#str}} commentslabel, openstudio {{/str}}"
-                         class="openstudio-grid-item-content-detail-info-icon {{^comments}}openstudio-icon-inactive{{/comments}}" />
+                    <img src="{{#comments}}{{commentsicon}}{{/comments}}{{^comments}}{{commentsgreyicon}}{{/comments}}"
+                         class="openstudio-grid-item-content-detail-info-icon " alt="{{#str}} commentslabel, openstudio {{/str}}"/>
                 </span>
             </span>
             <span class="openstudio-grid-item-content-detail-info-box">
@@ -55,8 +55,8 @@
                     {{#inspired}} {{inspired}} {{/inspired}}
                 </span>
                 <span>
-                    <img src="{{inspirationicon}}" alt="{{#str}} inspirationlabel, openstudio {{/str}}"
-                        class="openstudio-grid-item-content-detail-info-icon {{^inspired}}openstudio-icon-inactive{{/inspired}}" />
+                    <img src="{{#inspired}}{{inspirationicon}}{{/inspired}}{{^inspired}}{{inspirationgreyicon}}{{/inspired}}"
+                        class="openstudio-grid-item-content-detail-info-icon" alt="{{#str}} inspirationlabel, openstudio {{/str}}" />
                 </span>
             </span>
             <span class="openstudio-grid-item-content-detail-info-box">
@@ -64,8 +64,8 @@
                     {{#mademelaugh}} {{mademelaugh}} {{/mademelaugh}}
                 </span>
                 <span>
-                    <img src="{{participationicon}}" alt="{{#str}} participationlabel, openstudio {{/str}}"
-                        class="openstudio-grid-item-content-detail-info-icon {{^mademelaugh}}openstudio-icon-inactive{{/mademelaugh}}" />
+                    <img src="{{#mademelaugh}}{{participationicon}}{{/mademelaugh}}{{^mademelaugh}}{{participationgreyicon}}{{/mademelaugh}}"
+                        class="openstudio-grid-item-content-detail-info-icon" alt="{{#str}} participationlabel, openstudio {{/str}}" />
                 </span>
             </span>
             <span class="openstudio-grid-item-content-detail-info-box">
@@ -73,8 +73,8 @@
                     {{#favourite}} {{favourite}} {{/favourite}}
                 </span>
                 <span>
-                    <img src="{{favouriteicon}}" alt="{{#str}} favouritelabel, openstudio {{/str}}"
-                        class="openstudio-grid-item-content-detail-info-icon {{^favourite}}openstudio-icon-inactive{{/favourite}}" />
+                    <img src="{{#favourite}}{{favouriteicon}}{{/favourite}}{{^favourite}}{{favouritegreyicon}}{{/favourite}}"
+                        class="openstudio-grid-item-content-detail-info-icon" alt="{{#str}} favouritelabel, openstudio {{/str}}" />
                 </span>
             </span>
         </div>

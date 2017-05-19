@@ -199,40 +199,42 @@
             {{>mod_openstudio/content_flags}}
 
             <div class="openstudio-folder-view-buttons clearfix">
-                {{#contentdeleteenable}}
-                    <input id="id_deletebutton" class="osep-smallbutton" name="deletefolder" value="{{#str}}folderdeletedfolder, mod_openstudio{{/str}}" type="button">
-                {{/contentdeleteenable}}
+                <div>
+                    {{#contentdeleteenable}}
+                        <input id="id_deletebutton" class="osep-smallbutton" name="deletefolder" value="{{#str}}folderdeletedfolder, mod_openstudio{{/str}}" type="button">
+                    {{/contentdeleteenable}}
 
-                {{#contentlockenable}}
-                    <input id="id_lockbutton" name="lockbutton" type="button"
-                        {{#locked}}
-                            data-lockstate="locked"
-                            value="{{#str}}folderunlockfolder, mod_openstudio{{/str}}"
-                        {{/locked}}
-                        {{^locked}}
-                            data-lockstate="unlocked"
-                            value="{{#str}}folderlockfolder, mod_openstudio{{/str}}"
+                    {{#contentlockenable}}
+                        <input id="id_lockbutton" name="lockbutton" type="button"
+                            {{#locked}}
+                                data-lockstate="locked"
+                                value="{{#str}}folderunlockfolder, mod_openstudio{{/str}}"
+                            {{/locked}}
+                            {{^locked}}
+                                data-lockstate="unlocked"
+                                value="{{#str}}folderlockfolder, mod_openstudio{{/str}}"
+                                class="osep-smallbutton"
+                            {{/locked}}
                             class="osep-smallbutton"
-                        {{/locked}}
-                        class="osep-smallbutton"
-                    />
-                {{/contentlockenable}}
-            </div>
-            <div class="openstudio-folder-view-request-feedback">
-                {{#contentrequestfeedbackenable}}
-                    <button id="content_view_icon_{{contentflagrequestfeedback}}"
-                            class="openstudio-request-feedback-button osep-smallbutton"
-                            data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagrequestfeedback}}"
-                            data-mode="{{#contentflagrequestfeedbackactive}}off{{/contentflagrequestfeedbackactive}}
-                                {{^contentflagrequestfeedbackactive}}on{{/contentflagrequestfeedbackactive}}">
-                        {{#contentflagrequestfeedbackactive}}{{#str}}contentflagaskforhelpcancel, mod_openstudio{{/str}}{{/contentflagrequestfeedbackactive}}
-                        {{^contentflagrequestfeedbackactive}}{{#str}}contentflagaskforhelp, mod_openstudio{{/str}}{{/contentflagrequestfeedbackactive}}
-                    </button>
-                {{/contentrequestfeedbackenable}}
+                        />
+                    {{/contentlockenable}}
+                </div>
+                <div class="openstudio-folder-view-request-feedback clearfix">
+                    {{#contentrequestfeedbackenable}}
+                        <button id="content_view_icon_{{contentflagrequestfeedback}}"
+                                class="openstudio-request-feedback-button osep-smallbutton"
+                                data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagrequestfeedback}}"
+                                data-mode="{{#contentflagrequestfeedbackactive}}off{{/contentflagrequestfeedbackactive}}
+                                    {{^contentflagrequestfeedbackactive}}on{{/contentflagrequestfeedbackactive}}">
+                            {{#contentflagrequestfeedbackactive}}{{#str}}contentflagaskforhelpcancel, mod_openstudio{{/str}}{{/contentflagrequestfeedbackactive}}
+                            {{^contentflagrequestfeedbackactive}}{{#str}}contentflagaskforhelp, mod_openstudio{{/str}}{{/contentflagrequestfeedbackactive}}
+                        </button>
+                    {{/contentrequestfeedbackenable}}
+                </div>
             </div>
             {{#viewdeletedpostenable}}
                 <input id="id_viewdeletedpostbutton" name="viewdeletedpostbutton" type="button"
-                       class="osep-smallbutton" value="{{#str}}openstudio:viewdeleted, mod_openstudio{{/str}}"/>
+                       class="osep-smallbutton" value="{{#str}}openstudio:viewdeletedposts, mod_openstudio{{/str}}"/>
             {{/viewdeletedpostenable}}
         </div>
     </div>

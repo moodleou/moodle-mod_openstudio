@@ -1431,7 +1431,8 @@ class renderer_utils {
             }
         }
 
-        if ($contentdata->iscontentversion && ($contentdata->isownedbyviewer || $permissions->managecontent)) {
+        if (property_exists($contentdata, 'iscontentversion') && $contentdata->iscontentversion &&
+                ($contentdata->isownedbyviewer || $permissions->managecontent)) {
             $deleteenable = true;
         }
 

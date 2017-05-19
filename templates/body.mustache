@@ -151,7 +151,7 @@
                     {{^adddisable}}
                         <div class="openstudio-grid-item
                             {{#contentempty}}
-                                openstudio-grid-item-add-new{{#l3required}}-required{{/l3required}}
+                                 openstudio-grid-item-add-new{{#contentislocked}}-locked{{/contentislocked}}{{#l3required}}-required{{/l3required}}
                             {{/contentempty}}">
                             {{^contentempty}}{{>mod_openstudio/activity_content_block}}{{/contentempty}}
                             {{#contentempty}}{{>mod_openstudio/add_activity_content_block}}{{/contentempty}}

@@ -1233,6 +1233,7 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
 .openstudio-folder-view-comments .openstudio-comment-thread-original-item .openstudio-comment-text {
     padding-bottom: 15px;
     min-height: 0;
+    margin-top: 4px;
 }
 
 .openstudio-folder-view-comments .openstudio-comment-thread-replied-items .openstudio-comment-text {
@@ -1863,13 +1864,18 @@ a.openstudio-add-title:hover  {
 
 .openstudio-upload-container {
     height: 137px;
-    width: 100%;
+    width: calc(100% - 2px);
     border-radius : 4px;
     border: 1px dashed #676463;
     display: inline-block;
     margin-bottom: 10px;
     text-align: center;
     background: #ffffff;
+}
+
+.openstudio-add-new-activity .openstudio-upload-container,
+.openstudio-add-new-activity .openstudio-folder-content .openstudio-folder-background {
+    margin-bottom: 35px;
 }
 
 .openstudio-upload-container img {
@@ -2272,8 +2278,8 @@ a.openstudio-add-title:hover  {
 
 .openstudio-folder-content .openstudio-folder-background {
     background-color: #9bb0c9;
-    padding: 1px 10px 10px 10px;
-    margin: -2px 0px 10px 0px;
+    padding: 2px 10px 10px 10px;
+    margin: -3px 0px 10px 0px;
 }
 
 .openstudio-folder-background a {
@@ -2281,23 +2287,24 @@ a.openstudio-add-title:hover  {
 }
 
 .openstudio-folder-background .openstudio-default-folder-background {
-    height: 77px;
+    height: 74px;
     background-color: #ffffff;
-    padding: 10px;
+    padding: 10px 12px 10px 10px;
 }
 
 .openstudio-default-folder-background .openstudio-default-folder-img {
     border-radius: 4px;
     border: 1px dashed #9bb0c9;
     width: 100%;
-    padding-top: 11px;
-    padding-bottom: 11px;
+    padding-top: 12px;
+    padding-bottom: 12px;
     background-color: #ffffff;
+    height: 48px;
 }
 .openstudio-folder-background .openstudio-content-folder-img {
-    border: 4px solid #ffffff;
-    height: 88px;
-    width: 143px;
+    border: 3px solid #ffffff;
+    height: 89px;
+    width: 144px;
 }
 
 .openstudio-default-folder-background img{
@@ -2338,7 +2345,7 @@ a.openstudio-add-title:hover  {
 .openstudio-grid-item-content-detail-info{
     text-align: center;
     border-top: 1px solid #f0f0f1;
-    height: 45px;
+    height: 35px;
     margin-left: -15px;
     padding-top: 3px;
 }
@@ -2507,7 +2514,7 @@ iframe.openstudio-content-view-iframe {
     font-weight: bold;
     color: #002158;
     line-height: 18px;
-    margin: 0 20px 15px 25px;
+    margin: 0 26px 15px 24px;
 }
 
 .openstudio-profile-progress-content-description .openstudio-profile-progress-step.activity-locked {
@@ -2541,15 +2548,24 @@ a.openstudio-actvity-title:hover  {
 }
 
 .openstudio-add-new-lock-message {
-    margin-bottom: 25px;
+    margin-bottom: 15px;
 }
 
-.openstudio-grid-item-add-new-required {
+.openstudio-activity-lock-title {
+    padding-bottom: 4px;
+}
+
+.openstudio-grid-item-add-new-required,
+.openstudio-grid-item-add-new-locked-required {
     float: left;
     width: 244px;
     margin-bottom: 24px;
     border-radius: 4px;
     background-color: #fff6e2;
+}
+
+.openstudio-grid-item-add-new-locked {
+    background: #ffffff;
 }
 
 .openstudio-grid-item-content-subtitle {
@@ -3409,7 +3425,7 @@ div.openstudio-browse-post-item-filename {
  * View deleted post
  */
 #id_viewdeletedpostbutton {
-    margin-top: 10px;
+    margin-top: 28px;
 }
 
 .path-mod-openstudio .moodle-dialogue-base .openstudio-view-deleted-dialogue.moodle-dialogue .moodle-dialogue-content
@@ -3625,7 +3641,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 */
 
 .openstudio-work-progress-container {
-    width: 305px;
+    width: 290px;
     position: relative;
 }
 
@@ -3655,9 +3671,8 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 
 .openstudio-work-progress-percent {
     float: right;
-    width: 15%;
     text-align: left;
-    padding-left: 10px;
+    margin-right: 6px;
 }
 
 .openstudio-completecolour {
@@ -3737,7 +3752,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 
 .openstudio-own-view .openstudio-profile-view-text {
     display: inline-block;
-    margin-left: 7px;
+    margin-left: 5px;
 }
 
 .openstudio-profile-progress-content-description .openstudio-profile-block {
@@ -3802,6 +3817,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     padding-left: 7px;
     padding-right: 38px;
     background-color: transparent;
+    max-width: 208px;
 }
 
 .openstudio-profile-mypaticipation .openstudio-expand-image,
@@ -3818,7 +3834,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 .openstudio-profile-bar .openstudio-profile-paticipation-content {
     width: 23%;
     display: inline-block;
-    margin-top: 3px;
+    margin-top: 4px;
     vertical-align: top;
 }
 
@@ -3850,8 +3866,9 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 .openstudio-profile-bar .openstudio-profile-progress-content {
     display: inline-block;
     vertical-align: top;
-    margin-top: 3px;
-    padding-left: 7px;
+    margin-top: 4px;
+    float: right;
+    margin-right: 14px;
 }
 
 .openstudio-profile-progress-content .openstudio-profile-progress-content-description {
@@ -3898,7 +3915,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 /* Handle folder overview */
 .openstudio-folder-header {
     margin: 20px 24px 15px 24px;
-    padding: 12px 0 2px 0;
+    padding: 12px 0 4px 0;
 }
 
 .openstudio-folder-header .openstudio-folder-header-left {
@@ -3910,9 +3927,11 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     float: right;
     margin-top: 5px;
 }
+
 .openstudio-folder-header-left img {
     position: absolute;
 }
+
 .openstudio-folder-header-left .openstudio-folder-header-title {
     display: inline-block;
     vertical-align: middle;
@@ -3939,10 +3958,15 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 
 .openstudio-folder-view-container {
     background: #ffffff none repeat scroll 0 0;
-    margin: 15px 24px 20px;
+    margin: 15px 24px 62px;
     padding: 8px 20px 40px 20px;
     position: relative;
     border-radius: 4px;
+}
+
+.openstudio-folder-view-container .openstudio-content-view-animation-icons {
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 .openstudio-folder-view-title {
@@ -4010,6 +4034,10 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     margin-right: 20px;
 }
 
+.openstudio-folder-view-content .openstudio-folder-view-add-new-content {
+    margin-bottom: -5px;
+}
+
 .openstudio-folder-view-primary .openstudio-item-request-feedback,
 .openstudio-folder-view-primary .openstudio-item-lock {
     position: relative;
@@ -4040,6 +4068,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     cursor: pointer;
     background-color: #fff;
 }
+
 .openstudio-select-content {
     margin-bottom: 10px;
 }
@@ -4085,7 +4114,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 }
 
 .openstudio-folder-view-descripton-content {
-    padding: 15px 15px 20px 15px;
+    padding: 9px 15px 15px 15px;
 }
 
 .openstudio-folder-view-descripton-title {
@@ -4093,7 +4122,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     color: #000000;
     font-family: Arial;
     font-weight: bold;
-    margin-bottom: 8px;
+    margin-bottom: 0px;
 }
 
 .openstudio-folder-view-descripton-text {
@@ -4145,6 +4174,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 
 .openstudio-folder-view-buttons {
     margin-top: 28px;
+    float: left;
 }
 
 .path-mod-openstudio .openstudio-folder-view-buttons #id_deletebutton {
@@ -4165,13 +4195,19 @@ a.openstudio-add-new-content-link:hover  {
 }
 
 .openstudio-folder-view-add-new-content-title {
-    height: 51px;
-    line-height: 51px;
+    height: 48px;
+    line-height: 36px;
 }
 
 .openstudio-folder-view-title-icon img {
     width: 24px;
     padding-left: 5px;
+}
+
+
+.openstudio-add-new-content-link img{
+    vertical-align: top;
+    margin-top: 10px;
 }
 
 /* IE */
@@ -4230,14 +4266,14 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-work-progress-container {
-        width: 250px;
+        width: 240px;
     }
 
     .openstudio-profile-bar .openstudio-profile-progress-content {
-        margin-left: 0;
-        float: none;
-        margin-right: 0;
-        padding-left: 5px;
+        float: right;
+        width: 402px;
+        margin: 0;
+        padding: 0;
     }
 
     .openstudio-content-view-primary {
@@ -4247,6 +4283,18 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-content-view-secondary {
         width: 308px;
+    }
+
+    .openstudio-work-progress-percent {
+        margin-right: 0px;
+    }
+
+    #openstudio_profile_fullusername {
+        width: 84px;
+    }
+
+    .openstudio-profile-bar .openstudio-profile-progress-bar {
+        width: 240px;
     }
 
     .openstudio-content-view-version-actions {
@@ -4278,13 +4326,21 @@ a.openstudio-add-new-content-link:hover  {
         margin-bottom: 5px;
     }
 
+    .openstudio-profile-bar .openstudio-profile-head {
+        width: 141px;
+    }
+
+    .openstudio-profile-bar .openstudio-profile-paticipation-content {
+        width: 154px;
+    }
+
     .openstudio-folder-view-container {
         padding: 8px 20px 40px;
         margin-top: 15px;
     }
 
     .openstudio-folder-view-primary {
-        width: 400px;
+        width: 396px;
         margin-right: 10px;
     }
 
@@ -4293,22 +4349,27 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-folder-view-content .openstudio-folder-view-add-new-content {
-        padding-left: 15px;
         padding-right: 15px;
         float: none;
         width: auto;
+        margin-bottom: 5px;
     }
 
     .openstudio-folder-available {
         color: #312b39;
-        font-size: 1.14286em;
+        font-size: 0.857142em;
+        margin-bottom: 8px;
+        margin-top: 1px;
         float: left;
-        margin-bottom: 3px;
     }
 
     .openstudio-upload-folder {
-        width: 175px;
+        width: 173px;
         height: 90px;
+    }
+
+    .openstudio-folder-items {
+        margin-left: 15px;
     }
 
     .openstudio-upload-new-content-to-folder,
@@ -4325,16 +4386,14 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-folder-show-content-block {
-        width: 157px;
+        width: 155px;
         margin-top: -3px;
-        margin-left: 15px;
         padding-left: 10px;
         padding-right: 10px;
     }
 
     .openstudio-folder-show-content-block:nth-child(odd) {
         margin-right: 0px;
-        margin-left: 7px;
     }
 
     .openstudio-new-folder-title,
@@ -4348,11 +4407,22 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-folder-view-container .openstudio-content-view-secondary {
-        width: 308px;
+        width: 302px;
     }
 
     .openstudio-folder-view-container .openstudio-content-view-icon-inspiration {
         margin-left: 0px;
+    }
+
+    .openstudio-folder-view-buttons {
+        float: none;
+    }
+
+    /**
+     * View deleted post
+     */
+    #id_viewdeletedpostbutton {
+        margin-top: 15px;
     }
 
     .openstudio-folder-items {
@@ -4536,8 +4606,14 @@ a.openstudio-add-new-content-link:hover  {
         width: 197px;
     }
 
-    .openstudio-work-progress-container {
-        width: 250px;
+    .openstudio-profile-bar .openstudio-profile-progress-content {
+        float: left;
+        margin-top: 15px;
+        margin-left: 8px;
+    }
+
+    .openstudio-profile-rule {
+        margin-top: 0px;
     }
 
     .openstudio-profile-work-progress {
@@ -4620,7 +4696,11 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-upload-folder {
         width: 128px;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
+    }
+
+    .openstudio-folder-items {
+        margin-left: 0px;
     }
 
     .openstudio-grid-item-folder-preview {
@@ -4628,6 +4708,15 @@ a.openstudio-add-new-content-link:hover  {
         display: block;
         margin-left :auto;
         margin-right :auto;
+    }
+
+    .openstudio-folder-available {
+        margin-top: -3px;
+    }
+
+    .openstudio-folder-view-container .openstudio-content-view-animation-icons {
+        padding-left: 0px;
+        padding-right: 0px;
     }
 
     .openstudio-new-folder-title,
@@ -5125,7 +5214,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-grid-item-content-detail-info {
-        height: 48px;
+        height: 50px;
         margin-left: 0;
         text-align: left;
         padding-top: 7px;
@@ -5437,6 +5526,21 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-folder-header .openstudio-folder-header-right {
         float: left;
         margin-top: 15px;
+    }
+
+    .openstudio-folder-view-buttons {
+        float: none;
+    }
+
+    /**
+     * View deleted post
+     */
+    #id_viewdeletedpostbutton {
+        margin-top: 10px;
+    }
+
+    .openstudio-folder-view-container .openstudio-content-view-animation-icons {
+        padding-left: 0px;
     }
 
     .openstudio-folder-header-right .openstudio-folder-header-title {
@@ -5945,10 +6049,6 @@ a.openstudio-add-new-content-link:hover  {
         margin-bottom: 10px;
     }
 
-    .openstudio-folder-content .openstudio-folder-background {
-        width: 94%;
-    }
-
     .openstudio-new-folder-title-device {
         display: none;
     }
@@ -5971,7 +6071,9 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-folder-view-container {
         margin-left: 20px;
         margin-right: 20px;
+        border-radius: 6px;
     }
+
     .openstudio-folder-header {
         margin-bottom: 10px;
     }
@@ -6290,7 +6392,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-folder-background .openstudio-content-folder-img {
-        width: 97%;
+        width: 144px;
     }
 
     .openstudio-content-view-version-title-box .openstudio-content-view-title {
@@ -6571,11 +6673,12 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-folder-background .openstudio-default-folder-background {
         height: 135px;
-        padding: 7px 7px 3px 7px;
     }
 
     .openstudio-default-folder-background .openstudio-default-folder-img {
-        height: 107px;
+        height: 80px;
+        padding-bottom: 27px;
+        padding-top: 27px;
     }
 
     .openstudio-upload-folder .openstudio-new-folder-title-device,
@@ -6613,6 +6716,8 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-folder-background .openstudio-content-folder-img {
         border: 4px solid #ffffff;
+        height: 131px;
+        width: 212px;
     }
 
     /**
