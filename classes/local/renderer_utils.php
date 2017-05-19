@@ -673,7 +673,7 @@ class renderer_utils {
                         $contentislockmessage = get_string('contentislockedfrom', 'openstudio',
                                 array('from' => $contentlocktimetext));
                     } else {
-                        $contentislockmessage = get_string('slotwillbelockedfrom', 'openstudio',
+                        $contentislockmessage = get_string('contentwillbelockedfrom', 'openstudio',
                                 array('from' => $contentlocktimetext));
                     }
                 } else if (($contentlocktime <= 0) && ($contentunlocktime > 0)) {
@@ -687,7 +687,7 @@ class renderer_utils {
                             $contentislockmessage = get_string('contentislockedfrom', 'openstudio',
                                     array('from' => $contentlocktimetext));
                         } else {
-                            $contentislockmessage = get_string('slotwillbelockedfrom', 'openstudio',
+                            $contentislockmessage = get_string('contentwillbelockedfrom', 'openstudio',
                                     array('from' => $contentlocktimetext));
                         }
                     } else {
@@ -695,7 +695,7 @@ class renderer_utils {
                             $contentislockmessage = get_string('contentislockedfromtill', 'openstudio',
                                     array('from' => $contentlocktimetext, 'till' => $contentunlocktimetext));
                         } else {
-                            $contentislockmessage = get_string('slotwillbelockedfromtill', 'openstudio',
+                            $contentislockmessage = get_string('contentwillbelockedfromtill', 'openstudio',
                                     array('from' => $contentlocktimetext, 'till' => $contentunlocktimetext));
                         }
                     }
