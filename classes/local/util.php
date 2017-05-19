@@ -525,7 +525,10 @@ EOF;
             if ($permissions->accessallgroups) {
                 return true;
             }
-
+            $cm = self::get_coursemodule_from_studioid($studio->id);
+            if ($cm->groupmode == VISIBLEGROUPS) {
+                return true;
+            }
             return api\group::is_content_group_member(
                     $permissions->groupmode,
                     $content->visibility,

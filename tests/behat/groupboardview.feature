@@ -172,3 +172,46 @@ Feature: Create and edit contents
         And I should not see "Test My Group Board View 1"
         And I should not see "Test My Group Board View 2"
         And I should not see "Test My Group Board View 3"
+
+        # When groups mode is separate groups - Each group member can only see their own group, others are invisible
+        And I follow "Administration > Edit settings" in the openstudio navigation
+        And I set the following fields to these values:
+          | Group mode | Separate groups      |
+          | Grouping   | grouping1            |
+        And I press "Save and display"
+        And I follow "Shared content > My Group" in the openstudio navigation
+        And I am on site homepage
+        And I log out
+        And I log in as "student1"
+        And I follow "Course 1"
+        And I follow "Test Open Studio name 1"
+        And I follow "Shared content > My Group" in the openstudio navigation
+        And I should see "group1" in the "span.openstudio-filter-select > span" "css_element"
+        And "select#filter_groupid" "css_element" should not exist
+        And I should see "Test My Group Board View 1"
+        And I should not see "Test My Group Board View 2"
+
+        # When groups mode is Visible groups - Each group member works in their own group, but can also see other groups
+        And I am on site homepage
+        And I log out
+        And I log in as "teacher1"
+        And I follow "Course 1"
+        And I follow "Test Open Studio name 1"
+        And I follow "Administration > Edit settings" in the openstudio navigation
+        And I set the following fields to these values:
+          | Group mode | Visible groups      |
+        And I press "Save and display"
+        And I am on site homepage
+        And I log out
+        And I log in as "student1"
+        And I follow "Course 1"
+        And I follow "Test Open Studio name 1"
+        And I follow "Shared content > My Group" in the openstudio navigation
+        And I should see "Test My Group Board View 1"
+        And I should see "Test My Group Board View 2"
+        And I should see "Test My Group Board View 3"
+        And I follow "Test My Group Board View 2"
+        Then I should see "My Module"
+        And I should see "Test My Group Board View 2"
+        And I should see "Owner of this post"
+        And "Add new comment" "button" should exist
