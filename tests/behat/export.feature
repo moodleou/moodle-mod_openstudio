@@ -20,10 +20,10 @@ Feature: Export to my contents
         And the following config values are set as admin:
             | enablewebservices | 1 |
             | enableportfolios  | 1 |
-        And I navigate to "Manage protocols" node in "Site administration > Plugins"
+        And I navigate to "Plugins > Manage protocols" in site administration
         And I click on "Enable" "link" in the "REST protocol" "table_row"
         And I press "Save changes"
-        And I navigate to "Manage portfolios" node in "Site administration > Plugins"
+        And I navigate to "Plugins > Manage portfolios" in site administration
         And I set portfolio instance "File download" to "Enabled and visible"
         And I press "Save"
         And I log out
@@ -33,8 +33,8 @@ Feature: Export to my contents
         And I log in as "teacher1" (in the OSEP theme)
         And I follow "Course 1"
         And the following open studio "instances" exist:
-            | course | name           | description                | pinboard | idnumber | tutorroles |
-            | C1     | Sharing Studio | Sharing Studio description | 99       | OS1      | manager    |
+            | course | name           | description                | pinboard | idnumber | tutorroles | enablefoldersanycontent |
+            | C1     | Sharing Studio | Sharing Studio description | 99       | OS1      | manager    | 1                       |
 
         And the following open studio "contents" exist:
             | openstudio | user     | name      | description           | file                                       | visibility |
@@ -66,4 +66,26 @@ Feature: Export to my contents
         And I press "Selected posts"
         And I set the field "Content 1" to "1"
         And I press "Export selected posts"
+        Then I should see "Downloading ..."
+
+    @javascript
+    Scenario: Export folder
+        # Prepare data
+        Given the following open studio "folders" exist:
+            | openstudio | user     | name     | description          | visibility | contenttype    |
+            | OS1        | teacher1 | Folder 1 | Folder Description 1 | module     | folder_content |
+        And I am on site homepage
+        And I follow "Course 1"
+        And I follow "Sharing Studio"
+        And I follow "My Content"
+        And I follow "Folder 1"
+        And I press "Select existing post to add to folder"
+        And I click on "Select" "button" in the "Browse posts" "dialogue"
+        And I click on "Save changes" "button" in the "Browse posts" "dialogue"
+        And I should see "Content 1"
+
+        # Do export
+        And I follow "My Content"
+        And I follow "Export"
+        And I press "All content shown"
         Then I should see "Downloading ..."

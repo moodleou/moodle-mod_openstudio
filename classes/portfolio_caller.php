@@ -125,7 +125,12 @@ class portfolio_caller extends \portfolio_module_caller_base {
         foreach ($this->contents as $content) {
             $content->content = $filedir . $content->content;
             $contentpage = $OUTPUT->render_from_template('mod_openstudio/export', ['content' => $content]);
-            $contentfile = $this->exporter->write_new_file($contentpage, $this->generate_filename($content, 'html'));
+            if (!empty($content->folderid)) {
+                $suffix = ' - Folder ' . $content->folderid;
+            } else {
+                $suffix = '';
+            }
+            $contentfile = $this->exporter->write_new_file($contentpage, $this->generate_filename($content, 'html', $suffix));
             $this->multifiles[] = $contentfile;
             if ($content->contenttype === content::TYPE_FOLDER) {
                 $folderlinks = [];
@@ -175,6 +180,7 @@ class portfolio_caller extends \portfolio_module_caller_base {
                 }
             }
             $content = util::add_additional_content_data($content, true);
+            $content->folderid = $folderid;
             $this->contents[] = $content;
             if ($folderid) {
                 $this->foldercontents[$folderid] = $content;
