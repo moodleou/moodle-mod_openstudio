@@ -652,7 +652,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $contentdata->feature_enablefolders = $permissions->feature_enablefolders;
         $contentdata->available = $permissions->pinboarddata->available;
 
-        if ($contentdata->contents && !$myactivities) {
+        if ($contentdata->contents && !$myactivities && !empty($contentdata->streamdatapagesize)) {
             $pb = renderer_utils::openstudio_render_paging_bar($contentdata);
             $paging = $this->render($pb);
             $contentdata->paging = $paging;
