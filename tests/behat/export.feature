@@ -39,6 +39,9 @@ Feature: Export to my contents
         And the following open studio "contents" exist:
             | openstudio | user     | name      | description           | file                                       | visibility |
             | OS1        | teacher1 | Content 1 | Content Description 1 | mod/openstudio/tests/importfiles/test1.jpg | module     |
+        And I wait "2" seconds
+        And the following open studio "contents" exist:
+            | openstudio | user     | name      | description           | file                                       | visibility |
             | OS1        | teacher1 | Content 2 | Content Description 2 | mod/openstudio/tests/importfiles/test2.jpg | module     |
 
         And all users have accepted the plagarism statement for "OS1" openstudio
@@ -82,7 +85,7 @@ Feature: Export to my contents
         And I press "Select existing post to add to folder"
         And I click on "Select" "button" in the "Browse posts" "dialogue"
         And I click on "Save changes" "button" in the "Browse posts" "dialogue"
-        And I should see "Content 1"
+        And I should see "Content 2"
 
         # Do export
         And I follow "My Content"

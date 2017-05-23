@@ -49,7 +49,7 @@ class mod_openstudio_content_form extends moodleform {
             '.zip');
 
     protected function definition() {
-        global $CFG, $USER, $DB;
+        global $CFG, $USER, $DB, $OUTPUT;
 
         $mform = $this->_form;
         $contenttitle = get_string('contentformname', 'openstudio');
@@ -163,8 +163,6 @@ class mod_openstudio_content_form extends moodleform {
 
         } else {
 
-            $mform->addElement('html', html_writer::start_tag('div',
-                    array('class' => 'openstudio-upload-content-buttons')));
             $mform->addElement('hidden', 'urltitle');
             $mform->setType('urltitle', PARAM_TEXT);
             $contenttype = $this->_customdata['contenttype'];
@@ -188,26 +186,19 @@ class mod_openstudio_content_form extends moodleform {
                 $buttonaddfileactive = 'openstudio-button-active';
             }
 
-            $mform->addElement('html', html_writer::start_tag('div',
-                    array('class' => 'openstudio-add-file-button')));
-
-            $mform->addElement('button', 'addfilebutton',
-                    get_string('addfilebutton', 'openstudio'), array('class' => $buttonaddfileactive));
-            $mform->addHelpButton('addfilebutton', 'addfilebutton', 'openstudio');
-            $mform->addElement('html', html_writer::end_tag('div'));
-
-            $mform->addElement('html', html_writer::start_tag('div',
-                    array('class' => 'openstudio-add-link-button')));
-            $mform->addElement('button', 'addlinkbutton',
-                    get_string('addlinkbutton', 'openstudio'), array('class' => $buttonaddlinkactive));
-            $mform->addHelpButton('addlinkbutton', 'addlinkbutton', 'openstudio');
-            $mform->addElement('html', html_writer::end_tag('div'));
-
             $mform->addElement('hidden', 'contentuploadtype');
             $mform->setType('contentuploadtype', PARAM_TEXT);
             $mform->setDefault('contentuploadtype', $defaultcontentuploadtype);
 
-            $mform->addElement('html', html_writer::end_tag('div'));
+            $group = [
+                $mform->createElement('button', 'addfilebutton',
+                        get_string('addfilebutton', 'openstudio'), array('class' => $buttonaddfileactive)),
+                $mform->createElement('static', 'addfilebutton_help', '', $OUTPUT->help_icon('addfilebutton', 'openstudio')),
+                $mform->createElement('button', 'addlinkbutton',
+                        get_string('addlinkbutton', 'openstudio'), array('class' => $buttonaddlinkactive)),
+                $mform->createElement('static', 'addfilebutton_help', '', $OUTPUT->help_icon('addlinkbutton', 'openstudio'))
+            ];
+            $mform->addGroup($group, 'openstudio_upload_content_buttons', get_string('contentformattachments', 'openstudio'));
 
             $mform->addElement('html', html_writer::start_tag('div',
                     array('id' => 'openstudio_upload_content_add_file',
@@ -222,7 +213,7 @@ class mod_openstudio_content_form extends moodleform {
                     $maxbytes = (isset($CFG->maxbytes) ? $CFG->maxbytes : \mod_openstudio\local\util\defaults::MAXBYTES);
                 }
 
-                $mform->addElement('filemanager', 'attachments', get_string('contentformattachments', 'openstudio'), null,
+                $mform->addElement('filemanager', 'attachments', get_string('contentformattachments', 'openstudio'), array('class' => 'openstudio-upload-file'),
                         array('maxbytes' => $maxbytes, 'subdirs' => false,
                               'maxfiles' => 1, 'accepted_types' => self::ACCEPT_TYPE));
 

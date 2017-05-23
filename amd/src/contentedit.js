@@ -33,8 +33,8 @@ define(['jquery'], function($) {
         init: function() {
             $.fx.off = true;
 
-            $('#id_addfilebutton').on('click', t.toogleAddFile);
-            $('#id_addlinkbutton').on('click', t.toogleAddLink);
+            $('#id_openstudio_upload_content_buttons_addfilebutton').on('click', t.toogleAddFile);
+            $('#id_openstudio_upload_content_buttons_addlinkbutton').on('click', t.toogleAddLink);
          },
 
         /**
@@ -53,13 +53,13 @@ define(['jquery'], function($) {
                     $('#contentformoptionalmetadata').show();
                     $('input[name="contentuploadtype"]').val('addfile');
 
-                    $('#id_addlinkbutton').removeClass('openstudio-button-active');
-                    $('#id_addfilebutton').addClass('openstudio-button-active');
+                    $('#id_openstudio_upload_content_buttons_addlinkbutton').removeClass('openstudio-button-active');
+                    $('#id_openstudio_upload_content_buttons_addfilebutton').addClass('openstudio-button-active');
                 } else {
                     $('#contentformoptionalmetadata').hide();
                     $('input[name="contentuploadtype"]').val('');
 
-                    $('#id_addfilebutton').removeClass('openstudio-button-active');
+                    $('#id_openstudio_upload_content_buttons_addfilebutton').removeClass('openstudio-button-active');
                 }
             });
         },
@@ -80,12 +80,12 @@ define(['jquery'], function($) {
                     $('#contentformoptionalmetadata').show();
                     $('input[name="contentuploadtype"]').val('addlink');
 
-                    $('#id_addfilebutton').removeClass('openstudio-button-active');
-                    $('#id_addlinkbutton').addClass('openstudio-button-active');
+                    $('#id_openstudio_upload_content_buttons_addfilebutton').removeClass('openstudio-button-active');
+                    $('#id_openstudio_upload_content_buttons_addlinkbutton').addClass('openstudio-button-active');
                 } else {
                     $('#contentformoptionalmetadata').hide();
                     $('input[name="contentuploadtype"]').val('');
-                    $('#id_addlinkbutton').removeClass('openstudio-button-active');
+                    $('#id_openstudio_upload_content_buttons_addlinkbutton').removeClass('openstudio-button-active');
                 }
             });
         }

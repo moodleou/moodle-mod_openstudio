@@ -31,6 +31,10 @@
     display: block;
 }
 
+.path-mod-openstudio #fitem_id_addfilebutton {
+    margin-bottom: 6px;
+}
+
 /* OSEP bottom button */
 .path-mod-openstudio .osep-bottombuttons a {
     margin-left: 13px;
@@ -1947,10 +1951,32 @@ a.openstudio-add-title:hover  {
 }
 
 /* Add/Edit Content. */
+#fitem_id_uploadcontent {
+    float: left;
+    margin-top: 10px;
+    width: 0;
+}
 
-.openstudio-upload-content-buttons {
-    padding-top: 4px;
+#fgroup_id_openstudio_upload_content_buttons {
+    margin: 40px 0px 20px 0px;
+}
+
+#id_openstudio_upload_content_buttons_addfilebutton,
+#id_openstudio_upload_content_buttons_addlinkbutton {
+    margin-right: 0px;
+}
+
+#fgroup_id_openstudio_upload_content_buttons .iconhelp {
+    margin-left: 0px;
+    margin-right: 15px;
+}
+
+#fgroup_id_openstudio_upload_content_buttons .helptooltip {
     display: inline-block;
+}
+
+.openstudio-upload-file .fitemtitle {
+    display: none;
 }
 
 .openstudio-add-content-icon {
@@ -2039,27 +2065,6 @@ a.openstudio-add-title:hover  {
     color: #ffffff;
 }
 
-.openstudio-add-file-button {
-    float: left;
-}
-
-.openstudio-add-file-button .helptooltip,
-.openstudio-add-link-button .helptooltip {
-    margin-top: 26px;
-    position: absolute;
-}
-
-.openstudio-add-link-button {
-    margin: 0 0 0 118px;
-    padding: 0;
-}
-
-.mform .openstudio-upload-content-buttons .fitem div.fitemtitle {
-    float: right;
-    text-align: left;
-    width: 10px;
-}
-
 .path-mod-openstudio .openstudio-content-edit-form #fgroup_id_buttonar {
     margin: 0;
     padding-top: 20px;
@@ -2072,6 +2077,7 @@ a.openstudio-add-title:hover  {
 .path-mod-openstudio .openstudio-content-edit-form  #fitem_id_weblink {
     padding: 0;
     margin-bottom: 18px;
+    margin-top: 2px;
 }
 
 .mform .openstudio-upload-content-add-file-container .fitem div.fitemtitle {
@@ -4210,19 +4216,6 @@ a.openstudio-add-new-content-link:hover  {
     margin-top: 10px;
 }
 
-/* IE */
-@media screen\0 {
-    .openstudio-add-file-button {
-        margin-top: 26px;
-
-    }
-
-    .openstudio-add-file-button .helptooltip {
-        margin-top: 0px;
-        margin-left: -10px;
-    }
-}
-
 .openstudio-mobile-paging {
     text-transform: capitalize;
     display: none;
@@ -4854,6 +4847,10 @@ a.openstudio-add-new-content-link:hover  {
 
     .moodle-dialogue-base .openstudio-dialogue.moodle-dialogue .moodle-dialogue-content .moodle-dialogue-ft {
         margin: 0;
+    }
+
+    #fitem_id_uploadcontent {
+        display: none;
     }
 
     /**
@@ -6514,10 +6511,6 @@ a.openstudio-add-new-content-link:hover  {
         padding-left: 0px;
     }
 
-    .openstudio-upload-content-buttons {
-        padding-top: 30px;
-    }
-
     .path-mod-openstudio .mform .fcheckbox > span,
     .path-mod-openstudio .mform .fradio > span,
     .path-mod-openstudio .mform .fgroup > span {
@@ -6718,6 +6711,10 @@ a.openstudio-add-new-content-link:hover  {
         border: 4px solid #ffffff;
         height: 131px;
         width: 212px;
+    }
+
+    #fgroup_id_openstudio_upload_content_buttons .helptooltip {
+        display: none;
     }
 
     /**

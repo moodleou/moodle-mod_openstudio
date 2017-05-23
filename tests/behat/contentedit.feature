@@ -68,7 +68,7 @@ Feature: Create and edit contents
         And I press "Save"
         And I go to content edit view
         Then I should see "Test Open Studio name 1"
-        And I should not see "Upload content"
+        And I should see "Upload content"
 
         And I press "Add file"
         And I set the following fields to these values:

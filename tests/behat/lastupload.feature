@@ -196,6 +196,6 @@ Feature: Create and edit contents
       And I log in as "student3"
       And I follow "Course 1"
       Then "/descendant::div[@class='activityinstance'][1]//span[@class='lastmodtext studiolmt']" "xpath_element" should exist
-      And I should see "Test Open Studio name 1" in the ".ourecent_list li:nth-child(1) .instancename" "css_element"
+      And I should see "Test Open Studio name 3" in the ".ourecent_list li:nth-child(1) .instancename" "css_element"
       And I should not see "Test Open Studio name 2" in the ".ourecent_list li:nth-child(1) .instancename" "css_element"
-      And I should not see "Test Open Studio name 3" in the ".ourecent_list li:nth-child(1) .instancename" "css_element"
+      And I should not see "Test Open Studio name 1" in the ".ourecent_list li:nth-child(1) .instancename" "css_element"
