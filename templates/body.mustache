@@ -136,6 +136,12 @@
         </div>
     {{/searchmessage}}
     {{^filterdisable}}
+        {{#showprofilebarview}}
+            <div class="openstudio-view-items-profile">
+                {{>mod_openstudio/profile_bar}}
+                <div class="openstudio-profile-rule"></div>
+            </div>
+        {{/showprofilebarview}}
         <div class="openstudio-filter">
             {{>mod_openstudio/filter}}
         </div>

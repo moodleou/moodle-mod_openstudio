@@ -1759,6 +1759,16 @@ label.openstudio-export-item-name {
     cursor: pointer;
 }
 
+.openstudio-view-items-profile {
+    padding: 6px 15px 8px 0px;
+    background-color: #ffffff;
+    margin: 0px 24px 0px 24px;
+}
+
+#page-mod-openstudio-view .openstudio-view-items-profile {
+    padding-bottom: 1px;
+}
+
 .openstudio-filter-text {
     padding-left: 15px;
     font-size: 1em;
@@ -3698,7 +3708,6 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 .openstudio-profile-rule {
     border-top: 1px solid #d4d2d2;
     margin-top: 5px;
-    margin-bottom: 10px;
     margin-left: 15px;
 }
 
@@ -4605,10 +4614,6 @@ a.openstudio-add-new-content-link:hover  {
         margin-left: 8px;
     }
 
-    .openstudio-profile-rule {
-        margin-top: 0px;
-    }
-
     .openstudio-profile-work-progress {
         width: 100%;
         margin-left: 0px;
@@ -4747,6 +4752,9 @@ a.openstudio-add-new-content-link:hover  {
         padding: 0px;
     }
 
+    #openstudio_profile_fullusername {
+        width: 185px;
+    }
 
     .openstudio-folder-header .openstudio-folder-header-left {
         width: 320px ;
@@ -5091,6 +5099,10 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-grid-item {
         width: 100%;
+    }
+
+    .openstudio-view-items-profile {
+        margin: 0 20px;
     }
 
     .openstudio-filter-text a {
@@ -5501,7 +5513,7 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-content-view-container {
         padding : 8px 15px 25px;
-        margin: 0px 20px 20px 20px;
+        margin: 20px;
     }
 
     .openstudio-content-view-primary {
@@ -5965,10 +5977,6 @@ a.openstudio-add-new-content-link:hover  {
         margin-bottom: 25px;
     }
 
-    .openstudio-profile-rule {
-        margin-bottom: 0px;
-    }
-
     .openstudio-filter-link,
     a.openstudio-filter-preference-icon {
         width: 100%;
@@ -5979,7 +5987,7 @@ a.openstudio-add-new-content-link:hover  {
 
     .path-mod-openstudio [data-toggle="collapse"] .openstudio-expand-image,
     .path-mod-openstudio [data-toggle="collapse"] .openstudio-collapse-image {
-        right: 17px;
+        right: 16px;
         left: auto;
     }
 
