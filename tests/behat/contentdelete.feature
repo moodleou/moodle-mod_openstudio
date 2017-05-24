@@ -112,3 +112,29 @@ Feature: Delete my content/other contents
         And I follow "S1"
         And I press "Post archive"
         Then I should see "Student content 3"
+
+     Scenario: Delete my content in my activities should navigate to content details when back to a deleted activity post
+       # Delete content in my activity
+        Given I log in as "student1"
+        And I am on site homepage
+        And I follow "Course 1"
+        And I follow "Sharing Studio"
+        And I follow "My Content > My Activities" in the openstudio navigation
+        And I follow "S1"
+        And I press "Add file"
+        And I set the following fields to these values:
+            | Who can view this content | My module                                  |
+            | Title                     | Student content 4                          |
+            | Description               | Student content 4 description              |
+            | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+        And I press "Save"
+        And I press "Delete"
+        And I click on "Delete" "button" in the "Delete post?" "dialogue"
+        And I follow "My Content > My Activities" in the openstudio navigation
+
+        # Navigate to content details when back to a deleted activity post
+        And I follow "S1"
+        Then I should see "S1"
+        And I should see "Owner of this post"
+        And "Add new comment" "button" should exist
+        And "Request feedback" "button" should exist

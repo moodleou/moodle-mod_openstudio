@@ -93,7 +93,14 @@
         </div>
         <div class="openstudio-grid-item-content-preview{{#contenttypedefaultimage}}-default{{/contenttypedefaultimage}}">
             <a href="{{{contentlink}}}">
-                <img class="openstudio-grid-item-thumbnail" src="{{{contentthumbnailurl}}}" alt="{{{name}}}">
+                {{#activitycontentempty}}
+                    <div class="openstudio-upload-container">
+                        <img src="{{{createcontentthumbnail}}}" alt="{{{name}}}">
+                    </div>
+                {{/activitycontentempty}}
+                {{^activitycontentempty}}
+                    <img class="openstudio-grid-item-thumbnail" src="{{{contentthumbnailurl}}}" alt="{{{name}}}">
+                {{/activitycontentempty}}
             </a>
         </div>
     {{/isfolder}}

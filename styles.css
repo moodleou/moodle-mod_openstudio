@@ -120,6 +120,11 @@
     display: block;
 }
 
+.path-mod-openstudio .openstudio-content-view-file.openstudio-content-actions.locked {
+    display: block;
+    pointer-events: none;
+}
+
 /* Preferences */
 .openstudio-filter-preferences {
     font-size: 1em;

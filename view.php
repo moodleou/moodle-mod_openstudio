@@ -675,7 +675,8 @@ if ($finalviewpermissioncheck) {
                         $content->contentislockmessage = $lockdata->contentislockmessage;
                     }
 
-                    $content->contentempty = $content->contenttype == content::TYPE_NONE;
+                    $content->contentempty = $content->contenttype == content::TYPE_NONE && $content->timemodified == 0;
+                    $content->activitycontentempty = $content->contenttype == content::TYPE_NONE;
                     if (array_key_exists($activityid, $activityitems)) {
                         $activityitems[$activityid]->activities[] = (object)$content;
                     } else {
