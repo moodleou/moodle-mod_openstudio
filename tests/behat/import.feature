@@ -43,6 +43,7 @@ Feature: Import zip file
         Then I should see "test.pdf"
         Then I should see "test.pptx"
         Then I should see "test.ods"
+        Then I should see "test.txt"
 
         And I follow "test.ods"
         Then following "Download file attachment" should download between "2000" and "3000" bytes

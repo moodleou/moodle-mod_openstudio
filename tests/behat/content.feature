@@ -211,3 +211,19 @@ Feature: Create and edit contents
         And I press "Save"
         And I follow "Shared content > My Module" in the openstudio navigation
         Then I should see "Test My Group Board View 5 Tags"
+
+    Scenario: Add new content just a title and description with a txt file
+        When I follow "Test Open Studio name 1"
+        And I follow "Add new content"
+        And I press "Add file"
+        And I set the following fields to these values:
+          | Who can view this content | My module                                  |
+          | Title                     | Test My Group Board View 6 Tags            |
+          | Description               | My Group Board View Description 6 Tags     |
+          | Upload content            | mod/openstudio/tests/importfiles/test.txt  |
+          | Tags                      | Tests Add New Tags                         |
+        And I wait "2" seconds
+        And I should see "Tests Add New Tags"
+        And I press "Save"
+        And I follow "Shared content > My Module" in the openstudio navigation
+        Then I should see "Test My Group Board View 6 Tags"

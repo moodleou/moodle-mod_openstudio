@@ -42,7 +42,7 @@ class mod_openstudio_content_form extends moodleform {
             '.jpg', '.jpe', '.jpeg', '.gif', '.png', // Image.
             '.avi', '.mpg', '.mpeg', '.mov', '.mp4', '.mv4', '.flv', '.gif', // Video.
             '.aiff', '.wav', '.mp3', // Audio.
-            '.doc', '.docx', '.rtf', '.pdf', '.odt', '.fdf', '.nbk', // Document.
+            '.doc', '.docx', '.rtf', '.pdf', '.odt', '.fdf', '.nbk', '.txt', // Document.
             '.ppt', '.pptx', '.odp', // Presentation.
             '.xls', '.xlsx', '.csv', '.ods', // Spreadsheet.
             '.dwg', '.stl', '.stp', '.eps', '.dxf', // CAD.
