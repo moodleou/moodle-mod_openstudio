@@ -50,7 +50,7 @@ class portfolio_caller extends \portfolio_module_caller_base {
     }
 
     public static function display_name() {
-        return get_string('modulename', 'openstudio');
+        return get_string('openstudio', 'openstudio');
     }
 
     public function __construct(array $callbackargs) {

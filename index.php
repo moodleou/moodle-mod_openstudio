@@ -40,7 +40,7 @@ $context = context_course::instance($course->id);
 
 // Get required strings.
 $strstudios = get_string("modulenameplural", "openstudio");
-$strstudio = get_string("modulename", "openstudio");
+$strstudio = get_string("openstudio", "openstudio");
 
 $PAGE->set_course($course); // Sets up global $COURSE.
 $PAGE->set_pagelayout('incourse');

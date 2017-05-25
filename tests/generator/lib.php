@@ -236,7 +236,7 @@ class mod_openstudio_generator extends testing_module_generator {
             throw new coding_exception('module generator requires $record->course');
         }
         if (!isset($record->name)) {
-            $record->name = get_string('pluginname', 'openstudio') . ' ' . $i;
+            $record->name = get_string('openstudio', 'openstudio') . ' ' . $i;
         }
         if (!isset($record->intro)) {
             $record->intro = 'Test Studio for phpunit test '.$i;

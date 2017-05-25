@@ -38,7 +38,7 @@ $course = $coursedata->course;
 $PAGE->set_course($course); // Sets up global $COURSE.
 $PAGE->set_pagelayout('incourse');
 $PAGE->set_url('/mod/openstudio/honesty.php', array('id' => $id));
-$PAGE->set_title($course->fullname . ': '. get_string('modulename', 'openstudio') . ': '
+$PAGE->set_title($course->fullname . ': '. get_string('openstudio', 'openstudio') . ': '
         . get_string('honestycrumb', 'openstudio'));
 $PAGE->set_heading($course->fullname);
 $PAGE->navbar->add(get_string('honestycrumb', 'openstudio'));

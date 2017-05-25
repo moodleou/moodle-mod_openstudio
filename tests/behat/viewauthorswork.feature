@@ -55,7 +55,7 @@ Feature: View author's work
         And I am on site homepage
         And I follow "Course 1"
         And I turn editing mode on
-        And I add a "Open Studio" to section "1" and I fill the form with:
+        And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
             | Name                         | Test Open Studio name 1      |
             | Description                  | Test Open Studio description |
             | Group mode                   | Visible groups               |

@@ -48,7 +48,7 @@ Feature: Create and edit contents
       And I follow "Course 1"
       And I turn editing mode on
       And I add the "OU Recent activity" block
-      And I add a "Open Studio" to section "1" and I fill the form with:
+      And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1        |
           | Description                  | Test Open Studio description 1 |
           | Your word for 'My Module'    | Module 1                       |
@@ -57,7 +57,7 @@ Feature: Create and edit contents
           | Enable pinboard              | 99                             |
           | Abuse reports are emailed to | teacher1@asd.com               |
           | ID number                    | OS1                            |
-      And I add a "Open Studio" to section "2" and I fill the form with:
+      And I add a "OpenStudio 2 (pilot only)" to section "2" and I fill the form with:
           | Name                         | Test Open Studio name 2        |
           | Description                  | Test Open Studio description 2 |
           | Your word for 'My Module'    | Module 1                       |
@@ -66,7 +66,7 @@ Feature: Create and edit contents
           | Enable pinboard              | 99                             |
           | Abuse reports are emailed to | teacher1@asd.com               |
           | ID number                    | OS2                            |
-      And I add a "Open Studio" to section "3" and I fill the form with:
+      And I add a "OpenStudio 2 (pilot only)" to section "3" and I fill the form with:
           | Name                         | Test Open Studio name 3        |
           | Description                  | Test Open Studio description 3 |
           | Your word for 'My Module'    | Module 1                       |

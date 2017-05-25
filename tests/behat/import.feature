@@ -20,7 +20,7 @@ Feature: Import zip file
         And I am on site homepage
         And I follow "Course 1"
         And I turn editing mode on in the OSEP theme
-        And I add a "Open Studio" to section "0" and I fill the form with:
+        And I add a "OpenStudio 2 (pilot only)" to section "0" and I fill the form with:
             | Name        | Test Open Studio name 1      |
             | Description | Test Open Studio description |
             | ID number   | OS1                          |
