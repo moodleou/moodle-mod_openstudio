@@ -38,19 +38,19 @@
              width="80%" height="22px" id="openstudio-progressbar" preserveAspectRatio="none"
              aria-labelledby="openstudio-progressbar-title" role="img">
             <defs>
-                <clipPath id="openstudio-progressbar-clip">
+                <clipPath id="{{$clipid}}openstudio-progressbar-clip{{/clipid}}">
                     <rect x="3" y="3" width="100%" height="16" rx="5" ry="5" stroke="blue"
                           style="stroke-width:1;stroke:#d4d2d2"></rect>
                 </clipPath>
-                <linearGradient id="openstudio-progressbar-complete" x1="0" y1="0" x2="0" y2="1">
+                <linearGradient id="{{$completeid}}openstudio-progressbar-complete{{/completeid}}" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" class="openstudio-greycolour"></stop>
                     <stop offset="60%" class="openstudio-completecolour"></stop>
                 </linearGradient>
             </defs>
-            <g clip-path="url(#openstudio-progressbar-clip)" class="openstudio-incompletefill">
+            <g clip-path="url(#{{$clipid}}openstudio-progressbar-clip{{/clipid}})" class="openstudio-incompletefill">
                 <g>
-                    <rect x="3" y="3" width="{{percentcompleted}}%" height="16" id="openstudio-progressbar-complete"
-                          fill="url(#openstudio-progressbar-complete)"></rect>
+                    <rect x="3" y="3" width="{{percentcompleted}}%" height="16" id="{{$completeid}}openstudio-progressbar-complete{{/completeid}}"
+                          fill="url(#{{$completeid}}openstudio-progressbar-complete{{/completeid}})"></rect>
                 </g>
             </g>
         </svg>

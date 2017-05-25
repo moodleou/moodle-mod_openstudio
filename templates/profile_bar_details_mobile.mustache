@@ -74,7 +74,10 @@
                 {{#str}} mystudioworkprogress, mod_openstudio {{/str}}
             </div>
             <div class="openstudio-profile-progress-bar">
-                {{>mod_openstudio/work_progress}}
+                {{<mod_openstudio/work_progress}}
+                    {{$clipid}}openstudio-progressbar-mobile-clip{{/clipid}}
+                    {{$completeid}}openstudio-progressbar-mobile-complete{{/completeid}}
+                {{/mod_openstudio/work_progress}}
             </div>
         </div>
         <div id="profile_percent_mobile" class="openstudio-profile-progress-content-description">
