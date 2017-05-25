@@ -1749,6 +1749,7 @@ label.openstudio-export-item-name {
 
 .openstudio-filter-sort-text img {
     width: 10px;
+    height: 10px;
     padding-left: 3px;
 }
 
@@ -2194,6 +2195,11 @@ a.openstudio-add-title:hover  {
 }
 
 .openstudio-grid-item-content-preview {
+    display: block;
+}
+
+.openstudio-grid-item-content-preview a,
+.openstudio-grid-item-content-preview-default a {
     display: block;
 }
 
