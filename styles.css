@@ -4607,6 +4607,11 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-orderpost-item-column3 {
         max-width: 230px;
     }
+
+    .path-mod-openstudio #osep-bottombutton-import,
+    .path-mod-openstudio #osep-bottombutton-export {
+        display: none;
+    }
 }
 
 /* Tablet Portrait. */
