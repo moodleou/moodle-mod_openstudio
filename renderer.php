@@ -1039,7 +1039,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $folderdata->cmid = $cmid;
         $folderdata = renderer_utils::folder_content($permissions->pinboardfolderlimit, $folderdata);
         $folderaddcontent = new moodle_url('/mod/openstudio/contentedit.php',
-                    array('id' => $cmid, 'lid' => 0, 'sid' => 0,
+                    array('id' => $cmid, 'lid' => 0, 'sid' => 0, 'vid' => $folderdata->visibility,
                             'ssid' => $folderdata->id, 'type' => content::TYPE_FOLDER_CONTENT));
         $folderedit = new moodle_url('/mod/openstudio/contentedit.php',
                     array('id' => $cmid, 'lid' => 0, 'sid' => $folderdata->id, 'type' => content::TYPE_FOLDER));

@@ -107,7 +107,65 @@ if (!util::can_read_content($cminstance, $permissions, $folderdata)) {
     print_error('errornopermissiontoviewcontent', 'openstudio', $returnurliferror->out(false));
 }
 
+// Get page url.
+$pageurl = util::get_current_url();
+
 $folderdataname = $folderdata->name;
+
+$folderisinpinboard = false;
+if ($folderdata->levelid == 0) {
+    $folderisinpinboard = true;
+}
+
+$folderdatavisibilitycontext = $folderdata->visibility;
+$crumbarray = array();
+switch ($folderdatavisibilitycontext) {
+    case content::VISIBILITY_MODULE:
+        $vid = content::VISIBILITY_MODULE;
+        $areaurl = new moodle_url('/mod/openstudio/view.php',
+                array('id' => $cm->id, 'vid' => content::VISIBILITY_MODULE));
+        $areaurlname = get_string('navmymodule', 'openstudio');
+        break;
+
+    case content::VISIBILITY_GROUP:
+        $vid = content::VISIBILITY_GROUP;
+        $areaurl = new moodle_url('/mod/openstudio/view.php',
+                array('id' => $cm->id, 'vid' => content::VISIBILITY_GROUP));
+        $areaurlname = get_string('navmygroup', 'openstudio');
+        break;
+
+    case content::VISIBILITY_PRIVATE:
+    default:
+        $vid = content::VISIBILITY_PRIVATE;
+        $areaurl = new moodle_url('/mod/openstudio/view.php',
+                array('id' => $cm->id, 'vid' => content::VISIBILITY_PRIVATE));
+        $areaurlname = get_string('navactivities', 'openstudio');
+        break;
+}
+
+// Only show the pinboard link if the slot is mine.
+if (($folderdata->userid == $USER->id) && $showdeletedcontentversions) {
+    $vid = content::VISIBILITY_PRIVATE_PINBOARD;
+    $areaurl = new moodle_url('/mod/openstudio/view.php',
+            array('id' => $cm->id, 'vid' => content::VISIBILITY_PRIVATE_PINBOARD, 'fblock' => -1));
+    $areaurlname = get_string('navmypinboard', 'openstudio');
+    $crumbarray[$areaurlname] = $areaurl->out(false);
+} else {
+    $pageview = 'activities';
+    $crumbarray[$areaurlname] = $areaurl->out(false);
+    if ($folderdata->userid != $USER->id) {
+        $crumbkey = get_string('profileswork', 'openstudio', array('name' => $folderdata->firstname));
+        $crumbarray[$crumbkey] = new moodle_url(
+                '/mod/openstudio/view.php',
+                array('id' => $cm->id,
+                        'vid' => content::VISIBILITY_WORKSPACE,
+                        'vuid' => $folderdata->userid));
+    }
+}
+
+$crumbarray[$folderdataname] = $pageurl;
+util::add_breadcrumb($PAGE, $cm->id, navigation_node::TYPE_ACTIVITY, $crumbarray);
+
 
 // Get page url.
 $pageurl = util::get_current_url();

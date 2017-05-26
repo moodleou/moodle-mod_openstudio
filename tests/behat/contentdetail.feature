@@ -713,3 +713,44 @@ Feature: Create and edit contents detail
         And I press "Delete"
         And I click on "Delete" "button" in the "Delete post?" "dialogue"
         And I should not see "Test My Content Details View Archive 2"
+
+    Scenario: Breadcrumb navigation for View content details
+        And I am on site homepage
+        And I log out
+        And I log in as "admin"
+        And I am on site homepage
+        And I follow "Course 1"
+        And I turn editing mode on
+        And I navigate to "Edit settings" in current page administration
+        And I click on "Course format" "link"
+        And I set the field "Format" to "OSEP study planner"
+        And I press "Save and display"
+        And I am using the OSEP theme
+        And I log out (in the OSEP theme)
+        And I log in as "teacher1" (in the OSEP theme)
+        And I follow "Course 1"
+        And I press "Expand all"
+        And I follow "Test Open Studio name 1"
+
+        # Breadcrumb view content details
+        And the following open studio "contents" exist:
+            | openstudio | user     | name                         | description                  | file                                              | visibility |
+            | OS1        | teacher1 | Test My Content Details View | Test My Content Details View | mod/openstudio/tests/importfiles/test1.jpg        | module     |
+        And I follow "Shared content > My Module" in the openstudio navigation
+        And I follow "Test My Content Details View"
+        And the OSEP theme breadcrumbs should be "C1 Home > Week 2 > Test Open Studio name 1 > My Pinboard > Test My Content Details View"
+
+        # Breadcrumb add content
+        And I follow "Shared content > My Module" in the openstudio navigation
+        And I follow "Add new content"
+        And the OSEP theme breadcrumbs should be "C1 Home > Week 2 > Test Open Studio name 1 > My Pinboard > Pinboard content > Create"
+
+        # switch to student1
+        And I log out (in the OSEP theme)
+        And I log in as "student1" (in the OSEP theme)
+        And I follow "Course 1"
+        And I press "Expand all"
+        And I follow "Test Open Studio name 1"
+        And I follow "Shared content > My Module" in the openstudio navigation
+        And I follow "Test My Content Details View"
+        Then the OSEP theme breadcrumbs should be "C1 Home > Week 2 > Test Open Studio name 1 > My Module > Teacher's work > Test My Content Details View"

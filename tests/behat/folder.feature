@@ -210,3 +210,48 @@ Feature: Create and edit Folder
         And I follow "Shared content > My Module" in the openstudio navigation
         And I should not see "Test my folder view 1"
         And I should see "Test my folder view 2"
+
+    Scenario: Breadcrumb navigation for Folder and Content of folder
+        Given I am on site homepage
+        And I log out
+        And I am using the OSEP theme
+        And I log in as "teacher1" (in the OSEP theme)
+        And I follow "Course 1"
+        And I press "Expand all"
+        When I follow "Test Open Studio name 1"
+        And I follow "Administration > Edit" in the openstudio navigation
+        And I follow "Expand all"
+        And I set the field "Enable Folders" to "1"
+        And I press "Save and display"
+
+        # Add new folder
+        And the following open studio "folders" exist:
+        | openstudio | user     | name                   | description                       | visibility | contenttype    |
+        | OS1        | teacher1 | Test Folder Overview   | My Folder Overview Description 1  | module     | folder_content |
+        And I follow "Test Open Studio name 1"
+        And I follow "Shared Content > My Module" in the openstudio navigation
+        And I follow "Test Folder Overview"
+        And the OSEP theme breadcrumbs should be "C1 Home > Week 1 > Test Open Studio name 1 > My Pinboard > Test Folder Overview"
+
+        # Add new content of folder
+        And I follow "Add new content"
+        And the OSEP theme breadcrumbs should be "C1 Home > Week 1 > Test Open Studio name 1 > My Pinboard > Test Folder Overview > Create"
+        And I set the following fields to these values:
+        | Title                     | Test Content Folder Overview                    |
+        | Description               | My Folder Overview Description                  |
+        And I press "Save"
+        And the OSEP theme breadcrumbs should be "C1 Home > Week 1 > Test Open Studio name 1 > My Pinboard > Test Folder Overview > Test Content Folder Overview"
+
+        # switch to student1
+        And I log out (in the OSEP theme)
+        And I log in as "student1" (in the OSEP theme)
+        And I follow "Course 1"
+        And I press "Expand all"
+        And I follow "Test Open Studio name 1"
+        And I follow "Shared content > My Module" in the openstudio navigation
+        And I follow "Test Open Studio name 1"
+        And I follow "Shared Content > My Module" in the openstudio navigation
+        And I follow "Test Folder Overview"
+        And the OSEP theme breadcrumbs should be "C1 Home > Week 1 > Test Open Studio name 1 > My Module >  Teacher's work > Test Folder Overview"
+        And I follow "Test Content Folder Overview"
+        Then the OSEP theme breadcrumbs should be "C1 Home > Week 1 > Test Open Studio name 1 > My Module >  Teacher's work > Test Folder Overview >  Test Content Folder Overview"

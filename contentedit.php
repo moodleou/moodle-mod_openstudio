@@ -273,7 +273,7 @@ if ($sid > 0) {
     }
 
     $strpageurl = new moodle_url('/mod/openstudio/contentedit.php',
-            array('id' => $cm->id, 'sid' => $sid));
+            array('id' => $cm->id, 'sid' => $sid, 'ssid' => 0));
 } else {
     // If its a blank new content, then make sure the owner of the content is the logged in user.
     $userid = $USER->id;
@@ -404,7 +404,38 @@ if ($contentisinpinboard) {
 }
 
 if (!empty($contentdataname)) {
+    if ($contentdataname == get_string('contenttitlepinboard', 'openstudio')) {
+        $strcontenturl = new moodle_url('/mod/openstudio/contentedit.php',
+            array('id' => $cm->id, 'vid' => $vid, 'lid' => 0, 'sid' => 0, 'type' => 0));
+    }
     $crumbarray[$contentdataname] = $strcontenturl;
+}
+
+if ($folderid && empty($sid)) {
+    $strpageurl = new moodle_url('/mod/openstudio/contentedit.php',
+            array('id' => $cm->id, 'lid' => $contentdata->levelid, 'sid' => $sid, 'vid' => $vid,
+                'ssid' => $folderid, 'type' => content::TYPE_FOLDER_CONTENT));
+} else if ($folderid && $sid) {
+    if ($folderid == $sid) {
+        $strpageurl = new moodle_url('/mod/openstudio/contentedit.php',
+            array('id' => $id, 'lid' => 0, 'sid' => $sid, 'type' => content::TYPE_FOLDER));
+    } else {
+        $contentfolderdata = folder::get_content($folderid, $sid);
+        if ($contentfolderdata->fcname) {
+            $contentfoldername = $contentfolderdata->fcname;
+        } else {
+            $contentfolderdata = content::get_record($userid, $sid);
+            $contentfoldername = util::get_content_name($contentdata);
+        }
+        $strcontentfolderurl = new moodle_url('/mod/openstudio/content.php',
+            array('id' => $id, 'sid' => $sid, 'vuid' => $userid, 'folderid' => $folderid));
+        $crumbarray[$contentfoldername] = $strcontentfolderurl;
+        $strcontenturl = new moodle_url('/mod/openstudio/folder.php', array('id' => $id, 'lid' => $lid,
+                    'sid' => $folderid));
+        $crumbarray[$contentdataname] = $strcontenturl;
+        $strpageurl = new moodle_url('/mod/openstudio/contentedit.php',
+                array('id' => $cm->id, 'sid' => $sid, 'ssid' => $folderid));
+    }
 }
 
 if (empty($sid)) {

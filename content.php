@@ -34,6 +34,7 @@ use mod_openstudio\local\api\comments;
 use mod_openstudio\local\api\user;
 use mod_openstudio\local\api\tracking;
 use mod_openstudio\local\forms\comment_form;
+use mod_openstudio\local\renderer_utils;
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
@@ -258,8 +259,6 @@ if ($permissions->contentismine && $contentisinpinboard) {
                         'vuid' => $contentdata->userid));
     }
 }
-$crumbarray[$contentdataname] = $pageurl;
-util::add_breadcrumb($PAGE, $cm->id, navigation_node::TYPE_ACTIVITY, $crumbarray);
 // Generate stream html.
 $renderer = $PAGE->get_renderer('mod_openstudio');
 $PAGE->set_button($renderer->searchform($theme, $vid, $id));
@@ -278,6 +277,10 @@ $contentdata->isfoldercontent = false;
 if ($folderid) {
     $folderdata = content::get($folderid);
     $folderdata = lock::determine_lock_status($folderdata);
+    $contentdetails = renderer_utils::content_details($cmid, $permissions, $contentdata, $iscontentversion);
+    if ($contentdetails->contentdataname) {
+        $contentdataname = $contentdetails->contentdataname;
+    }
     if ($folderdata) {
         $contentdata->name = $folderdata->name;
         $folderedit = new moodle_url('/mod/openstudio/contentedit.php',
@@ -289,12 +292,15 @@ if ($folderid) {
         $folderoverview = new moodle_url('/mod/openstudio/folder.php',
                         array('id' => $id, 'sid' => $folderid, 'lid' => $contentdata->levelid,
                                  'vuid' => $contentdata->userid));
+        $crumbarray[$contentdata->name] = $folderoverview;
         $contentdata->foldereditenable = ($permissions->addcontent && $USER->id == $folderdata->userid)
                 || $permissions->managecontent;
         $contentdata->folderlinkoverview = $folderoverview;
     }
 }
 
+$crumbarray[$contentdataname] = $pageurl;
+util::add_breadcrumb($PAGE, $cm->id, navigation_node::TYPE_ACTIVITY, $crumbarray);
 $PAGE->requires->strings_for_js(
     array('contentactionarchivepost', 'modulejsdialogcancel', 'archivedialogheader',
         'modulejsdialogcontentarchiveconfirm', 'deletearchiveversionheader', 'deletearchiveversionheaderconfirm'),
