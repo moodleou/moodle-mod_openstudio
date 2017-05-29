@@ -149,6 +149,15 @@
     height: 54px;
 }
 
+.openstudio-content-view-file > a > img,
+.openstudio-content-view-file > iframe {
+    max-width: 580px;
+}
+
+.openstudio-content-view-file iframe.ouembed-embedtype-slideshows {
+    height: 446px;
+}
+
 .path-mod-openstudio .openstudio-filter-text [data-toggle="collapse"] .openstudio-expand-image,
 .path-mod-openstudio .openstudio-filter-text [data-toggle="collapse"] .openstudio-collapse-image {
     right: 0px;
@@ -4291,6 +4300,12 @@ a.openstudio-add-new-content-link:hover  {
 
 /* Tablet. */
 @media only screen and (max-device-width: 1024px) {
+
+    .openstudio-content-view-file > a > img,
+    .openstudio-content-view-file > iframe {
+        max-width: 400px;
+    }
+
     .openstudio-nav-settings {
         display: none;
     }
@@ -4652,6 +4667,12 @@ a.openstudio-add-new-content-link:hover  {
 
 /* Tablet Portrait. */
 @media screen and (max-device-width: 1023px) and (orientation: portrait){
+
+    .openstudio-content-view-file > a > img,
+    .openstudio-content-view-file > iframe {
+        max-width: 320px;
+    }
+
     .path-mod-openstudio .administration{
         display: none;
     }
@@ -4863,6 +4884,11 @@ a.openstudio-add-new-content-link:hover  {
 
 /* Mobile. */
 @media (max-width: 767px) {
+
+    .openstudio-content-view-file > a > img,
+    .openstudio-content-view-file > iframe {
+        max-width: 500px;
+    }
 
     div.paging.openstudio-desktop-paging {
         display: none;
@@ -6491,6 +6517,12 @@ a.openstudio-add-new-content-link:hover  {
 }
 /* Mobile small. */
 @media (max-width: 419px) {
+
+    .openstudio-content-view-file > a > img,
+    .openstudio-content-view-file > iframe {
+        max-width: 252px;
+    }
+
     .path-mod-openstudio .osep-moduleheading {
         width: 100%;
         height: auto;
