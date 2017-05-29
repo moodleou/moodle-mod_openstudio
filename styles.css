@@ -36,16 +36,19 @@
 }
 
 /* OSEP bottom button */
+.path-mod-openstudio .osep-bottombuttons {
+    padding-top: 30px;
+}
+
 .path-mod-openstudio .osep-bottombuttons a {
     margin-left: 13px;
 }
 
 .openstudio-container {
-    min-height: 500px;
     margin-top: 20px;
-    margin-bottom: 17px;
+    margin-bottom: 18px;
     background-color: #bfe2ef;
-    padding-bottom: 18px;
+    padding-bottom: 8px;
 }
 
 .path-mod-openstudio .dropdown-menu > li > a.menuitem-active {
@@ -1733,12 +1736,12 @@ label.openstudio-export-item-name {
     color: #002158;
     line-height: 22px;
     margin: 0;
-    padding: 18px 24px 13px;
+    padding: 15px 24px 13px;
 }
 
 .openstudio-content-view-profile-bar,
 .openstudio-filter {
-    padding: 6px 15px 8px 0px;
+    padding: 7px 15px 8px 0px;
     background-color: #ffffff;
     margin: 0px 24px 20px 24px;
 }
@@ -2537,6 +2540,11 @@ iframe.openstudio-content-view-iframe {
 }
 
 /* Activity. */
+
+.openstudio-activity-grid {
+    padding-bottom: 52px;
+ }
+
 .openstudio-grid.openstudio-activity-cutting-edge {
     border-top: 1px solid #fff;
     padding-top: 20px;
@@ -2636,7 +2644,7 @@ a.openstudio-actvity-title:hover  {
 /* Content detail page */
 .openstudio-content-view-container {
     background: #ffffff none repeat scroll 0 0;
-    margin: 24px;
+    margin: 20px 24px 72px 24px;
     padding: 8px 20px 40px 20px;
     position: relative;
 }
@@ -2652,7 +2660,7 @@ a.openstudio-actvity-title:hover  {
     line-height: 28px;
     min-height: 28px;
     padding: 0;
-    margin: 0 0 20px 0;
+    margin: 0 0 17px 0;
     float: left;
 }
 
@@ -3567,6 +3575,10 @@ button.openstudio-view-deleted-save-button {
  */
 
 /* People Page */
+.openstudio-people-page {
+    padding-bottom: 19px;
+}
+
 .openstudio-profile-row {
     height: 48px;
     margin: 0 24px;
@@ -3630,8 +3642,8 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     font-family: Arial;
     font-weight: Bold;
     color: #312b39;
-    margin-top: 0px;
-    height: 10px;
+    margin: 0px;
+    line-height: 24px;
 }
 
 .openstudio-profile-view {
@@ -4296,12 +4308,12 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-content-view-primary {
-        width: 400px;
+        width: 396px;
         margin-right: 10px;
     }
 
     .openstudio-content-view-secondary {
-        width: 308px;
+        width: 302px;
     }
 
     .openstudio-work-progress-percent {
@@ -4483,7 +4495,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-content-view-title-box h1 {
-        width: 90%;
+        width: 84%;
     }
 
     .openstudio-content-view-actions-icons-right {
@@ -4648,7 +4660,15 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-profile-info {
-        width: 35%;
+        width: 45%;
+    }
+
+    .openstudio-profile-active-date {
+        width: 24%;
+    }
+
+    .openstudio-profile-participation {
+        width: 22%;
     }
 
     .openstudio-content-view-tags {
@@ -4676,7 +4696,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-content-view-primary {
-        width: 320px;
+        width: 316px;
     }
 
     .openstudio-content-view-version-title-box .openstudio-content-view-title {
@@ -4690,7 +4710,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-content-view-secondary {
-        width: 234px;
+        width: 230px;
     }
 
     .openstudio-content-view-container {
@@ -4928,10 +4948,6 @@ a.openstudio-add-new-content-link:hover  {
         display: none
     }
 
-    .openstudio-paging {
-        padding-bottom: 70px;
-    }
-
     .openstudio-navigation-text {
         display: none;
     }
@@ -5065,6 +5081,10 @@ a.openstudio-add-new-content-link:hover  {
         padding-bottom: 15px;
     }
 
+    .openstudio-people-page {
+        padding-bottom: 19px;
+    }
+
     /**
      * Drop-down menu
      */
@@ -5109,10 +5129,9 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-container {
-        margin-left: -20px;
-        margin-right: -20px;
+        margin-left: -19px;
+        margin-right: -19px;
         margin-top: 5px;
-        padding-bottom: 2px;
     }
 
     .openstudio-grid-item {
@@ -5148,7 +5167,7 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-filter-sort-text {
         font-size: 1.28571em;
-        padding-left: 10px;
+        padding-left: 9px;
     }
 
     .openstudio-filter-sort-divider {
@@ -5394,7 +5413,6 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-profile-name {
         font-size: 1.42857em;
-        height: 15px;
     }
 
     .openstudio-profile-view {
@@ -5418,7 +5436,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-profile-participation span {
-        font-size: 1.28571em;
+        font-size: 1.14285em;
     }
 
     .openstudio-work-progress {
@@ -5534,8 +5552,8 @@ a.openstudio-add-new-content-link:hover  {
      */
 
     .openstudio-content-view-container {
-        padding : 8px 15px 25px;
-        margin: 20px;
+        padding: 8px 15px 25px;
+        margin: 20px 20px 12px 20px;
     }
 
     .openstudio-content-view-primary {
@@ -6045,6 +6063,7 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-filter-sort-text img {
         width: 16px;
+        height: 16px;
     }
 
     .openstudio-filter-collapsed, .openstudio-filter-icon {
@@ -6422,6 +6441,10 @@ a.openstudio-add-new-content-link:hover  {
         width: 144px;
     }
 
+    .openstudio-content-view-title {
+        margin: 1px 0 18px;
+    }
+
     .openstudio-content-view-version-title-box .openstudio-content-view-title {
         font-size: 1.5714em;
     }
@@ -6441,6 +6464,10 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-content-view-block a, .openstudio-content-view-block a:hover, .openstudio-content-view-block a:focus {
         padding-left: 10px;
+    }
+
+    a.openstudio-filter-preference-icon:hover {
+        text-decoration: none;
     }
 
     .openstudio-content-view-block {
