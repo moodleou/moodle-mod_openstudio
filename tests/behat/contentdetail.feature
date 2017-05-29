@@ -675,6 +675,7 @@ Feature: Create and edit contents detail
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
         And I follow "Test My Content Details View Archive 1"
+        And I should not see "Archive post"
         And I press "Post archive"
         And I press "View"
         And "Delete" "button" should exist
@@ -686,6 +687,7 @@ Feature: Create and edit contents detail
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
         And I follow "Test My Content Details View Archive 1"
+        And I should not see "Archive post"
         And I press "Post archive"
         And I press "View"
         And I should not see "Delete"
@@ -697,6 +699,7 @@ Feature: Create and edit contents detail
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
         And I follow "Test My Content Details View Archive 1"
+        And I should not see "Archive post"
         And I press "Post archive"
         And I press "View"
         And I should not see "Delete"

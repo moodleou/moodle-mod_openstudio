@@ -48,6 +48,7 @@
         "profilebarenable": true,
         "actionenable": true,
         "isfoldercontent": false,
+        "showarchivebutton": true,
         "reportabuselink" : http://example.com,
     }
 }}
@@ -215,11 +216,11 @@
                 </div>
                 {{^contenttypenone}}
                     <div class="openstudio-content-view-archive">
-                        {{#contentarchivepostenable}}
+                        {{#showarchivebutton}}
                             <input id="id_archivebutton" name="archivebutton"
                                    class="{{#contentcrudlocked}} locked {{/contentcrudlocked}} openstudio-content-actions osep-smallbutton"
                                value="{{#str}}contentactionarchivepost, mod_openstudio{{/str}}" type="button">
-                        {{/contentarchivepostenable}}
+                        {{/showarchivebutton}}
                         {{#reportabuselink}}
                             <a id="id_reportbutton_link" href="{{{reportabuselink}}}">
                                 <input id="id_reportbutton" name="reportbutton"

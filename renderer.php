@@ -898,6 +898,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $contentdata->mycontent = true;
         }
 
+        // Handle show/hide archive button.
+        $contentdata->showarchivebutton = $contentdata->mycontent;
         $contentdata->contentviewversionlink = new moodle_url('/mod/openstudio/content.php',
                 array('id' => $cmid, 'sid' => $contentdata->id, 'vuid' => $contentdata->userid, 'version' => 1));
         $contentdata->contenteditenable = $contenteditenable;
@@ -910,6 +912,9 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         // Check archive post permission.
         $contentdata->contentarchivepostenable = empty($contentdata->isfoldercontent);
+        if ($contentdata->contentarchivepostenable == false) {
+            $contentdata->showarchivebutton = false;
+        }
 
         // Render content versions.
         $contentversions = array();
