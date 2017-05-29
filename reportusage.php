@@ -103,7 +103,7 @@ foreach ($flagdata->slots as $value) {
     $flagdatacontents[] = array(
             'flagtypename' => get_string('reportflagname' . $value->flagid, 'openstudio'),
             'totalusers' => $value->totalusers,
-            'totalcontents' => $value->totals
+            'totalcontents' => $value->totalslots
     );
 }
 $flagdata->flagdatacontents = $flagdatacontents;

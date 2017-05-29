@@ -1139,6 +1139,9 @@ $string['reportcontenttypename78'] = 'Powerpoint Document (Weblink)';
 $string['reportcontenttypename79'] = 'Spreadsheet (Weblink)';
 $string['reportcontenttypename80'] = 'Excel Spreadsheet (Weblink)';
 $string['reportcontenttypename100'] = 'Folder';
+$string['reportcontenttypename110'] = 'Folder content';
+$string['reportcontenttypename120'] = 'CAD';
+$string['reportcontenttypename130'] = 'ZIP';
 
 $string['reportflagname1'] = 'Reported abuse';
 $string['reportflagname2'] = 'Favourited';
@@ -1154,6 +1157,10 @@ $string['reportflagname10'] = 'Liked Comment';
 $string['reportvisibilityname1'] = 'Private';
 $string['reportvisibilityname2'] = 'All Tutor Group';
 $string['reportvisibilityname3'] = 'Module';
+$string['reportvisibilityname4'] = 'Private';
+$string['reportvisibilityname5'] = 'Private pinboard';
+$string['reportvisibilityname6'] = 'In folder only';
+$string['reportvisibilityname7'] = 'Tutor';
 $string['reportvisibilitynamegroup'] = 'Specific Tutor Group';
 
 $string['locktype'] = 'Lock type for content';
