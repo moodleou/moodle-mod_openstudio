@@ -16,9 +16,10 @@ Feature: Lock/Unlock my content
       | fullname | shortname | category |
       | Course 1 | C1 | 0 |
     And the following "course enrolments" exist:
-      | user | course | role |
-      | student1 | C1 | student |
-      | manager1 | C1 | manager |
+      | user     | course | role           |
+      | student1 | C1     | student        |
+      | manager1 | C1     | manager        |
+      | teacher1 | C1     | editingteacher |
 
     # Enable REST web service
     Then I log in as "admin"
@@ -81,3 +82,19 @@ Feature: Lock/Unlock my content
     And I press "Unlock"
     Then "Lock" "button" should exist
     Then "Unlock" "button" should not exist
+
+    # Hide Request Feedback button on Lock Content/Folder
+    And I am on site homepage
+    And I log out
+    And I log in as "student1"
+    And I follow "Course 1"
+    And I follow "Sharing Studio"
+    And I follow "Student slot 1"
+    And I press "Request feedback"
+    And I should see "Feedback requested" in the "div#openstudio_item_request_feedback" "css_element"
+    And "Cancel feedback request" "button" should exist
+    And I press "Lock"
+    And "Request feedback" "button" should not exist
+    And I press "Unlock"
+    And "Cancel feedback request" "button" should exist
+    And I should see "Feedback requested" in the "div#openstudio_item_request_feedback" "css_element"

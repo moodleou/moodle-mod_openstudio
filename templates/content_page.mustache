@@ -274,7 +274,8 @@
                 <div class="openstudio-content-view-actions-icons-right">
                     {{#contentrequestfeedbackenable}}
                         <button id="content_view_icon_{{contentflagrequestfeedback}}"
-                                class="openstudio-request-feedback-button osep-smallbutton"
+                                class="openstudio-request-feedback-button osep-smallbutton
+                                            {{#contentcrudlocked}} locked {{/contentcrudlocked}} openstudio-content-actions"
                                 data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagrequestfeedback}}"
                                 data-mode="{{#contentflagrequestfeedbackactive}}off{{/contentflagrequestfeedbackactive}}
                                 {{^contentflagrequestfeedbackactive}}on{{/contentflagrequestfeedbackactive}}">
