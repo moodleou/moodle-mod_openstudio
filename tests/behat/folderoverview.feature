@@ -408,7 +408,91 @@ Feature: Folder Overview
       And I set the field "Move to post number" to "0"
       Then I should see "You cannot enter a position that does not contain a slot."
 
-        # Lose input focus
+      # Lose input focus
       And I set the field "Move to post number" to "4"
       And I click on "Move to post number" "text"
       Then I should see "You cannot move this content beyond other fixed contents."
+
+      And I click on "Close" "button" in the "Order posts" "dialogue"
+      And I press "Order posts"
+
+      # User can move content can re-order to 1
+      And I set the field with xpath "//input[@id='openstudio-folder-reorder-input-4']" to "1"
+      And I click on "Move to post number" "text"
+
+      # User cannot input number to order fixed content, error message will display
+      And I set the field with xpath "//input[@id='openstudio-folder-reorder-input-3']" to "1"
+      And I click on "Move to post number" "text"
+      And I should see "You cannot move this content beyond other fixed contents."
+
+      # Multiply movement content
+      And I click on "Close" "button" in the "Order posts" "dialogue"
+      And I press "Order posts"
+      And I set the field with xpath "//input[@id='openstudio-folder-reorder-input-4']" to "3"
+      And I click on "Move to post number" "text"
+      And I set the field with xpath "//input[@id='openstudio-folder-reorder-input-4']" to "2"
+      And I click on "Move to post number" "text"
+      And I click on "Save order" "button" in the "Order posts" "dialogue"
+      And Open studio contents should be in the following order:
+        | Test My Folder Overview 1 |
+        | Test My Folder Overview 4 |
+        | Test My Folder Overview 2 |
+        | Test My Folder Overview 3 |
+
+   Scenario: Folder Overview in My Activities with Zero ordering
+
+      # Add 3 booked slot on Folder Activity
+      Given the following open studio "level1s" exist:
+          | openstudio  | name         | sortorder |
+          | OS1         | Block1       | 1         |
+      And the following open studio "level2s" exist:
+          | level1      | name         | sortorder |
+          | Block1      | Activity1    | 1         |
+      And the following open studio "level3s" exist:
+          | level2      | name         | sortorder | contenttype    |
+          | Activity1   | Content1.1   | 1         | folder         |
+      And the following open studio "folder templates" exist:
+            | level3         | additionalcontents  |
+            | Content1.1     | 10                  |
+      # Add 2 content can not be reordered
+      And the following open studio "folder content templates" exist:
+            | level3         | name       | contentpreventreorder |
+            | Content1.1     | Content 1  | 1                     |
+            | Content1.1     | Content 2  | 1                     |
+            | Content1.1     | Content 3  | 1                     |
+      And I follow "Course 1"
+      And I follow "Test Open Studio name 1"
+      And I follow "My Content > My Activities" in the openstudio navigation
+      And I follow "Content1.1"
+
+      # Redirect to  add folder page
+      And I set the following fields to these values:
+        | Who can view this folder  | My module                                  |
+        | Folder title              | Test my folder view 1                      |
+        | Folder description        | My folder view description 1               |
+      And I press "Create folder"
+
+      # Upload a new content 
+      And I follow "Add new content"
+      And I press "Add file"
+      And I set the following fields to these values:
+        | Title                     | Content 4                                  |
+        | Description               | My Folder Overview Description             |
+        | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+      And I press "Save"
+      And I follow "My Content > My Activities" in the openstudio navigation
+      And I follow "Content1.1"
+
+      # Order Post
+      And I press "Order posts"
+      And "Content 3" "text" should appear before "Content 4" "text"
+
+      # Entering 0 as the position of the last item
+      And I set the field with xpath "//input[@id='openstudio-folder-reorder-input-4']" to "0"
+      And I click on "Move to post number" "text"
+
+      # Validation message raises
+      And I should see "You cannot enter a position that does not contain a slot."
+
+      # Content won't change order
+      And "Content 3" "text" should appear before "Content 4" "text"

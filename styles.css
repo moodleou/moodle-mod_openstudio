@@ -6514,6 +6514,10 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-content-view-block {
         background-position: right 10px center;
     }
+
+    .openstudio-orderpost-item-moveup-button {
+        margin-right: 12px;
+    }
 }
 /* Mobile small. */
 @media (max-width: 419px) {

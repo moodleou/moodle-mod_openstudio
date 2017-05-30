@@ -228,7 +228,9 @@ define([
         moveTo: function() {
 
             var desiredOrder = $(this).val();
-
+            if (desiredOrder <= 0 || desiredOrder > t.mconfig.total) {
+                return;
+            }
             var item = $(this).closest(t.CSS.ITEM_CONTAINER);
             var itemOrder = item.find(t.CSS.ITEM_ORDER).attr('data-order');
             itemOrder = parseInt(itemOrder);
@@ -236,8 +238,7 @@ define([
             var lastOrder = $(t.CSS.ITEM_CONTAINER).last().find(t.CSS.ITEM_ORDER).attr('data-order');
             lastOrder = parseInt(lastOrder);
 
-            var currentorder = $('div[data-order=' +
-                $(this).attr('data-order') + ']').hasClass('openstudio-orderpost-item-canreorder');
+            var currentorder = $('div[data-order=' + itemOrder + ']').hasClass('openstudio-orderpost-item-canreorder');
             var itemMove = $('div[data-order=' + desiredOrder + ']').hasClass('openstudio-orderpost-item-canreorder');
             if (currentorder && itemMove) {
                 Str
@@ -267,7 +268,6 @@ define([
          * @method saveOrder
          */
         saveOrder: function() {
-            var saveAllowed = true;
             $(t.CSS.ORDER_NUMBER_INPUT).each(function() {
                 var order = $(this).val().trim();
                 var item = $(this).closest(t.CSS.ITEM_CONTAINER);
@@ -278,9 +278,6 @@ define([
                 }
             });
 
-            if (!saveAllowed) {
-                return;
-            }
             M.util.js_pending('openstudioOrderPostsFolderContent');
             var textlistcontent = t.getListOrderPost(true);
             var newlistcontent = {};
@@ -367,7 +364,7 @@ define([
                         .text(orderNumberString);
 
                     $(this).find(t.CSS.ORDER_NUMBER_INPUT)
-                        .attr('value', index);
+                        .val(index);
                 });
             }
 
@@ -547,6 +544,7 @@ define([
         checkReorderLock: function(currentOrderNumber, toOrderNumber) {
             var firstitem = '';
             var lastitem = '';
+            var currentElement = '';
             var classCheck = 'openstudio-orderpost-item-canreorder';
             if (currentOrderNumber > toOrderNumber) {
                 firstitem = toOrderNumber;
@@ -559,7 +557,7 @@ define([
             if (currentOrderNumber < toOrderNumber) {
                 firstitem = firstitem + 1;
                 while (firstitem <= lastitem) {
-                    var currentElement = $(t.CSS.ITEM_ORDER + '[data-order="' + firstitem + '"]');
+                    currentElement = $(t.CSS.ITEM_ORDER + '[data-order="' + firstitem + '"]');
                     if (currentElement.hasClass(classCheck)) {
                         return true;
                     }
@@ -568,7 +566,7 @@ define([
             } else {
                 lastitem = lastitem - 1;
                 while (lastitem >= firstitem) {
-                    var currentElement = $(t.CSS.ITEM_ORDER + '[data-order="' + firstitem + '"]');
+                    currentElement = $(t.CSS.ITEM_ORDER + '[data-order="' + lastitem + '"]');
                     if (currentElement.hasClass(classCheck)) {
                         return true;
                     }
