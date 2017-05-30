@@ -54,7 +54,6 @@ Feature: Create and edit contents detail
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
             | Name                         | Test Open Studio name 1      |
             | Description                  | Test Open Studio description |
-            | Your word for 'My Module'    | Module 1                     |
             | Group mode                   | Separate groups              |
             | Grouping                     | grouping1                    |
             | Enable pinboard              | 99                           |

@@ -121,8 +121,12 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         // Generate shared content items.
         if ($permissions->feature_module) {
+            $modulename = get_string('settingsthemehomesettingsmodule', 'openstudio');
+            if (!empty($theme->thememodulename)) {
+                $modulename = $theme->thememodulename;
+            }
             $submenuitem = array(
-                    'name' => get_string('settingsthemehomesettingsmodule', 'openstudio'),
+                    'name' => $modulename,
                     'url' => $navigationurls->mymoduleurl,
                     'pix' => $OUTPUT->pix_url('mymodule_rgb_32px', 'openstudio'),
                     'active' => $menuhighlight->mymodule
@@ -132,8 +136,12 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         }
 
         if ($permissions->feature_group) {
+            $groupname = get_string('settingsthemehomesettingsgroup', 'openstudio');
+            if (!empty($theme->themegroupname)) {
+                $groupname = $theme->themegroupname;
+            }
             $submenuitem = array(
-                    'name' => get_string('settingsthemehomesettingsgroup', 'openstudio'),
+                    'name' => $groupname,
                     'url' => $navigationurls->mygroupurl,
                     'pix' => $OUTPUT->pix_url('group_rgb_32px', 'openstudio'),
                     'active' => $menuhighlight->mygroup
@@ -184,8 +192,12 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         $subnavigations = array();
         if ($permissions->feature_studio || ($permissions->activitydata->used > 0)) {
+            $studioname = get_string('settingsthemehomesettingsstudio', 'openstudio');
+            if (!empty($theme->themestudioname)) {
+                $studioname = $theme->themestudioname;
+            }
             $submenuitem = array(
-                    'name' => get_string('settingsthemehomesettingsstudio', 'openstudio'),
+                    'name' => $studioname,
                     'url' => $navigationurls->myworkurl,
                     'pix' => $OUTPUT->pix_url('activity_rgb_32px', 'openstudio'),
                     'active' => $menuhighlight->myactivity
@@ -195,8 +207,12 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         }
 
         if ($permissions->feature_pinboard || ($permissions->pinboarddata->usedandempty > 0)) {
+            $pinboardname = get_string('settingsthemehomesettingspinboard', 'openstudio');
+            if (!empty($theme->themepinboardname)) {
+                $pinboardname = $theme->themepinboardname;
+            }
             $submenuitem = array(
-                    'name' => get_string('settingsthemehomesettingspinboard', 'openstudio'),
+                    'name' => $pinboardname,
                     'url' => $navigationurls->pinboardurl,
                     'pix' => $OUTPUT->pix_url('pinboard_rgb_32px', 'openstudio'),
                     'active' => $menuhighlight->mypinboard
@@ -1200,7 +1216,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         }
 
         $desktoppagingbar = html_writer::tag('div', $output, array(
-                'class' =>'paging openstudio-desktop-paging'));
+                'class' => 'paging openstudio-desktop-paging'));
 
         return $mobilepagingbar . $desktoppagingbar;
     }

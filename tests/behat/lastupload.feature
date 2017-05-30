@@ -51,7 +51,6 @@ Feature: Create and edit contents
       And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1        |
           | Description                  | Test Open Studio description 1 |
-          | Your word for 'My Module'    | Module 1                       |
           | Group mode                   | Visible groups                 |
           | Grouping                     | grouping1                      |
           | Enable pinboard              | 99                             |
@@ -60,7 +59,6 @@ Feature: Create and edit contents
       And I add a "OpenStudio 2 (pilot only)" to section "2" and I fill the form with:
           | Name                         | Test Open Studio name 2        |
           | Description                  | Test Open Studio description 2 |
-          | Your word for 'My Module'    | Module 1                       |
           | Group mode                   | Visible groups                 |
           | Grouping                     | grouping1                      |
           | Enable pinboard              | 99                             |
@@ -69,7 +67,6 @@ Feature: Create and edit contents
       And I add a "OpenStudio 2 (pilot only)" to section "3" and I fill the form with:
           | Name                         | Test Open Studio name 3        |
           | Description                  | Test Open Studio description 3 |
-          | Your word for 'My Module'    | Module 1                       |
           | Group mode                   | Visible groups                 |
           | Grouping                     | grouping1                      |
           | Enable pinboard              | 99                             |

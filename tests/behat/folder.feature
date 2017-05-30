@@ -86,7 +86,7 @@ Feature: Create and edit Folder
         And I should see "Create new folder"
 
         # Enable Folder in My Module
-        And I follow "Shared content > My Module" in the openstudio navigation
+        And I follow "Shared content > Module 1" in the openstudio navigation
         And I should see "Module 1"
         And I should see "Upload content"
         And I should see "Create new folder"
@@ -153,7 +153,7 @@ Feature: Create and edit Folder
           | Folder title              | Test my folder view 1                      |
           | Folder description        | My folder view description 1               |
         And I press "Create folder"
-        And I follow "Shared content > My Module" in the openstudio navigation
+        And I follow "Shared content > Module 1" in the openstudio navigation
         And I should see "Test my folder view 1"
         And the "src" attribute of "div.openstudio-folder-content img.openstudio-folder-tab" "css_element" should contain "openstudio_sets_preview_box"
 
@@ -207,7 +207,7 @@ Feature: Create and edit Folder
         Then "Edit" "text" should exist in the ".breadcrumb-nav" "css_element"
         And I set the field "Folder title" to "Test my folder view 2"
         And I press "Save"
-        And I follow "Shared content > My Module" in the openstudio navigation
+        And I follow "Shared content > Module 1" in the openstudio navigation
         And I should not see "Test my folder view 1"
         And I should see "Test my folder view 2"
 
@@ -229,7 +229,7 @@ Feature: Create and edit Folder
         | openstudio | user     | name                   | description                       | visibility | contenttype    |
         | OS1        | teacher1 | Test Folder Overview   | My Folder Overview Description 1  | module     | folder_content |
         And I follow "Test Open Studio name 1"
-        And I follow "Shared Content > My Module" in the openstudio navigation
+        And I follow "Shared Content > Module 1" in the openstudio navigation
         And I follow "Test Folder Overview"
         And the OSEP theme breadcrumbs should be "C1 Home > Week 1 > Test Open Studio name 1 > My Pinboard > Test Folder Overview"
 
@@ -248,9 +248,9 @@ Feature: Create and edit Folder
         And I follow "Course 1"
         And I press "Expand all"
         And I follow "Test Open Studio name 1"
-        And I follow "Shared content > My Module" in the openstudio navigation
+        And I follow "Shared content > Module 1" in the openstudio navigation
         And I follow "Test Open Studio name 1"
-        And I follow "Shared Content > My Module" in the openstudio navigation
+        And I follow "Shared Content > Module 1" in the openstudio navigation
         And I follow "Test Folder Overview"
         And the OSEP theme breadcrumbs should be "C1 Home > Week 1 > Test Open Studio name 1 > My Module >  Teacher's work > Test Folder Overview"
         And I follow "Test Content Folder Overview"

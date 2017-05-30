@@ -210,3 +210,66 @@ Feature: Create and edit contents
         And I follow "Test Open Studio name 1"
         And I follow "My Content"
         Then I should see "My Pinboard"
+
+    Scenario: Behavior handling drop down label to make consistency to Setting:
+        When I am on site homepage
+        And I follow "Course 1"
+        And I turn editing mode on
+        And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+          | Name                          | Test Open Studio name 1      |
+          | Description                   | Test Open Studio description |
+          | Your word for 'My Module'     | Module 1                     |
+          | Your word for 'My Group'      | Group 1                      |
+          | Your word for 'My Activities' | Activities 1                 |
+          | Your word for 'My Pinboard'   | Pinboard  1                  |
+          | Group mode                    | Visible groups               |
+          | Grouping                      | grouping1                    |
+          | Enable pinboard               | 99                           |
+          | Enable Folders                | 1                            |
+          | Abuse reports are emailed to  | teacher1@asd.com             |
+          | ID number                     | OS1                          |
+
+        And the following open studio "level1s" exist:
+            | openstudio | name | sortorder |
+            | OS1        | B1   | 1         |
+        And the following open studio "level2s" exist:
+            | level1 | name | sortorder |
+            | B1     | A1   | 1         |
+        And the following open studio "level3s" exist:
+            | level2 | name | sortorder |
+            | A1     | S1   | 1         |
+        And the following open studio "folder templates" exist:
+            | level3 | additionalcontents |
+            | S1     | 2                  |
+        And all users have accepted the plagarism statement for "OS1" openstudio
+        And I follow "Test Open Studio name 1"
+
+        # check drop down label apply Setting
+        And I follow "Shared Content"
+        And I should see "Module 1"
+        And I should see "Group 1"
+        And I follow "Shared Content"
+        And I follow "My Content"
+        And I should see "Activities 1"
+        And I should see "Pinboard  1"
+
+        # remove Your word for 'My Module' in Setting
+        And I follow "My Content"
+        And I follow "Administration > Edit settings" in the openstudio navigation
+        And I set the following fields to these values:
+          | Your word for 'My Module'     |     |
+        And I press "Save and display"
+        And I follow "Shared Content"
+        And I should not see "Module 1"
+        And I should see "My Module"
+
+        And I follow "Group 1"
+        And I should see "Group 1"
+        And I follow "Shared content > My Module" in the openstudio navigation
+        And I should see "My Module"
+        And I follow "Shared content > Group 1" in the openstudio navigation
+        And I should see "Group 1"
+        And I follow "My Content > Pinboard 1" in the openstudio navigation
+        And I should see "Pinboard  1"
+        And I follow "My Content > Activities 1" in the openstudio navigation
+        And I should see "Activities 1"
