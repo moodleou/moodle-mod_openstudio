@@ -195,7 +195,7 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
                 $('#openstudio_filter_types_0').prop("checked", true);
             });
 
-            $('.openstudio-filter-types-checkbox').on("click", function (e) {
+            $('.openstudio-filter-types-checkbox').on("click", function() {
                 var checkbox = $(this);
 
                 if (checkbox.is(":checked") && checkbox.attr('id') != "openstudio_filter_types_0") {
@@ -211,7 +211,7 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
 
 
             // By user flags.
-            $('#openstudio_filter_user_flags_0').on("click", function (e) {
+            $('#openstudio_filter_user_flags_0').on("click", function(e) {
                 var checkbox = $(this);
 
                 // Prevent checkbox from unchecking when clicked.
@@ -224,7 +224,7 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
                 $('#openstudio_filter_user_flags_0').prop("checked", true);
             });
 
-            $('.openstudio-filter-user-flags-checkbox').on("click", function (e) {
+            $('.openstudio-filter-user-flags-checkbox').on("click", function() {
                 var checkbox = $(this);
 
                 if (checkbox.is(":checked") && checkbox.attr('id') != "openstudio_filter_types_0") {
@@ -239,7 +239,7 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
             });
 
             // Reset button.
-            $('#reset_filter_btn').on('click', function (e) {
+            $('#reset_filter_btn').on('click', function() {
                 $('#reset_filter').val(1);
                 $('#filteractive').val(0);
                 $('#openstudio-filter-form').submit();
@@ -248,7 +248,7 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
 
             // Set Blocks option selected when a block checked.
             // When do not has any block checked, all option should be selected.
-            $('.openstudio-filter-block').on('click', function (e) {
+            $('.openstudio-filter-block').on('click', function() {
                 var checkbox = $(this);
                 var filter_area_activity_value = $('#filter_area_activity_value').val();
                 var length = $('[name="fblockarray[]"]:checked').length;
@@ -263,7 +263,7 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
             });
 
             // Uncheck all blocks option when ALl/Pinboard selected.
-            $('#filter_block').on('change', function (e) {
+            $('#filter_block').on('change', function() {
                 var filter_block = $(this).val();
                 var filter_area_activity_value = $('#filter_area_activity_value').val();
 

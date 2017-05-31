@@ -39,11 +39,13 @@
 
 {{< core/modal }}
     {{$title}}{{#str}} stopnotifications, mod_openstudio {{/str}}{{/title}}
-    {{$body}}{{#str}} stopnotificationsforcommenton, mod_openstudio, {{name}} {{/str}}{{/body}}
-    {{$footer}}
-    <button type="button" class="btn btn-primary" data-contentid="{{contentid}}" data-commentid="{{commentid}}" data-action="yes">
-        {{#str}} stopnotifications, mod_openstudio {{/str}}
-    </button>
-    <button type="button" class="btn btn-secondary" data-action="no">{{#str}} cancel {{/str}}</button>
-    {{/footer}}
+    {{$body}}
+        <p>{{#str}} stopnotificationsforcommenton, mod_openstudio, {{name}} {{/str}}</p>
+        <div>
+            <button type="button" class="btn btn-primary" data-contentid="{{contentid}}" data-commentid="{{commentid}}" data-action="yes">
+                {{#str}} stopnotifications, mod_openstudio {{/str}}
+            </button>
+            <button type="button" class="btn btn-secondary" data-action="no">{{#str}} cancel {{/str}}</button>
+        </div>
+    {{/body}}
 {{/ core/modal }}

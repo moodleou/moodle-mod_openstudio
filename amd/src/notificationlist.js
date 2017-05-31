@@ -94,7 +94,7 @@ define(['jquery', 'core/ajax', 'core/modal', 'core/templates', 'theme_bootstrapb
                 })
                 .done(function(html) {
                     t.modal = new Modal(html);
-                    t.modal.footer.find('button').on('click', t.handleModalButton);
+                    t.modal.body.find('button').on('click', t.handleModalButton);
                     t.modal.show();
                 });
         },

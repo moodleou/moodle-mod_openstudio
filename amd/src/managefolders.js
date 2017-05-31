@@ -42,7 +42,7 @@ define(['jquery'], function($) {
 
             $('.moveup:first').hide();
 
-            $('.movedown').each(function(index, value) {
+            $('.movedown').each(function() {
                 var id = this.id;
                 var index = id.split(/[_ ]+/).pop();
 

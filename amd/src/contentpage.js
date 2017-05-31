@@ -53,7 +53,7 @@ define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/templates', 'core
                         t.deleteContentDialogue = t.createDeleteContentDialogue(osDialogue);
                     });
                 });
-                
+
                 // Maximize feature.
                 t.createMaximizeModal();
                 $('#openstudio_content_view_maximize').on('click', t.toogleContentModal);
@@ -140,7 +140,7 @@ define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/templates', 'core
 
             if (gpslat && gpslng) {
                 var myLatLng = {lat: parseFloat(gpslat), lng: parseFloat(gpslng)};
-                map = new google.maps.Map(document.getElementById('openstudio_content_view_map_canvas'), {
+                var map = new google.maps.Map(document.getElementById('openstudio_content_view_map_canvas'), {
                     center: myLatLng,
                     zoom: 14
                 });
@@ -321,7 +321,7 @@ define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/templates', 'core
                         }]);
 
                         promises[0]
-                            .done(function(res) {
+                            .done(function() {
                                 $('.openstudio-cancel-btn').trigger('click');
 
                                 // Redirect to current version content when delete from view version detail.
