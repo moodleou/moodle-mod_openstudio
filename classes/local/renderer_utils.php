@@ -1646,4 +1646,50 @@ class renderer_utils {
 
         return $pluginfileurl;
     }
+
+    /**
+     * Check content is folder and update folder data in content
+     *
+     * @param $content Object
+     * @param $id int Course module ID
+     * @parem $vid int Visibility ID.
+     * @return $content Object
+     */
+    public static function get_folder_data($id, $content, $vid) {
+        global $OUTPUT;
+        $content->isfolder = false;
+                // Check content is folder.
+        if ($content->contenttype == content::TYPE_FOLDER || $content->l3contenttype == content::TYPE_FOLDER) {
+            $contentexist = $firstcontent = folder::get_first_content($content->id);
+            $content->isfolder = true;
+            $content->hascontent = false;
+            $folderthumbnailfileurl = $OUTPUT->pix_url('uploads_rgb_32px', 'openstudio');
+            $content->defaultfolderimg = $OUTPUT->pix_url('uploads_rgb_32px', 'openstudio');
+            if ($firstcontent) {
+                $content->hascontent = true;
+                $content->thumbnailimg = true;
+                if (isset($firstcontent->openstudioid)) {
+                    $firsrcm = get_coursemodule_from_instance('openstudio', $firstcontent->openstudioid);
+                    $context = \context_module::instance($firsrcm->id);
+                    $firstcontent = self::content_type_image($firstcontent, $context);
+                    $folderthumbnailfileurl = $firstcontent->contenttypeimage;
+                    if ($firstcontent->contenttype != content::TYPE_IMAGE) {
+                        $content->thumbnailimg = false;
+                    }
+                } else {
+                     $content->thumbnailimg = false;
+                }
+            }
+            $content->folderthumbnail = $folderthumbnailfileurl;
+            $content->folderdefaultthumbnail = $OUTPUT->pix_url('openstudio_sets_preview_box', 'openstudio');
+            $content->folderlink = new \moodle_url('/mod/openstudio/folder.php',
+                    array('id' => $id, 'lid' => $content->l3id, 'vid' => content::VISIBILITY_PRIVATE, 'sid' => $content->id));
+            if (!$content->id) {
+                $content->folderlink = new \moodle_url('/mod/openstudio/contentedit.php',
+                        array('id' => $id, 'sid' => 0, 'lid' => $content->l3id, 'vid' => $vid,
+                                'ssid' => 0, 'type' => content::TYPE_FOLDER_CONTENT));
+            }
+        }
+        return $content;
+    }
 }

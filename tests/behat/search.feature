@@ -106,3 +106,37 @@ I need to be able to search within OpenStudio
         Then I should not see "Student content 2"
         Then I should not see "Student slot 4"
         Then I should see "content — 2 results found"
+
+    Scenario: Search my folder
+        # Using OSEP theme to display OSEP search form.
+        Given I am using the OSEP theme
+        When I log in as "student1" (in the OSEP theme)
+
+         Given the following open studio "folders" exist:
+        | openstudio | user     | name                         | description                       | visibility | contenttype    |
+        | OS1        | student1 | Student content folder 1     | My Folder Overview Description 1  | private    | folder_content |
+        | OS1        | student1 | Student content folder 2     | My Folder Overview Description 2  | module     | folder_content |
+
+        # Search folder in my pinboard view
+        And I am on site homepage
+        And I follow "Course 1"
+        And I press "Expand all"
+        And I follow "Sharing Studio"
+        And I follow "My Content > My Pinboard" in the openstudio navigation
+        And I set the field "query" to "folder"
+        And I click on "//img[@alt='Search']" "xpath_element"
+        And I should see "folder — 2 results found"
+        And I should see "Student content folder 1"
+        And I should see "Student content folder 2"
+
+        # Search folder in my module by another student
+        And I log out (in the OSEP theme)
+        And I log in as "student2" (in the OSEP theme)
+        And I follow "Course 1"
+        And I press "Expand all"
+        And I follow "Sharing Studio"
+        And I set the field "query" to "folder"
+        And I click on "//img[@alt='Search']" "xpath_element"
+        And I should see "folder — 1 results found"
+        And I should not see "Student content folder 1"
+        And I should see "Student content folder 2"

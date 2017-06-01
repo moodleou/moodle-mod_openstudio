@@ -31,6 +31,7 @@ use mod_openstudio\local\renderer_utils;
 use mod_openstudio\local\api\notifications;
 use mod_openstudio\local\util;
 use mod_openstudio\local\util\defaults;
+use mod_openstudio\local\api\folder;
 
 $id = optional_param('id', 0, PARAM_INT); // Course module id.
 
@@ -199,7 +200,7 @@ if (trim($searchtext) == '') {
         $resultingcontents = stream::get_contents_by_ids(
                 $USER->id, $contentids, $permissions->feature_contentreciprocalaccess);
         if ($resultingcontents !== false) {
-            foreach($resultingcontents as $content) {
+            foreach ($resultingcontents as $content) {
 
                 // Process content locking.
                 if (($content->levelcontainer > 0) && ($content->userid == $permissions->activeuserid)) {
@@ -259,7 +260,7 @@ if (trim($searchtext) == '') {
                 } else {
                     $content->myworkview = false;
                 }
-
+                $content = renderer_utils::get_folder_data($id, $content, $vid);
                 $content->viewuserworkurl = new moodle_url('/mod/openstudio/view.php',
                         array('id' => $id, 'vuid' => $content->userid, 'vid' => content::VISIBILITY_PRIVATE));
 
@@ -307,7 +308,7 @@ if ($contentdata->total == 0) {
                     'nextstart' => 0));
         }
 
-        if ($pagestart  < $contentdata->nextpage) {
+        if ($pagestart < $contentdata->nextpage) {
             // Has next page.
             $contentdata->nexturl = $CFG->wwwroot . '/mod/openstudio/';
             $contentdata->nexturl .= util::get_page_name_and_substitute_params(array(
