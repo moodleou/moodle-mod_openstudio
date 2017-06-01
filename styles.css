@@ -151,7 +151,7 @@
 
 .openstudio-content-view-file > a > img,
 .openstudio-content-view-file > iframe {
-    max-width: 580px;
+    width: 100%;
 }
 
 .openstudio-content-view-file iframe.ouembed-embedtype-slideshows {
@@ -2702,7 +2702,7 @@ a.openstudio-actvity-title:hover  {
 }
 
 .openstudio-content-view-title-box h1 {
-    width: 93%;
+    width: calc(100% - 39px);
 }
 
 span.openstudio-content-view-title {
@@ -2759,14 +2759,14 @@ span.openstudio-content-view-title {
 }
 
 .openstudio-content-view-primary {
-    width: 580px;
+    width: calc(62% - 36px);
     float: left;
     margin-right: 40px;
     position: relative;
 }
 
 .openstudio-content-view-secondary {
-    width: 374px;
+    width: calc(38% - 4px);
     display: block;
     float: right;
     top: 0;
@@ -4109,7 +4109,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 }
 
 .openstudio-folder-view-primary {
-    width: 580px;
+    width: calc(62% - 36px);
     float: left;
     background-color: #d8dde6;
     padding-bottom: 40px;
@@ -4344,7 +4344,7 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-content-view-file > a > img,
     .openstudio-content-view-file > iframe {
-        max-width: 400px;
+        width: 100%;
     }
 
     .openstudio-nav-settings {
@@ -4381,12 +4381,11 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-content-view-primary {
-        width: 396px;
-        margin-right: 10px;
+        width: calc(59% - 39px);
     }
 
     .openstudio-content-view-secondary {
-        width: 302px;
+        width: calc(41% - 1px);
     }
 
     .openstudio-work-progress-percent {
@@ -4450,7 +4449,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-folder-view-primary {
-        width: 396px;
+        width: calc(59% - 39px);
         margin-right: 10px;
     }
 
@@ -4517,7 +4516,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-folder-view-container .openstudio-content-view-secondary {
-        width: 302px;
+        width: calc(41% - 1px);
     }
 
     .openstudio-folder-view-container .openstudio-content-view-icon-inspiration {
@@ -4577,7 +4576,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-content-view-actions-icons-right {
-        float: left;
+        float: right;
         padding-bottom: 20px;
     }
 
@@ -4719,7 +4718,7 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-content-view-file > a > img,
     .openstudio-content-view-file > iframe {
-        max-width: 320px;
+        width: 100%;
     }
 
     .path-mod-openstudio .administration{
@@ -4784,7 +4783,11 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-content-view-primary {
-        width: 316px;
+        width: calc(59% - 31px);
+    }
+
+    .openstudio-content-view-secondary {
+        width: calc(41% - 9px);
     }
 
     .openstudio-content-view-version-title-box .openstudio-content-view-title {
@@ -4797,10 +4800,6 @@ a.openstudio-add-new-content-link:hover  {
         margin-bottom: 20px;
     }
 
-    .openstudio-content-view-secondary {
-        width: 230px;
-    }
-
     .openstudio-content-view-container {
         padding: 8px 15px 40px;
     }
@@ -4811,7 +4810,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-folder-view-primary {
-        width: 316px;
+        width: calc(59% - 29px);
     }
 
     .openstudio-folder-view-container {
@@ -4836,6 +4835,11 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-folder-available {
         margin-top: -3px;
+    }
+
+    .openstudio-content-view-actions-icons-right {
+        float: left;
+        margin-bottom: 20px;
     }
 
     .openstudio-folder-view-container .openstudio-content-view-animation-icons {
@@ -4867,7 +4871,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-folder-view-container .openstudio-content-view-secondary {
-        width: 230px;
+        width: calc(41% - 9px);
     }
 
     .path-mod-openstudio .openstudio-folder-view-container #id_lockfolder {
@@ -4943,7 +4947,7 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-content-view-file > a > img,
     .openstudio-content-view-file > iframe {
-        max-width: 500px;
+       width: 100%;
     }
 
     div.paging.openstudio-desktop-paging {
