@@ -110,9 +110,7 @@
 }
 
 .openstudio-add-dashboard-button {
-    padding-top: 10px;
     float: right;
-    clear: right;
 }
 
 .path-mod-openstudio .openstudio-content-actions.locked {
@@ -241,11 +239,13 @@
 .openstudio-filter-buttons {
     float: right;
     margin-right: -2px;
-    margin-top: 72px;
+    margin-top: 95px;
+    margin-bottom: 22px;
 }
 
 .openstudio-filter-buttons-pinboard {
-    margin-top: 167px;
+    margin-bottom: 22px;
+    margin-top: 190px;
 }
 
 .path-mod-openstudio .openstudio-filter-box div > label {
@@ -2181,7 +2181,7 @@ a.openstudio-add-title:hover  {
     color: #002158;
     padding-bottom: 14px;
     display: inline;
-    width: calc(100% - 18px);
+    width: calc(100% - 33px);
     float: left;
 }
 
@@ -2258,6 +2258,7 @@ a.openstudio-add-title:hover  {
 .openstudio-tooltip {
     position: relative;
     display: inline-block;
+    padding-left: 15px;
 }
 
 .openstudio-tooltip .openstudio-tooltiptext {
@@ -3623,8 +3624,11 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 }
 
 .openstudio-profile-work-progress {
-    width: 29%;
-    float: left;
+    float: right;
+    margin-right: -3px;
+    padding: 0;
+    position: relative;
+    width: auto;
 }
 
 .openstudio-profile-img {
@@ -3664,6 +3668,10 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     color: #002158;
     font-size: 1em;
     line-height: 14px;
+}
+
+.openstudio-profile-work-title {
+    margin-bottom: 6px;
 }
 
 .openstudio-profile-active-date-title {
@@ -3720,8 +3728,20 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     margin-right: 6px;
 }
 
+.openstudio-greycolour {
+    stop-color: #d2d2d2;
+}
+
 .openstudio-completecolour {
     stop-color: #0f8372;
+}
+
+.openstudio-currentfill {
+    fill: #0b55a8;
+}
+
+.openstudio-incompletefill {
+    fill: white;
 }
 
 /**
@@ -4282,9 +4302,6 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-add-dashboard-button {
-        clear: right;
-        float: right;
-        padding-top: 10px;
         margin-right: -10px;
     }
 
@@ -4350,6 +4367,7 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-profile-work-progress {
         margin-left: -8px;
+        margin-right: 0px;
     }
 
     .openstudio-profile-work-progress .openstudio-profile-label-title {
@@ -4962,9 +4980,6 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-add-dashboard-button {
-        clear: right;
-        float: right;
-        padding-top: 10px;
         margin-right: 10px;
     }
 
@@ -5951,7 +5966,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-grid-item-content-title {
-        width: 92%;
+        width: 90%;
     }
 
     .openstudio-tooltip .openstudio-tooltiptext {
@@ -6620,7 +6635,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-grid-item-content-title {
-        width: 86%;
+        width: 84%;
     }
 
     .openstudio-profile-img {
