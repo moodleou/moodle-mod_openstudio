@@ -2959,7 +2959,6 @@ body:not(.ios):not(.android) .openstudio-content-view-flag-icon.has-hover:hover 
 
 .openstudio-content-view-block-post-owner {
     background: #f4fafc none repeat scroll 0 0;
-    height: 94px;
 }
 
 .openstudio-content-view-secondary .collapsed {
@@ -3084,7 +3083,7 @@ div.openstudio-content-view-image-metadata div:nth-of-type(odd) {
     display: table;
     vertical-align: top;
     float: left;
-    width: 136px;
+    width: 132px;
 }
 
 .openstudio-content-view-version-info-name {
@@ -3095,7 +3094,7 @@ div.openstudio-content-view-image-metadata div:nth-of-type(odd) {
     line-height: 15px;
     margin-bottom: 0px;
     margin-top: 0px;
-    height: 29px;
+    height: 27px;
     overflow: hidden;
 }
 
@@ -4339,7 +4338,7 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-profile-bar .openstudio-profile-progress-content {
         float: right;
         width: 402px;
-        margin: 0;
+        margin: 1px 0px 0px 0px;
         padding: 0;
     }
 
@@ -4368,7 +4367,8 @@ a.openstudio-add-new-content-link:hover  {
         clear: left;
         display: table;
         float: left;
-        padding-top: 5px;
+        margin-bottom: 5px;
+        padding-top: 1px;
     }
 
     .openstudio-content-view-tags {
@@ -5197,6 +5197,7 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-profile-bar .openstudio-profile-progress-content {
         margin-left: 0px;
+        margin-top: 4px;
     }
 
     .openstudio-content-view-profile-bar,
@@ -5237,7 +5238,8 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-add-new {
-        padding-bottom: 25px;
+        padding-bottom: 14px;
+        padding-top: 2px;
     }
 
     .openstudio-actvity-title {
@@ -5400,7 +5402,7 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-profile-comment .openstudio-profile-comment-text,
     .openstudio-own-view .openstudio-profile-view-text1 {
-        margin: 5px 0 0 7px;
+        margin: 4px 0 0 7px;
     }
 
     .openstudio-profile-own-date {
@@ -5409,7 +5411,8 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-profile-last-active-date {
         font-size: 1.28571em;
-        margin-top: 5px;
+        margin-top: 1px;
+        margin-bottom: 5px;
         color: #002158;
     }
 
@@ -5425,14 +5428,13 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-profile-bar .openstudio-profile-progress-title {
-        margin: 7px 0 4px 0;
-        margin-right: 5px;
+        margin: 7px 5px 8px 0;
         font-size: 1.28571em;
         width: 100%;
     }
 
     #profile_percent_mobile {
-        margin-top: 15px;
+        margin-top: 13px;
         margin-bottom: 13px;
     }
 
@@ -5545,7 +5547,7 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-profile-bar .openstudio-profile-paticipation-content {
         width: 100%;
-        padding: 10px 0px 19px 0px;
+        padding: 7px 0px 13px 0px;
         border-bottom: 1px solid #bfe2ef;
     }
 
@@ -5710,7 +5712,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-folder-show-content-block-title {
-        height: 45px;
+        min-height: 45px;
     }
 
     .openstudio-folder-show-content-block-date {
@@ -5985,7 +5987,9 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-content-view-version-actions {
-        padding-top: 8px;
+        padding-top: 0px;
+        margin-bottom: 5px;
+        margin-top: 8px;
     }
 
     .openstudio-content-view-image-data-label,
@@ -6519,6 +6523,19 @@ a.openstudio-add-new-content-link:hover  {
         text-decoration: none;
     }
 
+    .openstudio-folder-available {
+        font-size: 1.142857em;
+        margin-bottom: 3px;
+    }
+
+    .openstudio-content-view-version-info-name {
+        height: 16px;
+    }
+
+    .openstudio-profile-active-date {
+        padding-bottom: 19px;
+    }
+
     .openstudio-content-view-block {
         background-position: right 10px center;
     }
@@ -6662,7 +6679,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-profile-paticipation-content .openstudio-profile-paticipation {
-        margin-bottom: 6px;
+        margin-bottom: 0px;
     }
 
     span.openstudio-content-view-title {
