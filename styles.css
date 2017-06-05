@@ -3710,6 +3710,14 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     position: relative;
 }
 
+/**
+* Fix issue on IE
+*/
+.ie .openstudio-work-progress-container {
+    width: 287px;
+    position: relative;
+}
+
 .openstudio-work-progress {
     width: 229px;
     height: 16px;
