@@ -166,7 +166,7 @@ define([
                     t.hideSaveButtons();
 
                     t.showHideSelectButton();
-
+                    t.resize();
                     // Click event on Remove last selection button.
                     $(t.CSS.REMOVELASTSELECTED).on('click', function() {
                         t.removeLastPostSelected();

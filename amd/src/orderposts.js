@@ -183,6 +183,7 @@ define([
                     t.checkReorder();
                     t.inputPosition();
                     $(t.CSS.SAVE_ORDER_BUTTON).attr("disabled", "disabled");
+                    t.resize();
                 })
                 .always(function() {
                     M.util.js_complete('openstudioGetOrderPostsFolderContent');

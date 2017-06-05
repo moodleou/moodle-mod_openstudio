@@ -645,7 +645,7 @@ div.openstudio-orderpost-item:nth-of-type(odd) {
 
 .openstudio-orderpost-item-column4 {
     float: right;
-    padding-right: 35px;
+    padding-right: 15px;
 }
 
 .openstudio-orderpost-item-column4 ul {
@@ -670,13 +670,30 @@ div.openstudio-orderpost-item:nth-of-type(odd) {
     padding: 0;
 }
 
-.openstudio-orderpost-item-moveup-button:disabled,
-.openstudio-orderpost-item-movedown-button:disabled,
-.path-mod-openstudio .openstudio-orderpost-item-moveup-button[disabled]:hover,
-.path-mod-openstudio .openstudio-orderpost-item-movedown-button[disabled]:hover {
-    opacity: 0.1;
-    border: none;
-    background: none;
+.openstudio-orderpost-item-moveup-button {
+    margin-bottom: 1px
+}
+
+.openstudio-orderpost-item-book.openstudio-orderpost-item-moveup-button span.openstudio-folder-reorder-disabled, 
+.openstudio-orderpost-item-book.openstudio-orderpost-item-movedown-button span.openstudio-folder-reorder-disabled,
+.openstudio-orderpost-item-book.openstudio-orderpost-item-moveup-button:disabled span.openstudio-folder-reorder-disabled, 
+.openstudio-orderpost-item-book.openstudio-orderpost-item-movedown-button:disabled span.openstudio-folder-reorder-disabled {
+    display: none;
+}
+
+.openstudio-orderpost-item-moveup-button:disabled span.openstudio-folder-reorder-active,
+.openstudio-orderpost-item-movedown-button:disabled span.openstudio-folder-reorder-active {
+    display: none;
+}
+
+.openstudio-orderpost-item-moveup-button:disabled span.openstudio-folder-reorder-disabled,
+.openstudio-orderpost-item-movedown-button:disabled span.openstudio-folder-reorder-disabled {
+    display: block;
+}
+
+.openstudio-orderpost-item-moveup-button span.openstudio-folder-reorder-disabled,
+.openstudio-orderpost-item-movedown-button span.openstudio-folder-reorder-disabled {
+    display: none;
 }
 
 .openstudio-orderpost-item-moveup-button img,
@@ -692,10 +709,13 @@ div.openstudio-orderpost-item:nth-of-type(odd) {
     text-align: center;
     color: #002158;
     font-family: Arial;
+    margin-right: 3px;
+    background-color: #ffffff;
 }
 
 .openstudio-orderpost-item-locked {
     text-align: center;
+    margin-left: 6px;
 }
 
 .openstudio-orderpost-item-locked img {
@@ -6334,6 +6354,12 @@ a.openstudio-add-new-content-link:hover  {
         margin-top: -2px;
     }
 
+    .openstudio-orderpost-item-moveup-button,
+    .path-mod-openstudio .openstudio-orderpost-item-moveup-button:hover,
+    .path-mod-openstudio .openstudio-orderpost-item-moveup-button:focus {
+        margin-right: 12px;
+    }
+
     .path-mod-openstudio .openstudio-orderpost-item-order-number-input {
         height: 21px;
         width: 32px;
@@ -6548,10 +6574,6 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-content-view-block {
         background-position: right 10px center;
-    }
-
-    .openstudio-orderpost-item-moveup-button {
-        margin-right: 12px;
     }
 }
 /* Mobile small. */
