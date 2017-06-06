@@ -1193,6 +1193,7 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
 
 .openstudio-folder-view-comments .openstudio-comment-thread-list {
     margin-top: 0;
+    margin-bottom: 20px;
 }
 
 .openstudio-folder-view-comments .openstudio-comment-thread-header {
@@ -1253,7 +1254,7 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
 }
 
 .openstudio-folder-view-comments #id_addcomment {
-    margin: 20px 15px 30px;
+    margin: 5px 15px 30px;
 }
 
 .openstudio-folder-view-comments .openstudio-comment-thread-item .openstudio-comment-metadata
@@ -3613,7 +3614,7 @@ button.openstudio-view-deleted-save-button {
 }
 
 .openstudio-profile-row {
-    height: 48px;
+    min-height: 48px;
     margin: 0 24px;
     padding: 15px 15px 17px;
     border-bottom: 1px solid #bfe2ef ;
@@ -3643,6 +3644,11 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     float: left;
     min-height: 48px;
     height: initial;
+}
+
+.openstudio-profile-info .openstudio-profile-description {
+    float: left;
+    width: 76%;
 }
 
 .openstudio-profile-active-date {
@@ -4694,6 +4700,10 @@ a.openstudio-add-new-content-link:hover  {
     .path-mod-openstudio #osep-bottombutton-export {
         display: none;
     }
+
+    .openstudio-profile-info .openstudio-profile-description {
+        width: 69%;
+    }
 }
 
 /* Tablet Portrait. */
@@ -5395,7 +5405,7 @@ a.openstudio-add-new-content-link:hover  {
      */
     .openstudio-profile-row {
         margin: 0 20px;
-        height: 300px;
+        min-height: 300px;
     }
 
     .openstudio-profile-info {
@@ -6808,8 +6818,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-folder-view-comments #id_addcomment {
-        margin-top: 25px;
-        margin-bottom: 40px;
+        margin-bottom: 20px;
         margin-left: 15px;
     }
 
