@@ -135,6 +135,7 @@
 
 #reset_filter_btn {
     margin-left: 5px;
+    margin-right: 0px;
 }
 
 .openstudio-filter-active {
@@ -223,18 +224,25 @@
 
 .openstudio-filter-box {
     border-left: 1px solid #d4d2d2;
-    float: left;
+    display: inline-block;
+    vertical-align: top;
     margin-top: 10px;
     padding-left: 8px;
-    width: 206px;
+    width: calc(25% - 45px);
+    max-width: 100%;
 }
 
-.openstudio-filter-box-last {
+.openstudio-filter-box-pinboard .openstudio-filter-box {
+    width: calc(33% - 52px);
+}
+
+.openstudio-filter-box-last,
+.openstudio-filter-box-pinboard .openstudio-filter-box-last {
     border-left: 1px solid #d4d2d2;
-    float: right;
     margin-top: 10px;
     padding-left: 8px;
-    width: 117px;
+    width: 114px;
+    margin-left: 2px;
 }
 
 .openstudio-filter-header {
@@ -247,14 +255,11 @@
 
 .openstudio-filter-buttons {
     float: right;
-    margin-top: 52px;
+    margin-top: 53px;
     margin-bottom: 22px;
-    margin-right: 15px;
-}
-
-.openstudio-filter-buttons-pinboard {
-    margin-bottom: 22px;
-    margin-top: 190px;
+    margin-right: 25px;
+    margin-top: -30px;
+    position: relative;
 }
 
 .path-mod-openstudio .openstudio-filter-box div > label {
@@ -668,10 +673,6 @@ div.openstudio-orderpost-item:nth-of-type(odd) {
     width: 22px;
     margin: 0;
     padding: 0;
-}
-
-.openstudio-orderpost-item-moveup-button {
-    margin-bottom: 1px
 }
 
 .openstudio-orderpost-item-book.openstudio-orderpost-item-moveup-button span.openstudio-folder-reorder-disabled, 
@@ -2416,13 +2417,12 @@ a.openstudio-add-title:hover  {
     text-align: center;
     border-top: 1px solid #f0f0f1;
     height: 35px;
-    margin-left: -15px;
     padding-top: 3px;
 }
 
 .openstudio-grid-item-content-detail-info-box{
     display: inline-block;
-    width: 43px;
+    width: 47px;
     text-align: center;
     position: relative;
 }
@@ -2438,10 +2438,10 @@ a.openstudio-add-title:hover  {
 .openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-text,
 .openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-text-new {
     font-size: 0.85714em;
-    margin-left: 28px;
+    margin-left: 32px;
     margin-top: 1px;
-    margin-bottom: -12px;
-    text-align: center;
+    margin-bottom: -17px;
+    text-align: left;
     display: block;
     height: 19px;
 }
@@ -2453,14 +2453,19 @@ a.openstudio-add-title:hover  {
 
 .openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-text-new {
     background: #b52a1e none repeat scroll 0 0;
-    border-radius: 20px;
-    bottom: -1px;
+    border-radius: 50%;
+    bottom: 23px;
     color: #fff;
     font-weight: 700;
-    width: 21px;
-    position: relative;
-    margin-left: 24px;
-    border: 1px solid #fff;
+    min-width: 17px;
+    height: 17px;
+    position: absolute;
+    margin-left: 26px;
+    text-align: center;
+}
+
+.openstudio-grid-item-content-detail-info .double-digit {
+    min-width: 22px;
 }
 
 .openstudio-content-view-edit {
@@ -3651,6 +3656,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 .openstudio-profile-info .openstudio-profile-description {
     float: left;
     width: 76%;
+    margin-top: -7px;
 }
 
 .openstudio-profile-active-date {
@@ -3707,7 +3713,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 .openstudio-profile-label-title{
     color: #002158;
     font-size: 1em;
-    line-height: 14px;
+    line-height: 10px;
 }
 
 .openstudio-profile-work-title {
@@ -3971,7 +3977,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 .openstudio-profile-participation .openstudio-profile-label-title{
     color: #002158;
     font-size: 1em;
-    line-height: 16px;
+    line-height: 10px;
     padding-left: 0;
 }
 
@@ -4560,11 +4566,21 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-filter-box {
-        width: 142px;
+        width: calc(25% - 39px);
     }
 
-    .openstudio-filter-box-last {
-        width: 117px;
+    .openstudio-filter-box-pinboard .openstudio-filter-box {
+        width: calc(33% - 45px);
+    }
+
+    .openstudio-filter-box-last,
+    .openstudio-filter-box-pinboard .openstudio-filter-box-last {
+        width: 110px;
+        margin-right: -18px;
+    }
+
+    .openstudio-filter-buttons {
+        margin-right: 0px;
     }
 
     .openstudio-filter-arrow-box div:nth-child(1) {
@@ -4903,19 +4919,21 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-filter-box {
-        width: 108px;
+        width: calc(25% - 33px);
     }
 
-    .openstudio-filter-box-last {
-        width: 92px;
+    .openstudio-filter-box-pinboard .openstudio-filter-box {
+        width: calc(33% - 38px);
+    }
+
+    .openstudio-filter-box-last,
+    .openstudio-filter-box-pinboard .openstudio-filter-box-last {
+        width: 93px;
+        margin-right: -25px;
     }
 
     .openstudio-filter-box div img {
         display: none;
-    }
-
-    .openstudio-filter-buttons {
-        margin-top: 52px;
     }
 
     .openstudio-filter-select select {
@@ -5382,20 +5400,18 @@ a.openstudio-add-new-content-link:hover  {
         margin-left: 17px;
         font-size: 1.28571em;
         margin-top: 1px;
-        bottom: -1px;
         width: 32px;
         height: 28px;
     }
 
     .openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-text {
         font-size: 1.28571em;
-        margin-top: -5px;
-        margin-bottom: -5px;
+        margin-bottom: -9px;
         width: 31px;
     }
 
     .openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-box {
-        width: 45px;
+        width: 43px;
         text-align: left;
     }
 

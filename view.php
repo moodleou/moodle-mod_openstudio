@@ -696,6 +696,9 @@ if ($finalviewpermissioncheck) {
                         $socialitem->favourite = $socialitem->favouriteold;
                     }
 
+                    // Check if social item is double digit.
+                    $socialitem = util::check_item_double_digit($socialitem);
+
                     $contentdata->contents[$socialitem->contentid]->socialdata = $socialitem;
 
                     $socialdatatotal = $socialitem->comments + $socialitem->inspired + $socialitem->mademelaugh + $socialitem->favourite;

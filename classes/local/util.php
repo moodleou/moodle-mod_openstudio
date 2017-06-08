@@ -1621,4 +1621,19 @@ EOF;
         global $PAGE;
         $PAGE->requires->js_call_amd('mod_openstudio/accessibility', 'init');
     }
+
+    /**
+     * Check if social item is double digit.
+     *
+     * @param $socialitem Object social item data.
+     * @return Object $socialitem
+     */
+    public static function check_item_double_digit($socialitem) {
+        $socialitem->isdoubledigitcomments = $socialitem->comments > 9;
+        $socialitem->isdoubledigitinspired = $socialitem->inspired > 9;
+        $socialitem->isdoubledigitmademelaugh = $socialitem->mademelaugh > 9;
+        $socialitem->isdoubledigitfavourite = $socialitem->favourite > 9;
+
+        return $socialitem;
+    }
 }

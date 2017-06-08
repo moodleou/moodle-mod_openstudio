@@ -108,7 +108,7 @@
     <input type="hidden" id="filter_area_activity_value" value="{{filter_area_activity_value}}">
 
     <div id="filter_container" class="{{#filteropen}}in{{/filteropen}} collapse clearfix" >
-        <div class="openstudio-filter-arrow-box clearfix">
+        <div class="openstudio-filter-arrow-box {{#ismypinboard}}openstudio-filter-box-pinboard{{/ismypinboard}} clearfix">
             {{^ismypinboard}}
                 <div class="openstudio-filter-box clearfix">
                     <span class="openstudio-filter-header">{{#str}} filterselectfrom, mod_openstudio {{/str}}</span>
