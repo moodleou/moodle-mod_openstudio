@@ -126,6 +126,22 @@
     pointer-events: none;
 }
 
+/* Chevron padding on Profile bar */
+.openstudio-profile-fullname {
+    display: inline;
+}
+
+.path-mod-openstudio [data-toggle="collapse"] .openstudio-profile-expand-image,
+.path-mod-openstudio [data-toggle="collapse"].collapsed .openstudio-profile-collapse-image {
+     display: inline;
+    padding-left: 8px;
+}
+
+.path-mod-openstudio [data-toggle="collapse"] .openstudio-profile-collapse-image,
+.path-mod-openstudio [data-toggle="collapse"].collapsed .openstudio-profile-expand-image {
+    display: none;
+}
+
 /* Preferences */
 .openstudio-filter-preferences {
     font-size: 1em;
@@ -3933,9 +3949,8 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     font-family: Arial;
     font-weight: bold;
     padding-left: 7px;
-    padding-right: 38px;
     background-color: transparent;
-    max-width: 208px;
+    max-width: 230px;
 }
 
 .openstudio-profile-mypaticipation .openstudio-expand-image,
@@ -4398,10 +4413,6 @@ a.openstudio-add-new-content-link:hover  {
         margin-right: 0px;
     }
 
-    #openstudio_profile_fullusername {
-        width: 84px;
-    }
-
     .openstudio-profile-bar .openstudio-profile-progress-bar {
         width: 240px;
     }
@@ -4783,6 +4794,10 @@ a.openstudio-add-new-content-link:hover  {
         margin-bottom: 30px;
     }
 
+    .openstudio-profile-bar .openstudio-profile-head {
+        width: calc(100% - 70px);
+    }
+
     .openstudio-content-view-animation-icons-left {
         width: 100%;
     }
@@ -4900,10 +4915,6 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-folder-items {
         padding: 0px;
-    }
-
-    #openstudio_profile_fullusername {
-        width: 185px;
     }
 
     .openstudio-folder-header .openstudio-folder-header-left {
@@ -6731,8 +6742,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-profile-bar .openstudio-profile-mypaticipation {
-        background-size: 20px 20px;
-        background-position: right 20px top 18px;
+        padding-right: 38px;
         font-size: 1.428em;
     }
 
