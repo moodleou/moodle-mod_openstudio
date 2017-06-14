@@ -86,8 +86,8 @@ class import_testcase extends \advanced_testcase {
         $importfile = $this->create_storedfile_from_fixture('importtest.zip');
         $files = \mod_openstudio\local\api\import::get_archive_contents($importfile);
 
-        $this->assertCount(4, $files['files']); // Zip contains 5 files, but 1 is not permitted.
-        $fixturefiles = ['test.pdf', 'test.odt', 'test.ods', 'test.pptx'];
+        $this->assertCount(5, $files['files']); // Zip contains 6 files, but 1 is not permitted.
+        $fixturefiles = ['test.pdf', 'test.odt', 'test.ods', 'test.pptx', 'test.txt'];
         foreach ($files['files'] as $file) {
             $this->assertTrue(in_array($file->pathname, $fixturefiles));
             unset($fixturefiles[array_search($file->pathname, $fixturefiles)]);
@@ -142,8 +142,8 @@ class import_testcase extends \advanced_testcase {
         \mod_openstudio\local\api\import::import_files($files, $cm, $this->student->id);
 
         $contents = $DB->get_records('openstudio_contents', ['openstudioid' => $this->studio->id, 'userid' => $this->student->id]);
-        $this->assertCount(4, $contents);
-        $fixturefiles = ['test.pdf', 'test.odt', 'test.ods', 'test.pptx'];
+        $this->assertCount(5, $contents);
+        $fixturefiles = ['test.pdf', 'test.odt', 'test.ods', 'test.pptx', 'test.txt'];
         foreach ($contents as $content) {
             $this->assertTrue(in_array($content->name, $fixturefiles));
             unset($fixturefiles[array_search($content->name, $fixturefiles)]);
