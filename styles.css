@@ -1843,6 +1843,10 @@ label.openstudio-export-item-name {
     line-height: 18px;
 }
 
+.openstudio-filter-text a:hover {
+    color: #002158;
+}
+
 .openstudio-filter-select {
     padding-left: 10px;
     font-size: 1em;
@@ -2367,7 +2371,7 @@ a.openstudio-add-title:hover  {
 .openstudio-folder-content .openstudio-folder-background {
     background-color: #9bb0c9;
     padding: 2px 10px 10px 10px;
-    margin: -3px 0px 0px 0px;
+    margin: -4px 0px 0px 0px;
 }
 
 .openstudio-folder-background a {
@@ -6631,7 +6635,51 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-content-view-block {
         background-position: right 10px center;
     }
+
+    /* Folders in landscape view on iPhone */
+    .openstudio-folder-content {
+        width: calc(100% - 133px);
+        margin-left: 13%;
+    }
+
+    .openstudio-folder-content .openstudio-folder-background {
+        padding: 2px 25px 25px;
+    }
+
+    .openstudio-folder-background .openstudio-content-folder-img {
+        width: calc(100% - 20px);
+        height: 220px;
+        border: 7px solid #ffffff;
+    }
+
+    .openstudio-folder-background .openstudio-default-folder-background {
+        height: 220px;
+        padding: 18px 20px 18px 18px;
+    }
+
+    .openstudio-default-folder-background .openstudio-default-folder-img {
+        height: 158px;
+        padding-top: 25px;
+    }
+
+    .openstudio-default-folder-background .openstudio-default-folder-empty-img {
+        height: 134px;
+        padding-bottom: 40px;
+        padding-top: 43px;
+    }
+
+    .openstudio-item-request-feedback,
+    .openstudio-item-lock {
+        height: 27px;
+        line-height: 27px;
+    }
+
+    .openstudio-folder-content .openstudio-item-request-feedback,
+    .openstudio-folder-content .openstudio-item-lock {
+        margin-top: 35px;
+    }
 }
+
 /* Mobile small. */
 @media (max-width: 419px) {
 
@@ -6936,10 +6984,21 @@ a.openstudio-add-new-content-link:hover  {
         display: none;
     }
 
+    .openstudio-folder-content .openstudio-item-request-feedback,
+    .openstudio-folder-content .openstudio-item-lock {
+        height: 22px;
+        line-height: 22px;
+        margin-top: 24px;
+    }
+
     /**
      * Folder overview 419
      */
     .openstudio-grid-item-folder-preview img {
         width: 200px;
+    }
+
+    .openstudio-folder-background .openstudio-default-folder-background {
+        padding: 10px 12px 10px 10px;
     }
 }
