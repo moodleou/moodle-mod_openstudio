@@ -2428,11 +2428,15 @@ a.openstudio-add-title:hover  {
     font-family: Arial;
     font-weight: Bold;
     color: #312b39;
-    line-height: 14px;
-    margin-bottom: -3px;
-    margin-top: 0;
-    min-height: 19px;
-    margin-top: -2px;
+    line-height: 17px;
+    margin-bottom: 1px;
+    margin-top: -4px;
+}
+
+.openstudio-grid-item-content-detail-owner-info {
+    display: inline-block;
+    vertical-align: top;
+    width: calc(100% - 40px);
 }
 
 .openstudio-grid-item-content-detail-info{
@@ -3047,7 +3051,10 @@ body:not(.ios):not(.android) .openstudio-content-view-flag-icon.has-hover:hover 
 }
 
 .openstudio-content-view-user-info {
-    margin-top: 13px;
+    margin-top: 11px;
+    display: inline-block;
+    vertical-align: top;
+    width: calc(100% - 92px);
 }
 
 .openstudio-content-view-user-info-name {
@@ -4836,6 +4843,10 @@ a.openstudio-add-new-content-link:hover  {
         margin: 0px;
     }
 
+    .openstudio-content-view-actions-icons-left {
+        margin-bottom: 10px;
+    }
+
     .openstudio-content-view-current-version {
         float: left;
         width: 100%;
@@ -4881,7 +4892,7 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-content-view-actions-icons-right {
         float: left;
-        margin-bottom: 20px;
+        padding-bottom: 25px;
     }
 
     .openstudio-folder-view-container .openstudio-content-view-animation-icons {
@@ -5940,10 +5951,12 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-content-view-actions-icons-left {
         float: none;
+        margin-bottom: 10px;
     }
 
     .openstudio-content-view-actions-icons-right {
         float: left;
+        padding-bottom: 25px;
     }
 
     .openstudio-content-view-tag-item {
@@ -5965,6 +5978,15 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-content-view-user-info-name {
         font-size: 1.28571em;
+        line-height: 21px;
+    }
+
+    .openstudio-content-view-user-info {
+        width: calc(100% - 76px);
+    }
+
+    .openstudio-grid-item-content-detail-owner-info {
+        width: calc(100% - 56px);
     }
 
     /* Browse posts */
