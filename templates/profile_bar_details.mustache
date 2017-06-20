@@ -46,22 +46,22 @@
         {{activedate}}
     </div>
 </div>
-<div class="openstudio-profile-paticipation-content clearfix">
-    <div class="openstudio-profile-paticipation">
-        {{#str}} contentflagparticipation, mod_openstudio {{/str}}
-        {{#participationenable}}
-            {{#participationlow}}
-                {{#pix}}
-                    participation_sad_rgb_32px, openstudio, {{#str}} contentparticipationlow, openstudio {{/str}}
-                {{/pix}}
-            {{/participationlow}}
-            {{^participationlow}}
-                {{#pix}}
-                    participation_happy_rgb_32px, openstudio, {{#str}} contentparticipationhigh, openstudio {{/str}}
-                {{/pix}}
-            {{/participationlow}}
-        {{/participationenable}}
-    </div>
+<div class="openstudio-profile-bar-participation-content clearfix">
+    {{#participationenable}}
+        <div class="openstudio-profile-bar-participation">
+            {{#str}} contentflagparticipation, mod_openstudio {{/str}}
+                {{#participationlow}}
+                    {{#pix}}
+                        participation_sad_rgb_32px, openstudio, {{#str}} contentparticipationlow, openstudio {{/str}}
+                    {{/pix}}
+                {{/participationlow}}
+                {{^participationlow}}
+                    {{#pix}}
+                        participation_happy_rgb_32px, openstudio, {{#str}} contentparticipationhigh, openstudio {{/str}}
+                    {{/pix}}
+                {{/participationlow}}
+        </div>
+    {{/participationenable}}
     <div id="profile_comment_view" class="openstudio-profile-comment-view collapse">
         {{>mod_openstudio/profile_bar_participation}}
     </div>

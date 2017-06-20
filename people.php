@@ -132,8 +132,7 @@ if (!empty($peopledatatemp)) {
         $person->flagscontentread = $flagscontentread;
 
         $person->progressenable = $person->userprogressdata['totalslots'] > 0;
-        $person->participationenable = ($permissions->feature_participationsmiley
-                && $person->userprogressdata['totalslots'] > 0);
+        $person->participationenable = $permissions->feature_participationsmiley;
         $person->participationlow = isset($person->userprogressdata['participationstatus'])
                 && ($person->userprogressdata['participationstatus'] == 'low');
 

@@ -142,22 +142,22 @@
                 </div>
             </div>
             <div class="openstudio-profile-participation">
-                <div class="openstudio-profile-label-title">
-                    {{#str}} participationlabel, mod_openstudio {{/str}}
-                    {{#participationenable}}
-                        {{#participationlow}}
-                            {{#pix}}
-                                participation_sad_rgb_32px, openstudio, {{#str}} contentparticipationlow, openstudio {{/str}}
-                            {{/pix}}
-                        {{/participationlow}}
-                        {{^participationlow}}
-                            {{#pix}}
-                                participation_happy_rgb_32px, openstudio, {{#str}} contentparticipationhigh, openstudio {{/str}}
-                            {{/pix}}
-                        {{/participationlow}}
-                    {{/participationenable}}
-                </div>
-                <div class="openstudio-profile-participation-value">
+                {{#participationenable}}
+                    <div class="openstudio-profile-label-title openstudio-people-participation-title">
+                        {{#str}} participationlabel, mod_openstudio {{/str}}
+                            {{#participationlow}}
+                                {{#pix}}
+                                    participation_sad_rgb_32px, openstudio, {{#str}} contentparticipationlow, openstudio {{/str}}
+                                {{/pix}}
+                            {{/participationlow}}
+                            {{^participationlow}}
+                                {{#pix}}
+                                    participation_happy_rgb_32px, openstudio, {{#str}} contentparticipationhigh, openstudio {{/str}}
+                                {{/pix}}
+                            {{/participationlow}}
+                    </div>
+                {{/participationenable}}
+                <div class="openstudio-profile-participation-value openstudio-people-participation-comments">
                     <span class="openstudio-profile-participation-icon">
                         <img src="{{commentsicon}}"
                              alt="{{#str}} commentslabel, openstudio {{/str}}"
@@ -188,7 +188,7 @@
                     </span>
                 </div>
             </div>
-            <div class="openstudio-profile-work-progress">
+            <div class="openstudio-profile-work-progress openstudio-poeple-profile-work-progress">
                 {{#progressenable}}
                     <div class="openstudio-profile-label-title openstudio-profile-work-title">
                         {{#str}} mystudioworkprogress, mod_openstudio {{/str}}

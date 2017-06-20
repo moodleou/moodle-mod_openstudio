@@ -3703,7 +3703,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 .openstudio-profile-info .openstudio-profile-description {
     float: left;
     width: 76%;
-    margin-top: -7px;
+    margin-top: -5px;
 }
 
 .openstudio-profile-active-date {
@@ -3714,6 +3714,15 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 .openstudio-profile-participation {
     width: 21%;
     float: left;
+    margin-top: -2px;
+}
+
+.openstudio-people-participation-comments {
+    margin-top: 15px;
+}
+
+.openstudio-people-participation-title ~ .openstudio-people-participation-comments {
+    margin-top: 0px;
 }
 
 .openstudio-profile-work-progress {
@@ -3740,7 +3749,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     font-weight: Bold;
     color: #312b39;
     margin: 0px;
-    line-height: 24px;
+    line-height: 19px;
 }
 
 .openstudio-profile-view {
@@ -3896,6 +3905,11 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     color: #000000;
     display: inline-block;
     padding-left: 5px;
+    margin-top : 22px;
+}
+
+.openstudio-profile-bar-participation ~ .openstudio-profile-comment-view {
+    margin-top : 0px;
 }
 
 .openstudio-profile-comment-view .openstudio-profile-comment img {
@@ -3995,7 +4009,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     width: 20px;
 }
 
-.openstudio-profile-bar .openstudio-profile-paticipation-content {
+.openstudio-profile-bar .openstudio-profile-bar-participation-content {
     width: 23%;
     display: inline-block;
     margin-top: 4px;
@@ -4003,7 +4017,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 }
 
 .openstudio-profile-participation .openstudio-profile-label-title,
-.openstudio-profile-paticipation-content .openstudio-profile-paticipation {
+.openstudio-profile-bar-participation-content .openstudio-profile-bar-participation {
     color: #002158;
     font-family: Arial;
     border: none;
@@ -4011,9 +4025,10 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     padding-right: 20px;
     background-color: transparent;
     width: 110px;
+    margin-bottom: -2px;
 }
 
-.openstudio-profile-paticipation-content .openstudio-profile-paticipation img {
+.openstudio-profile-bar-participation-content .openstudio-profile-bar-participation img {
     width: 16px;
     height: 16px;
     display: inline-block;
@@ -4501,7 +4516,7 @@ a.openstudio-add-new-content-link:hover  {
         width: 141px;
     }
 
-    .openstudio-profile-bar .openstudio-profile-paticipation-content {
+    .openstudio-profile-bar .openstudio-profile-bar-participation-content {
         width: 154px;
     }
 
@@ -4832,7 +4847,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-profile-participation {
-        width: 22%;
+        width: 24%;
     }
 
     .openstudio-content-view-tags {
@@ -5016,7 +5031,7 @@ a.openstudio-add-new-content-link:hover  {
         height: auto;
     }
 
-    .openstudio-profile-bar .openstudio-profile-paticipation-content {
+    .openstudio-profile-bar .openstudio-profile-bar-participation-content {
         position: absolute;
         left: 363px;
     }
@@ -5058,6 +5073,17 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-mobile-paging-current {
         padding: 0 5px;
+    }
+
+    .openstudio-profile-info .openstudio-profile-description {
+        width: calc(100% - 75px);
+        margin-top: -4px;
+    }
+
+    .openstudio-profile-participation .openstudio-profile-label-title {
+        font-size: 1.28571em;
+        margin-top: 14px;
+        width: 200px;
     }
 
     /**
@@ -5274,11 +5300,20 @@ a.openstudio-add-new-content-link:hover  {
     #page-mod-openstudio-people .openstudio-profile-participation {
         width: 100%;
         border-bottom: 1px solid #bfe2ef;
-        padding-bottom: 15px;
+        padding-bottom: 16px;
     }
 
     .openstudio-people-page {
         padding-bottom: 19px;
+    }
+
+    .openstudio-profile-work-progress .openstudio-profile-label-title {
+        margin-bottom: 9px;
+        margin-top: 12px;
+    }
+
+    .openstudio-poeple-profile-work-progress {
+        padding-bottom: 16px;
     }
 
     /**
@@ -5559,7 +5594,7 @@ a.openstudio-add-new-content-link:hover  {
         color: #002158;
     }
 
-    .openstudio-profile-bar .openstudio-profile-paticipation-content {
+    .openstudio-profile-bar .openstudio-profile-bar-participation-content {
         position: relative;
         left: 0;
     }
@@ -5688,7 +5723,7 @@ a.openstudio-add-new-content-link:hover  {
         width: 60%;
     }
 
-    .openstudio-profile-bar .openstudio-profile-paticipation-content {
+    .openstudio-profile-bar .openstudio-profile-bar-participation-content {
         width: 100%;
         padding: 7px 0px 13px 0px;
         border-bottom: 1px solid #bfe2ef;
@@ -5699,7 +5734,7 @@ a.openstudio-add-new-content-link:hover  {
         display: block;
     }
 
-    .openstudio-profile-paticipation-content .openstudio-profile-paticipation {
+    .openstudio-profile-bar-participation-content .openstudio-profile-bar-participation {
         padding-left: 0;
         width: 103px;
         font-size: 1.28571em;
@@ -5714,11 +5749,11 @@ a.openstudio-add-new-content-link:hover  {
         padding-left: 0;
     }
 
-    .openstudio-profile-paticipation-content .openstudio-profile-paticipation {
+    .openstudio-profile-bar-participation-content .openstudio-profile-bar-participation {
         width: 100%;
     }
 
-    .openstudio-profile-paticipation-content .openstudio-profile-paticipation img {
+    .openstudio-profile-bar-participation-content .openstudio-profile-bar-participation img {
         width: 24px;
         height: 24px;
     }
@@ -6888,7 +6923,7 @@ a.openstudio-add-new-content-link:hover  {
         font-size:  1.285em;
     }
 
-    .openstudio-profile-paticipation-content .openstudio-profile-paticipation {
+    .openstudio-profile-bar-participation-content .openstudio-profile-bar-participation {
         margin-bottom: 0px;
     }
 
@@ -6909,10 +6944,9 @@ a.openstudio-add-new-content-link:hover  {
         width: 84%;
     }
 
-    .openstudio-profile-img {
-        margin-right: 7px;
+    .openstudio-profile-info .openstudio-profile-description {
+        width: calc(100% - 65px);
     }
-
     /**
      * Comment feature
      */

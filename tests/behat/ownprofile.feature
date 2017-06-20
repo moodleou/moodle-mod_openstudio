@@ -113,10 +113,14 @@ Feature: My Activity
 
   Scenario: Check existing of View My Own Profile in My Activities/My Pinboard view
       When I follow "Test Open Studio name 1"
+      And I follow "Administration > Edit" in the openstudio navigation
+      And I follow "Expand all"
+      And I set the field "Show a happy or sad emoticon according to the user's level of participation" to "1"
+      And I press "Save and display"
       And I follow "My Content > My Activities" in the openstudio navigation
       Then I should see "Teacher 1"
       And I should see "Participation"
-      And I should see "My studio work progress" 
+      And I should see "My studio work progress"
       And I follow "My Content > My Pinboard" in the openstudio navigation
       Then I should see "Teacher 1"
       And I should see "Participation"
@@ -128,7 +132,7 @@ Feature: My Activity
       And I follow "Shared content > My Group" in the openstudio navigation
       Then I should not see "Teacher 1"
       And I should not see "Participation"
-      And I should not see "My studio work progress" 
+      And I should not see "My studio work progress"
 
       # switch other user
       And I am on site homepage
@@ -147,9 +151,9 @@ Feature: My Activity
       And I click on "a.openstudio-profile-mypaticipation" "css_element"
       Then I should see "Last active date:"
       And I should see "comments made"
-      And I should see "viewed" 
-      And I should see "Activity 1" 
-      And I should see "Activity 2" 
+      And I should see "viewed"
+      And I should see "Activity 1"
+      And I should see "Activity 2"
       And I should see "Activity 3"
 
       # switch other user
@@ -162,12 +166,12 @@ Feature: My Activity
       And I click on "a.openstudio-profile-mypaticipation" "css_element"
       Then I should see "Last active date:"
       And I should see "comments made"
-      And I should see "viewed" 
-      And I should see "Activity 1" 
-      And I should see "Activity 2" 
+      And I should see "viewed"
+      And I should see "Activity 1"
+      And I should see "Activity 2"
       And I should see "Activity 3"
 
-  Scenario:  Check progress of user 
+  Scenario:  Check progress of user
       When I follow "Test Open Studio name 1"
       And I follow "My content > My Activities" in the openstudio navigation
       And I click on "a.openstudio-profile-mypaticipation" "css_element"
@@ -213,6 +217,10 @@ Feature: My Activity
       When I am on site homepage
       And I follow "Course 1"
       And I follow "Test Open Studio name 2"
+      And I follow "Administration > Edit" in the openstudio navigation
+      And I follow "Expand all"
+      And I set the field "Show a happy or sad emoticon according to the user's level of participation" to "1"
+      And I press "Save and display"
       And I follow "My Content"
       And I should see "Participation"
       And I should not see "My studio work progress"
@@ -225,4 +233,3 @@ Feature: My Activity
       And I follow "Test Open Studio name 2"
       And I should not see "Participation"
       And I should not see "My studio work progress"
-    
