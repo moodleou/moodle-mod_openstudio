@@ -273,3 +273,53 @@ Feature: Create and edit contents
         And I should see "Pinboard  1"
         And I follow "My Content > Activities 1" in the openstudio navigation
         And I should see "Activities 1"
+
+    Scenario: Behavior handling upload icon when pinboard disabled:
+        When I am on site homepage
+        And I follow "Course 1"
+        And I turn editing mode on
+        And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+          | Name                         | Test Open Studio name 1      |
+          | Description                  | Test Open Studio description |
+          | Group mode                   | Visible groups               |
+          | Grouping                     | grouping1                    |
+          | Enable pinboard              | 0                            |
+          | Enable Folders               | 1                            |
+          | Abuse reports are emailed to | teacher1@asd.com             |
+          | ID number                    | OS1                          |
+        And all users have accepted the plagarism statement for "OS1" openstudio
+        And I follow "Test Open Studio name 1"
+        And I should see "My Module"
+        And I should not see "My Content"
+        And I should not see "Add new content"
+        And I follow "Shared content > My Group" in the openstudio navigation
+        And I should not see "Add new content"
+
+    Scenario: Behavior handling content view when pinboard disabled:
+        When I am on site homepage
+        And I follow "Course 1"
+        And I turn editing mode on
+        And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+          | Name                         | Test Open Studio name 1      |
+          | Description                  | Test Open Studio description |
+          | Group mode                   | Visible groups               |
+          | Grouping                     | grouping1                    |
+          | Enable pinboard              | 99                           |
+          | Enable Folders               | 1                            |
+          | Abuse reports are emailed to | teacher1@asd.com             |
+          | ID number                    | OS1                          |
+        And all users have accepted the plagarism statement for "OS1" openstudio
+        And the following open studio "contents" exist:
+            | openstudio | user     | name           | description                | visibility |
+            | OS1        | student1 | Test content A | Test content 1 description | module     |
+            | OS1        | student1 | Test content B | Test content 2 description | module     |
+        And I follow "Test Open Studio name 1"
+        And I follow "Administration > Edit" in the openstudio navigation
+        And I follow "Expand all"
+        # disabled pinboard
+        And I set the field "Enable pinboard" to "0"
+        And I press "Save and display"
+        And I should see "Test content A"
+        And I should see "Test content B"
+        And I should not see "Add new content"
+        And I should not see "My Content"

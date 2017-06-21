@@ -176,11 +176,13 @@
     {{/myactivities}}
     {{^myactivities}}
         <div class="openstudio-grid" id="openstudio_grid">
-            {{^adddisable}}
-                <div class="openstudio-grid-item openstudio-grid-item-add-new">
-                    {{>mod_openstudio/add_content_block}}
-                </div>
-            {{/adddisable}}
+            {{#available}}
+                {{^adddisable}}
+                    <div class="openstudio-grid-item openstudio-grid-item-add-new">
+                        {{>mod_openstudio/add_content_block}}
+                    </div>
+                {{/adddisable}}
+            {{/available}}
             {{#contents}}
                 <div class="openstudio-grid-item">{{>mod_openstudio/content_block}}</div>
             {{/contents}}
