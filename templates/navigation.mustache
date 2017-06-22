@@ -141,25 +141,28 @@
             {{/hassubnavigation}}
         </li>
     {{/navigation}}
-</ul>
-<div role="presentation" class="dropdown notifications">
-    <a class="dropdown-toggle" data-toggle="dropdown" role="button"
-            aria-haspopup="true" aria-expanded="false" title="{{#str}} notificationlabel, mod_openstudio {{/str}}">
-            <span id="openstudio_navigation_notification">
-                <span class="openstudio-navigation-img">
-                    <img src="{{notificationicon}}"
-                        alt="{{#str}} notificationlabel, mod_openstudio {{/str}}"
-                        class="openstudio-navigation-notification-icon"
-                        width="28" height="28" />
-                </span>
-                {{#notificationnumber}}
-                    <span class="openstudio-navigation-notification-text">
-                        <span class="accesshide">{{#str}} youhavenotifications, mod_openstudio {{/str}}</span>
-                        <span class="openstudio-navigation-notification-number">{{notificationnumber}}</span>
-                        <span class="accesshide">{{#str}} unreadnotifications, mod_openstudio {{/str}}</span>
+    <li>
+        <div role="presentation" class="dropdown notifications">
+            <a class="dropdown-toggle" data-toggle="dropdown" role="button"
+               aria-haspopup="true" aria-expanded="false" title="{{#str}} notificationlabel, mod_openstudio {{/str}}">
+                <span id="openstudio_navigation_notification">
+                    <span class="openstudio-navigation-img">
+                        <img src="{{notificationicon}}"
+                             alt="{{#str}} notificationlabel, mod_openstudio {{/str}}"
+                             class="openstudio-navigation-notification-icon"
+                             width="28" height="28" />
                     </span>
-                {{/notificationnumber}}
-            </span>
-    </a>
-    {{>mod_openstudio/notificationlist}}
-</div>
+                    {{#notificationnumber}}
+                        <span class="openstudio-navigation-notification-text">
+                            <span class="accesshide">{{#str}} youhavenotifications, mod_openstudio {{/str}}</span>
+                            <span class="openstudio-navigation-notification-number">{{notificationnumber}}</span>
+                            <span class="accesshide">{{#str}} unreadnotifications, mod_openstudio {{/str}}</span>
+                        </span>
+                    {{/notificationnumber}}
+                </span>
+            </a>
+            {{>mod_openstudio/notificationlist}}
+        </div>
+    </li>
+</ul>
+

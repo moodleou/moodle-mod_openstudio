@@ -132,44 +132,44 @@
                 {{/str}}
             </span>
         </a>
-    </div>
-    <div class="openstudio-content-view-animation-icons-right">
-        {{#contentcopyenable}}
-            <span class="openstudio-content-view-flag-icon openstudio-content-view-icon-copies openstudio-content-view-icon-active">
+        <span class="openstudio-content-view-animation-icons-right">
+            {{#contentcopyenable}}
+                <span class="openstudio-content-view-flag-icon openstudio-content-view-icon-copies openstudio-content-view-icon-active">
+                    <span class="openstudio-content-view-icon-active-image">
+                        {{#pix}}
+                            copies_btn_blue_rgb_32px, openstudio,
+                            {{#str}}
+                                contentflagxcopies, mod_openstudio, { "number": {{#quote}}{{contentcopycount}}{{/quote}} }
+                            {{/str}}
+                        {{/pix}}
+                    </span>
+                    {{#str}}
+                        contentflagxcopies, mod_openstudio, { "number": {{#quote}}{{contentcopycount}}{{/quote}} }
+                    {{/str}}
+                </span>
+            {{/contentcopyenable}}
+            <span class="openstudio-content-view-flag-icon openstudio-content-view-icon-views
+                    {{#contentviewtotal}}openstudio-content-view-icon-active{{/contentviewtotal}}">
                 <span class="openstudio-content-view-icon-active-image">
                     {{#pix}}
-                        copies_btn_blue_rgb_32px, openstudio,
+                        viewed_btn_blue_rgb_32px, openstudio,
                         {{#str}}
-                            contentflagxcopies, mod_openstudio, { "number": {{#quote}}{{contentcopycount}}{{/quote}} }
+                            contentflagxviews, mod_openstudio, { "number": {{#quote}}{{contentviewtotal}}{{/quote}} }
+                        {{/str}}
+                    {{/pix}}
+                </span>
+                <span class="openstudio-content-view-icon-inactive-image">
+                    {{#pix}}
+                        viewed_btn_grey_rgb_32px, openstudio,
+                        {{#str}}
+                            contentflagxviews, mod_openstudio, { "number": {{#quote}}{{contentviewtotal}}{{/quote}} }
                         {{/str}}
                     {{/pix}}
                 </span>
                 {{#str}}
-                    contentflagxcopies, mod_openstudio, { "number": {{#quote}}{{contentcopycount}}{{/quote}} }
+                    contentflagxviews, mod_openstudio, { "number": {{#quote}}{{contentviewtotal}}{{/quote}} }
                 {{/str}}
             </span>
-        {{/contentcopyenable}}
-        <span class="openstudio-content-view-flag-icon openstudio-content-view-icon-views
-                    {{#contentviewtotal}}openstudio-content-view-icon-active{{/contentviewtotal}}">
-            <span class="openstudio-content-view-icon-active-image">
-                {{#pix}}
-                    viewed_btn_blue_rgb_32px, openstudio,
-                    {{#str}}
-                        contentflagxviews, mod_openstudio, { "number": {{#quote}}{{contentviewtotal}}{{/quote}} }
-                    {{/str}}
-                {{/pix}}
-            </span>
-            <span class="openstudio-content-view-icon-inactive-image">
-                {{#pix}}
-                    viewed_btn_grey_rgb_32px, openstudio,
-                    {{#str}}
-                        contentflagxviews, mod_openstudio, { "number": {{#quote}}{{contentviewtotal}}{{/quote}} }
-                    {{/str}}
-                {{/pix}}
-            </span>
-            {{#str}}
-                contentflagxviews, mod_openstudio, { "number": {{#quote}}{{contentviewtotal}}{{/quote}} }
-            {{/str}}
         </span>
     </div>
 </div>
