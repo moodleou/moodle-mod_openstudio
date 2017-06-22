@@ -609,7 +609,7 @@ button.openstudio-notification-stopbutton:focus {
 
 button.openstudio-orderpost-save-button {
     float: right;
-    margin-right: 0px;
+    margin-right: 16px;
 }
 
 .openstudio-orderpost-item {
@@ -653,9 +653,10 @@ div.openstudio-orderpost-item:nth-of-type(odd) {
 }
 
 .openstudio-orderpost-item-column2 {
-    width: 79px;
+    width: 74px;
     padding-top: 9px;
     padding-bottom: 9px;
+    padding-left: 7px;
 }
 
 .openstudio-orderpost-item-column3 {
@@ -666,7 +667,7 @@ div.openstudio-orderpost-item:nth-of-type(odd) {
 
 .openstudio-orderpost-item-column4 {
     float: right;
-    padding-right: 15px;
+    padding-right: 34px;
 }
 
 .openstudio-orderpost-item-column4 ul {
@@ -691,9 +692,9 @@ div.openstudio-orderpost-item:nth-of-type(odd) {
     padding: 0;
 }
 
-.openstudio-orderpost-item-book.openstudio-orderpost-item-moveup-button span.openstudio-folder-reorder-disabled, 
+.openstudio-orderpost-item-book.openstudio-orderpost-item-moveup-button span.openstudio-folder-reorder-disabled,
 .openstudio-orderpost-item-book.openstudio-orderpost-item-movedown-button span.openstudio-folder-reorder-disabled,
-.openstudio-orderpost-item-book.openstudio-orderpost-item-moveup-button:disabled span.openstudio-folder-reorder-disabled, 
+.openstudio-orderpost-item-book.openstudio-orderpost-item-moveup-button:disabled span.openstudio-folder-reorder-disabled,
 .openstudio-orderpost-item-book.openstudio-orderpost-item-movedown-button:disabled span.openstudio-folder-reorder-disabled {
     display: none;
 }
@@ -750,7 +751,7 @@ div.openstudio-orderpost-item:nth-of-type(odd) {
 }
 
 .path-mod-openstudio .openstudio-orderpost-item-order-number-input {
-    width: 16px;
+    width: 17px;
     height: 12px;
     padding: 2px;
     margin-bottom: 0;
@@ -763,7 +764,7 @@ div.openstudio-orderpost-item:nth-of-type(odd) {
     display: block;
     font-family: Arial;
     font-weight: bold;
-    font-size: 0.928em;
+    font-size: 1em;
     color: #002158;
     line-height: 22px;
     margin-top: -7px;
@@ -773,14 +774,15 @@ div.openstudio-orderpost-item:nth-of-type(odd) {
     display: block;
     font-family: Arial;
     font-size: 0.857em;
-    color: #464542;
-    margin-top: -8px;
+    color: #676463;
+    margin-top: -4px;
 }
 
 .openstudio-orderpost-item-ordernumber-guide {
     font-family: Arial;
-    font-size: 0.857em;
-    color: #464542;
+    font-size: 1em;
+    color: #000000;
+    padding-right: 4px;
 }
 
 #page-mod-openstudio-folder #id_orderpost {
@@ -2324,7 +2326,7 @@ a.openstudio-add-title:hover  {
     opacity: 0;
     transition: opacity .25s;
     width: 150px;
-    font-size: 0.92857em;
+    font-size: 1em;
 }
 
 .openstudio-notification-stopbutton .openstudio-tooltiptext {
@@ -2668,7 +2670,7 @@ a.openstudio-actvity-title:hover  {
 }
 
 .openstudio-grid-item-content-subtitle {
-    font-size: 0.92857em;
+    font-size: 1em;
     font-weight: bold;
     font-family: Arial;
     color: #002158;
@@ -2679,7 +2681,7 @@ a.openstudio-actvity-title:hover  {
 }
 
 .openstudio-grid-item-content-detail-owner-view {
-    font-size: 0.92857em;
+    font-size: 1em;
     color: #0b55a8;
     border-right: none;
     border-left: 0 none;
@@ -3055,7 +3057,7 @@ body:not(.ios):not(.android) .openstudio-content-view-flag-icon.has-hover:hover 
 }
 
 .openstudio-content-view-user-info-view {
-    font-size: 0.92857em;
+    font-size: 1em;
     color: #0b55a8;
     border-right: none;
     border-left: 0 none;
@@ -3331,7 +3333,7 @@ div.openstudio-browse-post-item-filename {
 
 .openstudio-browse-post-item-img {
     float: left;
-    width: 79px;
+    width: 73px;
     padding: 13px 0px 0px 20px;
     position: relative;
 }
@@ -3370,19 +3372,20 @@ div.openstudio-browse-post-item-filename {
 }
 
 .openstudio-browse-post-item-title {
-    font-size: 0.928571em;
+    font-size: 1em;
     font-weight: bold;
     color: #002158;
 }
 
 .openstudio-browse-post-item-date {
-    color: #464542;
+    color: #676463;
     font-size: 0.85714em;
+    margin-top: 4px;
 }
 
 .openstudio-browse-post-item-filename,
 .openstudio-browse-post-item-location-box {
-    font-size: 0.928571em;
+    font-size: 1em;
     position: relative;
     margin-top: 25px;
 }
@@ -3607,7 +3610,7 @@ button.openstudio-view-deleted-save-button {
     display: block;
     font-family: Arial;
     font-weight: bold;
-    font-size: 0.928em;
+    font-size: 1em;
     color: #002158;
     line-height: 22px;
     margin-top: -7px;
@@ -4737,6 +4740,10 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-profile-info .openstudio-profile-description {
         width: 69%;
+    }
+
+    button.openstudio-orderpost-save-button {
+      margin-right: 0px;
     }
 }
 
