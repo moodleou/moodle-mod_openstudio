@@ -175,7 +175,7 @@ class renderer_utils {
         }
 
         $userprogressdata = api\user::get_activity_status($openstudioid, $contentowner->id);
-        $activedate = $userprogressdata['lastactivedate'] > 0 ? date('j/m/y h:i', $userprogressdata['lastactivedate']) : null;
+        $activedate = $userprogressdata['lastactivedate'] > 0 ? userdate($userprogressdata['lastactivedate'], get_string('formattimedatetime', 'openstudio')) : null;
         $flagsdata = flags::count_by_user($openstudioid, $contentowner->id);
 
         if (array_key_exists(flags::READ_CONTENT, $flagsdata)) {
@@ -1235,7 +1235,7 @@ class renderer_utils {
                         'folderid' => $folderdata->id));
                 $content->contentdetailurl = $contentdetail;
                 $content->contentthumbnailurl = $contentthumbnailfileurl;
-                $content->datetimeupdated = $content->timemodified ? date('j/m/y h:i', $content->timemodified) : null;
+                $content->datetimeupdated = $content->timemodified ? userdate($content->timemodified, get_string('formattimedatetime', 'openstudio')) : null;
             }
             $folderdata->contents[] = $content;
         }
@@ -1342,7 +1342,7 @@ class renderer_utils {
                 }
                 $folderitem->id = $content->id;
                 $folderitem->name = $content->name;
-                $folderitem->date = $content->timemodified ? date('j/m/y h:i', $content->timemodified) : null;
+                $folderitem->date = $content->timemodified ? userdate($content->timemodified, get_string('formattimedatetime', 'openstudio')) : null;
 
                 $folderitem->moveuporder = $content->contentorder - 1;
                 $folderitem->movedownorder = $content->contentorder + 1;
@@ -1607,7 +1607,7 @@ class renderer_utils {
                 $deletedposts[] = (object)array(
                     'pictureurl' => (string) $post->contenttypeimage,
                     'name' => $post->name,
-                    'date' => $post->deletedtime ? date('j/m/y h:i', $post->deletedtime) : '',
+                    'date' => $post->deletedtime ? userdate($post->timemodified, get_string('formattimedatetime', 'openstudio')) : '',
                     'id' => $post->id
                 );
             }

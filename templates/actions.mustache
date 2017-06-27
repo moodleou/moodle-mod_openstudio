@@ -32,8 +32,8 @@
 
 }}
 <div class="openstudio-buttons-settings">
-    <div class="openstudio-subscribe-button">
-        {{#enablesubscription}}
+    {{#enablesubscription}}
+        <div class="openstudio-subscribe-button">
             <button type="submit" class="btn" name="subscribebutton"
                 {{#subscriptionid}}
                     subscriptionid="{{subscriptionid}}"
@@ -45,8 +45,8 @@
                     {{#str}} subscribetothisstudio, mod_openstudio {{/str}}
                 {{/subscriptionid}}
             </button>
-        {{/enablesubscription}}
-    </div>
+        </div>
+    {{/enablesubscription}}
     <div class="openstudio-add-dashboard-button">
      {{{addtodashboard}}}
     </div>

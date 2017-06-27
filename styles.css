@@ -1426,7 +1426,7 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
 
 .openstudio-content-view-maximize-box.openstudio-modal-content-footer a.openstudio-content-view-maximize {
     color: #fff;
-    font-size: 0.875em;
+    font-size: 1em;
     font-family: Arial;
 }
 
@@ -2846,11 +2846,11 @@ span.openstudio-content-view-title {
 .openstudio-content-view-maximize img {
     display: inline-block;
     margin-bottom: 2px;
-    margin-right: 3px;
+    margin-right: 5px;
 }
 
 .openstudio-content-view-maximize.minimize img {
-    margin-right: 2px;
+    margin-right: 6px;
 }
 
 .openstudio-content-view-description {
@@ -3063,7 +3063,7 @@ body:not(.ios):not(.android) .openstudio-content-view-flag-icon.has-hover:hover 
     font-weight: Bold;
     color: #312b39;
     line-height: 17px;
-    margin-bottom: 2px;
+    margin-bottom: 3px;
     margin-top: 0px;
 }
 
@@ -4394,6 +4394,11 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-add-dashboard-button {
         margin-right: -10px;
+        margin-top: 4px;
+    }
+
+    .openstudio-subscribe-button ~ .openstudio-add-dashboard-button {
+        margin-top: 0px;
     }
 
     .openstudio-nav-primary {
@@ -5111,13 +5116,15 @@ a.openstudio-add-new-content-link:hover  {
         display: none;
     }
 
-    .openstudio-subscribe-button {
-        margin-top: 0px;
-        margin-right: 24px;
+    .openstudio-buttons-settings {
+        margin-right: 0;
+        margin-top: 0;
     }
 
+    .openstudio-subscribe-button,
     .openstudio-add-dashboard-button {
-        margin-right: 10px;
+        float: left;
+        width: 100%;
     }
 
     .openstudio-nav-primary {
@@ -5274,10 +5281,6 @@ a.openstudio-add-new-content-link:hover  {
         .path-mod-openstudio .my-content .dropdown-menu {
             width: 100vw;
         }
-    }
-
-    .path-mod-openstudio .osep-moduleheading {
-        min-height: 76px;
     }
 
     .openstudio-container {
@@ -5454,11 +5457,6 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-grid-item-content-preview-default {
         width: 100%;
-    }
-
-    .openstudio-buttons-settings {
-        margin-top: -85px;
-        margin-right: 0px;
     }
 
     .path-mod-openstudio .openstudio-content-edit-form #fgroup_id_buttonar {

@@ -118,7 +118,7 @@ if (!empty($peopledatatemp)) {
 
         $person->userpictureurl = new moodle_url('/user/pix.php/'.$person->id.'/f1.jpg');
         $person->userprogressdata = user::get_activity_status($cminstance->id, $person->id);
-        $person->userprogressdata['lastactivedate'] = date('j/m/y, h:i', $person->userprogressdata['lastactivedate']);
+        $person->userprogressdata['lastactivedate'] = userdate($person->userprogressdata['lastactivedate'], get_string('formattimedatetime', 'openstudio'));
         $person->viewuserworkurl = new moodle_url('/mod/openstudio/view.php',
                     array('id' => $id, 'vuid' => $person->id, 'vid' => content::VISIBILITY_PRIVATE));
 

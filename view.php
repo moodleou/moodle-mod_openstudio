@@ -610,7 +610,7 @@ if ($finalviewpermissioncheck) {
             $content->itemsharewith = $itemsharewith;
             $content->isonlyme = $isonlyme;
             $content->contentthumbnailurl = $contentthumbnailfileurl;
-            $content->datetimeupdated = $content->timemodified ? date('j/m/y h:i', $content->timemodified) : null;
+            $content->datetimeupdated = $content->timemodified ? userdate($content->timemodified, get_string('formattimedatetime', 'openstudio')) : null;
             $content->contentlink = new moodle_url('/mod/openstudio/content.php',
                     array('id' => $id, 'sid' => $content->id, 'vuid' => $content->userid));
 

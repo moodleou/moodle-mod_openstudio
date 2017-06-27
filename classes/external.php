@@ -1441,7 +1441,7 @@ class mod_openstudio_external extends external_api {
                     $deletedposts[] = (object)array(
                         'pictureurl' => (string) $post->contenttypeimage,
                         'name' => $post->name,
-                        'date' => $post->deletedtime ? date('j/m/y h:i', $post->deletedtime) : '',
+                        'date' => $post->deletedtime ? userdate($post->deletedtime, get_string('formattimedatetime', 'openstudio')) : '',
                         'id' => $post->id
                     );
                 }
