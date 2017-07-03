@@ -35,6 +35,10 @@
     margin-bottom: 6px;
 }
 
+.path-mod-openstudio img.userpicture {
+    margin-right: 0px;
+}
+
 /* OSEP bottom button */
 .path-mod-openstudio .osep-bottombuttons {
     padding-top: 30px;
@@ -3883,7 +3887,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     display: inline-block;
     float: left;
     padding-top: 5px;
-    width: 25%;
+    width: 22%;
 }
 
 .openstudio-profile-head .openstudio-profile-date {
@@ -3919,7 +3923,6 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 }
 
 .openstudio-profile-comment .openstudio-profile-comment-text {
-    display: inline-block;
     margin-left: 7px;
 }
 
@@ -4014,6 +4017,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     display: inline-block;
     margin-top: 4px;
     vertical-align: top;
+    float: left;
 }
 
 .openstudio-profile-participation .openstudio-profile-label-title,
