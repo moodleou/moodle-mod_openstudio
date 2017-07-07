@@ -60,7 +60,7 @@ Feature: Create and edit contents
         And I should see "Your word for 'My Pinboard'"
         And I should see " Enable 'My Module'"
         And the "value" attribute of "input#id_pinboard" "css_element" should contain "100"
-        And I should see "Site upload limit (10MB)"
+        And I should see "10MB"
 
     Scenario: Behavior handling for People Tab
         When I am on site homepage

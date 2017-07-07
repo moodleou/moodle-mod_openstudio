@@ -47,6 +47,8 @@ class mod_openstudio_mod_form extends moodleform_mod {
      * Defines forms elements
      */
     public function definition() {
+        global $CFG, $COURSE;
+
         $mform = $this->_form;
 
         // -------------------------------------------------------------------------------
@@ -262,18 +264,8 @@ class mod_openstudio_mod_form extends moodleform_mod {
         if ($maxbytes > $coursemaxbytes) {
             $maxbytes = $coursemaxbytes;
         }
-        $contentmaxbytes = '';
-        // Restrict the list of file upload sizes to the limit folder for the module/site.
-        if (($maxbytes <= 0) || (\mod_openstudio\local\util\defaults::MAXBYTES < $maxbytes)) {
-            $contentmaxbytes = \mod_openstudio\local\util\defaults::MAXBYTES;
-        } else {
-            if ((\mod_openstudio\local\util\defaults::MAXBYTES > $maxbytes)) {
-                $contentmaxbytes = $maxbytes;
-            } else {
-                $contentmaxbytes = \mod_openstudio\local\util\defaults::MAXBYTES;
-            }
-        }
-        $maxbytesdeafultarray = get_max_upload_sizes($contentmaxbytes);
+
+        $maxbytesdeafultarray = get_max_upload_sizes($coursemaxbytes);
         // Restrict the list of file upload sizes to the limit folder for the module/site.
         $maxbytesarray = array();
         foreach ($maxbytesdeafultarray as $key => $value) {
@@ -283,9 +275,12 @@ class mod_openstudio_mod_form extends moodleform_mod {
         $mform->addElement('select', 'contentmaxbytes',
                 get_string('settingscustomuploadsettingsfilesizelimit', 'openstudio'),
                 $maxbytesarray);
-        $mform->setDefault('contentmaxbytes',
-                ((defaults::MAXBYTES > $maxbytes) ? $maxbytes : defaults::MAXBYTES));
-
+        if (($maxbytes <= 0) || (defaults::MAXBYTES < $maxbytes)) {
+            $mform->setDefault('contentmaxbytes', defaults::MAXBYTES);
+        } else {
+            $mform->setDefault('contentmaxbytes',
+                  ((defaults::MAXBYTES > $maxbytes) ? $maxbytes : defaults::MAXBYTES));
+        }
         // -------------------------------------------------------------------------------
 
         $mform->addElement('hidden', 'returnurl', 0);
