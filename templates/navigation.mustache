@@ -127,12 +127,14 @@
                 </a>
                 <ul class="dropdown-menu">
                     {{#subnavigation}}
-                       <li><a class="{{#active}}menuitem-active{{/active}}" href="{{{url}}}">{{name}}</a></li>
+                       <li>
+                           <a class="{{#active}}menuitem-active{{/active}}" {{^active}} href="{{{url}}}"{{/active}}>{{name}}</a>
+                       </li>
                     {{/subnavigation}}
                 </ul>
             {{/hassubnavigation}}
             {{^hassubnavigation}}
-                <a href="{{{url}}}">
+                <a {{^active}}href="{{{url}}}"{{/active}}>
                     <span class="openstudio-navigation-img">
                         <img src="{{pix}}" alt="{{name}}" class="openstudio-navigation-icon" />
                     </span>
@@ -143,7 +145,7 @@
     {{/navigation}}
     <li>
         <div role="presentation" class="dropdown notifications">
-            <a class="dropdown-toggle" data-toggle="dropdown" role="button"
+            <a href="" class="dropdown-toggle openstudio-navigation-notification" data-toggle="dropdown" role="button"
                aria-haspopup="true" aria-expanded="false" title="{{#str}} notificationlabel, mod_openstudio {{/str}}">
                 <span id="openstudio_navigation_notification">
                     <span class="openstudio-navigation-img">

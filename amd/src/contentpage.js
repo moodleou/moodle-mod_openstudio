@@ -24,8 +24,8 @@
 /**
  * @module mod_oucontent/contentpage
  */
-define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/templates', 'core/config', 'require'],
-    function($, Ajax, Str, Modal, Templates, Config, require) {
+define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/modal_events', 'core/templates', 'core/config', 'require'],
+    function($, Ajax, Str, Modal, ModalEvents, Templates, Config, require) {
         var t;
 
         t = {
@@ -122,6 +122,28 @@ define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/templates', 'core
                 t.modal.hide();
             } else {
                 t.modal.show();
+
+                // Set focus on close button when open content model.
+                t.modal.getRoot().on(ModalEvents.shown, function() {
+                    $('.openstudio-modal-content-close').get(0).focus();
+
+                    $('.openstudio-modal-content-close, #openstudio_content_view_minimize').keydown(function (e) {
+                        if (e.keyCode == 13) {
+                            t.modal.hide();
+                            $('#openstudio_content_view_maximize').focus();
+
+                            return false;
+                        }
+                    });
+
+                    // Set focus on Close button when tab from Minimize.
+                    $('#openstudio_content_view_minimize').keydown(function (e) {
+                        e.preventDefault();
+                        if (e.keyCode == 9) {
+                            $('.openstudio-modal-content-close').get(0).focus();
+                        }
+                    });
+                });
             }
 
             // Lock page scroll.

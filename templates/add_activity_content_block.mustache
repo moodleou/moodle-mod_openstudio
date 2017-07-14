@@ -53,16 +53,16 @@
                     {{{l3name}}}
                 </a>
             </div>
-            <div class ="openstudio-folder-content">
-                <img class="openstudio-folder-tab" src="{{{folderdefaultthumbnail}}}" alt="{{{name}}}">
-                <div class ="openstudio-folder-background">
-                    <a href="{{{folderlink}}}">
+            <a href="{{{folderlink}}}">
+                <div class="openstudio-folder-content">
+                    <img class="openstudio-folder-tab" src="{{{folderdefaultthumbnail}}}" alt="{{{name}}}">
+                    <div class="openstudio-folder-background">
                         <div class="openstudio-default-folder-background">
                             <img class="openstudio-default-folder-img" src="{{{defaultfolderimg}}}" alt="{{{name}}}">
                         </div>
-                    </a>
+                    </div>
                 </div>
-            </div>
+            </a>
         {{/isfolder}}
         {{^isfolder}}
             <div class="openstudio-add-new">

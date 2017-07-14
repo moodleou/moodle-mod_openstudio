@@ -116,6 +116,7 @@ Feature: Create and edit contents detail
             | OS1        | teacher1 | TestContentDetails 1 | Test slot 1 description | mod/openstudio/tests/importfiles/geotagged.jpg     | module     |
 
         # Redirect to content detail
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "TestContentDetails 1"
         And I should see "My Pinboard"
@@ -167,6 +168,7 @@ Feature: Create and edit contents detail
             | OS1        | teacher1 | TestContentDetails 2 | Test slot 2 description | mod/openstudio/tests/importfiles/test.mp4         | module     |
 
         # Redirect to content detail
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "TestContentDetails 2"
         And I should see "My Pinboard"
@@ -218,6 +220,7 @@ Feature: Create and edit contents detail
             | OS1        | teacher1 | TestContentDetails 3 | Test slot 3 description | mod/openstudio/tests/importfiles/test.mp3         | module     |
 
         # Redirect to content detail
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "TestContentDetails 3"
         And I should see "My Pinboard"
@@ -316,6 +319,7 @@ Feature: Create and edit contents detail
             | OS1        | teacher1 | TestContentDetails 5 | Test slot 5 description | mod/openstudio/tests/importfiles/test.pdf         | module     |
 
         # Redirect to content detail
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "TestContentDetails 5"
         And I should see "My Pinboard"
@@ -367,6 +371,7 @@ Feature: Create and edit contents detail
             | OS1        | teacher1 | TestContentDetails 6 | Test slot 6 description | mod/openstudio/tests/importfiles/test.xlsx        | module     |
 
         # Redirect to content detail
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "TestContentDetails 6"
         And I should see "My Pinboard"
@@ -421,6 +426,7 @@ Feature: Create and edit contents detail
             | OS1        | teacher1 | TestContentDetails 8 | Test slot 8 description | mod/openstudio/tests/importfiles/test1.jpg        | module     |
 
         # Redirect to content detail
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "TestContentDetails 7"
         And I should see "My Pinboard"
@@ -440,6 +446,7 @@ Feature: Create and edit contents detail
             | OS1        | teacher1 | TestContentDetails 9 | Test slot 9 description | mod/openstudio/tests/importfiles/test1.jpg        | module     |
 
         # Redirect to content detail
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "TestContentDetails 9"
         And I should see "0 views"
@@ -450,6 +457,7 @@ Feature: Create and edit contents detail
         And I log in as "student1"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "TestContentDetails 9"
         And I should see "Teacher 1"
@@ -467,6 +475,7 @@ Feature: Create and edit contents detail
         And I log in as "student2"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "TestContentDetails 9"
         And I should see "Teacher 1"
@@ -484,6 +493,7 @@ Feature: Create and edit contents detail
         And I log in as "teacher1"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "TestContentDetails 9"
         And I should see "Teacher 1"
@@ -502,6 +512,7 @@ Feature: Create and edit contents detail
         And the following open studio "contents" exist:
             | openstudio | user     | name                         | description                  | file                                              | visibility |
             | OS1        | teacher1 | Test My Content Details View | Test My Content Details View | mod/openstudio/tests/importfiles/test1.jpg        | module     |
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "Test My Content Details View"
         And I scroll to the bottom of the OU study planner
@@ -526,6 +537,7 @@ Feature: Create and edit contents detail
         And I log in as "student1"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "Test My Content Details View"
         And "Request feedback" "button" should not exist
@@ -536,6 +548,7 @@ Feature: Create and edit contents detail
         And I log in as "student2"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "Test My Content Details View"
         And "Request feedback" "button" should not exist
@@ -561,6 +574,7 @@ Feature: Create and edit contents detail
             | OS1        | teacher1 | Test ContentDetail Report Abuse  | Test ContentDetail Report Abuse  Description | mod/openstudio/tests/importfiles/test1.jpg        | module     |
 
         # Redirect to content detail
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "Test ContentDetail Report Abuse"
         # The owner of the content can not report the content
@@ -574,6 +588,7 @@ Feature: Create and edit contents detail
         And I log in as "student1"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "Test ContentDetail Report Abuse"
         And "Report post" "button" should exist
@@ -591,6 +606,7 @@ Feature: Create and edit contents detail
         And I log in as "student2"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "Test ContentDetail Report Abuse"
         And I press "Report post"
@@ -608,6 +624,7 @@ Feature: Create and edit contents detail
         And the following open studio "contents" exist:
             | openstudio | user     | name                         | description                  | file                                              | visibility |
             | OS1        | teacher1 | Test My Content Details View | Test My Content Details View | mod/openstudio/tests/importfiles/test1.jpg        | module     |
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "Test My Content Details View"
         And I should not see "Post archive"
@@ -642,6 +659,7 @@ Feature: Create and edit contents detail
         And I should see "Test My Content Details View Archive 1"
 
         # View Current version in My Module
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I should see "Test My Content Details View Archive 1"
 
@@ -664,6 +682,7 @@ Feature: Create and edit contents detail
         And I press "View"
         And I press "Restore this version"
         And I should see "Test My Content Details View Archive 1"
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I should see "Test My Content Details View Archive 1"
 
@@ -738,6 +757,7 @@ Feature: Create and edit contents detail
         And the following open studio "contents" exist:
             | openstudio | user     | name                         | description                  | file                                              | visibility |
             | OS1        | teacher1 | Test My Content Details View | Test My Content Details View | mod/openstudio/tests/importfiles/test1.jpg        | module     |
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "Test My Content Details View"
         And the OSEP theme breadcrumbs should be "C1 Home > Week 2 > Test Open Studio name 1 > My Pinboard > Test My Content Details View"
@@ -753,6 +773,7 @@ Feature: Create and edit contents detail
         And I follow "Course 1"
         And I press "Expand all"
         And I follow "Test Open Studio name 1"
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "Test My Content Details View"
         Then the OSEP theme breadcrumbs should be "C1 Home > Week 2 > Test Open Studio name 1 > My Module > Teacher's work > Test My Content Details View"

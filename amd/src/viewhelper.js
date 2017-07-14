@@ -81,7 +81,8 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
                     itemSelector: '.openstudio-grid-item',
                     masonry: {
                         columnWidth: 243,
-                        gutter: 20
+                        gutter: 20,
+                        horizontalOrder: true
                     }
                 }));
             });

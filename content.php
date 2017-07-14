@@ -331,7 +331,7 @@ flags::toggle(
 tracking::log_action($contentdata->id, flags::READ_CONTENT, $USER->id);
 
 $html = $renderer->siteheader(
-    $coursedata, $permissions, $theme, $cm->name, '', $vid);
+    $coursedata, $permissions, $theme, $cm->name, '', '');
 
 echo $OUTPUT->header(); // Header.
 

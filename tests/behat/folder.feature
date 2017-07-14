@@ -86,6 +86,7 @@ Feature: Create and edit Folder
         And I should see "Create new folder"
 
         # Enable Folder in My Module
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > Module 1" in the openstudio navigation
         And I should see "Module 1"
         And I should see "Upload content"

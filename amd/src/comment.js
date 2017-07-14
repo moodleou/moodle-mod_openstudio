@@ -128,6 +128,9 @@ define([
 
             // Scroll to form.
             t.scrollToEl($(t.CSS.COMMENT_FORM_CONTENT));
+
+            // Set focus on comment form.
+            $('#openstudio_comment_form').focus();
         },
 
         /**
@@ -243,6 +246,9 @@ define([
 
                     $(t.CSS.COMMENT_THREAD).show();
 
+                    // Set focus on comment form.
+                    $('#openstudio_comment_form').focus();
+
                     // Trigger oumedia plugin to render audio attachment.
                     if (window.oump) {
                         window.oump.harvest();
@@ -335,6 +341,11 @@ define([
 
                     // Hide delete dialogue.
                     t.dialogue.hide();
+
+                    // Set focus on comment form.
+                    t.dialogue.after('visibleChange', function () {
+                        $('#openstudio_comment_form').focus();
+                    },  t.dialogue);
                 })
                 .always(function() {
                     M.util.js_complete('openstudioDeleteComment');

@@ -118,7 +118,8 @@ if (!empty($peopledatatemp)) {
 
         $person->userpictureurl = new moodle_url('/user/pix.php/'.$person->id.'/f1.jpg');
         $person->userprogressdata = user::get_activity_status($cminstance->id, $person->id);
-        $person->userprogressdata['lastactivedate'] = userdate($person->userprogressdata['lastactivedate'], get_string('formattimedatetime', 'openstudio'));
+        $person->userprogressdata['lastactivedate'] = userdate($person->userprogressdata['lastactivedate'],
+                get_string('formattimedatetime', 'openstudio'));
         $person->viewuserworkurl = new moodle_url('/mod/openstudio/view.php',
                     array('id' => $id, 'vuid' => $person->id, 'vid' => content::VISIBILITY_PRIVATE));
 
@@ -146,23 +147,29 @@ if (!empty($peopledatatemp)) {
 }
 
 // Sort action url.
-$sortactionurl = new moodle_url('/mod/openstudio/people.php');
+$sortactionurl = new moodle_url('/mod/openstudio/people.php', ['id' => $id, 'osort' => $osort, 'fsort' => $fsort]);
 $sortactionurl = $sortactionurl->out(false);
-$sortactionurl .= "?id={$id}";
-$peopledata->sortactionurl = $sortactionurl ."&osort={$osort}" ."&fsort={$fsort}";
+$peopledata->sortactionurl = $sortactionurl;
 
 $nextosort = 1 - $osort;
-$sortactionurl .= "&vid={$vid}";
-$sortactionurl .= "&groupid={$groupid}";
-$peopledata->nextsortactionurl = $sortactionurl ."&osort={$nextosort}";
+
+$sortbydateurl = new moodle_url('/mod/openstudio/people.php', ['id' => $id, 'osort' => $nextosort,
+        'fsort' => stream::SORT_BY_DATE, 'vid' => $vid, 'groupid' => $groupid], 'date');
+$sortbydateurl = $sortbydateurl->out(false);
+$peopledata->sortbydateurl = $sortbydateurl;
+
+$sortbyusernameurl = new moodle_url('/mod/openstudio/people.php', ['id' => $id, 'osort' => $nextosort,
+        'fsort' => stream::SORT_BY_USERNAME, 'vid' => $vid, 'groupid' => $groupid], 'username');
+$sortbyusernameurl = $sortbyusernameurl->out(false);
+$peopledata->sortbyusernameurl = $sortbyusernameurl;
 
 $sortbydate = false;
 $sortbyusername = false;
 switch ($fsort) {
-    case 2:
+    case stream::SORT_BY_USERNAME:
         $sortbyusername = true;
         break;
-    case 1:
+    case stream::SORT_BY_DATE:
     default:
         $sortbydate = true;
         break;
@@ -171,10 +178,10 @@ switch ($fsort) {
 $sortasc = false;
 $sortdesc = false;
 switch ($osort) {
-    case 1:
+    case stream::SORT_ASC:
         $sortasc = true;
         break;
-    case 0:
+    case stream::SORT_DESC:
     default:
         $sortdesc = true;
         break;

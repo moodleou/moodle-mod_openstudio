@@ -95,6 +95,7 @@ Feature: View author's work
         Given I log in as "student1"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I click on "//h4[contains(text(),'Student 3')]/following-sibling::a" "xpath_element"
         And I wait "1" seconds
@@ -103,6 +104,7 @@ Feature: View author's work
         Then I should not see "Content 3 - onlyme"
         Then I should not see "Content 3 - tutor"
 
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I click on "//h4[contains(text(),'Student 2')]/following-sibling::a" "xpath_element"
         Then I should see "Content 2 - my module"
@@ -116,6 +118,7 @@ Feature: View author's work
         Given I log in as "teacher1"
         And I follow "Course 1"
         And I follow "Test Open Studio name 1"
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I click on "//h4[contains(text(),'Student 3')]/following-sibling::a" "xpath_element"
         Then I should see "Content 3 - my module"

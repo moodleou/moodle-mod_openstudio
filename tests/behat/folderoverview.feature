@@ -57,6 +57,7 @@ Feature: Folder Overview
         | openstudio | user     | name                   | description                       | visibility | contenttype    |
         | OS1        | teacher1 | Test Folder Overview   | My Folder Overview Description 1  | module     | folder_content |
       And I follow "Test Open Studio name 1"
+      And I follow "People" in the openstudio navigation
       And I follow "Shared Content > My Module" in the openstudio navigation
       And I follow "Test Folder Overview"
       And I should see "Folder Overview"
@@ -94,6 +95,7 @@ Feature: Folder Overview
         | openstudio | user     | name                   | description                       | visibility | contenttype    |
         | OS1        | teacher1 | Test Folder Overview   | My Folder Overview Description 1  | module     | folder_content |
       And I follow "Test Open Studio name 1"
+      And I follow "People" in the openstudio navigation
       And I follow "Shared Content > My Module" in the openstudio navigation
       And the "src" attribute of "img.openstudio-default-folder-img" "css_element" should contain "uploads_rgb_32px"
       And I follow "Test Folder Overview"
@@ -181,6 +183,7 @@ Feature: Folder Overview
       And I press "Save and display"
 
       # Go to folder overview
+      And I follow "People" in the openstudio navigation
       And I follow "Shared Content > My Module" in the openstudio navigation
       And I follow "Test Folder Overview"
       And I should not see "TestContentFolders 1"
@@ -232,6 +235,7 @@ Feature: Folder Overview
         | OS1        | teacher1 | Test Folder Overview  | Test My Content Folder View 3 |
 
       And I follow "Test Open Studio name 1"
+      And I follow "People" in the openstudio navigation
       And I follow "Shared content > My Module" in the openstudio navigation
       And I follow "Test Folder Overview"
 
@@ -277,6 +281,7 @@ Feature: Folder Overview
         | OS1        | teacher1 | Test Folder Overview  | Test My Content Folder View 1 |
 
       And I follow "Test Open Studio name 1"
+      And I follow "People" in the openstudio navigation
       And I follow "Shared content > My Module" in the openstudio navigation
       And I follow "Test Folder Overview"
       And I press "Order posts"

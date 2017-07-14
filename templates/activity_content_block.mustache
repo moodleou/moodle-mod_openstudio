@@ -57,17 +57,17 @@
 <div class="openstudio-grid-item-content">
     <div class="openstudio-grid-item-content-title">{{{l3name}}}</div>
     <div class="openstudio-tooltip">
-        <img class="openstudio-grid-item-content-icon" src="{{{contenticon}}}" alt="{{{name}}}">
+        <img class="openstudio-grid-item-content-icon" src="{{{contenticon}}}" alt="{{{name}}}" tabindex="0">
         <span class="openstudio-tooltiptext {{#isonlyme}}openstudio-tooltiptext-onlyme{{/isonlyme}}">{{itemsharewith}}</span>
     </div>
     {{#isfolder}}
-        <div class ="openstudio-folder-content">
-            <div class="openstudio-grid-item-content-box">
-                {{>mod_openstudio/content_block_banner_status}}
-            </div>
-            <img class="openstudio-folder-tab" src="{{{folderdefaultthumbnail}}}" alt="{{{name}}}">
-            <div class ="openstudio-folder-background">
-                <a href="{{{folderlink}}}">
+        <a href="{{{folderlink}}}">
+            <div class="openstudio-folder-content">
+                <div class="openstudio-grid-item-content-box">
+                    {{>mod_openstudio/content_block_banner_status}}
+                </div>
+                <img class="openstudio-folder-tab" src="{{{folderdefaultthumbnail}}}" alt="{{{name}}}">
+                <div class="openstudio-folder-background">
                     {{#hascontent}}
                         {{#thumbnailimg}}
                             <img class="openstudio-content-folder-img" src="{{{folderthumbnail}}}" alt="{{{name}}}">
@@ -83,9 +83,9 @@
                             <img class="openstudio-default-folder-img" src="{{{defaultfolderimg}}}" alt="{{{name}}}">
                         </div>
                     {{/hascontent}}
-                </a>
+                </div>
             </div>
-        </div>
+        </a>
     {{/isfolder}}
     {{^isfolder}}
         <div class="openstudio-grid-item-content-box">

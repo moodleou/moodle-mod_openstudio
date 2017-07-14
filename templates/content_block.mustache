@@ -58,16 +58,16 @@
 <div class="openstudio-grid-item-content">
     <div class="openstudio-grid-item-content-title">{{{name}}}</div>
     <div class="openstudio-tooltip">
-        <img class="openstudio-grid-item-content-icon" src="{{{contenticon}}}" alt="{{{name}}}">
+        <img class="openstudio-grid-item-content-icon" src="{{{contenticon}}}" alt="{{{name}}}" tabindex="0">
         <span class="openstudio-tooltiptext {{#isonlyme}}openstudio-tooltiptext-onlyme{{/isonlyme}}">{{itemsharewith}}</span>
     </div>
     <div class="openstudio-grid-item-content-box">
         {{#isfolder}}
-            <div class ="openstudio-folder-content">
-                {{>mod_openstudio/content_block_banner_status}}
-                <img class="openstudio-folder-tab" src="{{{folderdefaultthumbnail}}}" alt="{{{name}}}">
-                <div class ="openstudio-folder-background">
-                    <a href="{{{folderlink}}}" class="clearfix">
+            <a href="{{{folderlink}}}" class="clearfix">
+                <div class="openstudio-folder-content">
+                    {{>mod_openstudio/content_block_banner_status}}
+                    <img class="openstudio-folder-tab" src="{{{folderdefaultthumbnail}}}" alt="{{{name}}}">
+                    <div class="openstudio-folder-background">
                         {{#hascontent}}
                             {{#thumbnailimg}}
                                 <img class="openstudio-content-folder-img" src="{{{folderthumbnail}}}" alt="{{{name}}}">
@@ -83,17 +83,17 @@
                                 <img class="openstudio-default-folder-img openstudio-default-folder-empty-img" src="{{{defaultfolderimg}}}" alt="{{{name}}}">
                             </div>
                         {{/hascontent}}
-                    </a>
+                    </div>
                 </div>
-            </div>
+            </a>
         {{/isfolder}}
         {{^isfolder}}
                 {{>mod_openstudio/content_block_banner_status}}
-                <div class="openstudio-grid-item-content-preview{{#contenttypedefaultimage}}-default{{/contenttypedefaultimage}}">
-                    <a href="{{{contentlink}}}" class="clearfix">
+                <a href="{{{contentlink}}}" class="clearfix">
+                    <div class="openstudio-grid-item-content-preview{{#contenttypedefaultimage}}-default{{/contenttypedefaultimage}}">
                         <img class="openstudio-grid-item-thumbnail" src="{{{contentthumbnailurl}}}" alt="{{{name}}}">
-                    </a>
-                </div>
+                    </div>
+                </a>
         {{/isfolder}}
     </div>
     <div class="openstudio-grid-item-content-detail">

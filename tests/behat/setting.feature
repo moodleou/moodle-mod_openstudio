@@ -140,6 +140,7 @@ Feature: Create and edit contents
         # Only My Group is available
         When I follow "Test Open Studio name 1"
         Then I should see "Shared Content"
+        And I follow "People" in the openstudio navigation
         And I follow "Shared Content"
         Then I should see "My Group"
 
@@ -148,6 +149,7 @@ Feature: Create and edit contents
         And I follow "Course 1"
         And I follow "Test Open Studio name 2"
         Then I should see "Shared Content"
+        And I follow "People" in the openstudio navigation
         And I follow "Shared Content"
         Then I should see "My Module"
 

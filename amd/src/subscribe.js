@@ -215,6 +215,7 @@ define([
                     .get_string('unsubscribe', 'mod_openstudio')
                     .done(function(s) {
                         $(t.CSS.SUBSCRIBEBUTTON).text(s);
+                        $('#openstudio_subscribe_button').focus();
                     });
 
                 $(t.CSS.SUBSCRIBEBUTTON).attr('subscriptionid', subscriptionid);

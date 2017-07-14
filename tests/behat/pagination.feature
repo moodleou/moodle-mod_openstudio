@@ -131,6 +131,7 @@ Feature: Create and edit contents
             | OS1        | student1 | Test content N  | Test content 13 description | module     |
 
         When I reload the page
+        And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         Then I should see "Test content N"
         And I should see "2"

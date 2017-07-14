@@ -193,7 +193,7 @@ $renderer = $PAGE->get_renderer('mod_openstudio');
 $PAGE->set_button($renderer->searchform($theme, $vid, $id));
 
 $html = $renderer->siteheader(
-    $coursedata, $permissions, $theme, $cm->name, '', $vid);
+    $coursedata, $permissions, $theme, $cm->name, '', '');
 
 echo $OUTPUT->header(); // Header.
 

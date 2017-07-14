@@ -39,7 +39,7 @@
         <div class="openstudio-modal-content">
             <div class="openstudio-modal-content-title">
                 <span>{{{title}}}</span>
-                <div class="openstudio-modal-content-close"></div>
+                <button class="openstudio-modal-content-close"></button>
             </div>
             <div class="openstudio-modal-content-body
                 {{#isiframecontent}}
@@ -50,7 +50,7 @@
             <div class="openstudio-content-view-date-box clearfix">
                 <div class="openstudio-content-view-date">{{{date}}}</div>
                 <div class="openstudio-content-view-maximize-box openstudio-modal-content-footer">
-                    <a id="openstudio_content_view_minimize"
+                    <a id="openstudio_content_view_minimize" tabindex="0"
                     class="openstudio-content-view-maximize minimize">
                         {{#pix}}
                             minimize_blue_rgb_32px, openstudio, {{#str}} contentviewminimise, openstudio {{/str}}

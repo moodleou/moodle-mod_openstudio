@@ -610,7 +610,11 @@ if ($finalviewpermissioncheck) {
             $content->itemsharewith = $itemsharewith;
             $content->isonlyme = $isonlyme;
             $content->contentthumbnailurl = $contentthumbnailfileurl;
-            $content->datetimeupdated = $content->timemodified ? userdate($content->timemodified, get_string('formattimedatetime', 'openstudio')) : null;
+
+            $content->datetimeupdated = null;
+            if ($content->timemodified) {
+                $content->datetimeupdated = userdate($content->timemodified, get_string('formattimedatetime', 'openstudio'));
+            }
             $content->contentlink = new moodle_url('/mod/openstudio/content.php',
                     array('id' => $id, 'sid' => $content->id, 'vuid' => $content->userid));
 
@@ -785,13 +789,13 @@ $contentdata->sortactionurl = $sortactionurl;
 $nextosort = 1 - $osort;
 $sortbydateurl = new moodle_url('/mod/openstudio/view.php',
         ['id' => $id, 'vid' => $vid, 'groupid' => $groupid, 'pagesize' => $streamdatapagesize, 'vuid' => $vuid,
-                'blockid' => $blockid, 'osort' => $nextosort, 'fsort' => stream::SORT_BY_DATE]);
+                'blockid' => $blockid, 'osort' => $nextosort, 'fsort' => stream::SORT_BY_DATE], 'date');
 
 $contentdata->sortbydateurl = $sortbydateurl->out(false);
 
 $sortbytitleurl = new moodle_url('/mod/openstudio/view.php',
         ['id' => $id, 'vid' => $vid, 'groupid' => $groupid, 'pagesize' => $streamdatapagesize, 'vuid' => $vuid,
-                'blockid' => $blockid, 'osort' => $nextosort, 'fsort' => stream::SORT_BY_ACTIVITYTITLE]);
+                'blockid' => $blockid, 'osort' => $nextosort, 'fsort' => stream::SORT_BY_ACTIVITYTITLE], 'title');
 
 $contentdata->sortbytitleurl = $sortbytitleurl->out(false);
 

@@ -58,6 +58,11 @@
 .path-mod-openstudio .dropdown-menu > li > a.menuitem-active {
     background-color: #bfe2ef;
     color: #002158;
+    cursor: default;
+}
+
+.path-mod-openstudio .dropdown-menu > li > a.menuitem-active:hover {
+    text-decoration: unset;
 }
 
 .path-mod-openstudio .nav-tabs > li, .nav-pills > li {
@@ -142,7 +147,7 @@
 
 .path-mod-openstudio [data-toggle="collapse"] .openstudio-profile-expand-image,
 .path-mod-openstudio [data-toggle="collapse"].collapsed .openstudio-profile-collapse-image {
-     display: inline;
+    display: inline;
     padding-left: 8px;
 }
 
@@ -357,11 +362,16 @@
 }
 
 /** Notifications */
+.openstudio-navigation-notification {
+    display: block;
+    height: 28px;
+    width: 28px;
+    margin-top: 10px;
+}
 
 .openstudio-navigation-notification-icon {
     cursor: pointer;
     border: 0 none;
-    margin-top: 10px;
     position: absolute;
     vertical-align: middle;
     width: 28px;
@@ -939,7 +949,7 @@ div.openstudio-orderpost-item:nth-of-type(odd) {
 
 .openstudio-comment-form-content,
 .openstudio-comment-reply-form {
-     display: none;
+    display: none;
 }
 
 .openstudio-comment-form-body .mform .fitem .fitemtitle {
@@ -970,6 +980,15 @@ div.openstudio-orderpost-item:nth-of-type(odd) {
     margin-bottom: 2px;
     background: none;
     box-shadow: none;
+}
+
+.openstudio-comment-form-content .felement.ffilepicker input.fp-btn-choose:focus {
+    outline: 1px dotted grey;
+}
+
+.path-mod-openstudio .modal-container .openstudio-modal-content-close:focus,
+#openstudio_content_view_minimize:focus {
+    outline: 1px dotted grey;
 }
 
 body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commentext .fitemtitle label {
@@ -1139,7 +1158,7 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
 }
 
 .openstudio-comment-flag-count.flagged {
-     color: #0b55a8;
+    color: #0b55a8;
 }
 
 .openstudio-comment-flag {
@@ -1397,13 +1416,13 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
  */
 
 .openstudio-search-message {
-	padding-left: 15px;
-	background-color: #fff;
-	margin: 0 20px 20px 20px;
-	height: 40px;
-	display: flex;
-	align-items: center;
-	padding-right: 15px;
+    padding-left: 15px;
+    background-color: #fff;
+    margin: 0 20px 20px 20px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    padding-right: 15px;
 }
 
 .openstudio-search-message span {
@@ -1459,16 +1478,17 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
     font-weight: bold;
 }
 
-.openstudio-modal-content-close {
+.path-mod-openstudio .modal-container .modal .openstudio-modal-content-close::before {
     display: block;
+    content: url([[pix:openstudio|close_button_white_rgb_32px]]);
     width: 30px;
     height: 30px;
-    background-image: url([[pix:openstudio|close_button_white_rgb_32px]]);
-    background-size: 30px 30px;
+}
+
+.path-mod-openstudio .modal-container .openstudio-modal-content-close {
+    background-color: transparent;
     float: right;
-    background-position: center;
-    background-repeat: no-repeat;
-    cursor: pointer;
+    border: 0px;
 }
 
 .openstudio-modal-content .openstudio-content-view-date {
@@ -1766,8 +1786,8 @@ label.openstudio-export-item-name {
     display: inline-block;
     font-size: 0.85714em;
     font-weight: bold;
-    margin-left: 15px;
-    margin-top: 7px;
+    margin-left: 20px;
+    margin-top: -7px;
     position: absolute;
     text-align: center;
     width: 18px;
@@ -1777,6 +1797,10 @@ label.openstudio-export-item-name {
     border-top: 1px solid #d4d2d2;
     padding-top: 20px;
     margin-top: 30px;
+}
+
+.openstudio-content-edit-form .form-autocomplete-selection:focus {
+    outline: 1px dotted grey;
 }
 
 .path-mod-openstudio .filemanager .fp-restrictions {
@@ -2256,6 +2280,12 @@ a.openstudio-add-title:hover  {
     float: right;
 }
 
+.openstudio-grid-item-content-tooltip {
+    display: block;
+    height: 18px;
+    width: 18px;
+}
+
 .openstudio-grid-item-content-detail {
     padding-top: 8px;
 }
@@ -2297,6 +2327,12 @@ a.openstudio-add-title:hover  {
 .openstudio-grid-item-content-box {
     clear: left;
     position: relative;
+}
+
+.openstudio-grid-item-content-box a,
+.openstudio-grid-item-content a,
+.openstudio-add-new-activity a {
+    display: block;
 }
 
 .openstudio-item-lock {
@@ -2362,7 +2398,8 @@ a.openstudio-add-title:hover  {
     border-color: #464542 transparent transparent transparent;
 }
 
-.openstudio-tooltip:hover .openstudio-tooltiptext {
+.openstudio-tooltip:hover .openstudio-tooltiptext,
+.openstudio-grid-item-content-icon:focus ~ .openstudio-tooltiptext {
     visibility: visible;
     opacity: 1;
 }
@@ -2606,8 +2643,17 @@ iframe.openstudio-content-view-iframe {
 }
 
 .openstudio-modal-content .openstudio-item-request-feedback,
-.openstudio-modal-content .openstudio-item-unlock {
+.openstudio-modal-content .openstudio-item-unlock,
+.openstudio-modal-content .openstudio-item-lock {
     display: none;
+}
+
+#openstudio_comment_form:before {
+    display: inline;
+}
+
+#openstudio_comment_form:focus {
+    outline: none;
 }
 
 .openstudio-folder-content .openstudio-item-request-feedback,
@@ -2620,7 +2666,7 @@ iframe.openstudio-content-view-iframe {
 
 .openstudio-activity-grid {
     padding-bottom: 52px;
- }
+}
 
 .openstudio-grid.openstudio-activity-cutting-edge {
     border-top: 1px solid #fff;
@@ -4817,7 +4863,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     button.openstudio-orderpost-save-button {
-      margin-right: 0px;
+        margin-right: 0px;
     }
 }
 
@@ -5067,7 +5113,7 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-content-view-file > a > img,
     .openstudio-content-view-file > iframe {
-       width: 100%;
+        width: 100%;
     }
 
     div.paging.openstudio-desktop-paging {
@@ -5242,6 +5288,10 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-navigation-icon {
         width: 64px;
         margin-left: 0px;
+    }
+
+    .openstudio-navigation-notification {
+        margin-top: 0px;
     }
 
     .openstudio-navigation-notification-icon {
@@ -6798,6 +6848,12 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-item-lock {
         height: 27px;
         line-height: 27px;
+    }
+
+    .openstudio-navigation-notification-number {
+        margin-top: 0px;
+        margin-left: 2px;
+        width: 24px;
     }
 
     .openstudio-folder-content .openstudio-item-request-feedback,

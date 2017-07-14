@@ -85,6 +85,7 @@ Feature: Preference
       And I log in as "teacher1"
       And I follow "Course 1"
       And I follow "Test Open Studio name 1"
+      And I follow "People" in the openstudio navigation
       And I follow "Shared content > My Module" in the openstudio navigation
       And I should see "Test My Preferences View 1"
       And I should see "Test My Preferences View 2"

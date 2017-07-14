@@ -158,7 +158,7 @@
                 {{/contenttypefileurl}}
 
                 {{#contenttypeimage}}
-                    <a href="{{contentfileurl}}">
+                    <a href="{{contentfileurl}}" tabindex="0">
                         <img src="{{{contentfileurl}}}" class="openstudio-content-view-img" alt="{{{contentdatatitle}}}">
                     </a>
                 {{/contenttypeimage}}
@@ -182,7 +182,7 @@
                 {{^contenttypenone}}
                     {{#maximizeenable}}
                         <div class="openstudio-content-view-maximize-box">
-                            <a id="openstudio_content_view_maximize"
+                            <a id="openstudio_content_view_maximize" href=""
                                class="openstudio-content-view-maximize">
                                 {{#pix}}
                                     maximize_blue_rgb_32px, openstudio, {{#str}} contentviewmaximise, openstudio {{/str}}
@@ -222,7 +222,7 @@
                                value="{{#str}}contentactionarchivepost, mod_openstudio{{/str}}" type="button">
                         {{/showarchivebutton}}
                         {{#reportabuselink}}
-                            <a id="id_reportbutton_link" href="{{{reportabuselink}}}">
+                            <a id="id_reportbutton_link" href="{{{reportabuselink}}}" tabindex="-1">
                                 <input id="id_reportbutton" name="reportbutton"
                                    value="{{#str}}contentactionreportpost, mod_openstudio{{/str}}" type="button">
                             </a>
@@ -238,7 +238,7 @@
                     <div class="openstudio-content-view-actions-icons-left">
                         {{#contenteditenable}}
                             {{#mycontent}}
-                                <a href="{{{contenteditlink}}}" class="openstudio-content-view-edit-button-link">
+                                <a href="{{{contenteditlink}}}" class="openstudio-content-view-edit-button-link" tabindex="-1">
                                     <input id="id_editbutton" name="editbutton" class="openstudio-content-view-edit-button
                                         openstudio-content-actions osep-smallbutton
                                         {{#locked}}
