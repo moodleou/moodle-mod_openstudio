@@ -120,6 +120,13 @@
                 <h4 class="openstudio-grid-item-content-detail-owner-name">{{{firstname}}} {{{lastname}}}</h4>
             </div>
         </div>
+        {{^contentislocked}}
+            {{#contentislockmessage}}
+                <div class="openstudio-activity-lock-message openstudio-activity-content-lock-message">
+                    {{contentislockmessage}}
+                </div>
+            {{/contentislockmessage}}
+        {{/contentislocked}}
         {{>mod_openstudio/content_block_social}}
     </div>
 </div>

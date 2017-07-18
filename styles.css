@@ -2686,6 +2686,18 @@ a.openstudio-actvity-title:hover  {
     background: #ffffff;
 }
 
+.openstudio-activity-lock-message {
+    margin-bottom: 15px;
+}
+
+.openstudio-add-activity-lock-message {
+    margin-top: -25px;
+}
+
+.openstudio-activity-content-lock-message {
+    margin-top: -15px;
+}
+
 .openstudio-grid-item-content-subtitle {
     font-size: 1em;
     font-weight: bold;

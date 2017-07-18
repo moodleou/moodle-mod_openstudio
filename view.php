@@ -521,7 +521,7 @@ if ($finalviewpermissioncheck) {
                 $content = lock::determine_lock_status($content);
             }
 
-            $content->locked = ($content->locktype == lock::ALL);
+            $content->locked = ($content->locktype > lock::NONE) && ($content->locktype <= lock::CRUD);
             $contentid = (int) $content->id;
 
             if ($contentid == 0) {
@@ -645,12 +645,10 @@ if ($finalviewpermissioncheck) {
                 if ($content->l2id != '') {
                     // Activity content.
 
-                    if (!$content->id) {
-                        // Process lock when content has not uploaded yet.
-                        $lockdata = renderer_utils::content_lock_data((object) array('l3id' => $content->l3id));
-                        $content->contentislocked = $lockdata->contentislock;
-                        $content->contentislockmessage = $lockdata->contentislockmessage;
-                    }
+                    // Process lock for activity content.
+                    $lockdata = renderer_utils::content_lock_data((object) array('l3id' => $content->l3id));
+                    $content->contentislocked = $lockdata->contentislock;
+                    $content->contentislockmessage = $lockdata->contentislockmessage;
 
                     $content->contentempty = $content->contenttype == content::TYPE_NONE && $content->timemodified == 0;
                     $content->activitycontentempty = $content->contenttype == content::TYPE_NONE;

@@ -175,7 +175,11 @@ class renderer_utils {
         }
 
         $userprogressdata = api\user::get_activity_status($openstudioid, $contentowner->id);
-        $activedate = $userprogressdata['lastactivedate'] > 0 ? userdate($userprogressdata['lastactivedate'], get_string('formattimedatetime', 'openstudio')) : null;
+        $activedate = null;
+        if ($userprogressdata['lastactivedate'] > 0) {
+            $activedate = userdate($userprogressdata['lastactivedate'], get_string('formattimedatetime', 'openstudio'));
+        }
+
         $flagsdata = flags::count_by_user($openstudioid, $contentowner->id);
 
         if (array_key_exists(flags::READ_CONTENT, $flagsdata)) {
@@ -1234,7 +1238,10 @@ class renderer_utils {
                         'folderid' => $folderdata->id));
                 $content->contentdetailurl = $contentdetail;
                 $content->contentthumbnailurl = $contentthumbnailfileurl;
-                $content->datetimeupdated = $content->timemodified ? userdate($content->timemodified, get_string('formattimedatetime', 'openstudio')) : null;
+                $content->datetimeupdated = null;
+                if ($content->timemodified) {
+                    $content->datetimeupdated = userdate($content->timemodified, get_string('formattimedatetime', 'openstudio'));
+                }
             }
             $folderdata->contents[] = $content;
         }
@@ -1341,7 +1348,11 @@ class renderer_utils {
                 }
                 $folderitem->id = $content->id;
                 $folderitem->name = $content->name;
-                $folderitem->date = $content->timemodified ? userdate($content->timemodified, get_string('formattimedatetime', 'openstudio')) : null;
+
+                $folderitem->date = null;
+                if ($content->timemodified) {
+                    $folderitem->date = userdate($content->timemodified, get_string('formattimedatetime', 'openstudio'));
+                }
 
                 $folderitem->moveuporder = $content->contentorder - 1;
                 $folderitem->movedownorder = $content->contentorder + 1;
@@ -1391,11 +1402,7 @@ class renderer_utils {
                 || $contentdata->locktype == lock::ALL);
         $contentdata->contentflaglocked = ($contentdata->locktype == lock::SOCIAL
                 || $contentdata->locktype == lock::ALL);
-        $contentdata->contentcrudlocked = ($contentdata->locktype == lock::CRUD
-                || $contentdata->locktype == lock::ALL);
-
-        $contentdata->locked = $contentdata->contentcommentlocked || $contentdata->contentflaglocked
-                || $contentdata->contentcrudlocked;
+        $contentdata->locked = ($contentdata->locktype == lock::CRUD || $contentdata->locktype == lock::ALL);
 
         if ($contentlockenable) {
             $PAGE->requires->strings_for_js(
@@ -1603,10 +1610,14 @@ class renderer_utils {
             foreach ($deletedposttemp as $post) {
                 $post = self::content_type_image($post, $context, true);
 
+                $deletedtime = null;
+                if ($post->deletedtime) {
+                    $deletedtime = userdate($post->timemodified, get_string('formattimedatetime', 'openstudio'));
+                }
                 $deletedposts[] = (object)array(
                     'pictureurl' => (string) $post->contenttypeimage,
                     'name' => $post->name,
-                    'date' => $post->deletedtime ? userdate($post->timemodified, get_string('formattimedatetime', 'openstudio')) : '',
+                    'date' => $deletedtime,
                     'id' => $post->id
                 );
             }

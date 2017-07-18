@@ -117,7 +117,7 @@
             {{/iscontentversion}}
         </div>
         <div class="openstudio-content-view-primary" id="openstudio_content_view_primary">
-            <div class="openstudio-content-view-file {{#contentcrudlocked}} locked {{/contentcrudlocked}} openstudio-content-actions">
+            <div class="openstudio-content-view-file {{#locked}} locked {{/locked}} openstudio-content-actions">
                 <div id="openstudio_item_request_feedback"
                      class="{{#contentflagrequestfeedbackactive}}
                                 openstudio-item-request-feedback
@@ -218,7 +218,7 @@
                     <div class="openstudio-content-view-archive">
                         {{#showarchivebutton}}
                             <input id="id_archivebutton" name="archivebutton"
-                                   class="{{#contentcrudlocked}} locked {{/contentcrudlocked}} openstudio-content-actions osep-smallbutton"
+                                   class="{{#locked}} locked {{/locked}} openstudio-content-actions osep-smallbutton"
                                value="{{#str}}contentactionarchivepost, mod_openstudio{{/str}}" type="button">
                         {{/showarchivebutton}}
                         {{#reportabuselink}}
@@ -241,9 +241,9 @@
                                 <a href="{{{contenteditlink}}}" class="openstudio-content-view-edit-button-link">
                                     <input id="id_editbutton" name="editbutton" class="openstudio-content-view-edit-button
                                         openstudio-content-actions osep-smallbutton
-                                        {{#contentcrudlocked}}
+                                        {{#locked}}
                                             locked
-                                        {{/contentcrudlocked}}"
+                                        {{/locked}}"
                                         value="{{#str}}contentactioneditname, mod_openstudio{{/str}}" type="button">
                                 </a>
                             {{/mycontent}}
@@ -276,7 +276,7 @@
                     {{#contentrequestfeedbackenable}}
                         <button id="content_view_icon_{{contentflagrequestfeedback}}"
                                 class="openstudio-request-feedback-button osep-smallbutton
-                                            {{#contentcrudlocked}} locked {{/contentcrudlocked}} openstudio-content-actions"
+                                            {{#locked}} locked {{/locked}} openstudio-content-actions"
                                 data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagrequestfeedback}}"
                                 data-mode="{{#contentflagrequestfeedbackactive}}off{{/contentflagrequestfeedbackactive}}
                                 {{^contentflagrequestfeedbackactive}}on{{/contentflagrequestfeedbackactive}}">

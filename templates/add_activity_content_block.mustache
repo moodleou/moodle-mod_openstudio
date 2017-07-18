@@ -74,5 +74,10 @@
                 <img src="{{{createcontentthumbnail}}}" alt="{{{name}}}">
             </div></a>
         {{/isfolder}}
+        {{#contentislockmessage}}
+            <div class="openstudio-activity-lock-message openstudio-add-activity-lock-message">
+                {{contentislockmessage}}
+            </div>
+        {{/contentislockmessage}}
     {{/contentislocked}}
 </div>
