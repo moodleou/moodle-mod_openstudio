@@ -48,7 +48,7 @@ Feature: Create and edit contents
             | student4 | G3 |
         And I log in as "teacher1"
 
-    Scenario: Change labels of setting
+    Scenario: Check default settings
         When I am on site homepage
         And I follow "Course 1"
         And I turn editing mode on
@@ -60,7 +60,7 @@ Feature: Create and edit contents
         And I should see "Your word for 'My Pinboard'"
         And I should see " Enable 'My Module'"
         And the "value" attribute of "input#id_pinboard" "css_element" should contain "100"
-        And I should see "10MB"
+        And I should see "Site upload limit" in the "Maximum file size" "field"
 
     Scenario: Behavior handling for People Tab
         When I am on site homepage
