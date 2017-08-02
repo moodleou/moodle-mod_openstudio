@@ -1,5 +1,5 @@
 @ou @ou_vle @mod @mod_openstudio @mod_openstudio_manage_folders @javascript
-Feature: My Activity
+Feature: My Activity view in Open Studio
   When using Open Studio with other users
   As a teacher
   I need to create a content and upload a file

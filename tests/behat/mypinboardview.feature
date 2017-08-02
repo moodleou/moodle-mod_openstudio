@@ -1,8 +1,5 @@
 @ou @ou_vle @mod @mod_openstudio @mod_openstudio_test_content @_file_upload
-Feature: Create and edit contents
-    When using Open Studio with other users
-    As a teacher
-    I need to create a content and upload a file
+Feature: Open Studio pinboard stream
 
     Background: Setup course and studio
         Given the following "users" exist:

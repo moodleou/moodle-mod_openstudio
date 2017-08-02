@@ -43,7 +43,7 @@ Feature: Manage open studio folders
     And all users have accepted the plagarism statement for "OS1" openstudio
 
   @javascript
-  Scenario: Manage set templates
+  Scenario: Manage folder templates
     Given I follow "Test Open Studio name 1"
     And I follow "Administration > Manage levels" in the openstudio navigation
     And I press "Add another Block"
