@@ -49,7 +49,7 @@ Feature: Open Studio people view
 
     Scenario: Only show People link if module or group sharing is enabled
         When I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1      |
@@ -76,13 +76,13 @@ Feature: Open Studio people view
         And I follow "Test Open Studio name 1"
         Then I should not see "People"
         And I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 2"
         Then I should see "People"
 
     Scenario: GIVEN My Module selected, THEN show all OS Members
         When I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
           | Name                          | Test Open Studio name 1        |
@@ -113,7 +113,7 @@ Feature: Open Studio people view
         And I am on site homepage
         And I log out
         And I log in as "student1"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Add new content"
         And I press "Add file"
@@ -130,7 +130,7 @@ Feature: Open Studio people view
         And I am on site homepage
         And I log out
         And I log in as "student2"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Add new content"
         And I press "Add file"
@@ -148,7 +148,7 @@ Feature: Open Studio people view
         And I am on site homepage
         And I log out
         And I log in as "student5"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Add new content"
         And I press "Add file"
@@ -167,7 +167,7 @@ Feature: Open Studio people view
         And I am on site homepage
         And I log out
         And I log in as "teacher1"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "People" in the openstudio navigation
         Then I should see "Student 1"
@@ -176,7 +176,7 @@ Feature: Open Studio people view
 
     Scenario: Group mode selected
         When I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
           | Name                          | Test Open Studio name 1        |
@@ -194,7 +194,7 @@ Feature: Open Studio people view
         And all users have accepted the plagarism statement for "OS1" openstudio
         And I log out
         And I log in as "student2"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Add new content"
         And I press "Add file"
@@ -207,7 +207,7 @@ Feature: Open Studio people view
         And I am on site homepage
         And I log out
         And I log in as "student3"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "My content" in the openstudio navigation
         And I follow "Add new content"
@@ -223,7 +223,7 @@ Feature: Open Studio people view
         And I am on site homepage
         And I log out
         And I log in as "student5"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "People" in the openstudio navigation
         And I click on "select#openstudio-people-groupid" "css_element"
@@ -249,7 +249,7 @@ Feature: Open Studio people view
         And I am on site homepage
         And I log out
         And I log in as "student2"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "People" in the openstudio navigation
         Then I should see "All Group"
@@ -265,7 +265,7 @@ Feature: Open Studio people view
         And I am on site homepage
         And I log out
         And I log in as "teacher1"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Administration > Edit" in the openstudio navigation
         And I follow "Expand all"

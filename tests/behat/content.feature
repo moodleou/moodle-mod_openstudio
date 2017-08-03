@@ -48,7 +48,7 @@ Feature: Create Open Studio contents
             | student4 | G3 |
         And I log in as "teacher1"
         And I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
             | Name                         | Test Open Studio name 1      |

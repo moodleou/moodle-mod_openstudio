@@ -32,7 +32,7 @@ Feature: View deleted posts
         # Delete post
         Given I am on site homepage
         And I log in as "manager1"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Sharing Studio"
         And I follow "My Content"
         And I follow "Folder 1"

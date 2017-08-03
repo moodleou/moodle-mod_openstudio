@@ -33,7 +33,7 @@ Feature: Subscribe/Unsubscribe to my studio
     And I am on site homepage
     And I log out
     And I log in as "teacher1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I turn editing mode on
     And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
       | Name | Test Open Studio name 1 |
@@ -47,7 +47,7 @@ Feature: Subscribe/Unsubscribe to my studio
     And I log out
     And I log in as "student1"
     And I am on site homepage
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
 
   @javascript
   Scenario: Subscribe/Unsubscribe

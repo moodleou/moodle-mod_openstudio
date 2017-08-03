@@ -49,7 +49,7 @@ Feature: Create and edit contents detail
             | teacher2 | G1 |
         And I log in as "teacher1"
         And I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
             | Name                         | Test Open Studio name 1      |
@@ -64,7 +64,7 @@ Feature: Create and edit contents detail
 
     Scenario: Add new content and check content details with img
         When I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Add new content"
         And I press "Add file"
@@ -109,7 +109,7 @@ Feature: Create and edit contents detail
 
     Scenario: Add new content and check content details with img exif
         When I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And the following open studio "contents" exist:
             | openstudio | user     | name                 | description             | file                                               | visibility |
@@ -161,7 +161,7 @@ Feature: Create and edit contents detail
 
     Scenario: Add new content and check content details with video file
         When I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And the following open studio "contents" exist:
             | openstudio | user     | name                 | description             | file                                              | visibility |
@@ -213,7 +213,7 @@ Feature: Create and edit contents detail
 
     Scenario: Add new content and check content details with audio file
         When I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And the following open studio "contents" exist:
             | openstudio | user     | name                 | description             | file                                              | visibility |
@@ -265,7 +265,7 @@ Feature: Create and edit contents detail
 
     Scenario: Add new content and check content details with web/embed link
         When I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Add new content"
         And I press "Add web/embed link"
@@ -312,7 +312,7 @@ Feature: Create and edit contents detail
 
     Scenario: Add new content and check content details with Documents
         When I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And the following open studio "contents" exist:
             | openstudio | user     | name                 | description             | file                                              | visibility |
@@ -364,7 +364,7 @@ Feature: Create and edit contents detail
 
     Scenario: Add new content and check content details with Spreadsheets (subject to the OS Setting)
         When I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And the following open studio "contents" exist:
             | openstudio | user     | name                 | description             | file                                              | visibility |
@@ -416,7 +416,7 @@ Feature: Create and edit contents detail
 
     Scenario: Add new content and check content details with dulicated
         When I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And the following open studio "contents" exist:
             | openstudio | user     | name                 | description             | file                                              | visibility |
@@ -439,7 +439,7 @@ Feature: Create and edit contents detail
 
     Scenario: Add new content and check content details with another user
         When I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And the following open studio "contents" exist:
             | openstudio | user     | name                 | description             | file                                              | visibility |
@@ -455,7 +455,7 @@ Feature: Create and edit contents detail
         And I am on site homepage
         And I log out
         And I log in as "student1"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
@@ -473,7 +473,7 @@ Feature: Create and edit contents detail
         And I am on site homepage
         And I log out
         And I log in as "student2"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
@@ -491,7 +491,7 @@ Feature: Create and edit contents detail
         And I am on site homepage
         And I log out
         And I log in as "teacher1"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
@@ -507,7 +507,7 @@ Feature: Create and edit contents detail
 
     Scenario: Request feedback on students work
         When I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And the following open studio "contents" exist:
             | openstudio | user     | name                         | description                  | file                                              | visibility |
@@ -535,7 +535,7 @@ Feature: Create and edit contents detail
         And I am on site homepage
         And I log out
         And I log in as "student1"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
@@ -546,7 +546,7 @@ Feature: Create and edit contents detail
         And I am on site homepage
         And I log out
         And I log in as "student2"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
@@ -567,7 +567,7 @@ Feature: Create and edit contents detail
         # switch to teacher1
         And I log out
         And I log in as "teacher1"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And the following open studio "contents" exist:
             | openstudio | user     | name                             | description                                  | file                                              | visibility |
@@ -586,7 +586,7 @@ Feature: Create and edit contents detail
         And I am on site homepage
         And I log out
         And I log in as "student1"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
@@ -604,7 +604,7 @@ Feature: Create and edit contents detail
         And I am on site homepage
         And I log out
         And I log in as "student2"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
@@ -619,7 +619,7 @@ Feature: Create and edit contents detail
 
     Scenario: Archive post content details
         When I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And the following open studio "contents" exist:
             | openstudio | user     | name                         | description                  | file                                              | visibility |
@@ -690,7 +690,7 @@ Feature: Create and edit contents detail
         And I am on site homepage
         And I log out
         And I log in as "teacher2"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Test My Content Details View Archive 1"
         And I should not see "Archive post"
@@ -702,7 +702,7 @@ Feature: Create and edit contents detail
         And I am on site homepage
         And I log out
         And I log in as "student1"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Test My Content Details View Archive 1"
         And I should not see "Archive post"
@@ -714,7 +714,7 @@ Feature: Create and edit contents detail
         And I am on site homepage
         And I log out
         And I log in as "student2"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Test My Content Details View Archive 1"
         And I should not see "Archive post"
@@ -726,7 +726,7 @@ Feature: Create and edit contents detail
         And I am on site homepage
         And I log out
         And I log in as "teacher1"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Test My Content Details View Archive 1"
         And I press "Post archive"
@@ -740,7 +740,7 @@ Feature: Create and edit contents detail
         And I log out
         And I log in as "admin"
         And I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I turn editing mode on
         And I navigate to "Edit settings" in current page administration
         And I click on "Course format" "link"
@@ -749,7 +749,7 @@ Feature: Create and edit contents detail
         And I am using the OSEP theme
         And I log out (in the OSEP theme)
         And I log in as "teacher1" (in the OSEP theme)
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I press "Expand all"
         And I follow "Test Open Studio name 1"
 
@@ -770,7 +770,7 @@ Feature: Create and edit contents detail
         # switch to student1
         And I log out (in the OSEP theme)
         And I log in as "student1" (in the OSEP theme)
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I press "Expand all"
         And I follow "Test Open Studio name 1"
         And I follow "People" in the openstudio navigation

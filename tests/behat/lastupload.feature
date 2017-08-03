@@ -42,7 +42,7 @@ Feature: Show last upload time for Open Studio activities
           | student3 | G3 |
       And I log in as "teacher1"
       And I am on site homepage
-      And I follow "Course 1"
+      And I am on "Course 1" course homepage
       And I turn editing mode on
       And I add the "OU Recent activity" block
       And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
@@ -88,7 +88,7 @@ Feature: Show last upload time for Open Studio activities
         | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
       And I press "Save"
       And I am on site homepage
-      And I follow "Course 1"
+      And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 2"
       And I follow "Add new content"
       And I press "Add file"
@@ -99,7 +99,7 @@ Feature: Show last upload time for Open Studio activities
         | Upload content            | mod/openstudio/tests/importfiles/test2.jpg |
       And I press "Save"
       And I am on site homepage
-      And I follow "Course 1"
+      And I am on "Course 1" course homepage
       And "OU Recent activity" "block" should exist
       Then "/descendant::div[@class='activityinstance'][1]//span[@class='lastmodtext studiolmt']" "xpath_element" should exist
       And I should see "Test Open Studio name 1" in the ".ourecent_list li:nth-child(2) .instancename" "css_element"
@@ -109,7 +109,7 @@ Feature: Show last upload time for Open Studio activities
       Given I am on site homepage
       When I log out
       And I log in as "student1"
-      And I follow "Course 1"
+      And I am on "Course 1" course homepage
       And "OU Recent activity" "block" should exist
       Then "/descendant::div[@class='activityinstance'][1]//span[@class='lastmodtext studiolmt']" "xpath_element" should exist
       And I should see "Test Open Studio name 1" in the ".ourecent_list li:nth-child(2) .instancename" "css_element"
@@ -119,7 +119,7 @@ Feature: Show last upload time for Open Studio activities
       When I am on site homepage
       And I log out
       And I log in as "student3"
-      And I follow "Course 1"
+      And I am on "Course 1" course homepage
       Then "/descendant::div[@class='activityinstance'][1]//span[@class='lastmodtext studiolmt']" "xpath_element" should exist
       And I should see "Test Open Studio name 1" in the ".ourecent_list li:nth-child(2) .instancename" "css_element"
       And I should see "Test Open Studio name 2" in the ".ourecent_list li:nth-child(1) .instancename" "css_element"
@@ -141,7 +141,7 @@ Feature: Show last upload time for Open Studio activities
 
       # Add new content in My Pinboard View
       And I am on site homepage
-      And I follow "Course 1"
+      And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 2"
       And I follow "Add new content"
       And I press "Add file"
@@ -154,7 +154,7 @@ Feature: Show last upload time for Open Studio activities
 
       # Add new content in My Group View
       And I am on site homepage
-      And I follow "Course 1"
+      And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 3"
       And I follow "Add new content"
       And I press "Add file"
@@ -166,7 +166,7 @@ Feature: Show last upload time for Open Studio activities
       And I press "Save"  
 
       And I am on site homepage
-      And I follow "Course 1"
+      And I am on "Course 1" course homepage
       And "OU Recent activity" "block" should exist
       Then "/descendant::div[@class='activityinstance'][1]//span[@class='lastmodtext studiolmt']" "xpath_element" should exist
       And I should see "Test Open Studio name 1" in the ".ourecent_list li:nth-child(3) .instancename" "css_element"
@@ -177,7 +177,7 @@ Feature: Show last upload time for Open Studio activities
       When I am on site homepage
       And I log out
       And I log in as "student1"
-      And I follow "Course 1"
+      And I am on "Course 1" course homepage
       And "OU Recent activity" "block" should exist
       Then "/descendant::div[@class='activityinstance'][1]//span[@class='lastmodtext studiolmt']" "xpath_element" should exist
       And I should see "Test Open Studio name 1" in the ".ourecent_list li:nth-child(2) .instancename" "css_element"
@@ -188,7 +188,7 @@ Feature: Show last upload time for Open Studio activities
       When I am on site homepage
       And I log out
       And I log in as "student3"
-      And I follow "Course 1"
+      And I am on "Course 1" course homepage
       Then "/descendant::div[@class='activityinstance'][1]//span[@class='lastmodtext studiolmt']" "xpath_element" should exist
       And I should see "Test Open Studio name 3" in the ".ourecent_list li:nth-child(1) .instancename" "css_element"
       And I should not see "Test Open Studio name 2" in the ".ourecent_list li:nth-child(1) .instancename" "css_element"

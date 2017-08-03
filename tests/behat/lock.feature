@@ -45,7 +45,7 @@ Feature: Lock/Unlock my content
     # Student (un)locks/ his content
     Given I log in as "student1"
     And I am on site homepage
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Sharing Studio"
     And I follow "Student slot 1"
     And I press "Lock"
@@ -72,7 +72,7 @@ Feature: Lock/Unlock my content
     And I am on site homepage
     And I log out
     And I log in as "manager1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Sharing Studio"
     And I follow "Student slot 1"
     And I press "Lock"
@@ -87,7 +87,7 @@ Feature: Lock/Unlock my content
     And I am on site homepage
     And I log out
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Sharing Studio"
     And I follow "Student slot 1"
     And I press "Request feedback"

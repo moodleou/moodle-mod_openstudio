@@ -42,7 +42,7 @@ Feature: Own profile view in Open Studio
         | student3 | G3 |
       And I log in as "teacher1"
       And I am on site homepage
-      And I follow "Course 1"
+      And I am on "Course 1" course homepage
       And I turn editing mode on
       And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
         | Name                         | Test Open Studio name 1      |
@@ -138,7 +138,7 @@ Feature: Own profile view in Open Studio
       And I am on site homepage
       And I log out
       And I log in as "student1"
-      And I follow "Course 1"
+      And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 1"
       And I follow "My content > My Activities" in the openstudio navigation
       Then I should see "Student 1"
@@ -160,7 +160,7 @@ Feature: Own profile view in Open Studio
       And I am on site homepage
       And I log out
       And I log in as "student1"
-      And I follow "Course 1"
+      And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 1"
       And I follow "My content > My Activities" in the openstudio navigation
       And I click on "a.openstudio-profile-mypaticipation" "css_element"
@@ -194,7 +194,7 @@ Feature: Own profile view in Open Studio
       And I am on site homepage
       And I log out
       And I log in as "student1"
-      And I follow "Course 1"
+      And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 1"
       And I follow "My content > My Activities" in the openstudio navigation
       And I click on "a.openstudio-profile-mypaticipation" "css_element"
@@ -215,7 +215,7 @@ Feature: Own profile view in Open Studio
 
   Scenario: Check own profile in case of empty content
       When I am on site homepage
-      And I follow "Course 1"
+      And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 2"
       And I follow "Administration > Edit" in the openstudio navigation
       And I follow "Expand all"
@@ -229,7 +229,7 @@ Feature: Own profile view in Open Studio
       And I am on site homepage
       And I log out
       And I log in as "student1"
-      And I follow "Course 1"
+      And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 2"
       And I should not see "Participation"
       And I should not see "My studio work progress"

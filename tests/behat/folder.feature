@@ -48,7 +48,7 @@ Feature: Create and edit Folder
             | student4 | G3 |
         And I log in as "teacher1"
         And I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "0" and I fill the form with:
             | Name                         | Test Open Studio name 1      |
@@ -125,7 +125,7 @@ Feature: Create and edit Folder
         And I set the field "Content Name" to "Content 2"
         And I set the field "Required (TMA)" to "1"
         And I press "Add another Content"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "My content > My Activities" in the openstudio navigation
         And I should see "Activity 1"
@@ -138,7 +138,7 @@ Feature: Create and edit Folder
         And I log out
         And I am using the OSEP theme
         And I log in as "teacher1" (in the OSEP theme)
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I press "Expand all"
         When I follow "Test Open Studio name 1"
         And I follow "Administration > Edit" in the openstudio navigation
@@ -185,7 +185,7 @@ Feature: Create and edit Folder
         And I log out
         And I am using the OSEP theme
         And I log in as "teacher1" (in the OSEP theme)
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I press "Expand all"
         When I follow "Test Open Studio name 1"
         And I follow "Administration > Edit" in the openstudio navigation
@@ -217,7 +217,7 @@ Feature: Create and edit Folder
         And I log out
         And I am using the OSEP theme
         And I log in as "teacher1" (in the OSEP theme)
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I press "Expand all"
         When I follow "Test Open Studio name 1"
         And I follow "Administration > Edit" in the openstudio navigation
@@ -246,7 +246,7 @@ Feature: Create and edit Folder
         # switch to student1
         And I log out (in the OSEP theme)
         And I log in as "student1" (in the OSEP theme)
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I press "Expand all"
         And I follow "Test Open Studio name 1"
         And I follow "Shared content > Module 1" in the openstudio navigation

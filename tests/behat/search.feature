@@ -57,7 +57,7 @@ I need to be able to search within OpenStudio
 
         # Search my pinboard
         And I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I press "Expand all"
         And I follow "Sharing Studio"
         And I follow "My Content > My Pinboard" in the openstudio navigation
@@ -95,7 +95,7 @@ I need to be able to search within OpenStudio
         Given I am using the OSEP theme
         And I log out (in the OSEP theme)
         When I log in as "student2" (in the OSEP theme)
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I press "Expand all"
         And I follow "Sharing Studio"
         And I set the field "query" to "content"
@@ -119,7 +119,7 @@ I need to be able to search within OpenStudio
 
         # Search folder in my pinboard view
         And I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I press "Expand all"
         And I follow "Sharing Studio"
         And I follow "My Content > My Pinboard" in the openstudio navigation
@@ -132,7 +132,7 @@ I need to be able to search within OpenStudio
         # Search folder in my module by another student
         And I log out (in the OSEP theme)
         And I log in as "student2" (in the OSEP theme)
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I press "Expand all"
         And I follow "Sharing Studio"
         And I set the field "query" to "folder"

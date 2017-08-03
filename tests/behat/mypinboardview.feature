@@ -45,7 +45,7 @@ Feature: Open Studio pinboard stream
             | student4 | G3     |
         And I log in as "teacher1"
         And I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
             | Name                         | Test Open Studio name 1      |
@@ -80,7 +80,7 @@ Feature: Open Studio pinboard stream
         And I am on site homepage
         And I log out
         And I log in as "student1"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "My Content > My Pinboard" in the openstudio navigation
         Then I should not see "Test My Pinboard View"
@@ -104,7 +104,7 @@ Feature: Open Studio pinboard stream
         And I am on site homepage
         And I log out
         And I log in as "student2"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "My Content" in the openstudio navigation
         

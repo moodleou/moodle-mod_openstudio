@@ -62,7 +62,7 @@ Feature: Delete my content/other contents
 
         Given I log in as "student1"
         And I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Sharing Studio"
         And I follow "Student content 1"
         And I press "Delete"
@@ -73,7 +73,7 @@ Feature: Delete my content/other contents
         And I am on site homepage
         And I log out
         And I log in as "teacher1"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Sharing Studio"
         And I follow "Student content 2"
         Then I should not see "Delete"
@@ -82,7 +82,7 @@ Feature: Delete my content/other contents
         And I am on site homepage
         And I log out
         And I log in as "manager1"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Sharing Studio"
         And I follow "Student content 2"
         And I press "Delete"
@@ -94,7 +94,7 @@ Feature: Delete my content/other contents
         # Delete content in my activity
         Given I log in as "student1"
         And I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Sharing Studio"
         And I follow "My Content > My Activities" in the openstudio navigation
         And I follow "S1"
@@ -117,7 +117,7 @@ Feature: Delete my content/other contents
        # Delete content in my activity
         Given I log in as "student1"
         And I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Sharing Studio"
         And I follow "My Content > My Activities" in the openstudio navigation
         And I follow "S1"

@@ -38,7 +38,7 @@ Feature: Preference
           | student3 | G1 |
       And I log in as "admin"
       And I am on site homepage
-      And I follow "Course 1"
+      And I am on "Course 1" course homepage
       And I turn editing mode on
       And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
         | Name                         | Test Open Studio name 1      |
@@ -83,7 +83,7 @@ Feature: Preference
       And I am on site homepage
       And I log out
       And I log in as "teacher1"
-      And I follow "Course 1"
+      And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 1"
       And I follow "People" in the openstudio navigation
       And I follow "Shared content > My Module" in the openstudio navigation
@@ -187,7 +187,7 @@ Feature: Preference
       And I am on site homepage
       And I log out
       And I log in as "teacher1"
-      And I follow "Course 1"
+      And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 1"
       And I follow "Shared content > My Group" in the openstudio navigation
       And I should see "Test My Preferences View 1"
@@ -290,7 +290,7 @@ Feature: Preference
       And I am on site homepage
       And I log out
       And I log in as "teacher1"
-      And I follow "Course 1"
+      And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 1"
       And I follow "My content > My Pinboard" in the openstudio navigation
       And I should see "Test My Preferences View 1"
@@ -370,7 +370,7 @@ Feature: Preference
       And I am on site homepage
       And I log out
       And I log in as "teacher1"
-      And I follow "Course 1"
+      And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 1"
       And I follow "My content > My Activities" in the openstudio navigation
       And I should see "Test My Preferences View 1"

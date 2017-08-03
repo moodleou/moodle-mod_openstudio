@@ -43,7 +43,7 @@ Feature: Open Studio group stream
             | student3 | G3 |
         And I log in as "teacher1"
         And I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
             | Name                         | Test Open Studio name 1      |
@@ -77,7 +77,7 @@ Feature: Open Studio group stream
         And I am on site homepage
         And I log out
         And I log in as "student1"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Shared content > My Group" in the openstudio navigation
         Then I should see "Test My Group Board View 1"
@@ -86,7 +86,7 @@ Feature: Open Studio group stream
         And I am on site homepage
         And I log out
         And I log in as "student3"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Shared content > My Group" in the openstudio navigation
         Then I should not see "Test My Group Board View 1"
@@ -107,7 +107,7 @@ Feature: Open Studio group stream
         And I am on site homepage
         And I log out
         And I log in as "teacher1"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Shared content > My Group" in the openstudio navigation
         Then I should see "Test My Group Board View 3"
@@ -116,7 +116,7 @@ Feature: Open Studio group stream
         And I am on site homepage
         And I log out
         And I log in as "student2"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Shared content > My Group" in the openstudio navigation
        And I follow "Add new content"
@@ -135,7 +135,7 @@ Feature: Open Studio group stream
         And I am on site homepage
         And I log out
         And I log in as "student1"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Shared content > My Group" in the openstudio navigation
         Then I should see "Test My Group Board View 1"
@@ -145,7 +145,7 @@ Feature: Open Studio group stream
         And I am on site homepage
         And I log out
         And I log in as "student3"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Shared content > My Group" in the openstudio navigation
         Then I should not see "Test My Group Board View 1"
@@ -156,7 +156,7 @@ Feature: Open Studio group stream
         And I am on site homepage
         And I log out
         And I log in as "teacher1"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Administration > Edit settings" in the openstudio navigation
         And I set the following fields to these values:
@@ -180,7 +180,7 @@ Feature: Open Studio group stream
         And I am on site homepage
         And I log out
         And I log in as "student1"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Shared content > My Group" in the openstudio navigation
         And I should see "group1" in the "span.openstudio-filter-select > span" "css_element"
@@ -192,7 +192,7 @@ Feature: Open Studio group stream
         And I am on site homepage
         And I log out
         And I log in as "teacher1"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Administration > Edit settings" in the openstudio navigation
         And I set the following fields to these values:
@@ -201,7 +201,7 @@ Feature: Open Studio group stream
         And I am on site homepage
         And I log out
         And I log in as "student1"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Shared content > My Group" in the openstudio navigation
         And I should see "Test My Group Board View 1"

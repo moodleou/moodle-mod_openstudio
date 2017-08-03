@@ -31,7 +31,7 @@ Feature: Export to my contents
         # Create an Open Studio activity
         Given I am using the OSEP theme
         And I log in as "teacher1" (in the OSEP theme)
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And the following open studio "instances" exist:
             | course | name           | description                | pinboard | idnumber | tutorroles | enablefoldersanycontent |
             | C1     | Sharing Studio | Sharing Studio description | 99       | OS1      | manager    | 1                       |
@@ -51,7 +51,7 @@ Feature: Export to my contents
     Scenario: Export
 
         Given I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Sharing Studio"
 
         # Export all contents
@@ -62,7 +62,7 @@ Feature: Export to my contents
 
         # Export selected posts
         And I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Sharing Studio"
         And I follow "My Content"
         And I follow "Export"
@@ -78,7 +78,7 @@ Feature: Export to my contents
             | openstudio | user     | name     | description          | visibility | contenttype    |
             | OS1        | teacher1 | Folder 1 | Folder Description 1 | module     | folder_content |
         And I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Sharing Studio"
         And I follow "My Content"
         And I follow "Folder 1"

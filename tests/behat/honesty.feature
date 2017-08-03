@@ -36,7 +36,7 @@ Feature: Accept plagarism statement
             | student2 | G1 |
         And I log in as "teacher1"
         And I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
             | Name                         | Test Open Studio name 1      |
@@ -65,7 +65,7 @@ Feature: Accept plagarism statement
         And I am on site homepage
         And I log out
         And I log in as "student1"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         Then I should see "Plagiarism statement"
 
@@ -74,6 +74,6 @@ Feature: Accept plagarism statement
         And I log out
         And I log in as "teacher1"
         And I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         Then I should see "Add new content"

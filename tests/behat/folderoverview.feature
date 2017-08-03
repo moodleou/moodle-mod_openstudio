@@ -38,7 +38,7 @@ Feature: Folder Overview
           | student3 | G1     |
       And I log in as "teacher1"
       And I am on site homepage
-      And I follow "Course 1"
+      And I am on "Course 1" course homepage
       And I turn editing mode on
       And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
         | Name                         | Test Open Studio name 1      |
@@ -323,7 +323,7 @@ Feature: Folder Overview
             | level3         | name       | contentpreventreorder |
             | Content1.1     | Content 1  | 1                     |
             | Content1.1     | Content 2  | 1                     |
-      And I follow "Course 1"
+      And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 1"
       And I follow "My Content > My Activities" in the openstudio navigation
       And I follow "Content1.1"
@@ -465,7 +465,7 @@ Feature: Folder Overview
             | Content1.1     | Content 1  | 1                     |
             | Content1.1     | Content 2  | 1                     |
             | Content1.1     | Content 3  | 1                     |
-      And I follow "Course 1"
+      And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 1"
       And I follow "My Content > My Activities" in the openstudio navigation
       And I follow "Content1.1"

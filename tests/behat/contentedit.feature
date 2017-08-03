@@ -50,7 +50,7 @@ Feature: Create and edit Open Studio contents
 
     Scenario: Edit content without upload file
         Given I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1      |
@@ -84,7 +84,7 @@ Feature: Create and edit Open Studio contents
 
     Scenario: Edit content with upload file
         Given I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1      |
@@ -117,7 +117,7 @@ Feature: Create and edit Open Studio contents
 
     Scenario: Edit content without web link
         Given I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1      |
@@ -151,7 +151,7 @@ Feature: Create and edit Open Studio contents
 
     Scenario: Edit content with web link
         Given I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1      |

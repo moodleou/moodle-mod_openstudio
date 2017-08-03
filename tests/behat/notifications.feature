@@ -41,7 +41,7 @@ Feature: Notifications
 
   Scenario: Notify tutor when a post is shared with them
     Given I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     And I follow "Add new content"
     And I set the following fields to these values:
@@ -59,7 +59,7 @@ Feature: Notifications
     And I am on site homepage
     And I log out
     When I log in as "teacher1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     Then I should see "1" in the ".openstudio-navigation-notification-number" "css_element"
     When I click on "Notifications" "button"
@@ -74,14 +74,14 @@ Feature: Notifications
     And "student1" will recieve notifications for openstudio content "Notification post 1"
     And "student1" will recieve notifications for openstudio content "Notification post 2"
     And I log in as "student2"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     And I follow "Notification post 1"
     And I click on "0 Smiles" "text"
     And I am on site homepage
     And I log out
     When I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     Then I should see "1" in the ".openstudio-navigation-notification-number" "css_element"
     When I click on "Notifications" "button"
@@ -97,7 +97,7 @@ Feature: Notifications
     And "student1" will recieve notifications for openstudio content "Notification post 1"
     And "student1" will recieve notifications for openstudio content "Notification post 2"
     And I log in as "student2"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     And I follow "Notification post 1"
     And I press "Add new comment"
@@ -106,7 +106,7 @@ Feature: Notifications
     And I am on site homepage
     And I log out
     When I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     Then I should see "1" in the ".openstudio-navigation-notification-number" "css_element"
     When I click on "Notifications" "button"
@@ -124,7 +124,7 @@ Feature: Notifications
       | OS1        | student2 | Notification post 1 | Notification comment 1 |
     And "student2" will recieve notifications for openstudio comment "Notification comment 1"
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     And I follow "Notification post 1"
     And I press "Reply"
@@ -133,7 +133,7 @@ Feature: Notifications
     And I am on site homepage
     And I log out
     When I log in as "student2"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     Then I should see "1" in the ".openstudio-navigation-notification-number" "css_element"
     When I click on "Notifications" "button"
@@ -150,14 +150,14 @@ Feature: Notifications
       | OS1        | student2 | Notification post 1 | Notification comment 1 |
     And "student2" will recieve notifications for openstudio comment "Notification comment 1"
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     And I follow "Notification post 1"
     And I click on "Like comment" "link"
     And I am on site homepage
     And I log out
     When I log in as "student2"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     Then I should see "1" in the ".openstudio-navigation-notification-number" "css_element"
     When I click on "Notifications" "button"
@@ -174,7 +174,7 @@ Feature: Notifications
       | OS1        | student2 | Notification post 1 | Notification comment 1 |
     And "student2" will recieve notifications for openstudio comment "Notification comment 1"
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     And I follow "Notification post 1"
     And I click on "Like comment" "link"
@@ -184,7 +184,7 @@ Feature: Notifications
     And I am on site homepage
     And I log out
     When I log in as "student2"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     Then I should see "2" in the ".openstudio-navigation-notification-number" "css_element"
     When I click on "Notifications" "button"
@@ -199,14 +199,14 @@ Feature: Notifications
     And "student1" will recieve notifications for openstudio content "Notification post 1"
     And "student1" will recieve notifications for openstudio content "Notification post 2"
     And I log in as "student2"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     And I follow "Notification post 1"
     And I click on "0 Smiles" "text"
     And I am on site homepage
     And I log out
     When I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     Then I should see "1" in the ".openstudio-navigation-notification-number" "css_element"
     When I press "Notifications"
@@ -216,14 +216,14 @@ Feature: Notifications
     Given I am on site homepage
     And I log out
     And I log in as "student2"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     And I follow "Notification post 1"
     And I click on "0 Inspired" "text"
     And I am on site homepage
     And I log out
     When I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     Then ".openstudio-navigation-notification-number" "css_element" should not exist
 
@@ -237,14 +237,14 @@ Feature: Notifications
       | OS1        | student2 | Notification post 1 | Notification comment 1 |
     And "student2" will recieve notifications for openstudio comment "Notification comment 1"
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     And I follow "Notification post 1"
     And I click on "Like comment" "link"
     And I am on site homepage
     And I log out
     And I log in as "student2"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     And I should see "1" in the ".openstudio-navigation-notification-number" "css_element"
     And I press "Notifications"
@@ -254,20 +254,20 @@ Feature: Notifications
     And I am on site homepage
     And I log out
     And I log in as "teacher1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     And I follow "Notification post 1"
     When I click on "Like comment" "link"
     And I am on site homepage
     And I log out
     And I log in as "student2"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     Then ".openstudio-navigation-notification-number" "css_element" should not exist
 
   Scenario: Delete unread notifications when a post is deleted
     Given I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     And I follow "Add new content"
     And I set the following fields to these values:
@@ -285,7 +285,7 @@ Feature: Notifications
     And I am on site homepage
     And I log out
     And I log in as "teacher1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     And I should see "1" in the ".openstudio-navigation-notification-number" "css_element"
     And I follow "Shared Content > My Group" in the openstudio navigation
@@ -294,7 +294,7 @@ Feature: Notifications
     And I am on site homepage
     And I log out
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     And I should see "1" in the ".openstudio-navigation-notification-number" "css_element"
     And I follow "My Content" in the openstudio navigation
@@ -305,7 +305,7 @@ Feature: Notifications
     Given I am on site homepage
     And I log out
     And I log in as "teacher1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     When I follow "Notification Studio"
     Then ".openstudio-navigation-notification-number" "css_element" should not exist
 
@@ -315,27 +315,27 @@ Feature: Notifications
       | OS1        | student1 | Notification post 1 | lorem ipsum dolor | module     |
     And "student1" will recieve notifications for openstudio content "Notification post 1"
     And I log in as "student2"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     And I follow "Notification post 1"
     And I click on "0 Smiles" "text"
     And I am on site homepage
     And I log out
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     And I should see "1" in the ".openstudio-navigation-notification-number" "css_element"
     And I am on site homepage
     And I log out
     When I log in as "student2"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     And I follow "Notification post 1"
     And I click on "1 Smiles" "text"
     And I am on site homepage
     And I log out
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     Then ".openstudio-navigation-notification-number" "css_element" should not exist
 
@@ -345,7 +345,7 @@ Feature: Notifications
       | OS1        | student1 | Notification post 1 | lorem ipsum dolor | module     |
     And "student1" will recieve notifications for openstudio content "Notification post 1"
     And I log in as "student2"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     And I follow "Notification post 1"
     And I press "Add new comment"
@@ -354,13 +354,13 @@ Feature: Notifications
     And I am on site homepage
     And I log out
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     And I should see "1" in the ".openstudio-navigation-notification-number" "css_element"
     And I am on site homepage
     And I log out
     When I log in as "student2"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     And I follow "Notification post 1"
     And I follow "Delete comment"
@@ -368,6 +368,6 @@ Feature: Notifications
     And I am on site homepage
     And I log out
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     Then ".openstudio-navigation-notification-number" "css_element" should not exist

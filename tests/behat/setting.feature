@@ -47,7 +47,7 @@ Feature: Edit Open Studio settings
 
     Scenario: Check default settings
         When I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1"
         And I follow "Expand all"
@@ -61,7 +61,7 @@ Feature: Edit Open Studio settings
 
     Scenario: Behavior handling for People Tab
         When I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1      |
@@ -88,13 +88,13 @@ Feature: Edit Open Studio settings
         And I follow "Test Open Studio name 1"
         Then I should not see "People"
         And I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 2"
         Then I should see "People"
 
     Scenario: Behavior handling for Shared Content
         Given I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I turn editing mode on
 
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
@@ -143,7 +143,7 @@ Feature: Edit Open Studio settings
 
         # Only My Module is available
         When I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 2"
         Then I should see "Shared Content"
         And I follow "People" in the openstudio navigation
@@ -152,7 +152,7 @@ Feature: Edit Open Studio settings
 
         # My Module and My Group are available
         When I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 3"
         Then I should see "Shared Content"
         And I follow "Shared content" in the openstudio navigation
@@ -161,7 +161,7 @@ Feature: Edit Open Studio settings
 
     Scenario: Behavior handling for My Content with My Activities:
         When I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1      |
@@ -186,7 +186,7 @@ Feature: Edit Open Studio settings
         And I press "Add another Content"
         And I set the field "Content Name" to "Content 1"
         And I press "Add another Content"
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "My content" in the openstudio navigation
         Then I should see "My Pinboard"
@@ -194,7 +194,7 @@ Feature: Edit Open Studio settings
 
     Scenario: Behavior handling for My Content without My Activities:
         When I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1      |
@@ -212,7 +212,7 @@ Feature: Edit Open Studio settings
 
     Scenario: Behavior handling drop down label to make consistency to Setting:
         When I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
           | Name                          | Test Open Studio name 1      |
@@ -275,7 +275,7 @@ Feature: Edit Open Studio settings
 
     Scenario: Behavior handling upload icon when pinboard disabled:
         When I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1      |
@@ -296,7 +296,7 @@ Feature: Edit Open Studio settings
 
     Scenario: Behavior handling content view when pinboard disabled:
         When I am on site homepage
-        And I follow "Course 1"
+        And I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1      |
