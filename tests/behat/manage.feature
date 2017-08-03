@@ -28,7 +28,6 @@ Feature: Manage open studio folders
       | user     | group  |
       | teacher1 | G1 |
     And I log in as "teacher1"
-    And I am on site homepage
     And I am on "Course 1" course homepage
     And I turn editing mode on
     And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:

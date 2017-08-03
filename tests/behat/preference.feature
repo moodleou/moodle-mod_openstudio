@@ -37,7 +37,6 @@ Feature: Preference
           | student2 | G1 |
           | student3 | G1 |
       And I log in as "admin"
-      And I am on site homepage
       And I am on "Course 1" course homepage
       And I turn editing mode on
       And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:

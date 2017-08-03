@@ -40,7 +40,6 @@ Feature: Add/Reply/Flag/Delete comment
 
         # Add new comment
         And I log in as "student1"
-        And I am on site homepage
         And I am on "Course 1" course homepage
         And I press "Expand all"
         And I follow "Sharing Studio"
@@ -98,7 +97,6 @@ Feature: Add/Reply/Flag/Delete comment
         # Add new comment
         And I log out
         And I log in as "student1"
-        And I am on site homepage
         And I am on "Course 1" course homepage
         And I press "Expand all"
         And I follow "Sharing Studio"

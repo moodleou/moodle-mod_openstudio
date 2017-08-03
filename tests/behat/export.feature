@@ -50,8 +50,7 @@ Feature: Export to my contents
     @javascript
     Scenario: Export
 
-        Given I am on site homepage
-        And I am on "Course 1" course homepage
+        Given I am on "Course 1" course homepage
         And I follow "Sharing Studio"
 
         # Export all contents
@@ -61,7 +60,6 @@ Feature: Export to my contents
         Then I should see "Downloading ..."
 
         # Export selected posts
-        And I am on site homepage
         And I am on "Course 1" course homepage
         And I follow "Sharing Studio"
         And I follow "My Content"
@@ -77,7 +75,6 @@ Feature: Export to my contents
         Given the following open studio "folders" exist:
             | openstudio | user     | name     | description          | visibility | contenttype    |
             | OS1        | teacher1 | Folder 1 | Folder Description 1 | module     | folder_content |
-        And I am on site homepage
         And I am on "Course 1" course homepage
         And I follow "Sharing Studio"
         And I follow "My Content"

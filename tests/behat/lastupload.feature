@@ -41,7 +41,6 @@ Feature: Show last upload time for Open Studio activities
           | teacher1 | G3 |
           | student3 | G3 |
       And I log in as "teacher1"
-      And I am on site homepage
       And I am on "Course 1" course homepage
       And I turn editing mode on
       And I add the "OU Recent activity" block
@@ -87,7 +86,6 @@ Feature: Show last upload time for Open Studio activities
         | Description               | My Group Board View Description 1          |
         | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
       And I press "Save"
-      And I am on site homepage
       And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 2"
       And I follow "Add new content"
@@ -98,7 +96,6 @@ Feature: Show last upload time for Open Studio activities
         | Description               | My Group Board View Description 2          |
         | Upload content            | mod/openstudio/tests/importfiles/test2.jpg |
       And I press "Save"
-      And I am on site homepage
       And I am on "Course 1" course homepage
       And "OU Recent activity" "block" should exist
       Then "/descendant::div[@class='activityinstance'][1]//span[@class='lastmodtext studiolmt']" "xpath_element" should exist
@@ -140,7 +137,6 @@ Feature: Show last upload time for Open Studio activities
       And I press "Save"
 
       # Add new content in My Pinboard View
-      And I am on site homepage
       And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 2"
       And I follow "Add new content"
@@ -153,7 +149,6 @@ Feature: Show last upload time for Open Studio activities
       And I press "Save"
 
       # Add new content in My Group View
-      And I am on site homepage
       And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 3"
       And I follow "Add new content"
@@ -165,7 +160,6 @@ Feature: Show last upload time for Open Studio activities
         | Upload content | mod/openstudio/tests/importfiles/test2.jpg |
       And I press "Save"  
 
-      And I am on site homepage
       And I am on "Course 1" course homepage
       And "OU Recent activity" "block" should exist
       Then "/descendant::div[@class='activityinstance'][1]//span[@class='lastmodtext studiolmt']" "xpath_element" should exist

@@ -17,7 +17,6 @@ Feature: Import zip file
 
         And I am using the OSEP theme
         And I log in as "admin" (in the OSEP theme)
-        And I am on site homepage
         And I am on "Course 1" course homepage
         And I turn editing mode on in the OSEP theme
         And I add a "OpenStudio 2 (pilot only)" to section "0" and I fill the form with:
@@ -30,7 +29,6 @@ Feature: Import zip file
     Scenario: Import zip file
         Given I am using the OSEP theme
         And I log in as "student1" (in the OSEP theme)
-        And I am on site homepage
         And I am on "Course 1" course homepage
         And I press "Expand all"
         And I follow "Test Open Studio name 1"

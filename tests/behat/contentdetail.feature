@@ -48,7 +48,6 @@ Feature: Create and edit contents detail
             | student3 | G3 |
             | teacher2 | G1 |
         And I log in as "teacher1"
-        And I am on site homepage
         And I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
@@ -63,8 +62,7 @@ Feature: Create and edit contents detail
         And all users have accepted the plagarism statement for "OS1" openstudio
 
     Scenario: Add new content and check content details with img
-        When I am on site homepage
-        And I am on "Course 1" course homepage
+        When I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Add new content"
         And I press "Add file"
@@ -108,8 +106,7 @@ Feature: Create and edit contents detail
         Then "#openstudio_content_view_post_owner > div.openstudio-content-view-user-info > a" "css_element" should exist
 
     Scenario: Add new content and check content details with img exif
-        When I am on site homepage
-        And I am on "Course 1" course homepage
+        When I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And the following open studio "contents" exist:
             | openstudio | user     | name                 | description             | file                                               | visibility |
@@ -160,8 +157,7 @@ Feature: Create and edit contents detail
         And "#openstudio_content_view_post_owner > div.openstudio-content-view-user-info > a" "css_element" should exist
 
     Scenario: Add new content and check content details with video file
-        When I am on site homepage
-        And I am on "Course 1" course homepage
+        When I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And the following open studio "contents" exist:
             | openstudio | user     | name                 | description             | file                                              | visibility |
@@ -212,8 +208,7 @@ Feature: Create and edit contents detail
         And "#openstudio_content_view_post_owner > div.openstudio-content-view-user-info > a" "css_element" should exist
 
     Scenario: Add new content and check content details with audio file
-        When I am on site homepage
-        And I am on "Course 1" course homepage
+        When I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And the following open studio "contents" exist:
             | openstudio | user     | name                 | description             | file                                              | visibility |
@@ -264,8 +259,7 @@ Feature: Create and edit contents detail
         And "#openstudio_content_view_post_owner > div.openstudio-content-view-user-info > a" "css_element" should exist
 
     Scenario: Add new content and check content details with web/embed link
-        When I am on site homepage
-        And I am on "Course 1" course homepage
+        When I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Add new content"
         And I press "Add web/embed link"
@@ -311,8 +305,7 @@ Feature: Create and edit contents detail
         And "#openstudio_content_view_post_owner > div.openstudio-content-view-user-info > a" "css_element" should exist
 
     Scenario: Add new content and check content details with Documents
-        When I am on site homepage
-        And I am on "Course 1" course homepage
+        When I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And the following open studio "contents" exist:
             | openstudio | user     | name                 | description             | file                                              | visibility |
@@ -363,8 +356,7 @@ Feature: Create and edit contents detail
         And "#openstudio_content_view_post_owner > div.openstudio-content-view-user-info > a" "css_element" should exist
 
     Scenario: Add new content and check content details with Spreadsheets (subject to the OS Setting)
-        When I am on site homepage
-        And I am on "Course 1" course homepage
+        When I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And the following open studio "contents" exist:
             | openstudio | user     | name                 | description             | file                                              | visibility |
@@ -415,8 +407,7 @@ Feature: Create and edit contents detail
         And "#openstudio_content_view_post_owner > div.openstudio-content-view-user-info > a" "css_element" should exist
 
     Scenario: Add new content and check content details with dulicated
-        When I am on site homepage
-        And I am on "Course 1" course homepage
+        When I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And the following open studio "contents" exist:
             | openstudio | user     | name                 | description             | file                                              | visibility |
@@ -438,8 +429,7 @@ Feature: Create and edit contents detail
         And I should see "2 copies"
 
     Scenario: Add new content and check content details with another user
-        When I am on site homepage
-        And I am on "Course 1" course homepage
+        When I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And the following open studio "contents" exist:
             | openstudio | user     | name                 | description             | file                                              | visibility |
@@ -506,8 +496,7 @@ Feature: Create and edit contents detail
         And I should see "2 views"
 
     Scenario: Request feedback on students work
-        When I am on site homepage
-        And I am on "Course 1" course homepage
+        When I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And the following open studio "contents" exist:
             | openstudio | user     | name                         | description                  | file                                              | visibility |
@@ -618,8 +607,7 @@ Feature: Create and edit contents detail
         And I should see "Test ContentDetail Report Abuse"
 
     Scenario: Archive post content details
-        When I am on site homepage
-        And I am on "Course 1" course homepage
+        When I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And the following open studio "contents" exist:
             | openstudio | user     | name                         | description                  | file                                              | visibility |
@@ -739,7 +727,6 @@ Feature: Create and edit contents detail
         And I am on site homepage
         And I log out
         And I log in as "admin"
-        And I am on site homepage
         And I am on "Course 1" course homepage
         And I turn editing mode on
         And I navigate to "Edit settings" in current page administration

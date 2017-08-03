@@ -44,7 +44,6 @@ Feature: Lock/Unlock my content
 
     # Student (un)locks/ his content
     Given I log in as "student1"
-    And I am on site homepage
     And I am on "Course 1" course homepage
     And I follow "Sharing Studio"
     And I follow "Student slot 1"

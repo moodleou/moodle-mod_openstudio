@@ -56,7 +56,6 @@ I need to be able to search within OpenStudio
         When I log in as "student1" (in the OSEP theme)
 
         # Search my pinboard
-        And I am on site homepage
         And I am on "Course 1" course homepage
         And I press "Expand all"
         And I follow "Sharing Studio"
@@ -118,7 +117,6 @@ I need to be able to search within OpenStudio
         | OS1        | student1 | Student content folder 2     | My Folder Overview Description 2  | module     | folder_content |
 
         # Search folder in my pinboard view
-        And I am on site homepage
         And I am on "Course 1" course homepage
         And I press "Expand all"
         And I follow "Sharing Studio"

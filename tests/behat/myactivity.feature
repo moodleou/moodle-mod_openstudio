@@ -27,7 +27,6 @@ Feature: My Activity view in Open Studio
       | user     | group |
       | teacher1 | G1    |
     And I log in as "teacher1"
-    And I am on site homepage
     And I am on "Course 1" course homepage
     And I turn editing mode on
     And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
@@ -144,4 +143,3 @@ Feature: My Activity view in Open Studio
     And I should not see "Test My Activities View 4"
     And I should see "Content 1.1 Required"
     Then the "src" attribute of "img.openstudio-grid-item-thumbnail" "css_element" should contain "test2.jpg"
-  

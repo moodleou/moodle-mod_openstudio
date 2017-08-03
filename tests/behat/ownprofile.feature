@@ -41,7 +41,6 @@ Feature: Own profile view in Open Studio
         | student3 | G2 |
         | student3 | G3 |
       And I log in as "teacher1"
-      And I am on site homepage
       And I am on "Course 1" course homepage
       And I turn editing mode on
       And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
@@ -214,8 +213,7 @@ Feature: Own profile view in Open Studio
       And I should see "10%"
 
   Scenario: Check own profile in case of empty content
-      When I am on site homepage
-      And I am on "Course 1" course homepage
+      When I am on "Course 1" course homepage
       And I follow "Test Open Studio name 2"
       And I follow "Administration > Edit" in the openstudio navigation
       And I follow "Expand all"

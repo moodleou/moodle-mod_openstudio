@@ -61,7 +61,6 @@ Feature: Delete my content/other contents
     Scenario: Delete my content
 
         Given I log in as "student1"
-        And I am on site homepage
         And I am on "Course 1" course homepage
         And I follow "Sharing Studio"
         And I follow "Student content 1"
@@ -93,7 +92,6 @@ Feature: Delete my content/other contents
 
         # Delete content in my activity
         Given I log in as "student1"
-        And I am on site homepage
         And I am on "Course 1" course homepage
         And I follow "Sharing Studio"
         And I follow "My Content > My Activities" in the openstudio navigation
@@ -116,7 +114,6 @@ Feature: Delete my content/other contents
      Scenario: Delete my content in my activities should navigate to content details when back to a deleted activity post
        # Delete content in my activity
         Given I log in as "student1"
-        And I am on site homepage
         And I am on "Course 1" course homepage
         And I follow "Sharing Studio"
         And I follow "My Content > My Activities" in the openstudio navigation

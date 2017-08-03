@@ -49,8 +49,7 @@ Feature: Create and edit Open Studio contents
         And I log in as "teacher1"
 
     Scenario: Edit content without upload file
-        Given I am on site homepage
-        And I am on "Course 1" course homepage
+        Given I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1      |
@@ -83,8 +82,7 @@ Feature: Create and edit Open Studio contents
         And I should not see "Test My Group Board View 1"
 
     Scenario: Edit content with upload file
-        Given I am on site homepage
-        And I am on "Course 1" course homepage
+        Given I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1      |
@@ -116,8 +114,7 @@ Feature: Create and edit Open Studio contents
         And I should not see "Test My Group Board View 1"
 
     Scenario: Edit content without web link
-        Given I am on site homepage
-        And I am on "Course 1" course homepage
+        Given I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1      |
@@ -150,8 +147,7 @@ Feature: Create and edit Open Studio contents
         And I should not see "Test My Group Board View 1"
 
     Scenario: Edit content with web link
-        Given I am on site homepage
-        And I am on "Course 1" course homepage
+        Given I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1      |

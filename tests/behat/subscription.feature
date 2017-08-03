@@ -46,7 +46,6 @@ Feature: Subscribe/Unsubscribe to my studio
     And I am on site homepage
     And I log out
     And I log in as "student1"
-    And I am on site homepage
     And I am on "Course 1" course homepage
 
   @javascript

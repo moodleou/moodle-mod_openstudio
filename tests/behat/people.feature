@@ -48,8 +48,7 @@ Feature: Open Studio people view
         And I log in as "teacher1"
 
     Scenario: Only show People link if module or group sharing is enabled
-        When I am on site homepage
-        And I am on "Course 1" course homepage
+        When I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1      |
@@ -75,14 +74,12 @@ Feature: Open Studio people view
         And all users have accepted the plagarism statement for "OS2" openstudio
         And I follow "Test Open Studio name 1"
         Then I should not see "People"
-        And I am on site homepage
         And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 2"
         Then I should see "People"
 
     Scenario: GIVEN My Module selected, THEN show all OS Members
-        When I am on site homepage
-        And I am on "Course 1" course homepage
+        When I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
           | Name                          | Test Open Studio name 1        |
@@ -175,8 +172,7 @@ Feature: Open Studio people view
         And I should see "Student 5"
 
     Scenario: Group mode selected
-        When I am on site homepage
-        And I am on "Course 1" course homepage
+        When I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
           | Name                          | Test Open Studio name 1        |
