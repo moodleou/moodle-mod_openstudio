@@ -79,7 +79,7 @@ class manageactivities_form extends \moodleform {
                 }
 
                 $activityname[] = $mform->createElement('image', 'reinstatebutton[' . $activity->id . ']',
-                        $OUTPUT->pix_url('undo', 'openstudio'),
+                        $OUTPUT->image_url('undo', 'openstudio'),
                         array('title' => get_string('undeletelevel', 'openstudio')));
                 $mform->addGroup($activityname, null, $counter . '. ', ' ', null, true);
             }
@@ -124,20 +124,20 @@ class manageactivities_form extends \moodleform {
             if ($total > 1) {
                 if ($counter == 1) {
                     $activityname[] = $mform->createElement('image', 'movednbutton[' . $activity->id . ']',
-                            $OUTPUT->pix_url('t/down'), array('title' => get_string('movedown', 'openstudio')));
+                            $OUTPUT->image_url('t/down'), array('title' => get_string('movedown', 'openstudio')));
                 } else if ($counter == $total) {
                     $activityname[] = $mform->createElement('image', 'moveupbutton[' . $activity->id . ']',
-                            $OUTPUT->pix_url('t/up'), array('title' => get_string('moveup', 'openstudio')));
+                            $OUTPUT->image_url('t/up'), array('title' => get_string('moveup', 'openstudio')));
                 } else {
                     $activityname[] = $mform->createElement('image', 'movednbutton[' . $activity->id . ']',
-                            $OUTPUT->pix_url('t/down'), array('title' => get_string('movedown', 'openstudio')));
+                            $OUTPUT->image_url('t/down'), array('title' => get_string('movedown', 'openstudio')));
                     $activityname[] = $mform->createElement('image', 'moveupbutton[' . $activity->id . ']',
-                            $OUTPUT->pix_url('t/up'), array('title' => get_string('moveup', 'openstudio')));
+                            $OUTPUT->image_url('t/up'), array('title' => get_string('moveup', 'openstudio')));
                 }
             }
 
             $activityname[] = $mform->createElement('image', 'editbutton[' . $activity->id . ']',
-                    $OUTPUT->pix_url('t/edit'), array('title' => get_string('editlevel', 'openstudio')));
+                    $OUTPUT->image_url('t/edit'), array('title' => get_string('editlevel', 'openstudio')));
 
             if ($contentsinactivity > 0) {
                 // Get block name to add to url.
@@ -149,11 +149,11 @@ class manageactivities_form extends \moodleform {
                         get_string('viewcontents', 'openstudio') . ")"));
                 if (has_capability('mod/openstudio:deletelevels', $context)) {
                     $activityname[] = $mform->createElement('image', 'deletebutton[' . $activity->id . ']',
-                            $OUTPUT->pix_url('t/delete'), array('title' => get_string('deletelevel', 'openstudio')));
+                            $OUTPUT->image_url('t/delete'), array('title' => get_string('deletelevel', 'openstudio')));
                 }
             } else {
                 $activityname[] = $mform->createElement('image', 'deletebutton[' . $activity->id . ']',
-                        $OUTPUT->pix_url('t/delete'), array('title' => get_string('deletelevel', 'openstudio')));
+                        $OUTPUT->image_url('t/delete'), array('title' => get_string('deletelevel', 'openstudio')));
             }
 
             $mform->addGroup($activityname, null, $counter . '. ', ' ', null, true);

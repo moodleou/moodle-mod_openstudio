@@ -1538,40 +1538,40 @@ EOF;
         $icon = new \stdClass();
         switch ($contenttype) {
             case content::TYPE_FOLDER:
-                $icon->fileicon = $OUTPUT->pix_url('folder_rgb_32px', 'openstudio');
+                $icon->fileicon = $OUTPUT->image_url('folder_rgb_32px', 'openstudio');
                 $icon->filetype = get_string('filtertypesfolder', 'openstudio');
                 break;
             case content::TYPE_IMAGE:
-                $icon->fileicon = $OUTPUT->pix_url('image_rgb_32px', 'openstudio');
+                $icon->fileicon = $OUTPUT->image_url('image_rgb_32px', 'openstudio');
                 $icon->filetype = get_string('filtertypesimage', 'openstudio');
                 break;
             case content::TYPE_VIDEO:
-                $icon->fileicon = $OUTPUT->pix_url('video_rgb_32px', 'openstudio');
+                $icon->fileicon = $OUTPUT->image_url('video_rgb_32px', 'openstudio');
                 $icon->filetype = get_string('filtertypesvideo', 'openstudio');
                 break;
             case content::TYPE_AUDIO:
-                $icon->fileicon = $OUTPUT->pix_url('audio_rgb_32px', 'openstudio');
+                $icon->fileicon = $OUTPUT->image_url('audio_rgb_32px', 'openstudio');
                 $icon->filetype = get_string('filtertypesaudio', 'openstudio');
                 break;
             case content::TYPE_DOCUMENT:
-                $icon->fileicon = $OUTPUT->pix_url('text_doc_rgb_32px', 'openstudio');
+                $icon->fileicon = $OUTPUT->image_url('text_doc_rgb_32px', 'openstudio');
                 $icon->filetype = get_string('filtertypesdocuments', 'openstudio');
                 break;
             case content::TYPE_PRESENTATION:
-                $icon->fileicon = $OUTPUT->pix_url('powerpoint_rgb_32px', 'openstudio');
+                $icon->fileicon = $OUTPUT->image_url('powerpoint_rgb_32px', 'openstudio');
                 $icon->filetype = get_string('filtertypespresentation', 'openstudio');
                 break;
             case content::TYPE_SPREADSHEET:
-                $icon->fileicon = $OUTPUT->pix_url('excel_spreadsheet_rgb_32px', 'openstudio');
+                $icon->fileicon = $OUTPUT->image_url('excel_spreadsheet_rgb_32px', 'openstudio');
                 $icon->filetype = get_string('filtertypesspreadsheet', 'openstudio');
                 break;
             case content::TYPE_URL:
-                $icon->fileicon = $OUTPUT->pix_url('html_markup_rgb_32px', 'openstudio');
+                $icon->fileicon = $OUTPUT->image_url('html_markup_rgb_32px', 'openstudio');
                 $icon->filetype = get_string('filtertypesweblink', 'openstudio');
                 break;
             case content::TYPE_NONE:
             default:
-                $icon->fileicon = $OUTPUT->pix_url('unknown_rgb_32px', 'openstudio');
+                $icon->fileicon = $OUTPUT->image_url('unknown_rgb_32px', 'openstudio');
                 $icon->filetype = get_string('unknown', 'openstudio');
                 break;
         }

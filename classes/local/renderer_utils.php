@@ -202,8 +202,8 @@ class renderer_utils {
         $contentdata->userpictureurl = new \moodle_url('/user/pix.php/'.$contentowner->id.'/f1.jpg');
         $contentdata->viewuserworkurl = new \moodle_url('/mod/openstudio/view.php',
                     array('id' => $openstudioid, 'vuid' => $contentowner->id, 'vid' => content::VISIBILITY_PRIVATE));
-        $contentdata->viewedicon = $OUTPUT->pix_url('viewed_rgb_32px', 'openstudio');
-        $contentdata->commentsicon = $OUTPUT->pix_url('comments_rgb_32px', 'openstudio');
+        $contentdata->viewedicon = $OUTPUT->image_url('viewed_rgb_32px', 'openstudio');
+        $contentdata->commentsicon = $OUTPUT->image_url('comments_rgb_32px', 'openstudio');
         $contentdata->participationenable = $permissions->feature_participationsmiley;
         $contentdata->participationlow = isset($userprogressdata['participationstatus'])
                 && ($userprogressdata['participationstatus'] == 'low');
@@ -461,11 +461,11 @@ class renderer_utils {
             switch ($contentdata->contenttype) {
                 case content::TYPE_NONE:
                         $contenttypeuseimagedefault = false;
-                        $contenttypeiconurl = $OUTPUT->pix_url('unknown_rgb_32px', 'openstudio');
+                        $contenttypeiconurl = $OUTPUT->image_url('unknown_rgb_32px', 'openstudio');
                     break;
                 case content::TYPE_IMAGE:
                     if ($contentdata->mimetype == 'image/bmp') {
-                        $contenttypeiconurl = $OUTPUT->pix_url('image_rgb_32px', 'openstudio');
+                        $contenttypeiconurl = $OUTPUT->image_url('image_rgb_32px', 'openstudio');
                     } else {
                         $contenttypeiconurl = self::make_plugin_file($context->id, $contentthumbnailarea, $contentdata->id,
                                 $contentdata->content, $folderid);
@@ -473,13 +473,13 @@ class renderer_utils {
                     break;
 
                 case content::TYPE_VIDEO:
-                    $contenttypeiconurl = $OUTPUT->pix_url('video_rgb_32px', 'openstudio');
+                    $contenttypeiconurl = $OUTPUT->image_url('video_rgb_32px', 'openstudio');
                     break;
                 case content::TYPE_AUDIO:
                     if ($contentdata->mimetype == 'audio/x-aiff') {
                         $contenttypeuseimagedefault = true;
                     }
-                    $contenttypeiconurl = $OUTPUT->pix_url('audio_rgb_32px', 'openstudio');
+                    $contenttypeiconurl = $OUTPUT->image_url('audio_rgb_32px', 'openstudio');
                     break;
                 case content::TYPE_DOCUMENT:
                 case content::TYPE_URL_DOCUMENT:
@@ -488,31 +488,31 @@ class renderer_utils {
                     switch ($contentdata->mimetype) {
                         case 'application/msword':
                         case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-                            $contenttypeiconurl = $OUTPUT->pix_url('word_rgb_32px', 'openstudio');
+                            $contenttypeiconurl = $OUTPUT->image_url('word_rgb_32px', 'openstudio');
                             break;
                         case 'application/pdf':
-                            $contenttypeiconurl = $OUTPUT->pix_url('pdf_rgb_32px', 'openstudio');
+                            $contenttypeiconurl = $OUTPUT->image_url('pdf_rgb_32px', 'openstudio');
                             break;
                         default:
-                            $contenttypeiconurl = $OUTPUT->pix_url('document_rgb_32px', 'openstudio');
+                            $contenttypeiconurl = $OUTPUT->image_url('document_rgb_32px', 'openstudio');
                             break;
                     }
                     break;
                 case content::TYPE_URL_DOCUMENT_PDF:
                     $contenttypeuseimagedefault = true;
-                    $contenttypeiconurl = $OUTPUT->pix_url('pdf_rgb_32px', 'openstudio');
+                    $contenttypeiconurl = $OUTPUT->image_url('pdf_rgb_32px', 'openstudio');
                     break;
                 case content::TYPE_PRESENTATION:
                 case content::TYPE_URL_PRESENTATION:
                 case content::TYPE_URL_PRESENTATION_PPT:
                     $contenttypeuseimagedefault = true;
-                    $contenttypeiconurl = $OUTPUT->pix_url('powerpoint_rgb_32px', 'openstudio');
+                    $contenttypeiconurl = $OUTPUT->image_url('powerpoint_rgb_32px', 'openstudio');
                     break;
                 case content::TYPE_SPREADSHEET:
                 case content::TYPE_URL_SPREADSHEET:
                 case content::TYPE_URL_SPREADSHEET_XLS:
                     $contenttypeuseimagedefault = true;
-                    $contenttypeiconurl = $OUTPUT->pix_url('excel_spreadsheet_rgb_32px', 'openstudio');
+                    $contenttypeiconurl = $OUTPUT->image_url('excel_spreadsheet_rgb_32px', 'openstudio');
                     break;
                 case content::TYPE_URL_IMAGE:
                     $contenttypeiconurl = $contentdata->content;
@@ -523,21 +523,21 @@ class renderer_utils {
                 case content::TYPE_URL_AUDIO:
                     if ((trim($contentdata->content) == '') &&
                             isset($contentdata->description) && (trim($contentdata->description) != '')) {
-                        $contenttypeiconurl = $OUTPUT->pix_url('text_doc_rgb_32px', 'openstudio');
+                        $contenttypeiconurl = $OUTPUT->image_url('text_doc_rgb_32px', 'openstudio');
                     } else {
-                        $contenttypeiconurl = $OUTPUT->pix_url('online_rgb_32px', 'openstudio');
+                        $contenttypeiconurl = $OUTPUT->image_url('online_rgb_32px', 'openstudio');
                     }
                     break;
                 case content::TYPE_CAD:
                     $contenttypeuseimagedefault = true;
-                    $contenttypeiconurl = $OUTPUT->pix_url('cad_rgb_32px', 'openstudio');
+                    $contenttypeiconurl = $OUTPUT->image_url('cad_rgb_32px', 'openstudio');
                     break;
                 case content::TYPE_ZIP:
                     $contenttypeuseimagedefault = true;
-                    $contenttypeiconurl = $OUTPUT->pix_url('zip_archive_rgb_32px', 'openstudio');
+                    $contenttypeiconurl = $OUTPUT->image_url('zip_archive_rgb_32px', 'openstudio');
                     break;
                 default:
-                    $contenttypeiconurl = $OUTPUT->pix_url('unknown_rgb_32px', 'openstudio');
+                    $contenttypeiconurl = $OUTPUT->image_url('unknown_rgb_32px', 'openstudio');
                     break;
             }
         }
@@ -603,21 +603,21 @@ class renderer_utils {
 
         switch ($visibility) {
             case content::VISIBILITY_MODULE:
-                $contentvisibilityicon = $OUTPUT->pix_url('mymodule_rgb_32px', 'openstudio');
+                $contentvisibilityicon = $OUTPUT->image_url('mymodule_rgb_32px', 'openstudio');
                 break;
             case content::VISIBILITY_GROUP:
-                $contentvisibilityicon = $OUTPUT->pix_url('share_with_my_group_rgb_32px', 'openstudio');
+                $contentvisibilityicon = $OUTPUT->image_url('share_with_my_group_rgb_32px', 'openstudio');
                 break;
             case content::VISIBILITY_WORKSPACE:
             case content::VISIBILITY_PRIVATE:
             case content::VISIBILITY_PRIVATE_PINBOARD:
-                $contentvisibilityicon = $OUTPUT->pix_url('onlyme_rgb_32px', 'openstudio');
+                $contentvisibilityicon = $OUTPUT->image_url('onlyme_rgb_32px', 'openstudio');
                 break;
             case content::VISIBILITY_TUTOR:
-                $contentvisibilityicon = $OUTPUT->pix_url('share_with_tutor_rgb_32px', 'openstudio');
+                $contentvisibilityicon = $OUTPUT->image_url('share_with_tutor_rgb_32px', 'openstudio');
                 break;
             default:
-                $contentvisibilityicon = $OUTPUT->pix_url('onlyme_rgb_32px', 'openstudio');
+                $contentvisibilityicon = $OUTPUT->image_url('onlyme_rgb_32px', 'openstudio');
                 break;
         }
 
@@ -787,7 +787,7 @@ class renderer_utils {
         switch ($contentdata->contenttype) {
             case content::TYPE_IMAGE:
                 if ($contentdata->mimetype == 'image/bmp') {
-                    $contenttypeimage = $OUTPUT->pix_url('unknown_rgb_32px', 'openstudio');
+                    $contenttypeimage = $OUTPUT->image_url('unknown_rgb_32px', 'openstudio');
                 } else {
                     if ($contentdata->content) {
                         $contenttypeimage = self::make_plugin_file($context->id, $contentthumbnailarea, $contentdata->id,
@@ -801,10 +801,10 @@ class renderer_utils {
                 }
                 break;
             case content::TYPE_VIDEO:
-                $contenttypeimage = $OUTPUT->pix_url('video_rgb_32px', 'openstudio');
+                $contenttypeimage = $OUTPUT->image_url('video_rgb_32px', 'openstudio');
                 break;
             case content::TYPE_AUDIO:
-                $contenttypeimage = $OUTPUT->pix_url('audio_rgb_32px', 'openstudio');
+                $contenttypeimage = $OUTPUT->image_url('audio_rgb_32px', 'openstudio');
                 break;
             case content::TYPE_DOCUMENT:
             case content::TYPE_URL_DOCUMENT:
@@ -812,44 +812,44 @@ class renderer_utils {
                 switch ($contentdata->mimetype) {
                     case 'application/msword':
                     case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-                        $contenttypeimage = $OUTPUT->pix_url('word_rgb_32px', 'openstudio');
+                        $contenttypeimage = $OUTPUT->image_url('word_rgb_32px', 'openstudio');
                         break;
                     case 'application/pdf':
-                        $contenttypeimage = $OUTPUT->pix_url('pdf_rgb_32px', 'openstudio');
+                        $contenttypeimage = $OUTPUT->image_url('pdf_rgb_32px', 'openstudio');
                         break;
                     default:
-                        $contenttypeimage = $OUTPUT->pix_url('document_rgb_32px', 'openstudio');
+                        $contenttypeimage = $OUTPUT->image_url('document_rgb_32px', 'openstudio');
                         break;
                 }
                 break;
             case content::TYPE_URL_DOCUMENT_PDF:
-                $contenttypeimage = $OUTPUT->pix_url('pdf_rgb_32px', 'openstudio');
+                $contenttypeimage = $OUTPUT->image_url('pdf_rgb_32px', 'openstudio');
                 break;
             case content::TYPE_PRESENTATION:
             case content::TYPE_URL_PRESENTATION:
             case content::TYPE_URL_PRESENTATION_PPT:
-                $contenttypeimage = $OUTPUT->pix_url('powerpoint_rgb_32px', 'openstudio');
+                $contenttypeimage = $OUTPUT->image_url('powerpoint_rgb_32px', 'openstudio');
                 break;
 
             case content::TYPE_SPREADSHEET:
             case content::TYPE_URL_SPREADSHEET:
             case content::TYPE_URL_SPREADSHEET_XLS:
-                $contenttypeimage = $OUTPUT->pix_url('excel_spreadsheet_rgb_32px', 'openstudio');
+                $contenttypeimage = $OUTPUT->image_url('excel_spreadsheet_rgb_32px', 'openstudio');
                 break;
             case content::TYPE_TEXT:
             case content::TYPE_URL:
             case content::TYPE_URL_VIDEO:
             case content::TYPE_URL_AUDIO:
-                $contenttypeimage = $OUTPUT->pix_url('online_rgb_32px', 'openstudio');
+                $contenttypeimage = $OUTPUT->image_url('online_rgb_32px', 'openstudio');
                 break;
             case content::TYPE_CAD:
-                $contenttypeimage = $OUTPUT->pix_url('cad_rgb_32px', 'openstudio');
+                $contenttypeimage = $OUTPUT->image_url('cad_rgb_32px', 'openstudio');
                 break;
             case content::TYPE_ZIP:
-                $contenttypeimage = $OUTPUT->pix_url('zip_archive_rgb_32px', 'openstudio');
+                $contenttypeimage = $OUTPUT->image_url('zip_archive_rgb_32px', 'openstudio');
                 break;
             default:
-                $contenttypeimage = $OUTPUT->pix_url('unknown_rgb_32px', 'openstudio');
+                $contenttypeimage = $OUTPUT->image_url('unknown_rgb_32px', 'openstudio');
                 break;
         }
 
@@ -922,56 +922,56 @@ class renderer_utils {
         $posttypes[] = (object) [
             'checked' => in_array(content::TYPE_IMAGE, $filters->ftypearray),
             'value' => content::TYPE_IMAGE,
-            'icon' => $OUTPUT->pix_url('image_filters_rgb_32px', 'openstudio'),
+            'icon' => $OUTPUT->image_url('image_filters_rgb_32px', 'openstudio'),
             'label' => get_string('filtertypesimage', 'openstudio')
         ];
 
         $posttypes[] = (object) [
             'checked' => in_array(content::TYPE_VIDEO, $filters->ftypearray),
             'value' => content::TYPE_VIDEO,
-            'icon' => $OUTPUT->pix_url('video_filters_rgb_32px', 'openstudio'),
+            'icon' => $OUTPUT->image_url('video_filters_rgb_32px', 'openstudio'),
             'label' => get_string('filtertypesvideo', 'openstudio')
         ];
 
         $posttypes[] = (object) [
             'checked' => in_array(content::TYPE_AUDIO, $filters->ftypearray),
             'value' => content::TYPE_AUDIO,
-            'icon' => $OUTPUT->pix_url('audio_filters_rgb_32px', 'openstudio'),
+            'icon' => $OUTPUT->image_url('audio_filters_rgb_32px', 'openstudio'),
             'label' => get_string('filtertypesaudio', 'openstudio')
         ];
 
         $posttypes[] = (object) [
             'checked' => in_array(content::TYPE_DOCUMENT, $filters->ftypearray),
             'value' => content::TYPE_DOCUMENT,
-            'icon' => $OUTPUT->pix_url('documents_filters_rgb_32px', 'openstudio'),
+            'icon' => $OUTPUT->image_url('documents_filters_rgb_32px', 'openstudio'),
             'label' => get_string('filtertypesdocuments', 'openstudio')
         ];
 
         $posttypes[] = (object) [
             'checked' => in_array(content::TYPE_PRESENTATION, $filters->ftypearray),
             'value' => content::TYPE_PRESENTATION,
-            'icon' => $OUTPUT->pix_url('powerpoint_filters_rgb_32px', 'openstudio'),
+            'icon' => $OUTPUT->image_url('powerpoint_filters_rgb_32px', 'openstudio'),
             'label' => get_string('filtertypespresentation', 'openstudio')
         ];
 
         $posttypes[] = (object) [
             'checked' => in_array(content::TYPE_SPREADSHEET, $filters->ftypearray),
             'value' => content::TYPE_SPREADSHEET,
-            'icon' => $OUTPUT->pix_url('spreadsheet_filters_rgb_32px', 'openstudio'),
+            'icon' => $OUTPUT->image_url('spreadsheet_filters_rgb_32px', 'openstudio'),
             'label' => get_string('filtertypesspreadsheet', 'openstudio')
         ];
 
         $posttypes[] = (object) [
             'checked' => in_array(content::TYPE_URL, $filters->ftypearray),
             'value' => content::TYPE_URL,
-            'icon' => $OUTPUT->pix_url('online_filters_rgb_32px', 'openstudio'),
+            'icon' => $OUTPUT->image_url('online_filters_rgb_32px', 'openstudio'),
             'label' => get_string('filtertypesweblink', 'openstudio')
         ];
 
         $posttypes[] = (object) [
             'checked' => in_array(content::TYPE_FOLDER, $filters->ftypearray),
             'value' => content::TYPE_FOLDER,
-            'icon' => $OUTPUT->pix_url('folder_filters_rgb_32px', 'openstudio'),
+            'icon' => $OUTPUT->image_url('folder_filters_rgb_32px', 'openstudio'),
             'label' => get_string('filtertypesfolder', 'openstudio')
         ];
 
@@ -1002,35 +1002,35 @@ class renderer_utils {
         $userflags[] = (object) [
             'checked' => in_array(stream::FILTER_FAVOURITES, $filters->fflagarray),
             'value' => stream::FILTER_FAVOURITES,
-            'icon' => $OUTPUT->pix_url('favourite_filters_rgb_32px', 'openstudio'),
+            'icon' => $OUTPUT->image_url('favourite_filters_rgb_32px', 'openstudio'),
             'label' => get_string('filterflagfavourite', 'openstudio')
         ];
 
         $userflags[] = (object) [
             'checked' => in_array(stream::FILTER_MOSTSMILES, $filters->fflagarray),
             'value' => stream::FILTER_MOSTSMILES,
-            'icon' => $OUTPUT->pix_url('participation_filters_rgb_32px', 'openstudio'),
+            'icon' => $OUTPUT->image_url('participation_filters_rgb_32px', 'openstudio'),
             'label' => get_string('filterflagsmile', 'openstudio')
         ];
 
         $userflags[] = (object) [
             'checked' => in_array(stream::FILTER_MOSTINSPIRATION, $filters->fflagarray),
             'value' => stream::FILTER_MOSTINSPIRATION,
-            'icon' => $OUTPUT->pix_url('inspiration_filters_rgb_32px', 'openstudio'),
+            'icon' => $OUTPUT->image_url('inspiration_filters_rgb_32px', 'openstudio'),
             'label' => get_string('filterflaginspiration', 'openstudio')
         ];
 
         $userflags[] = (object) [
             'checked' => in_array(stream::FILTER_HELPME, $filters->fflagarray),
             'value' => stream::FILTER_HELPME,
-            'icon' => $OUTPUT->pix_url('request_feedback_filters_rgb_32px', 'openstudio'),
+            'icon' => $OUTPUT->image_url('request_feedback_filters_rgb_32px', 'openstudio'),
             'label' => get_string('filterflagfeedbackrequested', 'openstudio')
         ];
 
         $userflags[] = (object) [
             'checked' => in_array(stream::FILTER_COMMENTS, $filters->fflagarray),
             'value' => stream::FILTER_COMMENTS,
-            'icon' => $OUTPUT->pix_url('comments_filters_rgb_32px', 'openstudio'),
+            'icon' => $OUTPUT->image_url('comments_filters_rgb_32px', 'openstudio'),
             'label' => get_string('filterflagcomments', 'openstudio')
         ];
 
@@ -1060,28 +1060,28 @@ class renderer_utils {
         $selectstatus[] = (object) [
             'checked' => $filters->fstatus == stream::FILTER_READ ,
             'value' => stream::FILTER_READ,
-            'icon' => $OUTPUT->pix_url('viewed_filters_rgb_32px', 'openstudio'),
+            'icon' => $OUTPUT->image_url('viewed_filters_rgb_32px', 'openstudio'),
             'label' => get_string('filterflagviewed', 'openstudio')
         ];
 
         $selectstatus[] = (object) [
             'checked' => $filters->fstatus == stream::FILTER_NOTREAD,
             'value' => stream::FILTER_NOTREAD,
-            'icon' => $OUTPUT->pix_url('not_viewed_filters_rgb_32px', 'openstudio'),
+            'icon' => $OUTPUT->image_url('not_viewed_filters_rgb_32px', 'openstudio'),
             'label' => get_string('filterflagnotviewed', 'openstudio')
         ];
 
         $selectstatus[] = (object) [
             'checked' => $filters->fstatus == stream::FILTER_EMPTYCONTENT,
             'value' => stream::FILTER_EMPTYCONTENT,
-            'icon' => $OUTPUT->pix_url('empty_posts_filters_rgb_32px', 'openstudio'),
+            'icon' => $OUTPUT->image_url('empty_posts_filters_rgb_32px', 'openstudio'),
             'label' => get_string('filterflagemptycontents', 'openstudio')
         ];
 
         $selectstatus[] = (object) [
             'checked' => $filters->fstatus == stream::FILTER_LOCKED,
             'value' => stream::FILTER_LOCKED,
-            'icon' => $OUTPUT->pix_url('lock_filters_rgb_32px', 'openstudio'),
+            'icon' => $OUTPUT->image_url('lock_filters_rgb_32px', 'openstudio'),
             'label' => get_string('filterflaglocked', 'openstudio')
         ];
 
@@ -1105,21 +1105,21 @@ class renderer_utils {
         $selectfrom[] = (object) [
             'checked' => $filters->fscope == stream::SCOPE_EVERYONE,
             'value' => stream::SCOPE_EVERYONE,
-            'icon' => $OUTPUT->pix_url('everyone_filters_rgb_32px', 'openstudio'),
+            'icon' => $OUTPUT->image_url('everyone_filters_rgb_32px', 'openstudio'),
             'label' => get_string('filterscopeeveryone', 'openstudio')
         ];
 
         $selectfrom[] = (object) [
             'checked' => $filters->fscope == stream::SCOPE_MY,
             'value' => stream::SCOPE_MY,
-            'icon' => $OUTPUT->pix_url('mine_filters_rgb_32px', 'openstudio'),
+            'icon' => $OUTPUT->image_url('mine_filters_rgb_32px', 'openstudio'),
             'label' => get_string('filterscopemy', 'openstudio')
         ];
 
         $selectfrom[] = (object) [
             'checked' => $filters->fscope == stream::SCOPE_THEIRS,
             'value' => stream::SCOPE_THEIRS,
-            'icon' => $OUTPUT->pix_url('theirs_filters_rgb_32px', 'openstudio'),
+            'icon' => $OUTPUT->image_url('theirs_filters_rgb_32px', 'openstudio'),
             'label' => get_string('filterscopetheirs', 'openstudio')
         ];
 
@@ -1220,7 +1220,7 @@ class renderer_utils {
         foreach ($contentdatatemp as $content) {
             if (isset($content->foldertemplateid)) {
                 $content->thumbnailimg = false;
-                $contentthumbnailfileurl = $OUTPUT->pix_url('uploads_rgb_32px', 'openstudio');
+                $contentthumbnailfileurl = $OUTPUT->image_url('uploads_rgb_32px', 'openstudio');
                 $content->contentthumbnailurl = $contentthumbnailfileurl;
                 $contentdetail = new \moodle_url('/mod/openstudio/contentedit.php',
                             array('id' => $folderdata->cmid, 'sid' => 0, 'ssid' => $folderdata->id, 'type' => 110,
@@ -1334,7 +1334,7 @@ class renderer_utils {
             $content->contentorder = $folderitem->order;
             $folderitem->contentsbook = false;
             if (isset($content->foldertemplateid)) {
-                $contentthumbnailfileurl = $OUTPUT->pix_url('uploads_rgb_32px', 'openstudio');
+                $contentthumbnailfileurl = $OUTPUT->image_url('uploads_rgb_32px', 'openstudio');
                 $folderitem->id = $content->id;
                 $folderitem->name = $content->name;
                 $folderitem->orderstring = str_pad($content->contentorder, 2, '0', STR_PAD_LEFT);
@@ -1673,8 +1673,8 @@ class renderer_utils {
             $contentexist = $firstcontent = folder::get_first_content($content->id);
             $content->isfolder = true;
             $content->hascontent = false;
-            $folderthumbnailfileurl = $OUTPUT->pix_url('uploads_rgb_32px', 'openstudio');
-            $content->defaultfolderimg = $OUTPUT->pix_url('uploads_rgb_32px', 'openstudio');
+            $folderthumbnailfileurl = $OUTPUT->image_url('uploads_rgb_32px', 'openstudio');
+            $content->defaultfolderimg = $OUTPUT->image_url('uploads_rgb_32px', 'openstudio');
             if ($firstcontent) {
                 $content->hascontent = true;
                 $content->thumbnailimg = true;
@@ -1691,7 +1691,7 @@ class renderer_utils {
                 }
             }
             $content->folderthumbnail = $folderthumbnailfileurl;
-            $content->folderdefaultthumbnail = $OUTPUT->pix_url('openstudio_sets_preview_box', 'openstudio');
+            $content->folderdefaultthumbnail = $OUTPUT->image_url('openstudio_sets_preview_box', 'openstudio');
             $content->folderlink = new \moodle_url('/mod/openstudio/folder.php',
                     array('id' => $id, 'lid' => $content->l3id, 'vid' => content::VISIBILITY_PRIVATE, 'sid' => $content->id));
             if (!$content->id) {

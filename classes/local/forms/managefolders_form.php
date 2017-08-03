@@ -62,13 +62,13 @@ class managefolders_form extends \moodleform {
         $contentfieldsoptions['contentsubheader']['default'] = \html_writer::tag('h3',
             get_string('content', 'openstudio') . ' {no}');
         $contentfields[] = $mform->createElement('image', 'contentmovedown',
-            $OUTPUT->pix_url('t/down'),
+            $OUTPUT->image_url('t/down'),
             array('title' => get_string('movedown', 'openstudio'), 'class' => 'movedown'));
         $contentfields[] = $mform->createElement('image', 'contentmoveup',
-            $OUTPUT->pix_url('t/up'),
+            $OUTPUT->image_url('t/up'),
             array('title' => get_string('moveup', 'openstudio'), 'class' => 'moveup'));
         $contentfields[] = $mform->createElement('image', 'contentdelete',
-            $OUTPUT->pix_url('t/delete'),
+            $OUTPUT->image_url('t/delete'),
             array('title' => get_string('deletelevel', 'openstudio'), 'class' => 'delete'));
 
         // Name.

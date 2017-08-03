@@ -225,29 +225,29 @@ if (trim($searchtext) == '') {
                 // Set icon for content.
                 switch ($visibility) {
                     case content::VISIBILITY_MODULE:
-                        $contenticon = $OUTPUT->pix_url('mymodule_rgb_32px', 'openstudio');
+                        $contenticon = $OUTPUT->image_url('mymodule_rgb_32px', 'openstudio');
                         $itemsharewith = get_string('contentitemsharewithmymodule', 'openstudio');
                         break;
 
                     case content::VISIBILITY_GROUP:
-                        $contenticon = $OUTPUT->pix_url('group_rgb_32px', 'openstudio');
+                        $contenticon = $OUTPUT->image_url('group_rgb_32px', 'openstudio');
                         $itemsharewith = get_string('slotvisibletogroup', 'openstudio',
                                 group::get_name(abs($content->visibility)));
                         break;
 
                     case content::VISIBILITY_WORKSPACE:
                     case content::VISIBILITY_PRIVATE:
-                        $contenticon = $OUTPUT->pix_url('onlyme_rgb_32px', 'openstudio');
+                        $contenticon = $OUTPUT->image_url('onlyme_rgb_32px', 'openstudio');
                         $itemsharewith = get_string('contentitemsharewithonlyme', 'openstudio');
                         break;
 
                     case content::VISIBILITY_PRIVATE_PINBOARD:
-                        $contenticon = $OUTPUT->pix_url('onlyme_rgb_32px', 'openstudio');
+                        $contenticon = $OUTPUT->image_url('onlyme_rgb_32px', 'openstudio');
                         $itemsharewith = get_string('contentitemsharewithonlyme', 'openstudio');
                         break;
 
                     case content::VISIBILITY_TUTOR:
-                        $contenticon = $OUTPUT->pix_url('share_with_tutor_rgb_32px', 'openstudio');
+                        $contenticon = $OUTPUT->image_url('share_with_tutor_rgb_32px', 'openstudio');
                         $itemsharewith = get_string('contentitemsharewithmytutor', 'openstudio');
                         break;
                 }

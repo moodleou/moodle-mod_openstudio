@@ -70,7 +70,7 @@ class manageblocks_form extends \moodleform {
                             get_string('viewcontents', 'openstudio').")"));
                 }
                 $blockname[] = $mform->createElement('image', 'reinstatebutton[' . $block->id . ']',
-                    $OUTPUT->pix_url('undo', 'openstudio'), array('title' => get_string('undeletelevel', 'openstudio')));
+                    $OUTPUT->image_url('undo', 'openstudio'), array('title' => get_string('undeletelevel', 'openstudio')));
                 $mform->addGroup($blockname, null, $counter . '. ', ' ', null, true);
             }
         }
@@ -105,19 +105,19 @@ class manageblocks_form extends \moodleform {
             if ($total > 1) {
                 if ($counter == 1) {
                     $blockname[] = $mform->createElement('image', 'movednbutton[' . $block->id . ']',
-                        $OUTPUT->pix_url('t/down'), array('title' => get_string('movedown', 'openstudio')));
+                        $OUTPUT->image_url('t/down'), array('title' => get_string('movedown', 'openstudio')));
                 } else if ($counter == $total) {
                     $blockname[] = $mform->createElement('image', 'moveupbutton[' . $block->id . ']',
-                        $OUTPUT->pix_url('t/up'), array('title' => get_string('moveup', 'openstudio')));
+                        $OUTPUT->image_url('t/up'), array('title' => get_string('moveup', 'openstudio')));
                 } else {
                     $blockname[] = $mform->createElement('image', 'movednbutton[' . $block->id . ']',
-                        $OUTPUT->pix_url('t/down'), array('title' => get_string('movedown', 'openstudio')));
+                        $OUTPUT->image_url('t/down'), array('title' => get_string('movedown', 'openstudio')));
                     $blockname[] = $mform->createElement('image', 'moveupbutton[' . $block->id . ']',
-                        $OUTPUT->pix_url('t/up'), array('title' => get_string('moveup', 'openstudio')));
+                        $OUTPUT->image_url('t/up'), array('title' => get_string('moveup', 'openstudio')));
                 }
             }
             $blockname[] = $mform->createElement('image', 'editbutton[' . $block->id . ']',
-                $OUTPUT->pix_url('t/edit'), array('title' => get_string('editlevel', 'openstudio')));
+                $OUTPUT->image_url('t/edit'), array('title' => get_string('editlevel', 'openstudio')));
             if ($contentsinblock > 0) {
                 $blockurl = new \moodle_url('/mod/openstudio/search.php', array('id' => $this->_customdata['id']));
                 $searchstring = '&searchtext=' . urlencode('"' . $block->name . '"');
@@ -126,11 +126,11 @@ class manageblocks_form extends \moodleform {
                         get_string('viewcontents', 'openstudio') . ")"));
                 if (has_capability('mod/openstudio:deletelevels', $context)) {
                     $blockname[] = $mform->createElement('image', 'deletebutton[' . $block->id . ']',
-                        $OUTPUT->pix_url('t/delete'), array('title' => get_string('deletelevel', 'openstudio')));
+                        $OUTPUT->image_url('t/delete'), array('title' => get_string('deletelevel', 'openstudio')));
                 }
             } else {
                 $blockname[] = $mform->createElement('image', 'deletebutton[' . $block->id . ']',
-                    $OUTPUT->pix_url('t/delete'), array('title' => get_string('deletelevel', 'openstudio')));
+                    $OUTPUT->image_url('t/delete'), array('title' => get_string('deletelevel', 'openstudio')));
             }
             $mform->addGroup($blockname, null, $counter . '. ', ' ', null, true);
         }

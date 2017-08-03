@@ -128,7 +128,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $submenuitem = array(
                     'name' => $modulename,
                     'url' => $navigationurls->mymoduleurl,
-                    'pix' => $OUTPUT->pix_url('mymodule_rgb_32px', 'openstudio'),
+                    'pix' => $OUTPUT->image_url('mymodule_rgb_32px', 'openstudio'),
                     'active' => $menuhighlight->mymodule
             );
             $menuitem['hassubnavigation'] = true;
@@ -143,7 +143,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $submenuitem = array(
                     'name' => $groupname,
                     'url' => $navigationurls->mygroupurl,
-                    'pix' => $OUTPUT->pix_url('group_rgb_32px', 'openstudio'),
+                    'pix' => $OUTPUT->image_url('group_rgb_32px', 'openstudio'),
                     'active' => $menuhighlight->mygroup
             );
             $menuitem['hassubnavigation'] = true;
@@ -155,7 +155,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             if (count($menuitem['subnavigation']) > 1) {
                 $menuitem['name'] = get_string('menusharedcontent', 'openstudio');
                 $menuitem['url'] = '#';
-                $menuitem['pix'] = $OUTPUT->pix_url('shared_content_rgb_32px', 'openstudio');
+                $menuitem['pix'] = $OUTPUT->image_url('shared_content_rgb_32px', 'openstudio');
                 $menuitem['class'] = 'shared-content';
                 $menuitem['active'] = $menuhighlight->mymodule || $menuhighlight->mygroup;
                 $data->navigation[] = $menuitem;
@@ -165,7 +165,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                     'subnavigation' => array(),
                     'name' => get_string('menusharedcontent', 'openstudio'),
                     'url' => $submenuitem['url'],
-                    'pix' => $OUTPUT->pix_url('shared_content_rgb_32px', 'openstudio'),
+                    'pix' => $OUTPUT->image_url('shared_content_rgb_32px', 'openstudio'),
                     'class' => 'shared-content',
                     'active' => $menuhighlight->mymodule || $menuhighlight->mygroup
                 );
@@ -177,7 +177,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             // Generate people items.
             $menuitem['name'] = get_string('menupeople', 'openstudio');
             $menuitem['url'] = $navigationurls->peoplemoduleurl;
-            $menuitem['pix'] = $OUTPUT->pix_url('people_rgb_32px', 'openstudio');
+            $menuitem['pix'] = $OUTPUT->image_url('people_rgb_32px', 'openstudio');
             $menuitem['class'] = 'people';
             $menuitem['active'] = $menuhighlight->people;
             $menuitem['hassubnavigation'] = false;
@@ -199,7 +199,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $submenuitem = array(
                     'name' => $studioname,
                     'url' => $navigationurls->myworkurl,
-                    'pix' => $OUTPUT->pix_url('activity_rgb_32px', 'openstudio'),
+                    'pix' => $OUTPUT->image_url('activity_rgb_32px', 'openstudio'),
                     'active' => $menuhighlight->myactivity
             );
             $menuitem['hassubnavigation'] = true;
@@ -214,7 +214,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $submenuitem = array(
                     'name' => $pinboardname,
                     'url' => $navigationurls->pinboardurl,
-                    'pix' => $OUTPUT->pix_url('pinboard_rgb_32px', 'openstudio'),
+                    'pix' => $OUTPUT->image_url('pinboard_rgb_32px', 'openstudio'),
                     'active' => $menuhighlight->mypinboard
             );
             $menuitem['hassubnavigation'] = true;
@@ -232,7 +232,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
                 $menuitem['name'] = get_string('menumycontent', 'openstudio');
                 $menuitem['url'] = '#';
-                $menuitem['pix'] = $OUTPUT->pix_url('openstudio_rgb_32px', 'openstudio');
+                $menuitem['pix'] = $OUTPUT->image_url('openstudio_rgb_32px', 'openstudio');
                 $menuitem['class'] = 'my-content';
                 $menuitem['active'] = $menuhighlight->myactivity || $menuhighlight->mypinboard;
                 $data->navigation[] = $menuitem;
@@ -242,7 +242,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                     'subnavigation' => array(),
                     'name' => get_string('menumycontent', 'openstudio'),
                     'url' => $submenuitem['url'],
-                    'pix' => $OUTPUT->pix_url('openstudio_rgb_32px', 'openstudio'),
+                    'pix' => $OUTPUT->image_url('openstudio_rgb_32px', 'openstudio'),
                     'class' => 'my-content',
                     'active' => $menuhighlight->myactivity || $menuhighlight->mypinboard
                 );
@@ -256,7 +256,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $data->navigation[] = $adminmenuitem;
         }
 
-        $data->notificationicon = $OUTPUT->pix_url('notifications_rgb_32px', 'openstudio');
+        $data->notificationicon = $OUTPUT->image_url('notifications_rgb_32px', 'openstudio');
         $data->notifications = [];
         $notifications = notifications::get_current($cm->instance, $USER->id, defaults::NOTIFICATIONLIMITMAX);
         foreach ($notifications as $notification) {
@@ -447,7 +447,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             if (!empty($menuitem['subnavigation'])) {
                 $menuitem['name'] = get_string('menuadministration', 'openstudio');
                 $menuitem['url'] = '#';
-                $menuitem['pix'] = $OUTPUT->pix_url('administration_rgb_32px', 'openstudio');
+                $menuitem['pix'] = $OUTPUT->image_url('administration_rgb_32px', 'openstudio');
                 $menuitem['class'] = 'administration';
             }
         }
@@ -491,7 +491,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $data->placeholdertext = $placeholdertext;
         $data->searchlink = $CFG->wwwroot.'/mod/openstudio/search.php';
         $data->helplink = $CFG->wwwroot.'/help.php';
-        $data->iconsearch = $OUTPUT->pix_url('i/search');
+        $data->iconsearch = $OUTPUT->image_url('i/search');
         $data->id = $openstudioid;
         $data->vid = $viewmode;
         $data->groupid = $groupid;
@@ -533,7 +533,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $createfolderlink = new moodle_url('/mod/openstudio/contentedit.php',
                 array('id' => $data->cmid, 'lid' => 0, 'sid' => 0, 'ssid' => 0, 'type' => content::TYPE_FOLDER_CONTENT));
         $data->createfolderlink = $createfolderlink;
-        $data->addcontenticon = $OUTPUT->pix_url('add_content_rgb_32px', 'openstudio');
+        $data->addcontenticon = $OUTPUT->image_url('add_content_rgb_32px', 'openstudio');
         $data->editform = $contenteditform;
 
         return $this->render_from_template('mod_openstudio/content_edit', $data);
@@ -641,19 +641,19 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $contentdata->myactivities = $myactivities;
         $contentdata->blocksdata = property_exists($contentdata,
             'openstudio_view_filters') ? $contentdata->openstudio_view_filters->fblockdataarray : array();
-        $contentdata->viewedicon = $OUTPUT->pix_url('viewed_rgb_32px', 'openstudio');
-        $contentdata->commentsicon = $OUTPUT->pix_url('comments_rgb_32px', 'openstudio');
-        $contentdata->inspirationicon = $OUTPUT->pix_url('inspiration_rgb_32px', 'openstudio');
-        $contentdata->participationicon = $OUTPUT->pix_url('participation_rgb_32px', 'openstudio');
-        $contentdata->favouriteicon = $OUTPUT->pix_url('favourite_rgb_32px', 'openstudio');
-        $contentdata->commentsgreyicon = $OUTPUT->pix_url('comments_grey_rgb_32px', 'openstudio');
-        $contentdata->inspirationgreyicon = $OUTPUT->pix_url('inspiration_grey_rgb_32px', 'openstudio');
-        $contentdata->participationgreyicon = $OUTPUT->pix_url('participation_grey_rgb_32px', 'openstudio');
-        $contentdata->favouritegreyicon = $OUTPUT->pix_url('favourite_grey_rgb_32px', 'openstudio');
+        $contentdata->viewedicon = $OUTPUT->image_url('viewed_rgb_32px', 'openstudio');
+        $contentdata->commentsicon = $OUTPUT->image_url('comments_rgb_32px', 'openstudio');
+        $contentdata->inspirationicon = $OUTPUT->image_url('inspiration_rgb_32px', 'openstudio');
+        $contentdata->participationicon = $OUTPUT->image_url('participation_rgb_32px', 'openstudio');
+        $contentdata->favouriteicon = $OUTPUT->image_url('favourite_rgb_32px', 'openstudio');
+        $contentdata->commentsgreyicon = $OUTPUT->image_url('comments_grey_rgb_32px', 'openstudio');
+        $contentdata->inspirationgreyicon = $OUTPUT->image_url('inspiration_grey_rgb_32px', 'openstudio');
+        $contentdata->participationgreyicon = $OUTPUT->image_url('participation_grey_rgb_32px', 'openstudio');
+        $contentdata->favouritegreyicon = $OUTPUT->image_url('favourite_grey_rgb_32px', 'openstudio');
         $contentdata->vid = $viewmode;
-        $contentdata->lockicon = $OUTPUT->pix_url('lock_grey_rgb_32px', 'openstudio');
-        $contentdata->requestfeedbackicon = $OUTPUT->pix_url('request_feedback_white_rgb_32px', 'openstudio');
-        $contentdata->createcontentthumbnail = $OUTPUT->pix_url('uploads_rgb_32px', 'openstudio');
+        $contentdata->lockicon = $OUTPUT->image_url('lock_grey_rgb_32px', 'openstudio');
+        $contentdata->requestfeedbackicon = $OUTPUT->image_url('request_feedback_white_rgb_32px', 'openstudio');
+        $contentdata->createcontentthumbnail = $OUTPUT->image_url('uploads_rgb_32px', 'openstudio');
 
         $contentdata->contentediturl = new moodle_url('/mod/openstudio/contentedit.php', array(
                    'id' => $cmid, 'vid' => $viewmode, 'lid' => 0, 'sid' => 0, 'type' => 0, 'sstsid' => 0));
@@ -663,7 +663,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                     'type' => content::TYPE_FOLDER_CONTENT));
 
             $contentdata->folderediturl = $folderlink;
-            $contentdata->createfolderthumbnail = $OUTPUT->pix_url('create_folder_rgb_32px', 'openstudio');
+            $contentdata->createfolderthumbnail = $OUTPUT->image_url('create_folder_rgb_32px', 'openstudio');
         }
         $contentdata->feature_enablefolders = $permissions->feature_enablefolders;
         $contentdata->available = $permissions->pinboarddata->available;
@@ -752,8 +752,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         $peopledata->groupitems = array_values($groupitem);
         $peopledata->showmultigroup = $showmultigroup;
-        $peopledata->commentsicon = $OUTPUT->pix_url('comments_rgb_32px', 'openstudio');
-        $peopledata->viewedicon = $OUTPUT->pix_url('viewed_rgb_32px', 'openstudio');
+        $peopledata->commentsicon = $OUTPUT->image_url('comments_rgb_32px', 'openstudio');
+        $peopledata->viewedicon = $OUTPUT->image_url('viewed_rgb_32px', 'openstudio');
 
         return $this->render_from_template('mod_openstudio/people_page', $peopledata);
     }
@@ -1086,8 +1086,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $folderdata->userpicturehtml = $OUTPUT->render($picture);
         }
 
-        $folderdata->addcontentthumbnail = $OUTPUT->pix_url('uploads_rgb_32px', 'openstudio');
-        $folderdata->selectcontentthumbnail = $OUTPUT->pix_url('browse_posts_rgb_32px', 'openstudio');
+        $folderdata->addcontentthumbnail = $OUTPUT->image_url('uploads_rgb_32px', 'openstudio');
+        $folderdata->selectcontentthumbnail = $OUTPUT->image_url('browse_posts_rgb_32px', 'openstudio');
 
         // Generate content flags.
         $folderdata = renderer_utils::content_flags($cmid, $permissions, $folderdata);
@@ -1131,8 +1131,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         $data->contents = $contents;
         $data->total = count($contents);
-        $data->lockicon = $OUTPUT->pix_url('lock_grey_rgb_32px', 'openstudio');
-        $data->requestfeedbackicon = $OUTPUT->pix_url('request_feedback_white_rgb_32px', 'openstudio');
+        $data->lockicon = $OUTPUT->image_url('lock_grey_rgb_32px', 'openstudio');
+        $data->requestfeedbackicon = $OUTPUT->image_url('request_feedback_white_rgb_32px', 'openstudio');
 
         return $this->render_from_template('mod_openstudio/folder_browse_posts', $data);
     }

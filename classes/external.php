@@ -192,37 +192,37 @@ class mod_openstudio_external extends external_api {
                 // Set icon for content.
                 switch ($visibility) {
                     case content::VISIBILITY_MODULE:
-                        $contenticon = $OUTPUT->pix_url('mymodule_rgb_32px', 'openstudio');
+                        $contenticon = $OUTPUT->image_url('mymodule_rgb_32px', 'openstudio');
                         $contentlocation = get_string('contentformvisibilitymodule', 'openstudio');
                         break;
 
                     case content::VISIBILITY_GROUP:
-                        $contenticon = $OUTPUT->pix_url('group_rgb_32px', 'openstudio');
+                        $contenticon = $OUTPUT->image_url('group_rgb_32px', 'openstudio');
                         $contentlocation = group::get_name(abs($content->visibility));
                         break;
 
                     case content::VISIBILITY_WORKSPACE:
                     case content::VISIBILITY_PRIVATE:
-                        $contenticon = $OUTPUT->pix_url('onlyme_rgb_32px', 'openstudio');
+                        $contenticon = $OUTPUT->image_url('onlyme_rgb_32px', 'openstudio');
                         $contentlocation = get_string('contentformvisibilityprivate', 'openstudio');
                         break;
 
                     case content::VISIBILITY_PRIVATE_PINBOARD:
-                        $contenticon = $OUTPUT->pix_url('onlyme_rgb_32px', 'openstudio');
+                        $contenticon = $OUTPUT->image_url('onlyme_rgb_32px', 'openstudio');
                         $contentlocation = get_string('contentformvisibilityprivate', 'openstudio');
                         break;
 
                     case content::VISIBILITY_TUTOR:
-                        $contenticon = $OUTPUT->pix_url('share_with_tutor_rgb_32px', 'openstudio');
+                        $contenticon = $OUTPUT->image_url('share_with_tutor_rgb_32px', 'openstudio');
                         $contentlocation = get_string('contentitemsharewithmytutor', 'openstudio');
                         break;
                     case content::VISIBILITY_INFOLDERONLY:
-                        $contenticon = $OUTPUT->pix_url('folder_darkblue_rgb_32px', 'openstudio');
+                        $contenticon = $OUTPUT->image_url('folder_darkblue_rgb_32px', 'openstudio');
                         $folder = folder::get_containing_folder($content->id);
                         $contentlocation = $folder->name;
                         break;
                     default:
-                        $contenticon = $OUTPUT->pix_url('onlyme_rgb_32px', 'openstudio');
+                        $contenticon = $OUTPUT->image_url('onlyme_rgb_32px', 'openstudio');
                         $contentlocation = get_string('contentformvisibilityprivate', 'openstudio');
                         break;
                 }
