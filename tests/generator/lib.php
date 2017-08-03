@@ -357,6 +357,7 @@ class mod_openstudio_generator extends testing_module_generator {
         }
         if (!isset($record->visible)) {
             $record->visible = 1;
+            $record->visibleoncoursepage = 1;
             $record->visibleold = 1;
         }
         if (!isset($record->tutorroles)) {
