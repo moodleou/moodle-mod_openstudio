@@ -10,8 +10,8 @@ Feature: Add/Reply/Flag/Delete comment
             | student1 | Student   | 1        | student1@asd.com |
             | student2 | Student   | 2        | student2@asd.com |
         And the following "courses" exist:
-            | fullname | shortname | category | format      |
-            | Course 1 | C1        | 0        | oustudyplan |
+            | fullname | shortname | category | format      | numsections |
+            | Course 1 | C1        | 0        | oustudyplan | 0           |
         And the following "course enrolments" exist:
             | user     | course | role    |
             | student1 | C1     | student |

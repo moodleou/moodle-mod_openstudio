@@ -13,8 +13,8 @@ Feature: Create and edit Folder
             | student3 | Student | 3 | student3@asd.com |
             | student4 | Student | 4 | student4@asd.com |
         And the following "courses" exist:
-            | fullname | shortname | category | format      |
-            | Course 1 | C1        | 0        | oustudyplan |
+            | fullname | shortname | category | format      | numsections |
+            | Course 1 | C1        | 0        | oustudyplan | 0           |
         And the following "course enrolments" exist:
             | user | course | role |
             | teacher1 | C1 | editingteacher |
