@@ -289,7 +289,7 @@ EOF;
 
                 // Check if number of records for a given studio instance exceeds $processlimit,
                 // and if so, we dont process any more records for the studio instance.
-                if (($processlimit > 0) && ($processcounts[$subscription->studioid] >= $processlimit)) {
+                if (($processlimit > 0) && ($processcounts[$subscription->openstudioid] >= $processlimit)) {
                     continue;
                 }
 
@@ -335,18 +335,20 @@ EOF;
                             $subscription->timeprocessed = 100;
                         }
 
-                        $notifications = notifications::get_recent($studioid,
+                        $notifications = notifications::get_recent($subscription->openstudioid,
                                 $subscription->userid, $subscription->timeprocessed);
 
-                        $emailsubject = get_string('subscriptionemailsubject', 'openstudio', $coursecode);
-                        $email = new subscription_email($userdetails, $notifications, $subscription->format);
-                        $emailbody = $renderer->render($email);
-                        // OK, We have everything, let's generate and send the email.
-                        email_to_user($userdetails, $CFG->noreplyaddress,
+                        if (count($notifications) > 0) {
+                            $emailsubject = get_string('subscriptionemailsubject', 'openstudio', $coursecode);
+                            $email = new subscription_email($userdetails, $notifications, $subscription->format);
+                            $emailbody = $renderer->render($email);
+                            // OK, We have everything, let's generate and send the email.
+                            email_to_user($userdetails, $CFG->noreplyaddress,
                                 $emailsubject, $emailbody['plain'], $emailbody['html']);
 
-                        // Update the subscription entry.
-                        self::update($subscription->id, '', '', time());
+                            // Update the subscription entry.
+                            self::update($subscription->id, '', '', time());
+                        }
                     }
                 } else {
                     // Even though we havent really processed the user because of lack of permission,
