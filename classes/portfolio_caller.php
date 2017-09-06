@@ -42,7 +42,6 @@ class portfolio_caller extends \portfolio_module_caller_base {
     protected $contents = [];
     protected $foldercontents = [];
     protected $files = [];
-    protected $fs;
     protected $context;
 
     public static function expected_callbackargs() {
@@ -58,7 +57,6 @@ class portfolio_caller extends \portfolio_module_caller_base {
         $this->cm = get_coursemodule_from_instance('openstudio', $this->studioid);
         $this->contentids = export::decode_ids($this->contentids);
         $this->supportedformats = [PORTFOLIO_FORMAT_RICHHTML];
-        $this->fs = get_file_storage();
         $this->context = \context_module::instance($this->cm->id);
     }
 
@@ -93,35 +91,24 @@ class portfolio_caller extends \portfolio_module_caller_base {
         }
 
         $this->load_contents($contents);
-        if (empty($this->files)) {
-            // No attached files to export, we'll just be generating HTML pages for the content.  Create a dummy file to
-            // make sure $this->multifiles is set up correctly.  It's in the user's draft area, so cleaned up by cron.
-            $dummyfile = [
-                'contextid' => \context_user::instance($USER->id)->id,
-                'component' => 'user',
-                'filearea' => 'draft',
-                'filename' => 'dummyfile',
-                'filepath' => '/',
-                'itemid' => file_get_unused_draft_itemid()
-            ];
-            $this->files[] = $this->fs->create_file_from_string($dummyfile, '');
-        }
-        $this->set_file_and_format_data($this->files);
-    }
 
-    public function prepare_package() {
-        global $OUTPUT;
+        $this->set_file_and_format_data($this->files);
         if (empty($this->multifiles) && !empty($this->singlefile)) {
             $this->multifiles = array($this->singlefile);
         }
         if (!empty($this->multifiles)) {
-            foreach ($this->multifiles as $file) {
-                if ($file->get_filename() !== 'dummyfile') {
-                    $this->exporter->copy_existing_file($file);
-                }
-            }
+            $this->add_format(PORTFOLIO_FORMAT_RICHHTML);
+        } else {
+            $this->add_format(PORTFOLIO_FORMAT_PLAINHTML);
         }
+    }
+
+    public function prepare_package() {
+        global $OUTPUT;
+
+
         $filedir = $this->exporter->get('format')->get_file_directory();
+        $manifest = ($this->exporter->get('format') instanceof PORTFOLIO_FORMAT_RICH);
         foreach ($this->contents as $content) {
             $content->content = $filedir . $content->content;
             $contentpage = $OUTPUT->render_from_template('mod_openstudio/export', ['content' => $content]);
@@ -130,8 +117,7 @@ class portfolio_caller extends \portfolio_module_caller_base {
             } else {
                 $suffix = '';
             }
-            $contentfile = $this->exporter->write_new_file($contentpage, $this->generate_filename($content, 'html', $suffix));
-            $this->multifiles[] = $contentfile;
+            $contentfile = $this->exporter->write_new_file($contentpage, $this->generate_filename($content, 'html', $suffix), $manifest);
             if ($content->contenttype === content::TYPE_FOLDER) {
                 $folderlinks = [];
                 foreach ($this->foldercontents[$content->id] as $foldercontent) {
@@ -139,26 +125,38 @@ class portfolio_caller extends \portfolio_module_caller_base {
                 }
                 $templatedata = ['title' => $content->name . ' Contents', 'links' => $folderlinks];
                 $folderpage = $OUTPUT->render_from_template('mod_openstudio/folderexport', $templatedata);
-                $folderfile = $this->exporter->write_new_file($folderpage, $this->generate_filename($content, 'html', ' Contents'));
-                $this->multifiles[] = $folderfile;
+                $folderfile = $this->exporter->write_new_file($folderpage, $this->generate_filename($content, 'html', ' Contents'), $manifest);
+            }
+        }
+
+        if (!empty($this->multifiles)) {
+            foreach ($this->multifiles as $file) {
+                $this->exporter->copy_existing_file($file);
             }
         }
     }
 
     public function expected_time() {
-        if (empty($this->multifiles)) {
-            return portfolio_expected_time_file($this->singlefile);
-        } else {
-            return portfolio_expected_time_file($this->multifiles);
-        }
+        return $this->expected_time_file();
     }
 
     public function check_permissions() {
         return has_capability('mod/openstudio:export', \context_module::instance($this->cm->id));
     }
 
+    /**
+     * Special override to copy with no files
+     *
+     * @return string
+     */
     public function get_sha1() {
-        return sha1($this->get_sha1_file());
+        $filesha = '';
+        if (!empty($this->multifiles)) {
+            $filesha = $this->get_sha1_file();
+        }
+        $bigstring = $filesha;
+
+        return sha1($bigstring);
     }
 
     public static function base_supported_formats() {
@@ -166,6 +164,7 @@ class portfolio_caller extends \portfolio_module_caller_base {
     }
 
     private function load_contents($contents, $folderid = null) {
+        $fs = get_file_storage();
         foreach ($contents as $content) {
             if ($content->userid != $this->user->id) {
                 throw new \portfolio_caller_exception('exportwronguser', 'openstudio', '', $content->name);
@@ -175,7 +174,7 @@ class portfolio_caller extends \portfolio_module_caller_base {
                 $this->load_contents($foldercontents, $content->id);
             } else {
                 if (!empty($content->fileid)) {
-                    $this->files[] = $this->fs->get_file($this->context->id, 'mod_openstudio', 'content',
+                    $this->files[] = $fs->get_file($this->context->id, 'mod_openstudio', 'content',
                             $content->fileid, '/', $content->content);
                 }
             }
