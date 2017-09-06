@@ -62,7 +62,7 @@
 }
 
 .path-mod-openstudio .dropdown-menu > li > a.menuitem-active:hover {
-    text-decoration: unset;
+    text-decoration: none;
 }
 
 .path-mod-openstudio .nav-tabs > li, .nav-pills > li {
@@ -109,7 +109,7 @@
 
 .openstudio-subscribe-button {
     float: right;
-    margin-right: 13px;
+    margin-right: 19px;
     display: inline-block;
     padding-bottom: 10px;
 }
@@ -125,6 +125,7 @@
 
 .openstudio-add-dashboard-button {
     float: right;
+    clear: both;
 }
 
 .path-mod-openstudio .openstudio-content-actions.locked {
@@ -4487,7 +4488,7 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-subscribe-button {
         margin-top: 4px;
         padding-right: 0px;
-        margin-right: 3px;
+        margin-right: 9px;
     }
 
     .openstudio-add-dashboard-button {
