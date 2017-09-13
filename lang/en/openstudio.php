@@ -1379,3 +1379,6 @@ $string['postatbottom'] = 'Post is already at the bottom';
 $string['postatbottom'] = 'You cannot enter a position that does not contain a slot.';
 $string['errormoveslotduplicate'] = 'You cannot enter the same number twice.';
 $string['errormoveslotoutofrange'] = 'You cannot enter a position that does not contain a slot.';
+
+$string['search:activity'] = 'OpenStudio - activity information';
+$string['search:posts'] = 'OpenStudio - posts';

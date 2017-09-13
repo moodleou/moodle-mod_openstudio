@@ -36,6 +36,7 @@
         <FIELD NAME="themehomedefault" TYPE="int" LENGTH="4" NOTNULL="false" SEQUENCE="false" COMMENT="Currently not being used"/>
         <FIELD NAME="themehelplink" TYPE="char" LENGTH="600" NOTNULL="false" SEQUENCE="false" COMMENT="Currently not being used"/>
         <FIELD NAME="themehelpname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Currently not being used"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Time (in seconds since epoch)."/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

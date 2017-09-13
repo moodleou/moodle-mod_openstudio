@@ -67,6 +67,11 @@ class restore_openstudio_activity_structure_step extends restore_activity_struct
         global $DB;
 
         $data = (object)$data;
+
+        if (!isset($data->timemodified)) {
+            $data->timemodified = time();
+        }
+
         $oldid = $data->id;
         $data->course = $this->get_courseid();
         unset($data->openstudio_level1);
