@@ -1382,3 +1382,4 @@ $string['errormoveslotoutofrange'] = 'You cannot enter a position that does not 
 
 $string['search:activity'] = 'OpenStudio - activity information';
 $string['search:posts'] = 'OpenStudio - posts';
+$string['search:folders'] = 'OpenStudio - folders';
