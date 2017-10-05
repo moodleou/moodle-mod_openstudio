@@ -295,12 +295,13 @@ define([
 
             // Is mobile view.
             if (Y.one('body').get('winWidth') > 767) {
+                var dialoguetop = $(t.CSS.SUBSCRIBESETTING).offset().top + 3;
+                var dialogueleft = $(t.CSS.SUBSCRIBESETTING).offset().left - 330;
                 t.dialogue
                     .get('boundingBox')
                     .setStyles({
-                       top: 3,
-                       right: 211,
-                       left: 'auto',
+                       top: dialoguetop,
+                       left: dialogueleft,
                        width: 316
                     });
 
@@ -311,7 +312,6 @@ define([
                 // Update dialog sizing.
                 t.dialogue.hide();
                 t.sizing = 'large';
-                $(t.CSS.SUBSCRIBESETTING).after($(t.CSS.BOUNDINGBOX).parent());
 
                 if (visible) {
                     t.dialogue.show();
@@ -320,9 +320,8 @@ define([
                 t.dialogue
                     .get('boundingBox')
                     .setStyles({
-                       top: 3,
-                       right: 211,
-                       left: 'auto',
+                       top: dialoguetop,
+                       left: dialogueleft,
                        width: 316
                     });
             } else {
