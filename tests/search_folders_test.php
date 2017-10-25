@@ -118,6 +118,9 @@ class search_folders_test extends \advanced_testcase {
 
         $this->privatefoldercontent = content::create_in_pinboard($this->openstudiolevels->id, $this->user->id,
                 $privatefolderentry, $this->cm);
+
+        require_once(__DIR__ . '/search_posts_test.php');
+        search_posts_test::fix_timemodified_order();
     }
 
     /**

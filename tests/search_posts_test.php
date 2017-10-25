@@ -146,6 +146,21 @@ class search_posts_test extends \advanced_testcase {
 
         // Function create_in_pinboard doesn't support content fileid.
         $this->filecontent = $DB->insert_record('openstudio_contents', $filecontententry);
+
+        self::fix_timemodified_order();
+    }
+
+    /**
+     * Ensures everything in openstudio_contents has a unique timemodified in same order as
+     * the creation id.
+     */
+    public static function fix_timemodified_order() {
+        global $DB;
+
+        $index = 100;
+        foreach ($DB->get_fieldset_sql('SELECT id FROM {openstudio_contents} ORDER BY id') as $id) {
+            $DB->set_field('openstudio_contents', 'timemodified', $index++, ['id' => $id]);
+        }
     }
 
     /**
