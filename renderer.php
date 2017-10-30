@@ -1116,6 +1116,12 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             'total' => $folderdata->total
         ]]);
 
+        // Check to add default value in case another script using this function without
+        // specify variable which cause section to be hidden.
+        if (!isset($folderdata->showaddsection)) {
+            $folderdata->showaddsection = true;
+        }
+
         return $this->render_from_template('mod_openstudio/folder_page', $folderdata);
     }
 

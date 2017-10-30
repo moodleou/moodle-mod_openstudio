@@ -143,3 +143,23 @@ Feature: My Activity view in Open Studio
     And I should not see "Test My Activities View 4"
     And I should see "Content 1.1 Required"
     Then the "src" attribute of "img.openstudio-grid-item-thumbnail" "css_element" should contain "test2.jpg"
+
+  Scenario: Don't show upload buttons when no additional content is allowed.
+    When I set the following fields to these values:
+      | Content Name | Folder content 3.2 |
+      | Is folder?   | 1                  |
+    And I press "Save Changes"
+    And I follow "Folder content 3.2"
+    And I set the following fields to these values:
+      | Number of additional contents allowed | 0 |
+    And I press "Save Changes"
+    And I follow "Test Open Studio name 1"
+    And I follow "My Content > My Activities" in the openstudio navigation
+    And I follow "Folder content 3.2"
+    And I set the following fields to these values:
+      | Folder title | Folder 1 |
+    And I press "Create folder"
+    # Check add section is hidden.
+    Then I should not see "Add new content"
+    And I should not see "Upload content to folder"
+    And I should not see "Select existing post to add to folder"

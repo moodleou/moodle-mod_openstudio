@@ -177,6 +177,13 @@ util::page_setup($PAGE, $pagetitle, $pageheading, $pageurl, $course, $cm);
 
 flags::toggle($folderdata->id, flags::READ_CONTENT, 'on', $USER->id, $folderdata->id);
 
+if (!empty($folderdata->levelid)) {
+    $foldertemplate = \mod_openstudio\local\api\template::get_by_levelid($folderdata->levelid);
+    if ($foldertemplate && empty($foldertemplate->additionalcontents)) {
+        $folderdata->showaddsection = false;
+    }
+}
+
 $PAGE->requires->js_call_amd('mod_openstudio/contentpage', 'init');
 $PAGE->requires->js_call_amd('mod_openstudio/folderhelper', 'init');
 

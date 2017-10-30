@@ -49,6 +49,7 @@
         "contentlockenable": true,
         "locked": false,
         "viewdeletedpostenable": true,
+        "showaddsection" : true,
         "contents": [
             {
                 "firstname" : "Admin",
@@ -108,40 +109,42 @@
             <div class="openstudio-folder-items clearfix">
                 <div class="openstudio-folder-item openstudio-folder-view-content">
                     {{#myfolder}}
-                        <div class="openstudio-folder-view-add-new-content">
-                            <div class="openstudio-folder-view-add-new-content-title">
-                                <a href="{{addcontent}}" class="openstudio-add-new-content-link">
-                                    {{#pix}} add_content_rgb_32px, mod_openstudio, {{{name}}} {{/pix}}
-                                    <span>{{#str}} addnewcontent, mod_openstudio {{/str}}</span>
+                        {{#showaddsection}}
+                            <div class="openstudio-folder-view-add-new-content">
+                                <div class="openstudio-folder-view-add-new-content-title">
+                                    <a href="{{addcontent}}" class="openstudio-add-new-content-link">
+                                        {{#pix}} add_content_rgb_32px, mod_openstudio, {{{name}}} {{/pix}}
+                                        <span>{{#str}} addnewcontent, mod_openstudio {{/str}}</span>
+                                    </a>
+                                </div>
+                                <a href="{{{addcontent}}}">
+                                    <div class="openstudio-upload-folder">
+                                        <img class="openstudio-upload-new-content-to-folder" src="{{{addcontentthumbnail}}}" alt="{{{name}}}">
+                                        <span class="openstudio-new-folder-title">{{#str}} updatecontenttofolder, mod_openstudio {{/str}}
+                                        </span>
+                                        <span class="openstudio-new-folder-title-device">
+                                            {{#str}} foldertdevicetitle, mod_openstudio {{/str}}
+                                        </span>
+                                    </div>
                                 </a>
-                            </div>
-                            <a href="{{{addcontent}}}">
-                                <div class="openstudio-upload-folder">
-                                    <img class="openstudio-upload-new-content-to-folder" src="{{{addcontentthumbnail}}}" alt="{{{name}}}">
-                                    <span class="openstudio-new-folder-title">{{#str}} updatecontenttofolder, mod_openstudio {{/str}}
+                                <div class="openstudio-upload-folder openstudio-select-content">
+                                    <img class="openstudio-select-existing-post" src="{{{selectcontentthumbnail}}}" alt="{{{name}}}">
+                                    <span class="openstudio-select-post-title" role="button">
+                                        {{#str}} folderselectexist, mod_openstudio {{/str}}
                                     </span>
-                                    <span class="openstudio-new-folder-title-device">
-                                        {{#str}} foldertdevicetitle, mod_openstudio {{/str}}
+                                    <span class="openstudio-select-post-title-device">
+                                        {{#str}} foldertselectdevicetitle, mod_openstudio {{/str}}
                                     </span>
                                 </div>
-                            </a>
-                            <div class="openstudio-upload-folder openstudio-select-content">
-                                <img class="openstudio-select-existing-post" src="{{{selectcontentthumbnail}}}" alt="{{{name}}}">
-                                <span class="openstudio-select-post-title" role="button">
-                                    {{#str}} folderselectexist, mod_openstudio {{/str}}
-                                </span>
-                                <span class="openstudio-select-post-title-device">
-                                    {{#str}} foldertselectdevicetitle, mod_openstudio {{/str}}
-                                </span>
-                            </div>
 
-                            <div class="openstudio-folder-available">
-                                {{#str}}
-                                   folderavailiable, mod_openstudio, { "available": {{additionlimit}} }
-                                {{/str}}
-                            </div>
+                                <div class="openstudio-folder-available">
+                                    {{#str}}
+                                       folderavailiable, mod_openstudio, { "available": {{additionlimit}} }
+                                    {{/str}}
+                                </div>
 
-                        </div>
+                            </div>
+                        {{/showaddsection}}
                     {{/myfolder}}
                 </div>
                 {{#contents}}
