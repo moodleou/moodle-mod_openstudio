@@ -2549,8 +2549,9 @@ a.openstudio-add-title:hover  {
     text-align: center;
 }
 
-.openstudio-content-view-edit img {
+#page-mod-openstudio-content .openstudio-content-view-edit img {
     width: 72px;
+    height: auto;
     margin-top: 35px;
 }
 
@@ -3558,7 +3559,7 @@ div.openstudio-browse-post-item-filename {
     box-shadow: none;
     margin: 0;
     padding: 0;
-    width: 48px;
+    width: auto;
     margin-right: 15px;
     margin-bottom: 10px;
 }
@@ -4194,8 +4195,10 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     color: #0b55a8;
 }
 
-.openstudio-folder-header img {
+#page-mod-openstudio-content .openstudio-folder-header img,
+#page-mod-openstudio-folder .openstudio-folder-header img {
     height: 24px;
+    width: auto;
 }
 
 .openstudio-folder-view-container {
