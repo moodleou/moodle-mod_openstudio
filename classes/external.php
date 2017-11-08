@@ -754,6 +754,7 @@ class mod_openstudio_external extends external_api {
 
         // Check if user has permission to add content.
         $actionallowed = $permissions->addcomment || $permissions->managecontent;
+        $flagsenabled = explode(',', $permissions->flags);
 
         if ($actionallowed) {
             try {
@@ -815,6 +816,9 @@ class mod_openstudio_external extends external_api {
 
                     $commentdata->deleteenable = true;
                     $commentdata->reportenable = false;
+
+                    // Check comment like setting enabled.
+                    $commentdata->contentcommentlikeenabled = in_array(flags::COMMENT_LIKE, $flagsenabled);
 
                     $commenthtml = $renderer->content_comment($commentdata);
 

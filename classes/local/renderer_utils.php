@@ -990,6 +990,7 @@ class renderer_utils {
         global $OUTPUT;
 
         $filters = $contentdata->openstudio_view_filters;
+        $flagsenabled = explode(',', $contentdata->permissions->flags);
 
         $userflags = array();
         $userflags[] = (object) [
@@ -999,35 +1000,43 @@ class renderer_utils {
             'label' => get_string('filterflagallcontents', 'openstudio')
         ];
 
-        $userflags[] = (object) [
-            'checked' => in_array(stream::FILTER_FAVOURITES, $filters->fflagarray),
-            'value' => stream::FILTER_FAVOURITES,
-            'icon' => $OUTPUT->image_url('favourite_filters_rgb_32px', 'openstudio'),
-            'label' => get_string('filterflagfavourite', 'openstudio')
-        ];
+        if (in_array(flags::FAVOURITE, $flagsenabled)) {
+            $userflags[] = (object)[
+                'checked' => in_array(stream::FILTER_FAVOURITES, $filters->fflagarray),
+                'value' => stream::FILTER_FAVOURITES,
+                'icon' => $OUTPUT->image_url('favourite_filters_rgb_32px', 'openstudio'),
+                'label' => get_string('filterflagfavourite', 'openstudio')
+            ];
+        }
 
-        $userflags[] = (object) [
-            'checked' => in_array(stream::FILTER_MOSTSMILES, $filters->fflagarray),
-            'value' => stream::FILTER_MOSTSMILES,
-            'icon' => $OUTPUT->image_url('participation_filters_rgb_32px', 'openstudio'),
-            'label' => get_string('filterflagsmile', 'openstudio')
-        ];
+        if (in_array(flags::MADEMELAUGH, $flagsenabled)) {
+            $userflags[] = (object)[
+                'checked' => in_array(stream::FILTER_MOSTSMILES, $filters->fflagarray),
+                'value' => stream::FILTER_MOSTSMILES,
+                'icon' => $OUTPUT->image_url('participation_filters_rgb_32px', 'openstudio'),
+                'label' => get_string('filterflagsmile', 'openstudio')
+            ];
+        }
 
-        $userflags[] = (object) [
-            'checked' => in_array(stream::FILTER_MOSTINSPIRATION, $filters->fflagarray),
-            'value' => stream::FILTER_MOSTINSPIRATION,
-            'icon' => $OUTPUT->image_url('inspiration_filters_rgb_32px', 'openstudio'),
-            'label' => get_string('filterflaginspiration', 'openstudio')
-        ];
+        if (in_array(flags::INSPIREDME, $flagsenabled)) {
+            $userflags[] = (object)[
+                'checked' => in_array(stream::FILTER_MOSTINSPIRATION, $filters->fflagarray),
+                'value' => stream::FILTER_MOSTINSPIRATION,
+                'icon' => $OUTPUT->image_url('inspiration_filters_rgb_32px', 'openstudio'),
+                'label' => get_string('filterflaginspiration', 'openstudio')
+            ];
+        }
 
-        $userflags[] = (object) [
-            'checked' => in_array(stream::FILTER_HELPME, $filters->fflagarray),
-            'value' => stream::FILTER_HELPME,
-            'icon' => $OUTPUT->image_url('request_feedback_filters_rgb_32px', 'openstudio'),
-            'label' => get_string('filterflagfeedbackrequested', 'openstudio')
-        ];
+        if (in_array(flags::NEEDHELP, $flagsenabled)) {
+            $userflags[] = (object)[
+                'checked' => in_array(stream::FILTER_HELPME, $filters->fflagarray),
+                'value' => stream::FILTER_HELPME,
+                'icon' => $OUTPUT->image_url('request_feedback_filters_rgb_32px', 'openstudio'),
+                'label' => get_string('filterflagfeedbackrequested', 'openstudio')
+            ];
+        }
 
-        $userflags[] = (object) [
+        $userflags[] = (object)[
             'checked' => in_array(stream::FILTER_COMMENTS, $filters->fflagarray),
             'value' => stream::FILTER_COMMENTS,
             'icon' => $OUTPUT->image_url('comments_filters_rgb_32px', 'openstudio'),
@@ -1141,6 +1150,7 @@ class renderer_utils {
         $flagtotals = flags::count_by_content($contentdata->id, $permissions->activeuserid);
         $flagstatus = flags::get_for_content_by_user($contentdata->id, $permissions->activeuserid);
         $flagfeedbackstatus = flags::get_for_content_by_user($contentdata->id, $contentdata->userid);
+        $flagsenabled = explode(',', $permissions->flags);
 
         $contentdata->contentflagfavourite = flags::FAVOURITE;
         $contentdata->contentflagsmile = flags::MADEMELAUGH;
@@ -1156,6 +1166,9 @@ class renderer_utils {
         $contentdata->contentflaginspireaction = false;
         $contentdata->contentflagrequestfeedbackaction = false;
         $contentdata->contentflagrequestfeedbackactive = false;
+        $contentdata->contentflagfavouriteenabled = false;
+        $contentdata->contentflagsmileenabled = false;
+        $contentdata->contentflaginspireenabled = false;
 
         if (array_key_exists(flags::FAVOURITE, $flagtotals)) {
             $contentdata->contentfavouritetotal = $flagtotals[flags::FAVOURITE]->count;
@@ -1187,13 +1200,24 @@ class renderer_utils {
             $contentdata->contentflagrequestfeedbackactive = true;
         }
 
+        // Check flags setting enabled.
+        if (in_array(flags::FAVOURITE, $flagsenabled)) {
+            $contentdata->contentflagfavouriteenabled = true;
+        }
+        if (in_array(flags::MADEMELAUGH, $flagsenabled)) {
+            $contentdata->contentflagsmileenabled = true;
+        }
+        if (in_array(flags::INSPIREDME, $flagsenabled)) {
+            $contentdata->contentflaginspirenabled = true;
+        }
+
         // Get copies count.
         $contenthash = item::generate_hash($contentdata->id);
         $contentdata->contentcopycount = item::count_occurences($contenthash, $cmid);
         $contentdata->contentcopyenable = $contentdata->contentcopycount > 1 ? true : false;
 
         // Check Request feedback permission.
-        $contentdata->contentrequestfeedbackenable = $contentdata->isownedbyviewer;
+        $contentdata->contentrequestfeedbackenable = $contentdata->isownedbyviewer && in_array(flags::NEEDHELP, $flagsenabled);
 
         return $contentdata;
     }
@@ -1482,6 +1506,10 @@ class renderer_utils {
 
         // Check comment permission.
         $contentdata->contentcommentenable = $permissions->addcomment ? true : false;
+
+        // Check comment like setting enabled.
+        $flagsenabled = explode(',', $permissions->flags);
+        $contentdata->contentcommentlikeenabled = in_array(flags::COMMENT_LIKE, $flagsenabled);
 
         if ($contentdata->contentcommentenable) {
 

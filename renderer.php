@@ -562,6 +562,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $blocksdata = array();
         $contentdata->ismypinboard = false;
         $contentdata->ismyactivity = false;
+        $contentdata->permissions = $permissions;
 
         switch ($viewmode) {
             case content::VISIBILITY_MODULE:

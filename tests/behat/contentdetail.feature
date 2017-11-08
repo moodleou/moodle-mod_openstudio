@@ -94,7 +94,7 @@ Feature: Create and edit contents detail
         And "Report post" "button" should not exist
         And I should not see "Image meta-data"
         And I should not see "Image location"
-        
+
         And "Edit" "button" should exist
         And "Delete" "button" should exist
         And "Lock" "button" should exist
@@ -145,7 +145,7 @@ Feature: Create and edit contents detail
         And "Report post" "button" should not exist
         And I should see "Image meta-data"
         And I should see "Image location"
-        
+
         And "Edit" "button" should exist
         And "Delete" "button" should exist
         And "Lock" "button" should exist
@@ -196,7 +196,7 @@ Feature: Create and edit contents detail
         And "Report post" "button" should not exist
         And I should not see "Image meta-data"
         And I should not see "Image location"
-        
+
         And "Edit" "button" should exist
         And "Delete" "button" should exist
         And "Lock" "button" should exist
@@ -247,7 +247,7 @@ Feature: Create and edit contents detail
         And "Report post" "button" should not exist
         And I should not see "Image meta-data"
         And I should not see "Image location"
-        
+
         And "Edit" "button" should exist
         And "Delete" "button" should exist
         And "Lock" "button" should exist
@@ -293,7 +293,7 @@ Feature: Create and edit contents detail
         And "Report post" "button" should not exist
         And I should not see "Image meta-data"
         And I should not see "Image location"
-        
+
         And "Edit" "button" should exist
         And "Delete" "button" should exist
         And "Lock" "button" should exist
@@ -344,7 +344,7 @@ Feature: Create and edit contents detail
         And "Report post" "button" should not exist
         And I should not see "Image meta-data"
         And I should not see "Image location"
-        
+
         And "Edit" "button" should exist
         And "Delete" "button" should exist
         And "Lock" "button" should exist
@@ -395,7 +395,7 @@ Feature: Create and edit contents detail
         And "Report post" "button" should not exist
         And I should not see "Image meta-data"
         And I should not see "Image location"
-        
+
         And "Edit" "button" should exist
         And "Delete" "button" should exist
         And "Lock" "button" should exist
@@ -764,3 +764,32 @@ Feature: Create and edit contents detail
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "Test My Content Details View"
         Then the OSEP theme breadcrumbs should be "C1 Home > Week 2 > Test Open Studio name 1 > My Module > Teacher's work > Test My Content Details View"
+
+    Scenario: Check flags setting applied
+        And I log out
+        And I log in as "admin"
+        And I am on "Course 1" course homepage
+        And I follow "Test Open Studio name 1"
+        And I follow "Administration > Edit settings" in the openstudio navigation
+        And I set the following fields to these values:
+          | Flags | Favourite, Made me laugh |
+        And I press "Save and display"
+        And the following open studio "contents" exist:
+          | openstudio | user     | name         | description                | visibility |
+          | OS1        | teacher1 | TestContent1 | Test content 1 description | module     |
+
+        And I follow "People" in the openstudio navigation
+        And I follow "Shared content > My Module" in the openstudio navigation
+        And I follow "TestContent1"
+        And I should see "0 Favourites"
+        And I should see "0 Smiles"
+        And I should not see "0 Inspired"
+        And "Request feedback" "button" should not exist
+
+        # Check flags setting applied for filter
+        And I follow "Shared content > My Module" in the openstudio navigation
+        And I press "Filter"
+        And I should see "Favourite"
+        And I should see "Smile"
+        And I should not see "Inspiration"
+        And I should not see "Feedback requested"
