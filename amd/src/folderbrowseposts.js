@@ -167,10 +167,6 @@ define([
 
                     t.showHideSelectButton();
                     t.resize();
-                    // Click event on Remove last selection button.
-                    $(t.CSS.REMOVELASTSELECTED).on('click', function() {
-                        t.removeLastPostSelected();
-                    });
 
                     // Update odd/even background row.
                     t.updateBackgroundRow();

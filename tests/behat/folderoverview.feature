@@ -500,3 +500,38 @@ Feature: Folder Overview
 
       # Content won't change order
       And "Content 3" "text" should appear before "Content 4" "text"
+
+    Scenario: Remove last selection Item Button work correctly
+
+      Given the following open studio "folders" exist:
+        | openstudio | user     | name                   | description                       | visibility | contenttype    |
+        | OS1        | teacher1 | Test Folder Overview   | My Folder Overview Description 1  | module     | folder_content |
+      And the following open studio "contents" exist:
+        | openstudio | user     | name                  | description                 | file                                               | visibility  |
+        | OS1        | teacher1 | TestRemove 1          | Test content 1 description  | mod/openstudio/tests/importfiles/test3.jpg         | module      |
+        | OS1        | teacher1 | TestRemove 2          | Test content 2 description  | mod/openstudio/tests/importfiles/test2.jpg         | module      |
+        | OS1        | teacher1 | TestRemove 3          | Test content 2 description  | mod/openstudio/tests/importfiles/test1.jpg         | module      |
+      And I follow "Test Open Studio name 1"
+      And I follow "My Content"
+      And I follow "Test Folder Overview"
+      And I press "Select existing post to add to folder"
+      # Add 1st Item
+      And I set the field "search" to "TestRemove 1"
+      And I press "Search"
+      And I should see "TestRemove 1"
+      And I click on "Select" "button" in the "Browse posts" "dialogue"
+      # Add 2nd Item
+      And I set the field "search" to "TestRemove 2"
+      And I press "Search"
+      And I should see "TestRemove 2"
+      And I click on "Select" "button" in the "Browse posts" "dialogue"
+      # Add 3rd Item
+      And I set the field "search" to "TestRemove 3"
+      And I press "Search"
+      And I should see "TestRemove 3"
+      And I click on "Select" "button" in the "Browse posts" "dialogue"
+      # Observe the result
+      And I click on "Remove last selection" "button" in the "Browse posts" "dialogue"
+      And I should see "TestRemove 3"
+      And I should not see "TestRemove 2"
+      And I should not see "TestRemove 1"
