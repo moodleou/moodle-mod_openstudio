@@ -5296,6 +5296,8 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-navigation-notification {
         margin-top: 0px;
+        width: 70px;
+        height: 74px;
     }
 
     .openstudio-navigation-notification-icon {
@@ -6858,6 +6860,10 @@ a.openstudio-add-new-content-link:hover  {
         margin-top: 0px;
         margin-left: 2px;
         width: 24px;
+    }
+    body.ie .openstudio-navigation-notification-number {
+        margin-top: 0;
+        margin-left: -35px;
     }
 
     .openstudio-folder-content .openstudio-item-request-feedback,
