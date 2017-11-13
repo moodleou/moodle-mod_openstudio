@@ -90,38 +90,16 @@
                     <div class="openstudio-orderpost-item-column4">
                         <ul>
                             <li>
-                                <button id="openstudio-folder-reorder-up-{{moveuporder}}" name="{{#str}} btnmoveup, openstudio {{/str}}" class="openstudio-orderpost-item-moveup-button {{^canreorder}}openstudio-orderpost-item-disabled{{/canreorder}}
+                                <button title="{{moveupcontenttitle}}" id="openstudio-folder-reorder-up-{{moveuporder}}" name="{{#str}} btnmoveup, openstudio {{/str}}" class="openstudio-orderpost-item-moveup-button {{^canreorder}}openstudio-orderpost-item-disabled{{/canreorder}}
                                     {{#contentsbook}}openstudio-orderpost-item-book{{/contentsbook}}">
                                     <span class="openstudio-folder-reorder-active">
                                         {{#pix}}
-                                            move_post_up_active_rgb_32px, mod_openstudio,
-                                            {{#firstcontent}}
-                                                {{#str}} postattop, openstudio {{/str}}
-                                            {{/firstcontent}}
-                                            {{^firstcontent}}
-                                                {{#str}}
-                                                    foldermovecontentup, mod_openstudio, {
-                                                            "name": {{#quote}}{{name}}{{/quote}},
-                                                            "position": {{#quote}}{{moveuporder}}{{/quote}}
-                                                    }
-                                                {{/str}}
-                                            {{/firstcontent}}
+                                            move_post_up_active_rgb_32px, mod_openstudio
                                         {{/pix}}
                                     </span>
                                     <span class="openstudio-folder-reorder-disabled">
                                         {{#pix}}
-                                            move_post_up_disabled_rgb_32px, mod_openstudio,
-                                            {{#firstcontent}}
-                                                {{#str}} postattop, openstudio {{/str}}
-                                            {{/firstcontent}}
-                                            {{^firstcontent}}
-                                                {{#str}}
-                                                    foldermovecontentup, mod_openstudio, {
-                                                            "name": {{#quote}}{{name}}{{/quote}},
-                                                            "position": {{#quote}}{{moveuporder}}{{/quote}}
-                                                    }
-                                                {{/str}}
-                                            {{/firstcontent}}
+                                            move_post_up_disabled_rgb_32px, mod_openstudio
                                         {{/pix}}
                                     </span>
 
@@ -136,38 +114,16 @@
                                 {{#contentsbook}}disabled{{/contentsbook}} type="text" maxlength="3" name="{{#str}} foldermovetopostnumber, mod_openstudio {{/str}}"/>
                             </li>
                             <li>
-                                <button id="openstudio-folder-reorder-down-{{moveuporder}}" name="{{#str}} btnmovedown, openstudio {{/str}}" class="openstudio-orderpost-item-movedown-button {{^canreorder}}openstudio-orderpost-item-disabled{{/canreorder}}
+                                <button title="{{movedowncontenttitle}}" id="openstudio-folder-reorder-down-{{moveuporder}}" name="{{#str}} btnmovedown, openstudio {{/str}}" class="openstudio-orderpost-item-movedown-button {{^canreorder}}openstudio-orderpost-item-disabled{{/canreorder}}
                                 {{#contentsbook}}openstudio-orderpost-item-book{{/contentsbook}}">
                                     <span class="openstudio-folder-reorder-active">
                                         {{#pix}}
-                                            move_post_down_active_rgb_32px, mod_openstudio,
-                                            {{#lastcontent}}
-                                                {{#str}} postatbottom, openstudio {{/str}}
-                                            {{/lastcontent}}
-                                            {{^lastcontent}}
-                                                {{#str}}
-                                                    foldermovecontentup, mod_openstudio, {
-                                                            "name": {{#quote}}{{name}}{{/quote}},
-                                                            "position": {{#quote}}{{movedownorder}}{{/quote}}
-                                                    }
-                                                {{/str}}
-                                            {{/lastcontent}}
+                                            move_post_down_active_rgb_32px, mod_openstudio
                                         {{/pix}}
                                     </span>
                                     <span class="openstudio-folder-reorder-disabled openstudio-folder-reorder-hidden">
                                         {{#pix}}
-                                            move_post_down_disabled_rgb_32px, mod_openstudio,
-                                            {{#lastcontent}}
-                                                {{#str}} postatbottom, openstudio {{/str}}
-                                            {{/lastcontent}}
-                                            {{^lastcontent}}
-                                                {{#str}}
-                                                    foldermovecontentup, mod_openstudio, {
-                                                            "name": {{#quote}}{{name}}{{/quote}},
-                                                            "position": {{#quote}}{{movedownorder}}{{/quote}}
-                                                    }
-                                                {{/str}}
-                                            {{/lastcontent}}
+                                            move_post_down_disabled_rgb_32px, mod_openstudio
                                         {{/pix}}
                                     </span>
                                 </button>

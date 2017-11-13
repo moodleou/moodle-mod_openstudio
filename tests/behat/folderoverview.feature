@@ -264,6 +264,13 @@ Feature: Folder Overview
         | Test My Content Folder View 3 |
         | Test My Content Folder View 2 |
 
+      # Check title attribute of button
+      And I press "Order posts"
+      When I click on ".openstudio-orderpost-item-movedown-button img" "css_element"
+      Then ".openstudio-orderpost-item:nth-child(1) .openstudio-orderpost-item-movedown-button[title='Move content Test My Content Folder View 3 down to position 2.']" "css_element" should exist
+      And ".openstudio-orderpost-item:nth-child(2) .openstudio-orderpost-item-moveup-button[title='Move content Test My Content Folder View 1 up to position 1.']" "css_element" should exist
+      And ".openstudio-orderpost-item:nth-child(2) .openstudio-orderpost-item-movedown-button[title='Move content Test My Content Folder View 1 down to position 3.']" "css_element" should exist
+
   Scenario: Content of order posts in folder overview
       Given the following open studio "folders" exist:
         | openstudio | user     | name                   | description                       | visibility | contenttype    |

@@ -1382,6 +1382,13 @@ class renderer_utils {
                 $folderitem->movedownorder = $content->contentorder + 1;
                 $folderitem->orderstring = str_pad($content->contentorder, 2, '0', STR_PAD_LEFT);
                 $folderitem->pictureurl = $contentthumbnailfileurl;
+
+                // Generate title attribute for move up and move down button.
+                $folderitem->moveupcontenttitle = $isfirstcontent ? get_string('postattop', 'openstudio') : get_string(
+                        'foldermovecontentup', 'openstudio', ['name' => $folderitem->name, 'position' => $folderitem->moveuporder]);
+                $folderitem->movedowncontenttitle = $islastcontent ? get_string('postatbottom', 'openstudio') : get_string(
+                        'foldermovecontentdown', 'openstudio', ['name' => $folderitem->name,
+                                'position' => $folderitem->movedownorder]);
             }
             $ordercontent [] = $folderitem;
         }

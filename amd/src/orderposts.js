@@ -366,6 +366,31 @@ define([
 
                     $(this).find(t.CSS.ORDER_NUMBER_INPUT)
                         .val(index);
+
+                    // Replace title attribute of move up button with new order.
+                    var moveUpButtonTitle = $(this).find(t.CSS.MOVE_UP_BUTTON).attr('title');
+                    var moveUpButtonOrderArr = moveUpButtonTitle.match(/([0-9-.]+)/g);
+                    if (moveUpButtonOrderArr !== null) {
+                        var moveUpButtonOrderArrLength = moveUpButtonOrderArr.length;
+                        // Get last match.
+                        var moveUpButtonOrder = moveUpButtonOrderArr[moveUpButtonOrderArrLength - 1];
+                        var moveUpButtonNewTitle = moveUpButtonTitle.replace(moveUpButtonOrder, index - 1 + '.');
+
+                        $(this).find(t.CSS.MOVE_UP_BUTTON).attr('title', moveUpButtonNewTitle);
+                    }
+
+                    // Replace title attribute of move down button with new order.
+                    var moveDownButtonTitle = $(this).find(t.CSS.MOVE_DOWN_BUTTON).attr('title');
+                    var moveDownButtonOrderArr = moveDownButtonTitle.match(/([0-9-.]+)/g);
+                    if (moveDownButtonOrderArr !== null) {
+                        var moveDownButtonOrderArrLength = moveDownButtonOrderArr.length;
+                        // Get last match.
+                        var moveDownButtonOrder = moveDownButtonOrderArr[moveDownButtonOrderArrLength - 1];
+                        var moveDownButtonNewTitle = moveDownButtonTitle.replace(moveDownButtonOrder, index + 1 + '.');
+
+                        $(this).find(t.CSS.MOVE_DOWN_BUTTON).attr('title', moveDownButtonNewTitle);
+                    }
+
                 });
             }
 
