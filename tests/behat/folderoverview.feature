@@ -63,7 +63,7 @@ Feature: Folder Overview
 
       # the left handside should be the post stream
       And I should see "Test Folder Overview"
-      And I should see "Edit folder title and permissions"
+      And I should see "Edit folder details and sharing"
 
       And I should see "Add new content"
       And I should see "Upload content to folder"

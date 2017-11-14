@@ -202,7 +202,7 @@ Feature: Create and edit Folder
 
         # edit folder in My Module view
         And I go to content edit view
-        And I follow "Edit folder title and permissions"
+        And I follow "Edit folder details and sharing"
         Then "Test my folder view 1" "text" should exist in the ".breadcrumb-nav" "css_element"
         Then "Edit" "text" should exist in the ".breadcrumb-nav" "css_element"
         And I set the field "Folder title" to "Test my folder view 2"
