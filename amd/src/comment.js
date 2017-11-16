@@ -28,8 +28,9 @@ define([
     'jquery',
     'core/ajax',
     'core/str',
+    'mod_openstudio/scrollto',
     'require'
-], function($, Ajax, Str, require) {
+], function($, Ajax, Str, Scrollto, require) {
     var t;
     t = {
 
@@ -41,6 +42,11 @@ define([
          * }
          */
         mconfig: null,
+
+        /**
+         * Height from DOMElement to top browser.
+         */
+        HEIGHT_TO_TOP: 100,
 
         /**
          * List out all of css selector used in this module.
@@ -127,7 +133,7 @@ define([
             $(t.CSS.COMMENT_REPLY_FORM).hide(); // Hide comment reply forms.
 
             // Scroll to form.
-            t.scrollToEl($(t.CSS.COMMENT_FORM_CONTENT));
+            Scrollto.scrollToEl($(t.CSS.COMMENT_FORM_CONTENT), t.HEIGHT_TO_TOP);
 
             // Set focus on comment form.
             $('#openstudio_comment_form').focus();
@@ -157,7 +163,7 @@ define([
             $(t.CSS.COMMENT_FORM_CONTENT).find('form input[name="inreplyto"]').val(parseInt(commentid));
 
             // Scroll to form.
-            t.scrollToEl(replyform);
+            Scrollto.scrollToEl(replyform, t.HEIGHT_TO_TOP);
         },
 
         /**
@@ -231,7 +237,7 @@ define([
                             .before(res.commenthtml);
 
                         // Scroll to added item.
-                        t.scrollToEl($('[data-thread-item="' + res.commentid + '"]'));
+                        Scrollto.scrollToEl($('[data-thread-item="' + res.commentid + '"]'), t.HEIGHT_TO_TOP);
 
                     } else { // New comment added.
 
@@ -239,7 +245,7 @@ define([
                         $(t.CSS.COMMENT_THREAD_BODY).append(res.commenthtml);
 
                         // Scroll to added item.
-                        t.scrollToEl($('[data-thread-items="' + res.commentid + '"]'));
+                        Scrollto.scrollToEl($('[data-thread-items="' + res.commentid + '"]'), t.HEIGHT_TO_TOP);
                     }
 
                     t.resize();
@@ -440,19 +446,6 @@ define([
                     t.dialogue.centerDialogue();
                 }
             }
-        },
-
-        /**
-         * Scroll to element.
-         * @param {Object} $el DOMElement.
-         * @method scrollToEl
-         */
-        scrollToEl: function($el) {
-            setTimeout(function() {
-                $('html, body').animate({
-                    scrollTop: $el.offset().top - 100
-                }, 1500);
-            }, 100);
         }
     };
 

@@ -25,7 +25,7 @@
  * @module mod_oucontent/contentedit
  */
 
-define(['jquery'], function($) {
+define(['jquery', 'mod_openstudio/scrollto'], function($, Scrollto) {
     var t;
 
         t = {
@@ -36,6 +36,11 @@ define(['jquery'], function($) {
             $('#id_openstudio_upload_content_buttons_addfilebutton').on('click', t.toogleAddFile);
             $('#id_openstudio_upload_content_buttons_addlinkbutton').on('click', t.toogleAddLink);
          },
+
+        /**
+         * Height from DOMElement to top browser.
+         */
+        HEIGHT_TO_TOP: 38,
 
         /**
          * Toogle Add File button.
@@ -55,6 +60,8 @@ define(['jquery'], function($) {
 
                     $('#id_openstudio_upload_content_buttons_addlinkbutton').removeClass('openstudio-button-active');
                     $('#id_openstudio_upload_content_buttons_addfilebutton').addClass('openstudio-button-active');
+
+                    Scrollto.scrollToEl($('#id_openstudio_upload_content_buttons_addfilebutton'), t.HEIGHT_TO_TOP);
                 } else {
                     $('#contentformoptionalmetadata').hide();
                     $('input[name="contentuploadtype"]').val('');
@@ -82,6 +89,8 @@ define(['jquery'], function($) {
 
                     $('#id_openstudio_upload_content_buttons_addfilebutton').removeClass('openstudio-button-active');
                     $('#id_openstudio_upload_content_buttons_addlinkbutton').addClass('openstudio-button-active');
+
+                    Scrollto.scrollToEl($('#id_openstudio_upload_content_buttons_addlinkbutton'), t.HEIGHT_TO_TOP);
                 } else {
                     $('#contentformoptionalmetadata').hide();
                     $('input[name="contentuploadtype"]').val('');
