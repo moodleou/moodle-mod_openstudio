@@ -1198,8 +1198,10 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             }
 
             $output .= get_string('page') . ':';
-
-            if (!empty($pagingbar->firstlink)) {
+            // If first link is text for mobile.
+            // If first link is nummber for desktop.
+            $firstlinktype = strip_tags($pagingbar->firstlink);
+            if (!empty($firstlinktype) && is_numeric($firstlinktype)) {
                 $output .= ' ' . $pagingbar->firstlink . ' ...';
             }
 
@@ -1208,7 +1210,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             }
 
             if (!empty($pagingbar->lastlink)) {
-                $output .= ' ...' . $pagingbar->lastlink . ' ';
+                $output .= ' ... ' . $pagingbar->lastlink . ' ';
             }
 
             if (!empty($pagingbar->nextlink)) {
