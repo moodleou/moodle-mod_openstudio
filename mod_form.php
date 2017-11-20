@@ -302,9 +302,16 @@ class mod_openstudio_mod_form extends moodleform_mod {
     public function data_preprocessing(&$defaultvalues) {
         global $DB;
 
-        $defaultvalues['enabledvisibility'] = array(content::VISIBILITY_PRIVATE,
+        if (isset($defaultvalues['allowedvisibility'])) {
+            $defaultvalues['enabledvisibility'] = explode(",", $defaultvalues['allowedvisibility']);
+        } else {
+            $defaultvalues['enabledvisibility'] = [
+                content::VISIBILITY_PRIVATE,
                 content::VISIBILITY_GROUP,
-                content::VISIBILITY_MODULE);
+                content::VISIBILITY_MODULE,
+                content::VISIBILITY_TUTOR,
+            ];
+        }
 
         if (isset($defaultvalues['tutorroles'])) {
             $tutorroles = explode(",", $defaultvalues['tutorroles']);

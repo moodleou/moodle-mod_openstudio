@@ -322,6 +322,7 @@ $string['filterflagfavourite'] = 'Favourite';
 $string['filterflagsmile'] = 'Smile';
 $string['filterflaginspiration'] = 'Inspiration';
 $string['filterflagfeedbackrequested'] = 'Feedback requested';
+$string['filterflagtutor'] = 'Shared with tutor';
 $string['filterflagcomments'] = 'With comments';
 $string['filterflagviewed'] = 'Viewed';
 $string['filterflagnotviewed'] = 'Not viewed';

@@ -991,6 +991,7 @@ class renderer_utils {
 
         $filters = $contentdata->openstudio_view_filters;
         $flagsenabled = explode(',', $contentdata->permissions->flags);
+        $vid = optional_param('vid', content::VISIBILITY_MODULE, PARAM_INT);
 
         $userflags = array();
         $userflags[] = (object) [
@@ -1033,6 +1034,15 @@ class renderer_utils {
                 'value' => stream::FILTER_HELPME,
                 'icon' => $OUTPUT->image_url('request_feedback_filters_rgb_32px', 'openstudio'),
                 'label' => get_string('filterflagfeedbackrequested', 'openstudio')
+            ];
+        }
+
+        if ($vid == content::VISIBILITY_GROUP && $contentdata->permissions->feature_tutor && $contentdata->permissions->istutor) {
+            $userflags[] = (object)[
+                'checked' => in_array(stream::FILTER_TUTOR, $filters->fflagarray),
+                'value' => stream::FILTER_TUTOR,
+                'icon' => $OUTPUT->image_url('share_with_tutor_rgb_32px', 'openstudio'),
+                'label' => get_string('filterflagtutor', 'openstudio')
             ];
         }
 

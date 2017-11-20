@@ -37,6 +37,7 @@ class flags {
     const FOLLOW_USER = 8;
     const COMMENT = 9;
     const COMMENT_LIKE = 10;
+    const TUTOR = 11;
 
     /**
      * Returns all flags belonging to a slot.
