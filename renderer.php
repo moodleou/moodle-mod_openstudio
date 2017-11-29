@@ -36,6 +36,7 @@ use mod_openstudio\local\api\notifications;
 use mod_openstudio\local\api\folder;
 use mod_openstudio\local\util\defaults;
 use mod_openstudio\local\notifications\notification;
+use mod_openstudio\local\api\template;
 
 /**
  * OpenStudio renderer.
@@ -735,7 +736,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 ];
             }
 
-            // Show all option when number of group > 1
+            // Show all option when number of group > 1.
             if ($groupcount > 1) {
                 $groupitem[0] = (object)[
                     'groupid' => 0,
@@ -1089,6 +1090,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         $folderdata->addcontentthumbnail = $OUTPUT->image_url('uploads_rgb_32px', 'openstudio');
         $folderdata->selectcontentthumbnail = $OUTPUT->image_url('browse_posts_rgb_32px', 'openstudio');
+        $folderdata->editicon = $OUTPUT->image_url('edit_rgb_32px', 'openstudio');
 
         // Generate content flags.
         $folderdata = renderer_utils::content_flags($cmid, $permissions, $folderdata);
@@ -1120,6 +1122,61 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         // specify variable which cause section to be hidden.
         if (!isset($folderdata->showaddsection)) {
             $folderdata->showaddsection = true;
+        }
+
+        // Check folder has activity guidance.
+        $hasguidance = false;
+        if ($folderdata->id === 0) {
+            $foldertemplate = template::get_by_levelid($folderdata->levelid);
+        } else {
+            $foldertemplate = template::get_by_folderid($folderdata->id);
+        }
+
+        $contentguidances = [];
+        $folderguidance = get_string('foldernoguidance', 'openstudio');
+        if ($foldertemplate) {
+            $trimmedguidance = trim($foldertemplate->guidance);
+            if (!empty($trimmedguidance)) {
+                $hasguidance = true;
+                $folderguidance = format_text($trimmedguidance, FORMAT_HTML);
+            }
+
+            $contenttemplates = template::get_contents($foldertemplate->id);
+
+            if (!empty($contenttemplates)) {
+                foreach ($contenttemplates as $contenttemplate) {
+                    $contentguidance = get_string('foldernocontentguidance', 'openstudio');
+                    $contentnumber = sprintf('%02d', $contenttemplate->contentorder);
+                    $contenttitle = $contenttemplate->name;
+
+                    $trimmedcontentguidance = trim($contenttemplate->guidance);
+                    if (!empty($trimmedcontentguidance)) {
+                        $hasguidance = true;
+                        $contentguidance = $trimmedcontentguidance;
+                    }
+
+                    $contentguidances[] = (object) [
+                            'contentnumber' => $contentnumber,
+                            'contenttitle' => format_text($contenttitle, FORMAT_PLAIN),
+                            'contentguidance' => format_text($contentguidance, FORMAT_HTML)
+                    ];
+                }
+            }
+        }
+
+        // Activity guidance functionality.
+        if ($hasguidance) {
+            $folderdata->hasguidance = $hasguidance;
+            $folderdata->folderguidance = $folderguidance;
+            $folderdata->contentguidances = $contentguidances;
+            $folderdata->uploadicon = $OUTPUT->image_url('uploads_rgb_32px', 'openstudio');
+
+            $this->page->requires->strings_for_js(['folderactivityguidance'], 'mod_openstudio');
+            $this->page->requires->js_call_amd('mod_openstudio/folderactivityguidance', 'init', [[
+                    'cmid' => $folderdata->cmid,
+                    'folderid' => $folderdata->id,
+                    'levelid' => $folderdata->levelid
+            ]]);
         }
 
         return $this->render_from_template('mod_openstudio/folder_page', $folderdata);

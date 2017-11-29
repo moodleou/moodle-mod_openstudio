@@ -542,3 +542,36 @@ Feature: Folder Overview
       And I should see "TestRemove 3"
       And I should not see "TestRemove 2"
       And I should not see "TestRemove 1"
+
+  Scenario: Activity guidance in folder overview
+      Given the following open studio "level1s" exist:
+        | openstudio | name   | sortorder |
+        | OS1        | Block1 | 1         |
+      And the following open studio "level2s" exist:
+        | level1 | name      | sortorder |
+        | Block1 | Activity1 | 1         |
+      And the following open studio "level3s" exist:
+        | level2    | name     | sortorder | contenttype |
+        | Activity1 | Folder 1 | 1         | folder      |
+      And the following open studio "folder templates" exist:
+        | level3   | additionalcontents | guidance             |
+        | Folder 1 | 10                 | Folder guidance text |
+      And the following open studio "folder content templates" exist:
+        | level3   | name      | guidance           |
+        | Folder 1 | Content 1 | Content 1 guidance |
+        | Folder 1 | Content 2 |                    |
+      And I am on "Course 1" course homepage
+      And I follow "Test Open Studio name 1"
+      And I follow "My Content > My Activities" in the openstudio navigation
+      And I follow "Folder 1"
+      And I set the following fields to these values:
+        | Who can view this folder | My module                    |
+        | Folder title             | Test my folder view 1        |
+        | Folder description       | My folder view description 1 |
+      And I press "Create folder"
+      Then I press "Activity guidance"
+      And I should see "Folder guidance text"
+      And I should see "Content 1"
+      And I should see "Content 1 guidance"
+      And I should see "Content 2"
+      And I should see "No guidance has been given for this content"

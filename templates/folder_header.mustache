@@ -40,9 +40,13 @@
 	</div>
 	{{#foldereditenable}}
 		<div class ="openstudio-folder-header-right">
-			{{#pix}} edit_rgb_32px, mod_openstudio, {{#str}}foldereditdetailandsharing, mod_openstudio{{/str}} {{/pix}}
-			<a class="openstudio-folder-header-title {{#locked}} locked {{/locked}}"
+            <span class="openstudio-folder-view-title-icon">
+			    {{#pix}} edit_rgb_32px, mod_openstudio, {{#str}}foldereditdetailandsharing, mod_openstudio{{/str}} {{/pix}}
+            </span>
+			<span>
+                <a class="openstudio-folder-header-title {{#locked}} locked {{/locked}}"
 			   href="{{{folderedit}}}">{{#str}}foldereditdetailandsharing, mod_openstudio{{/str}}</a>
+            </span>
 		</div>
 	{{/foldereditenable}}
 </div>

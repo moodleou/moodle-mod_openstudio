@@ -72,7 +72,8 @@
                     "favouritenew" : 0
                  }
             }, 
-        ]
+        ],
+        "hasguidance": true
     }
 }}
 
@@ -86,13 +87,18 @@
                     <img src="{{{visibilityicon}}}" alt="{{{mod_openstudio}}}">
                 </span>
             </div>
-            {{#myfolder}}
-                <div class="openstudio-folder-view-title-managepost">
+            <div class="openstudio-folder-view-title-managepost {{#hasguidance}}openstudio-folder-view-hasguidance{{/hasguidance}}">
+                {{#hasguidance}}
+                    <button id="id_activity_guidance" name="activity-guidance" class="osep-smallbutton">
+                        {{#str}}folderactivityguidance, mod_openstudio{{/str}}
+                    </button>
+                {{/hasguidance}}
+                {{#myfolder}}
                     <button id="id_orderpost" name="managepost" class="osep-smallbutton">
                         {{#str}}folderorderpost, mod_openstudio{{/str}}
                     </button>
-                </div>
-            {{/myfolder}}
+                {{/myfolder}}
+            </div>
         </div>
         <div class="openstudio-folder-view-primary clearfix" id="openstudio_folder_view_primary">
             <div id="openstudio_item_request_feedback"
@@ -242,3 +248,8 @@
         </div>
     </div>
 </div>
+{{#hasguidance}}
+    <div id="folder_activity_guidance" class="openstudio-folder-activity-guidance">
+        {{>mod_openstudio/folder_activity_guidance}}
+    </div>
+{{/hasguidance}}

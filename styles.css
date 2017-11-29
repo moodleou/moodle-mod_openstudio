@@ -814,6 +814,117 @@ div.openstudio-orderpost-item:nth-of-type(odd) {
  */
 
 /**
+ * Folder - Activity guidance
+ */
+
+.openstudio-folder-activity-guidance {
+    display: none;
+}
+
+.openstudio-folder-view-hasguidance {
+    float: right;
+}
+
+.openstudio-activity-guidance-item {
+    display: table;
+    width: 100%;
+    border-top: 1px solid #b2bccd;
+    padding: 4px 0 13px 0px;
+    display: block;
+}
+
+div.openstudio-activity-guidance-item:nth-of-type(even) {
+    background: #ffffff;
+}
+
+div.openstudio-activity-guidance-item:nth-of-type(odd) {
+    background: #f2f3f6;
+    border-top: 1px solid #b2bccd;
+}
+
+.openstudio-activity-guidance-item:last-child {
+    border-bottom: 1px solid #b2bccd;
+}
+
+.openstudio-activity-guidance-item-row {
+    margin-bottom: 10px;
+}
+
+.openstudio-activity-guidance-item-row > div {
+    display: table-cell;
+    vertical-align: top;
+}
+
+.openstudio-activity-guidance-item-column1 {
+    width: 52px;
+    padding-top: 11px;
+}
+
+.openstudio-activity-guidance-item-column2 {
+    width: 64px;
+    padding-top: 11px;
+}
+
+.openstudio-activity-guidance-item-column3 {
+    padding: 6px 9px 0 9px;
+    font-weight: bold;
+    color: #002158;
+}
+
+.openstudio-activity-guidance-item-order {
+    margin: 0 auto;
+    width: 23px;
+    height: 23px;
+    line-height: 24px;
+    border: 1px solid #b2bccd;
+    text-align: center;
+    color: #002158;
+    font-family: Arial;
+    margin-right: 10px;
+    background-color: #ffffff;
+}
+
+.openstudio-activity-guidance-item-upload-container {
+    margin: 0 auto;
+    width: 62px;
+    height: 42px;
+    border: 1px solid #b2bccd;
+    text-align: center;
+    color: #002158;
+    background-color: #ffffff;
+}
+
+.openstudio-activity-guidance-item-upload-icon {
+    width: 32px;
+    margin-top: 5px;
+}
+
+.openstudio-activity-guidance-item-content {
+    line-height: 20px;
+    padding: 0px 15px;
+}
+
+.openstudio-activity-guidance-item-content > p {
+    margin: 0px;
+}
+
+#page-mod-openstudio-folder .openstudio-activity-guidance-item-content .atto_image_button_text-top.img-responsive,
+#page-mod-openstudio-folder .openstudio-activity-guidance-item-content .atto_image_button_middle.img-responsive,
+#page-mod-openstudio-folder .openstudio-activity-guidance-item-content .atto_image_button_text-bottom.img-responsive {
+    width: 100%;
+    margin-top: 5px;
+}
+
+#page-mod-openstudio-folder #id_activity_guidance {
+    margin-right: 6px;
+}
+
+/**
+ * End folder - Activity guidance
+ */
+
+
+/**
  * Import feature
  */
 
@@ -867,12 +978,14 @@ div.openstudio-orderpost-item:nth-of-type(odd) {
 /* Common dialog header */
 
 .path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue .moodle-dialogue-wrap .moodle-dialogue-hd,
-.path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue .moodle-dialogue-wrap .moodle-dialogue-hd.yui3-widget-hd {
+.path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue .moodle-dialogue-wrap .moodle-dialogue-hd.yui3-widget-hd,
+.path-mod-openstudio .modal-container .modal .modal-header {
     height: 46px;
     padding: 0px;
 }
 
-.path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue .moodle-dialogue-hd span:first-child {
+.path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue .moodle-dialogue-hd span:first-child,
+.path-mod-openstudio .modal-container .modal .modal-header h3 {
     padding: 11px 15px;
     display: inline-block;
     font-family: Arial;
@@ -910,6 +1023,30 @@ div.openstudio-orderpost-item:nth-of-type(odd) {
 .yui3-widget-buttons button {
     margin-left: 5px;
     margin-right: 5px;
+}
+
+.path-mod-openstudio .modal-container {
+    position: absolute;
+    overflow: visible;
+}
+
+.path-mod-openstudio .modal-container .modal {
+    max-width: 640px;
+}
+
+.path-mod-openstudio .modal-container .modal .modal-body p {
+    margin: 0 0 10px;
+}
+
+.path-mod-openstudio .modal-container .modal .modal-header .close {
+    right: 15px;
+    top: 0px;
+    padding-top: 8px;
+    padding-right: 0px;
+}
+
+.path-mod-openstudio .modal-container .modal .modal-header h3:focus {
+    outline: none;
 }
 
 /**
@@ -3309,7 +3446,8 @@ div.openstudio-content-view-version div:nth-of-type(odd) {
 
 /* Folder browse posts dialogue. */
 
-.path-mod-openstudio .moodle-dialogue-base .openstudio-folder-posts-dialogue .moodle-dialogue-content .moodle-dialogue-hd {
+.path-mod-openstudio .moodle-dialogue-base .openstudio-folder-posts-dialogue .moodle-dialogue-content .moodle-dialogue-hd,
+.path-mod-openstudio .modal-container .modal .modal-header {
     background-color: #d8dde6;
     border-top: solid 2px #b2bccd;
     border-bottom: solid 2px #b2bccd;
@@ -3331,7 +3469,8 @@ div.openstudio-content-view-version div:nth-of-type(odd) {
     cursor: pointer;
 }
 
-.path-mod-openstudio .moodle-dialogue-base .openstudio-folder-posts-dialogue .moodle-dialogue-content .yui3-button.closebutton::before {
+.path-mod-openstudio .moodle-dialogue-base .openstudio-folder-posts-dialogue .moodle-dialogue-content .yui3-button.closebutton::before,
+.path-mod-openstudio .modal-container .modal .modal-header .close::before {
     content: url([[pix:openstudio|close_button_whitecross_rgb_32px]]);
 }
 
@@ -4229,7 +4368,6 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 
 .openstudio-folder-view-title-background {
     font-size: 1.28571em ;
-    width: 200px;
     float: left;
 }
 
@@ -4452,9 +4590,8 @@ a.openstudio-add-new-content-link:hover  {
 
 .openstudio-folder-view-title-icon img {
     width: 24px;
-    padding-left: 5px;
+    height: 24px;
 }
-
 
 .openstudio-add-new-content-link img{
     vertical-align: top;
@@ -5109,6 +5246,18 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-folder-view-content .openstudio-folder-view-add-new-content {
         padding-left: 20px;
         padding-right: 20px;
+    }
+
+    .openstudio-folder-view-title-background {
+        padding-bottom: 6px;
+    }
+
+    .openstudio-folder-view-title-managepost {
+        float: right;
+    }
+
+    .openstudio-folder-view-hasguidance {
+        float: left;
     }
 }
 
@@ -5907,15 +6056,11 @@ a.openstudio-add-new-content-link:hover  {
         padding-bottom: 8px;
     }
 
-    .openstudio-folder-view-title {
+    .openstudio-folder-view-title > span {
         font-size: 1.42857em;
         margin-bottom: 20px;
         margin-right: 0px;
         width: 100%;
-    }
-
-    .openstudio-folder-view-title-managepost  {
-        float: right;
     }
 
     .openstudio-folder-view-primary {
@@ -6870,6 +7015,15 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-folder-content .openstudio-item-lock {
         margin-top: 35px;
     }
+
+    .openstudio-folder-view-title {
+        width: 100%;
+    }
+
+    .path-mod-openstudio .modal-container .modal {
+        margin-top: 0px;
+    }
+
 }
 
 /* Mobile small. */
@@ -7207,5 +7361,9 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-folder-background .openstudio-default-folder-background {
         padding: 10px 12px 10px 10px;
+    }
+
+    .openstudio-folder-preview-default img  {
+        width: 72px;
     }
 }
