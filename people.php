@@ -114,10 +114,18 @@ $peopledatatemp = user::get_all($cminstance->id,
 if (!empty($peopledatatemp)) {
     $peopledata->total = $peopledatatemp->total;
 
+    $personarray = [];
+    $personidsarray = [];
     foreach ($peopledatatemp->people as $person) {
+        $personarray[] = $person;
+        $personidsarray[] = $person->id;
+    }
 
+    $usersactivitydata = user::get_all_users_activity_status($cminstance->id, $personidsarray);
+
+    foreach ($personarray as $person) {
         $person->userpictureurl = new moodle_url('/user/pix.php/'.$person->id.'/f1.jpg');
-        $person->userprogressdata = user::get_activity_status($cminstance->id, $person->id);
+        $person->userprogressdata = $usersactivitydata[$person->id];
         $person->userprogressdata['lastactivedate'] = userdate($person->userprogressdata['lastactivedate'],
                 get_string('formattimedatetime', 'openstudio'));
         $person->viewuserworkurl = new moodle_url('/mod/openstudio/view.php',
@@ -132,13 +140,13 @@ if (!empty($peopledatatemp)) {
 
         $person->flagscontentread = $flagscontentread;
 
-        $person->progressenable = $person->userprogressdata['totalslots'] > 0;
+        $person->progressenable = $person->userprogressdata['totalcontents'] > 0;
         $person->participationenable = $permissions->feature_participationsmiley;
         $person->participationlow = isset($person->userprogressdata['participationstatus'])
                 && ($person->userprogressdata['participationstatus'] == 'low');
 
         if ($person->progressenable) {
-            $percentcompleted = round($person->userprogressdata['filledslots'] / $person->userprogressdata['totalslots'] * 100);
+            $percentcompleted = round($person->userprogressdata['filledcontents'] / $person->userprogressdata['totalcontents'] * 100);
             $person->percentcompleted = $percentcompleted;
         }
 

@@ -371,5 +371,147 @@ EOF;
 
         return false;
     }
-}
 
+    /**
+     * Calculates and return all user progress in using the specified studio instance.
+     *
+     * @param int $studioid filter data to specified studio instance.
+     * @param int $userids user ids to fetch data for.
+     * @return array return array containing the user's progress.
+     */
+    public static function get_all_users_activity_status($studioid, $userids) {
+        global $DB;
+
+        if (empty($userids)) {
+            return [];
+        }
+
+        // Return user id sql and user id array.
+        list($useridsql, $useridparams) = $DB->get_in_or_equal($userids);
+
+        $usersactivitydata = [];
+
+        // Caculate the user's last active date which can be determined by entries
+        // in the studio_flags or studio_tracking table.
+        // Count of all comments posted by a user for a given studio.
+        $sql = <<<EOF
+  SELECT t.userid, max(t.timemodified) as tmodified,
+         (SELECT max(f.timemodified) AS fmodified
+            FROM {openstudio_flags} f
+           WHERE f.userid = t.userid),
+         (SELECT count(c.*) as totalpostedcomments
+            FROM {openstudio_comments} c
+            JOIN {openstudio_contents} s ON s.id = c.contentid AND s.openstudioid = ?
+           WHERE c.userid = t.userid AND c.deletedby IS NULL),
+         (SELECT count(c.*) as totalpostedcommentsexcludeown
+            FROM {openstudio_comments} c
+            JOIN {openstudio_contents} s ON s.id = c.contentid AND s.openstudioid = ?
+           WHERE c.userid = t.userid AND s.userid != t.userid AND c.deletedby IS NULL)
+    FROM {openstudio_tracking} t
+   WHERE t.userid {$useridsql}
+GROUP BY t.userid
+
+EOF;
+
+        $results = $DB->get_recordset_sql($sql, array_merge([$studioid, $studioid], $useridparams));
+        foreach ($results as $result) {
+            $lastactivedate = false;
+
+            if ((int) $result->fmodified > 0) {
+                $lastactivedate = $result->fmodified;
+            }
+
+            if ((int) $result->tmodified > 0) {
+                if ($result->tmodified > $lastactivedate) {
+                    $lastactivedate = $result->tmodified;
+                }
+            }
+            if (!$lastactivedate) {
+                $lastactivedate = 'unknown';
+            }
+
+            $activitydata = [
+                    'totalpostedcomments' => $result->totalpostedcomments,
+                    'totalpostedcommentsexcludeown' => $result->totalpostedcommentsexcludeown,
+                    'lastactivedate' => $lastactivedate
+            ];
+            $usersactivitydata[$result->userid] = $activitydata;
+        }
+        $results->close();
+
+        // Gather user's content usage in terms of number of activity contents that they have
+        // populated and put them into a progress array.
+        $sql = <<<EOF
+         SELECT l1.id AS level1id,
+                l2.id AS level2id,
+                l3.id AS level3id,
+                s.id,
+                s.contenttype AS slotcontenttype,
+                l3.contenttype AS slotcontenttype2,
+                l1.name AS level1name,
+                l2.name AS level2name,
+                l3.name AS level3name,
+                l1.sortorder AS level1sortorder,
+                s.userid
+           FROM {openstudio_level3} l3
+     INNER JOIN {openstudio_level2} l2 ON l2.id = l3.level2id
+     INNER JOIN {openstudio_level1} l1 ON l1.id = l2.level1id AND l1.openstudioid = ?
+LEFT OUTER JOIN {openstudio_contents} s ON s.levelcontainer = 3 AND s.levelid = l3.id AND s.userid {$useridsql}
+          WHERE l1.status >= 0
+            AND l2.status >= 0
+            AND l3.status >= 0
+       ORDER BY l1.sortorder ASC, l2.sortorder ASC, l3.sortorder ASC
+
+EOF;
+
+        $results = $DB->get_recordset_sql($sql, array_merge([$studioid], $useridparams));
+
+        $filledcontentsarray = [];
+        $totalcontentsarray = [];
+        foreach ($results as $result) {
+            // Collect the total array by level3id.
+            $totalcontentsarray[$result->level3id] = 1;
+
+            // Calculate the filled content.
+            if ((int) $result->id) {
+                if (array_key_exists($result->userid, $filledcontentsarray)) {
+                    $filledcontentsarray[$result->userid]++;
+                } else {
+                    $filledcontentsarray[$result->userid] = 1;
+                }
+            }
+        }
+        $results->close();
+
+        $counttotalcontents = count($totalcontentsarray);
+
+        // Calculate smiley mood: happy or sad.
+        foreach ($userids as $userid) {
+            $activitydata = !empty($usersactivitydata[$userid]) ? $usersactivitydata[$userid] : [];
+
+            $filledcontents = 0;
+            $participationlevel = 0;
+            if (!empty($filledcontentsarray[$userid])) {
+                $filledcontents = $filledcontentsarray[$userid];
+                // Total comment exclude own.
+                $participationlevel = $activitydata['totalpostedcommentsexcludeown'] / $filledcontentsarray[$userid];
+            }
+
+            $participationstatus = 'low';
+            if ($participationlevel >= 1) {
+                $participationstatus = 'high';
+            }
+
+            $extraactivitydata = [
+                    'totalcontents' => $counttotalcontents,
+                    'filledcontents' => $filledcontents,
+                    'participationstatus' => $participationstatus
+            ];
+
+            $usersactivitydata[$userid] = array_merge($activitydata, $extraactivitydata);
+        }
+
+        return $usersactivitydata;
+
+    }
+}
