@@ -105,6 +105,9 @@ $pagetitle = $pageheading = get_string('pageheader', 'openstudio',
         array('cname' => $course->shortname, 'cmname' => $cm->name,
                 'title' => get_string('menupeople', 'openstudio')));
 
+// Render page header and crumb trail.
+util::page_setup($PAGE, $pagetitle, $pageheading, $pageurl, $course, $cm);
+
 $peopledata = (object) array('people' => array(), 'total' => 0);
 
 $peopledatatemp = user::get_all($cminstance->id,
@@ -124,7 +127,9 @@ if (!empty($peopledatatemp)) {
     $usersactivitydata = user::get_all_users_activity_status($cminstance->id, $personidsarray);
 
     foreach ($personarray as $person) {
-        $person->userpictureurl = new moodle_url('/user/pix.php/'.$person->id.'/f1.jpg');
+        $picture = new user_picture($person);
+        $picture->size = 1;
+        $person->userpictureurl = $picture->get_url($PAGE)->out(false);
         $person->userprogressdata = $usersactivitydata[$person->id];
         $person->userprogressdata['lastactivedate'] = userdate($person->userprogressdata['lastactivedate'],
                 get_string('formattimedatetime', 'openstudio'));
@@ -200,9 +205,6 @@ $peopledata->sortbyusername = $sortbyusername;
 $peopledata->sortasc = $sortasc;
 $peopledata->sortdesc = $sortdesc;
 $peopledata->selectedgroupid = $groupid;
-
-// Render page header and crumb trail.
-util::page_setup($PAGE, $pagetitle, $pageheading, $pageurl, $course, $cm);
 
 // Breadcrumb.
 $peoplepageurl = new moodle_url('/mod/openstudio/people.php',
