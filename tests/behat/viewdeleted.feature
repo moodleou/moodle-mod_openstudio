@@ -1,5 +1,5 @@
 @ou @ou_vle @mod @mod_openstudio @mod_openstudio_folder_overview @javascript
-Feature: View deleted posts
+Feature: View deleted open studio posts
     When using Open Studio with manager
     As a manager
     I need to view/restore deleted posts and restore
@@ -28,7 +28,7 @@ Feature: View deleted posts
             | OS1        | manager1 | Folder 1 | Content 1 |
         And all users have accepted the plagarism statement for "OS1" openstudio
 
-    Scenario: View/Restore deleted posts in Folder
+    Scenario: View/Restore deleted open studio posts in Folder
         # Delete post
         Given I am on site homepage
         And I log in as "manager1"
@@ -38,10 +38,10 @@ Feature: View deleted posts
         And I follow "Folder 1"
         And I follow "Content 1"
         And I press "Delete"
+        And I click on "Delete" "button" in the "Delete post?" "dialogue"
         Then I should not see "Content 1"
 
         # View deleted posts
-        And I click on ".openstudio-delete-ok-btn" "css_element"
         And I press "View deleted"
         Then I should see "Content 1"
 
