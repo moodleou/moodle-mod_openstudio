@@ -961,6 +961,15 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 'folderid' => $contentdata->folderid, 'restoreversion' => 1));
         $contentdata->contentrestoreversionurl = $contentrestoreversionurl->out(false);
 
+        // Folder name not created yet.
+        if ($contentdata->folderid) {
+            $contentfolder = folder::get($contentdata->folderid);
+            if (!$contentdata->name && $contentfolder->l3id) {
+                $contentdata->name = $contentfolder->l1name . ' - ' . $contentfolder->l2name .
+                        ' - ' . $contentfolder->l3name;
+            }
+        }
+
         return $this->render_from_template('mod_openstudio/content_page', $contentdata);
     }
 
@@ -1062,6 +1071,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         global $OUTPUT, $PAGE, $USER;
 
         $folderdata->cmid = $cmid;
+        $folderdata->contents = [];
         $folderdata = renderer_utils::folder_content($permissions->pinboardfolderlimit, $folderdata);
         $folderaddcontent = new moodle_url('/mod/openstudio/contentedit.php',
                     array('id' => $cmid, 'lid' => 0, 'sid' => 0, 'vid' => $folderdata->visibility,
@@ -1072,6 +1082,17 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                         array('id' => $cmid, 'sid' => $folderdata->id, 'lid' => $folderdata->levelid,
                                 'vuid' => $folderdata->userid));
         $folderdata->myfolder = true;
+        $folderdata->showorderpostbutton = true;
+        $contenttemplates = template::get_by_folderid($folderdata->id);
+        if ($contenttemplates) {
+            $folderdata->showorderpostbutton = false;
+            foreach ($folderdata->contents as $content) {
+                if ($content->canreorder == 1) {
+                    $folderdata->showorderpostbutton = true;
+                    break;
+                }
+            }
+        }
         if ($folderdata->userid != $USER->id) {
             $folderdata->myfolder = false;
         }
@@ -1110,6 +1131,12 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         renderer_utils::process_content_comment($folderdata, $permissions, $cmid, $cminstance);
         // Process view deleted post.
         renderer_utils::process_view_deleted_post($folderdata, $permissions, $cmid);
+
+        // Folder name not created yet.
+        if (!$folderdata->name && $folderdata->l3id) {
+            $folderdata->name = $folderdata->l1name . ' - ' . $folderdata->l2name .
+                    ' - ' . $folderdata->l3name;
+        }
 
         // Order-post functionality.
         $this->page->requires->strings_for_js(

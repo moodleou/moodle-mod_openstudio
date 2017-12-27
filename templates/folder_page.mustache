@@ -94,9 +94,11 @@
                     </button>
                 {{/hasguidance}}
                 {{#myfolder}}
-                    <button id="id_orderpost" name="managepost" class="osep-smallbutton">
-                        {{#str}}folderorderpost, mod_openstudio{{/str}}
-                    </button>
+                    {{#showorderpostbutton}}
+                        <button id="id_orderpost" name="managepost" class="osep-smallbutton">
+                            {{#str}}folderorderpost, mod_openstudio{{/str}}
+                        </button>
+                    {{/showorderpostbutton}}
                 {{/myfolder}}
             </div>
         </div>

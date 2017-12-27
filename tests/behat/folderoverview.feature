@@ -132,12 +132,8 @@ Feature: Folder Overview
       And I should see "Content1.1"
       And the "src" attribute of "img.openstudio-default-folder-img" "css_element" should contain "uploads_rgb_32px"
       And I follow "Content1.1"
-      # Redirect to create folder page
-      And I set the following fields to these values:
-          | Who can view this folder  | My module                                  |
-          | Folder title              | Test my folder view 1                      |
-          | Folder description        | My folder view description 1               |
-      And I press "Create folder"
+      # Folder title empty
+      And I should see "Block1 - Activity1 - Content1.1"
 
       # Redirect to folder overview page
       And I follow "Add new content"
@@ -151,6 +147,14 @@ Feature: Folder Overview
       # Redirect to content detail
       And I should see "Test My Folder Overview"
       And the "src" attribute of "img.openstudio-content-view-img" "css_element" should contain "test1.jpg"
+      And I follow "Edit folder details and sharing"
+      And I set the following fields to these values:
+        | Who can view this folder  | My module                                  |
+        | Folder title              | Test my folder view 1                      |
+        | Folder description        | My folder view description 1               |
+      And I press "Save"
+      # Folder Title has value
+      And I should see "Test my folder view 1"
       And I follow "Shared Content > My Module" in the openstudio navigation
       And the "src" attribute of "img.openstudio-content-folder-img" "css_element" should contain "test1.jpg"
 
@@ -334,12 +338,7 @@ Feature: Folder Overview
       And I follow "My Content > My Activities" in the openstudio navigation
       And I follow "Content1.1"
 
-      # Redirect to  add folder page
-      And I set the following fields to these values:
-        | Who can view this folder  | My module                                  |
-        | Folder title              | Test my folder view 1                      |
-        | Folder description        | My folder view description 1               |
-      And I press "Create folder"
+      # Redirect to content detail
       And I follow "Content 1"
       And I press "Add file"
       And I set the following fields to these values:
@@ -358,21 +357,9 @@ Feature: Folder Overview
       And I press "Save"
       And I follow "My Content > My Activities" in the openstudio navigation
       And I follow "Content1.1"
-      And I press "Order posts"
-
-      # Content can not re-order. User click down button to move pass another fixed content, error message will display
-      And the "Save order" "button" should be disabled
-      And the "Move Up" "button" should be disabled
-      And I click on "#openstudio-folder-reorder-down-0" "css_element"
-      And I should see "You cannot move this content beyond other fixed contents."
-      
-      # User cannot input number to order fixed content, error message will display
-      And I set the field "Move to post number" to "2"
-      And I click on "Save order" "button" in the "Order posts" "dialogue"
-      And I should see "You cannot move this content beyond other fixed contents."
+      And I should not see "Order posts"
 
       # Content can re-order
-      And I click on "Close" "button" in the "Order posts" "dialogue"
       And I follow "Add new content"
       And I press "Add file"
       And I set the following fields to these values:
@@ -476,13 +463,6 @@ Feature: Folder Overview
       And I follow "My Content > My Activities" in the openstudio navigation
       And I follow "Content1.1"
 
-      # Redirect to  add folder page
-      And I set the following fields to these values:
-        | Who can view this folder  | My module                                  |
-        | Folder title              | Test my folder view 1                      |
-        | Folder description        | My folder view description 1               |
-      And I press "Create folder"
-
       # Upload a new content 
       And I follow "Add new content"
       And I press "Add file"
@@ -564,11 +544,6 @@ Feature: Folder Overview
       And I follow "Test Open Studio name 1"
       And I follow "My Content > My Activities" in the openstudio navigation
       And I follow "Folder 1"
-      And I set the following fields to these values:
-        | Who can view this folder | My module                    |
-        | Folder title             | Test my folder view 1        |
-        | Folder description       | My folder view description 1 |
-      And I press "Create folder"
       Then I press "Activity guidance"
       And I should see "Folder guidance text"
       And I should see "Content 1"

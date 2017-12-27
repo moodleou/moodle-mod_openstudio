@@ -112,8 +112,13 @@ class folder {
                     item::log($contentid);
                 }
 
-                // Update folder content last modified time.
-                $DB->set_field('openstudio_contents', 'timemodified', time(), ['id' => $folderid]);
+                // Update folder content last modified time and showextradata.
+                $updatedata = new \stdClass();
+                $updatedata->timemodified = time();
+                $updatedata->showextradata = 0;
+                $updatedata->id = $folderid;
+
+                $DB->update_record('openstudio_contents', $updatedata);
                 tracking::log_action($folderid, tracking::MODIFY_FOLDER, $userid);
                 switch ($context) {
                     case 1:

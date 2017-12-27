@@ -221,11 +221,12 @@ class renderer_utils {
 
                             $activities[$key]->isactive = false;
                             if ($activities[$key]->slotcontenttype2 == content::TYPE_FOLDER) {
-                                $activities[$key]->activityediturl = new \moodle_url('/mod/openstudio/contentedit.php',
-                                        array('id' => $contentdata->cmid, 'sid' => 0, 'lid' => $activity->level3id,
-                                                'ssid' => 0, 'type' => content::TYPE_FOLDER_CONTENT));
+                                $activities[$key]->activityediturl = new \moodle_url('/mod/openstudio/folder.php',
+                                        array('id' => $contentdata->cmid, 'sid' => 0,
+                                            'vuid' => $contentowner->id, 'lid' => $activity->level3id));
 
-                                if ($activity->id) {
+                                // Use showextradata field to indicate that this is an auto-generated folder.
+                                if ($activity->id && !$activity->showextradata) {
                                     $activities[$key]->isactive = true;
                                     $activities[$key]->activityediturl = new \moodle_url('/mod/openstudio/folder.php',
                                             array('id' => $contentdata->cmid, 'sid' => $activity->id,
@@ -1740,9 +1741,8 @@ class renderer_utils {
             $content->folderlink = new \moodle_url('/mod/openstudio/folder.php',
                     array('id' => $id, 'lid' => $content->l3id, 'vid' => content::VISIBILITY_PRIVATE, 'sid' => $content->id));
             if (!$content->id) {
-                $content->folderlink = new \moodle_url('/mod/openstudio/contentedit.php',
-                        array('id' => $id, 'sid' => 0, 'lid' => $content->l3id, 'vid' => $vid,
-                                'ssid' => 0, 'type' => content::TYPE_FOLDER_CONTENT));
+                $content->folderlink = new \moodle_url('/mod/openstudio/folder.php',
+                        ['id' => $id, 'lid' => $content->l3id, 'vid' => content::VISIBILITY_PRIVATE, 'sid' => 0]);
             }
         }
         return $content;

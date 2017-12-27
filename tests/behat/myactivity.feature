@@ -156,9 +156,6 @@ Feature: My Activity view in Open Studio
     And I follow "Test Open Studio name 1"
     And I follow "My Content > My Activities" in the openstudio navigation
     And I follow "Folder content 3.2"
-    And I set the following fields to these values:
-      | Folder title | Folder 1 |
-    And I press "Create folder"
     # Check add section is hidden.
     Then I should not see "Add new content"
     And I should not see "Upload content to folder"

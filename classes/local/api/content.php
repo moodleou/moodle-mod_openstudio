@@ -298,23 +298,44 @@ EOF;
             $insertdata['levelid'] = $levelid;
             $insertdata['levelcontainer'] = $level;
             $insertdata['contenttype'] = $data['contenttype'];
-            array_key_exists('mimetype', $data) ? ($insertdata['mimetype'] = $data['mimetype']) : null;
-            array_key_exists('content', $data) ? ($insertdata['content'] = $data['content']) : null;
             $insertdata['fileid'] = $slotfileid;
-            array_key_exists('thumbnail', $data) ? ($insertdata['thumbnail'] = $data['thumbnail']) : null;
-            array_key_exists('urltitle', $data) ? ($insertdata['urltitle'] = $data['urltitle']) : null;
             $insertdata['name'] = $data['name'];
-            array_key_exists('description', $data) ? ($insertdata['description'] = $data['description']) : null;
+
+            if (array_key_exists('mimetype', $data)) {
+                $insertdata['mimetype'] = $data['mimetype'];
+            }
+            if (array_key_exists('content', $data)) {
+                $insertdata['content'] = $data['content'];
+            }
+            if (array_key_exists('thumbnail', $data)) {
+                $insertdata['thumbnail'] = $data['thumbnail'];
+            }
+            if (array_key_exists('urltitle', $data)) {
+                $insertdata['urltitle'] = $data['urltitle'];
+            }
+            if (array_key_exists('description', $data)) {
+                $insertdata['description'] = $data['description'];
+            }
             $insertdata['showextradata'] = 0;
+            if (array_key_exists('showextradata', $data)) {
+                $insertdata['showextradata'] = $data['showextradata'];
+            }
             if (array_key_exists('showgps', $data)) {
                 $insertdata['showextradata'] = $insertdata['showextradata'] + $data['showgps'];
             }
             if (array_key_exists('showimagedata', $data)) {
                 $insertdata['showextradata'] = $insertdata['showextradata'] + $data['showimagedata'];
             }
-            array_key_exists('ownership', $data) ? ($insertdata['ownership'] = $data['ownership']) : null;
-            array_key_exists('ownershipdetail', $data) ? ($insertdata['ownershipdetail'] = $data['ownershipdetail']) : null;
-            array_key_exists('visibility', $data) ? ($insertdata['visibility'] = $data['visibility']) : null;
+            if (array_key_exists('ownership', $data)) {
+                $insertdata['ownership'] = $data['ownership'];
+            }
+            if (array_key_exists('ownershipdetail', $data)) {
+                $insertdata['ownershipdetail'] = $data['ownershipdetail'];
+            }
+            if (array_key_exists('visibility', $data)) {
+                $insertdata['visibility'] = $data['visibility'];
+            }
+
             $insertdata['userid'] = $userid;
             $insertdata['timemodified'] = time();
             $insertdata['timeflagged'] = time();

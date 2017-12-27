@@ -93,6 +93,7 @@ EOF;
                 l2.id AS level2id,
                 l3.id AS level3id,
                 s.id,
+                s.showextradata AS showextradata,
                 s.contenttype AS slotcontenttype,
                 l3.contenttype AS slotcontenttype2,
                 l1.name AS level1name,
@@ -134,7 +135,8 @@ EOF;
                 // Calculate the slot counts.
                 $counttotalslots++;
                 $progressdataarray[$progress->level1id]->countslots++;
-                if ((int) $progress->id == 0) {
+                // Use showextradata field to indicate that this is an auto-generated folder.
+                if ((int) $progress->id == 0 || ($progress->showextradata && $progress->slotcontenttype == content::TYPE_FOLDER)) {
                     $countemptyslots++;
                 } else {
                     $countfilledslots++;

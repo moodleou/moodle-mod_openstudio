@@ -654,7 +654,9 @@ if ($finalviewpermissioncheck) {
                     $content->contentislocked = $lockdata->contentislock;
                     $content->contentislockmessage = $lockdata->contentislockmessage;
 
-                    $content->contentempty = $content->contenttype == content::TYPE_NONE && $content->timemodified == 0;
+                    // Use showextradata field to indicate that this is an auto-generated folder.
+                    $content->contentempty = ($content->contenttype == content::TYPE_NONE && $content->timemodified == 0)
+                            || ($content->showextradata && $content->contenttype == content::TYPE_FOLDER);
                     $content->activitycontentempty = $content->contenttype == content::TYPE_NONE;
                     if (array_key_exists($activityid, $activityitems)) {
                         $activityitems[$activityid]->activities[] = (object)$content;

@@ -85,22 +85,32 @@ if ($permissions->viewdeleted || $permissions->managecontent) {
     $showdeletedcontentversions = true;
 }
 
-if ($folderid > 0) {
-    $contentandversions = contentversion::get_content_and_versions($folderid, $USER->id, $showdeletedcontentversions);
-    $folderdata = lock::determine_lock_status($contentandversions->contentdata);
-} else {
-    $folderdata = (object) array(
-        'id' => 0,
-        'name' => get_string('foldernoname', 'openstudio'),
-        'isownedbyviewer' => true,
-        'userid' => $USER->id,
-        'levelid' => $lid,
-        'visibility' => $vid,
-        'timemodified' => time(),
-        'visibilitycontext' => content::VISIBILITY_PRIVATE,
-        'deletedby' => null
-    );
+if ($folderid == 0) {
+    $foldervialevel = content::get_record_via_levels($cminstance->id, $userid, 3, $lid);
+    if ($foldervialevel) {
+        // Folder allready created.
+        $folderid = $foldervialevel->id;
+    } else {
+        // Folder has not created yet.
+        // Set showextradata to 1, then set it back to 0 when the user makes changes to the folder.
+        $data = ['contenttype' => content::TYPE_FOLDER, 'showextradata' => 1,
+            'visibility' => $cminstance->defaultvisibility,
+            'embedcode' => '', 'urltitle' => '', 'weblink' => '',
+            'name' => '', 'description' => ''];
+        // Create new folder.
+        $folderid = content::create(
+            $cminstance->id,
+            $USER->id,
+            3,
+            $lid,
+            $data
+        );
+    }
 }
+
+// Get folder data.
+$contentandversions = contentversion::get_content_and_versions($folderid, $USER->id, $showdeletedcontentversions);
+$folderdata = lock::determine_lock_status($contentandversions->contentdata);
 
 // Check the viewing user has permission to view content.
 if (!util::can_read_content($cminstance, $permissions, $folderdata)) {
