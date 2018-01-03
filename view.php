@@ -852,6 +852,14 @@ $contentdata->osort = $osort;
 $contentdata->page = $streamdatapagesize;
 $contentdata->filteropen = $filteropen;
 $contentdata->filteractive = $filteractive;
+if (!has_capability('mod/openstudio:addcontent', $mcontext)) {
+    $contentdata->adddisable = true;
+}
+if (isguestuser()) {
+    $url = get_login_url();
+    $SESSION->wantsurl = $PAGE->url->out();
+    $contentdata->guestmessage = format_text(get_string('guestmessage', 'mod_openstudio', $url), FORMAT_MARKDOWN);
+}
 
 // Generate stream html.
 $renderer = $PAGE->get_renderer('mod_openstudio');

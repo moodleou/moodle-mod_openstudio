@@ -2396,6 +2396,17 @@ a.openstudio-add-title:hover  {
     background-color: #f0f0f1;
 }
 
+.openstudio-grid-item-guest-message {
+    background-color: #f0f0f1;
+}
+
+.openstudio-grid-item-guest-message p {
+    background-color: #fff;
+    padding: 14px;
+    margin: 14px;
+    border: 1px solid #676463;
+}
+
 .openstudio-grid-item-content {
     padding: 5px 15px 0;
 }

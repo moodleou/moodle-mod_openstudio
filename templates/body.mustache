@@ -176,6 +176,11 @@
     {{/myactivities}}
     {{^myactivities}}
         <div class="openstudio-grid" id="openstudio_grid">
+            {{#guestmessage}}
+                <div class="openstudio-grid-item openstudio-grid-item-guest-message">
+                    {{{guestmessage}}}
+                </div>
+            {{/guestmessage}}
             {{#available}}
                 {{^adddisable}}
                     <div class="openstudio-grid-item openstudio-grid-item-add-new">

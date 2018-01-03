@@ -38,6 +38,12 @@ class honesty {
     public static function get($studioid, $userid) {
         global $DB;
 
+        if (isguestuser()) {
+            // The guest user cannot view or post anything, so no risk of plagiarism there! In any case, we can't save an
+            // honesty check for them.
+            return true;
+        }
+
         $result = $DB->get_record('openstudio_honesty_checks',
                 array('openstudioid' => (int) $studioid, 'userid' => (int) $userid), '*');
 

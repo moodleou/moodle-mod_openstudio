@@ -70,7 +70,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $data->sitename = $sitename;
 
         // Check if enable Email subscriptions.
-        $data->enablesubscription = $permissions->feature_enablesubscription;
+        $data->enablesubscription = $permissions->feature_enablesubscription && !isguestuser();
 
         $menuhighlight = new stdClass;
         $menuhighlight->mymodule = false;
@@ -207,7 +207,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $subnavigations[] = $submenuitem;
         }
 
-        if ($permissions->feature_pinboard || ($permissions->pinboarddata->usedandempty > 0)) {
+        if (!isguestuser() && ($permissions->feature_pinboard || ($permissions->pinboarddata->usedandempty > 0))) {
             $pinboardname = get_string('settingsthemehomesettingspinboard', 'openstudio');
             if (!empty($theme->themepinboardname)) {
                 $pinboardname = $theme->themepinboardname;
@@ -257,58 +257,60 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $data->navigation[] = $adminmenuitem;
         }
 
-        $data->notificationicon = $OUTPUT->image_url('notifications_rgb_32px', 'openstudio');
-        $data->notifications = [];
-        $notifications = notifications::get_current($cm->instance, $USER->id, defaults::NOTIFICATIONLIMITMAX);
-        foreach ($notifications as $notification) {
-            $data->notifications[] = $notification->export_for_template($this->output);
-        }
-        $data->notificationnumber = array_reduce($notifications, function($carry, notification $notification) {
-            $carry += $notification->timeread ? 0 : 1;
-            return $carry;
-        });
-        $stopstring = get_string('stopnotificationsforcontent', 'mod_openstudio');
-        $stopicon = new \pix_icon('stop_notification', $stopstring, 'mod_openstudio', [
-                'width' => 16,
-                'height' => 16
-        ]);
-        $data->notificationstopicon = $stopicon->export_for_template($this->output);
+        if (!isguestuser()) {
+            $data->notificationicon = $OUTPUT->image_url('notifications_rgb_32px', 'openstudio');
+            $data->notifications = [];
+            $notifications = notifications::get_current($cm->instance, $USER->id, defaults::NOTIFICATIONLIMITMAX);
+            foreach ($notifications as $notification) {
+                $data->notifications[] = $notification->export_for_template($this->output);
+            }
+            $data->notificationnumber = array_reduce($notifications, function($carry, notification $notification) {
+                $carry += $notification->timeread ? 0 : 1;
+                return $carry;
+            });
+            $stopstring = get_string('stopnotificationsforcontent', 'mod_openstudio');
+            $stopicon = new \pix_icon('stop_notification', $stopstring, 'mod_openstudio', [
+                    'width' => 16,
+                    'height' => 16
+            ]);
+            $data->notificationstopicon = $stopicon->export_for_template($this->output);
 
-        $addtodashboard = block_externaldashboard_backend::render_favourites_button($PAGE->cm, false);
-        $data->addtodashboard = $addtodashboard;
+            $addtodashboard = block_externaldashboard_backend::render_favourites_button($PAGE->cm, false);
+            $data->addtodashboard = $addtodashboard;
 
-        // Subscription.
-        $subscriptionconstant = array(
-                "FORMAT_HTML" => subscription::FORMAT_HTML,
-                "FORMAT_PLAIN" => subscription::FORMAT_PLAIN,
-                "FREQUENCY_HOURLY" => subscription::FREQUENCY_HOURLY,
-                "FREQUENCY_DAILY" => subscription::FREQUENCY_DAILY);
+            // Subscription.
+            $subscriptionconstant = array(
+                    "FORMAT_HTML" => subscription::FORMAT_HTML,
+                    "FORMAT_PLAIN" => subscription::FORMAT_PLAIN,
+                    "FREQUENCY_HOURLY" => subscription::FREQUENCY_HOURLY,
+                    "FREQUENCY_DAILY" => subscription::FREQUENCY_DAILY);
 
-        $PAGE->requires->strings_for_js(array(
-                'subscriptiondialogheader', 'subscriptiondialogcancel', 'subscribe', 'unsubscribe',
-                'subscribetothisstudio'), 'mod_openstudio');
+            $PAGE->requires->strings_for_js(array(
+                    'subscriptiondialogheader', 'subscriptiondialogcancel', 'subscribe', 'unsubscribe',
+                    'subscribetothisstudio'), 'mod_openstudio');
 
-        $this->page->requires->js_call_amd('mod_openstudio/subscribe', 'init', [[
-                'constants' => $subscriptionconstant,
-                'openstudioid' => $coursedata->cminstance->id,
-                'userid' => $permissions->activeuserid,
-                'cmid' => $cmid]]);
+            $this->page->requires->js_call_amd('mod_openstudio/subscribe', 'init', [[
+                    'constants' => $subscriptionconstant,
+                    'openstudioid' => $coursedata->cminstance->id,
+                    'userid' => $permissions->activeuserid,
+                    'cmid' => $cmid]]);
 
-        $this->page->requires->strings_for_js(['stopnotifications', 'stopnotificationsfor'], 'mod_openstudio');
-        $this->page->requires->strings_for_js(['closebuttontitle', 'cancel'], 'moodle');
+            $this->page->requires->strings_for_js(['stopnotifications', 'stopnotificationsfor'], 'mod_openstudio');
+            $this->page->requires->strings_for_js(['closebuttontitle', 'cancel'], 'moodle');
 
-        $this->page->requires->js_call_amd('mod_openstudio/notificationlist', 'init', [
-                'cmid' => $cmid,
-                'followflag' => flags::FOLLOW_CONTENT]);
+            $this->page->requires->js_call_amd('mod_openstudio/notificationlist', 'init', [
+                    'cmid' => $cmid,
+                    'followflag' => flags::FOLLOW_CONTENT]);
 
-        $subscriptiondata = subscription::get(
-                $permissions->activeuserid,
-                $permissions->activecminstanceid);
+            $subscriptiondata = subscription::get(
+                    $permissions->activeuserid,
+                    $permissions->activecminstanceid);
 
-        if ($subscriptiondata) {
-            $data->subscriptionid = $subscriptiondata[subscription::MODULE]->id;
-        } else {
-            $data->subscriptionid = false;
+            if ($subscriptiondata) {
+                $data->subscriptionid = $subscriptiondata[subscription::MODULE]->id;
+            } else {
+                $data->subscriptionid = false;
+            }
         }
 
         return $this->render_from_template('mod_openstudio/header', $data);
