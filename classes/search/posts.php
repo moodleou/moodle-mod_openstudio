@@ -54,9 +54,10 @@ class posts extends \core_search\base_mod {
      * Returns recordset containing required data for indexing openstudio posts.
      *
      * @param int $modifiedfrom
-     * @return \moodle_recordset
+     * @param \context|null $context
+     * @return \moodle_recordset|null
      */
-    public function get_recordset_by_timestamp($modifiedfrom = 0) {
+    public function get_document_recordset($modifiedfrom = 0, \context $context = null) {
         global $DB;
 
         // Get all posts.
@@ -71,19 +72,25 @@ class posts extends \core_search\base_mod {
 
         $fields = $openstudiofields . ', ' . $levelfields . ', ' . $contentfields;
 
+        list ($contextjoin, $contextparams) = $this->get_context_restriction_sql(
+                $context, 'openstudio', 'os');
+        if ($contextjoin === null) {
+            return null;
+        }
+
         $sql = "SELECT {$fields}
                   FROM {openstudio_contents} c
              LEFT JOIN {openstudio} os ON os.id = c.openstudioid
              LEFT JOIN {openstudio_level3} l3 ON l3.id = c.levelid
              LEFT JOIN {openstudio_level2} l2 ON l2.id = l3.level2id
              LEFT JOIN {openstudio_level1} l1 ON l1.id = l2.level1id AND l1.openstudioid = c.openstudioid
+          $contextjoin
                  WHERE c.timemodified >= ?
                        AND c.contenttype NOT IN (?,?)
                        AND c.deletedtime IS NULL
               ORDER BY c.timemodified ASC";
-
-        return $DB->get_recordset_sql($sql, [$modifiedfrom, content::TYPE_NONE, content::TYPE_FOLDER]);
-
+        return $DB->get_recordset_sql($sql,
+                array_merge($contextparams, [$modifiedfrom], [content::TYPE_NONE, content::TYPE_FOLDER]));
     }
 
     /**

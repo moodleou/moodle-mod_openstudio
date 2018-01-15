@@ -53,11 +53,17 @@ class comments extends \core_search\base_mod {
      * Returns recordset containing required data for indexing openstudio comments.
      *
      * @param int $modifiedfrom
-     * @return \moodle_recordset
+     * @param \context|null $context
+     * @return \moodle_recordset|null
      */
-    public function get_recordset_by_timestamp($modifiedfrom = 0) {
+    public function get_document_recordset($modifiedfrom = 0, \context $context = null) {
         global $DB;
 
+        list ($contextjoin, $contextparams) = $this->get_context_restriction_sql(
+                $context, 'openstudio', 'os');
+        if ($contextjoin === null) {
+            return null;
+        }
         // Get all contents.
         $openstudiofields = 'os.course';
 
@@ -73,13 +79,13 @@ class comments extends \core_search\base_mod {
                   FROM {openstudio_contents} s
                   JOIN {openstudio} os ON os.id = s.openstudioid
                   JOIN {openstudio_comments} sc ON s.id = sc.contentid
+          $contextjoin
                  WHERE sc.timemodified >= ?
                        AND s.deletedtime IS NULL
                        AND sc.deletedtime IS NULL
                        AND s.contenttype <> ?
               ORDER BY sc.timemodified ASC";
-
-        return $DB->get_recordset_sql($sql, [$modifiedfrom, content::TYPE_NONE]);
+        return $DB->get_recordset_sql($sql, array_merge($contextparams, [$modifiedfrom, content::TYPE_NONE]));
     }
 
     /**

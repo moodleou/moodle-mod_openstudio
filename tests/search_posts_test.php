@@ -201,6 +201,18 @@ class search_posts_test extends \advanced_testcase {
         $url = $posts->get_doc_url($doc)->out(false);
         $this->assertEquals($CFG->wwwroot . '/mod/openstudio/content.php?id=' . $this->cm->id.'&sid='.$this->sharedcontent, $url);
 
+        // Create a second instance to check the context restriction.
+        $openstudiodata = ['course' => $this->course->id, 'enablefolders' => 1, 'idnumber' => 'OSother'];
+        $other = $this->generator->create_instance($openstudiodata);
+        $othercontext = context_module::instance($other->cmid);
+
+        // Test get_document_recordset with and without context.
+        $results = self::recordset_to_array($posts->get_document_recordset(0));
+        $this->assertCount(3, $results);
+        $results = self::recordset_to_array($posts->get_document_recordset(0, $context));
+        $this->assertCount(3, $results);
+        $results = self::recordset_to_array($posts->get_document_recordset(0, $othercontext));
+        $this->assertCount(0, $results);
     }
 
     /**

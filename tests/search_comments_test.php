@@ -284,6 +284,19 @@ class search_comments_testcase extends \advanced_testcase {
                     break;
             }
         }
+
+        // Create a second instance to check the context restriction.
+        $openstudiodata = ['course' => $this->course->id, 'enablefolders' => 1, 'idnumber' => 'OSother'];
+        $other = $this->generator->create_instance($openstudiodata);
+        $othercontext = \context_module::instance($other->cmid);
+
+        // Test get_document_recordset with and without context.
+        $results = self::recordset_to_array($comments->get_document_recordset(0));
+        $this->assertCount(3, $results);
+        $results = self::recordset_to_array($comments->get_document_recordset(0, $context));
+        $this->assertCount(3, $results);
+        $results = self::recordset_to_array($comments->get_document_recordset(0, $othercontext));
+        $this->assertCount(0, $results);
     }
 
     /**

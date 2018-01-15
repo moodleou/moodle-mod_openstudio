@@ -132,6 +132,20 @@ class search_folders_test extends \advanced_testcase {
 
         // Check that function return 2 folders.
         $this->assertCount(2, $results);
+
+        // Create a second instance to check the context restriction.
+        $openstudiodata = ['course' => $this->course->id, 'enablefolders' => 1, 'idnumber' => 'OSother'];
+        $other = $this->generator->create_instance($openstudiodata);
+        $othercontext = context_module::instance($other->cmid);
+
+        // Test get_document_recordset with and without context.
+        $results = self::recordset_to_array($folders->get_document_recordset(0));
+        $this->assertCount(2, $results);
+        $results = self::recordset_to_array($folders->get_document_recordset(0,
+                context_module::instance($this->openstudiolevels->cmid)));
+        $this->assertCount(2, $results);
+        $results = self::recordset_to_array($folders->get_document_recordset(0, $othercontext));
+        $this->assertCount(0, $results);
     }
 
     /**
