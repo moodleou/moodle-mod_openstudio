@@ -765,11 +765,6 @@ div.openstudio-orderpost-item:nth-of-type(odd) {
     overflow: hidden;
 }
 
-.openstudio-orderpost-item-picture img {
-    width: 64px;
-    height: auto;
-}
-
 .path-mod-openstudio .openstudio-orderpost-item-order-number-input {
     width: 17px;
     height: 12px;
