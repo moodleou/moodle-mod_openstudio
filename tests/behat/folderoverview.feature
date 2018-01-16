@@ -36,18 +36,11 @@ Feature: Folder Overview
           | student1 | G1     |
           | student2 | G1     |
           | student3 | G1     |
+      And the following open studio "instances" exist:
+          | course | name                    | description                  | pinboard | idnumber | groupmode | grouping  | pinboard | enablefolders | reportingemail   |
+          | C1     | Test Open Studio name 1 | Test Open Studio description | 99       | OS1      | 2         | GI1       | 99       | 1             | teacher1@asd.com |
       And I log in as "teacher1"
       And I am on "Course 1" course homepage
-      And I turn editing mode on
-      And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
-        | Name                         | Test Open Studio name 1      |
-        | Description                  | Test Open Studio description |
-        | Group mode                   | Visible groups               |
-        | Grouping                     | grouping1                    |
-        | Enable pinboard              | 99                           |
-        | Enable Folders               | 1                            |
-        | Abuse reports are emailed to | teacher1@asd.com             |
-        | ID number                    | OS1                          |
       And all users have accepted the plagarism statement for "OS1" openstudio
       And I change viewport size to "large"
 
