@@ -105,6 +105,8 @@ $string['event:folderhelpmeflagged'] = 'Folder help me flagged';
 $string['event:folderinspireflagged'] = 'Folder inspire flagged';
 $string['event:foldersmileflagged'] = 'Folder smile flagged';
 
+$string['tagarea_openstudio_contents'] = 'OpenStudio content posts';
+
 $string['studiofieldset'] = 'Custom example fieldset';
 $string['studioname'] = 'Name';
 $string['studiointro'] = 'Description';
