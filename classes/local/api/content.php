@@ -1363,7 +1363,7 @@ EOF;
                         $contenttype = self::TYPE_IMAGE;
                     } else if (in_array($fileextension, array('avi', 'mpg', 'mpeg', 'mov', 'mp4', 'm4v', 'flv', 'gif'))) {
                         $contenttype = self::TYPE_VIDEO;
-                    } else if (in_array($fileextension, array('aiff', 'wav', 'mp3'))) {
+                    } else if (in_array($fileextension, array('aiff', 'wav', 'mp3', 'm4a'))) {
                         $contenttype = self::TYPE_AUDIO;
                     } else if (in_array($fileextension, array('doc', 'docx', 'rtf', 'pdf', 'odt', 'fdf', 'nbk'))) {
                         $contenttype = self::TYPE_DOCUMENT;
