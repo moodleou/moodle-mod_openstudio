@@ -25,6 +25,7 @@
 namespace mod_openstudio;
 
 use mod_openstudio\local\api\content;
+use mod_openstudio\local\api\search;
 use mod_openstudio\search\comments;
 
 defined('MOODLE_INTERNAL') || die();
@@ -70,7 +71,7 @@ class search_comments_testcase extends \advanced_testcase {
         \testable_core_search::instance();
 
         // Create course.
-        $this->course = $this->getDataGenerator()->create_course();
+        $this->course = $this->getDataGenerator()->create_course(['format' => 'oustudyplan']);
 
         // Create Users.
         $this->user = $this->getDataGenerator()->create_user(
@@ -235,6 +236,7 @@ class search_comments_testcase extends \advanced_testcase {
 
     /**
      * Test check file index.
+     * @throws \coding_exception
      */
     public function test_check_file_index() {
         $comments = new comments();
@@ -297,6 +299,60 @@ class search_comments_testcase extends \advanced_testcase {
         $this->assertCount(3, $results);
         $results = self::recordset_to_array($comments->get_document_recordset(0, $othercontext));
         $this->assertCount(0, $results);
+    }
+
+    /**
+     * Test check search comments with global search.
+     */
+    public function test_check_global_search() {
+        // Use global search system for default.
+        set_config('modulesitesearch', 2, 'local_moodleglobalsearch');
+        set_config('activitysearch', 2, 'local_moodleglobalsearch');
+
+        // Define behat to use search in search/classes/manager.php
+        if (!defined('BEHAT_SITE_RUNNING')) {
+            define('BEHAT_SITE_RUNNING', true);
+        }
+
+        // Create new comment.
+        $comments = new comments();
+        $commentsdata = $comments->get_document((object)[
+                'id' => $this->urlcontentcomment,
+                'name' => 'Sample name 1',
+                'openstudioid' => $this->cm->instance,
+                'commenttext' => 'Comment belong to URL content',
+                'commentuser' => $this->user->id,
+                'timemodified' => 0,
+                'course' => $this->course->id
+        ]);
+        // Add comment to fake data.
+        $fakedata = new \stdClass();
+        $fakedata->query = 'This is a comment';
+        $fakedata->results = [];
+
+        $resultdata = new \stdClass();
+        $resultdata->itemid = $commentsdata->get('itemid');
+        $resultdata->componentname = 'mod_openstudio';
+        $resultdata->areaname = 'comments';
+        $resultdata->fields = new \stdClass();
+        $resultdata->fields->contextid = $commentsdata->get('contextid');
+        $resultdata->fields->courseid = $commentsdata->get('courseid');
+        $resultdata->fields->title = $commentsdata->get('title');
+        $resultdata->fields->content = $commentsdata->get('content');
+        $resultdata->fields->modified =  $commentsdata->get('modified');
+        $resultdata->extrafields = new \stdClass();
+        $resultdata->extrafields->coursefullname = $this->course->fullname;
+
+        $fakedata->results[] = $resultdata;
+
+        set_config('behat_fakeresult', json_encode($fakedata), 'core_search');
+
+        // Search comment.
+        $data = search::query($this->cm, 'This is a comment');
+        $results = array_slice($data->result, 0, 1);
+
+        $this->assertCount(1, $results);
+        $this->assertEquals('openstudio-comment-'.$resultdata->itemid, $results[0]->anchor);
     }
 
     /**

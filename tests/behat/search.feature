@@ -47,6 +47,10 @@ I need to be able to search within OpenStudio
         Given the following open studio "level3contents" exist:
             | openstudio | user     | name              | description           | weblink                                     | visibility | level3 | levelcontainer |
             | OS1        | student1 | Student content 5 | Content Description 5 | https://www.youtube.com/watch?v=ktAnpf_nu5c | module     | S1     | module         |
+        # Use Legacy system for default.
+        And the following config values are set as admin:
+            | modulesitesearch | 2 | local_moodleglobalsearch |
+            | activitysearch   | 1 | local_moodleglobalsearch |
         And Open Studio levels are configured for "Sharing Studio"
         And all users have accepted the plagarism statement for "OS1" openstudio
 
@@ -138,3 +142,75 @@ I need to be able to search within OpenStudio
         And I should see "folder — 1 results found"
         And I should not see "Student content folder 1"
         And I should see "Student content folder 2"
+
+    Scenario: Global search for comment
+        Given the following config values are set as admin:
+            | modulesitesearch | 2 | local_moodleglobalsearch |
+            | activitysearch   | 2 | local_moodleglobalsearch |
+
+        # Using OSEP theme to display OSEP search form.
+        And I am using the OSEP theme
+        When I log in as "student1" (in the OSEP theme)
+
+        And the following open studio "folders" exist:
+            | openstudio | user     | name                     | description                      | visibility | contenttype    | index | keyword |
+            | OS1        | student1 | Student content folder 2 | My Folder Overview Description 2 | module     | folder_content | 1     | Folder  |
+        And the following open studio "contents" exist:
+            | openstudio | user     | name         | description                    | visibility | index | keyword |
+            | OS1        | student1 | My Content 1 | Test My Content Details View 1 | module     | 1     | Content |
+        And the following open studio "comments" exist:
+            | openstudio | user     | content      | comment                   | index | keyword |
+            | OS1        | student1 | My Content 1 | My Notification comment 1 | 1     | Comment |
+
+        And I am on "Course 1" course homepage
+        And I press "Expand all"
+        Then I follow "Sharing Studio"
+        And I set the field "q" to "Comment"
+        And I click on "//img[@alt='Search']" "xpath_element"
+        And I should see "Comment — 1 results found"
+        And I should see "My Content 1"
+
+  Scenario: Global search for folders
+      Given the following config values are set as admin:
+        | modulesitesearch | 2 | local_moodleglobalsearch |
+        | activitysearch   | 2 | local_moodleglobalsearch |
+
+      # Using OSEP theme to display OSEP search form.
+      And I am using the OSEP theme
+      When I log in as "student1" (in the OSEP theme)
+
+      And the following open studio "folders" exist:
+        | openstudio | user     | name                     | description                      | visibility | contenttype    | index | keyword |
+        | OS1        | student1 | Student content folder 2 | My Folder Overview Description 2 | module     | folder_content | 1     | Folder  |
+
+      And I am on "Course 1" course homepage
+      And I press "Expand all"
+      Then I follow "Sharing Studio"
+      And I set the field "q" to "Folder"
+      And I click on "//img[@alt='Search']" "xpath_element"
+      And I should see "Folder — 1 results found"
+      And I should see "Student content folder 2"
+
+  Scenario: Global search for content
+    Given the following config values are set as admin:
+      | modulesitesearch | 2 | local_moodleglobalsearch |
+      | activitysearch   | 2 | local_moodleglobalsearch |
+  
+    # Using OSEP theme to display OSEP search form.
+    And I am using the OSEP theme
+    When I log in as "student1" (in the OSEP theme)
+
+    And the following open studio "folders" exist:
+      | openstudio | user     | name                     | description                      | visibility | contenttype    | index | keyword |
+      | OS1        | student1 | Student content folder 2 | My Folder Overview Description 2 | module     | folder_content | 1     | Folder  |
+    And the following open studio "contents" exist:
+      | openstudio | user     | name         | description                    | visibility | index | keyword |
+      | OS1        | student1 | My Content 1 | Test My Content Details View 1 | module     | 1     | Content |
+
+    And I am on "Course 1" course homepage
+    And I press "Expand all"
+    Then I follow "Sharing Studio"
+    And I set the field "q" to "Content"
+    And I click on "//img[@alt='Search']" "xpath_element"
+    And I should see "Content — 1 results found"
+    And I should see "My Content 1"

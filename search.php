@@ -54,6 +54,13 @@ $course = $coursedata->course;
 $permissions = $coursedata->permissions;
 $theme = $coursedata->theme;
 $strpageurl = util::get_current_url();
+$cminfo = \cm_info::create($cm);
+
+// For global search, we need use input name=q.
+if ($searchtext == '' && util::moodle_global_search_installed()
+        && \local_moodleglobalsearch\util::is_activity_search_enabled($cminfo)) {
+    $searchtext = optional_param('q', '', PARAM_TEXT);
+}
 
 require_login($course, true, $cm);
 
@@ -150,19 +157,41 @@ if (trim($searchtext) == '') {
     $searchresultdata = search::query(
             $cm, $searchtext, $pagestart, $streamdatapagesize, $nextstart, $vid);
 
-    // Enrich the search result with additional content information.
-    $contentdata = (object) array(
+    // Define object.
+    // TODO: This object should be refactored to a templatable object.
+    $contentdata = (object)array(
             'contents' => array(),
-            'total' => count($searchresultdata->result),
-            'previouspage' => $searchresultdata->previous,
-            'nextpage' => $searchresultdata->next,
-            'nextstart' => $searchresultdata->nextstart,
-            'streamdatapagesize' => $streamdatapagesize,
-            'pagestart' => $pagestart,
-            'pageurl' => $strpageurl);
-    $contentids = array();
-    foreach ($searchresultdata->result as $searchresult) {
-        $contentids[] = $searchresult->intref1;
+            'total' => 0,
+            'previouspage' => '',
+            'nextpage' => '',
+            'nextstart' => '',
+            'streamdatapagesize' => 0,
+            'pagestart' => 0,
+            'pageurl' => '');
+
+    // Enrich the search result with additional content information.
+    if (isset($searchresultdata->result)) {
+        $contentdata = (object)array(
+                'contents' => array(),
+                'total' => count($searchresultdata->result),
+                'previouspage' => $searchresultdata->previous,
+                'nextpage' => $searchresultdata->next,
+                'nextstart' => $searchresultdata->nextstart,
+                'streamdatapagesize' => $streamdatapagesize,
+                'pagestart' => $pagestart,
+                'pageurl' => $strpageurl);
+        $contentids = array();
+        $contentidsfolder = array();
+        $contentidsanchor = array();
+        foreach ($searchresultdata->result as $searchresult) {
+            $contentids[] = $searchresult->intref1;
+            if (!empty($searchresult->anchor)) {
+                $contentidsanchor[$searchresult->intref1] = $searchresult->anchor;
+            }
+            if (!empty($searchresult->folderid)) {
+                $contentidsfolder[$searchresult->intref1] = $searchresult->folderid;
+            }
+        }
     }
 
     if (!empty($contentids)) {
@@ -216,13 +245,22 @@ if (trim($searchtext) == '') {
 
                 $contentthumbnailfileurl = $content->contenttypeimage;
 
-                $visibility = (int)$content->visibility;
+                $visibility = $visibilityid = (int)$content->visibility;
                 if ($visibility < 0) {
                     $visibility = content::VISIBILITY_GROUP;
                 }
 
                 $itemsharewith = '';
                 // Set icon for content.
+                // Get icon content in folder only.
+                if (!empty($contentidsfolder[$content->id]) && $visibility == content::VISIBILITY_INFOLDERONLY) {
+                    $folderdata = content::get($contentidsfolder[$content->id]);
+                    $visibility = $visibilityid = (int)$folderdata->visibility;
+                    if ($visibility < 0) {
+                        $visibility = content::VISIBILITY_GROUP;
+                    }
+                }
+
                 switch ($visibility) {
                     case content::VISIBILITY_MODULE:
                         $contenticon = $OUTPUT->image_url('mymodule_rgb_32px', 'openstudio');
@@ -231,8 +269,8 @@ if (trim($searchtext) == '') {
 
                     case content::VISIBILITY_GROUP:
                         $contenticon = $OUTPUT->image_url('group_rgb_32px', 'openstudio');
-                        $itemsharewith = get_string('slotvisibletogroup', 'openstudio',
-                                group::get_name(abs($content->visibility)));
+                        $itemsharewith = get_string('contentitemsharewithgroup', 'openstudio',
+                                group::get_name(abs($visibilityid)));
                         break;
 
                     case content::VISIBILITY_WORKSPACE:
@@ -249,6 +287,11 @@ if (trim($searchtext) == '') {
                     case content::VISIBILITY_TUTOR:
                         $contenticon = $OUTPUT->image_url('share_with_tutor_rgb_32px', 'openstudio');
                         $itemsharewith = get_string('contentitemsharewithmytutor', 'openstudio');
+                        break;
+
+                    default:
+                        $contenticon = $OUTPUT->image_url('onlyme_rgb_32px', 'openstudio');
+                        $itemsharewith = get_string('contentitemsharewithonlyme', 'openstudio');
                         break;
                 }
 
@@ -271,8 +314,18 @@ if (trim($searchtext) == '') {
                 $content->itemsharewith = $itemsharewith;
                 $content->contentthumbnailurl = $contentthumbnailfileurl;
                 $content->datetimeupdated = $content->timemodified ? userdate($content->timemodified, get_string('formattimedatetime', 'openstudio')) : null;
-                $content->contentlink = new moodle_url('/mod/openstudio/content.php',
-                        array('id' => $id, 'sid' => $content->id, 'vuid' => $content->userid));
+
+                $urlarray = ['id' => $id, 'sid' => $content->id, 'vuid' => $content->userid];
+                if (!empty($contentidsfolder[$content->id])) {
+                    $urlarray = ['id' => $id, 'sid' => $content->id, 'vuid' => $content->userid,
+                            'folderid' => $contentidsfolder[$content->id]];
+                }
+                if (!empty($contentidsanchor[$content->id])) {
+                    $content->contentlink = new moodle_url('/mod/openstudio/content.php',
+                        $urlarray, $contentidsanchor[$content->id]);
+                } else {
+                    $content->contentlink = new moodle_url('/mod/openstudio/content.php', $urlarray);
+                }
 
                 if (isset($contentsocialdata[$content->id])) {
                     $content->socialdata = $contentsocialdata[$content->id]->socialdata;

@@ -422,6 +422,25 @@ EOF;
             if (method_exists($this->plugingenerator, $methodname)) {
                 // Using data generators directly.
                 $this->plugingenerator->{$methodname}($elementdata);
+                if (!empty($elementdata['index'])) {
+                    $iditem = $this->plugingenerator->{$methodname}($elementdata);
+
+                    // Get areaname.
+                    switch ($elementdatagenerator) {
+                        // Contents have areaname is posts.
+                        case 'contents':
+                            $elementdatagenerator = 'posts';
+                            break;
+                        // Comment have areaname is comments.
+                        case 'comment':
+                            $elementdatagenerator = 'comments';
+                            break;
+                    }
+                    // Create mock document for global search.
+                    $openstudio = $this->plugingenerator->get_studio_by_idnumber($elementdata['openstudio']);
+                    $this->create_mock_index_data($openstudio, $iditem, $elementdata['keyword'], $elementdatagenerator,
+                        $elementdata['keyword'], $openstudio->intro);
+                }
 
             } else if (method_exists($this, 'process_' . $elementdatagenerator)) {
                 // Using an alternative to the direct data generator call.
@@ -430,6 +449,42 @@ EOF;
                 throw new ExpectationException($elementname . ' data generator is not implemented', $this->getSession());
             }
         }
+    }
+
+    /**
+     * Create mock document for global search.
+     *
+     * @param $openstudio
+     * @param $itemid
+     * @param $query
+     * @param $areaname
+     * @param $title
+     * @param $content
+     */
+    protected function create_mock_index_data($openstudio, $itemid, $query, $areaname, $title, $content) {
+
+        // Add item to fake data.
+        $fakedata = new \stdClass();
+        $fakedata->query = $query;
+        $fakedata->results = [];
+
+        $resultdata = new \stdClass();
+        $resultdata->itemid = $itemid;
+        $resultdata->componentname = 'mod_openstudio';
+        $resultdata->areaname = $areaname;
+        $resultdata->fields = new \stdClass();
+
+        $resultdata->fields->contextid = \context_module::instance($openstudio->cmid)->id;
+        $resultdata->fields->courseid = $openstudio->course;
+        $resultdata->fields->title = $title;
+        $resultdata->fields->content = $content;
+        $resultdata->fields->modified =  time();
+        $resultdata->extrafields = new \stdClass();
+        $resultdata->extrafields->coursefullname = $openstudio->sitename;
+
+        $fakedata->results[] = $resultdata;
+
+        set_config('behat_fakeresult', json_encode($fakedata), 'core_search');
     }
 
     /**

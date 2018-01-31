@@ -40,6 +40,10 @@ class search_testcase extends \advanced_testcase {
 
     protected function setUp() {
         $this->resetAfterTest(true);
+        // Use Legacy system for default.
+        set_config('modulesitesearch', 2, 'local_moodleglobalsearch');
+        set_config('activitysearch', 1, 'local_moodleglobalsearch');
+
         $teacherroleid = 3;
         $studentroleid = 5;
         $this->totalcontents = 24; // This is what the scripts below create for ONE CMID.

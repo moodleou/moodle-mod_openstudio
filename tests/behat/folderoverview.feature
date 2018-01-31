@@ -39,6 +39,10 @@ Feature: Folder Overview
       And the following open studio "instances" exist:
           | course | name                    | description                  | pinboard | idnumber | groupmode | grouping  | pinboard | enablefolders | reportingemail   |
           | C1     | Test Open Studio name 1 | Test Open Studio description | 99       | OS1      | 2         | GI1       | 99       | 1             | teacher1@asd.com |
+      # Use Legacy system for default.
+      Given the following config values are set as admin:
+          | modulesitesearch | 2 | local_moodleglobalsearch |
+          | activitysearch   | 1 | local_moodleglobalsearch |
       And I log in as "teacher1"
       And I am on "Course 1" course homepage
       And all users have accepted the plagarism statement for "OS1" openstudio

@@ -28,6 +28,7 @@ require_once($CFG->dirroot . '/search/tests/fixtures/testable_core_search.php');
 
 use mod_openstudio\local\api\content;
 use mod_openstudio\search\folders;
+use mod_openstudio\local\api\search;
 
 /**
  * Test case for generic functions in classes/search/ where covered.
@@ -61,7 +62,7 @@ class search_folders_test extends \advanced_testcase {
         \testable_core_search::instance();
 
         // Create course.
-        $this->course = $this->getDataGenerator()->create_course();
+        $this->course = $this->getDataGenerator()->create_course(['format' => 'oustudyplan']);
 
         // Create Users.
         $this->user = $this->getDataGenerator()->create_user(
@@ -219,6 +220,55 @@ class search_folders_test extends \advanced_testcase {
         // Check return granted when get url , folder  and deny when get private .
         $this->assertEquals(\core_search\manager::ACCESS_GRANTED, $folders->check_access($this->sharedfoldercontent));
         $this->assertEquals(\core_search\manager::ACCESS_DENIED, $folders->check_access($this->privatefoldercontent));
+    }
+
+    /**
+     * Test check search folders with global search.
+     */
+    public function test_check_global_search() {
+        // Use global search system for default.
+        set_config('modulesitesearch', 2, 'local_moodleglobalsearch');
+        set_config('activitysearch', 2, 'local_moodleglobalsearch');
+
+        // Define behat to use search in search/classes/manager.php
+        if (!defined('BEHAT_SITE_RUNNING')) {
+            define('BEHAT_SITE_RUNNING', true);
+        }
+
+        // Create new folder.
+        $folders = new folders();
+        $folderdata = self::recordset_to_array($folders->get_recordset_by_timestamp());
+
+        // Add folder to fake data.
+        $fakedata = new \stdClass();
+        $fakedata->query = 'Folders';
+        $fakedata->results = [];
+
+        $resultdata = new \stdClass();
+        $resultdata->itemid = $folderdata[0]->id;
+        $resultdata->componentname = 'mod_openstudio';
+        $resultdata->areaname = 'folders';
+        $resultdata->fields = new \stdClass();
+
+        $resultdata->fields->contextid = \context_module::instance($this->cm->id)->id;
+        $resultdata->fields->courseid = $folderdata[0]->course;
+        $resultdata->fields->title = $folderdata[0]->urltitle;
+        $resultdata->fields->content = $folderdata[0]->content;
+        $resultdata->fields->modified =  $folderdata[0]->timemodified;
+        $resultdata->extrafields = new \stdClass();
+        $resultdata->extrafields->coursefullname = $this->course->fullname;
+
+        $fakedata->results[] = $resultdata;
+
+        set_config('behat_fakeresult', json_encode($fakedata), 'core_search');
+
+        // Search folder.
+        $data = search::query($this->cm, 'Folders');
+
+        $results = array_slice($data->result, 0, 1);
+
+        $this->assertCount(1, $results);
+        $this->assertEquals($resultdata->itemid, $results[0]->intref1);
     }
 
     /**

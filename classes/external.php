@@ -142,8 +142,24 @@ class mod_openstudio_external extends external_api {
                 content::TYPE_URL_SPREADSHEET_XLS, content::TYPE_CAD, content::TYPE_ZIP);
 
         if ($search) {
-            $searchresults = search::query($cm, $search, 0, $pagesize, 0, content::VISIBILITY_MODULE, $filter);
-            $contentdata = $searchresults->result;
+            $searchresultdata = search::query($cm, $search, 0, $pagesize, 0, content::VISIBILITY_MODULE, $filter);
+            $cminfo = \cm_info::create($cm);
+            if (!\local_moodleglobalsearch\util::is_activity_search_enabled($cminfo)) {
+                $contentdata = $searchresultdata->result;
+            } else {
+                // Use global search if activity search enabled.
+                if (!empty($searchresultdata->result)) {
+                    $contentids = [];
+                    foreach ($searchresultdata->result as $searchresult) {
+                        $contentids[] = $searchresult->intref1;
+                    }
+                    if (!empty($contentids)) {
+                        // Process content data.
+                        $contentdata = stream::get_contents_by_ids(
+                                $USER->id, $contentids, $permissions->feature_contentreciprocalaccess);
+                    }
+                }
+            }
         } else {
             $contentdatatemp = stream::get_contents(
                     $cminstance->id, $permissions->groupingid, $userid, $userid, content::VISIBILITY_PRIVATE_PINBOARD,

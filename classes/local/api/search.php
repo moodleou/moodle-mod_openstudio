@@ -51,11 +51,7 @@ class search {
             $pagestart = 0, $pagesize = \mod_openstudio\local\util\defaults::STREAMPAGESIZE, $nextstart = 0,
             $filtercontext = content::VISIBILITY_MODULE,
             $filterfunction = 'openstudio_ousearch_filter_permission') {
-
-        // Do nothing if OU search is not installed.
-        if (!util::search_installed()) {
-            return true;
-        }
+        global $PAGE;
 
         $limitfrom = 0;
         $limitnum = 0;
@@ -66,12 +62,60 @@ class search {
         if ($nextstart > 0) {
             $limitfrom = $nextstart;
         }
+        $cminfo = \cm_info::create($cm);
+        $searchresults = new \stdClass();
 
-        // Query the search engine.
-        $query = new \local_ousearch_search($searchtext);
-        $query->set_coursemodule($cm);
-        $query->set_filter($filterfunction);
-        $searchresults = $query->query($limitfrom, $limitnum);
+        if (util::moodle_global_search_installed()
+                && \local_moodleglobalsearch\util::is_activity_search_enabled($cminfo)) {
+            try {
+                $search = \core_search\manager::instance();
+            } catch (\core_search\engine_exception $searcherror) {
+                $donothing = true; // For code checker.
+            }
+
+            if (!empty($searcherror)) {
+                return $searchresults;
+            }
+
+            $data = new \stdClass();
+            $data->q = $searchtext;
+            $data->course = $cm->course;
+            $data->courseids = [$data->course];
+            $data->areaids = [
+                'mod_openstudio-activity',
+                'mod_openstudio-comments',
+                'mod_openstudio-folders',
+                'mod_openstudio-posts'
+            ];
+            // Get contexts id.
+            $context = \context_module::instance($cm->id);
+            $data->contextids = [$context->id];
+
+            // Get global search results.
+            $results = $search->paged_search($data, 0);
+
+            $searchresults->dbstart = 1;
+            $searchresults->results = [];
+            foreach ($results->results as $result) {
+                $data = self::global_search_result($result);
+                // Only return 1 item, when it's return more result(when search comments).
+                if (!isset($searchresults->results[$data->intref1]) || $data->areaid == 'mod_openstudio-posts') {
+                    $searchresults->results[$data->intref1] = self::global_search_result($result);
+                }
+            }
+
+            $searchresults->dbrows = count($searchresults->results);
+        } else {
+            // Do nothing if OU search is not installed.
+            if (!util::search_installed()) {
+                return $searchresults;
+            }
+            // Query the search engine.
+            $query = new \local_ousearch_search($searchtext);
+            $query->set_coursemodule($cm);
+            $query->set_filter($filterfunction);
+            $searchresults = $query->query($limitfrom, $limitnum);
+        }
 
         $nextsearchresults = 0;
         $result = array();
@@ -208,5 +252,39 @@ class search {
         }
 
         return true;
+    }
+
+    /**
+     * Global search result.
+     *
+     * @param \core_search\document Containing a single search response to be displayed.
+     * @return object data.
+     */
+    public static function global_search_result(\core_search\document $doc) {
+        global $CFG, $PAGE;
+
+        $docdata = $doc->export_for_template($PAGE->get_renderer('core'));
+        $result = new \stdClass();
+        // Get sid & folderid.
+        $relativeurl = new \moodle_url($docdata['docurl']);
+        $sid = $relativeurl->param('sid');
+        $folderid = $relativeurl->param('folderid');
+
+        $areaid = $doc->get('areaid');
+        $itemid = $doc->get('itemid');
+        $anchor = '';
+        switch ($areaid) {
+            case 'mod_openstudio-comments' :
+                $itemid = $sid;
+                $anchor = 'openstudio-comment-'.$doc->get('itemid');
+                break;
+        }
+
+        $result->intref1 = $itemid;
+        $result->areaid = $areaid;
+        $result->anchor = $anchor;
+        $result->folderid = $folderid;
+
+        return $result;
     }
 }

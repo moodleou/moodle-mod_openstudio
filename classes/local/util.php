@@ -900,6 +900,16 @@ EOF;
     }
 
     /**
+     * Call to check if moodle global search plugin exists.
+     *
+     * @return bool True if OU moodle global search extension is installed.
+     */
+    public static function moodle_global_search_installed() {
+        global $CFG;
+        return file_exists($CFG->dirroot . '/local/moodleglobalsearch/classes/util.php');
+    }
+
+    /**
      * Hash function applied to uploaded files to generate a hash key that
      * can be used to compare if another uploaded file is the same.
      *

@@ -28,6 +28,7 @@ require_once($CFG->dirroot . '/search/tests/fixtures/testable_core_search.php');
 
 use mod_openstudio\local\api\content;
 use mod_openstudio\search\posts;
+use mod_openstudio\local\api\search;
 
  /**
   * Test case for generic functions in classes/search/ where covered.
@@ -64,7 +65,7 @@ class search_posts_test extends \advanced_testcase {
         \testable_core_search::instance();
 
         // Create course.
-        $this->course = $this->getDataGenerator()->create_course();
+        $this->course = $this->getDataGenerator()->create_course(['format' => 'oustudyplan']);
 
         // Create Users.
         $this->user = $this->getDataGenerator()->create_user(
@@ -213,6 +214,55 @@ class search_posts_test extends \advanced_testcase {
         $this->assertCount(3, $results);
         $results = self::recordset_to_array($posts->get_document_recordset(0, $othercontext));
         $this->assertCount(0, $results);
+    }
+
+    /**
+     * Test check search posts with global search.
+     */
+    public function test_check_global_search() {
+        // Use global search system for default.
+        set_config('modulesitesearch', 2, 'local_moodleglobalsearch');
+        set_config('activitysearch', 2, 'local_moodleglobalsearch');
+
+        // Define behat to use search in search/classes/manager.php
+        if (!defined('BEHAT_SITE_RUNNING')) {
+            define('BEHAT_SITE_RUNNING', true);
+        }
+
+        // Create new post.
+        $posts = new posts();
+        $postsdata = self::recordset_to_array($posts->get_recordset_by_timestamp());
+
+        // Add folder to fake data.
+        $fakedata = new \stdClass();
+        $fakedata->query = 'This is a post';
+        $fakedata->results = [];
+
+        $resultdata = new \stdClass();
+        $resultdata->itemid = $postsdata[0]->id;
+        $resultdata->componentname = 'mod_openstudio';
+        $resultdata->areaname = 'posts';
+        $resultdata->fields = new \stdClass();
+
+        $resultdata->fields->contextid = \context_module::instance($this->cm->id)->id;
+        $resultdata->fields->courseid = $postsdata[0]->course;
+        $resultdata->fields->title = $postsdata[0]->urltitle;
+        $resultdata->fields->content = $postsdata[0]->content;
+        $resultdata->fields->modified =  $postsdata[0]->timemodified;
+        $resultdata->extrafields = new \stdClass();
+        $resultdata->extrafields->coursefullname = $this->course->fullname;
+
+        $fakedata->results[] = $resultdata;
+
+        set_config('behat_fakeresult', json_encode($fakedata), 'core_search');
+
+        // Search post.
+        $data = search::query($this->cm, 'This is a post');
+
+        $results = array_slice($data->result, 0, 1);
+
+        $this->assertCount(1, $results);
+        $this->assertEquals($resultdata->itemid, $results[0]->intref1);
     }
 
     /**
