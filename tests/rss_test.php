@@ -504,7 +504,7 @@ class rss_testcase extends \advanced_testcase {
                 foreach ($slotlevels as $slotlevelid) {
                     $slotcount++;
                     $data = array(
-                        'name' => 'Slot No. ' . $slotcount + 2,
+                        'name' => 'Slot No. ' . ($slotcount + 2),
                         'attachments' => '',
                         'embedcode' => '',
                         'weblink' => 'http://www.open.ac.uk/',
@@ -520,7 +520,7 @@ class rss_testcase extends \advanced_testcase {
                     // Level 3 is for slots.
                     $slots[$slotlevelid][$slotcount] = \mod_openstudio\local\api\content::create(
                             $this->studiolevels->id, $this->users->students->eight->id, 3, $slotlevelid, $data);
-                    $data['name'] = 'Slot No. ' . $slotcount + 1;
+                    $data['name'] = 'Slot No. ' . ($slotcount + 1);
                     $slots[$slotlevelid][$slotcount + 1] = \mod_openstudio\local\api\content::create(
                             $this->studiolevels->id, $this->users->students->six->id, 3, $slotlevelid, $data);
                     // Let's add some flags to each slot.
