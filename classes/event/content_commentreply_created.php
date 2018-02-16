@@ -45,7 +45,7 @@ class content_commentreply_created extends \core\event\base implements notifiabl
      * @return void
      */
     protected function init() {
-        $this->data['objecttable'] = 'openstudio_content';
+        $this->data['objecttable'] = 'openstudio_contents';
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }

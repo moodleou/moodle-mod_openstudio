@@ -1171,6 +1171,9 @@ EOF;
                 $legacyname = $info;
                 break;
         }
+        if ($url && ($url instanceof \moodle_url)) {
+            $url = $url->out(false);
+        }
         $params = array(
                 'context' => $modulecontext,
                 'other' => array(
