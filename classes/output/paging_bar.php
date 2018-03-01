@@ -36,6 +36,16 @@ defined('MOODLE_INTERNAL') || die();
  */
 class paging_bar extends \paging_bar {
 
+    /**
+     * Set max display for paging bar.
+     */
+    const MAX_DISPLAY = 7;
+
+    /**
+     * Number of pages before and after the current page.
+     */
+    const BEFORE_AFTER_VALUE = 2;
+
     public $currentpage;
 
     /**
@@ -86,6 +96,57 @@ class paging_bar extends \paging_bar {
 
             if ($this->page > 0) {
                 $this->currentpage = $pagenum;
+            }
+        }
+    }
+
+    /**
+     * Overwrite prepare function of paging_bar.
+     *
+     * The Paging bar is divided into 3 parts: the first part, the middle and the end.
+     * The first part was working as expected (ex: Page: 1 2 3 4 5 6 ... 100 Next >).
+     * The middle and the end of paging bar didn't working as expected.
+     * Expected:
+     *      The middle: < Previous Page: 1 ... 30 31 32 33 34 ... 100 Next >
+     *      The end: < Previous Page: 1 ... 95 96 97 98 99 100
+     * The function make sure paging bar works as expected without having to edit moodle core.
+     * Parameters can be changed to match the requirements.
+     *
+     * @param \renderer_base $output
+     * @param \moodle_page $page
+     * @param string $target
+     * @throws \coding_exception
+     */
+    public function prepare(\renderer_base $output, \moodle_page $page, $target) {
+        parent::prepare($output, $page, $target);
+        $firstarrangepage = self::MAX_DISPLAY - 1;
+        if (count($this->pagelinks) > $firstarrangepage) {
+            $arrpaging = [];
+            $totalpage = ceil($this->totalcount / $this->perpage);
+            $element = '<span class="current-page">'.$this->currentpage.'</span>';
+            $currentpageindex = array_search($element, $this->pagelinks);
+            /**
+             * $lastarrangepage: page used for arrange paging bar when current page is between it and last page.
+             *
+             * Example: $totalpage = 100, $lastarrangepage = $totalpage - 5 = 95
+             * 1. current page: 94, display paging: < Previous Page: 1 ... 92 93 94 95 96 ... 100 Next >
+             * 2. current page: 95, display paging: < Previous Page: 1 ... 93 94 95 96 97 ... 100 Next >
+             * 3. current page: 96, display paging: < Previous Page: 1 ... 95 96 97 98 99 100
+             */
+            $lastarrangepage = $totalpage - (self::MAX_DISPLAY - 2);
+            if ($this->currentpage <= $lastarrangepage) {
+                for ($i = $currentpageindex - self::BEFORE_AFTER_VALUE; $i <= $currentpageindex + self::BEFORE_AFTER_VALUE; $i++) {
+                    if ($this->pagelinks[$i]) {
+                        array_push($arrpaging, $this->pagelinks[$i]);
+                    }
+                }
+                $this->lastlink = \html_writer::link(str_replace($this->page, $totalpage - 1, $this->baseurl), $totalpage);
+            } else {
+                $arrpaging = array_slice($this->pagelinks, 1 - self::MAX_DISPLAY);
+            }
+            $this->maxdisplay = self::MAX_DISPLAY;
+            if ($arrpaging) {
+                $this->pagelinks = $arrpaging;
             }
         }
     }
