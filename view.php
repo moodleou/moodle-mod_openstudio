@@ -214,18 +214,6 @@ if (!$permissions->feature_module && ($vid == content::VISIBILITY_MODULE)) {
     $vid = $permissions->allow_visibilty_modes[0];
 }
 
-// Pagination settings.
-$pagedefault = 0;
-if (isset($SESSION->openstudio_view_filters)) {
-    if (isset($SESSION->openstudio_view_filters[$vid]->page)) {
-        $pagedefault = $SESSION->openstudio_view_filters[$vid]->page;
-    }
-}
-$pagestart = optional_param('page', $pagedefault, PARAM_INT);
-if ($pagestart < 0) {
-    $pagestart = 0;
-}
-
 // Currently,  we respect view page size on preference bar and ignore settings.
 $streamdatapagesize = defaults::STREAMPAGESIZE;
 if (isset($SESSION->openstudio_view_filters)) {
@@ -234,6 +222,23 @@ if (isset($SESSION->openstudio_view_filters)) {
     }
 }
 $streamdatapagesize = optional_param('pagesize', $streamdatapagesize, PARAM_INT);
+
+// Pagination settings.
+$pagedefault = 0;
+if (isset($SESSION->openstudio_view_filters)) {
+    if (isset($SESSION->openstudio_view_filters[$vid]->page)) {
+        if ($streamdatapagesize != $SESSION->openstudio_view_filters[$vid]->pagesize) {
+            unset($SESSION->openstudio_view_filters[$vid]->page);
+        } else {
+            $pagedefault = $SESSION->openstudio_view_filters[$vid]->page;
+        }
+    }
+}
+
+$pagestart = optional_param('page', $pagedefault, PARAM_INT);
+if ($pagestart < 0) {
+    $pagestart = 0;
+}
 
 // Check if filter reset request givem, if so, then clear all the filters by redirecting the browser.
 $resetfilter = optional_param('reset', 0, PARAM_INT);
