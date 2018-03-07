@@ -756,7 +756,7 @@ $crumbarray[$placeholdertext] = $viewpageurl;
 util::add_breadcrumb($PAGE, $cm->id, navigation_node::TYPE_ACTIVITY, $crumbarray);
 
 // Only content owner can import.
-$importenable = $importenable && ($vuid == $USER->id);
+$importenable = $importenable && ($vuid == $USER->id) && has_capability('mod/openstudio:import', $mcontext);
 if ($importenable) {
     $importurl = new moodle_url('/mod/openstudio/import.php', array('id' => $id));
     $importstr = get_string('openstudio:import', 'mod_openstudio');
@@ -767,7 +767,7 @@ if ($importenable) {
 $PAGE->requires->js_call_amd('mod_openstudio/viewhelper', 'init');
 
 // Only content owner can export.
-$exportenable = $exportenable && ($vuid == $USER->id);
+$exportenable = $exportenable && ($vuid == $USER->id) && has_capability('mod/openstudio:export', $mcontext);
 if ($exportenable) {
     \theme_osep\bottom_buttons::add(\theme_osep\bottom_buttons::TYPE_EXPORT);
 

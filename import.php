@@ -45,6 +45,8 @@ $vid = content::VISIBILITY_PRIVATE_PINBOARD;
 
 require_login($course, true, $cm);
 require_capability('mod/openstudio:view', $mcontext);
+// Require capability import for current user.
+require_capability('mod/openstudio:import', $mcontext, $USER->id);
 
 // Terms and conditions check.
 util::honesty_check($id);

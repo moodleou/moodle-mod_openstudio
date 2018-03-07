@@ -39,6 +39,8 @@ $mcontext = $coursedata->mcontext;
 $permissions = $coursedata->permissions;
 
 require_login($course, true, $cm);
+// Require capability export for current user.
+require_capability('mod/openstudio:export', $mcontext, $USER->id);
 
 // Need to have view or managecontent capabilities.
 if (!$permissions->managecontent) {
