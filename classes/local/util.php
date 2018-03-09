@@ -965,7 +965,7 @@ EOF;
         // Check if URL differs from httpswwwroot and if port number is the reason for
         // difference.
         $url = $protocol . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
-        if (strpos($url, "$CFG->httpswwwroot/") !== 0) {
+        if (strpos($url, "$CFG->wwwroot/") !== 0) {
             if (strpos($url, ":") !== 0) {
                 $addport = true;
             }
