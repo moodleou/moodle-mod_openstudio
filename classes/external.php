@@ -1494,7 +1494,7 @@ class mod_openstudio_external extends external_api {
      *  ]
      */
     public static function order_posts($cmid, $folderid, $listorderporst) {
-        $result = '';
+        $result = [];
         $params = self::validate_parameters(self::order_posts_parameters(), array(
                 'cmid' => $cmid,
                 'folderid' => $folderid,
@@ -1553,7 +1553,7 @@ class mod_openstudio_external extends external_api {
      */
     public static function get_order_posts_content($cmid, $folderid) {
         global $PAGE;
-        $result = '';
+        $result = [];
         $params = self::validate_parameters(self::get_order_posts_content_parameters(), array(
                 'cmid' => $cmid,
                 'folderid' => $folderid));
