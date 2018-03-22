@@ -282,7 +282,7 @@ class file_testcase extends \advanced_testcase {
 
         try {
             header('X-Header-Test: test');
-        } catch (\PHPUnit_Framework_Error_Warning $e) {
+        } catch (\PHPUnit\Framework\Error\Warning $e) {
             $this->markTestSkipped('Cannot run test_studio_pluginfile due to a problem with Moodle\'s PHPUnit integration. ' .
                 'To workaround the problem, add ob_start(); at the start of the phpunit_util::bootstrap_moodle_info() '.
                 'method. See MDL-49713 for more information.');
