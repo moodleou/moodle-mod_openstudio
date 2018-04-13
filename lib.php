@@ -848,26 +848,27 @@ SELECT cm.*
 
 EOF;
 
-        $cm = $DB->get_record_sql($sql, array($courseid));
-        if ($cm === false) {
+        $cms = $DB->get_records_sql($sql, array($courseid));
+        if (empty($cms)) {
             return false;
         }
-
-        $slots = content::get_all_records($cm->instance);
-        if ($slots != false) {
-            $counter = 0;
-            foreach ($slots as $slotdata) {
-                $counter++;
-                if ($slotdata->contenttype == content::TYPE_NONE) {
-                    search::delete($cm, $slotdata, true);
-                } else {
-                    search::update($cm, $slotdata);
+        foreach ($cms as $cm) {
+            $slots = content::get_all_records($cm->instance);
+            if ($slots != false) {
+                $counter = 0;
+                foreach ($slots as $slotdata) {
+                    $counter++;
+                    if ($slotdata->contenttype == content::TYPE_NONE) {
+                        search::delete($cm, $slotdata, true);
+                    } else {
+                        search::update($cm, $slotdata);
+                    }
                 }
-            }
 
-            if ($feedback) {
-                print '<li>Studio instance: ' . $cm->instance
+                if ($feedback) {
+                    print '<li>Studio instance: ' . $cm->instance
                         . '. No. of slots: ' . $counter . '</li>';
+                }
             }
         }
     } else {
