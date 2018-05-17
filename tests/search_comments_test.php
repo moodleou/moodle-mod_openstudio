@@ -31,7 +31,7 @@ use mod_openstudio\search\comments;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once($CFG->dirroot . '/search/tests/fixtures/testable_core_search.php');
+require_once($CFG->dirroot . '/mod/openstudio/tests/fixtures/testable_openstudio_search.php');
 
 /**
  * Test case for Open Studio search function.
@@ -67,8 +67,7 @@ class search_comments_testcase extends \advanced_testcase {
         $this->studentroleid = 5;
 
         // Enable global search for this test.
-        set_config('enableglobalsearch', true);
-        \testable_core_search::instance();
+        \testable_openstudio_search::instance();
 
         // Create course.
         $this->course = $this->getDataGenerator()->create_course(['format' => 'oustudyplan']);
@@ -144,6 +143,11 @@ class search_comments_testcase extends \advanced_testcase {
                 $this->urlcontentprivatecomment,
                 $this->foldercontentcomment]
         );
+    }
+
+    public function tearDown() {
+        \testable_openstudio_search::$fakeresult = null;
+        parent::tearDown();
     }
 
     /**
@@ -309,11 +313,6 @@ class search_comments_testcase extends \advanced_testcase {
         set_config('modulesitesearch', 2, 'local_moodleglobalsearch');
         set_config('activitysearch', 2, 'local_moodleglobalsearch');
 
-        // Define behat to use search in search/classes/manager.php
-        if (!defined('BEHAT_SITE_RUNNING')) {
-            define('BEHAT_SITE_RUNNING', true);
-        }
-
         // Create new comment.
         $comments = new comments();
         $commentsdata = $comments->get_document((object)[
@@ -327,32 +326,24 @@ class search_comments_testcase extends \advanced_testcase {
         ]);
         // Add comment to fake data.
         $fakedata = new \stdClass();
-        $fakedata->query = 'This is a comment';
-        $fakedata->results = [];
+        $fakedata->totalcount = 1;
+        $fakedata->actualpage = 1;
 
-        $resultdata = new \stdClass();
-        $resultdata->itemid = $commentsdata->get('itemid');
-        $resultdata->componentname = 'mod_openstudio';
-        $resultdata->areaname = 'comments';
-        $resultdata->fields = new \stdClass();
-        $resultdata->fields->contextid = $commentsdata->get('contextid');
-        $resultdata->fields->courseid = $commentsdata->get('courseid');
-        $resultdata->fields->title = $commentsdata->get('title');
-        $resultdata->fields->content = $commentsdata->get('content');
-        $resultdata->fields->modified =  $commentsdata->get('modified');
-        $resultdata->extrafields = new \stdClass();
-        $resultdata->extrafields->coursefullname = $this->course->fullname;
+        $commentsdata->set_extra('coursefullname', $this->course->fullname);
+        $commentsdata->set_extra('userfullname', fullname($this->user));
+        $commentsdata->set_doc_url(new \moodle_url('/mod/openstudio/content.php', ['sid' => $this->urlcontent]));
 
-        $fakedata->results[] = $resultdata;
+        $fakedata->results[] = $commentsdata;
 
-        set_config('behat_fakeresult', json_encode($fakedata), 'core_search');
+        \testable_openstudio_search::$fakeresult = $fakedata;
 
         // Search comment.
         $data = search::query($this->cm, 'This is a comment');
-        $results = array_slice($data->result, 0, 1);
 
-        $this->assertCount(1, $results);
-        $this->assertEquals('openstudio-comment-'.$resultdata->itemid, $results[0]->anchor);
+        $this->assertCount(1, $data->result);
+        $comment = array_pop($data->result);
+        $this->assertEquals($this->urlcontent, $comment->intref1);
+        $this->assertEquals('openstudio-comment-' . $this->urlcontentcomment, $comment->anchor);
     }
 
     /**
