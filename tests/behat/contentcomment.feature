@@ -41,7 +41,6 @@ Feature: Add/Reply/Flag/Delete comment
         # Add new comment
         And I log in as "student1"
         And I am on "Course 1" course homepage
-        And I press "Expand all"
         And I follow "Sharing Studio"
         And I follow "Student slot 1"
         And I press "Add new comment"
@@ -66,7 +65,6 @@ Feature: Add/Reply/Flag/Delete comment
         And I log out
         And I log in as "student2"
         And I am on "Course 1" course homepage
-        And I press "Expand all"
         And I follow "Sharing Studio"
         And I follow "Student slot 1"
         Then I should see "Report comment"
@@ -98,7 +96,6 @@ Feature: Add/Reply/Flag/Delete comment
         And I log out
         And I log in as "student1"
         And I am on "Course 1" course homepage
-        And I press "Expand all"
         And I follow "Sharing Studio"
         And I follow "Student slot 1"
         And I press "Add new comment"
@@ -111,7 +108,6 @@ Feature: Add/Reply/Flag/Delete comment
         And I log out
         And I log in as "student2"
         And I am on "Course 1" course homepage
-        And I press "Expand all"
         And I follow "Sharing Studio"
         And I follow "Student slot 1"
         And I should see "Report comment"

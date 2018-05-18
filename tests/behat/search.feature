@@ -61,7 +61,6 @@ I need to be able to search within OpenStudio
 
         # Search my pinboard
         And I am on "Course 1" course homepage
-        And I press "Expand all"
         And I follow "Sharing Studio"
         And I follow "My Content > My Pinboard" in the openstudio navigation
         And I set the field "query" to "content"
@@ -99,7 +98,6 @@ I need to be able to search within OpenStudio
         And I log out (in the OSEP theme)
         When I log in as "student2" (in the OSEP theme)
         And I am on "Course 1" course homepage
-        And I press "Expand all"
         And I follow "Sharing Studio"
         And I set the field "query" to "content"
         And I click on "//img[@alt='Search']" "xpath_element"
@@ -122,7 +120,6 @@ I need to be able to search within OpenStudio
 
         # Search folder in my pinboard view
         And I am on "Course 1" course homepage
-        And I press "Expand all"
         And I follow "Sharing Studio"
         And I follow "My Content > My Pinboard" in the openstudio navigation
         And I set the field "query" to "folder"
@@ -135,7 +132,6 @@ I need to be able to search within OpenStudio
         And I log out (in the OSEP theme)
         And I log in as "student2" (in the OSEP theme)
         And I am on "Course 1" course homepage
-        And I press "Expand all"
         And I follow "Sharing Studio"
         And I set the field "query" to "folder"
         And I click on "//img[@alt='Search']" "xpath_element"
@@ -163,7 +159,6 @@ I need to be able to search within OpenStudio
             | OS1        | student1 | My Content 1 | My Notification comment 1 | 1     | Comment |
 
         And I am on "Course 1" course homepage
-        And I press "Expand all"
         Then I follow "Sharing Studio"
         And I set the field "q" to "Comment"
         And I click on "//img[@alt='Search']" "xpath_element"
@@ -184,8 +179,6 @@ I need to be able to search within OpenStudio
         | OS1        | student1 | Student content folder 2 | My Folder Overview Description 2 | module     | folder_content | 1     | Folder  |
 
       And I am on "Course 1" course homepage
-      And I press "Expand all"
-      Then I follow "Sharing Studio"
       And I set the field "q" to "Folder"
       And I click on "//img[@alt='Search']" "xpath_element"
       And I should see "Folder — 1 results found"
@@ -208,7 +201,6 @@ I need to be able to search within OpenStudio
       | OS1        | student1 | My Content 1 | Test My Content Details View 1 | module     | 1     | Content |
 
     And I am on "Course 1" course homepage
-    And I press "Expand all"
     Then I follow "Sharing Studio"
     And I set the field "q" to "Content"
     And I click on "//img[@alt='Search']" "xpath_element"

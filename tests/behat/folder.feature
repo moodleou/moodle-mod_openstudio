@@ -138,7 +138,6 @@ Feature: Create and edit Folder
         And I am using the OSEP theme
         And I log in as "teacher1" (in the OSEP theme)
         And I am on "Course 1" course homepage
-        And I press "Expand all"
         When I follow "Test Open Studio name 1"
         And I follow "Administration > Edit" in the openstudio navigation
         And I follow "Expand all"
@@ -185,7 +184,6 @@ Feature: Create and edit Folder
         And I am using the OSEP theme
         And I log in as "teacher1" (in the OSEP theme)
         And I am on "Course 1" course homepage
-        And I press "Expand all"
         When I follow "Test Open Studio name 1"
         And I follow "Administration > Edit" in the openstudio navigation
         And I follow "Expand all"
@@ -217,7 +215,6 @@ Feature: Create and edit Folder
         And I am using the OSEP theme
         And I log in as "teacher1" (in the OSEP theme)
         And I am on "Course 1" course homepage
-        And I press "Expand all"
         When I follow "Test Open Studio name 1"
         And I follow "Administration > Edit" in the openstudio navigation
         And I follow "Expand all"
@@ -246,7 +243,6 @@ Feature: Create and edit Folder
         And I log out (in the OSEP theme)
         And I log in as "student1" (in the OSEP theme)
         And I am on "Course 1" course homepage
-        And I press "Expand all"
         And I follow "Test Open Studio name 1"
         And I follow "Shared content > Module 1" in the openstudio navigation
         And I follow "Test Open Studio name 1"

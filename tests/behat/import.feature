@@ -30,7 +30,6 @@ Feature: Import zip file
         Given I am using the OSEP theme
         And I log in as "student1" (in the OSEP theme)
         And I am on "Course 1" course homepage
-        And I press "Expand all"
         And I follow "Test Open Studio name 1"
         And I follow "My Content"
         And I follow "Import"
