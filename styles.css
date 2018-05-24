@@ -2221,7 +2221,9 @@ a.openstudio-add-title:hover  {
     display: inline-block;
 }
 
-.openstudio-upload-file .fitemtitle {
+.openstudio-upload-file .fitemtitle,
+.openstudio-upload-file > div.felement > p:first-of-type,
+.openstudio-upload-file > div.felement > div.form-filetypes-descriptions {
     display: none;
 }
 

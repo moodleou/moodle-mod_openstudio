@@ -1,8 +1,9 @@
-@ou @ou_vle @mod @mod_openstudio @mod_openstudio_test_content @_file_upload @javascript
+@ou @ou_vle @mod @mod_openstudio @mod_openstudio_test_content @_file_upload @list_file_types @javascript
 Feature: Create and edit Open Studio contents
     When using Open Studio with other users
     As a teacher
     I need to create a content and upload a file
+    I should not see list of file types on Add File form
 
     Background: Setup course and studio
         Given the following "users" exist:
@@ -178,3 +179,18 @@ Feature: Create and edit Open Studio contents
         Then the "src" attribute of "img.openstudio-grid-item-thumbnail" "css_element" should contain "online_rgb_32px"
         And I should see "Test My Group Board View modify 1"
         And I should not see "Test My Group Board View 1"
+
+    Scenario: Check list of file types hidden on Add File form
+        Given I am on "Course 1" course homepage
+        And I turn editing mode on
+        And I add the "OU Recent activity" block
+        And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+          | Name        | Test Open Studio name 1      |
+          | Description | Test Open Studio description |
+          | ID number   | OS1                          |
+        And Open Studio test instance is configured for "Test Open Studio name 1"
+        And all users have accepted the plagarism statement for "OS1" openstudio
+        When I follow "Test Open Studio name 1"
+        And I follow "Add new content"
+        And I press "Add file"
+        Then I should not see "Accepted file types:"
