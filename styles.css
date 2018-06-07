@@ -923,10 +923,6 @@ div.openstudio-activity-guidance-item:nth-of-type(odd) {
  * Import feature
  */
 
-.path-mod-openstudio #osep-bottombutton-import img {
-    margin-bottom: 3px;
-}
-
 .openstudio-import-header {
     margin-top: 27px;
     padding-top: 9px;
@@ -1669,10 +1665,6 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
 /**
  * Export feature.
  */
-
-.path-mod-openstudio #osep-bottombutton-export img {
-    margin-bottom: 3px;
-}
 
 .openstudio-export-message {
     color: red;
