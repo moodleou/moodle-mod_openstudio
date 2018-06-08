@@ -1,4 +1,4 @@
-@ou @ou_vle @mod @mod_openstudio @javascript
+@ou @ou_vle @mod @mod_openstudio
 Feature: Search content
 In order to search content
 As a student
@@ -62,9 +62,9 @@ I need to be able to search within OpenStudio
         # Search my pinboard
         And I am on "Course 1" course homepage
         And I follow "Sharing Studio"
-        And I follow "My Content > My Pinboard" in the openstudio navigation
+        And I follow "My Pinboard"
         And I set the field "query" to "content"
-        And I click on "//img[@alt='Search']" "xpath_element"
+        And I click on "form.oustudyplan-searchbox button" "css_element"
         Then I should see "Student content 1"
         Then I should see "Student content 2"
         Then I should see "Student content 3"
@@ -72,9 +72,9 @@ I need to be able to search within OpenStudio
         Then I should see "content — 3 results found"
 
         # Search my activity
-        And I follow "My Content > My Activities" in the openstudio navigation
+        And I follow "My Activities"
         And I set the field "query" to "content"
-        And I click on "//img[@alt='Search']" "xpath_element"
+        And I click on "form.oustudyplan-searchbox button" "css_element"
         Then I should see "Student content 5"
         Then I should not see "Student content 1"
         Then I should not see "Student content 2"
@@ -85,7 +85,7 @@ I need to be able to search within OpenStudio
         # Search my module
         And I follow "Shared Content"
         And I set the field "query" to "content"
-        And I click on "//img[@alt='Search']" "xpath_element"
+        And I click on "form.oustudyplan-searchbox button" "css_element"
         Then I should see "Student content 1"
         Then I should see "Student content 2"
         Then I should see "Student content 3"
@@ -100,13 +100,27 @@ I need to be able to search within OpenStudio
         And I am on "Course 1" course homepage
         And I follow "Sharing Studio"
         And I set the field "query" to "content"
-        And I click on "//img[@alt='Search']" "xpath_element"
+        And I click on "form.oustudyplan-searchbox button" "css_element"
         Then I should see "Student content 3"
         Then I should see "Student content 5"
         Then I should not see "Student content 1"
         Then I should not see "Student content 2"
         Then I should not see "Student slot 4"
         Then I should see "content — 2 results found"
+
+        # Check searching with moodleglobalsearch enabled returns results from solr.
+        Given the following config values are set as admin:
+            | modulesitesearch | 2 | local_moodleglobalsearch |
+            | activitysearch   | 2 | local_moodleglobalsearch |
+        And global search expects the query "content" and will return:
+            | nothing |
+        And I am on "Course 1" course homepage
+        And I follow "Sharing Studio"
+        And I set the field "q" to "content"
+        When I click on "form.oustudyplan-searchbox button" "css_element"
+        Then I should not see "content — 2 results found"
+        And I should see "Search result for terms:"
+        And I should see "No results? Try searching from within My Module"
 
     Scenario: Search my folder
         # Using OSEP theme to display OSEP search form.
@@ -121,9 +135,9 @@ I need to be able to search within OpenStudio
         # Search folder in my pinboard view
         And I am on "Course 1" course homepage
         And I follow "Sharing Studio"
-        And I follow "My Content > My Pinboard" in the openstudio navigation
+        And I follow "My Pinboard"
         And I set the field "query" to "folder"
-        And I click on "//img[@alt='Search']" "xpath_element"
+        And I click on "form.oustudyplan-searchbox button" "css_element"
         And I should see "folder — 2 results found"
         And I should see "Student content folder 1"
         And I should see "Student content folder 2"
@@ -134,75 +148,21 @@ I need to be able to search within OpenStudio
         And I am on "Course 1" course homepage
         And I follow "Sharing Studio"
         And I set the field "query" to "folder"
-        And I click on "//img[@alt='Search']" "xpath_element"
+        And I click on "form.oustudyplan-searchbox button" "css_element"
         And I should see "folder — 1 results found"
         And I should not see "Student content folder 1"
         And I should see "Student content folder 2"
 
-    Scenario: Global search for comment
+        # Check searching with moodleglobalsearch enabled returns results from solr.
         Given the following config values are set as admin:
             | modulesitesearch | 2 | local_moodleglobalsearch |
             | activitysearch   | 2 | local_moodleglobalsearch |
-
-        # Using OSEP theme to display OSEP search form.
-        And I am using the OSEP theme
-        When I log in as "student1" (in the OSEP theme)
-
-        And the following open studio "folders" exist:
-            | openstudio | user     | name                     | description                      | visibility | contenttype    | index | keyword |
-            | OS1        | student1 | Student content folder 2 | My Folder Overview Description 2 | module     | folder_content | 1     | Folder  |
-        And the following open studio "contents" exist:
-            | openstudio | user     | name         | description                    | visibility | index | keyword |
-            | OS1        | student1 | My Content 1 | Test My Content Details View 1 | module     | 1     | Content |
-        And the following open studio "comments" exist:
-            | openstudio | user     | content      | comment                   | index | keyword |
-            | OS1        | student1 | My Content 1 | My Notification comment 1 | 1     | Comment |
-
+        And global search expects the query "content" and will return:
+            | nothing |
         And I am on "Course 1" course homepage
-        Then I follow "Sharing Studio"
-        And I set the field "q" to "Comment"
-        And I click on "//img[@alt='Search']" "xpath_element"
-        And I should see "Comment — 1 results found"
-        And I should see "My Content 1"
-
-  Scenario: Global search for folders
-      Given the following config values are set as admin:
-        | modulesitesearch | 2 | local_moodleglobalsearch |
-        | activitysearch   | 2 | local_moodleglobalsearch |
-
-      # Using OSEP theme to display OSEP search form.
-      And I am using the OSEP theme
-      When I log in as "student1" (in the OSEP theme)
-
-      And the following open studio "folders" exist:
-        | openstudio | user     | name                     | description                      | visibility | contenttype    | index | keyword |
-        | OS1        | student1 | Student content folder 2 | My Folder Overview Description 2 | module     | folder_content | 1     | Folder  |
-
-      And I am on "Course 1" course homepage
-      And I set the field "q" to "Folder"
-      And I click on "//img[@alt='Search']" "xpath_element"
-      And I should see "Folder — 1 results found"
-      And I should see "Student content folder 2"
-
-  Scenario: Global search for content
-    Given the following config values are set as admin:
-      | modulesitesearch | 2 | local_moodleglobalsearch |
-      | activitysearch   | 2 | local_moodleglobalsearch |
-  
-    # Using OSEP theme to display OSEP search form.
-    And I am using the OSEP theme
-    When I log in as "student1" (in the OSEP theme)
-
-    And the following open studio "folders" exist:
-      | openstudio | user     | name                     | description                      | visibility | contenttype    | index | keyword |
-      | OS1        | student1 | Student content folder 2 | My Folder Overview Description 2 | module     | folder_content | 1     | Folder  |
-    And the following open studio "contents" exist:
-      | openstudio | user     | name         | description                    | visibility | index | keyword |
-      | OS1        | student1 | My Content 1 | Test My Content Details View 1 | module     | 1     | Content |
-
-    And I am on "Course 1" course homepage
-    Then I follow "Sharing Studio"
-    And I set the field "q" to "Content"
-    And I click on "//img[@alt='Search']" "xpath_element"
-    And I should see "Content — 1 results found"
-    And I should see "My Content 1"
+        And I follow "Sharing Studio"
+        And I set the field "q" to "folder"
+        When I click on "form.oustudyplan-searchbox button" "css_element"
+        Then I should not see "folder — 1 results found"
+        And I should see "Search result for terms:"
+        And I should see "No results? Try searching from within My Module"
