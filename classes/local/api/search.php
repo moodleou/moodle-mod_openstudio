@@ -67,15 +67,7 @@ class search {
 
         if (util::moodle_global_search_installed()
                 && \local_moodleglobalsearch\util::is_activity_search_enabled($cminfo)) {
-            try {
-                $search = \core_search\manager::instance();
-            } catch (\core_search\engine_exception $searcherror) {
-                $donothing = true; // For code checker.
-            }
-
-            if (!empty($searcherror)) {
-                return $searchresults;
-            }
+            $search = \core_search\manager::instance();
 
             $data = new \stdClass();
             $data->q = $searchtext;

@@ -157,7 +157,7 @@ I need to be able to search within OpenStudio
         Given the following config values are set as admin:
             | modulesitesearch | 2 | local_moodleglobalsearch |
             | activitysearch   | 2 | local_moodleglobalsearch |
-        And global search expects the query "content" and will return:
+        And global search expects the query "folder" and will return:
             | nothing |
         And I am on "Course 1" course homepage
         And I follow "Sharing Studio"
