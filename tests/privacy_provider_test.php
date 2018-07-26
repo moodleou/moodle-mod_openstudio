@@ -22,17 +22,19 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-global $CFG;
+namespace mod_openstudio\tests;
 
-use core_privacy\tests\provider_testcase;
-use mod_openstudio\local\api\content;
-use mod_openstudio\local\api\flags;
-use mod_openstudio\local\api\tracking;
-use mod_openstudio\local\api\honesty;
-use mod_openstudio\privacy\provider;
-use core_privacy\local\request\approved_contextlist;
-use core_privacy\local\request\writer;
+defined('MOODLE_INTERNAL') || die();
+
+use \core_privacy\tests\provider_testcase;
+use \mod_openstudio\local\api\content;
+use \mod_openstudio\local\api\flags;
+use \mod_openstudio\local\api\tracking;
+use \mod_openstudio\local\api\honesty;
+use \mod_openstudio\local\api\folder;
+use \mod_openstudio\privacy\provider;
+use \core_privacy\local\request\approved_contextlist;
+use \core_privacy\local\request\writer;
 use \core_privacy\local\request\transform;
 use \mod_openstudio\local\api\subscription;
 use \mod_openstudio\local\api\tags;
@@ -45,7 +47,7 @@ use \mod_openstudio\local\api\comments;
  * @copyright The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_openstudio_privacy_testcase extends provider_testcase {
+class privacy_provider_test extends provider_testcase {
 
     protected $users;
     protected $course;
@@ -72,6 +74,7 @@ class mod_openstudio_privacy_testcase extends provider_testcase {
     protected $folders;
     protected $contentsinfolder;
     protected $foldercontents;
+    protected $group;
 
     /**
      * Set up for each test.
@@ -106,6 +109,8 @@ class mod_openstudio_privacy_testcase extends provider_testcase {
                 ['email' => 'teacher1@ouunittest.com', 'username' => 'teacher1']);
         $this->users->teachers->two = $this->getDataGenerator()->create_user(
                 ['email' => 'teacher2@ouunittest.com', 'username' => 'teacher2']);
+
+        $this->group = $this->getDataGenerator()->create_group(['courseid' => $this->course->id]);
 
         // Studio generator.
         $this->generator = $this->getDataGenerator()->get_plugin_generator('mod_openstudio');
@@ -256,7 +261,7 @@ class mod_openstudio_privacy_testcase extends provider_testcase {
                 'description' => random_string(),
                 'content' => random_string(),
                 'contenttype' => content::TYPE_TEXT,
-                'visibility' => content::VISIBILITY_MODULE,
+                'visibility' => (0 - $this->group->id),
                 'file' => 'mod/openstudio/tests/importfiles/test2.jpg'
         ]);
 
@@ -363,20 +368,20 @@ class mod_openstudio_privacy_testcase extends provider_testcase {
                 ['userid' => $this->users->students->one->id]));
 
         // Contents one of student 1.
-        $content1 = $contextdata->get_data([get_string('contents', 'mod_openstudio'),
-                get_string('content', 'mod_openstudio', $this->posts->one)]);
+        $content1 = $contextdata->get_data([get_string('privacy:subcontext:contents', 'mod_openstudio'),
+                get_string('privacy:subcontext:content', 'mod_openstudio', $this->posts->one)]);
 
         $this->assertEquals((object) [
                 'user' => get_string('privacy_you', 'mod_openstudio'),
                 'name' => format_string($getrecordscontentsuser1[1]->name),
-                'contenttype' => provider::content_type($getrecordscontentsuser1[1]->contenttype),
+                'contenttype' => get_string('privacy:contenttype:' . $getrecordscontentsuser1[1]->contenttype, 'mod_openstudio'),
                 'content' => format_text($getrecordscontentsuser1[1]->content, $getrecordscontentsuser1[1]->textformat, $context),
                 'description' => format_text($getrecordscontentsuser1[1]->description,
                         $getrecordscontentsuser1[1]->textformat, $context),
-                'visibility' => provider::visibility_type($getrecordscontentsuser1[1]->visibility),
+                'visibility' => get_string('privacy:visibility:' . $getrecordscontentsuser1[1]->visibility, 'mod_openstudio'),
                 'deletedtime' => '',
                 'deletedby' => '',
-                'locktype' => provider::locked_type($getrecordscontentsuser1[1]->locktype),
+                'locktype' => get_string('privacy:lock:' . $getrecordscontentsuser1[1]->locktype, 'mod_openstudio'),
                 'lockedtime' => '',
                 'lockedby' => '',
                 'timeflagged' => transform::datetime($getrecordscontentsuser1[1]->timeflagged),
@@ -387,9 +392,9 @@ class mod_openstudio_privacy_testcase extends provider_testcase {
                 'mod_openstudio', 'content', false));
 
         // Flags in content1 of student one.
-        $flagsuser1 = (array) $contextdata->get_data([get_string('contents', 'mod_openstudio'),
-                get_string('content', 'mod_openstudio', $this->posts->one),
-                get_string('flags', 'mod_openstudio')]);
+        $flagsuser1 = (array) $contextdata->get_data([get_string('privacy:subcontext:contents', 'mod_openstudio'),
+                get_string('privacy:subcontext:content', 'mod_openstudio', $this->posts->one),
+                get_string('privacy:subcontext:flags', 'mod_openstudio')]);
 
         $getflagsuser1 = array_values($DB->get_records('openstudio_flags',
                 ['userid' => $this->users->students->one->id, 'contentid' => $getrecordscontentsuser1[1]->id]));
@@ -398,14 +403,14 @@ class mod_openstudio_privacy_testcase extends provider_testcase {
                 'user' => get_string('privacy_you', 'mod_openstudio'),
                 'contentname' => format_string($content1->name),
                 'person' => '',
-                'flagname' => provider::flag_name($getflagsuser1[0]->flagid),
+                'flagname' => get_string('privacy:flag:' . $getflagsuser1[0]->flagid, 'mod_openstudio'),
                 'timemodified' => transform::datetime($getflagsuser1[0]->timemodified)
         ], $flagsuser1[$getflagsuser1[0]->id]);
 
         // Get comments in post 1 of student 1.
-        $commentsuser1 = (array) $contextdata->get_data([get_string('contents', 'mod_openstudio'),
-                get_string('content', 'mod_openstudio', $this->posts->one),
-                get_string('comments', 'mod_openstudio')]);
+        $commentsuser1 = (array) $contextdata->get_data([get_string('privacy:subcontext:contents', 'mod_openstudio'),
+                get_string('privacy:subcontext:content', 'mod_openstudio', $this->posts->one),
+                get_string('privacy:subcontext:comments', 'mod_openstudio')]);
 
         $getcommentuser1 = array_values($DB->get_records('openstudio_comments',
                 ['userid' => $this->users->students->one->id, 'contentid' => $getrecordscontentsuser1[1]->id]));
@@ -422,9 +427,9 @@ class mod_openstudio_privacy_testcase extends provider_testcase {
         ], $commentsuser1[$getcommentuser1[0]->id]);
 
         // Tracking in content1 of student one.
-        $trackinguser1 = (array) $contextdata->get_data([get_string('contents', 'mod_openstudio'),
-                get_string('content', 'mod_openstudio', $this->posts->one),
-                get_string('tracking', 'mod_openstudio')]);
+        $trackinguser1 = (array) $contextdata->get_data([get_string('privacy:subcontext:contents', 'mod_openstudio'),
+                get_string('privacy:subcontext:content', 'mod_openstudio', $this->posts->one),
+                get_string('privacy:subcontext:tracking', 'mod_openstudio')]);
 
         $gettrackinguser1 = array_values($DB->get_records('openstudio_tracking',
                 ['userid' => $this->users->students->one->id, 'contentid' => $getrecordscontentsuser1[1]->id]));
@@ -432,12 +437,12 @@ class mod_openstudio_privacy_testcase extends provider_testcase {
         $this->assertEquals([
                 'user' => get_string('privacy_you', 'mod_openstudio'),
                 'contentname' => format_string($content1->name),
-                'action' => provider::action_name_tracking($gettrackinguser1[0]->actionid),
+                'action' => get_string('privacy:tracking:' . $gettrackinguser1[0]->actionid, 'mod_openstudio'),
                 'timemodified' => transform::datetime($gettrackinguser1[0]->timemodified),
         ], $trackinguser1[$gettrackinguser1[0]->id]);
 
         // Get subscriptions.
-        $subscription = (array) $contextdata->get_data([get_string('subscription', 'mod_openstudio')]);
+        $subscription = (array) $contextdata->get_data([get_string('privacy:subcontext:subscription', 'mod_openstudio')]);
 
         $getsubscriptionuser1 = array_values($DB->get_records('openstudio_subscriptions',
                 ['userid' => $this->users->students->one->id]));
@@ -445,13 +450,13 @@ class mod_openstudio_privacy_testcase extends provider_testcase {
         $this->assertEquals([
                 'user' => get_string('privacy_you', 'mod_openstudio'),
                 'nameopenstudio' => format_string($this->studio->name, true),
-                'subscription' => provider::subscription_type($getsubscriptionuser1[0]->subscription),
+                'subscription' => get_string('privacy:subscription:' . $getsubscriptionuser1[0]->subscription, 'mod_openstudio'),
                 'timeprocessed' => transform::datetime($getsubscriptionuser1[0]->timeprocessed),
                 'timemodified' => transform::datetime($getsubscriptionuser1[0]->timemodified)
         ], $subscription);
 
         // Get honesty.
-        $honesty = $contextdata->get_data([get_string('honestycheck', 'mod_openstudio')]);
+        $honesty = $contextdata->get_data([get_string('privacy:subcontext:honestycheck', 'mod_openstudio')]);
         $getsubscriptionuser1 = array_values($DB->get_records('openstudio_honesty_checks',
                 ['userid' => $this->users->students->one->id]));
 
@@ -463,23 +468,23 @@ class mod_openstudio_privacy_testcase extends provider_testcase {
         ], $honesty);
 
         // Get contents in folder.
-        $contentinfolder = (array) $contextdata->get_data([get_string('folders', 'mod_openstudio'),
-                get_string('folder', 'mod_openstudio', $this->folders),
-                get_string('contents', 'mod_openstudio'),
-                get_string('content', 'mod_openstudio', $this->contentsinfolder[0])]);
+        $contentinfolder = (array) $contextdata->get_data([get_string('privacy:subcontext:folders', 'mod_openstudio'),
+                get_string('privacy:subcontext:folder', 'mod_openstudio', $this->folders),
+                get_string('privacy:subcontext:contents', 'mod_openstudio'),
+                get_string('privacy:subcontext:content', 'mod_openstudio', $this->contentsinfolder[0])]);
 
-        $foldercontent = (array) mod_openstudio\local\api\folder::get_content($this->folders, $this->contentsinfolder[0]);
+        $foldercontent = (array) folder::get_content($this->folders, $this->contentsinfolder[0]);
 
         $this->assertEquals([
                 'user' => get_string('privacy_you', 'mod_openstudio'),
                 'name' => format_string($foldercontent['name']),
-                'contenttype' => provider::content_type($foldercontent['contenttype']),
+                'contenttype' => get_string('privacy:contenttype:' . $foldercontent['contenttype'], 'mod_openstudio'),
                 'content' => format_text($foldercontent['content'], $foldercontent['textformat']),
                 'description' => format_text($foldercontent['description'], $foldercontent['textformat']),
-                'visibility' => provider::visibility_type($foldercontent['visibility']),
+                'visibility' => get_string('privacy:visibility:' . $foldercontent['visibility'], 'mod_openstudio'),
                 'deletedtime' => '',
                 'deletedby' => '',
-                'locktype' => provider::locked_type($foldercontent['locktype']),
+                'locktype' => get_string('privacy:lock:' . $foldercontent['locktype'], 'mod_openstudio'),
                 'lockedtime' => '',
                 'lockedby' => '',
                 'timeflagged' => transform::datetime($foldercontent['timeflagged']),
@@ -496,8 +501,8 @@ class mod_openstudio_privacy_testcase extends provider_testcase {
         $commentuser1post2 = array_values($DB->get_records('openstudio_comments',
                 ['userid' => $this->users->students->one->id, 'contentid' => $contentuser2[0]->id]));
 
-        $othercontent = (array) $contextdata2->get_data([get_string('othercontent', 'mod_openstudio'),
-                get_string('comments', 'mod_openstudio')]);
+        $othercontent = (array) $contextdata2->get_data([get_string('privacy:subcontext:othercontent', 'mod_openstudio'),
+                get_string('privacy:subcontext:comments', 'mod_openstudio')]);
 
         $this->assertEquals([
                 'user' => get_string('privacy_you', 'mod_openstudio'),
@@ -522,29 +527,29 @@ class mod_openstudio_privacy_testcase extends provider_testcase {
                 ['userid' => $this->users->students->two->id]));
 
         // Contents of student two.
-        $content2 = $contextdata2->get_data([get_string('contents', 'mod_openstudio'),
-                get_string('content', 'mod_openstudio', $this->posts->two)]);
+        $content2 = $contextdata2->get_data([get_string('privacy:subcontext:contents', 'mod_openstudio'),
+                get_string('privacy:subcontext:content', 'mod_openstudio', $this->posts->two)]);
 
         $this->assertEquals((object) [
                 'user' => get_string('privacy_you', 'mod_openstudio'),
                 'name' => format_string($getrecordscontentsuser2[0]->name),
-                'contenttype' => provider::content_type($getrecordscontentsuser2[0]->contenttype),
+                'contenttype' => get_string('privacy:contenttype:' . $getrecordscontentsuser2[0]->contenttype, 'mod_openstudio'),
                 'content' => format_text($getrecordscontentsuser2[0]->content, $getrecordscontentsuser2[0]->textformat, $context2),
                 'description' => format_text($getrecordscontentsuser2[0]->description,
                         $getrecordscontentsuser2[0]->textformat, $context2),
-                'visibility' => provider::visibility_type($getrecordscontentsuser2[0]->visibility),
+                'visibility' => get_string('privacy:visibility:group', 'mod_openstudio', $this->group->name),
                 'deletedtime' => '',
                 'deletedby' => '',
-                'locktype' => provider::locked_type($getrecordscontentsuser2[0]->locktype),
+                'locktype' => get_string('privacy:lock:' . $getrecordscontentsuser2[0]->locktype, 'mod_openstudio'),
                 'lockedtime' => '',
                 'lockedby' => '',
                 'timeflagged' => transform::datetime($getrecordscontentsuser2[0]->timeflagged),
                 'lockprocessed' => transform::datetime($getrecordscontentsuser2[0]->lockprocessed)
         ], $content2);
 
-        $commentsuser2 = (array) $contextdata2->get_data([get_string('contents', 'mod_openstudio'),
-                get_string('content', 'mod_openstudio', $this->posts->two),
-                get_string('comments', 'mod_openstudio')]);
+        $commentsuser2 = (array) $contextdata2->get_data([get_string('privacy:subcontext:contents', 'mod_openstudio'),
+                get_string('privacy:subcontext:content', 'mod_openstudio', $this->posts->two),
+                get_string('privacy:subcontext:comments', 'mod_openstudio')]);
 
         $getcommentuser2 = array_values($DB->get_records('openstudio_comments',
                 ['userid' => $this->users->students->two->id, 'contentid' => $getrecordscontentsuser2[0]->id]));
@@ -561,9 +566,9 @@ class mod_openstudio_privacy_testcase extends provider_testcase {
         ], $commentsuser2[$getcommentuser2[0]->id]);
 
         // Flags of student two.
-        $flagsuser2 = (array) $contextdata2->get_data([get_string('contents', 'mod_openstudio'),
-                get_string('content', 'mod_openstudio', $this->posts->two),
-                get_string('flags', 'mod_openstudio')]);
+        $flagsuser2 = (array) $contextdata2->get_data([get_string('privacy:subcontext:contents', 'mod_openstudio'),
+                get_string('privacy:subcontext:content', 'mod_openstudio', $this->posts->two),
+                get_string('privacy:subcontext:flags', 'mod_openstudio')]);
 
         $getflagsuser2 = array_values($DB->get_records('openstudio_flags',
                 ['userid' => $this->users->students->two->id, 'contentid' => $getrecordscontentsuser2[0]->id]));
@@ -572,14 +577,14 @@ class mod_openstudio_privacy_testcase extends provider_testcase {
                 'user' => get_string('privacy_you', 'mod_openstudio'),
                 'contentname' => format_string($content2->name),
                 'person' => '',
-                'flagname' => provider::flag_name($getflagsuser2[0]->flagid),
+                'flagname' => get_string('privacy:flag:' . $getflagsuser2[0]->flagid, 'mod_openstudio'),
                 'timemodified' => transform::datetime($getflagsuser2[0]->timemodified)
         ], $flagsuser2[$getflagsuser2[0]->id]);
 
         // Tracking of student two.
-        $trackinguser2 = (array) $contextdata2->get_data([get_string('contents', 'mod_openstudio'),
-                get_string('content', 'mod_openstudio', $this->posts->two),
-                get_string('tracking', 'mod_openstudio')]);
+        $trackinguser2 = (array) $contextdata2->get_data([get_string('privacy:subcontext:contents', 'mod_openstudio'),
+                get_string('privacy:subcontext:content', 'mod_openstudio', $this->posts->two),
+                get_string('privacy:subcontext:tracking', 'mod_openstudio')]);
 
         $gettrackinguser2 = array_values($DB->get_records('openstudio_tracking',
                 ['userid' => $this->users->students->two->id, 'contentid' => $getrecordscontentsuser2[0]->id]));
@@ -587,12 +592,12 @@ class mod_openstudio_privacy_testcase extends provider_testcase {
         $this->assertEquals([
                 'user' => get_string('privacy_you', 'mod_openstudio'),
                 'contentname' => format_string($content2->name),
-                'action' => provider::action_name_tracking($gettrackinguser2[0]->actionid),
+                'action' => get_string('privacy:tracking:' . $gettrackinguser2[0]->actionid, 'mod_openstudio'),
                 'timemodified' => transform::datetime($gettrackinguser2[0]->timemodified),
         ], $trackinguser2[$gettrackinguser2[0]->id]);
 
         // Get subscriptions, Student two doesn't subscribe OS..
-        $subscription = (array) $contextdata2->get_data([get_string('subscription', 'mod_openstudio')]);
+        $subscription = (array) $contextdata2->get_data([get_string('privacy:subcontext:subscription', 'mod_openstudio')]);
         $this->assertEmpty($subscription);
 
         // Export for student three.
@@ -624,12 +629,12 @@ class mod_openstudio_privacy_testcase extends provider_testcase {
         $contextdata = writer::with_context($this->contextstudio);
         $contextdata2 = writer::with_context($this->contextstudio3);
 
-        $content1 = $contextdata->get_data([get_string('contents', 'mod_openstudio'),
-                get_string('content', 'mod_openstudio', $this->posts->one)]);
+        $content1 = $contextdata->get_data([get_string('privacy:subcontext:contents', 'mod_openstudio'),
+                get_string('privacy:subcontext:content', 'mod_openstudio', $this->posts->one)]);
 
         // Get data in course 3.
-        $content2 = $contextdata2->get_data([get_string('contents', 'mod_openstudio'),
-                get_string('content', 'mod_openstudio', $this->posts->three)]);
+        $content2 = $contextdata2->get_data([get_string('privacy:subcontext:contents', 'mod_openstudio'),
+                get_string('privacy:subcontext:content', 'mod_openstudio', $this->posts->three)]);
 
         $this->assertEmpty($content1);
         // Data in course three still exist.
@@ -680,13 +685,13 @@ class mod_openstudio_privacy_testcase extends provider_testcase {
 
         // Content student one.
         $contextdata = writer::with_context($this->contextstudio);
-        $content1a = $contextdata->get_data([get_string('contents', 'mod_openstudio'),
-                get_string('content', 'mod_openstudio', $this->posts->one)]);
+        $content1a = $contextdata->get_data([get_string('privacy:subcontext:contents', 'mod_openstudio'),
+                get_string('privacy:subcontext:content', 'mod_openstudio', $this->posts->one)]);
         $this->assertNotEmpty($content1a);
 
         $contextdata2 = writer::with_context($this->contextstudio2);
-        $content1b = $contextdata2->get_data([get_string('contents', 'mod_openstudio'),
-                get_string('content', 'mod_openstudio', $this->posts->four)]);
+        $content1b = $contextdata2->get_data([get_string('privacy:subcontext:contents', 'mod_openstudio'),
+                get_string('privacy:subcontext:content', 'mod_openstudio', $this->posts->four)]);
         $this->assertNotEmpty($content1b);
 
         writer::reset();
@@ -697,13 +702,13 @@ class mod_openstudio_privacy_testcase extends provider_testcase {
         provider::export_user_data($appctxstudentone2);
 
         $contextdata = writer::with_context($this->contextstudio);
-        $content1a = $contextdata->get_data([get_string('contents', 'mod_openstudio'),
-                get_string('content', 'mod_openstudio', $this->posts->one)]);
+        $content1a = $contextdata->get_data([get_string('privacy:subcontext:contents', 'mod_openstudio'),
+                get_string('privacy:subcontext:content', 'mod_openstudio', $this->posts->one)]);
         $this->assertEmpty($content1a);
         // Data of student one in OS2 doesn't be affected.
         $contextdata2 = writer::with_context($this->contextstudio2);
-        $content1b = $contextdata2->get_data([get_string('contents', 'mod_openstudio'),
-                get_string('content', 'mod_openstudio', $this->posts->four)]);
+        $content1b = $contextdata2->get_data([get_string('privacy:subcontext:contents', 'mod_openstudio'),
+                get_string('privacy:subcontext:content', 'mod_openstudio', $this->posts->four)]);
         $this->assertNotEmpty($content1b);
 
         writer::reset();
@@ -724,15 +729,15 @@ class mod_openstudio_privacy_testcase extends provider_testcase {
 
         // Content student one.
         $contextdata = writer::with_context($this->contextstudio);
-        $content1 = $contextdata->get_data([get_string('contents', 'mod_openstudio'),
-                get_string('content', 'mod_openstudio', $this->posts->one)]);
+        $content1 = $contextdata->get_data([get_string('privacy:subcontext:contents', 'mod_openstudio'),
+                get_string('privacy:subcontext:content', 'mod_openstudio', $this->posts->one)]);
         // Post of students one is deleted.
         $this->assertEmpty($content1);
 
         // Content student two.
         $contextdata2 = writer::with_context($this->contextstudio2);
-        $content2 = $contextdata2->get_data([get_string('contents', 'mod_openstudio'),
-                get_string('content', 'mod_openstudio', $this->posts->two)]);
+        $content2 = $contextdata2->get_data([get_string('privacy:subcontext:contents', 'mod_openstudio'),
+                get_string('privacy:subcontext:content', 'mod_openstudio', $this->posts->two)]);
         // Post of students 2 has data.
         $this->assertNotEmpty($content2);
 
