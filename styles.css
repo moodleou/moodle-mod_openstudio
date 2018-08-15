@@ -565,6 +565,23 @@ button.openstudio-notification-stopbutton:focus {
     }
 }
 
+@media (max-width: 347px) {
+    .path-mod-openstudio .nav-pills li {
+        margin-right: 8px;
+    }
+    .path-mod-openstudio .openstudio-notifications.dropdown-menu {
+        top: 63px;
+        left: -225px;
+    }
+    .openstudio-nav-primary .notifications.open .openstudio-notifications-arrow {
+        left: 246px;
+        top: -18px;
+    }
+    .openstudio-navigation-notification-icon {
+        margin-left: 5px;
+    }
+}
+
 /**
  * Folder - Order post
  */
