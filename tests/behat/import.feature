@@ -33,8 +33,7 @@ Feature: Import zip file
         And I follow "Test Open Studio name 1"
         And I follow "My Content"
         And I follow "Import"
-        And I set the following fields to these values:
-            | Choose zip file | mod/openstudio/tests/importfiles/importtest.zip |
+        And I upload "mod/openstudio/tests/importfiles/importtest.zip" file to "Choose zip file" filemanager (OU themes)
         And I press "Import"
         Then I should see "test.odt"
         Then I should see "test.pdf"
