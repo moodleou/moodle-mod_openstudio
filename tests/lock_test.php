@@ -124,7 +124,7 @@ class lock_testcase extends \advanced_testcase {
         $updatedslotdata = \mod_openstudio\local\api\content::get_record($this->users->students->one->id, $this->contentdata->id);
         $this->assertEquals($lockedtype, $updatedslotdata->locktype);
         $this->assertEquals($this->users->students->one->id, $updatedslotdata->lockedby);
-        $this->assertEquals($timenow, $updatedslotdata->lockedtime);
+        $this->assertContains($updatedslotdata->lockedtime, [$timenow, $timenow - 1]); // 1 second tolerance.
 
         // Teacher adds a lock to the slot.
         $lockedtype = \mod_openstudio\local\api\lock::CRUD; // Default lock button action.
