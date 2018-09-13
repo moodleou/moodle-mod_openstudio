@@ -661,6 +661,9 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         $contentdata->contentediturl = new moodle_url('/mod/openstudio/contentedit.php', array(
                    'id' => $cmid, 'vid' => $viewmode, 'lid' => 0, 'sid' => 0, 'type' => 0, 'sstsid' => 0));
+
+        $contentdata->hasoneblock = count($contentdata->blocksdata) == 1 ? true : false;
+
         if ($permissions->feature_enablefolders) {
             $folderlink = new moodle_url('/mod/openstudio/contentedit.php', array(
                     'id' => $cmid, 'vid' => $viewmode, 'lid' => 0, 'sid' => 0, 'ssid' => 0,

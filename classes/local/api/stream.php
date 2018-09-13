@@ -1127,16 +1127,9 @@ EOF;
                                 $sortordersql = 'ORDER BY s.name ASC ';
                             }
                         } else {
-                            if (is_array($filterblocks)) {
-                                $sortordersql = 'ORDER BY l1sortorder, l2sortorder, l3sortorder, s.name DESC ';
-                                if ($sortordering == self::SORT_ASC) {
-                                    $sortordersql = 'ORDER BY l1sortorder, l2sortorder, l3sortorder, s.name ASC ';
-                                }
-                            } else {
-                                $sortordersql = 'ORDER BY l1name DESC, l2name DESC, l3name DESC, s.name DESC ';
-                                if ($sortordering == self::SORT_ASC) {
-                                    $sortordersql = 'ORDER BY l1name ASC, l2name ASC, l3name ASC, s.name ASC ';
-                                }
+                            $sortordersql = 'ORDER BY l1sortorder, l2sortorder, l3sortorder, s.name DESC ';
+                            if ($sortordering == self::SORT_ASC) {
+                                $sortordersql = 'ORDER BY l1sortorder, l2sortorder, l3sortorder, s.name ASC ';
                             }
                         }
                         break;

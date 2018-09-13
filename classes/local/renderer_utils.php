@@ -63,23 +63,27 @@ class renderer_utils {
 
         $navigationurls = (object) array();
 
+        // The activities must be sorted in their order in "Manage levels".
+        // Date sort and title sort are no longer available for this patch,
+        // So I assign the default value for sorter as "SORT_BY_ACTIVITYTITLE".
+        $activityparams = [
+                'id' => $cmid,
+                'vid' => content::VISIBILITY_PRIVATE,
+                'fblock' => false,
+                'ftype' => 0,
+                'fflag' => 0,
+                'fsort' => stream::SORT_BY_ACTIVITYTITLE,
+                'osort' => stream::SORT_ASC
+        ];
         if (isset($SESSION->openstudio_view_filters)
-            && isset($SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE])
-            && isset($SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE]->ftype)) {
-            $navigationurls->myworkurl = new \moodle_url('/mod/openstudio/view.php',
-                    array('id' => $cmid, 'vid' => content::VISIBILITY_PRIVATE,
-                            'fblock' => false,
-                            'ftype' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE]->ftype,
-                            'fflag' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE]->fflag,
-                            'ftags' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE]->ftags,
-                            'fsort' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE]->fsort,
-                            'osort' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE]->osort));
-        } else {
-            $navigationurls->myworkurl = new \moodle_url('/mod/openstudio/view.php',
-                    array('id' => $cmid, 'vid' => content::VISIBILITY_PRIVATE, 'fblock' => false,
-                            'ftype' => 0, 'fflag' => 0,
-                            'fsort' => stream::SORT_BY_ACTIVITYTITLE, 'osort' => 1));
+                && isset($SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE])
+                && isset($SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE]->ftype)) {
+            $activityparams['ftype'] = $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE]->ftype;
+            $activityparams['fflag'] = $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE]->fflag;
+            $activityparams['ftags'] = $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE]->ftags;
         }
+
+        $navigationurls->myworkurl = new \moodle_url('/mod/openstudio/view.php', $activityparams);
 
         if (isset($SESSION->openstudio_view_filters)
             && isset($SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE_PINBOARD])

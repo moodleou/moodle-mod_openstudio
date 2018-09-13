@@ -69,6 +69,7 @@
 </div>
 
 <div id="preference_filter_container" class="collapse">
+    {{^myactivities}}
     <div class="openstudio-preference-item">
         {{>mod_openstudio/filter_by_date}}
     </div>
@@ -77,6 +78,7 @@
             {{>mod_openstudio/filter_by_title}}
         </span>
     </div>
+    {{/myactivities}}
     <div class="openstudio-preference-item">
         <span class="openstudio-filter-sort-text ">{{#str}} filtertotal, mod_openstudio {{/str}}:
             {{total}}

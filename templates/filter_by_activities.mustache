@@ -45,7 +45,9 @@
 <span class="openstudio-filter-select">
     <label for="filter_block_activity">{{#str}} filterwork, mod_openstudio {{/str}}:</label>
     <select id="filter_block_activity" class="openstudio-filter-select-box" name="blockid">
+        {{^hasoneblock}}
             <option value="0">{{#str}} filterall, mod_openstudio {{/str}}</option>
+        {{/hasoneblock}}
         {{#blocksdata}}
             <option value="{{id}}" {{#checked}}selected="selected"{{/checked}}>{{name}}</option>
         {{/blocksdata}}
