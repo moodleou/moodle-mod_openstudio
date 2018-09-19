@@ -72,7 +72,7 @@ Feature: My Activity view in Open Studio
     Then I should see "Activity 1"
     And I should not see "Activity 2"
     And I should see "Activity 3"
-  
+
   Scenario: Upload a new content without file upload
     When I follow "Test Open Studio name 1"
     And I follow "My Content > My Activities" in the openstudio navigation
@@ -160,3 +160,64 @@ Feature: My Activity view in Open Studio
     Then I should not see "Add new content"
     And I should not see "Upload content to folder"
     And I should not see "Select existing post to add to folder"
+
+  Scenario: Check order of blocks defined in manage levels.
+    # Check if there is only 1 activity block then selected it by default.
+    When I follow "Test Open Studio name 1"
+    And I follow "My Content > My Activities" in the openstudio navigation
+    Then the "Work:" select box should not contain "All"
+    And the "Work:" select box should contain "Block 1"
+    And I should see "Activity 1" in the "div.openstudio-container > div:nth-child(5)" "css_element"
+    And "//div[@class='openstudio-container']/div[position()=6 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 1.1 Required')]" "xpath_element" should exist
+    And I should see "Activity 3" in the "div.openstudio-container > div:nth-child(7)" "css_element"
+    # Add new content to Activity 1.
+    When I follow "Administration > Manage levels" in the openstudio navigation
+    And I follow "Block 1"
+    And I follow "Activity 1"
+    And I press "Add another Content"
+    And I set the field "Content Name" to "Content 1.2"
+    And I press "Add another Content"
+    And I set the field "Content Name" to "Content 1.3"
+    And I press "Save Changes"
+    And I follow "Test Open Studio name 1"
+    And I follow "My Content > My Activities" in the openstudio navigation
+    Then I should see "Activity 1" in the "div.openstudio-container > div:nth-child(5)" "css_element"
+    And "//div[@class='openstudio-container']/div[position()=6 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 1.1 Required')]" "xpath_element" should exist
+    And "//div[@class='openstudio-container']/div[position()=6 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=2], 'Content 1.2')]" "xpath_element" should exist
+    And "//div[@class='openstudio-container']/div[position()=6 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=3], 'Content 1.3')]" "xpath_element" should exist
+    And I should see "Activity 3" in the "div.openstudio-container > div:nth-child(7)" "css_element"
+    And "//div[@class='openstudio-container']/div[position()=8 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 3.1')]" "xpath_element" should exist
+    # Add new Block 2.
+    When I follow "Administration > Manage levels" in the openstudio navigation
+    And I press "Add another Block"
+    And I set the field "Block Name" to "Block 2"
+    And I press "Save Changes"
+    Then I should see "Block 2"
+    # Add new Activity 1 to Block 2.
+    When I follow "Block 2"
+    And I press "Add another Activity"
+    And I set the field "Activity Name" to "Activity 1 - Block 2"
+    And I press "Add another Activity"
+    Then I should see "Activity 1 - Block 2"
+    # Add new content to Activity 1 - Block 2.
+    When I follow "Activity 1 - Block 2"
+    And I press "Add another Content"
+    And I set the field "Content Name" to "Content 1.1 - Block 2"
+    And I press "Save Changes"
+    Then I should see "Content 1.1 - Block 2"
+    # Move Block 2 up on Block 1 and check the order of appearance.
+    When I follow "Manage levels"
+    And I click on "//div[contains(@class, 'fcontainer')]/div[position()=1]/div[contains(@class, 'form-inline')]/input[contains(@name, 'movednbutton')]" "xpath_element"
+    And I follow "Test Open Studio name 1"
+    And I follow "My Content > My Activities" in the openstudio navigation
+    Then the "Work:" select box should contain "All"
+    And the "Work:" select box should contain "Block 2"
+    And the "Work:" select box should contain "Block 1"
+    And I should see "Activity 1 - Block 2" in the "div.openstudio-container > div:nth-child(5)" "css_element"
+    And "//div[@class='openstudio-container']/div[position()=6 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 1.1 - Block 2')]" "xpath_element" should exist
+    And I should see "Activity 1" in the "div.openstudio-container > div:nth-child(7)" "css_element"
+    And "//div[@class='openstudio-container']/div[position()=8 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 1.1 Required')]" "xpath_element" should exist
+    And "//div[@class='openstudio-container']/div[position()=8 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=2], 'Content 1.2')]" "xpath_element" should exist
+    And "//div[@class='openstudio-container']/div[position()=8 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=3], 'Content 1.3')]" "xpath_element" should exist
+    And I should see "Activity 3" in the "div.openstudio-container > div:nth-child(9)" "css_element"
+    And "//div[@class='openstudio-container']/div[position()=10 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 3.1')]" "xpath_element" should exist
