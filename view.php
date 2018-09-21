@@ -214,6 +214,14 @@ if (!$permissions->feature_module && ($vid == content::VISIBILITY_MODULE)) {
     $vid = $permissions->allow_visibilty_modes[0];
 }
 
+if ($vid == content::VISIBILITY_WORKSPACE || $vid == content::VISIBILITY_PRIVATE) {
+    $fsort = stream::SORT_BY_ACTIVITYTITLE;
+    $osort = stream::SORT_ASC;
+    $sortflag = [
+        'id' => $fsort, 'asc' => $osort
+    ];
+}
+
 // Currently,  we respect view page size on preference bar and ignore settings.
 $streamdatapagesize = defaults::STREAMPAGESIZE;
 if (isset($SESSION->openstudio_view_filters)) {

@@ -221,3 +221,16 @@ Feature: My Activity view in Open Studio
     And "//div[@class='openstudio-container']/div[position()=8 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=3], 'Content 1.3')]" "xpath_element" should exist
     And I should see "Activity 3" in the "div.openstudio-container > div:nth-child(9)" "css_element"
     And "//div[@class='openstudio-container']/div[position()=10 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 3.1')]" "xpath_element" should exist
+
+  Scenario: Set "Enable pinboard" is 0 and check order of blocks defined in manage levels.
+    When I am on "Course 1" course homepage
+    And I click on "a.dropdown-toggle" "css_element" in the "Test Open Studio name 1" "list_item"
+    And I click on "Edit settings" "link" in the "Test Open Studio name 1" "list_item"
+    And I follow "Custom features"
+    And I set the field "pinboard" to "0"
+    And I press "Save and display"
+    Then the "Work:" select box should not contain "All"
+    And the "Work:" select box should contain "Block 1"
+    And I should see "Activity 1" in the "div.openstudio-container > div:nth-child(5)" "css_element"
+    And "//div[@class='openstudio-container']/div[position()=6 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 1.1 Required')]" "xpath_element" should exist
+    And I should see "Activity 3" in the "div.openstudio-container > div:nth-child(7)" "css_element"
