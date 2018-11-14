@@ -56,7 +56,7 @@ define(['jquery', 'core/ajax', 'core/modal', 'core/templates', 'theme_bootstrapb
             }
             // Pre-fetch templates to make dialogue display quicker.
             Templates.render('mod_openstudio/notification_modal', {name: ''});
-            Templates.render('core/modal_backdrop');
+            Templates.render('core/modal_backdrop', {});
         },
 
         /**
