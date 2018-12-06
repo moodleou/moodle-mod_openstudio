@@ -156,6 +156,11 @@ class contents_form_testcase extends \advanced_testcase {
         $errors5 = $form->validation($data5, array());
 
         $this->assertEquals(array('attachments' => get_string('errorcontentinvalidnotebook', 'mod_openstudio')), $errors5);
+        $fs->create_file_from_pathname($invalidfile, $CFG->dirroot.'/mod/openstudio/tests/importfiles/3files.nbk');
+        $data6 = array('attachments' => $itemid);
+        $errors6 = $form->validation($data6, array());
+
+        $this->assertEquals([], $errors6);
     }
 
 }

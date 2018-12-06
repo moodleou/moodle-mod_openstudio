@@ -265,4 +265,16 @@ Feature: Create Open Studio contents
       And I should see "Tests Add New Tags add file m4a"
       Then the "href" attribute of "div.openstudio-content-view-primary a" "css_element" should contain "test.m4a"
       And I should see "Test My Group Board View 8 Tags"
-           
+
+  Scenario: Add new content just a title and description with a nbk file
+    When I follow "Test Open Studio name 1"
+    And I follow "Add new content"
+    And I press "Add file"
+    And I set the following fields to these values:
+      | Who can view this content | My module                                   |
+      | Title                     | My Module Title                             |
+      | Description               | My Module Description                       |
+      | Upload content            | mod/openstudio/tests/importfiles/3files.nbk |
+    And I press "Save"
+    When I switch to "openstudio-content-view-iframe" iframe
+    Then I should see "Anscombe's Quartet" in the "#notebook-container .text_cell_render h1" "css_element"

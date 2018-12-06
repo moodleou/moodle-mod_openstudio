@@ -351,18 +351,23 @@ class mod_openstudio_content_form extends moodleform {
                         $itemid = $file->get_itemid();
                         $filepath = $file->get_filepath();
                         $filelist = $file->list_files($packer);
-
+                        $numberoffiles = 0;
+                        foreach ($filelist as $f) {
+                            if (!$f->is_directory) {
+                                $numberoffiles++;
+                            }
+                        }
                         // Check that we've got the right number of files.
-                        if (count($filelist) < 2) {
+                        if ($numberoffiles < 2) {
                             $errors['attachments'] = get_string('errorcontentemptynotebook', 'openstudio');
-                        } else if (count($filelist) > 2) {
+                        } else if ($numberoffiles > 2) {
                             $errors['attachments'] = get_string('errorcontentfullnotebook', 'openstudio');
                         } else {
                             // We've got the right number of files, let's check if they appear to be the right types.
                             $expectedtypes = array('html', 'htm', 'ipynb');
                             foreach ($filelist as $contentfile) {
                                 $extension = pathinfo($contentfile->pathname, PATHINFO_EXTENSION);
-                                if (in_array($extension, $expectedtypes)) {
+                                if (in_array($extension, $expectedtypes) || $contentfile->is_directory) {
                                     $foundtypes = array($extension);
                                     // We only want 1 of htm or html, so if we've found one, remove both.
                                     if ($extension == 'html') {
