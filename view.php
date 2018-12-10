@@ -887,7 +887,7 @@ echo $OUTPUT->header(); // Header.
 
 echo $html;
 
-echo $renderer->body($cm->id, $cminstance->id, $theme, $vid, $permissions, $contentdata); // Body.
+echo $renderer->body($cm->id, $cminstance, $theme, $vid, $permissions, $contentdata); // Body.
 
 // Finish the page.
 echo $OUTPUT->footer();

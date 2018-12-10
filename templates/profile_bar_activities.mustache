@@ -55,9 +55,14 @@
         <div class="openstudio-profile-progress">
             {{#activities}}
                 {{#isactive}}
-                    <a class="openstudio-profile-progress-step content-block-active"
-                       href="{{{activityediturl}}}" title="{{{activitytitle}}}" >
-                    </a>
+                    {{#canreadcontent}}
+                        <a class="openstudio-profile-progress-step content-block-active"
+                           href="{{{activityediturl}}}" title="{{{activitytitle}}}" >
+                        </a>
+                    {{/canreadcontent}}
+                    {{^canreadcontent}}
+                        <span class="openstudio-profile-progress-step content-block-active" title="{{{activitytitle}}}" ></span>
+                    {{/canreadcontent}}
                 {{/isactive}}
                 {{^isactive}}
                     {{#contentislocked}}

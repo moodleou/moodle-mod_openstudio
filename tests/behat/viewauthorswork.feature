@@ -124,3 +124,64 @@ Feature: View author's work
         Then I should see "Student3_group3"
         Then I should see "Content 3 - onlyme"
         Then I should see "Content 3 - tutor"
+
+    @javascript
+    Scenario: Students should not see activity slot links when don't have permission to view.
+        Given I log in as "admin"
+        When I am on "Course 1" course homepage
+        And I turn editing mode on
+        And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+            | Name                             | Test Open Studio name 2        |
+            | Description                      | Test Open Studio description 2 |
+            | Your word for 'My Module'        | My Module                      |
+            | Your word for 'My Group'         | My Group                       |
+            | Your word for 'My Activities'    | My Activities                  |
+            | Your word for 'My Pinboard'      | My Pinboard                    |
+            | Group mode                       | Visible groups                 |
+            | Grouping                         | grouping1                      |
+            | Enable pinboard                  | 99                             |
+            | ID number                        | OS2                            |
+            | Enable content reciprocal access | 1                              |
+        And the following open studio "level1s" exist:
+            | openstudio | name   | sortorder |
+            | OS2        | Block1 | 1         |
+        And the following open studio "level2s" exist:
+            | level1 | name      | sortorder |
+            | Block1 | Activity1 | 1         |
+            | Block1 | Activity2 | 2         |
+        And the following open studio "level3s" exist:
+            | level2    | name       | sortorder |
+            | Activity1 | Content1.1 | 1         |
+            | Activity2 | Content2.1 | 2         |
+        And all users have accepted the plagarism statement for "OS2" openstudio
+
+        # Switch student1 user.
+        And I am on site homepage
+        And I log out
+        When I log in as "student1"
+        And I am on "Course 1" course homepage
+        And I follow "Test Open Studio name 2"
+        And I follow "My Content > My Activities" in the openstudio navigation
+        And I click on "#profile_percent div:nth-child(2) a.openstudio-profile-progress-step" "css_element"
+        And I press "Add file"
+        And I set the following fields to these values:
+            | Who can view this content | Only me                                    |
+            | Title                     | Test My Pinboard View 1                    |
+            | Description               | My Pinboard View Description 1             |
+            | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+        And I press "Save"
+        And I click on "#profile_percent div:nth-child(2) a.openstudio-profile-progress-step" "css_element"
+        Then the "class" attribute of "#profile_percent div:nth-child(2) a.openstudio-profile-progress-step" "css_element" should contain "content-block-active"
+
+        # Switch student2 user.
+        And I am on site homepage
+        And I log out
+        When I log in as "student2"
+        And I am on "Course 1" course homepage
+        And I follow "Test Open Studio name 2"
+        And I follow "People" in the openstudio navigation
+        Then I should see "Student 1"
+        And I click on ".openstudio-profile-details a.openstudio-profile-view" "css_element"
+        Then I should see "Student 1" in the "#openstudio_profile_fullusername" "css_element"
+        And the "class" attribute of "#profile_percent div:nth-child(2) span.openstudio-profile-progress-step" "css_element" should contain "content-block-active"
+        And the "class" attribute of "#profile_percent div:nth-child(4) span.openstudio-profile-progress-step" "css_element" should not contain "content-block-active"

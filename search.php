@@ -387,7 +387,7 @@ echo $renderer->header(); // Header.
 
 echo $renderer->siteheader($coursedata, $permissions, $theme, $cm->name, '', $vid);
 
-echo $renderer->body($cm->id, $cminstance->id, $theme, $vid, $permissions, $contentdata, $issearch = true); // Body.
+echo $renderer->body($cm->id, $cminstance, $theme, $vid, $permissions, $contentdata, $issearch = true); // Body.
 $PAGE->requires->js_call_amd('mod_openstudio/viewhelper', 'init', [[
         'searchtext' => $searchtext]]);
 

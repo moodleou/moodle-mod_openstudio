@@ -546,7 +546,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      * This function renders the HTML fragment for the body content of Open Studio.
      *
      * @param int $cmid The course module id.
-     * @param int $openstudioid The openstudio id.
+     * @param object $cminstance The course module instance.
      * @param object $theme The theme settings.
      * @param int $viewmode View mode: module, group, studio, pinboard or workspace.
      * @param object $permissions The permission object for the given user/view.
@@ -554,7 +554,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      * @param boolean $issearch Detect search behaviour
      * @return string The rendered HTM fragment.
      */
-    public function body($cmid, $openstudioid, $theme, $viewmode = content::VISIBILITY_MODULE, $permissions, $contentdata,
+    public function body($cmid, $cminstance, $theme, $viewmode = content::VISIBILITY_MODULE, $permissions, $contentdata,
             $issearch = false) {
         global $OUTPUT;
 
@@ -635,7 +635,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         }
 
         $contentdata->cmid = $cmid;
-        $contentdata = renderer_utils::profile_bar($permissions, $openstudioid, $contentdata);
+        $contentdata = renderer_utils::profile_bar($permissions, $cminstance, $contentdata);
 
         $contentdata->showprofilebarview = $showprofilebarview;
         $contentdata->groupitems = array_values($groupitem);
@@ -784,7 +784,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         }
 
         if ($contentdata->profilebarenable === true) {
-            $contentdata = renderer_utils::profile_bar($permissions, $openstudioid, $contentdata);
+            $contentdata = renderer_utils::profile_bar($permissions, $cminstance, $contentdata);
         }
 
         $contentdata = renderer_utils::content_details($cmid, $permissions, $contentdata, $contentdata->iscontentversion);

@@ -160,16 +160,17 @@ class renderer_utils {
      * This function generate variables for profile bar of Open Studio.
      *
      * @param object $permissions The permission object for the given user/view.
-     * @param int $openstudioid The open studio id.
+     * @param object $cminstance The course module instance.
      * @param object $contentdata The content records to display.
      * @return object $contentdata
      */
-    public static function profile_bar($permissions, $openstudioid, $contentdata) {
+    public static function profile_bar($permissions, $cminstance, $contentdata) {
         global $USER, $OUTPUT, $PAGE;
 
         $vuid = optional_param('vuid', $USER->id, PARAM_INT);
         $flagscontentread = 0;
         $ismyprofile = true;
+        $openstudioid = $cminstance->id;
 
         if ($vuid && $vuid != $USER->id) {
             $contentowner = api\user::get_user_by_id($vuid);
@@ -221,6 +222,7 @@ class renderer_utils {
                     foreach ($values as $level2id => $activities) {
                         $activityname = '';
                         foreach ($activities as $key => $activity) {
+                            $activities[$key]->canreadcontent = util::can_read_content($cminstance, $permissions, $activity);
                             $activityname = $activity->level2name;
 
                             $activities[$key]->isactive = false;
