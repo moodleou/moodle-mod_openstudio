@@ -92,6 +92,21 @@ function xmldb_openstudio_upgrade($oldversion=0) {
         upgrade_mod_savepoint(true, 2017091000, 'openstudio');
     }
 
+    if ($oldversion < 2018122500) {
+
+        // Define field retainimagemetadata to be added to openstudio_contents.
+        $table = new xmldb_table('openstudio_contents');
+        $field = new xmldb_field('retainimagemetadata', XMLDB_TYPE_INTEGER, '10', null, null, null, '0', 'lockprocessed');
+
+        // Conditionally launch add field retainimagemetadata.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Openstudio savepoint reached.
+        upgrade_mod_savepoint(true, 2018122500, 'openstudio');
+    }
+
     // Must always return true from these functions.
     return $result;
 

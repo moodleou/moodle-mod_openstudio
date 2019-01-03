@@ -103,7 +103,8 @@ Feature: Create Open Studio contents
           | Upload content            | mod/openstudio/tests/importfiles/test3.jpg |
           | Show GPS Data             | 1                                          |
           | Show Image Data           | 1                                          |
-        And I press "Save"
+          | Retain EXIF image data    | 1                                          |
+      And I press "Save"
         And I follow "Shared content > My Module" in the openstudio navigation
         Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test3.jpg"
         And I should see "Test My Group Board View 3"

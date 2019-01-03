@@ -109,8 +109,8 @@ Feature: Create and edit contents detail
         When I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And the following open studio "contents" exist:
-            | openstudio | user     | name                 | description             | file                                               | visibility |
-            | OS1        | teacher1 | TestContentDetails 1 | Test slot 1 description | mod/openstudio/tests/importfiles/geotagged.jpg     | module     |
+            | openstudio | user     | name                 | description             | file                                           | visibility | retainimagemetadata |
+            | OS1        | teacher1 | TestContentDetails 1 | Test slot 1 description | mod/openstudio/tests/importfiles/geotagged.jpg | module     | 1                   |
 
         # Redirect to content detail
         And I follow "People" in the openstudio navigation
@@ -180,6 +180,7 @@ Feature: Create and edit contents detail
         And I should see "Show Image Data"
         And I click on "input#id_showgps" "css_element"
         And I click on "input#id_showimagedata" "css_element"
+        And I click on "input#id_retainimagemetadata" "css_element"
         And I press "Save"
 
         And I should see "TestContentDetails 2"
@@ -231,6 +232,7 @@ Feature: Create and edit contents detail
         And I should see "Show Image Data"
         And I click on "input#id_showgps" "css_element"
         And I click on "input#id_showimagedata" "css_element"
+        And I click on "input#id_retainimagemetadata" "css_element"
         And I press "Save"
 
         And I should see "TestContentDetails 3"
@@ -328,6 +330,7 @@ Feature: Create and edit contents detail
         And I should see "Show Image Data"
         And I click on "input#id_showgps" "css_element"
         And I click on "input#id_showimagedata" "css_element"
+        And I click on "input#id_retainimagemetadata" "css_element"
         And I press "Save"
 
         And I should see "TestContentDetails 5"
@@ -379,6 +382,7 @@ Feature: Create and edit contents detail
         And I should see "Show Image Data"
         And I click on "input#id_showgps" "css_element"
         And I click on "input#id_showimagedata" "css_element"
+        And I click on "input#id_retainimagemetadata" "css_element"
         And I press "Save"
 
         And I should see "TestContentDetails 6"
@@ -804,3 +808,47 @@ Feature: Create and edit contents detail
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "Test My Content Details View"
         And "#osep-bottombutton-feedback-upper" "css_element" should not exist
+
+
+    Scenario: Add new content and check content details with abitily to remove image exif.
+        When I am on "Course 1" course homepage
+        And I follow "Test Open Studio name 1"
+        And the following open studio "contents" exist:
+            | openstudio | user     | name                 | description             | file                                           | visibility | retainimagemetadata | showimagedata | showgps |
+            | OS1        | teacher1 | TestContentDetails 1 | Test slot 1 description | mod/openstudio/tests/importfiles/geotagged.jpg | module     | 0                   | 0             | 0       |
+        # Redirect to content detail
+        And I follow "People" in the openstudio navigation
+        And I follow "Shared content > My Module" in the openstudio navigation
+        And I follow "TestContentDetails 1"
+        And I should see "My Pinboard"
+        And I should see "Teacher 1"
+        And I should see "TestContentDetails 1"
+        And I should see "Owner of this post"
+        # Enable Show GPS Data and Show Image Data but don't check retain exif data.
+        And I click on "input#id_editbutton" "css_element"
+        And I click on "input#id_showgps" "css_element"
+        And I press "Save"
+        And I should see "In order to show GPS or Image data the EXIF image data must be retained"
+        And I click on "input#id_showimagedata" "css_element"
+        And I press "Save"
+        And I should see "In order to show GPS or Image data the EXIF image data must be retained"
+        And I click on "input#id_retainimagemetadata" "css_element"
+        And I press "Save"
+        When I scroll to the bottom of the OU study planner
+        Then I should see "Image meta-data"
+        And I should see "Image location"
+        And I follow "People" in the openstudio navigation
+        And I follow "Shared content > My Module" in the openstudio navigation
+        And I click on "Upload content" "text"
+        And I press "Add file"
+        And I set the following fields to these values:
+            | Who can view this content | My module                                      |
+            | Title                     | Test My Content Details View                   |
+            | Description               | Test My Content Details View                   |
+            | Upload content            | mod/openstudio/tests/importfiles/geotagged.jpg |
+            | Tags                      | Tests Add New Tags                             |
+            | showimagedata             | 1                                              |
+            | showgps                   | 1                                              |
+        And I press "Save"
+        When I scroll to the bottom of the OU study planner
+        Then I should not see "Image meta-data"

@@ -516,6 +516,7 @@ $options = array(
         'folderdetails' => ($sid && $type == content::TYPE_FOLDER_CONTENT) ? true : false,
         'contentdetails' => $sid ? true : false,
         'isfolderlock' => $isfolderlock,
+        'retainimagemetadata' => !empty($contentdata->retainimagemetadata) ? 1 : 0,
         'cmid' => $cm->id,
         'vid' => $vid,
         'max_bytes' => $cminstance->contentmaxbytes
@@ -579,7 +580,8 @@ if ($contentform->is_cancelled()) {
             $contentformfile = array(
                 'id' => $draftitemid,
                 'file' => $files[0],
-                'checksum' => util::calculate_file_hash($files[0])
+                'checksum' => util::calculate_file_hash($files[0]),
+                'retainimagemetadata' => !empty($contentformdata->retainimagemetadata)
             );
             $contentformfile['mimetype'] = util::mimeinfo_from_type(
                     mimeinfo('type', $contentformfile['file']->filename));

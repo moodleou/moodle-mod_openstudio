@@ -302,6 +302,11 @@ class mod_openstudio_content_form extends moodleform {
 
         $mform->disabledIf('ownershipdetail', 'ownership', 'neq', '2');
 
+        $mform->addElement('checkbox', 'retainimagemetadata', get_string('retainimagemetadata', 'openstudio'));
+        $mform->addHelpButton('retainimagemetadata', 'retainimagemetadata', 'openstudio');
+        if (!empty($this->_customdata['retainimagemetadata'])) {
+            $mform->setDefault('retainimagemetadata', $this->_customdata['retainimagemetadata']);
+        }
         // Add custom class to style tag label align with input.
         $mform->addElement('tags', 'tags', get_string('tags'),
             array('itemtype' => 'openstudio_contents', 'component' => 'mod_openstudio'),
@@ -338,6 +343,9 @@ class mod_openstudio_content_form extends moodleform {
     public function validation($data, $files) {
         global $USER;
         $errors = parent::validation($data, $files);
+        if (empty($data['retainimagemetadata']) && (!empty($data['showgps']) || !empty($data['showimagedata']))) {
+            $errors['retainimagemetadata'] = get_string('retainimagemetadataerror', 'openstudio');
+        }
         if (!empty($data['attachments'])) {
             $fs = get_file_storage();
             $usercontext = context_user::instance($USER->id);

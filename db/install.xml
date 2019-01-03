@@ -147,6 +147,7 @@
         <FIELD NAME="lockedby" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Lock applied by user for instance"/>
         <FIELD NAME="lockedtime" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Time lock applied for instance"/>
         <FIELD NAME="lockprocessed" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Time lock processed for instance"/>
+        <FIELD NAME="retainimagemetadata" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Retain image metadata"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

@@ -288,12 +288,16 @@ EOF;
                 }
 
                 // Check if image type and create thumbnail if necessary.
+                if (!empty($file['mimetype']['string']) && $file['mimetype']['string'] == 'image' && empty($file['retainimagemetadata'])) {
+                    self::strip_metadata_for_image($file, $context, $slotfileid);
+                }
                 self::create_thumbnail($data,
                         $context->id, 'mod_openstudio', 'content', $slotfileid, '/', $data['content']);
             }
 
             // Populate data.
             $insertdata = array();
+            $insertdata['retainimagemetadata'] = isset($data['retainimagemetadata']) ? $data['retainimagemetadata'] : 0;
             $insertdata['openstudioid'] = $studioid;
             $insertdata['levelid'] = $levelid;
             $insertdata['levelcontainer'] = $level;
@@ -406,7 +410,7 @@ EOF;
             $transaction = $DB->start_delegated_transaction();
 
             $contentdata = $contentdataold = $DB->get_record('openstudio_contents', array('id' => $contentid), '*', MUST_EXIST);
-
+            $contentdata->retainimagemetadata = isset($data['retainimagemetadata']) ? $data['retainimagemetadata'] : 0;
             $previousvisibilitysetting = $contentdata->visibility;
             $currentvisibilitysetting = $data['visibility'];
 
@@ -556,9 +560,18 @@ EOF;
                     $data['urltitle'] = null;
 
                     // Check if image type and create thumbnail if necessary.
+                    if (!empty($file['mimetype']['string']) && $file['mimetype']['string'] == 'image' && empty($file['retainimagemetadata']) && !empty($contentfileid)) {
+                        self::strip_metadata_for_image($file, $context, $contentfileid);
+                    }
                     self::create_thumbnail($data,
                             $context->id, 'mod_openstudio', 'content', $contentfileid, '/', $data['content']);
+                } else {
+                    $contentfileid = $contentdata->fileid;
+                    if (!empty($file['mimetype']['string']) && $file['mimetype']['string'] == 'image' && empty($file['retainimagemetadata']) && !empty($contentfileid)) {
+                        self::strip_metadata_for_image($file, $context, $contentfileid);
+                    }
                 }
+
             } else {
                 // Nullify irrelevant record fields.
                 $data['content'] = '';
@@ -1624,5 +1637,47 @@ EOF;
         } catch (\moodle_exception $e) {
             return false;
         }
+    }
+
+    /**
+     * Strip metadata for image.
+     *
+     * @param array $file
+     * @param \context $context
+     * @param int $slotfileid itemid of file.
+     * @throws \ImagickException
+     * @throws \coding_exception
+     * @throws \file_exception
+     * @throws \stored_file_creation_exception
+     */
+    public static function strip_metadata_for_image($file, $context, $slotfileid) {
+        $fs = new \file_storage();
+        $realfile = $fs->get_file($context->id, 'mod_openstudio', 'content', $slotfileid,
+                $file['file']->filepath, $file['file']->filename);
+        $tmproot = make_temp_directory('tempimage');
+        $tmpfilepath = $tmproot . '/' . $realfile->get_contenthash();
+        $realfile->copy_content_to($tmpfilepath);
+        $img = new \Imagick($tmpfilepath);
+        $profiles = $img->getImageProfiles('icc', true);
+        $img->stripImage();
+        if(!empty($profiles)) {
+            $img->profileImage('icc', $profiles['icc']);
+        }
+        $img->writeImage($tmpfilepath);
+        $img->clear();
+        $filerecord = new \stdClass();
+        $filerecord->contextid = $context->id;
+        $filerecord->component = 'mod_openstudio';
+        $filerecord->filearea = 'contenttemp';
+        $filerecord->filepath = $file['file']->filepath;
+        $filerecord->filename = $file['file']->filename;
+        $filerecord->itemid = $file['id'];
+        // Create files.
+        $newfile = $fs->create_file_from_pathname($filerecord, $tmpfilepath);
+        // Replace new content to old content.
+        $realfile->replace_file_with($newfile);
+        // Delete the temp file.
+        $newfile->delete();
+        unlink($tmpfilepath);
     }
 }

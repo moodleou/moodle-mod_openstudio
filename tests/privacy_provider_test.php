@@ -385,7 +385,8 @@ class privacy_provider_test extends provider_testcase {
                 'lockedtime' => '',
                 'lockedby' => '',
                 'timeflagged' => transform::datetime($getrecordscontentsuser1[1]->timeflagged),
-                'lockprocessed' => transform::datetime($getrecordscontentsuser1[1]->lockprocessed)
+                'lockprocessed' => transform::datetime($getrecordscontentsuser1[1]->lockprocessed),
+                'retainimagemetadata' => transform::yesno($getrecordscontentsuser1[1]->retainimagemetadata)
         ], $content1);
         // File system.
         $this->assertNotEmpty($fs->get_area_files($this->contextstudio->id,
@@ -488,8 +489,8 @@ class privacy_provider_test extends provider_testcase {
                 'lockedtime' => '',
                 'lockedby' => '',
                 'timeflagged' => transform::datetime($foldercontent['timeflagged']),
-                'lockprocessed' => transform::datetime($foldercontent['lockprocessed'])
-
+                'lockprocessed' => transform::datetime($foldercontent['lockprocessed']),
+                'retainimagemetadata' => transform::yesno($foldercontent['retainimagemetadata'])
         ], $contentinfolder);
 
         // Get comments of student one. Student one commented in post of Student two.
@@ -544,7 +545,8 @@ class privacy_provider_test extends provider_testcase {
                 'lockedtime' => '',
                 'lockedby' => '',
                 'timeflagged' => transform::datetime($getrecordscontentsuser2[0]->timeflagged),
-                'lockprocessed' => transform::datetime($getrecordscontentsuser2[0]->lockprocessed)
+                'lockprocessed' => transform::datetime($getrecordscontentsuser2[0]->lockprocessed),
+                'retainimagemetadata' => transform::yesno($getrecordscontentsuser2[0]->retainimagemetadata)
         ], $content2);
 
         $commentsuser2 = (array) $contextdata2->get_data([get_string('privacy:subcontext:contents', 'mod_openstudio'),
