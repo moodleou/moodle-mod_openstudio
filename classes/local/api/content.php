@@ -1651,6 +1651,9 @@ EOF;
      * @throws \stored_file_creation_exception
      */
     public static function strip_metadata_for_image($file, $context, $slotfileid) {
+        if (!extension_loaded('imagick') || !class_exists('Imagick')) {
+            return;
+        }
         $fs = new \file_storage();
         $realfile = $fs->get_file($context->id, 'mod_openstudio', 'content', $slotfileid,
                 $file['file']->filepath, $file['file']->filename);
