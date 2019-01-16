@@ -31,6 +31,15 @@
  * @see upgrade_plugins_modules()
  */
 function xmldb_openstudio_install() {
+    if (PHPUNIT_TEST) {
+        // Do not setup file_types for unit tests...
+        return;
+    }
+    try {
+        core_filetypes::add_type('ipynb', 'application/x-ipynb+json', 'text');
+    } catch (coding_exception $e) {
+        // To stop any error messages being displayed since if type is already added add_type throws an exception.
+    }
 }
 
 /**

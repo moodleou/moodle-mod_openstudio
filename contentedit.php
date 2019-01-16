@@ -764,9 +764,12 @@ if ($contentform->is_cancelled()) {
                     // We only want the original zip in the draft area, not the contents as well.
                     $usercontext = context_user::instance($USER->id);
                     $draftfiles = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid);
+                    // When we upload .ipynb file,count draft files is always below 3
+                    // Because the draft contain .ipynb file and directory file.
+                    $isipynbonly = count($draftfiles) < 3;
                     foreach ($draftfiles as $draftfile) {
                         $mimetype = $draftfile->get_mimetype();
-                        if ($mimetype && $mimetype != 'application/x-smarttech-notebook') {
+                        if ($mimetype && $mimetype != 'application/x-smarttech-notebook' && !$isipynbonly) {
                             $draftfile->delete();
                         }
                     }

@@ -46,7 +46,7 @@ class mod_openstudio_content_form extends moodleform {
             '.ppt', '.pptx', '.odp', // Presentation.
             '.xls', '.xlsx', '.csv', '.ods', // Spreadsheet.
             '.dwg', '.stl', '.stp', '.eps', '.dxf', // CAD.
-            '.zip');
+            '.zip', '.ipynb');
 
     protected function definition() {
         global $CFG, $USER, $DB, $OUTPUT;

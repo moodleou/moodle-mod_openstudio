@@ -137,6 +137,10 @@ class portfolio_caller extends \portfolio_module_caller_base {
     }
 
     public function expected_time() {
+        // When we upload the error 3 files nkb,it will have an empty element,we should remove that.
+        if (is_array($this->multifiles)) {
+            $this->multifiles = array_filter($this->multifiles);
+        }
         return $this->expected_time_file();
     }
 

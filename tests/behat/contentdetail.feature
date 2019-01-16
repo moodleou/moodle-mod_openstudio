@@ -853,3 +853,40 @@ Feature: Create and edit contents detail
         And I press "Save"
         When I scroll to the bottom of the OU study planner
         Then I should not see "Image meta-data"
+
+    Scenario: Add new content and check preview for ipynb files and export is working fine with 3 files nbk.
+        When I am on "Course 1" course homepage
+        And I follow "Test Open Studio name 1"
+        And I click on "Upload content" "text"
+        And I press "Add file"
+        And I set the following fields to these values:
+            | Who can view this content | My module                                   |
+            | Title                     | Test My Content Details View                |
+            | Description               | Test My Content Details View                |
+            | Upload content            | mod/openstudio/tests/importfiles/test.ipynb |
+        And I press "Save"
+        When I wait until "Graphs in Statistical Analysis" "text" exists
+        Then I should see "usefulness of graphs"
+        And "#openstudio-content-previewipynb" "css_element" should exist
+        And I press "Edit"
+        And "test.ipynb" "text" should exist in the ".filemanager-container" "css_element"
+        And I log out (in the OSEP theme)
+        And I log in as "admin"
+        And the following config values are set as admin:
+            | enableportfolios  | 1 |
+        And I navigate to "Plugins > Manage portfolios" in site administration
+        And I set portfolio instance "File download" to "Enabled and visible"
+        And I press "Save"
+        And I log out
+        Given I am using the OSEP theme
+        And I log in as "teacher1" (in the OSEP theme)
+        When I am on "Course 1" course homepage
+        And I follow "Test Open Studio name 1"
+        And the following open studio "contents" exist:
+            | openstudio | user     | name                 | description             | file                                        |
+            | OS1        | teacher1 | TestContentDetails 1 | Test slot 1 description | mod/openstudio/tests/importfiles/3files.nbk |
+        And I follow "My Content"
+        And I follow "My Pinboard"
+        And I follow "Export"
+        And I press "All content shown"
+        Then I should see "Downloading ..."

@@ -107,7 +107,14 @@ function xmldb_openstudio_upgrade($oldversion=0) {
         upgrade_mod_savepoint(true, 2018122500, 'openstudio');
     }
 
-    // Must always return true from these functions.
+    if ($oldversion < 2019011600) {
+        try {
+            core_filetypes::add_type('ipynb', 'application/x-ipynb+json', 'text');
+        } catch (coding_exception $e) {
+            // To stop any error messages being displayed since if type is already added add_type throws an exception.
+        }
+    }
+        // Must always return true from these functions.
     return $result;
 
 

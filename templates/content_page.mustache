@@ -170,9 +170,11 @@
                 {{#contenttypeembed}}
                     {{{contentdatahtml}}}
                 {{/contenttypeembed}}
-
+                {{#previewcontent}}
+                <div id="openstudio-content-previewipynb" class="openstudio-content-preview">{{{previewcontent}}}</div>
+                {{/previewcontent}}
                 {{#contenttypeiframe}}
-                    <iframe class="openstudio-content-view-iframe" name="openstudio-content-view-iframe"
+                    <iframe class="openstudio-content-view-iframe{{#previewcontent}} ipynb-hide-iframe{{/previewcontent}}" name="openstudio-content-view-iframe"
                             src="{{contentiframesrc}}" sandbox=""></iframe>
                 {{/contenttypeiframe}}
               {{/contenttypenone}}

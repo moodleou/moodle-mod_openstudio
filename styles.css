@@ -1657,7 +1657,7 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
     padding-top: 25px;
     height: 0;
 }
-
+.openstudio-modal-content-body-iframe #openstudio-content-previewipynb,
 .openstudio-modal-content-body-iframe iframe {
     position: absolute;
     top: 0;
@@ -1665,6 +1665,10 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
     width: 100%;
     height: 100%;
     border: none;
+}
+
+.openstudio-modal-content-body-iframe #openstudio-content-previewipynb {
+    background: #fff;
 }
 
 .openstudio-modal-content-body {
@@ -7385,4 +7389,231 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-folder-preview-default img  {
         width: 72px;
     }
+}
+
+/* Notebook and Prism css */
+#page-mod-openstudio-content #openstudio-content-previewipynb.show {
+    display: block;
+}
+
+#page-mod-openstudio-content .openstudio-content-view-iframe.ipynb-hide-iframe {
+    display:none;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb .nb-notebook {
+    line-height: 1.5;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb .nb-stdout,
+#page-mod-openstudio-content #openstudio-content-previewipynb .nb-stderr {
+    white-space: pre-wrap;
+    margin: 1em 0;
+    padding: 0.1em 0.5em;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb .nb-stderr {
+    background-color: #faa;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb .nb-cell + .nb-cell {
+    margin-top: 0.5em;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb .nb-output table {
+    border: 1px solid #000;
+    border-collapse: collapse;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb .nb-output th {
+    font-weight: bold;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb .nb-output th,
+#page-mod-openstudio-content #openstudio-content-previewipynb .nb-output td {
+    border: 1px solid #000;
+    padding: 0.25em;
+    text-align: left;
+    vertical-align: middle;
+    border-collapse: collapse;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb .nb-cell {
+    position: relative;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb .nb-raw-cell {
+    white-space: pre-wrap;
+    background-color: #f5f2f0;
+    font-family: Consolas, Monaco, 'Andale Mono', monospace;
+    padding: 1em;
+    margin: .5em 0;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb .nb-output {
+    min-height: 1em;
+    width: 100%;
+    overflow-x: scroll;
+    border-right: 1px dotted #ccc;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb .nb-output img {
+    max-width: 100%;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb .nb-output:before,
+#page-mod-openstudio-content #openstudio-content-previewipynb .nb-input:before {
+    position: absolute;
+    font-family: monospace;
+    color: #999;
+    left: -7.5em;
+    width: 7em;
+    text-align: right;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb .nb-input:before {
+    content: "In [" attr(data-prompt-number) "]:";
+}
+#page-mod-openstudio-content #openstudio-content-previewipynb .nb-output:before {
+    content: "Out [" attr(data-prompt-number) "]:";
+}
+#page-mod-openstudio-content #openstudio-content-previewipynb div[style="max-height:1000px;max-width:1500px;overflow:auto;"] {
+    max-height: none !important;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb {
+    height: 590px;
+    overflow: scroll;
+    border: none;
+    width: 100%;
+    display: none;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb code[class*="language-"],
+#page-mod-openstudio-content #openstudio-content-previewipynb pre[class*="language-"] {
+    color: black;
+    text-shadow: 0 1px white;
+    font-family: Consolas, Monaco, 'Andale Mono', monospace;
+    direction: ltr;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    line-height: 1.5;
+
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+#page-mod-openstudio-content #openstudio-content-previewipynb code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+    text-shadow: none;
+    background: #b3d4fc;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+#page-mod-openstudio-content #openstudio-content-previewipynb code[class*="language-"]::selection, code[class*="language-"] ::selection {
+    text-shadow: none;
+    background: #b3d4fc;
+}
+
+@media print {
+    #page-mod-openstudio-content #openstudio-content-previewipynb code[class*="language-"],
+    #page-mod-openstudio-content #openstudio-content-previewipynb pre[class*="language-"] {
+        text-shadow: none;
+    }
+}
+
+/* Code blocks */
+#page-mod-openstudio-content #openstudio-content-previewipynb pre[class*="language-"] {
+    padding: 1em;
+    margin: .5em 0;
+    overflow: auto;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb :not(pre) > code[class*="language-"],
+#page-mod-openstudio-content #openstudio-content-previewipynb pre[class*="language-"] {
+    background: #f5f2f0;
+}
+
+/* Inline code */
+#page-mod-openstudio-content #openstudio-content-previewipynb :not(pre) > code[class*="language-"] {
+    padding: .1em;
+    border-radius: .3em;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.comment,
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.prolog,
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.doctype,
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.cdata {
+    color: slategray;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.punctuation {
+    color: #999;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb .namespace {
+    opacity: .7;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.property,
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.tag,
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.boolean,
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.number,
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.constant,
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.symbol,
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.deleted {
+    color: #905;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.selector,
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.attr-name,
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.string,
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.char,
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.builtin,
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.inserted {
+    color: #690;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.operator,
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.entity,
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.url,
+#page-mod-openstudio-content #openstudio-content-previewipynb .language-css .token.string,
+#page-mod-openstudio-content #openstudio-content-previewipynb .style .token.string {
+    color: #a67f59;
+    background: hsla(0, 0%, 100%, .5);
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.atrule,
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.attr-value,
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.keyword {
+    color: #07a;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.function {
+    color: #dd4a68;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.regex,
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.important,
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.variable {
+    color: #e90;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.important,
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.bold {
+    font-weight: bold;
+}
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.italic {
+    font-style: italic;
+}
+
+#page-mod-openstudio-content #openstudio-content-previewipynb .token.entity {
+    cursor: help;
 }

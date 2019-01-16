@@ -7,4 +7,39 @@
         <version>3.0.4</version>
         <licenseversion></licenseversion>
     </library>
+    <library>
+        <location>mod/openstudio/js/es5-shim.min.js</location>
+        <name>es5-shim</name>
+        <license>MIT</license>
+        <version>4.0.4</version>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>mod/openstudio/js/ansi_up.min.js</location>
+        <name>ansi_up</name>
+        <license>MIT</license>
+        <version>1.1.0</version>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>mod/openstudio/js/marked.min.js</location>
+        <name>marked - a markdown parser</name>
+        <license>MIT</license>
+        <version>0.3.0</version>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>mod/openstudio/js/notebook.min.js</location>
+        <name>notebook</name>
+        <license>MIT</license>
+        <version>0.3.2</version>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>mod/openstudio/js/prism.min.js</location>
+        <name>Prism</name>
+        <license>MIT</license>
+        <version>?</version>
+        <licenseversion></licenseversion>
+    </library>
 </libraries>

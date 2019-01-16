@@ -323,6 +323,7 @@ class renderer_utils {
         $contenttypeiconurl = '';
         $contentdatatitle = '';
         $contentiframesrc = '';
+        $previewcontent = '';
         $context = \context_module::instance($cmid);
 
         if (!empty($contentdata->folderid)) {
@@ -386,15 +387,25 @@ class renderer_utils {
                         $contentarea = 'notebook';
                     }
                     $contenttypeiframe = true;
+                    $ipynbfilecontent = '';
                     foreach ($contentfiles as $contentfile) {
                         $filename = $contentfile->get_filename();
+                        if ($contentfile->get_mimetype() == 'application/x-ipynb+json') {
+                            $ipynbfilecontent = $contentfile->get_content();
+                        }
                         if ($filename != '.') {
                             $extension = pathinfo($filename, PATHINFO_EXTENSION);
                             $contentfileurls[$extension] = self::make_plugin_file($context->id, $contentarea,
                                     $contentdata->id, $filename, $folderid);
                         }
                     }
-                    $contentiframesrc = $contentfileurls['html'];
+
+                    $contentiframesrc = isset($contentfileurls['html']) ? $contentfileurls['html'] : '';
+                    // When we only upload ipynb file.
+                    if (empty($contentfileurls['html']) && !empty($contentfileurls['ipynb']) && !empty($ipynbfilecontent)) {
+                        $contentiframesrc = '';
+                        $previewcontent = $ipynbfilecontent;
+                    }
                     $contentfileurl = $contentfileurls['ipynb'] . '?forcedownload=true';
                     break; // Only if this is a notebook.
                 }
@@ -560,7 +571,7 @@ class renderer_utils {
         $contentdata->contentdatahtml = $contentdatahtml;
         $contentdata->contenttypeiconurl = $contenttypeiconurl;
         $contentdata->contenttypeuseimagedefault = $contenttypeuseimagedefault;
-
+        $contentdata->previewcontent = $previewcontent;
         $contentdata->contentfileurl = $contentfileurl;
         $contentdata->contentthumbnailfileurl = $contentthumbnailfileurl;
         $contentdata->contentdatatitle = $contentdatatitle;

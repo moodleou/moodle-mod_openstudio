@@ -306,6 +306,7 @@ $PAGE->requires->strings_for_js(
         'modulejsdialogcontentarchiveconfirm', 'deletearchiveversionheader', 'deletearchiveversionheaderconfirm'),
     'mod_openstudio');
 $PAGE->requires->js_call_amd('mod_openstudio/contentpage', 'init');
+$PAGE->requires->js_call_amd('mod_openstudio/previewipynb', 'init');
 
 // Update flag and tracking.
 $tracking = tracking::READ_CONTENT;
