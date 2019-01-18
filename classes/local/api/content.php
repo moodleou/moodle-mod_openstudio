@@ -1321,7 +1321,7 @@ EOF;
                                 'filename'  => $contentfile->get_filename(),
                                 'userid'    => $contentfile->get_userid()
                         );
-                        $fs->convert_image(
+                        @$fs->convert_image(
                                 $contenttumbnailfile, $contentfile, defaults::CONTENTTHUMBNAIL_WIDTH, null, true, null);
                     } else {
                         $contenttumbnailfile = array(

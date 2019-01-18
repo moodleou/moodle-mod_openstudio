@@ -2454,6 +2454,7 @@ a.openstudio-add-title:hover  {
 
 .openstudio-grid-item-content-preview {
     display: block;
+    background: #ddf0f8;
 }
 
 .openstudio-grid-item-content-preview a,
@@ -2464,6 +2465,7 @@ a.openstudio-add-title:hover  {
 .openstudio-grid-item-content-preview img {
     height: auto;
     width: 100%;
+    min-height: 137px;
 }
 
 .openstudio-grid-item-content-preview-default {
