@@ -256,6 +256,18 @@ class mod_openstudio_content_form extends moodleform {
                     }
                 }
             }
+            if (!extension_loaded('imagick') || !class_exists('Imagick')) {
+                $mform->addElement('hidden', 'retainimagemetadata');
+                $mform->setType('retainimagemetadata', PARAM_INT);
+                $mform->setDefault('retainimagemetadata', 0);
+            } else {
+                $mform->addElement('checkbox', 'retainimagemetadata', get_string('retainimagemetadata', 'openstudio'));
+                $mform->addHelpButton('retainimagemetadata', 'retainimagemetadata', 'openstudio');
+            }
+
+            if (!empty($this->_customdata['retainimagemetadata'])) {
+                $mform->setDefault('retainimagemetadata', $this->_customdata['retainimagemetadata']);
+            }
 
             $mform->addElement('html', html_writer::end_tag('div'));
             $mform->addElement('html', html_writer::start_tag('div',
@@ -302,11 +314,6 @@ class mod_openstudio_content_form extends moodleform {
 
         $mform->disabledIf('ownershipdetail', 'ownership', 'neq', '2');
 
-        $mform->addElement('checkbox', 'retainimagemetadata', get_string('retainimagemetadata', 'openstudio'));
-        $mform->addHelpButton('retainimagemetadata', 'retainimagemetadata', 'openstudio');
-        if (!empty($this->_customdata['retainimagemetadata'])) {
-            $mform->setDefault('retainimagemetadata', $this->_customdata['retainimagemetadata']);
-        }
         // Add custom class to style tag label align with input.
         $mform->addElement('tags', 'tags', get_string('tags'),
             array('itemtype' => 'openstudio_contents', 'component' => 'mod_openstudio'),
@@ -343,9 +350,13 @@ class mod_openstudio_content_form extends moodleform {
     public function validation($data, $files) {
         global $USER;
         $errors = parent::validation($data, $files);
-        if (empty($data['retainimagemetadata']) && (!empty($data['showgps']) || !empty($data['showimagedata']))) {
-            $errors['retainimagemetadata'] = get_string('retainimagemetadataerror', 'openstudio');
+        if (!(!extension_loaded('imagick') || !class_exists('Imagick'))) {
+            // Only check retain EXIF data if option is shown.
+            if (empty($data['retainimagemetadata']) && (!empty($data['showgps']) || !empty($data['showimagedata']))) {
+                $errors['retainimagemetadata'] = get_string('retainimagemetadataerror', 'openstudio');
+            }
         }
+
         if (!empty($data['attachments'])) {
             $fs = get_file_storage();
             $usercontext = context_user::instance($USER->id);

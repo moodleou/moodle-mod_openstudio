@@ -825,6 +825,7 @@ Feature: Create and edit contents detail
         And I should see "TestContentDetails 1"
         And I should see "Owner of this post"
         # Enable Show GPS Data and Show Image Data but don't check retain exif data.
+        # Following will fail if Imagick not installed as validation of these fields is then disabled.
         And I click on "input#id_editbutton" "css_element"
         And I click on "input#id_showgps" "css_element"
         And I press "Save"
