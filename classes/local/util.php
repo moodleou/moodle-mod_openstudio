@@ -320,8 +320,6 @@ class util {
             $PAGE->set_pagelayout('base');
             if ($PAGE->theme->name === 'ou') {
                 $PAGE->set_pagelayout('fullpage');
-            } else {
-                $PAGE->set_pagelayout('print');
             }
         }
 
