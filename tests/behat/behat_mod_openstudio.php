@@ -421,24 +421,24 @@ EOF;
             $methodname = 'create_' . $elementdatagenerator;
             if (method_exists($this->plugingenerator, $methodname)) {
                 // Using data generators directly.
-                $this->plugingenerator->{$methodname}($elementdata);
+                $iditem = $this->plugingenerator->{$methodname}($elementdata);
                 if (!empty($elementdata['index'])) {
-                    $iditem = $this->plugingenerator->{$methodname}($elementdata);
-
                     // Get areaname.
                     switch ($elementdatagenerator) {
                         // Contents have areaname is posts.
                         case 'contents':
-                            $elementdatagenerator = 'posts';
+                            $areaname = 'posts';
                             break;
                         // Comment have areaname is comments.
                         case 'comment':
-                            $elementdatagenerator = 'comments';
+                            $areaname = 'comments';
                             break;
+                        default:
+                            $areaname = $elementdatagenerator;
                     }
                     // Create mock document for global search.
                     $openstudio = $this->plugingenerator->get_studio_by_idnumber($elementdata['openstudio']);
-                    $this->create_mock_index_data($openstudio, $iditem, $elementdata['keyword'], $elementdatagenerator,
+                    $this->create_mock_index_data($openstudio, $iditem, $elementdata['keyword'], $areaname,
                         $elementdata['keyword'], $openstudio->intro);
                 }
 
@@ -460,13 +460,23 @@ EOF;
      * @param $areaname
      * @param $title
      * @param $content
+     * @throws \moodle_exception
      */
     protected function create_mock_index_data($openstudio, $itemid, $query, $areaname, $title, $content) {
-
-        // Add item to fake data.
+        // Data stub.
         $fakedata = new \stdClass();
         $fakedata->query = $query;
         $fakedata->results = [];
+
+        // Get existing data if exists.
+        if ($existing = get_config('core_search', 'behat_fakeresult')) {
+            $existing = json_decode($existing);
+        }
+
+        if (!$existing || $existing->query != $fakedata->query) {
+            // New or existing data doesn't have this query so start new data (can setup 1 query).
+            $existing = $fakedata;
+        }
 
         $resultdata = new \stdClass();
         $resultdata->itemid = $itemid;
@@ -482,9 +492,9 @@ EOF;
         $resultdata->extrafields = new \stdClass();
         $resultdata->extrafields->coursefullname = $openstudio->sitename;
 
-        $fakedata->results[] = $resultdata;
+        $existing->results[] = $resultdata;
 
-        set_config('behat_fakeresult', json_encode($fakedata), 'core_search');
+        set_config('behat_fakeresult', json_encode($existing), 'core_search');
     }
 
     /**

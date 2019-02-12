@@ -46,6 +46,7 @@ class search {
      * @param int $nextstart
      * @param string $filterfunction
      * @return object Return search result.
+     * @throws \moodle_exception
      */
     public static function query($cm, $searchtext,
             $pagestart = 0, $pagesize = \mod_openstudio\local\util\defaults::STREAMPAGESIZE, $nextstart = 0,
@@ -53,6 +54,15 @@ class search {
             $filterfunction = 'openstudio_ousearch_filter_permission') {
         global $PAGE;
 
+        $searchresults = new \stdClass();
+
+        $cminfo = \cm_info::create($cm);
+        $globalsearch = false;
+        if (util::moodle_global_search_installed()
+                && \local_moodleglobalsearch\util::is_activity_search_enabled($cminfo)) {
+            $globalsearch = true;
+            $pagesize = \core_search\manager::DISPLAY_RESULTS_PER_PAGE;
+        }
         $limitfrom = 0;
         $limitnum = 0;
         if (($pagestart >= 0) && ($pagesize > 0)) {
@@ -62,11 +72,8 @@ class search {
         if ($nextstart > 0) {
             $limitfrom = $nextstart;
         }
-        $cminfo = \cm_info::create($cm);
-        $searchresults = new \stdClass();
 
-        if (util::moodle_global_search_installed()
-                && \local_moodleglobalsearch\util::is_activity_search_enabled($cminfo)) {
+        if ($globalsearch) {
             $search = \core_search\manager::instance();
 
             $data = new \stdClass();
@@ -83,8 +90,16 @@ class search {
             $context = \context_module::instance($cm->id);
             $data->contextids = [$context->id];
 
+            if (defined('BEHAT_SITE_RUNNING')) {
+                if ($fakeresult = get_config('core_search', 'behat_fakeresult')) {
+                    // We have to get the total results for behat tests here.
+                    $results = json_decode($fakeresult);
+                    $searchresults->dbrows = count($results->results);
+                }
+            }
+
             // Get global search results.
-            $results = $search->paged_search($data, 0);
+            $results = $search->paged_search($data, $pagestart);
 
             $searchresults->dbstart = 1;
             $searchresults->results = [];
@@ -95,8 +110,9 @@ class search {
                     $searchresults->results[$data->intref1] = self::global_search_result($result);
                 }
             }
-
-            $searchresults->dbrows = count($searchresults->results);
+            if (!defined('BEHAT_SITE_RUNNING')) {
+                $searchresults->dbrows = $results->totalcount;
+            }
         } else {
             // Do nothing if OU search is not installed.
             if (!util::search_installed()) {
@@ -113,13 +129,19 @@ class search {
         $result = array();
         $pagenext = $pageprevious = 0;
         if (isset($searchresults->results)) {
-            $nextsearchresults = $searchresults->dbstart;
 
             foreach ($searchresults->results as $key => $searchresult) {
                 $result[$key] = $searchresult;
             }
-            if ($searchresults->dbrows >= $pagesize) {
-                $pagenext = $pagestart + 1;
+            if (!$globalsearch) {
+                $nextsearchresults = $searchresults->dbstart;
+                if ($searchresults->dbrows >= $pagesize) {
+                    $pagenext = $pagestart + 1;
+                }
+            } else {
+                if (($pagestart + 1) * $pagesize < $searchresults->dbrows) {
+                    $pagenext = $pagestart + 1;
+                }
             }
             if ($pagestart > 0) {
                 $pageprevious = $pagestart - 1;
@@ -127,7 +149,8 @@ class search {
         }
 
         return (object) array('result' => $result,
-                'next' => $pagenext, 'previous' => $pageprevious, 'nextstart' => $nextsearchresults);
+                'next' => $pagenext, 'previous' => $pageprevious, 'nextstart' => $nextsearchresults,
+                'total' => $searchresults->dbrows, 'isglobal' => $globalsearch);
     }
 
     /**

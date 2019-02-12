@@ -92,6 +92,21 @@ I need to be able to search within OpenStudio
         Then I should see "Student content 5"
         Then I should not see "Student slot 4"
         Then I should see "content — 4 results found"
+        # Search my module - pagination.
+        Given the following config values are set as admin:
+          | streampagesize | 2 | openstudio |
+        When I follow "Shared Content"
+        And I set the field "query" to "content"
+        And I click on "form.oustudyplan-searchbox button" "css_element"
+        Then I should see "Student content 1"
+        And I should see "Student content 2"
+        And I should not see "Student content 3"
+        And I should see "content — 2 or more results found"
+        When I follow "More search results"
+        Then I should see "Student content 3"
+        And I should see "content — 2 or more results found"
+        And the following config values are set as admin:
+            | streampagesize | 100 | openstudio |
 
         # Search my module by another student
         Given I am using the OSEP theme
@@ -166,3 +181,47 @@ I need to be able to search within OpenStudio
         Then I should not see "folder — 1 results found"
         And I should see "Search result for terms:"
         And I should see "No results? Try searching from within My Module"
+
+    Scenario: Global search
+        Given the following config values are set as admin:
+            | modulesitesearch | 2 | local_moodleglobalsearch |
+            | activitysearch   | 2 | local_moodleglobalsearch |
+
+        When I log in as "student1"
+
+        And the following open studio "folders" exist:
+            | openstudio | user     | name                     | description                      | visibility | contenttype    | index | keyword |
+            | OS1        | student1 | Student content folder 2 | My Folder Overview Description 2 | module     | folder_content | 1     | keyword |
+            | OS1        | student1 | Student content folder 3 | My Folder Overview Description 3 | module     | folder_content | 1     | keyword |
+        And the following open studio "contents" exist:
+            | openstudio | user     | name         | description                    | visibility | index | keyword |
+            | OS1        | student1 | My Content 1 | Test My Content Details View 1 | module     | 1     | keyword |
+            | OS1        | student1 | My Content 2 | Test My Content Details View 2 | module     | 2     | keyword |
+            | OS1        | student1 | My Content 3 | Test My Content Details View 3 | module     | 3     | keyword |
+            | OS1        | student1 | My Content 4 | Test My Content Details View 4 | module     | 4     | keyword |
+            | OS1        | student1 | My Content 5 | Test My Content Details View 5 | module     | 5     | keyword |
+            | OS1        | student1 | My Content 6 | Test My Content Details View 6 | module     | 6     | keyword |
+            | OS1        | student1 | My Content 7 | Test My Content Details View 7 | module     | 7     | keyword |
+            | OS1        | student1 | My Content 8 | Test My Content Details View 8 | module     | 8     | keyword |
+            | OS1        | student1 | My Content 9 | Test My Content Details View 9 | module     | 9     | keyword |
+        And the following open studio "comments" exist:
+            | openstudio | user     | content      | comment                   | index | keyword |
+            | OS1        | student1 | My Content 1 | My Notification comment 1 | 1     | keyword |
+            | OS1        | student1 | My Content 2 | My Notification comment 2 | 1     | keyword |
+
+        And I am on "Course 1" course homepage
+        Then I follow "Sharing Studio"
+        And I set the field "q" to "keyword"
+        And I click on "form.oustudyplan-searchbox button" "css_element"
+        And I should see "keyword — 13 results found"
+        And I should see "My Content 1"
+        And I should not see "Previous search results"
+        Given I follow "More search results"
+        Then I should see "My Content 9"
+        And I should not see "More search results"
+        And I should see "keyword — 13 results found"
+        Given I follow "Previous search results"
+        Then I should not see "My Content 9"
+        And I should not see "Previous search results"
+        And I should see "More search results"
+        And I should see "keyword — 13 results found"

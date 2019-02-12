@@ -171,12 +171,16 @@ if (trim($searchtext) == '') {
 
     // Enrich the search result with additional content information.
     if (isset($searchresultdata->result)) {
+        if ($searchresultdata->isglobal) {
+            $streamdatapagesize = \core_search\manager::DISPLAY_RESULTS_PER_PAGE;
+        }
         $contentdata = (object)array(
                 'contents' => array(),
                 'total' => count($searchresultdata->result),
                 'previouspage' => $searchresultdata->previous,
                 'nextpage' => $searchresultdata->next,
                 'nextstart' => $searchresultdata->nextstart,
+                'allresults' => $searchresultdata->total,
                 'streamdatapagesize' => $streamdatapagesize,
                 'pagestart' => $pagestart,
                 'pageurl' => $strpageurl);
@@ -353,8 +357,13 @@ if ($contentdata->total == 0) {
 } else {
     if (($pagestart < $contentdata->nextpage) || ($pagestart > 0)) {
         // Need to paginate.
-        $contentdata->searchmessage .= get_string('searchresultsummarycount2', 'openstudio',
-                array('total' => $streamdatapagesize));
+        if ($searchresultdata->isglobal) {
+            $contentdata->searchmessage .= get_string('searchresultsummarycount', 'openstudio',
+                    array('total' => $contentdata->allresults));
+        } else {
+            $contentdata->searchmessage .= get_string('searchresultsummarycount2', 'openstudio',
+                    array('total' => $streamdatapagesize));
+        }
 
         if ($pagestart > 0) {
             // Has previous page.
