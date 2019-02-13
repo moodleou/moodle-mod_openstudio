@@ -121,15 +121,15 @@ Feature: Own profile view in Open Studio
       And I should see "Participation"
       And I should see "My studio work progress"
       And I follow "My Content > My Pinboard" in the openstudio navigation
-      Then I should see "Teacher 1"
+      Then I should see "Teacher 1" in the "#region-main" "css_element"
       And I should see "Participation"
       And I should see "My studio work progress"
       And I follow "Shared content > My Module" in the openstudio navigation
-      Then I should not see "Teacher 1"
+      Then I should not see "Teacher 1" in the "#region-main" "css_element"
       And I should not see "Participation"
       And I should not see "My studio work progress"
       And I follow "Shared content > My Group" in the openstudio navigation
-      Then I should not see "Teacher 1"
+      Then I should not see "Teacher 1" in the "#region-main" "css_element"
       And I should not see "Participation"
       And I should not see "My studio work progress"
 
@@ -140,7 +140,7 @@ Feature: Own profile view in Open Studio
       And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 1"
       And I follow "My content > My Activities" in the openstudio navigation
-      Then I should see "Student 1"
+      Then I should see "Student 1" in the "#region-main" "css_element"
       And I should see "Participation"
       And I should see "My studio work progress"
 
