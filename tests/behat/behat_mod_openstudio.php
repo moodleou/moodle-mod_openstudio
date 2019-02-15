@@ -642,7 +642,7 @@ EOF;
             $selector = "ul > li.dropdown.".$subitem." > a > span.openstudio-navigation-text";
             $menulink = $this->getSession()->getPage()->find("css", $selector);
             $menulink->click();
-            $linknode = $this->getSession()->getPage()->find('xpath', '//div[class="openstudio-nav-primary"]//a[contains(translate(' .
+            $linknode = $this->getSession()->getPage()->find('xpath', '//div[@class="openstudio-nav-primary"]//a[contains(translate(' .
                     'normalize-space(.), "abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"),"' .
                     strtoupper($parentnodes[1]) . '")]');
             if (empty($linknode)) {
