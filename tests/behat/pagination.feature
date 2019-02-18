@@ -606,7 +606,7 @@ Feature: Pagination Open Studio stream views
         And I should see "9" in the ".openstudio-desktop-paging" "css_element"
 
         # Click page 1, see again from 1 - 6 and 9 page
-        And I click on "1" "link"
+        And I click on "1" "link" in the ".openstudio-desktop-paging" "css_element"
         And I should not see "7" in the ".openstudio-desktop-paging" "css_element"
         And I should not see "8" in the ".openstudio-desktop-paging" "css_element"
 
