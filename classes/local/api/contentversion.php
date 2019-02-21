@@ -75,7 +75,7 @@ EOF;
             // We need to get the course associated with the content.
             $cm = util::get_coursemodule_from_studioid($versiondata->openstudioid);
             if ($cm === false) {
-                throw new \moodle_exception('errorunexpectedbehaviour', 'studio', '');
+                throw new \moodle_exception('errorunexpectedbehaviour', 'openstudio', '');
             }
 
             $ismember = group::is_content_group_member(

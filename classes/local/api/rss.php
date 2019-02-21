@@ -402,7 +402,7 @@ EOF;
                       JOIN {groups} tg1 ON tg1.id = tgm1.groupid AND tg1.courseid = c.id
                       JOIN {groups_members} tgm2 ON tg1.id = tgm2.groupid
                       JOIN {course_modules} cm ON cm.instance = st.id
-                      JOIN {modules} m ON m.id = cm.module AND m.name = 'studio'
+                      JOIN {modules} m ON m.id = cm.module AND m.name = 'openstudio'
                       JOIN {groupings_groups} gg3 ON gg3.groupingid = cm.groupingid AND gg3.groupid = tg1.id
                      WHERE ra.roleid {$rolesql}
                        AND ra.userid = ?

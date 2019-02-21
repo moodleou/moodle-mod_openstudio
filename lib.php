@@ -797,8 +797,8 @@ EOF;
     }
 
     if ($result->intref2 == content::VISIBILITY_TUTOR) {
-        $cm = get_coursemodule_from_id('studio', $result->coursemoduleid);
-        $cminstance = $DB->get_record('studio', array('id' => $cm->instance), '*', MUST_EXIST);
+        $cm = get_coursemodule_from_id('openstudio', $result->coursemoduleid);
+        $cminstance = $DB->get_record('openstudio', array('id' => $cm->instance), '*', MUST_EXIST);
         $tutorroles = array_filter(explode(',', $cminstance->tutorroles));
         return content::user_is_tutor($result->intref1, $USER->id, $tutorroles);
     }
