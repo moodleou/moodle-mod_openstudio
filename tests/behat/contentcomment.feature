@@ -85,7 +85,7 @@ Feature: Add/Reply/Flag/Delete comment
 
         # The OU Alert Plugin is enable by Admin
         When I log in as "admin"
-        And I navigate to "OU Alerts" node in "Site administration > Plugins > Reports"
+        And I navigate to "Plugins > Reports > OU Alerts" in site administration
         And I follow "OU Alerts"
         And I set the following fields to these values:
             | id_s__oualerts_enabled | 1 |
