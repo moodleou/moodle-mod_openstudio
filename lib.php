@@ -835,7 +835,10 @@ function openstudio_ousearch_filter_browseslots_useronly(&$result) {
  */
 function openstudio_ousearch_update_all($feedback = true, $courseid = 0) {
     global $DB;
-
+    if (get_config('local_ousearch', 'ousearchindexingdisabled')) {
+        // Do nothing if the OU Search system is turned off.
+        return;
+    }
     raise_memory_limit(MEMORY_EXTRA);
 
     if ($courseid > 0) {
