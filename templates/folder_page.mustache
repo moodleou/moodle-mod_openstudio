@@ -89,13 +89,13 @@
             </div>
             <div class="openstudio-folder-view-title-managepost {{#hasguidance}}openstudio-folder-view-hasguidance{{/hasguidance}}">
                 {{#hasguidance}}
-                    <button id="id_activity_guidance" name="activity-guidance" class="osep-smallbutton">
+                    <button id="id_activity_guidance" name="activity-guidance" class="osep-smallbutton btn btn-secondary">
                         {{#str}}folderactivityguidance, mod_openstudio{{/str}}
                     </button>
                 {{/hasguidance}}
                 {{#myfolder}}
                     {{#showorderpostbutton}}
-                        <button id="id_orderpost" name="managepost" class="osep-smallbutton">
+                        <button id="id_orderpost" name="managepost" class="osep-smallbutton btn btn-secondary">
                             {{#str}}folderorderpost, mod_openstudio{{/str}}
                         </button>
                     {{/showorderpostbutton}}
@@ -212,7 +212,7 @@
             <div class="openstudio-folder-view-buttons clearfix">
                 <div>
                     {{#contentdeleteenable}}
-                        <input id="id_deletebutton" class="osep-smallbutton" name="deletefolder" value="{{#str}}folderdeletedfolder, mod_openstudio{{/str}}" type="button">
+                        <input id="id_deletebutton" class="osep-smallbutton btn btn-secondary" name="deletefolder" value="{{#str}}folderdeletedfolder, mod_openstudio{{/str}}" type="button">
                     {{/contentdeleteenable}}
 
                     {{#contentlockenable}}
@@ -224,16 +224,16 @@
                             {{^locked}}
                                 data-lockstate="unlocked"
                                 value="{{#str}}folderlockfolder, mod_openstudio{{/str}}"
-                                class="osep-smallbutton"
+                                class="osep-smallbutton btn btn-secondary"
                             {{/locked}}
-                            class="osep-smallbutton"
+                            class="osep-smallbutton btn btn-secondary"
                         />
                     {{/contentlockenable}}
                 </div>
                 <div class="openstudio-folder-view-request-feedback clearfix">
                     {{#contentrequestfeedbackenable}}
                         <button id="content_view_icon_{{contentflagrequestfeedback}}"
-                                class="openstudio-request-feedback-button osep-smallbutton"
+                                class="openstudio-request-feedback-button osep-smallbutton btn btn-secondary"
                                 data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagrequestfeedback}}"
                                 data-mode="{{#contentflagrequestfeedbackactive}}off{{/contentflagrequestfeedbackactive}}
                                     {{^contentflagrequestfeedbackactive}}on{{/contentflagrequestfeedbackactive}}">
@@ -245,7 +245,7 @@
             </div>
             {{#viewdeletedpostenable}}
                 <input id="id_viewdeletedpostbutton" name="viewdeletedpostbutton" type="button"
-                       class="osep-smallbutton" value="{{#str}}openstudio:viewdeletedposts, mod_openstudio{{/str}}"/>
+                       class="osep-smallbutton btn btn-secondary" value="{{#str}}openstudio:viewdeletedposts, mod_openstudio{{/str}}"/>
             {{/viewdeletedpostenable}}
         </div>
     </div>

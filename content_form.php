@@ -213,7 +213,7 @@ class mod_openstudio_content_form extends moodleform {
                     $maxbytes = (isset($CFG->maxbytes) ? $CFG->maxbytes : \mod_openstudio\local\util\defaults::MAXBYTES);
                 }
 
-                $mform->addElement('filemanager', 'attachments', get_string('contentformattachments', 'openstudio'), array('class' => 'openstudio-upload-file'),
+                $mform->addElement('filemanager', 'attachments', get_string('files', 'moodle'), array('class' => 'openstudio-upload-file'),
                         array('maxbytes' => $maxbytes, 'subdirs' => false,
                               'maxfiles' => 1, 'accepted_types' => self::ACCEPT_TYPE));
 

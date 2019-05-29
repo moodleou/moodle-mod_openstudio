@@ -76,6 +76,7 @@ Feature: My Activity view in Open Studio
   Scenario: Upload a new content without file upload
     When I follow "Test Open Studio name 1"
     And I follow "My Content > My Activities" in the openstudio navigation
+    And I click on "a.openstudio-profile-mypaticipation" "css_element"
     And I follow "Content 1.1 Required"
     And I set the following fields to these values:
       | Who can view this content | My module                   |
@@ -90,13 +91,14 @@ Feature: My Activity view in Open Studio
   Scenario: Upload a new content with file upload
     When I follow "Test Open Studio name 1"
     And I follow "My Content > My Activities" in the openstudio navigation
+    And I click on "a.openstudio-profile-mypaticipation" "css_element"
     And I follow "Content 1.1 Required"
     And I press "Add file"
     And I set the following fields to these values:
       | Who can view this content | My module                                  |
       | Title                     | Test My Activities View 2                  |
       | Description               | My Activities Description 2                |
-      | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+      | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
     And I press "Save"
     And I follow "My Content > My Activities" in the openstudio navigation
     And I should see "Test My Activities View 2"
@@ -106,6 +108,7 @@ Feature: My Activity view in Open Studio
   Scenario: Upload a new content with Add web/embed link
     When I follow "Test Open Studio name 1"
     And I follow "My Content > My Activities" in the openstudio navigation
+    And I click on "a.openstudio-profile-mypaticipation" "css_element"
     And I follow "Content 1.1 Required"
     And I press "Add web/embed link"
     And I set the following fields to these values:
@@ -122,13 +125,14 @@ Feature: My Activity view in Open Studio
   Scenario:  Edit the setting of the new content uploaded
     When I follow "Test Open Studio name 1"
     And I follow "My Content > My Activities" in the openstudio navigation
+    And I click on "a.openstudio-profile-mypaticipation" "css_element"
     And I follow "Content 1.1 Required"
     And I press "Add file"
     And I set the following fields to these values:
       | Who can view this content | My module                                  |
       | Title                     | Test My Activities View 4                  |
       | Description               | My Activities Description 4                |
-      | Upload content            | mod/openstudio/tests/importfiles/test2.jpg |
+      | Files                     | mod/openstudio/tests/importfiles/test2.jpg |
     And I press "Save"
     And I follow "My Content > My Activities" in the openstudio navigation
     And I click on "div.openstudio-grid-item-content" "css_element"
@@ -155,6 +159,7 @@ Feature: My Activity view in Open Studio
     And I press "Save Changes"
     And I follow "Test Open Studio name 1"
     And I follow "My Content > My Activities" in the openstudio navigation
+    And I click on "a.openstudio-profile-mypaticipation" "css_element"
     And I follow "Folder content 3.2"
     # Check add section is hidden.
     Then I should not see "Add new content"

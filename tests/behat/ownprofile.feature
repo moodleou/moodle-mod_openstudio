@@ -180,7 +180,7 @@ Feature: Own profile view in Open Studio
         | Who can view this content | My module                                  |
         | Title                     | Test My Ownprofile View                    |
         | Description               | My Ownprofile View Description             |
-        | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+        | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
       And I press "Save"
       And I follow "My content > My Activities" in the openstudio navigation
       Then I should see "Test My Ownprofile View"
@@ -203,7 +203,7 @@ Feature: Own profile view in Open Studio
         | Who can view this content | My module                                  |
         | Title                     | Test My Ownprofile View Student            |
         | Description               | Test My Ownprofile View Description        |
-        | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+        | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
       And I press "Save"
       And I follow "My content > My Activities" in the openstudio navigation
       Then I should see "Test My Ownprofile View Student"

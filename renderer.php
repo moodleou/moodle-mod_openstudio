@@ -1318,4 +1318,43 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         return $mobilepagingbar . $desktoppagingbar;
     }
+
+    /**
+     * Adds the import button to a toolbar at bottom of the page.
+     *
+     * @param \moodle_url $url URL for button target (null if implemented only in JS)
+     * @param string $text Optional text label (HTML) if not using default
+     */
+    public function add_import_button(\moodle_url $url = null, $text = null) {
+        // This function is empty and for theme renderers to override.
+    }
+
+    /**
+     * Adds the export button to a toolbar at bottom of the page.
+     */
+    public function add_export_button() {
+        // This function is empty and for theme renderers to override.
+    }
+
+    /**
+     * This function renders the HTML fragment for the import and export buttons.
+     *
+     * @param bool $importenable If true, the import button will be included
+     * @param bool $exportenable If true, the export button will be included
+     * @param int $id Course_module ID
+     * @return string The rendered HTML fragment.
+     */
+    public function render_import_export_buttons($importenable, $exportenable, $id) {
+        $data = new stdClass();
+
+        if ($importenable) {
+            $data->importlink = new moodle_url('/mod/openstudio/import.php', array('id' => $id));
+        }
+
+        if ($exportenable) {
+            $data->exportlink = "#";
+        }
+
+        return $this->render_from_template('mod_openstudio/import_export_buttons', $data);
+    }
 }

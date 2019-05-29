@@ -67,7 +67,7 @@ Feature: Open Studio group stream
           | Who can view this content | Group - group1                             |
           | Title                     | Test My Group Board View 1                 |
           | Description               | My Group Board View Description 1          |
-          | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+          | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
         And I follow "Shared content > My Group" in the openstudio navigation
         Then I should see "Test My Group Board View 1"
@@ -97,7 +97,7 @@ Feature: Open Studio group stream
           | Who can view this content | Group - group3                             |
           | Title                     | Test My Group Board View 3                 |
           | Description               | My Group Board View Description 3          |
-          | Upload content            | mod/openstudio/tests/importfiles/test3.jpg |
+          | Files                     | mod/openstudio/tests/importfiles/test3.jpg |
         And I press "Save"
         And I follow "Shared content > My Group" in the openstudio navigation
         Then I should see "Test My Group Board View 3"
@@ -124,7 +124,7 @@ Feature: Open Studio group stream
           | Who can view this content | Group - group2                             |
           | Title                     | Test My Group Board View 2                 |
           | Description               | My Group Board View Description 2          |
-          | Upload content            | mod/openstudio/tests/importfiles/test2.jpg |
+          | Files                     | mod/openstudio/tests/importfiles/test2.jpg |
         And I press "Save"
         And I follow "Shared content > My Group" in the openstudio navigation
         Then I should see "Test My Group Board View 2"

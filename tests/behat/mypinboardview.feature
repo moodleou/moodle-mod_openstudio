@@ -68,7 +68,7 @@ Feature: Open Studio pinboard stream
           | Who can view this content | Only me                                    |
           | Title                     | Test My Pinboard View                      |
           | Description               | My Pinboard View Description               |
-          | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+          | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
         And I follow "My Content > My Pinboard" in the openstudio navigation
         Then I should see "Test My Pinboard View"
@@ -91,7 +91,7 @@ Feature: Open Studio pinboard stream
           | Who can view this content | My module                                       |
           | Title                     | My Module Title                                 |
           | Description               | My Module Description                           |
-          | Upload content            | mod/openstudio/tests/importfiles/Winterfell.jpg |
+          | Files                     | mod/openstudio/tests/importfiles/Winterfell.jpg |
         And I press "Save"
         And I follow "Shared content > My Module" in the openstudio navigation
 

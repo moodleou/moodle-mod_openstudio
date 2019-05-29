@@ -70,7 +70,7 @@ Feature: Create and edit contents detail
           | Who can view this content | My module                                  |
           | Title                     | Test My Content Details View               |
           | Description               | Test My Content Details View               |
-          | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+          | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
           | Tags                      | Tests Add New Tags                         |
         And I press "Save"
 
@@ -634,7 +634,7 @@ Feature: Create and edit contents detail
           | Who can view this content | My module                                  |
           | Title                     | Test My Content Details View Archive 1     |
           | Description               | Test My Content Details View Archive 1     |
-          | Upload content            | mod/openstudio/tests/importfiles/test2.jpg |
+          | Files                     | mod/openstudio/tests/importfiles/test2.jpg |
           | Tags                      | Tests Add New Tags                         |
         And I press "Save"
         And I should see "Post archive"
@@ -665,7 +665,7 @@ Feature: Create and edit contents detail
           | Who can view this content | My module                                  |
           | Title                     | Test My Content Details View Archive 2     |
           | Description               | Test My Content Details View Archive 2     |
-          | Upload content            | mod/openstudio/tests/importfiles/test3.jpg |
+          | Files                     | mod/openstudio/tests/importfiles/test3.jpg |
           | Tags                      | Tests Add New Tags                         |
         And I press "Save"
         And I press "Post archive"
@@ -846,7 +846,7 @@ Feature: Create and edit contents detail
             | Who can view this content | My module                                      |
             | Title                     | Test My Content Details View                   |
             | Description               | Test My Content Details View                   |
-            | Upload content            | mod/openstudio/tests/importfiles/geotagged.jpg |
+            | Files                     | mod/openstudio/tests/importfiles/geotagged.jpg |
             | Tags                      | Tests Add New Tags                             |
             | showimagedata             | 1                                              |
             | showgps                   | 1                                              |
@@ -863,7 +863,7 @@ Feature: Create and edit contents detail
             | Who can view this content | My module                                   |
             | Title                     | Test My Content Details View                |
             | Description               | Test My Content Details View                |
-            | Upload content            | mod/openstudio/tests/importfiles/test.ipynb |
+            | Files                     | mod/openstudio/tests/importfiles/test.ipynb |
         And I press "Save"
         When I wait until "Graphs in Statistical Analysis" "text" exists
         Then I should see "usefulness of graphs"

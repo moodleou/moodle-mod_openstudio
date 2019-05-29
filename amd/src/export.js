@@ -30,7 +30,7 @@ define([
     'core/str',
     'core/config',
     'mod_openstudio/osdialogue'
-], function($, Y, Str, SiteConfig, OSDialogue) {
+], function($, Y, Str, SiteConfig) {
     var t;
     t = {
 
@@ -66,7 +66,12 @@ define([
          */
         init: function(options) {
             t.mconfig = options;
-            t.dialogue = t.createExportDialogue();
+
+            Y.use('moodle-core-notification-dialogue', function() {
+                require(['mod_openstudio/osdialogue'], function(osDialogue){
+                    t.dialogue = t.createExportDialogue(osDialogue);
+                });
+            });
 
             // Click event on export bottom button.
             $(t.CSS.EXPORTBUTTON).on('click', function(e) {
@@ -89,7 +94,7 @@ define([
          * @method createExportDialogue
          * @return M.core.dialogue
          */
-        createExportDialogue: function() {
+        createExportDialogue: function(osDialogue) {
 
             /**
              * Set header for dialog
@@ -195,7 +200,7 @@ define([
                     });
             }
 
-            var dialogue = new OSDialogue({
+            var dialogue = new osDialogue({
                 closeButton: true,
                 visible: false,
                 centered: true,

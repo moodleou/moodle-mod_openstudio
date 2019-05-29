@@ -9,8 +9,8 @@ Feature: Export to my contents
             | username | firstname | lastname | email            |
             | teacher1 | Teacher   |  1       | teacher1@asd.com |
         And the following "courses" exist:
-            | fullname | shortname | category | format      |
-            | Course 1 | C1        | 0        | oustudyplan |
+            | fullname | shortname | category | format |
+            | Course 1 | C1        | 0        | topics |
         And the following "course enrolments" exist:
             | user     | course    | role     |
             | teacher1 | C1        | manager  |
@@ -29,8 +29,7 @@ Feature: Export to my contents
         And I log out
 
         # Create an Open Studio activity
-        Given I am using the OSEP theme
-        And I log in as "teacher1" (in the OSEP theme)
+        Given I log in as "teacher1"
         And I am on "Course 1" course homepage
         And the following open studio "instances" exist:
             | course | name           | description                | pinboard | idnumber | tutorroles | enablefoldersanycontent |
@@ -45,7 +44,7 @@ Feature: Export to my contents
             | OS1        | teacher1 | Content 2 | Content Description 2 | mod/openstudio/tests/importfiles/test2.jpg | module     |
 
         And all users have accepted the plagarism statement for "OS1" openstudio
-        And I turn editing mode on in the OSEP theme
+        And I turn editing mode on
 
     @javascript
     Scenario: Export

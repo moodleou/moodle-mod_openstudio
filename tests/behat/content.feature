@@ -86,7 +86,7 @@ Feature: Create Open Studio contents
           | Who can view this content | My module                                  |
           | Title                     | Test My Group Board View 2                 |
           | Description               | My Group Board View Description 2          |
-          | Upload content            | mod/openstudio/tests/importfiles/test2.jpg |
+          | Files                     | mod/openstudio/tests/importfiles/test2.jpg |
         And I press "Save"
         And I follow "Shared content > My Module" in the openstudio navigation
         Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test2.jpg"
@@ -100,7 +100,7 @@ Feature: Create Open Studio contents
           | Who can view this content | My module                                  |
           | Title                     | Test My Group Board View 3                 |
           | Description               | My Group Board View Description 3          |
-          | Upload content            | mod/openstudio/tests/importfiles/test3.jpg |
+          | Files                     | mod/openstudio/tests/importfiles/test3.jpg |
           | Show GPS Data             | 1                                          |
           | Show Image Data           | 1                                          |
           | Retain EXIF image data    | 1                                          |
@@ -117,7 +117,7 @@ Feature: Create Open Studio contents
           | Who can view this content | My module                                            |
           | Title                     | Test My Group Board View 4 ownership All my own work |
           | Description               | My Group Board View Description 4 ownership          |
-          | Upload content            | mod/openstudio/tests/importfiles/test3.jpg           |
+          | Files                     | mod/openstudio/tests/importfiles/test3.jpg           |
         Then the "disabled" attribute of "div.felement input[name='ownershipdetail']" "css_element" should contain "disabled"
         And I press "Save"
         And I follow "Shared content > My Module" in the openstudio navigation
@@ -130,7 +130,7 @@ Feature: Create Open Studio contents
           | Who can view this content | My module                                            |
           | Title                     | Test My Group Board View 4 ownership Found elsewhere |
           | Description               | My Group Board View Description 3 ownership          |
-          | Upload content            | mod/openstudio/tests/importfiles/test3.jpg           |
+          | Files                     | mod/openstudio/tests/importfiles/test3.jpg           |
           | Found elsewhere           | 1                                                    |
           | Details                   | Test 4                                               |
         And I press "Save"
@@ -146,7 +146,7 @@ Feature: Create Open Studio contents
           | Who can view this content | My module                                  |
           | Title                     | Test My Group Board View 4 Tags            |
           | Description               | My Group Board View Description 4 Tags     |
-          | Upload content            | mod/openstudio/tests/importfiles/test4.jpg |
+          | Files                     | mod/openstudio/tests/importfiles/test4.jpg |
           | Tags                      | Tests Add New Tags                         |
         And I wait "2" seconds
         And I should see "Tests Add New Tags"
@@ -219,7 +219,7 @@ Feature: Create Open Studio contents
           | Who can view this content | My module                                  |
           | Title                     | Test My Group Board View 6 Tags            |
           | Description               | My Group Board View Description 6 Tags     |
-          | Upload content            | mod/openstudio/tests/importfiles/test.txt  |
+          | Files                     | mod/openstudio/tests/importfiles/test.txt  |
           | Tags                      | Tests Add New Tags                         |
         And I wait "2" seconds
         And I should see "Tests Add New Tags"
@@ -235,7 +235,7 @@ Feature: Create Open Studio contents
         | Who can view this content | My module                                 |
         | Title                     | Test My Group Board View 7 Tags           |
         | Description               | My Group Board View Description 7 Tags    |
-        | Upload content            | mod/openstudio/tests/importfiles/test.m4v |
+        | Files                     | mod/openstudio/tests/importfiles/test.m4v |
         | Tags                      | Tests Add New Tags add file m4v           |
       And I wait "2" seconds
       And I should see "Tests Add New Tags add file m4v"
@@ -255,7 +255,7 @@ Feature: Create Open Studio contents
         | Who can view this content | My module                                 |
         | Title                     | Test My Group Board View 8 Tags           |
         | Description               | My Group Board View Description 8 Tags    |
-        | Upload content            | mod/openstudio/tests/importfiles/test.m4a |
+        | Files                     | mod/openstudio/tests/importfiles/test.m4a |
         | Tags                      | Tests Add New Tags add file m4a           |
       And I wait "2" seconds
       And I should see "Tests Add New Tags add file m4a"
@@ -275,7 +275,7 @@ Feature: Create Open Studio contents
       | Who can view this content | My module                                   |
       | Title                     | My Module Title                             |
       | Description               | My Module Description                       |
-      | Upload content            | mod/openstudio/tests/importfiles/3files.nbk |
+      | Files                     | mod/openstudio/tests/importfiles/3files.nbk |
     And I press "Save"
     When I switch to "openstudio-content-view-iframe" iframe
     Then I should see "Anscombe's Quartet" in the "#notebook-container .text_cell_render h1" "css_element"

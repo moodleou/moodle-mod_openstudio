@@ -38,46 +38,48 @@ define([
         t.superclass.constructor.apply(this, arguments);
     };
 
-    Y.extend(t, M.core.dialogue, {
-        /**
-         * Override addButton function of super class.
-         * @param {object} property
-         * @param {array} sections
-         */
-        addButton: function(property, sections) {
-            var self = this;
-            var button = '<button class="' + property.classNames + '">' + property.label + '</button>';
-            var sectionNode;
+    Y.use('moodle-core-notification-dialogue', function() {
+        Y.extend(t, M.core.dialogue, {
+            /**
+             * Override addButton function of super class.
+             * @param {object} property
+             * @param {array} sections
+             */
+            addButton: function (property, sections) {
+                var self = this;
+                var button = '<button class="' + property.classNames + ' btn">' + property.label + '</button>';
+                var sectionNode;
 
-            $.each(sections, function(key, value) {
-                switch (value) {
-                    case 'footer':
-                        sectionNode = self.footerNode;
-                        break;
-                    default:
-                        return;
-                        break;
-                }
+                $.each(sections, function (key, value) {
+                    switch (value) {
+                        case 'footer':
+                            sectionNode = self.footerNode;
+                            break;
+                        default:
+                            return;
+                            break;
+                    }
 
-                sectionNode.append(button);
+                    sectionNode.append(button);
 
-                var buttonNode = sectionNode.all('.' + property.classNames);
-                if (property.action == 'hide') {
-                    buttonNode.on('click', self.hide.bind(self));
-                }
+                    var buttonNode = sectionNode.all('.' + property.classNames);
+                    if (property.action == 'hide') {
+                        buttonNode.on('click', self.hide.bind(self));
+                    }
 
-                if (property.events) {
-                    $.each(property.events, function(key, value) {
-                        buttonNode.on(key, function() {
-                            value.apply(self, arguments);
+                    if (property.events) {
+                        $.each(property.events, function (key, value) {
+                            buttonNode.on(key, function () {
+                                value.apply(self, arguments);
+                            });
                         });
-                    });
-                }
-            });
-        }
-    }, {
-        NAME: OSDIALOGUE_NAME,
-        CSS_PREFIX: DIALOGUE_PREFIX
+                    }
+                });
+            }
+        }, {
+            NAME: OSDIALOGUE_NAME,
+            CSS_PREFIX: DIALOGUE_PREFIX
+        });
     });
 
     return t;

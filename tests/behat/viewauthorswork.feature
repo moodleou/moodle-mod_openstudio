@@ -162,14 +162,16 @@ Feature: View author's work
         And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 2"
         And I follow "My Content > My Activities" in the openstudio navigation
+        And I click on "a.openstudio-profile-mypaticipation" "css_element"
         And I click on "#profile_percent div:nth-child(2) a.openstudio-profile-progress-step" "css_element"
         And I press "Add file"
         And I set the following fields to these values:
             | Who can view this content | Only me                                    |
             | Title                     | Test My Pinboard View 1                    |
             | Description               | My Pinboard View Description 1             |
-            | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+            | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
+        And I click on "a.openstudio-profile-mypaticipation" "css_element"
         And I click on "#profile_percent div:nth-child(2) a.openstudio-profile-progress-step" "css_element"
         Then the "class" attribute of "#profile_percent div:nth-child(2) a.openstudio-profile-progress-step" "css_element" should contain "content-block-active"
 

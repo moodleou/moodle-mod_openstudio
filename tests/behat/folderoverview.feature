@@ -100,7 +100,7 @@ Feature: Folder Overview
       And I set the following fields to these values:
         | Title                     | Test My Folder Overview                    |
         | Description               | My Folder Overview Description             |
-        | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+        | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
       And I press "Save"
 
       # Redirect to content detail
@@ -128,7 +128,7 @@ Feature: Folder Overview
       And I follow "My Content > My Activities" in the openstudio navigation
       And I should see "Content1.1"
       And the "src" attribute of "img.openstudio-default-folder-img" "css_element" should contain "uploads_rgb_32px"
-      And I follow "Content1.1"
+      And I click on "Content1.1" "link" in the ".openstudio-grid-item" "css_element"
       # Folder title empty
       And I should see "Block1 - Activity1 - Content1.1"
 
@@ -138,7 +138,7 @@ Feature: Folder Overview
       And I set the following fields to these values:
         | Title                     | Test My Folder Overview                    |
         | Description               | My Folder Overview Description             |
-        | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+        | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
       And I press "Save"
 
       # Redirect to content detail
@@ -303,7 +303,7 @@ Feature: Folder Overview
       And I set the following fields to these values:
         | Title                     | Test My Folder Overview                    |
         | Description               | My Folder Overview Description             |
-        | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+        | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
       And I press "Save"
       And I follow "Shared content > My Module" in the openstudio navigation
       And I follow "Test Folder Overview"
@@ -333,7 +333,7 @@ Feature: Folder Overview
       And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 1"
       And I follow "My Content > My Activities" in the openstudio navigation
-      And I follow "Content1.1"
+      And I click on "Content1.1" "link" in the ".openstudio-grid-item" "css_element"
 
       # Redirect to content detail
       And I follow "Content 1"
@@ -341,18 +341,20 @@ Feature: Folder Overview
       And I set the following fields to these values:
         | Title                     | Test My Folder Overview 1                  |
         | Description               | My Folder Overview Description 1           |
-        | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+        | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
       And I press "Save"
       And I follow "My Content > My Activities" in the openstudio navigation
+      And I click on "a.openstudio-profile-mypaticipation" "css_element"
       And I follow "Content1.1"
       And I follow "Content 2"
       And I press "Add file"
       And I set the following fields to these values:
         | Title                     | Test My Folder Overview 2                  |
         | Description               | My Folder Overview Description 2           |
-        | Upload content            | mod/openstudio/tests/importfiles/test2.jpg |
+        | Files                     | mod/openstudio/tests/importfiles/test2.jpg |
       And I press "Save"
       And I follow "My Content > My Activities" in the openstudio navigation
+      And I click on "a.openstudio-profile-mypaticipation" "css_element"
       And I follow "Content1.1"
       And I should not see "Order posts"
 
@@ -362,9 +364,10 @@ Feature: Folder Overview
       And I set the following fields to these values:
         | Title                     | Test My Folder Overview 3                  |
         | Description               | My Folder Overview Description 3           |
-        | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+        | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
       And I press "Save"
       And I follow "My Content > My Activities" in the openstudio navigation
+      And I click on "a.openstudio-profile-mypaticipation" "css_element"
       And I follow "Content1.1"
       And I press "Order posts"
       # User cannot input number to order fixed content, error message will display
@@ -383,9 +386,10 @@ Feature: Folder Overview
       And I set the following fields to these values:
         | Title          | Test My Folder Overview 4                  |
         | Description    | My Folder Overview Description 4           |
-        | Upload content | mod/openstudio/tests/importfiles/test1.jpg |
+        | Files          | mod/openstudio/tests/importfiles/test1.jpg |
       And I press "Save"
       And I follow "My Content > My Activities" in the openstudio navigation
+      And I click on "a.openstudio-profile-mypaticipation" "css_element"
       And I follow "Content1.1"
       And I press "Order posts"
       And I set the field "Move to post number" to "4"
@@ -458,7 +462,7 @@ Feature: Folder Overview
       And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 1"
       And I follow "My Content > My Activities" in the openstudio navigation
-      And I follow "Content1.1"
+      And I click on "Content1.1" "link" in the ".openstudio-grid-item" "css_element"
 
       # Upload a new content 
       And I follow "Add new content"
@@ -466,9 +470,10 @@ Feature: Folder Overview
       And I set the following fields to these values:
         | Title                     | Content 4                                  |
         | Description               | My Folder Overview Description             |
-        | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+        | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
       And I press "Save"
       And I follow "My Content > My Activities" in the openstudio navigation
+      And I click on "a.openstudio-profile-mypaticipation" "css_element"
       And I follow "Content1.1"
 
       # Order Post
@@ -540,7 +545,7 @@ Feature: Folder Overview
       And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 1"
       And I follow "My Content > My Activities" in the openstudio navigation
-      And I follow "Folder 1"
+      And I click on "Folder 1" "link" in the ".openstudio-grid-item" "css_element"
       Then I press "Activity guidance"
       And I should see "Folder guidance text"
       And I should see "Content 1"

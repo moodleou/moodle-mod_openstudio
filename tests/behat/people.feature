@@ -102,7 +102,7 @@ Feature: Open Studio people view
           | Who can view this content | My module                                  |
           | Title                     | Test My Pinboard View                      |
           | Description               | My Pinboard View Description               |
-          | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+          | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
         And I follow "People" in the openstudio navigation
         
@@ -118,7 +118,7 @@ Feature: Open Studio people view
           | Who can view this content | Only me                                    |
           | Title                     | Test My Pinboard View Student 1            |
           | Description               | My Pinboard View Description 1             |
-          | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+          | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
         And I follow "People" in the openstudio navigation
         Then I should see "Teacher 1"
@@ -135,7 +135,7 @@ Feature: Open Studio people view
           | Who can view this content | Only me                                    |
           | Title                     | Test My Pinboard View Student 2            |
           | Description               | My Pinboard View Description 2             |
-          | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+          | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
         And I follow "People" in the openstudio navigation
         Then I should see "Teacher 1"
@@ -153,7 +153,7 @@ Feature: Open Studio people view
           | Who can view this content | Only me                                    |
           | Title                     | Test My Pinboard View Student 5            |
           | Description               | My Pinboard View Description 5             |
-          | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+          | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
         And I follow "People" in the openstudio navigation
         Then I should see "Teacher 1"
@@ -198,7 +198,7 @@ Feature: Open Studio people view
           | Who can view this content | My module                                  |
           | Title                     | Test My Pinboard View 1                    |
           | Description               | My Pinboard View Description 1             |
-          | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+          | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
         And I am on site homepage
         And I log out
@@ -212,7 +212,7 @@ Feature: Open Studio people view
           | Who can view this content | My module                                  |
           | Title                     | Test My Pinboard View 1                    |
           | Description               | My Pinboard View Description 1             |
-          | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+          | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
         
         # GIVEN Group Name selected, THEN show all members of the selected group

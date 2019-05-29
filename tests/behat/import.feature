@@ -15,25 +15,23 @@ Feature: Import zip file
             | user     | course | role    |
             | student1 | C1     | student |
 
-        And I am using the OSEP theme
-        And I log in as "admin" (in the OSEP theme)
+        And I log in as "admin"
         And I am on "Course 1" course homepage
-        And I turn editing mode on in the OSEP theme
+        And I turn editing mode on
         And I add a "OpenStudio 2 (pilot only)" to section "0" and I fill the form with:
             | Name        | Test Open Studio name 1      |
             | Description | Test Open Studio description |
             | ID number   | OS1                          |
         And all users have accepted the plagarism statement for "OS1" openstudio
-        And I log out (in the OSEP theme)
+        And I log out
 
     Scenario: Import zip file
-        Given I am using the OSEP theme
-        And I log in as "student1" (in the OSEP theme)
+        Given I log in as "student1"
         And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "My Content"
         And I follow "Import"
-        And I upload "mod/openstudio/tests/importfiles/importtest.zip" file to "Choose zip file" filemanager (OU themes)
+        And I upload "mod/openstudio/tests/importfiles/importtest.zip" file to "Choose zip file" filemanager
         And I press "Import"
         Then I should see "test.odt"
         Then I should see "test.pdf"

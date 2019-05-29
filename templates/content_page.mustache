@@ -83,7 +83,7 @@
                 <div class="openstudio-content-view-version-title-box">
                     <span class="openstudio-content-view-current-version">
                         <a href="{{contentcurrenteversionurl}}">
-                            <button id="id_currentversionbutton" class="openstudio-current-version-button">
+                            <button id="id_currentversionbutton" class="openstudio-current-version-button btn btn-primary">
                                 {{#pix}} t/left, core, {{#str}} contentactionnewerversionstring, openstudio {{/str}} {{/pix}}
                                 <span>{{#str}}contentactionreturntomainversion, mod_openstudio{{/str}}</span>
                             </button>
@@ -220,7 +220,7 @@
                     <div class="openstudio-content-view-archive">
                         {{#showarchivebutton}}
                             <input id="id_archivebutton" name="archivebutton"
-                                   class="{{#locked}} locked {{/locked}} openstudio-content-actions osep-smallbutton"
+                                   class="{{#locked}} locked {{/locked}} openstudio-content-actions osep-smallbutton btn btn-secondary"
                                value="{{#str}}contentactionarchivepost, mod_openstudio{{/str}}" type="button">
                         {{/showarchivebutton}}
                         {{#reportabuselink}}
@@ -242,7 +242,7 @@
                             {{#mycontent}}
                                 <a href="{{{contenteditlink}}}" class="openstudio-content-view-edit-button-link" tabindex="-1">
                                     <input id="id_editbutton" name="editbutton" class="openstudio-content-view-edit-button
-                                        openstudio-content-actions osep-smallbutton
+                                        openstudio-content-actions osep-smallbutton btn btn-secondary
                                         {{#locked}}
                                             locked
                                         {{/locked}}"
@@ -252,7 +252,7 @@
                         {{/contenteditenable}}
                         {{#contentdeleteenable}}
                             <input id="id_deletebutton" name="deletebutton"
-                                    class="openstudio-content-view-delete-button osep-smallbutton"
+                                    class="openstudio-content-view-delete-button osep-smallbutton btn btn-secondary"
                                    value="{{#str}}contentactiondelete, mod_openstudio{{/str}}" type="button">
                         {{/contentdeleteenable}}
                         {{#contentlockenable}}
@@ -267,7 +267,7 @@
                                            data-lockstate="unlocked"
                                             value="{{#str}}contentactionlockname, mod_openstudio{{/str}}"
                                         {{/locked}}
-                                        class="osep-smallbutton"
+                                        class="osep-smallbutton btn btn-secondary"
                                     >
                                 </a>
                             {{/isfoldercontent}}
@@ -277,7 +277,7 @@
                 <div class="openstudio-content-view-actions-icons-right">
                     {{#contentrequestfeedbackenable}}
                         <button id="content_view_icon_{{contentflagrequestfeedback}}"
-                                class="openstudio-request-feedback-button osep-smallbutton
+                                class="openstudio-request-feedback-button osep-smallbutton btn btn-secondary
                                             {{#locked}} locked {{/locked}} openstudio-content-actions"
                                 data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagrequestfeedback}}"
                                 data-mode="{{#contentflagrequestfeedbackactive}}off{{/contentflagrequestfeedbackactive}}
@@ -298,14 +298,14 @@
                         {{#contentdeleteenable}}
                             <input data-cmid="{{cmid}}" data-cid="{{contentid}}" data-cvid="{{id}}"
                                    id="id_deleteversionbutton" name="deletearchivebutton"
-                                   class="openstudio-delete-content-version osep-smallbutton"
+                                   class="openstudio-delete-content-version osep-smallbutton btn btn-secondary"
                                    value="{{#str}}contentactiondelete, mod_openstudio{{/str}}" type="button">
                             <input type="hidden" name="" id="contentcurrenteversionurl" value="{{contentcurrenteversionurl}}">
                         {{/contentdeleteenable}}
                         {{#isownedbyviewer}}
                             <a href="{{{contentrestoreversionurl}}}" class="openstudio-content-view-restoret-button-link">
                                 <input id="id_restorebutton" name="restorebutton"
-                                       class="openstudio-content-view-restore-button osep-smallbutton"
+                                       class="openstudio-content-view-restore-button osep-smallbutton btn btn-secondary"
                                        value="{{#str}}contentactionrestore, mod_openstudio{{/str}}" type="button">
                             </a>
                         {{/isownedbyviewer}}
@@ -360,14 +360,14 @@
                                     <span class="openstudio-content-view-version-actions clearfix">
                                         <a href="{{{contentviewversionlink}}}" class="openstudio-content-view-version-button-link">
                                         <input id="id_viewversionbutton" name="viewversionbutton"
-                                               class="openstudio-content-view-version-button osep-smallbutton"
+                                               class="openstudio-content-view-version-button osep-smallbutton btn btn-secondary"
                                                value="{{#str}}contentactionview, mod_openstudio{{/str}}" type="button">
                                         </a>
                                         {{#contentdeleteenable}}
                                             <input data-cmid="{{cmid}}" data-cid="{{contentid}}"
                                                    data-cvid="{{id}}"
                                                    id="deleteversionbutton" name="deleteversionbutton"
-                                                   class="openstudio-delete-content-version osep-smallbutton"
+                                                   class="openstudio-delete-content-version osep-smallbutton btn btn-secondary"
                                                    value="{{#str}}contentactiondelete, mod_openstudio{{/str}}" type="button">
                                         {{/contentdeleteenable}}
                                     </span>

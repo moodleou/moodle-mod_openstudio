@@ -75,7 +75,7 @@ Feature: Create and edit Open Studio contents
           | Who can view this content | My module                                  |
           | Title                     | Test My Group Board View modify 1          |
           | Description               | My Group Board View Description modify 1   |
-          | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+          | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
         And I follow "Shared content" in the openstudio navigation
         Then I should see "Test My Group Board View modify 1"
@@ -98,7 +98,7 @@ Feature: Create and edit Open Studio contents
           | Who can view this content | My module                                  |
           | Title                     | Test My Group Board View 1                 |
           | Description               | My Group Board View Description 1          |
-          | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+          | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
         And I go to content edit view
         Then I should see "Test Open Studio name 1"

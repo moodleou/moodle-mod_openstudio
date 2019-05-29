@@ -84,7 +84,7 @@ Feature: Show last upload time for Open Studio activities
         | Who can view this content | My module                                  |
         | Title                     | Test My Group Board View 1                 |
         | Description               | My Group Board View Description 1          |
-        | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+        | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
       And I press "Save"
       And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 2"
@@ -94,7 +94,7 @@ Feature: Show last upload time for Open Studio activities
         | Who can view this content | My module                                  |
         | Title                     | Test My Group Board View 2                 |
         | Description               | My Group Board View Description 2          |
-        | Upload content            | mod/openstudio/tests/importfiles/test2.jpg |
+        | Files                     | mod/openstudio/tests/importfiles/test2.jpg |
       And I press "Save"
       And I am on "Course 1" course homepage
       And "OU Recent activity" "block" should exist
@@ -133,7 +133,7 @@ Feature: Show last upload time for Open Studio activities
         | Who can view this content | My module                                  |
         | Title                     | Test My Group Board View 1                 |
         | Description               | My Group Board View Description 1          |
-        | Upload content            | mod/openstudio/tests/importfiles/test1.jpg |
+        | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
       And I press "Save"
 
       # Add new content in My Pinboard View
@@ -145,7 +145,7 @@ Feature: Show last upload time for Open Studio activities
         | Who can view this content | Only me |
         | Title | Test My Group Board View 2 |
         | Description | My Group Board View Description 2 |
-        | Upload content | mod/openstudio/tests/importfiles/test2.jpg |
+        | Files          | mod/openstudio/tests/importfiles/test2.jpg |
       And I press "Save"
 
       # Add new content in My Group View
@@ -157,7 +157,7 @@ Feature: Show last upload time for Open Studio activities
         | Who can view this content | Group - group1 |
         | Title | Test My Group Board View 3 |
         | Description | My Group Board View Description 3 |
-        | Upload content | mod/openstudio/tests/importfiles/test2.jpg |
+        | Files          | mod/openstudio/tests/importfiles/test2.jpg |
       And I press "Save"  
 
       And I am on "Course 1" course homepage

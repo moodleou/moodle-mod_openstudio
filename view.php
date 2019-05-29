@@ -768,13 +768,15 @@ $viewpageurl = new moodle_url('/mod/openstudio/view.php',
 $crumbarray[$placeholdertext] = $viewpageurl;
 util::add_breadcrumb($PAGE, $cm->id, navigation_node::TYPE_ACTIVITY, $crumbarray);
 
+$renderer = $PAGE->get_renderer('mod_openstudio');
+
 // Only content owner can import.
 $importenable = $importenable && ($vuid == $USER->id) && has_capability('mod/openstudio:import', $mcontext);
 if ($importenable) {
     $importurl = new moodle_url('/mod/openstudio/import.php', array('id' => $id));
     $importstr = get_string('openstudio:import', 'mod_openstudio');
 
-    \theme_osep\bottom_buttons::add(\theme_osep\bottom_buttons::TYPE_IMPORT, $importurl, $importstr);
+    $renderer->add_import_button($importurl, $importstr);
 }
 
 $PAGE->requires->js_call_amd('mod_openstudio/viewhelper', 'init');
@@ -782,7 +784,7 @@ $PAGE->requires->js_call_amd('mod_openstudio/viewhelper', 'init');
 // Only content owner can export.
 $exportenable = $exportenable && ($vuid == $USER->id) && has_capability('mod/openstudio:export', $mcontext);
 if ($exportenable) {
-    \theme_osep\bottom_buttons::add(\theme_osep\bottom_buttons::TYPE_EXPORT);
+    $renderer->add_export_button();
 
     // Require strings.
     $PAGE->requires->strings_for_js(
@@ -877,7 +879,6 @@ if (isguestuser()) {
 }
 
 // Generate stream html.
-$renderer = $PAGE->get_renderer('mod_openstudio');
 $PAGE->set_button($renderer->searchform($theme, $vid, $id, $groupid));
 
 $html = $renderer->siteheader(
@@ -888,6 +889,8 @@ echo $OUTPUT->header(); // Header.
 echo $html;
 
 echo $renderer->body($cm->id, $cminstance, $theme, $vid, $permissions, $contentdata); // Body.
+
+echo $renderer->render_import_export_buttons($importenable, $exportenable, $id);
 
 // Finish the page.
 echo $OUTPUT->footer();
