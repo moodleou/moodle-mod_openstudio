@@ -192,7 +192,7 @@ function openstudio_delete_instance($id) {
     $cm = get_coursemodule_from_id('openstudio', $id);
     if ($cm) {
         // Delete search indexes.
-        if (studio_search_installed()) {
+        if (util::search_installed()) {
             local_ousearch_document::delete_module_instance_data($cm);
         }
 

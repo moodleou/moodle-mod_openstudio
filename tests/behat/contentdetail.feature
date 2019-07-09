@@ -83,7 +83,6 @@ Feature: Create and edit contents detail
         And the "src" attribute of "#openstudio_content_view_primary > div.openstudio-content-view-file > a > img" "css_element" should contain "test1.jpg"
         And I should see "Test My Content Details View"
         And I should see "Tests Add New Tags"
-        And I scroll to the bottom of the OU study planner
 
         And I should see "0 Favourites"
         And I should see "0 Smiles"
@@ -134,7 +133,6 @@ Feature: Create and edit contents detail
 
         And the "src" attribute of "#openstudio_content_view_primary > div.openstudio-content-view-file > a > img" "css_element" should contain "geotagged.jpg"
         And I should see "Test slot 1 description"
-        And I scroll to the bottom of the OU study planner
 
         And I should see "0 Favourites"
         And I should see "0 Smiles"
@@ -186,7 +184,6 @@ Feature: Create and edit contents detail
         And I should see "TestContentDetails 2"
         And I should see "Test slot 2 description"
         And I should see "Download file attachment"
-        And I scroll to the bottom of the OU study planner
 
         And I should see "0 Favourites"
         And I should see "0 Smiles"
@@ -238,7 +235,6 @@ Feature: Create and edit contents detail
         And I should see "TestContentDetails 3"
         And I should see "Test slot 3 description"
         And I should see "Download file attachment"
-        And I scroll to the bottom of the OU study planner
 
         And I should see "0 Favourites"
         And I should see "0 Smiles"
@@ -284,7 +280,6 @@ Feature: Create and edit contents detail
 
         And I should see "My Content Details View Description 4"
         And I should see "Tests Add New Tags 4"
-        And I scroll to the bottom of the OU study planner
 
         And I should see "0 Favourites"
         And I should see "0 Smiles"
@@ -336,7 +331,6 @@ Feature: Create and edit contents detail
         And I should see "TestContentDetails 5"
         And I should see "Test slot 5 description"
         And I should see "Download file attachment"
-        And I scroll to the bottom of the OU study planner
 
         And I should see "0 Favourites"
         And I should see "0 Smiles"
@@ -388,7 +382,6 @@ Feature: Create and edit contents detail
         And I should see "TestContentDetails 6"
         And I should see "Test slot 6 description"
         And I should see "Download file attachment"
-        And I scroll to the bottom of the OU study planner
 
         And I should see "0 Favourites"
         And I should see "0 Smiles"
@@ -460,7 +453,6 @@ Feature: Create and edit contents detail
         And I should not see "Post archive"
         And the "src" attribute of "#openstudio_content_view_primary > div.openstudio-content-view-file > a > img" "css_element" should contain "test1.jpg"
         And I should see "TestContentDetails 9"
-        And I scroll to the bottom of the OU study planner
         And I should see "1 views"
 
         # switch to student2
@@ -478,7 +470,6 @@ Feature: Create and edit contents detail
         And I should not see "Post archive"
         And the "src" attribute of "#openstudio_content_view_primary > div.openstudio-content-view-file > a > img" "css_element" should contain "test1.jpg"
         And I should see "TestContentDetails 9"
-        And I scroll to the bottom of the OU study planner
         And I should see "2 views"
 
         # switch to teacher1 again
@@ -496,7 +487,6 @@ Feature: Create and edit contents detail
         And I should not see "Post archive"
         And the "src" attribute of "#openstudio_content_view_primary > div.openstudio-content-view-file > a > img" "css_element" should contain "test1.jpg"
         And I should see "TestContentDetails 9"
-        And I scroll to the bottom of the OU study planner
         And I should see "2 views"
 
     Scenario: Request feedback on students work
@@ -508,7 +498,6 @@ Feature: Create and edit contents detail
         And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "Test My Content Details View"
-        And I scroll to the bottom of the OU study planner
         And "Request feedback" "button" should exist
 
         # Test show Requested feedback
@@ -545,70 +534,6 @@ Feature: Create and edit contents detail
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "Test My Content Details View"
         And "Request feedback" "button" should not exist
-
-    Scenario: Add new content and Report content abuse
-        # The OU Alert Plugin is enable by Admin
-        When I log out
-        And I log in as "admin"
-        And I navigate to "Plugins > Reports > OU Alerts" in site administration
-        And I follow "OU Alerts"
-        And I set the following fields to these values:
-            | id_s__oualerts_enabled | 1 |
-        And I press "Save changes"
-        And I should see "Changes saved"
-
-        # switch to teacher1
-        And I log out
-        And I log in as "teacher1"
-        And I am on "Course 1" course homepage
-        And I follow "Test Open Studio name 1"
-        And the following open studio "contents" exist:
-            | openstudio | user     | name                             | description                                  | file                                              | visibility |
-            | OS1        | teacher1 | Test ContentDetail Report Abuse  | Test ContentDetail Report Abuse  Description | mod/openstudio/tests/importfiles/test1.jpg        | module     |
-
-        # Redirect to content detail
-        And I follow "People" in the openstudio navigation
-        And I follow "Shared content > My Module" in the openstudio navigation
-        And I follow "Test ContentDetail Report Abuse"
-        # The owner of the content can not report the content
-        And I should see "Teacher 1"
-        And I should see "Test ContentDetail Report Abuse"
-        And "Report post" "button" should not exist
-
-        # switch to student1 and Report content
-        And I am on site homepage
-        And I log out
-        And I log in as "student1"
-        And I am on "Course 1" course homepage
-        And I follow "Test Open Studio name 1"
-        And I follow "People" in the openstudio navigation
-        And I follow "Shared content > My Module" in the openstudio navigation
-        And I follow "Test ContentDetail Report Abuse"
-        And "Report post" "button" should exist
-        And I press "Report post"
-        When I set the following fields to these values:
-            | id_oualerts_reasons_1 | 1                       |
-            | id_oualerts_reasons_8 | 1                       |
-            | oualerts_message      | Report Open Studio Test |
-        And I press "Send alert"
-        And I should see "Test ContentDetail Report Abuse"
-
-        # switch to student2 and Report content
-        And I am on site homepage
-        And I log out
-        And I log in as "student2"
-        And I am on "Course 1" course homepage
-        And I follow "Test Open Studio name 1"
-        And I follow "People" in the openstudio navigation
-        And I follow "Shared content > My Module" in the openstudio navigation
-        And I follow "Test ContentDetail Report Abuse"
-        And I press "Report post"
-        When I set the following fields to these values:
-            | id_oualerts_reasons_1 | 1                       |
-            | id_oualerts_reasons_8 | 1                       |
-            | oualerts_message      | Report Open Studio Test |
-        And I press "Send alert"
-        And I should see "Test ContentDetail Report Abuse"
 
     Scenario: Archive post content details
         When I am on "Course 1" course homepage
@@ -728,20 +653,7 @@ Feature: Create and edit contents detail
         And I should not see "Test My Content Details View Archive 2"
 
     Scenario: Breadcrumb navigation for View content details
-        And I am on site homepage
-        And I log out
-        And I log in as "admin"
         And I am on "Course 1" course homepage
-        And I turn editing mode on
-        And I navigate to "Edit settings" in current page administration
-        And I click on "Course format" "link"
-        And I set the field "Format" to "OSEP study planner"
-        And I press "Save and display"
-        And I am using the OSEP theme
-        And I log out (in the OSEP theme)
-        And I log in as "teacher1" (in the OSEP theme)
-        And I am on "Course 1" course homepage
-        And I press "Expand all"
         And I follow "Test Open Studio name 1"
 
         # Breadcrumb view content details
@@ -751,23 +663,22 @@ Feature: Create and edit contents detail
         And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "Test My Content Details View"
-        And the OSEP theme breadcrumbs should be "C1 Home > Week 2 > Test Open Studio name 1 > My Pinboard > Test My Content Details View"
+        And the openstudio breadcrumbs should be "Dashboard > My courses > C1 > Topic 1 > Test Open Studio name 1 > My Pinboard > Test My Content Details View"
 
         # Breadcrumb add content
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "Add new content"
-        And the OSEP theme breadcrumbs should be "C1 Home > Week 2 > Test Open Studio name 1 > My Pinboard > Pinboard content > Create"
+        And the openstudio breadcrumbs should be "Dashboard > My courses > C1 > Topic 1 > Test Open Studio name 1 > My Pinboard > Pinboard content > Create"
 
         # switch to student1
-        And I log out (in the OSEP theme)
-        And I log in as "student1" (in the OSEP theme)
+        And I log out
+        And I log in as "student1"
         And I am on "Course 1" course homepage
-        And I press "Expand all"
         And I follow "Test Open Studio name 1"
         And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
         And I follow "Test My Content Details View"
-        Then the OSEP theme breadcrumbs should be "C1 Home > Week 2 > Test Open Studio name 1 > My Module > Teacher's work > Test My Content Details View"
+        Then the openstudio breadcrumbs should be "Dashboard > My courses > C1 > Topic 1 > Test Open Studio name 1 > My Module > Teacher's work > Test My Content Details View"
 
     Scenario: Check flags setting applied
         And I log out
@@ -835,7 +746,6 @@ Feature: Create and edit contents detail
         And I should see "In order to show GPS or Image data the EXIF image data must be retained"
         And I click on "input#id_retainimagemetadata" "css_element"
         And I press "Save"
-        When I scroll to the bottom of the OU study planner
         Then I should see "Image meta-data"
         And I should see "Image location"
         And I follow "People" in the openstudio navigation
@@ -851,7 +761,6 @@ Feature: Create and edit contents detail
             | showimagedata             | 1                                              |
             | showgps                   | 1                                              |
         And I press "Save"
-        When I scroll to the bottom of the OU study planner
         Then I should not see "Image meta-data"
 
     Scenario: Add new content and check preview for ipynb files and export is working fine with 3 files nbk.
@@ -870,7 +779,7 @@ Feature: Create and edit contents detail
         And "#openstudio-content-previewipynb" "css_element" should exist
         And I press "Edit"
         And "test.ipynb" "text" should exist in the ".filemanager-container" "css_element"
-        And I log out (in the OSEP theme)
+        And I log out
         And I log in as "admin"
         And the following config values are set as admin:
             | enableportfolios  | 1 |
@@ -878,8 +787,7 @@ Feature: Create and edit contents detail
         And I set portfolio instance "File download" to "Enabled and visible"
         And I press "Save"
         And I log out
-        Given I am using the OSEP theme
-        And I log in as "teacher1" (in the OSEP theme)
+        And I log in as "teacher1"
         When I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And the following open studio "contents" exist:

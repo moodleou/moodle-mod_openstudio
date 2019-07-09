@@ -32,11 +32,10 @@ use mod_openstudio\local\util;
  * Search API functions
  *
  * This code has been only minimally refactored from openstudio V1, so may still use terms like "slot".
- * This class relies on the local_ousearch plugin being installed, otherwise the functions do nothing.
  */
 class search {
     /**
-     * Queries the OU search engine for a given search term.
+     * Queries the search engine for a given search term.
      * Supports pagination.
      *
      * @param object $cm Course module object.
@@ -56,10 +55,8 @@ class search {
 
         $searchresults = new \stdClass();
 
-        $cminfo = \cm_info::create($cm);
         $globalsearch = false;
-        if (util::moodle_global_search_installed()
-                && \local_moodleglobalsearch\util::is_activity_search_enabled($cminfo)) {
+        if (util::global_search_enabled($cm)) {
             $globalsearch = true;
             $pagesize = \core_search\manager::DISPLAY_RESULTS_PER_PAGE;
         }

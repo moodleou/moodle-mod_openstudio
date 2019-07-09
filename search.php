@@ -54,11 +54,9 @@ $course = $coursedata->course;
 $permissions = $coursedata->permissions;
 $theme = $coursedata->theme;
 $strpageurl = util::get_current_url();
-$cminfo = \cm_info::create($cm);
 
 // For global search, we need use input name=q.
-if ($searchtext == '' && util::moodle_global_search_installed()
-        && \local_moodleglobalsearch\util::is_activity_search_enabled($cminfo)) {
+if ($searchtext == '' && util::global_search_enabled($cm)) {
     $searchtext = optional_param('q', '', PARAM_TEXT);
 }
 

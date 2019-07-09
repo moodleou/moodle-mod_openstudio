@@ -76,8 +76,8 @@ Feature: Preference
           | OS1        | student2 | Test My Preferences View 3  | My Preferences Description 3  | mod/openstudio/tests/importfiles/test.mp3         | module     |
 
       And the following open studio "level3contents" exist:
-          | openstudio | user     | name                        | description                   | weblink                                            | visibility | level3       | levelcontainer |
-          | OS1        | teacher1 | Test My Preferences View 4  | My Preferences Description 4  | https://www.youtube.com/watch?v=ktAnpf_nu5c        | module     | Content2.1   | module         |
+          | openstudio | user     | name                        | description                   | weblink                        | visibility | level3       | levelcontainer |
+          | OS1        | teacher1 | Test My Preferences View 4  | My Preferences Description 4  | https://www.example.com        | module     | Content2.1   | module         |
       
       And I am on site homepage
       And I log out
@@ -107,7 +107,7 @@ Feature: Preference
       And I should not see "Test My Preferences View 1"
       And I should see "Test My Preferences View 2"
       And I should not see "Test My Preferences View 3"
-      And I should see "Test My Preferences View 4"
+      And I should not see "Test My Preferences View 4"
 
       # Filter by Audio
       And I set the field "Video" to "0"
@@ -180,8 +180,8 @@ Feature: Preference
         | OS1        | student3   | Test My Preferences View 3 | My Preferences Description 3 | mod/openstudio/tests/importfiles/test.mp3  | G1              |
       
       And the following open studio "level3contents" exist:
-        | openstudio | user     | name                        | description                   | weblink                                            | visibilitygroup | level3       | levelcontainer |
-        | OS1        | teacher1 | Test My Preferences View 4  | My Preferences Description 4  | https://www.youtube.com/watch?v=ktAnpf_nu5c        | G1              | Content2.1   | module         |
+        | openstudio | user     | name                        | description                   | weblink                        | visibilitygroup | level3       | levelcontainer |
+        | OS1        | teacher1 | Test My Preferences View 4  | My Preferences Description 4  | https://www.example.com        | G1              | Content2.1   | module         |
       
       And I am on site homepage
       And I log out
@@ -210,7 +210,7 @@ Feature: Preference
       And I should not see "Test My Preferences View 1"
       And I should see "Test My Preferences View 2"
       And I should not see "Test My Preferences View 3"
-      And I should see "Test My Preferences View 4"
+      And I should not see "Test My Preferences View 4"
 
       # Filter by Audio
       And I set the field "Video" to "0"
@@ -283,8 +283,8 @@ Feature: Preference
         | OS1        | teacher1 | Test My Preferences View 3  | My Preferences Description 3  | mod/openstudio/tests/importfiles/test.mp3         | private    |
 
       And the following open studio "level3contents" exist:
-        | openstudio | user     | name                        | description                   | weblink                                            | visibility | level3       | levelcontainer |
-        | OS1        | teacher1 | Test My Preferences View 4  | My Preferences Description 4  | https://www.youtube.com/watch?v=ktAnpf_nu5c        | private    | Content2.1   | module         |
+        | openstudio | user     | name                        | description                   | weblink                         | visibility | level3       | levelcontainer |
+        | OS1        | teacher1 | Test My Preferences View 4  | My Preferences Description 4  | https://www.example.com         | private    | Content2.1   | module         |
 
       And I am on site homepage
       And I log out
@@ -363,8 +363,8 @@ Feature: Preference
         | OS1        | teacher1 | Test My Preferences View 3  | My Preferences Description 3  | mod/openstudio/tests/importfiles/test.mp3          | module     | Content3.1   | module         |
           
       Given the following open studio "level3contents" exist:
-        | openstudio | user     | name                        | description                   | weblink                                            | visibility | level3       | levelcontainer |
-        | OS1        | teacher1 | Test My Preferences View 4  | My Preferences Description 4  | https://www.youtube.com/watch?v=ktAnpf_nu5c        | module     | ContentB2    | module         |
+        | openstudio | user     | name                        | description                   | weblink                         | visibility | level3       | levelcontainer |
+        | OS1        | teacher1 | Test My Preferences View 4  | My Preferences Description 4  | https://www.example.com         | module     | ContentB2    | module         |
       
       And I am on site homepage
       And I log out
@@ -393,7 +393,7 @@ Feature: Preference
       And I should not see "Test My Preferences View 1"
       And I should see "Test My Preferences View 2"
       And I should not see "Test My Preferences View 3"
-      And I should see "Test My Preferences View 4"
+      And I should not see "Test My Preferences View 4"
 
       # Filter by Audio
       And I set the field "Video" to "0"

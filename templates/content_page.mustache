@@ -50,6 +50,7 @@
         "isfoldercontent": false,
         "showarchivebutton": true,
         "reportabuselink" : http://example.com,
+        "contentweblinktext" : "Web Link",
     }
 }}
 {{#contentmapenable}}
@@ -154,7 +155,7 @@
                 {{/contenttypeuseimagedefault}}
 
                 {{#contenttypefileurl}}
-                    <div><a href="{{contentfileurl}}">{{#str}} contentcontentweblink, mod_openstudio {{/str}}</a></div>
+                    <div><a href="{{contentfileurl}}">{{{contentweblinktext}}}</a></div>
                 {{/contenttypefileurl}}
 
                 {{#contenttypeimage}}
@@ -225,7 +226,7 @@
                         {{/showarchivebutton}}
                         {{#reportabuselink}}
                             <a id="id_reportbutton_link" href="{{{reportabuselink}}}" tabindex="-1">
-                                <input id="id_reportbutton" name="reportbutton"
+                                <input id="id_reportbutton" name="reportbutton" class="btn btn-secondary"
                                    value="{{#str}}contentactionreportpost, mod_openstudio{{/str}}" type="button">
                             </a>
                         {{/reportabuselink}}

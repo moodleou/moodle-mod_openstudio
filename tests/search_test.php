@@ -23,6 +23,8 @@
 namespace mod_openstudio;
 
 // Make sure this isn't being directly accessed.
+use mod_openstudio\local\util;
+
 defined('MOODLE_INTERNAL') || die();
 
 class search_testcase extends \advanced_testcase {
@@ -39,6 +41,10 @@ class search_testcase extends \advanced_testcase {
     private $content3;
 
     protected function setUp() {
+        if (!\mod_openstudio\local\util::search_installed()) {
+            $this->markTestSkipped('This test uses local_ousearch, which is not installed. Skipping.');
+        }
+
         $this->resetAfterTest(true);
         // Use Legacy system for default.
         set_config('modulesitesearch', 2, 'local_moodleglobalsearch');

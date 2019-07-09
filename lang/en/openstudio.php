@@ -581,6 +581,7 @@ $string['contentpreviousversions'] = 'Previous versions';
 $string['contentpreviousversionsaccesible'] = 'Previous <span class="accesshide">activity content</span> versions';
 
 $string['contentcontentweblink'] = 'Web link:';
+$string['contentcontentweblinkonly'] = 'Web link';
 $string['contentcontentweblinkuntitled'] = 'File attachment';
 $string['contentcontentdownload'] = 'Download file attachment';
 $string['contentcontentweblinkalluntitled'] = '';

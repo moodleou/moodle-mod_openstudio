@@ -434,7 +434,7 @@ EOF;
                     } else {
                         // If the weblink or embed code has changed, then we should version.
                         if ($data['weblink'] != '') {
-                            $embeddata = embedcode::parse(embedcode::get_ouembed_api(), $data['weblink']);
+                            $embeddata = embedcode::is_ouembed_installed() ? embedcode::parse(embedcode::get_ouembed_api(), $data['weblink']) : false;
                             if ($embeddata) {
                                 if ($contentdata->content != $embeddata->url) {
                                     $shouldversion = true;
@@ -1434,22 +1434,24 @@ EOF;
             // Execute logic to decipher embed code and extract key information to
             // store in slot record.
             $embeddata = false;
-            $embedapi = embedcode::get_ouembed_api();
-            if (!empty($data['weblink'])) {
-                $embeddata = embedcode::parse($embedapi, $data['weblink']);
-            }
-            if (($embeddata === false) && !empty($data['embedcode'])) {
-                $embeddata = embedcode::parse($embedapi, $data['embedcode']);
-            }
-            if ($embeddata !== false) {
-                $data['weblink'] = $embeddata->url;
-                if (empty($data['urltitle'])) {
-                    $data['urltitle'] = empty($embeddata->title) ? $data['name'] : $embeddata->title;
+            if (embedcode::is_ouembed_installed()) {
+                $embedapi = embedcode::get_ouembed_api();
+                if (!empty($data['weblink'])) {
+                    $embeddata = embedcode::parse($embedapi, $data['weblink']);
                 }
-                $data['thumbnail'] = $embeddata->thumbnailurl;
-                $data['contenttype'] = $embeddata->type;
-                $data['content'] = '';
-                $data['embedcode'] = '';
+                if (($embeddata === false) && !empty($data['embedcode'])) {
+                    $embeddata = embedcode::parse($embedapi, $data['embedcode']);
+                }
+                if ($embeddata !== false) {
+                    $data['weblink'] = $embeddata->url;
+                    if (empty($data['urltitle'])) {
+                        $data['urltitle'] = empty($embeddata->title) ? $data['name'] : $embeddata->title;
+                    }
+                    $data['thumbnail'] = $embeddata->thumbnailurl;
+                    $data['contenttype'] = $embeddata->type;
+                    $data['content'] = '';
+                    $data['embedcode'] = '';
+                }
             }
         }
 

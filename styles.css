@@ -3295,6 +3295,7 @@ body:not(.ios):not(.android) .openstudio-content-view-flag-icon.has-hover:hover 
 
 div.openstudio-browse-post-item-filename {
     border: 0px;
+    overflow-wrap: break-word;
 }
 
 .openstudio-browse-post-item-img {

@@ -143,8 +143,7 @@ class mod_openstudio_external extends external_api {
 
         if ($search) {
             $searchresultdata = search::query($cm, $search, 0, $pagesize, 0, content::VISIBILITY_MODULE, $filter);
-            $cminfo = \cm_info::create($cm);
-            if (!\local_moodleglobalsearch\util::is_activity_search_enabled($cminfo)) {
+            if (!util::global_search_enabled($cm)) {
                 $contentdata = $searchresultdata->result;
             } else {
                 // Use global search if activity search enabled.
@@ -191,6 +190,11 @@ class mod_openstudio_external extends external_api {
                 if ($content->contenttype == content::TYPE_FOLDER ||
                         array_key_exists($content->id, $contentsinfolder) ||
                         ($selectedpostsids && in_array($content->id, $selectedpostsids))) {
+                    continue;
+                }
+
+                // Make sure item belongs to the current user or adding other users' content is allowed
+                if ($content->userid != $USER->id && !$permissions->feature_enablefoldersanycontent) {
                     continue;
                 }
 

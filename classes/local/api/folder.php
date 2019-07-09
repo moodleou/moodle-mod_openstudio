@@ -27,7 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 
 use mod_openstudio\local\util\defaults;
 use mod_openstudio\local\util\feature;
-use report_oulinkchecker\local\location\description;
 
 class folder {
 
