@@ -326,7 +326,6 @@ class file_testcase extends \advanced_testcase {
             $headers = $this->get_header_array();
             list($disposition, $filename) = explode(';', $headers['Content-Disposition']);
             $this->assertEquals('filename="'.$this->files['ipynb']->filename.'"', trim($filename));
-            $this->assertStringStartsWith('application/octet-stream', $headers['Content-Type']);
             $this->assertEquals($this->files['ipynb']->file->get_filesize(), $headers['Content-Length']);
         }
     }

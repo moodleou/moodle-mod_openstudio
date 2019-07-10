@@ -200,7 +200,7 @@ Feature: Folder Overview
       # Select content of student1 to folder
       And I press "Select existing post to add to folder"
       And I set the field "search" to "TestContentFolders 2"
-      And I press "Search"
+      And I click on "Search" "button" in the ".openstudio-folder-browse-posts-search-box" "css_element"
       And I should see "TestContentFolders 2"
       And I click on "Select" "button" in the "Browse posts" "dialogue"
       And I click on "Save changes" "button" in the "Browse posts" "dialogue"
@@ -209,7 +209,7 @@ Feature: Folder Overview
       # Select content of student2 to folder
       And I press "Select existing post to add to folder"
       And I set the field "search" to "TestContentFolders 3"
-      And I press "Search"
+      And I click on "Search" "button" in the ".openstudio-folder-browse-posts-search-box" "css_element"
       And I should see "TestContentFolders 3"
       And I click on "Select" "button" in the "Browse posts" "dialogue"
       And I click on "Save changes" "button" in the "Browse posts" "dialogue"
@@ -501,17 +501,17 @@ Feature: Folder Overview
       And I press "Select existing post to add to folder"
       # Add 1st Item
       And I set the field "search" to "TestRemove 1"
-      And I press "Search"
+      And I click on "Search" "button" in the ".openstudio-folder-browse-posts-search-box" "css_element"
       And I should see "TestRemove 1"
       And I click on "Select" "button" in the "Browse posts" "dialogue"
       # Add 2nd Item
       And I set the field "search" to "TestRemove 2"
-      And I press "Search"
+      And I click on "Search" "button" in the ".openstudio-folder-browse-posts-search-box" "css_element"
       And I should see "TestRemove 2"
       And I click on "Select" "button" in the "Browse posts" "dialogue"
       # Add 3rd Item
       And I set the field "search" to "TestRemove 3"
-      And I press "Search"
+      And I click on "Search" "button" in the ".openstudio-folder-browse-posts-search-box" "css_element"
       And I should see "TestRemove 3"
       And I click on "Select" "button" in the "Browse posts" "dialogue"
       # Observe the result
