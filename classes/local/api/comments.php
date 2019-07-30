@@ -164,7 +164,7 @@ EOF;
         global $DB;
 
         $sql = <<<EOF
-SELECT count(c.*)
+SELECT count(c.id)
   FROM {openstudio_comments} c
  WHERE c.contentid = ?
    AND c.deletedby IS NULL
@@ -186,7 +186,7 @@ EOF;
 
         $params = [$studioid, $userid];
         $sql = <<<EOF
-SELECT count(c.*)
+SELECT count(c.id)
   FROM {openstudio_comments} c
   JOIN {openstudio_contents} s ON s.id = c.contentid AND s.openstudioid = ?
  WHERE c.userid = ?

@@ -337,22 +337,22 @@ EOF;
 
             case stream::SORT_PEOPLE_ASKINGFORHELP:
                 if ($sortorder == stream::SORT_ASC) {
-                    $sqlsort = ' ORDER BY flagtimemodified ASC NULLS FIRST,
-                                      slottimemodified ASC NULLS FIRST';
+                    $sqlsort = ' ORDER BY flagtimemodified ASC,
+                                      slottimemodified ASC';
                 } else {
-                    $sqlsort = ' ORDER BY flagtimemodified DESC NULLS LAST,
-                                      slottimemodified DESC NULLS LAST';
+                    $sqlsort = ' ORDER BY flagtimemodified DESC,
+                                      slottimemodified DESC';
                 }
                 break;
 
             case stream::SORT_PEOPLE_ACTIVTY:
             default:
                 if ($sortorder == stream::SORT_ASC) {
-                    $sqlsort = ' ORDER BY flagtimemodified ASC NULLS FIRST,
-                                      slottimemodified ASC NULLS FIRST';
+                    $sqlsort = ' ORDER BY flagtimemodified ASC,
+                                      slottimemodified ASC';
                 } else {
-                    $sqlsort = ' ORDER BY flagtimemodified DESC NULLS LAST,
-                                      slottimemodified DESC NULLS LAST';
+                    $sqlsort = ' ORDER BY flagtimemodified DESC,
+                                      slottimemodified DESC';
                 }
                 break;
         }
@@ -399,17 +399,17 @@ EOF;
         // Count of all comments posted by a user for a given studio.
         $sql = <<<EOF
   SELECT t.userid, max(t.timemodified) as tmodified,
-         (SELECT max(f.timemodified) AS fmodified
+         (SELECT max(f.timemodified) 
             FROM {openstudio_flags} f
-           WHERE f.userid = t.userid),
-         (SELECT count(c.*) as totalpostedcomments
+           WHERE f.userid = t.userid) AS fmodified,
+         (SELECT count(c.id) 
             FROM {openstudio_comments} c
             JOIN {openstudio_contents} s ON s.id = c.contentid AND s.openstudioid = ?
-           WHERE c.userid = t.userid AND c.deletedby IS NULL),
-         (SELECT count(c.*) as totalpostedcommentsexcludeown
+           WHERE c.userid = t.userid AND c.deletedby IS NULL) AS totalpostedcomments,
+         (SELECT count(c.id) 
             FROM {openstudio_comments} c
             JOIN {openstudio_contents} s ON s.id = c.contentid AND s.openstudioid = ?
-           WHERE c.userid = t.userid AND s.userid != t.userid AND c.deletedby IS NULL)
+           WHERE c.userid = t.userid AND s.userid != t.userid AND c.deletedby IS NULL) AS totalpostedcommentsexcludeown
     FROM {openstudio_tracking} t
    WHERE t.userid {$useridsql}
 GROUP BY t.userid

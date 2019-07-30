@@ -582,8 +582,9 @@ EOF;
               WHERE ue1.userid = {openstudio_contents}.userid
          AND EXISTS (SELECT 1
                        FROM {user_enrolments} ue2
-                       JOIN {enrol} e2 ON e2.id = ue2.enrolid AND e2.courseid = e1.courseid
-                      WHERE ue2.userid = ?))
+                       JOIN {enrol} e2 ON e2.id = ue2.enrolid
+                      WHERE ue2.userid = ?
+                      AND e2.courseid = e1.courseid))
 )
 GROUP BY {openstudio_contents}.id
 ORDER BY timemodified DESC

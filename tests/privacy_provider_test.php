@@ -365,7 +365,7 @@ class privacy_provider_test extends provider_testcase {
         $contextdata = writer::with_context($this->contextstudio);
 
         $getrecordscontentsuser1 = array_values($DB->get_records('openstudio_contents',
-                ['userid' => $this->users->students->one->id]));
+                ['userid' => $this->users->students->one->id], 'id DESC'));
 
         // Contents one of student 1.
         $content1 = $contextdata->get_data([get_string('privacy:subcontext:contents', 'mod_openstudio'),

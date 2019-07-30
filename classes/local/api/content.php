@@ -97,7 +97,7 @@ class content {
         global $DB;
 
         $sql = <<<EOF
-SELECT COUNT(l3.*)
+SELECT COUNT(l3.id)
   FROM {openstudio_level3} l3
   JOIN {openstudio_level2} l2 ON l2.id = l3.level2id
   JOIN {openstudio_level1} l1 ON l1.id = l2.level1id

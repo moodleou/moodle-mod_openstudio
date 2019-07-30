@@ -227,11 +227,11 @@ class subscription {
         // Module context sql is defined here and is referenced in the for loop below.
         $modulecontextsql = <<<EOF
 SELECT cm.id
-  FROM {course_modules} cm,
-       {modules} m
+  FROM {course_modules} cm
+  JOIN {modules} m
+    ON m.id = cm.module
  WHERE m.name = ?
    AND cm.instance = ?
-   AND m.id = cm.module
 
 EOF;
 

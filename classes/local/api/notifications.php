@@ -507,9 +507,9 @@ EOF;
                       FROM {openstudio_notifications} n
                       JOIN {openstudio_contents} c ON c.id = n.contentid
                      WHERE n.userid = ? AND c.openstudioid = ?
-                  ORDER BY timecreated DESC
-                    OFFSET ?";
-            $ids = array_merge($ids, $DB->get_fieldset_sql($sql, [$user->userid, $user->studioid, $limit]));
+                  ORDER BY timecreated DESC";
+            $notificationids = $DB->get_records_sql($sql, [$user->userid, $user->studioid], $limit);
+            $ids = array_merge($ids, array_keys($notificationids));
         }
         if (!empty($ids)) {
             list($dsql, $params) = $DB->get_in_or_equal($ids);

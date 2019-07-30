@@ -177,10 +177,10 @@ EOF;
 UPDATE {openstudio_content_versions} cv
    SET deletedby = ?,
        deletedtime = ?
- WHERE cv.id IN (SELECT MIN(cv2.id)
+ WHERE cv.id = (SELECT id from (SELECT MIN(cv2.id) as id
                    FROM {openstudio_content_versions} cv2
                   WHERE cv2.contentid = ?
-                    AND cv2.deletedtime IS NULL)
+                    AND cv2.deletedtime IS NULL) cv3)
 
 EOF;
 
