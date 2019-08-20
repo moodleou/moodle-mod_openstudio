@@ -508,7 +508,7 @@ if ($finalviewpermissioncheck) {
     // it to the default stream page size.  To  achieve this, we remove the pagination limit
     // by setting it to 0.
 
-    if ((($vid == content::VISIBILITY_MODULE || $vid == content::VISIBILITY_GROUP) && ($fblock > 0) && (count($fblockarray) == 1))
+    if ((($vid == content::VISIBILITY_MODULE || $vid == content::VISIBILITY_GROUP) && ($fblock > 0) && ($fblockarray !== null) && (count($fblockarray) == 1))
             || $vid == content::VISIBILITY_PRIVATE) {
         $streamdatapagesize = 0;
     }

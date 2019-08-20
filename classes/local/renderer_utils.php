@@ -906,7 +906,7 @@ class renderer_utils {
         }
 
         $area[] = (object) [
-            'checked' => count($filters->fblockarray) > 0,
+            'checked' => $filters->fblockarray !== null && count($filters->fblockarray) > 0,
             'value' => stream::FILTER_AREA_ACTIVITY,
             'icon' => '',
             'label' => get_string('filterblocks', 'openstudio')
