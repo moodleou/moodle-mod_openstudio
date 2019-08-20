@@ -45,7 +45,7 @@ class honesty_form extends \moodleform {
         $mform->addElement('header', 'attachment', get_string('honestycrumb', 'openstudio'));
 
         $honestyhtml = \html_writer::start_tag('div');
-        $honestyhtml .= get_string('honestytext', 'openstudio');
+        $honestyhtml .= get_config('openstudio', 'honestytext');
         $honestyhtml .= \html_writer::end_tag('div');
 
         $mform->addElement('html', $honestyhtml);

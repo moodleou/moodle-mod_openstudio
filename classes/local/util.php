@@ -48,7 +48,7 @@ class util {
         global $USER;
 
         $result = api\honesty::get($studioid, $USER->id);
-        if ($result) {
+        if ($result || !get_config('openstudio', 'honestycheckrequired')) {
             return true;
         }
 

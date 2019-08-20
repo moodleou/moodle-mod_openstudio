@@ -48,12 +48,17 @@ Feature: Accept plagarism statement
         And Open Studio test instance is configured for "Test Open Studio name 1"
 
     Scenario: Test acceptance of honesty check
+        Given the following config values are set as admin:
+            | honestycheckrequired | 1 | openstudio |
+            | honestytext | Test honesty text | openstudio |
         When I follow "Test Open Studio name 1"
         Then I should see "Plagiarism statement"
+        And I should see "Test honesty text"
 
         # Choose cancel
         And I press "Cancel"
         Then I should see "Test Open Studio name 1"
+        And I should not see "Add new content"
 
         # Choose accept
         And I follow "Test Open Studio name 1"
@@ -67,6 +72,7 @@ Feature: Accept plagarism statement
         And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         Then I should see "Plagiarism statement"
+        And I should see "Test honesty text"
 
         # Switch teacher1 user
         And I am on site homepage
@@ -75,3 +81,11 @@ Feature: Accept plagarism statement
         And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         Then I should see "Add new content"
+
+    Scenario: Test honesty check not required
+        Given the following config values are set as admin:
+            | honestycheckrequired | 0 | openstudio |
+        When I follow "Test Open Studio name 1"
+        Then I should not see "Plagiarism statement"
+        And I should see "Test Open Studio name 1"
+        And I should see "Add new content"

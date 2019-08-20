@@ -76,4 +76,17 @@ if ($ADMIN->fulltree) {
             defaults::NOTIFICATIONLIMITUNREAD,
             PARAM_INT
     ));
+    $settings->add(new admin_setting_configcheckbox(
+            'openstudio/honestycheckrequired',
+            get_string('confighonestycheckrequired', 'openstudio'),
+            get_string('confighonestycheckrequireddescription', 'openstudio'),
+            defaults::HONESTYTEXTREQUIRED
+    ));
+    $settings->add(new admin_setting_confightmleditor(
+            'openstudio/honestytext',
+            get_string('confighonestytext', 'openstudio'),
+            get_string('confighonestytextdescription', 'openstudio'),
+            get_string('confighonestytextdefault', 'openstudio'),
+            PARAM_RAW
+    ));
 }

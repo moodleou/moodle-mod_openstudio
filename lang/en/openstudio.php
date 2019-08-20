@@ -1021,19 +1021,11 @@ $string['import_limit_hit'] = 'You cannot import all these files as it will put 
 
 $string['honestycrumb'] = 'Plagiarism statement';
 $string['honestyacccept'] = 'Accept';
-$string['honestytext'] = "
-<p>
-The University has to ensure as far as possible that any work submitted by students is their own and does not contain any unreferenced material from other sources. When using the Open Studio, you must ensure that you appropriately reference any material that has been shared with you. The University statement 'What constitutes plagiarism or cheating?' appears in your Student/Assessment Handbook and you are expected to have familiarised yourself with it.
-</p>
-
-<p>
-Please be aware that the University may subject any of your submitted work to checks (including computerised checks) for plagiarism, and in some instances may need to seek further information from you. Any cases where the originality of the work is questionable will be considered under the University's policy on academic conduct.
-</p>
-
-<p>
-Please click Accept below to agree to these terms.
-</p>
-";
+$string['confighonestycheckrequired'] = 'Plagiarism check required';
+$string['confighonestycheckrequireddescription'] = 'Require users to accept a plagiarism statement before using open studio';
+$string['confighonestytext'] = 'Plagiarism check text';
+$string['confighonestytextdescription'] = 'The text of the plagiarism statement that users must accept if "Plagiarism check required" is enabled';
+$string['confighonestytextdefault'] = "When using the Open Studio, I will ensure that I appropriately reference any material that has been shared with me. I understand what constitutes plagiarism or cheating, and I will not undertake such activities.";
 
 $string['dateformattoday'] = 'Today';
 $string['dateformatyesterday'] = 'Yesterday';
