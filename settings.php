@@ -26,6 +26,11 @@ defined('MOODLE_INTERNAL') || die();
 use mod_openstudio\local\util\defaults;
 
 if ($ADMIN->fulltree) {
+    if (!extension_loaded('imagick') || !class_exists('Imagick')) {
+        $settings->add(new admin_setting_heading('openstudio/missinglibrarywarning', '',
+                get_string('configmissinglibrarywarning', 'openstudio')));
+    }
+
     $sitemaxbytes = isset($CFG->maxbytes) ? $CFG->maxbytes : defaults::MAXBYTES;
     $settings->add(new admin_setting_configselect(
             'openstudio/maxbytes',

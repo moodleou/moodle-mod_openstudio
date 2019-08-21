@@ -164,6 +164,7 @@ $string['navsearchcontextlabel'] = 'Search {$a->name}';
 $string['navsearchhelp'] = 'Help with Search';
 $string['helplink'] = 'OU Computing Guide';
 
+$string['configmissinglibrarywarning'] = 'Warning: OpenStudio requires the ImageMagick PHP extension. Please install or enable the ImageMagick extension.';
 $string['configreportingemailname'] = 'Reporting email';
 $string['configreportingemaildescription'] = 'The email address to which all alerts for inappropriate content are sent';
 $string['configmaxattachmentsizename'] = 'Maximum attachment size';
