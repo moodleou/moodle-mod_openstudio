@@ -120,6 +120,9 @@ class search {
             $query->set_coursemodule($cm);
             $query->set_filter($filterfunction);
             $searchresults = $query->query($limitfrom, $limitnum);
+            if (!isset($searchresults->dbrows)) {
+                $searchresults->dbrows = 0;
+            }
         }
 
         $nextsearchresults = 0;

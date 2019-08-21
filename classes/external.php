@@ -798,7 +798,7 @@ class mod_openstudio_external extends external_api {
                     }
                     $context = context_module::instance($cm->id);
                     $commentid = comments::create($params['cid'], $userid, $commenttext, $folderid,
-                        ['id' => $params['commentattachment']], $context, $inreplyto);
+                        ['id' => $params['commentattachment']], $context, $inreplyto, $cm);
                     $eventurl = new moodle_url('/mod/openstudio/content.php', ['id' => $params['cmid'], 'sid' => $params['cid']]);
                     if ($inreplyto) {
                         util::trigger_event(
