@@ -50,7 +50,7 @@ class search {
     public static function query($cm, $searchtext,
             $pagestart = 0, $pagesize = \mod_openstudio\local\util\defaults::STREAMPAGESIZE, $nextstart = 0,
             $filtercontext = content::VISIBILITY_MODULE,
-            $filterfunction = 'openstudio_ousearch_filter_permission') {
+            $filterfunction = 'openstudio_ousearch_filter_permission_include_setslots') {
         global $PAGE;
 
         $searchresults = new \stdClass();

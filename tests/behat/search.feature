@@ -128,3 +128,18 @@ I need to be able to search within OpenStudio
         And I should not see "Previous search results"
         And I should see "More search results"
         And I should see "keyword — 13 results found"
+
+    @javascript
+    Scenario: Search for a tag
+        Given I log in as "student1"
+        And global search expects the query "tag1" and will return:
+            | nothing |
+        And I am on "Course 1" course homepage
+        And I follow "Sharing Studio"
+        And I follow "Student content 3"
+        And I press "Edit"
+        And I press "Add file"
+        And I set the field with xpath "//input[@placeholder='Enter tags...']" to "tag1"
+        And I press "Save"
+        When I follow "tag1"
+        Then I should see "tag1 — No results"
