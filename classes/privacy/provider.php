@@ -27,10 +27,12 @@ defined('MOODLE_INTERNAL') || die();
 
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
+use core_privacy\local\request\approved_userlist;
 use core_privacy\local\request\contextlist;
 use context;
 use core_privacy\local\request\helper as request_helper;
 use core_privacy\local\request\transform;
+use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
 use mod_openstudio\local\api\flags;
 use mod_openstudio\local\api\tracking;
@@ -47,7 +49,8 @@ use mod_openstudio\local\api\subscription;
  */
 class provider implements
         \core_privacy\local\metadata\provider,
-        \core_privacy\local\request\plugin\provider {
+        \core_privacy\local\request\plugin\provider,
+        \core_privacy\local\request\core_userlist_provider {
 
     /**
      * Returns metadata.
@@ -1250,6 +1253,434 @@ class provider implements
                     'lockedby = ' . $contentssql, $usersparams);
         }
 
+    }
+
+    /**
+     * Get the list of users who have data within a context.
+     *
+     * @param userlist $userlist The userlist containing the list of users who have data in this context/plugin combination.
+     */
+    public static function get_users_in_context(userlist $userlist) {
+        $context = $userlist->get_context();
+
+        if (!is_a($context, \context_module::class)) {
+            return;
+        }
+
+        $params = [
+                'instanceid' => $context->instanceid,
+                'modname' => 'openstudio'
+        ];
+
+        $sql = "SELECT oc.userid
+                  FROM {course_modules} cm
+                  JOIN {modules} m ON cm.module = m.id AND m.name = :modname
+                  JOIN {openstudio} o ON o.id = cm.instance
+                  JOIN {openstudio_contents} oc ON oc.openstudioid = o.id
+                 WHERE cm.id = :instanceid";
+        $userlist->add_from_sql('userid', $sql, $params);
+
+        $sql = "SELECT ot.userid
+                  FROM {course_modules} cm
+                  JOIN {modules} m ON cm.module = m.id AND m.name = :modname
+                  JOIN {openstudio} o ON o.id = cm.instance
+                  JOIN {openstudio_contents} oc ON oc.openstudioid = o.id
+                  JOIN {openstudio_tracking} ot ON ot.contentid = oc.id
+                 WHERE cm.id = :instanceid";
+        $userlist->add_from_sql('userid', $sql, $params);
+
+        $sql = "SELECT ono.userid, ono.userfrom
+                  FROM {course_modules} cm
+                  JOIN {modules} m ON cm.module = m.id AND m.name = :modname
+                  JOIN {openstudio} o ON o.id = cm.instance
+                  JOIN {openstudio_contents} oc ON oc.openstudioid = o.id
+                  JOIN {openstudio_notifications} ono ON ono.contentid = oc.id
+                 WHERE cm.id = :instanceid";
+        $userlist->add_from_sql('userid', $sql, $params);
+        $userlist->add_from_sql('userfrom', $sql, $params);
+
+        $sql = "SELECT ocm.userid
+                  FROM {course_modules} cm
+                  JOIN {modules} m ON cm.module = m.id AND m.name = :modname
+                  JOIN {openstudio} o ON o.id = cm.instance
+                  JOIN {openstudio_contents} oc ON oc.openstudioid = o.id
+                  JOIN {openstudio_comments} ocm ON ocm.contentid = oc.id
+                 WHERE cm.id = :instanceid";
+        $userlist->add_from_sql('userid', $sql, $params);
+
+        $sql = "SELECT ofs.id, ofs.userid, ofs.personid
+                  FROM {course_modules} cm
+                  JOIN {modules} m ON cm.module = m.id AND m.name = :modname
+                  JOIN {openstudio} o ON o.id = cm.instance
+                  JOIN {openstudio_contents} oc ON oc.openstudioid = o.id
+                  JOIN {openstudio_flags} ofs ON ofs.contentid = oc.id
+                 WHERE cm.id = :instanceid";
+        $userlist->add_from_sql('userid', $sql, $params);
+        $userlist->add_from_sql('personid', $sql, $params);
+
+        $sql = "SELECT ohc.userid
+                  FROM {course_modules} cm
+                  JOIN {modules} m ON cm.module = m.id AND m.name = :modname
+                  JOIN {openstudio} o ON o.id = cm.instance
+                  JOIN {openstudio_honesty_checks} ohc ON ohc.openstudioid = cm.id
+                 WHERE cm.id = :instanceid";
+        $userlist->add_from_sql('userid', $sql, $params);
+
+        $sql = "SELECT os.userid
+                  FROM {course_modules} cm
+                  JOIN {modules} m ON cm.module = m.id AND m.name = :modname
+                  JOIN {openstudio} o ON o.id = cm.instance
+                  JOIN {openstudio_subscriptions} os ON os.openstudioid = o.id
+                 WHERE cm.id = :instanceid";
+        $userlist->add_from_sql('userid', $sql, $params);
+    }
+
+    /**
+     * Delete multiple users within a single context.
+     *
+     * @param approved_userlist $userlist The approved context and user information to delete information for.
+     */
+    public static function delete_data_for_users(approved_userlist $userlist) {
+        global $DB;
+
+        $context = $userlist->get_context();
+        $userids = $userlist->get_userids();
+        $cm = $DB->get_record('course_modules', ['id' => $context->instanceid]);
+
+        if (empty($cm)) {
+            return;
+        }
+        $adminid = get_admin()->id;
+        $openstudioid = $cm->instance;
+        $openstudioidparam = ['openstudioid' => $openstudioid];
+        $contentids = array_keys($DB->get_records('openstudio_contents', $openstudioidparam));
+        list($userinsql, $userinparams) = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
+
+        $params = array_merge($userinparams, $openstudioidparam);
+        $contentssql = "$userinsql AND openstudioid = :openstudioid";
+        list($userinsql, $userinparams) = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
+        list($contentinsql, $contentinparams) = $DB->get_in_or_equal($contentids, SQL_PARAMS_NAMED);
+        $fileareas = ['content', 'contentthumbnail', 'contentversion', 'contentthumbnailversion', 'notebook',
+                'notebookversion', 'draft'];
+        self::delete_subscriptions_for_users($openstudioid, $userinsql, $userinparams);
+        self::delete_honestycheck_for_users($cm->id, $userinsql, $userinparams);
+
+        self::delete_notification_for_users($userinsql, $userinparams, $contentinsql, $contentinparams);
+        self::delete_tracking_for_users($userinsql, $userinparams, $contentinsql, $contentinparams);
+        self::delete_flag_for_users($userinsql, $userinparams, $contentinsql, $contentinparams);
+        self::delete_comments_for_users($userinsql, $userinparams, $contentinsql, $contentinparams, $context, $userids);
+        self::delete_trash_files_for_users($userinsql, $userinparams, $openstudioid, $context, $fileareas, $userids);
+        self::delete_content_for_users($userinsql, $userinparams, $openstudioid, $context, $fileareas);
+        self::delete_tags_for_users($userinsql, $userinparams, $openstudioid, $context);
+
+        $DB->delete_records_select('openstudio_contents', 'userid ' . $contentssql, $params);
+        $DB->set_field_select('openstudio_contents', 'deletedby', $adminid,
+                'deletedby ' . $contentssql, $params);
+        $DB->set_field_select('openstudio_contents', 'lockedby', $adminid,
+                'lockedby ' . $contentssql, $params);
+    }
+
+    /**
+     * Delete subscriptions for users.
+     *
+     * @param int $openstudioid
+     * @param array $userinsql
+     * @param array $userinparams
+     */
+    private static function delete_subscriptions_for_users($openstudioid, $userinsql, $userinparams) {
+        global $DB;
+        $sql = "openstudioid = :openstudioid AND userid $userinsql";
+        $params = array_merge(['openstudioid' => $openstudioid], $userinparams);
+        $DB->delete_records_select('openstudio_subscriptions', $sql, $params);
+    }
+
+    /**
+     * Delete honestycheck.
+     *
+     * @param int $openstudioid
+     * @param array $userinsql
+     * @param array $userinparams
+     */
+    private static function delete_honestycheck_for_users($openstudioid, $userinsql, $userinparams) {
+        global $DB;
+        $sql = "openstudioid = :openstudioid AND userid $userinsql";
+        $params = array_merge(['openstudioid' => $openstudioid], $userinparams);
+        $DB->delete_records_select('openstudio_honesty_checks', $sql, $params);
+    }
+
+    /**
+     * Delete traciking.
+     *
+     * @param array $userinsql
+     * @param array $userinparams
+     * @param array $contentinsql
+     * @param array $contentinparams
+     */
+    private static function delete_tracking_for_users($userinsql, $userinparams, $contentinsql, $contentinparams) {
+        global $DB;
+        $sql = "userid $userinsql AND contentid $contentinsql";
+        $params = array_merge($userinparams, $contentinparams);
+        $DB->delete_records_select('openstudio_tracking', $sql, $params);
+    }
+
+    /**
+     * Delete notification.
+     *
+     * @param array $userinsql
+     * @param array $userinparams
+     * @param array $contentinsql
+     * @param array $contentinparams
+     */
+    private static function delete_notification_for_users($userinsql, $userinparams, $contentinsql, $contentinparams) {
+        global $DB;
+
+        $sqlcontentin = " AND contentid $contentinsql";
+        $params = array_merge($userinparams, $contentinparams);
+
+        // For notification, delete records if deleting user belong to userid field.
+        $DB->delete_records_select('openstudio_notifications', "userid $userinsql $sqlcontentin", $params);
+
+        // And update notification content to empty and owner to admin user.
+        $sql = "UPDATE {openstudio_notifications}
+                   SET userfrom = :adminuserid, message = :deletedmessage
+                 WHERE userfrom $userinsql $sqlcontentin";
+        $params = array_merge([
+            'adminuserid' => get_admin()->id,
+            'deletedmessage' => get_string('deletedbyrequest', 'openstudio'),
+        ], $userinparams, $contentinparams);
+        $DB->execute($sql, $params);
+    }
+
+    /**
+     * Delete flag.
+     *
+     * @param array $userinsql
+     * @param array $userinparams
+     * @param array $contentinsql
+     * @param array $contentinparams
+     */
+    private static function delete_flag_for_users($userinsql, $userinparams, $contentinsql, $contentinparams) {
+        global $DB;
+
+        $sqlcontentin = " AND contentid $contentinsql";
+        $params = array_merge($userinparams, $contentinparams);
+
+        // For flag, if deleting user belong to userid field, remove the record.
+        $DB->delete_records_select('openstudio_flags', "userid $userinsql $sqlcontentin", $params);
+
+        // If deleting user belong to personid field, then change the owner to admin user.
+        $DB->set_field_select('openstudio_flags', 'personid', get_admin()->id, "personid $userinsql $sqlcontentin",
+            $params);
+    }
+
+    /**
+     * Delete comments.
+     *
+     * @param array $userinsql
+     * @param array $userinparams
+     * @param array $contentinsql
+     * @param array $contentinparams
+     * @param \context_module $context
+     * @param int $userids
+     */
+    private static function delete_comments_for_users($userinsql, $userinparams, $contentinsql,
+            $contentinparams, $context, $userids) {
+        global $DB;
+        $fs = get_file_storage();
+        $params = array_merge($userinparams, $contentinparams);
+        $useridsin = implode(',', $userids);
+        $adminid = get_admin()->id;
+        // Update comments to empty if has reply.
+        $sql = "SELECT c1.id
+                  FROM {openstudio_comments} c1
+                 WHERE c1.contentid $contentinsql
+                       AND c1.userid $userinsql
+                       AND c1.id IN (SELECT c2.inreplyto 
+                                              FROM {openstudio_comments} c2
+                                             WHERE c2.userid IN ($useridsin)
+                                                   AND c2.deletedby IS NULL 
+                                                   AND inreplyto IS NOT NULL)";
+        $commentidshasreply = array_keys($DB->get_records_sql($sql, $params));
+        // Select comments that can be deleted (another user didn't reply on it).
+        $sql = "SELECT c1.id
+                  FROM {openstudio_comments} c1
+                 WHERE c1.contentid $contentinsql
+                       AND c1.userid $userinsql
+                       AND c1.id NOT IN (SELECT c2.inreplyto 
+                                              FROM {openstudio_comments} c2
+                                             WHERE c2.userid IN ($useridsin)
+                                                   AND c2.deletedby IS NULL 
+                                                   AND inreplyto IS NOT NULL)";
+        $commentidsnothasreply = array_keys($DB->get_records_sql($sql, $params));
+        if ($commentidshasreply) {
+            $commenttext = get_string('deletedbyrequest', 'openstudio');
+            foreach ($commentidshasreply as $c) {
+                $defaultcomments = new \stdClass();
+                $defaultcomments->id = $c;
+                $defaultcomments->userid = $adminid;
+                $defaultcomments->commenttext = $commenttext;
+                $DB->update_record('openstudio_comments', $defaultcomments);
+                $fs->delete_area_files($context->id, 'mod_openstudio', 'contentcomment', $c);
+            }
+        }
+        if ($commentidsnothasreply) {
+            list($commentinsql, $commentinparams) = $DB->get_in_or_equal($commentidsnothasreply, SQL_PARAMS_NAMED);
+            foreach ($commentidsnothasreply as $c) {
+                $fs->delete_area_files($context->id, 'mod_openstudio', 'contentcomment', $c);
+            }
+            $DB->delete_records_select('openstudio_comments', "id $commentinsql", $commentinparams);
+        }
+        // Update field deleted by to adminid of comments of other user.
+        $DB->set_field_select('openstudio_comments', 'deletedby', $adminid, 'deletedby ' . $userinsql,
+                $userinparams);
+        // Update filed deleted by to adminid of old version contents.
+        $DB->set_field_select('openstudio_content_versions', 'deletedby', $adminid,
+                'deletedby ' . $userinsql, $userinparams);
+    }
+
+    /**
+     * Delete trash files.
+     *
+     * @param array $userinsql
+     * @param array $userinparams
+     * @param int $openstudioid
+     * @param \context_module $context
+     * @param array $fileareas
+     * @param int $userids
+     */
+    private static function delete_trash_files_for_users($userinsql, $userinparams, $openstudioid, $context, $fileareas, $userids) {
+        global $DB;
+        $fs = get_file_storage();
+        list($user2insql, $user2inparams) = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
+
+        // Delete trash file.
+        // Trash files are the file in content and have not been removed yet after edited from user.
+        $trashfilesql = "SELECT DISTINCT f.itemid
+                                    FROM {files} f
+                                   WHERE f.component = 'mod_openstudio' AND f.userid $userinsql AND f.contextid = :contextid
+                                     AND f.itemid NOT IN (SELECT oc.fileid
+                                                            FROM {openstudio_contents} oc
+                                                            JOIN {files} f ON f.itemid = oc.fileid
+                                                            JOIN {openstudio} o ON o.id = oc.openstudioid
+                                                           WHERE o.id = :openstudioid AND oc.userid $user2insql)";
+        $params = ['contextid' => $context->id, 'openstudioid' => $openstudioid];
+        $trashfileparams = array_merge($params, $userinparams);
+        $trashfileparams = array_merge($trashfileparams, $user2inparams);
+        $trashfiles = $DB->get_recordset_sql($trashfilesql, $trashfileparams);
+        foreach ($trashfiles as $file) {
+            foreach ($fileareas as $area) {
+                $fs->delete_area_files($context->id, 'mod_openstudio', $area, $file->itemid);
+            }
+        }
+        $trashfiles->close();
+    }
+
+    /**
+     * Delete contents.
+     *
+     * @param array $userinsql
+     * @param array $userinparams
+     * @param int $openstudioid
+     * @param \context_module $context
+     * @param array $fileareas
+     */
+    private static function delete_content_for_users($userinsql, $userinparams,
+            $openstudioid, $context, $fileareas) {
+        global $DB;
+        $fs = get_file_storage();
+        // Get contents.
+        $contentssql = "SELECT oc.id, oc.fileid
+                          FROM {openstudio_contents} oc
+                         WHERE openstudioid = :openstudioid AND userid $userinsql";
+        $params = ['openstudioid' => $openstudioid];
+        $params = array_merge($params, $userinparams);
+        $contents = $DB->get_recordset_sql($contentssql, $params);
+        // Deleted all data related to content of this user.
+        foreach ($contents as $content) {
+            $contentsparams = [
+                    'contentid' => $content->id
+            ];
+            $DB->delete_records_select(
+                     'openstudio_content_items',
+                    'containerid = :containerid
+                           OR containerid IN (
+                                SELECT ocv.id
+                                  FROM {openstudio_content_versions} ocv
+                                 WHERE ocv.contentid = :contentid
+                                )',
+                    [
+                            'containerid' => $content->id,
+                            'contentid' => $content->id
+                    ]
+            );
+            $DB->delete_records_select(
+                    'openstudio_folder_contents',
+                    'contentid = :contentid OR folderid = :folderid',
+                    [
+                            'contentid' => $content->id,
+                            'folderid' => $content->id
+                    ]
+            );
+
+            // Get contents in old version.
+            $contentversions = $DB->get_records('openstudio_content_versions', $contentsparams);
+
+            foreach ($contentversions as $cversion) {
+                foreach ($fileareas as $filearea) {
+                    // Delete file of content old version.
+                    $fs->delete_area_files($context->id, 'mod_openstudio', $filearea, $cversion->fileid);
+                }
+            }
+
+            // Delete contents old version.
+            $DB->delete_records_select(
+                    'openstudio_content_versions',
+                    'contentid = :contentid', $contentsparams);
+
+            // Get comments.
+            $commentparams = ['contentid' => $content->id];
+            $commentparams = array_merge($commentparams, $userinparams);
+            $comments = $DB->get_records_select('openstudio_comments', "contentid = :contentid AND userid $userinsql",
+                    $commentparams
+            );
+
+            foreach ($comments as $comment) {
+                // Delete file of this comment.
+                $fs->delete_area_files($context->id, 'mod_openstudio', 'contentcomment', $comment->id);
+            }
+            // Delete comments.
+            $DB->delete_records_select(
+                    'openstudio_comments',
+                    'contentid = :contentid', $contentsparams);
+
+            // Delete all files from the posts.
+            foreach ($fileareas as $filearea) {
+                $fs->delete_area_files($context->id, 'mod_openstudio', $filearea, $content->fileid);
+            }
+        }
+        $contents->close();
+
+    }
+
+    /**
+     * Delete tags.
+     *
+     * @param array $userinsql
+     * @param array $userinparams
+     * @param int $openstudioid
+     * @param \context_module $context
+     */
+    private static function delete_tags_for_users($userinsql, $userinparams, $openstudioid, $context) {
+        // Get content for tags.
+        $contentstagsql = "SELECT oc.id
+                             FROM {openstudio_contents} oc
+                            WHERE openstudioid = :openstudioid AND userid $userinsql";
+        $params = ['openstudioid' => $openstudioid];
+        $params = array_merge($params, $userinparams);
+
+        // Delete all tags.
+        \core_tag\privacy\provider::delete_item_tags_select($context, 'mod_openstudio',
+                'openstudio_contents', "IN ($contentstagsql)", $params);
     }
 
     /**
