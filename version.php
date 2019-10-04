@@ -21,7 +21,7 @@
  * See https://docs.moodle.org/dev/version.php for more info.
  *
  * @package    mod_openstudio
- * @copyright  2015 Your Name <your@email.address>
+ * @copyright  2019 The Open University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,7 +30,7 @@ defined('MOODLE_INTERNAL') || die();
 $plugin->component = 'mod_openstudio';
 $plugin->version = 2019082000;
 $plugin->release = 'v0.0';
-$plugin->requires = 2011120100;
-$plugin->maturity = MATURITY_ALPHA;
+$plugin->requires = 2018120300;
+$plugin->maturity = MATURITY_STABLE;
 $plugin->cron = 0;
 $plugin->dependencies = array();
