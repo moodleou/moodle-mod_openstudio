@@ -9,8 +9,8 @@ Feature: Open Studio guest access
       | username | firstname | lastname | email            |
       | student1 | Student   | 1        | student1@asd.com |
     And the following "courses" exist:
-      | fullname | shortname |
-      | Course 1 | C1        |
+      | fullname | shortname | visibility |
+      | Course 1 | C1        | 1          |
     And the following "course enrolments" exist:
       | user     | course | role    |
       | student1 | C1     | student |
@@ -20,10 +20,11 @@ Feature: Open Studio guest access
     And the following open studio "contents" exist:
       | openstudio | user     | name            | description              | visibility |
       | OS1        | student1 | Student slot 1  | Test slot 1 description  | module     |
-    # Give guest the default student role so that they could view and post content if they weren't prevented.
-    And the following config values are set as admin:
-      | guestroleid | 5 |
     And I log in as "admin"
+    # Give guest the default student permissions so that they could view and post content if they weren't prevented.
+    And I set the following system permissions of "Guest" role:
+      | capability          | permission |
+      | mod/openstudio:view | Allow      |
     And I am on "Course 1" course homepage
     And I navigate to "Users > Enrolment methods" in current page administration
     And I click on "Enable" "link" in the "Guest access" "table_row"
