@@ -206,6 +206,22 @@
                     {{>mod_openstudio/comment}}
                 </div>
             </div>
+            <div class="openstudio-content-view-block openstudio-folder-global-background collapsed" data-toggle="collapse"
+                 data-target="#openstudio_folder_view_folder_tags" role="button">
+                <a href="">{{#str}} folderformtags, mod_openstudio {{/str}}</a>
+            </div>
+            <div id="openstudio_folder_view_folder_tags" class="openstudio-content-view-block-content
+                    openstudio-folder-block-content-background collapse clearfix">
+                <div class="openstudio-folder-view-tags clearfix">
+                    <ul class="openstudio-content-view-tag-item">
+                        {{#tagsraw}}
+                            <li class="openstudio-content-view-tag">
+                                <a href="{{{taglink}}}">{{{tagname}}}</a>
+                            </li>
+                        {{/tagsraw}}
+                    </ul>
+                </div>
+            </div>
 
             {{>mod_openstudio/content_flags}}
 

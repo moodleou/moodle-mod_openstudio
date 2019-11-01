@@ -292,9 +292,15 @@ class mod_openstudio_content_form extends moodleform {
             $submitbuttontitle = get_string('contentformsubmitbutton', 'openstudio');
         }
 
+        $isfolder = $this->_customdata['iscreatefolder'] || $this->_customdata['isfolderediting'];
+
         $mform->addElement('html', html_writer::start_tag('div',
                 array('id' => 'contentformoptionalmetadata',
-                'class' => $defaultcontentuploadtype ? '' : 'openstudio-hidden')));
+                'class' => $defaultcontentuploadtype || $isfolder ? '' : 'openstudio-hidden')));
+
+        $mform->addElement('html', html_writer::start_tag('div',
+                array('id' => 'contentformownershipdata',
+                        'class' => $isfolder ? 'openstudio-hidden' : '')));
 
         $radioarray = array();
         $radioarray[] = $mform->createElement('radio', 'ownership', '',
@@ -313,6 +319,8 @@ class mod_openstudio_content_form extends moodleform {
         $mform->setType('ownershipdetail', PARAM_TEXT);
 
         $mform->disabledIf('ownershipdetail', 'ownership', 'neq', '2');
+
+        $mform->addElement('html', html_writer::end_tag('div'));
 
         // Add custom class to style tag label align with input.
         $mform->addElement('tags', 'tags', get_string('tags'),

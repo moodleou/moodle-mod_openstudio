@@ -469,6 +469,7 @@ $string['contentformvisibility'] = 'Who can view this content';
 $string['contentformheadermetadata'] = 'Optional information';
 $string['contentformdescription'] = 'Description';
 $string['folderformdescription'] = 'Folder description';
+$string['folderformtags'] = 'Folder tags';
 $string['contentformtags'] = 'Tags';
 $string['contentformownershipmyownwork'] = 'All my own work';
 $string['contentformownershipfoundonline'] = 'Found online';
@@ -1335,7 +1336,7 @@ $string['notificationslistheader'] = 'My Notifications';
 $string['youhavenotifications'] = 'You have';
 $string['unreadnotifications'] = 'unread notifications';
 
-$string['folderfoldercomments'] = 'Folder Comments';
+$string['folderfoldercomments'] = 'Folder comments';
 $string['folderselectexist'] = 'Select existing post to add to folder';
 $string['folderdeletedfolder'] = 'Delete folder';
 $string['folderlockfolder'] = 'Lock folder';

@@ -50,8 +50,8 @@ Feature: Open Studio Folder Overview
 
   Scenario: Check Item Folder Overview
       Given the following open studio "folders" exist:
-        | openstudio | user     | name                   | description                       | visibility | contenttype    |
-        | OS1        | teacher1 | Test Folder Overview   | My Folder Overview Description 1  | module     | folder_content |
+        | openstudio | user     | name                   | description                       | visibility | contenttype    | tags     |
+        | OS1        | teacher1 | Test Folder Overview   | My Folder Overview Description 1  | module     | folder_content | testtag  |
       And I follow "Test Open Studio name 1"
       And I follow "People" in the openstudio navigation
       And I follow "Shared Content > My Module" in the openstudio navigation
@@ -73,9 +73,12 @@ Feature: Open Studio Folder Overview
       And I should see "Folder description"
       And I press "Folder description"
       And I should see "My Folder Overview Description 1"
-      And I press "Folder Comments"
-      And I should see "Folder Comments"
+      And I should see "Folder comments"
+      And I press "Folder comments"
       And "Add new comment" "button" should exist
+      And I should see "Folder tags"
+      And I press "Folder tags"
+      And I should see "testtag"
 
       And "Delete folder" "button" should exist
       And "Lock folder" "button" should exist

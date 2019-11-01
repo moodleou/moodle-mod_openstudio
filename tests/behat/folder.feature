@@ -248,3 +248,41 @@ Feature: Create and edit Open Studio Folder
         And the openstudio breadcrumbs should be "Dashboard > My courses > C1 > General > Test Open Studio name 1 > My Module >  Teacher's work > Test Folder Overview"
         And I follow "Test Content Folder Overview"
         Then the openstudio breadcrumbs should be "Dashboard > My courses > C1 > General > Test Open Studio name 1 > My Module >  Teacher's work > Test Folder Overview >  Test Content Folder Overview"
+
+    Scenario: Add tags to folder
+        Given I am on site homepage
+        And I log out
+        And I log in as "teacher1"
+        And I am on "Course 1" course homepage
+        When I follow "Test Open Studio name 1"
+        And I follow "Administration > Edit" in the openstudio navigation
+        And I follow "Expand all"
+        And I set the field "Enable Folders" to "1"
+        And I press "Save and display"
+
+        # Create new folder in My Module view
+        And I follow "Create new folder"
+        And I set the following fields to these values:
+            | Who can view this folder  | My module                                  |
+            | Folder title              | Test my folder view 1                      |
+            | Folder description        | My folder view description 1               |
+            | Tags                      | createdtag                                 |
+        And I press "Create folder"
+        And I press "Folder tags"
+        And I should see "createdtag"
+
+        # edit to add a new tag
+        And I follow "Edit folder details and sharing"
+        And I set the field "Tags" to "editedtag"
+        And I press "Save"
+        And I press "Folder tags"
+        And I should see "createdtag"
+        And I should see "editedtag"
+
+        # edit to remove a tag
+        And I follow "Edit folder details and sharing"
+        And I click on "//span[@data-value='createdtag']" "xpath_element"
+        And I press "Save"
+        And I press "Folder tags"
+        And I should not see "createdtag"
+        And I should see "editedtag"
