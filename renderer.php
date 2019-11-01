@@ -680,6 +680,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $pb = renderer_utils::openstudio_render_paging_bar($contentdata);
             $paging = $this->render($pb);
             $contentdata->paging = $paging;
+            $contentdata->multiplepages = $contentdata->streamdatapagesize < $contentdata->total;
         }
         $contentdata->available = $permissions->pinboarddata->available;
 

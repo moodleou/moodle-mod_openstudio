@@ -1209,6 +1209,7 @@ $string['cron_deletenotifications'] = 'Delete notification job';
 $string['accesscurrentpage'] = 'Current Page';
 $string['accesscurrentcontent'] = 'Current Content';
 $string['accessskiptofoldercontent'] = 'Skip to Folder content';
+$string['accessskipcontent'] = 'Skip content';
 
 $string['overlaymodule'] = 'Module';
 $string['overlaygroup'] = 'Group';
