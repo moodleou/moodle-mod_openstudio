@@ -388,6 +388,10 @@ Feature: Folder Overview
       And I follow "My Content > My Activities" in the openstudio navigation
       And I click on "a.openstudio-profile-mypaticipation" "css_element"
       And I follow "Content1.1"
+    And Open studio contents should be in the following order:
+      | Test My Folder Overview 1 |
+      | Test My Folder Overview 2 |
+      | Test My Folder Overview 3 |
       And I press "Order posts"
       # User cannot input number to order fixed content, error message will display
       And I click on "#openstudio-folder-reorder-down-0" "css_element"
@@ -396,9 +400,9 @@ Feature: Folder Overview
       And I click on "#openstudio-folder-reorder-up-2" "css_element"
       And I click on "Save order" "button" in the "Order posts" "dialogue"
       And Open studio contents should be in the following order:
-        | Test My Folder Overview 2 |
         | Test My Folder Overview 1 |
         | Test My Folder Overview 3 |
+        | Test My Folder Overview 2 |
 
       And I follow "Add new content"
       And I press "Add file"
@@ -416,9 +420,9 @@ Feature: Folder Overview
       And I should see "You cannot move this content beyond other fixed contents."
       And I click on "Close" "button" in the "Order posts" "dialogue"
       And Open studio contents should be in the following order:
-        | Test My Folder Overview 2 |
         | Test My Folder Overview 1 |
         | Test My Folder Overview 3 |
+        | Test My Folder Overview 2 |
         | Test My Folder Overview 4 |
 
       # User cannot input a zero number
@@ -454,8 +458,8 @@ Feature: Folder Overview
       And Open studio contents should be in the following order:
         | Test My Folder Overview 1 |
         | Test My Folder Overview 4 |
-        | Test My Folder Overview 2 |
         | Test My Folder Overview 3 |
+        | Test My Folder Overview 2 |
 
    Scenario: Folder Overview in My Activities with Zero ordering
 
