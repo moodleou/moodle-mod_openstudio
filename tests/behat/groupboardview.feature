@@ -61,7 +61,7 @@ Feature: Open Studio group stream
         # Add new content view Group
         When I follow "Test Open Studio name 1"
         Then I should see "Test Open Studio name 1"
-       And I follow "Add new content"
+       And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | Group - group1                             |
@@ -91,7 +91,7 @@ Feature: Open Studio group stream
         Then I should not see "Test My Group Board View 1"
 
         # Student add new content when in Separate Groups mode
-       And I follow "Add new content"
+       And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | Group - group3                             |
@@ -118,7 +118,7 @@ Feature: Open Studio group stream
         And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Shared content > My Group" in the openstudio navigation
-       And I follow "Add new content"
+       And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | Group - group2                             |

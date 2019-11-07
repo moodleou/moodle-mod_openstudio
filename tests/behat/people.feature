@@ -96,7 +96,7 @@ Feature: Open Studio people view
           | ID number                     | OS1                            |
         And all users have accepted the plagarism statement for "OS1" openstudio
         And I follow "Test Open Studio name 1"
-        And I follow "Add new content"
+        And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | My module                                  |
@@ -112,7 +112,7 @@ Feature: Open Studio people view
         And I log in as "student1"
         And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
-        And I follow "Add new content"
+        And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | Only me                                    |
@@ -129,7 +129,7 @@ Feature: Open Studio people view
         And I log in as "student2"
         And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
-        And I follow "Add new content"
+        And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | Only me                                    |
@@ -147,7 +147,7 @@ Feature: Open Studio people view
         And I log in as "student5"
         And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
-        And I follow "Add new content"
+        And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | Only me                                    |
@@ -192,7 +192,7 @@ Feature: Open Studio people view
         And I log in as "student2"
         And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
-        And I follow "Add new content"
+        And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | My module                                  |
@@ -206,7 +206,7 @@ Feature: Open Studio people view
         And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "My content" in the openstudio navigation
-        And I follow "Add new content"
+        And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | My module                                  |

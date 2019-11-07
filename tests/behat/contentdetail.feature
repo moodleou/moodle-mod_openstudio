@@ -65,7 +65,7 @@ Feature: Create and edit Open Studio contents detail
     Scenario: Add new content and check content details with img
         When I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
-        And I follow "Add new content"
+        And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | My module                                  |
@@ -261,7 +261,7 @@ Feature: Create and edit Open Studio contents detail
     Scenario: Add new content and check content details with web/embed link
         When I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
-        And I follow "Add new content"
+        And I follow "Upload content"
         And I press "Add web/embed link"
         And I set the following fields to these values:
           | Who can view this content | My module                                            |
@@ -669,7 +669,7 @@ Feature: Create and edit Open Studio contents detail
 
         # Breadcrumb add content
         And I follow "Shared content > My Module" in the openstudio navigation
-        And I follow "Add new content"
+        And I follow "Upload content"
         And the openstudio breadcrumbs should be "Dashboard > My courses > C1 > Topic 1 > Test Open Studio name 1 > My Pinboard > Pinboard content > Create"
 
         # switch to student1

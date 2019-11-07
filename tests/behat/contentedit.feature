@@ -190,6 +190,6 @@ Feature: Create and edit Open Studio contents
         And Open Studio test instance is configured for "Test Open Studio name 1"
         And all users have accepted the plagarism statement for "OS1" openstudio
         When I follow "Test Open Studio name 1"
-        And I follow "Add new content"
+        And I follow "Upload content"
         And I press "Add file"
         Then I should not see "Accepted file types:"
