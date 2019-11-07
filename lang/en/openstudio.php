@@ -28,7 +28,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['modulename'] = 'OpenStudio 2 (pilot only)';
+$string['modulename'] = 'OpenStudio 2';
 $string['modulenameplural'] = 'openstudios';
 $string['modulename_help'] = 'Open Studio is a creative, collaborative space that allows users to share images, videos,
 files and other media with others. It can shared within groups or used as an individual’s portfolio. Users can obtain
@@ -36,7 +36,7 @@ feedback on the content they have shared and comment on materials that others ha
 
 $string['openstudio'] = 'Open Studio';
 $string['pluginadministration'] = 'Open Studio administration';
-$string['pluginname'] = 'OpenStudio 2 (pilot only)';
+$string['pluginname'] = 'OpenStudio 2';
 
 $string['openstudio:addinstance'] = 'Add a new Studio';
 $string['openstudio:managelevels'] = 'Manage levels';

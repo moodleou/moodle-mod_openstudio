@@ -50,14 +50,14 @@ Feature: Open Studio people view
     Scenario: Only show People link if module or group sharing is enabled
         When I am on "Course 1" course homepage
         And I turn editing mode on
-        And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+        And I add a "OpenStudio 2" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1      |
           | Description                  | Test Open Studio description |
           | Enable 'My Module'           | 0                            |
           | Abuse reports are emailed to | teacher1@asd.com             |
           | ID number                    | OS1                          |
 
-        And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+        And I add a "OpenStudio 2" to section "1" and I fill the form with:
           | Name                          | Test Open Studio name 2        |
           | Description                   | Test Open Studio description 2 |
           | Your word for 'My Module'     | My Module                      |
@@ -81,7 +81,7 @@ Feature: Open Studio people view
     Scenario: GIVEN My Module selected, THEN show all OS Members
         When I am on "Course 1" course homepage
         And I turn editing mode on
-        And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+        And I add a "OpenStudio 2" to section "1" and I fill the form with:
           | Name                          | Test Open Studio name 1        |
           | Description                   | Test Open Studio description 1 |
           | Your word for 'My Module'     | My Module                      |
@@ -174,7 +174,7 @@ Feature: Open Studio people view
     Scenario: Group mode selected
         When I am on "Course 1" course homepage
         And I turn editing mode on
-        And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+        And I add a "OpenStudio 2" to section "1" and I fill the form with:
           | Name                          | Test Open Studio name 1        |
           | Description                   | Test Open Studio description 1 |
           | Your word for 'My Module'     | My Module                      |

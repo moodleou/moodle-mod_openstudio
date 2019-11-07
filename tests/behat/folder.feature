@@ -49,7 +49,7 @@ Feature: Create and edit Open Studio Folder
         And I log in as "teacher1"
         And I am on "Course 1" course homepage
         And I turn editing mode on
-        And I add a "OpenStudio 2 (pilot only)" to section "0" and I fill the form with:
+        And I add a "OpenStudio 2" to section "0" and I fill the form with:
             | Name                         | Test Open Studio name 1      |
             | Description                  | Test Open Studio description |
             | Your word for 'My Module'    | Module 1                     |

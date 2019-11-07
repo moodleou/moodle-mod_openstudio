@@ -52,7 +52,7 @@ Feature: Create and edit Open Studio contents
     Scenario: Edit content without upload file
         Given I am on "Course 1" course homepage
         And I turn editing mode on
-        And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+        And I add a "OpenStudio 2" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1      |
           | Description                  | Test Open Studio description |
           | Abuse reports are emailed to | teacher1@asd.com             |
@@ -85,7 +85,7 @@ Feature: Create and edit Open Studio contents
     Scenario: Edit content with upload file
         Given I am on "Course 1" course homepage
         And I turn editing mode on
-        And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+        And I add a "OpenStudio 2" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1      |
           | Description                  | Test Open Studio description |
           | Abuse reports are emailed to | teacher1@asd.com             |
@@ -117,7 +117,7 @@ Feature: Create and edit Open Studio contents
     Scenario: Edit content without web link
         Given I am on "Course 1" course homepage
         And I turn editing mode on
-        And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+        And I add a "OpenStudio 2" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1      |
           | Description                  | Test Open Studio description |
           | Abuse reports are emailed to | teacher1@asd.com             |
@@ -150,7 +150,7 @@ Feature: Create and edit Open Studio contents
     Scenario: Edit content with web link
         Given I am on "Course 1" course homepage
         And I turn editing mode on
-        And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+        And I add a "OpenStudio 2" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1      |
           | Description                  | Test Open Studio description |
           | Abuse reports are emailed to | teacher1@asd.com             |
@@ -183,7 +183,7 @@ Feature: Create and edit Open Studio contents
     Scenario: Check list of file types hidden on Add File form
         Given I am on "Course 1" course homepage
         And I turn editing mode on
-        And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+        And I add a "OpenStudio 2" to section "1" and I fill the form with:
           | Name        | Test Open Studio name 1      |
           | Description | Test Open Studio description |
           | ID number   | OS1                          |
