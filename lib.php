@@ -522,6 +522,7 @@ EOF;
                 }
             case content::TYPE_PRESENTATION:
             case content::TYPE_SPREADSHEET:
+            case content::TYPE_ZIP:
                 break;
 
             default:
