@@ -663,7 +663,7 @@ if ($finalviewpermissioncheck) {
                     // Activity content.
 
                     // Process lock for activity content.
-                    $lockdata = renderer_utils::content_lock_data((object) array('l3id' => $content->l3id));
+                    $lockdata = renderer_utils::content_lock_data((object) array('l3id' => $content->l3id), $permissions, $cminstance);
                     $content->contentislocked = $lockdata->contentislock;
                     $content->contentislockmessage = $lockdata->contentislockmessage;
 

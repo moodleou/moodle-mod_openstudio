@@ -279,6 +279,11 @@ $string['settingsenableparticipationsmileydescription'] = 'Show a happy or sad e
 $string['settingstutorroles'] = "'Tutor' roles";
 $string['settingstutorroles_help'] = "Users with these roles at the course level will be able to see contents shared with 'My tutor' in their groups.";
 $string['settingstutorrolesdefault'] = 'Tutor';
+$string['settingsallowlatesubmissions'] = 'Allow late submissions';
+$string['settingsallowlatesubmissionsdescription'] = 'Allow contents to be added to activities after the submission date has passed';
+$string['settingslatesubmissionmessage'] = 'Warning message for late submissions';
+$string['settingslatesubmissionmessage_help'] = 'This is the message that will display on a content slot when the submission date has passed. The placeholder %%DATE%% will be replaced by the submission date.';
+$string['settingsdefaultlatesubmissionmessage'] = 'Please note that the submission deadline of %%DATE%% for this activity has passed.';
 
 $string['pinboard'] = 'Pinboard';
 $string['pinboard_help'] = 'Specify the number of pinboard contents that users can create or enter 0 to disable.';

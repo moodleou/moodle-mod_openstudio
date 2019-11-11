@@ -38,8 +38,8 @@ class lock {
     const ALL = 1; // Combination of 2, 4 and 8.
     const CRUD = 2; // Cannot edit/delete/archive content.
     const SOCIAL = 4; // Cannot do social flagging (favourite, inspire, etc.).
-    const SOCIAL_CRUD = 6; // Cannot have new comments.
-    const COMMENT = 8; // Combination of 2 and 4.
+    const SOCIAL_CRUD = 6; // Combination of 2 and 4.
+    const COMMENT = 8; // Cannot have new comments.
     const COMMENT_CRUD = 12; // Combination of 2 and 8.
 
     /**

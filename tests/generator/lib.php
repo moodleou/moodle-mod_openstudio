@@ -337,6 +337,9 @@ class mod_openstudio_generator extends testing_module_generator {
         if (!isset($record->enableparticipationsmiley)) {
             $record->enableparticipationsmiley = 0;
         }
+        if (!isset($record->allowlatesubmissions)) {
+            $record->allowlatesubmissions = 0;
+        }
         if (array_key_exists('groupmode', $options) && array_key_exists('groupingid', $options)) {
             if (!isset($record->groupmode)) {
                 $record->groupmode = $options['groupmode'];
