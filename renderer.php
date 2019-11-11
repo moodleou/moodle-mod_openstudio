@@ -34,7 +34,6 @@ use mod_openstudio\local\api\lock;
 use mod_openstudio\local\api\user;
 use mod_openstudio\local\api\notifications;
 use mod_openstudio\local\api\folder;
-use mod_openstudio\local\util;
 use mod_openstudio\local\util\defaults;
 use mod_openstudio\local\notifications\notification;
 use mod_openstudio\local\api\template;
@@ -769,17 +768,17 @@ class mod_openstudio_renderer extends plugin_renderer_base {
     /**
      * This function renders the HTML fragment for the content detail page of Open Studio.
      *
-     * @param int $cm The course module object.
+     * @param int $cmid The course module id.
      * @param object $permissions The permission object for the given user/view.
      * @param object $contentdata The content detail to display.
      * @param int $cminstance The course module instance.
      * @return string The rendered HTML fragment.
      */
-    public function content_page($cm, $permissions, $contentdata, $cminstance) {
+    public function content_page($cmid, $permissions, $contentdata, $cminstance) {
         global $CFG, $PAGE, $OUTPUT, $USER;
 
         $openstudioid = $cminstance->id;
-        $contentdata->cmid = $cmid = $cm->id;
+        $contentdata->cmid = $cmid;
         if (!property_exists($contentdata, 'profilebarenable')) {
             $contentdata->profilebarenable = true;
         }
@@ -795,15 +794,10 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $tagsraw = array();
             if (count($contentdata->tagsraw) > 0) {
                 foreach ($contentdata->tagsraw as $contenttag) {
-                    if (util::global_search_enabled($cm)) {
-                        $tagsearchtext = $contenttag->name;
-                    } else {
-                        $tagsearchtext = 'tag:' . str_replace(' ', '', $contenttag->name);
-                    }
-
                     $taglink = new moodle_url('/mod/openstudio/search.php',
                         array('id' => $cmid,
-                            'searchtext' => $tagsearchtext));
+                            'searchtext' => 'tag:'
+                                . str_replace(' ', '', $contenttag->name)));
 
                     $tagsraw[] = (object) [
                         'taglink' => $taglink->out(false),

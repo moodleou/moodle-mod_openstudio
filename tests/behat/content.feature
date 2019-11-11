@@ -69,9 +69,9 @@ Feature: Create Open Studio contents
           | Description               | My Group Board View Description 1 |
         And I press "Add file"
         And I wait "1" seconds
-        And I should see "Maximum file size"
+        And I should see "Maximum size for new files"
         And I press "Add web/embed link"
-        And I should not see "Maximum file size"
+        And I should not see "Maximum size for new files"
         And I press "Add web/embed link"
         And I should not see "Details"
         And I press "Save"

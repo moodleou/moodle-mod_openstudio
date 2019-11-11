@@ -32,10 +32,11 @@ use mod_openstudio\local\util;
  * Search API functions
  *
  * This code has been only minimally refactored from openstudio V1, so may still use terms like "slot".
+ * This class relies on the local_ousearch plugin being installed, otherwise the functions do nothing.
  */
 class search {
     /**
-     * Queries the search engine for a given search term.
+     * Queries the OU search engine for a given search term.
      * Supports pagination.
      *
      * @param object $cm Course module object.
@@ -50,13 +51,15 @@ class search {
     public static function query($cm, $searchtext,
             $pagestart = 0, $pagesize = \mod_openstudio\local\util\defaults::STREAMPAGESIZE, $nextstart = 0,
             $filtercontext = content::VISIBILITY_MODULE,
-            $filterfunction = 'openstudio_ousearch_filter_permission_include_setslots') {
+            $filterfunction = 'openstudio_ousearch_filter_permission') {
         global $PAGE;
 
         $searchresults = new \stdClass();
 
+        $cminfo = \cm_info::create($cm);
         $globalsearch = false;
-        if (util::global_search_enabled($cm)) {
+        if (util::moodle_global_search_installed()
+                && \local_moodleglobalsearch\util::is_activity_search_enabled($cminfo)) {
             $globalsearch = true;
             $pagesize = \core_search\manager::DISPLAY_RESULTS_PER_PAGE;
         }
@@ -120,9 +123,6 @@ class search {
             $query->set_coursemodule($cm);
             $query->set_filter($filterfunction);
             $searchresults = $query->query($limitfrom, $limitnum);
-            if (!isset($searchresults->dbrows)) {
-                $searchresults->dbrows = 0;
-            }
         }
 
         $nextsearchresults = 0;

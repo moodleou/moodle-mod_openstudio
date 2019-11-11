@@ -34,9 +34,6 @@ class embedcode_testcase extends \advanced_testcase {
      * object contains the data that we'd expect.
      */
     public function test_parse() {
-        if (!\mod_openstudio\local\api\embedcode::is_ouembed_installed()) {
-            $this->markTestSkipped('This test uses filter_ouembed, which is not installed. Skipping.');
-        }
         $testurl = 'http://youtube.com/';
         $embedapi = new \mod_openstudio\local\tests\mock_filter_ouembed_api();
         $embedresponse = \mod_openstudio\local\api\embedcode::parse($embedapi, $testurl);

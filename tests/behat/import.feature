@@ -9,8 +9,8 @@ Feature: Import zip file
             | username | firstname | lastname | email            |
             | student1 | Student   | 1        | student1@asd.com |
         And the following "courses" exist:
-            | fullname | shortname | category | format | numsections |
-            | Course 1 | C1        |        0 | topics | 0           |
+            | fullname | shortname | category | format      | numsections |
+            | Course 1 | C1        |        0 | oustudyplan | 0           |
         And the following "course enrolments" exist:
             | user     | course | role    |
             | student1 | C1     | student |

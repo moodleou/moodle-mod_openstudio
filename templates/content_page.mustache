@@ -50,7 +50,6 @@
         "isfoldercontent": false,
         "showarchivebutton": true,
         "reportabuselink" : http://example.com,
-        "contentweblinktext" : "Web Link",
     }
 }}
 {{#contentmapenable}}
@@ -155,7 +154,7 @@
                 {{/contenttypeuseimagedefault}}
 
                 {{#contenttypefileurl}}
-                    <div><a href="{{contentfileurl}}">{{{contentweblinktext}}}</a></div>
+                    <div><a href="{{contentfileurl}}">{{#str}} contentcontentweblink, mod_openstudio {{/str}}</a></div>
                 {{/contenttypefileurl}}
 
                 {{#contenttypeimage}}
@@ -226,7 +225,7 @@
                         {{/showarchivebutton}}
                         {{#reportabuselink}}
                             <a id="id_reportbutton_link" href="{{{reportabuselink}}}" tabindex="-1">
-                                <input id="id_reportbutton" name="reportbutton" class="btn btn-secondary"
+                                <input id="id_reportbutton" name="reportbutton"
                                    value="{{#str}}contentactionreportpost, mod_openstudio{{/str}}" type="button">
                             </a>
                         {{/reportabuselink}}
@@ -325,7 +324,7 @@
             <div id="openstudio_content_view_post_owner" class="openstudio-content-view-block-content
 
                 {{#isfoldercontent}}openstudio-folder-block-content-background{{/isfoldercontent}}
-                openstudio-content-view-block-post-owner clearfix show">
+                openstudio-content-view-block-post-owner clearfix">
                 <div class="openstudio-content-view-user-picture">
                     <img src="{{{userpictureurl}}}">
                 </div>

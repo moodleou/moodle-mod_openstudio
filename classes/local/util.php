@@ -48,7 +48,7 @@ class util {
         global $USER;
 
         $result = api\honesty::get($studioid, $USER->id);
-        if ($result || !get_config('openstudio', 'honestycheckrequired')) {
+        if ($result) {
             return true;
         }
 
@@ -864,10 +864,10 @@ EOF;
     }
 
     /**
-     * Call to check if alert plugin exists.  If so, includes
+     * Call to check if search plugin exists.  If so, includes
      * the library suppport, otherwise return false.
      *
-     * @return bool True if OU alerts extension is installed.
+     * @return bool True if OU search extension is installed.
      */
     public static function oualerts_installed() {
         global $CFG;
@@ -905,30 +905,6 @@ EOF;
     public static function moodle_global_search_installed() {
         global $CFG;
         return file_exists($CFG->dirroot . '/local/moodleglobalsearch/classes/util.php');
-    }
-
-    /**
-     * Call to check if moodle global search/core global search should be used.
-     *
-     * @param object $cm Course module object.
-     * @return bool True if moodle global search is enabled or if it and OU Search are not installed and core global search is enabled
-     */
-    public static function global_search_enabled($cm) {
-        global $CFG;
-
-        // If moodle global search is installed and enabled that should be used.
-        if(util::moodle_global_search_installed()) {
-            $cminfo = \cm_info::create($cm);
-            return \local_moodleglobalsearch\util::is_activity_search_enabled($cminfo);
-        }
-
-        // If OU Search is installed, use that instead of global search
-        if(util::search_installed()){
-            return false;
-        }
-
-        // If neither moodle global search nor OU search are installed then use core global search if enabled
-        return !empty($CFG->enableglobalsearch);
     }
 
     /**

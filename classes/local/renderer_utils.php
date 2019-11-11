@@ -324,7 +324,6 @@ class renderer_utils {
         $contentdatatitle = '';
         $contentiframesrc = '';
         $previewcontent = '';
-        $contentweblinktext = '';
         $context = \context_module::instance($cmid);
 
         if (!empty($contentdata->folderid)) {
@@ -431,9 +430,8 @@ class renderer_utils {
             case content::TYPE_URL_VIDEO:
             case content::TYPE_URL_AUDIO:
                 $contentfileurl = $contentdata->content;
-                $contentweblinktext = get_string('contentcontentweblink', 'openstudio');
-                $embeddata = isset($contentdata->weblink) && embedcode::is_ouembed_installed() ? embedcode::parse(embedcode::get_ouembed_api(),
-                    $contentdata->weblink) : false;
+                $embeddata = isset($contentdata->weblink) ? embedcode::parse(embedcode::get_ouembed_api(),
+                        $contentdata->weblink) : false;
                 if ($embeddata === false) {
                     $contenttypefileurl = true;
                     if ($contentdata->contenttype == content::TYPE_URL_IMAGE) {
@@ -455,15 +453,13 @@ class renderer_utils {
                             // Skip the rest of the case code.
                         break;
                     } else if (($contentdata->contenttype == content::TYPE_URL) ||
-                            ($contentdata->contenttype == content::TYPE_URL_DOCUMENT_PDF)) {
-                        if (embedcode::is_ouembed_installed()) {
+                        ($contentdata->contenttype == content::TYPE_URL_DOCUMENT_PDF)) {
                             $contenttypeiframe = true;
+                            $contenttypefileurl = true;
+
                             $contentfileurl = $contentiframesrc = $contentdata->content;
-                        } else {
-                            // if ouembed is not installed just display the link
-                            $contentweblinktext = get_string('contentcontentweblinkonly', 'openstudio');
-                        }
-                        // Skip the rest of the case code.
+
+                            // Skip the rest of the case code.
                         break;
                     }
                 } else {
@@ -580,7 +576,6 @@ class renderer_utils {
         $contentdata->contentthumbnailfileurl = $contentthumbnailfileurl;
         $contentdata->contentdatatitle = $contentdatatitle;
         $contentdata->contentdatadate = userdate($contentdata->timemodified, get_string('formattimedatetime', 'openstudio'));
-        $contentdata->contentweblinktext = $contentweblinktext;
 
         if (property_exists($contentdata, 'isfoldercontent') && $contentdata->isfoldercontent) {
             $folder = folder::get($contentdata->folderid);

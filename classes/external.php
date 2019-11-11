@@ -143,7 +143,8 @@ class mod_openstudio_external extends external_api {
 
         if ($search) {
             $searchresultdata = search::query($cm, $search, 0, $pagesize, 0, content::VISIBILITY_MODULE, $filter);
-            if (!util::global_search_enabled($cm)) {
+            $cminfo = \cm_info::create($cm);
+            if (!\local_moodleglobalsearch\util::is_activity_search_enabled($cminfo)) {
                 $contentdata = $searchresultdata->result;
             } else {
                 // Use global search if activity search enabled.
@@ -190,11 +191,6 @@ class mod_openstudio_external extends external_api {
                 if ($content->contenttype == content::TYPE_FOLDER ||
                         array_key_exists($content->id, $contentsinfolder) ||
                         ($selectedpostsids && in_array($content->id, $selectedpostsids))) {
-                    continue;
-                }
-
-                // Make sure item belongs to the current user or adding other users' content is allowed
-                if ($content->userid != $USER->id && !$permissions->feature_enablefoldersanycontent) {
                     continue;
                 }
 
@@ -798,7 +794,7 @@ class mod_openstudio_external extends external_api {
                     }
                     $context = context_module::instance($cm->id);
                     $commentid = comments::create($params['cid'], $userid, $commenttext, $folderid,
-                        ['id' => $params['commentattachment']], $context, $inreplyto, $cm);
+                        ['id' => $params['commentattachment']], $context, $inreplyto);
                     $eventurl = new moodle_url('/mod/openstudio/content.php', ['id' => $params['cmid'], 'sid' => $params['cid']]);
                     if ($inreplyto) {
                         util::trigger_event(

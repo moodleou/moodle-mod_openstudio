@@ -34,16 +34,6 @@ defined('MOODLE_INTERNAL') || die();
 class embedcode {
 
     /**
-     * Call to check if embed plugin exists
-     *
-     * @return bool True if OU embed extension is installed.
-     */
-    public static function is_ouembed_installed() {
-        global $CFG;
-        return file_exists("{$CFG->dirroot}/filter/ouembed/filter.php");
-    }
-
-    /**
      * Generate an instance of the OUembed filter API to pass to the parse() method.
      *
      * @param array $params Options to pass into the oembed request.

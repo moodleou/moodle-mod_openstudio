@@ -113,11 +113,12 @@ SELECT s.id,
        f.filepath,
        f.filename,
        f.filesize
-  FROM {openstudio_contents} s
-  JOIN {files} f ON f.itemid = s.fileid
+  FROM {openstudio_contents} s,
+       {files} f
  WHERE s.openstudioid = ?
    AND s.userid  = ?
    AND s.fileid > ?
+   AND f.itemid = s.fileid
    AND f.component = ?
    AND f.filearea = ?
    AND f.filesize > ?

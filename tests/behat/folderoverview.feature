@@ -169,32 +169,13 @@ Feature: Folder Overview
         | openstudio | user     | name                   | description                       | visibility | contenttype    |
         | OS1        | teacher1 | Test Folder Overview   | My Folder Overview Description 1  | module     | folder_content |
       And the following open studio "contents" exist:
-        | openstudio | user     | name                  | description                 | file                                               | visibility  | index | keyword |
-        | OS1        | teacher1 | TestContentFolders 1  | Test content 1 description  | mod/openstudio/tests/importfiles/test1.jpg         | private     | 1     | folder  |
-        | OS1        | student1 | TestContentFolders 2  | Test content 2 description  | mod/openstudio/tests/importfiles/test2.jpg         | module      | 2     | folder  |
-        | OS1        | student2 | TestContentFolders 3  | Test content 3 description  | mod/openstudio/tests/importfiles/test3.jpg         | module      | 3     | folder  |
-        | OS1        | student3 | TestContentFolders 4  | Test content 4 description  | mod/openstudio/tests/importfiles/test4.jpg         | module      | 4     | folder  |
-    And the following config values are set as admin:
-      | enableglobalsearch | 1 |                          |
-      | modulesitesearch   | 2 | local_moodleglobalsearch |
-      | activitysearch     | 2 | local_moodleglobalsearch |
-      | nonosepsitesearch  | 1 | local_moodleglobalsearch |
-
-      # Go to folder overview
-      And I follow "Test Open Studio name 1"
-      And I follow "Shared Content > My Module" in the openstudio navigation
-      And I follow "Test Folder Overview"
-
-      # Should not see student posts
-      And I press "Select existing post to add to folder"
-      And I set the field "openstudio_search_post" to "folder"
-      And I click on "Search" "button" in the "Browse posts" "dialogue"
-      And I should not see "TestContentFolders 2"
-      And I should not see "TestContentFolders 3"
-      And I should not see "TestContentFolders 4"
+        | openstudio | user     | name                  | description                 | file                                               | visibility  |
+        | OS1        | teacher1 | TestContentFolders 1  | Test content 1 description  | mod/openstudio/tests/importfiles/test1.jpg         | private     |
+        | OS1        | student1 | TestContentFolders 2  | Test content 2 description  | mod/openstudio/tests/importfiles/test2.jpg         | module      |
+        | OS1        | student2 | TestContentFolders 3  | Test content 3 description  | mod/openstudio/tests/importfiles/test3.jpg         | module      |
+        | OS1        | student3 | TestContentFolders 4  | Test content 4 description  | mod/openstudio/tests/importfiles/test4.jpg         | module      |
 
       # Enable Add any contents to folders
-      And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 1"
       And I follow "Administration > Edit" in the openstudio navigation
       And I follow "Expand all"
@@ -218,19 +199,19 @@ Feature: Folder Overview
 
       # Select content of student1 to folder
       And I press "Select existing post to add to folder"
-      And I set the field "openstudio_search_post" to "folder"
-      And I click on "Search" "button" in the "Browse posts" "dialogue"
+      And I set the field "search" to "TestContentFolders 2"
+      And I click on "Search" "button" in the ".openstudio-folder-browse-posts-search-box" "css_element"
       And I should see "TestContentFolders 2"
-      And I select the existing openstudio post "TestContentFolders 2"
+      And I click on "Select" "button" in the "Browse posts" "dialogue"
       And I click on "Save changes" "button" in the "Browse posts" "dialogue"
       And I should see "TestContentFolders 2"
 
       # Select content of student2 to folder
       And I press "Select existing post to add to folder"
-      And I set the field "openstudio_search_post" to "folder"
-      And I click on "Search" "button" in the "Browse posts" "dialogue"
+      And I set the field "search" to "TestContentFolders 3"
+      And I click on "Search" "button" in the ".openstudio-folder-browse-posts-search-box" "css_element"
       And I should see "TestContentFolders 3"
-      And I select the existing openstudio post "TestContentFolders 3"
+      And I click on "Select" "button" in the "Browse posts" "dialogue"
       And I click on "Save changes" "button" in the "Browse posts" "dialogue"
       And I should see "TestContentFolders 3"
 
@@ -388,10 +369,6 @@ Feature: Folder Overview
       And I follow "My Content > My Activities" in the openstudio navigation
       And I click on "a.openstudio-profile-mypaticipation" "css_element"
       And I follow "Content1.1"
-    And Open studio contents should be in the following order:
-      | Test My Folder Overview 1 |
-      | Test My Folder Overview 2 |
-      | Test My Folder Overview 3 |
       And I press "Order posts"
       # User cannot input number to order fixed content, error message will display
       And I click on "#openstudio-folder-reorder-down-0" "css_element"
@@ -400,9 +377,9 @@ Feature: Folder Overview
       And I click on "#openstudio-folder-reorder-up-2" "css_element"
       And I click on "Save order" "button" in the "Order posts" "dialogue"
       And Open studio contents should be in the following order:
+        | Test My Folder Overview 2 |
         | Test My Folder Overview 1 |
         | Test My Folder Overview 3 |
-        | Test My Folder Overview 2 |
 
       And I follow "Add new content"
       And I press "Add file"
@@ -420,9 +397,9 @@ Feature: Folder Overview
       And I should see "You cannot move this content beyond other fixed contents."
       And I click on "Close" "button" in the "Order posts" "dialogue"
       And Open studio contents should be in the following order:
+        | Test My Folder Overview 2 |
         | Test My Folder Overview 1 |
         | Test My Folder Overview 3 |
-        | Test My Folder Overview 2 |
         | Test My Folder Overview 4 |
 
       # User cannot input a zero number
@@ -458,8 +435,8 @@ Feature: Folder Overview
       And Open studio contents should be in the following order:
         | Test My Folder Overview 1 |
         | Test My Folder Overview 4 |
-        | Test My Folder Overview 3 |
         | Test My Folder Overview 2 |
+        | Test My Folder Overview 3 |
 
    Scenario: Folder Overview in My Activities with Zero ordering
 
@@ -527,18 +504,21 @@ Feature: Folder Overview
       And I follow "My Content"
       And I follow "Test Folder Overview"
       And I press "Select existing post to add to folder"
-      And I should see "TestRemove 1"
-      And I should see "TestRemove 2"
-      And I should see "TestRemove 3"
       # Add 1st Item
-      And I select the existing openstudio post "TestRemove 1"
-      And I should not see "TestRemove 1"
+      And I set the field "search" to "TestRemove 1"
+      And I click on "Search" "button" in the ".openstudio-folder-browse-posts-search-box" "css_element"
+      And I should see "TestRemove 1"
+      And I click on "Select" "button" in the "Browse posts" "dialogue"
       # Add 2nd Item
-      And I select the existing openstudio post "TestRemove 2"
-      And I should not see "TestRemove 2"
+      And I set the field "search" to "TestRemove 2"
+      And I click on "Search" "button" in the ".openstudio-folder-browse-posts-search-box" "css_element"
+      And I should see "TestRemove 2"
+      And I click on "Select" "button" in the "Browse posts" "dialogue"
       # Add 3rd Item
-      And I select the existing openstudio post "TestRemove 3"
-      And I should not see "TestRemove 3"
+      And I set the field "search" to "TestRemove 3"
+      And I click on "Search" "button" in the ".openstudio-folder-browse-posts-search-box" "css_element"
+      And I should see "TestRemove 3"
+      And I click on "Select" "button" in the "Browse posts" "dialogue"
       # Observe the result
       And I click on "Remove last selection" "button" in the "Browse posts" "dialogue"
       And I should see "TestRemove 3"

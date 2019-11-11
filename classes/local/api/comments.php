@@ -42,7 +42,7 @@ class comments {
      * @return int Returns ID of inserted comment record.
      */
     public static function create($contentid, $userid, $comment, $folderid = null,
-            $file = null, $context = null, $inreplyto = null, $cm = null) {
+            $file = null, $context = null, $inreplyto = null) {
         global $DB;
 
         try {
@@ -74,12 +74,6 @@ class comments {
 
             if (($file !== null) && ($context !== null) && $commentid) {
                 file_save_draft_area_files($file['id'], $context->id, 'mod_openstudio', 'contentcomment', $commentid);
-            }
-
-            // Index new comments for search.
-            if ($cm != null) {
-                $newcontentdata = content::get_record($userid, $contentid);
-                search::update($cm, $newcontentdata);
             }
 
             // Update slot flag.
@@ -170,7 +164,7 @@ EOF;
         global $DB;
 
         $sql = <<<EOF
-SELECT count(c.id)
+SELECT count(c.*)
   FROM {openstudio_comments} c
  WHERE c.contentid = ?
    AND c.deletedby IS NULL
@@ -192,7 +186,7 @@ EOF;
 
         $params = [$studioid, $userid];
         $sql = <<<EOF
-SELECT count(c.id)
+SELECT count(c.*)
   FROM {openstudio_comments} c
   JOIN {openstudio_contents} s ON s.id = c.contentid AND s.openstudioid = ?
  WHERE c.userid = ?

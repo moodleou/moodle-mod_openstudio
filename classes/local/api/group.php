@@ -169,7 +169,7 @@ EOF;
         }
 
         $sql = <<<EOF
-    SELECT count(ue.id)
+    SELECT count(ue.*)
       FROM {user_enrolments} ue
       JOIN {enrol} e ON e.id = ue.enrolid AND e.courseid = ?
      WHERE ue.userid = ?

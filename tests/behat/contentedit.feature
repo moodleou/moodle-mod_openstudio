@@ -183,6 +183,7 @@ Feature: Create and edit Open Studio contents
     Scenario: Check list of file types hidden on Add File form
         Given I am on "Course 1" course homepage
         And I turn editing mode on
+        And I add the "OU Recent activity" block
         And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
           | Name        | Test Open Studio name 1      |
           | Description | Test Open Studio description |

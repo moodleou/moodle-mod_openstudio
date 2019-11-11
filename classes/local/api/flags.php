@@ -290,7 +290,7 @@ class flags {
         global $DB;
 
         $sql = <<<EOF
-    SELECT flagid, count(id) AS count
+    SELECT flagid, count(id)
       FROM {openstudio_flags} f
      WHERE userid = ?
 AND EXISTS (SELECT 1
@@ -319,7 +319,7 @@ EOF;
         global $DB;
 
         $sql = <<<EOF
-  SELECT flagid, count(id) AS count
+  SELECT flagid, count(id)
     FROM {openstudio_flags}
    WHERE contentid = ?
 GROUP BY flagid

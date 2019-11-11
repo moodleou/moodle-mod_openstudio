@@ -334,7 +334,7 @@ EOF;
         global $DB;
 
         $sql = <<<EOF
-SELECT COUNT(l3.id)
+SELECT COUNT(l3.*)
   FROM {openstudio_level3} l3
   JOIN {openstudio_level2} l2 ON l2.id = l3.level2id
   JOIN {openstudio_level1} l1 ON l1.id = l2.level1id
@@ -357,7 +357,7 @@ EOF;
         global $DB;
 
         $sql = <<<EOF
-  SELECT l1.id, COUNT(l3.id) AS count
+  SELECT l1.id, COUNT(l3.*)
     FROM {openstudio_level3} l3
     JOIN {openstudio_level2} l2 ON l2.id = l3.level2id
     JOIN {openstudio_level1} l1 ON l1.id = l2.level1id
@@ -396,20 +396,18 @@ EOF;
                 // Cascade down from level 1.
                 $sqll3 = <<<EOF
 DELETE FROM {openstudio_level3} l3
-      WHERE l3.level2id IN 
-        (SELECT l2.id 
-           FROM {openstudio_level2} l2
-           JOIN {openstudio_level1} l1 ON l2.level1id = l1.id
-          WHERE l1.id = ?)
+      USING {openstudio_level2} l2, {openstudio_level1} l1
+      WHERE l3.level2id = l2.id
+        AND l2.level1id = l1.id
+        AND l1.id = ?
 
 EOF;
 
                 $sqll2 = <<<EOF
 DELETE FROM {openstudio_level2} l2
-      WHERE l2.level1id = 
-        (SELECT l1.id
-        FROM {openstudio_level1} l1
-        WHERE l1.id = ?)
+      USING {openstudio_level1} l1
+      WHERE l2.level1id = l1.id
+        AND l1.id = ?
 
 EOF;
 
@@ -426,10 +424,9 @@ EOF;
                 // Cascade down from level 2.
                 $sqll3 = <<<EOF
 DELETE FROM {openstudio_level3} l3
-      WHERE l3.level2id IN 
-        (SELECT l2.id 
-        FROM {openstudio_level2} l2 
-        WHERE l2.id = ?)
+      USING {openstudio_level2} l2
+      WHERE l3.level2id = l2.id
+        AND l2.id = ?
 
 EOF;
 
@@ -514,10 +511,12 @@ EOF;
 UPDATE {openstudio_level3}
    SET status = ?
  WHERE level2id IN (SELECT l3.level2id
-                      FROM (SELECT * FROM {openstudio_level3}) l3
-                              JOIN {openstudio_level2} l2 ON l3.level2id = l2.id
-                              JOIN {openstudio_level1} l1 ON l2.level1id = l1.id
-                             WHERE l1.id = ?)
+                      FROM {openstudio_level3} l3,
+                           {openstudio_level2} l2,
+                           {openstudio_level1} l1
+                     WHERE l3.level2id = l2.id
+                       AND l2.level1id = l1.id
+                       AND l1.id = ?)
 
 EOF;
 
@@ -525,9 +524,10 @@ EOF;
 UPDATE {openstudio_level2}
    SET status = ?
  WHERE level1id IN (SELECT l2.level1id
-                      FROM (SELECT * FROM {openstudio_level2}) l2
-                              JOIN {openstudio_level1} l1 ON l2.level1id = l1.id
-                             WHERE l1.id = ?)
+                      FROM {openstudio_level2} l2,
+                           {openstudio_level1} l1
+                     WHERE l2.level1id = l1.id
+                       AND l1.id = ?)
 
 EOF;
 
@@ -547,9 +547,10 @@ EOF;
 UPDATE {openstudio_level3}
    SET status = ?
  WHERE level2id IN (SELECT l3.level2id
-                      FROM (SELECT * FROM {openstudio_level3}) l3
-                              JOIN {openstudio_level2} l2 ON l3.level2id = l2.id
-                             WHERE l2.id = ?)
+                      FROM {openstudio_level3} l3,
+                           {openstudio_level2} l2
+                     WHERE l3.level2id = l2.id
+                       AND l2.id = ?)
 
 EOF;
 

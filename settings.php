@@ -26,11 +26,6 @@ defined('MOODLE_INTERNAL') || die();
 use mod_openstudio\local\util\defaults;
 
 if ($ADMIN->fulltree) {
-    if (!extension_loaded('imagick') || !class_exists('Imagick')) {
-        $settings->add(new admin_setting_heading('openstudio/missinglibrarywarning', '',
-                get_string('configmissinglibrarywarning', 'openstudio')));
-    }
-
     $sitemaxbytes = isset($CFG->maxbytes) ? $CFG->maxbytes : defaults::MAXBYTES;
     $settings->add(new admin_setting_configselect(
             'openstudio/maxbytes',
@@ -80,18 +75,5 @@ if ($ADMIN->fulltree) {
             get_string('confignotificationlimitunreaddescription', 'openstudio'),
             defaults::NOTIFICATIONLIMITUNREAD,
             PARAM_INT
-    ));
-    $settings->add(new admin_setting_configcheckbox(
-            'openstudio/honestycheckrequired',
-            get_string('confighonestycheckrequired', 'openstudio'),
-            get_string('confighonestycheckrequireddescription', 'openstudio'),
-            defaults::HONESTYTEXTREQUIRED
-    ));
-    $settings->add(new admin_setting_confightmleditor(
-            'openstudio/honestytext',
-            get_string('confighonestytext', 'openstudio'),
-            get_string('confighonestytextdescription', 'openstudio'),
-            get_string('confighonestytextdefault', 'openstudio'),
-            PARAM_RAW
     ));
 }

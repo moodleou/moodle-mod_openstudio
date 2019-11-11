@@ -13,8 +13,8 @@ Feature: Create and edit Folder
             | student3 | Student | 3 | student3@asd.com |
             | student4 | Student | 4 | student4@asd.com |
         And the following "courses" exist:
-            | fullname | shortname | category | format | numsections |
-            | Course 1 | C1        | 0        | topics | 0           |
+            | fullname | shortname | category | format      | numsections |
+            | Course 1 | C1        | 0        | oustudyplan | 0           |
         And the following "course enrolments" exist:
             | user | course | role |
             | teacher1 | C1 | editingteacher |
@@ -135,7 +135,8 @@ Feature: Create and edit Folder
     Scenario: Create Folder in other view
         Given I am on site homepage
         And I log out
-        And I log in as "teacher1"
+        And I am using the OSEP theme
+        And I log in as "teacher1" (in the OSEP theme)
         And I am on "Course 1" course homepage
         When I follow "Test Open Studio name 1"
         And I follow "Administration > Edit" in the openstudio navigation
@@ -145,7 +146,7 @@ Feature: Create and edit Folder
 
         # Create new folder in My Module view
         And I follow "Create new folder"
-        Then "Create" "text" should exist in the ".breadcrumb" "css_element"
+        Then "Create" "text" should exist in the ".breadcrumb-nav" "css_element"
         And I set the following fields to these values:
           | Who can view this folder  | My module                                  |
           | Folder title              | Test my folder view 1                      |
@@ -180,7 +181,8 @@ Feature: Create and edit Folder
     Scenario: Edit Folder in other view
         Given I am on site homepage
         And I log out
-        And I log in as "teacher1"
+        And I am using the OSEP theme
+        And I log in as "teacher1" (in the OSEP theme)
         And I am on "Course 1" course homepage
         When I follow "Test Open Studio name 1"
         And I follow "Administration > Edit" in the openstudio navigation
@@ -199,8 +201,8 @@ Feature: Create and edit Folder
         # edit folder in My Module view
         And I go to content edit view
         And I follow "Edit folder details and sharing"
-        Then "Test my folder view 1" "text" should exist in the ".breadcrumb" "css_element"
-        Then "Edit" "text" should exist in the ".breadcrumb" "css_element"
+        Then "Test my folder view 1" "text" should exist in the ".breadcrumb-nav" "css_element"
+        Then "Edit" "text" should exist in the ".breadcrumb-nav" "css_element"
         And I set the field "Folder title" to "Test my folder view 2"
         And I press "Save"
         And I follow "Shared content > Module 1" in the openstudio navigation
@@ -210,7 +212,8 @@ Feature: Create and edit Folder
     Scenario: Breadcrumb navigation for Folder and Content of folder
         Given I am on site homepage
         And I log out
-        And I log in as "teacher1"
+        And I am using the OSEP theme
+        And I log in as "teacher1" (in the OSEP theme)
         And I am on "Course 1" course homepage
         When I follow "Test Open Studio name 1"
         And I follow "Administration > Edit" in the openstudio navigation
@@ -225,26 +228,26 @@ Feature: Create and edit Folder
         And I follow "Test Open Studio name 1"
         And I follow "Shared Content > Module 1" in the openstudio navigation
         And I follow "Test Folder Overview"
-        And the openstudio breadcrumbs should be "Dashboard > My courses > C1 > General > Test Open Studio name 1 > My Pinboard > Test Folder Overview"
+        And the OSEP theme breadcrumbs should be "C1 Home > Week 1 > Test Open Studio name 1 > My Pinboard > Test Folder Overview"
 
         # Add new content of folder
         And I follow "Add new content"
-        And the openstudio breadcrumbs should be "Dashboard > My courses > C1 > General > Test Open Studio name 1 > My Pinboard > Test Folder Overview > Create"
+        And the OSEP theme breadcrumbs should be "C1 Home > Week 1 > Test Open Studio name 1 > My Pinboard > Test Folder Overview > Create"
         And I set the following fields to these values:
         | Title                     | Test Content Folder Overview                    |
         | Description               | My Folder Overview Description                  |
         And I press "Save"
-        And the openstudio breadcrumbs should be "Dashboard > My courses > C1 > General > Test Open Studio name 1 > My Pinboard > Test Folder Overview > Test Content Folder Overview"
+        And the OSEP theme breadcrumbs should be "C1 Home > Week 1 > Test Open Studio name 1 > My Pinboard > Test Folder Overview > Test Content Folder Overview"
 
         # switch to student1
-        And I log out
-        And I log in as "student1"
+        And I log out (in the OSEP theme)
+        And I log in as "student1" (in the OSEP theme)
         And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Shared content > Module 1" in the openstudio navigation
         And I follow "Test Open Studio name 1"
         And I follow "Shared Content > Module 1" in the openstudio navigation
         And I follow "Test Folder Overview"
-        And the openstudio breadcrumbs should be "Dashboard > My courses > C1 > General > Test Open Studio name 1 > My Module >  Teacher's work > Test Folder Overview"
+        And the OSEP theme breadcrumbs should be "C1 Home > Week 1 > Test Open Studio name 1 > My Module >  Teacher's work > Test Folder Overview"
         And I follow "Test Content Folder Overview"
-        Then the openstudio breadcrumbs should be "Dashboard > My courses > C1 > General > Test Open Studio name 1 > My Module >  Teacher's work > Test Folder Overview >  Test Content Folder Overview"
+        Then the OSEP theme breadcrumbs should be "C1 Home > Week 1 > Test Open Studio name 1 > My Module >  Teacher's work > Test Folder Overview >  Test Content Folder Overview"

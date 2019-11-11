@@ -338,7 +338,7 @@ echo $OUTPUT->header(); // Header.
 
 echo $html;
 
-echo $renderer->content_page($cm, $permissions, $contentdata, $cminstance); // Content detail.
+echo $renderer->content_page($cm->id, $permissions, $contentdata, $cminstance); // Content detail.
 
 // Finish the page.
 echo $OUTPUT->footer();

@@ -64,7 +64,7 @@ class search_posts_test extends \advanced_testcase {
         testable_openstudio_search::instance();
 
         // Create course.
-        $this->course = $this->getDataGenerator()->create_course();
+        $this->course = $this->getDataGenerator()->create_course(['format' => 'oustudyplan']);
 
         // Create Users.
         $this->user = $this->getDataGenerator()->create_user(
@@ -227,7 +227,6 @@ class search_posts_test extends \advanced_testcase {
         // Use global search system for default.
         set_config('modulesitesearch', 2, 'local_moodleglobalsearch');
         set_config('activitysearch', 2, 'local_moodleglobalsearch');
-        set_config('nonosepsitesearch', 1, 'local_moodleglobalsearch');
 
         // Create new post.
         $posts = new posts();

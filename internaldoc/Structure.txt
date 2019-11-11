@@ -1,0 +1,21 @@
+amd:
+    - Requirejs bootstrap file
+api:
+    - api controller
+api/internal:
+    - internal api
+api/rest:
+    - restful api
+backup
+    - backup and restore
+classes
+    - events and schedule tasks
+internaldoc
+lang
+    - translation
+pix
+    - icon
+templates:
+    - template files
+tests
+    - unit test and behat test

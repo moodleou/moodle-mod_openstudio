@@ -1136,9 +1136,9 @@ EOF;
 
                     case self::SORT_BY_DATE: // Fall through as sorting by date is the default.
                     default:
-                        $sortordersql = 'ORDER BY s.timemodified DESC ';
+                        $sortordersql = 'ORDER BY s.timemodified DESC NULLS LAST ';
                         if ($sortordering == self::SORT_ASC) {
-                            $sortordersql = 'ORDER BY s.timemodified ASC ';
+                            $sortordersql = 'ORDER BY s.timemodified ASC NULLS LAST ';
                         }
                         break;
                 }
