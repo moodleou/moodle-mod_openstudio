@@ -711,17 +711,6 @@ Feature: Create and edit Open Studio contents detail
         And I should not see "Inspiration"
         And I should not see "Feedback requested"
 
-    Scenario: Test feedback button not exist in content detail page
-        When I am on "Course 1" course homepage
-        And I follow "Test Open Studio name 1"
-        And the following open studio "contents" exist:
-            | openstudio | user     | name                         | description                  | file                                              | visibility |
-            | OS1        | teacher1 | Test My Content Details View | Test My Content Details View | mod/openstudio/tests/importfiles/test1.jpg        | module     |
-        And I follow "People" in the openstudio navigation
-        And I follow "Shared content > My Module" in the openstudio navigation
-        And I follow "Test My Content Details View"
-        And "#osep-bottombutton-feedback-upper" "css_element" should not exist
-
     @_file_upload
     Scenario: Add new content and check content details with abitily to remove image exif.
         When I am on "Course 1" course homepage
