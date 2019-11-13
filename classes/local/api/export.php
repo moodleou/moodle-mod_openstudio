@@ -119,7 +119,7 @@ SELECT s.id,
    AND s.userid  = ?
    AND s.fileid > ?
    AND f.component = ?
-   AND f.filearea = ?
+   AND (f.filearea = ? OR f.filearea = ?)
    AND f.filesize > ?
    AND s.deletedby IS NULL
    AND s.deletedtime IS NULL
@@ -131,6 +131,7 @@ EOF;
         $params[] = 0;
         $params[] = 'mod_openstudio';
         $params[] = 'content';
+        $params[] = 'notebook';
         $params[] = 0;
 
         if (isset($filessql)) {
