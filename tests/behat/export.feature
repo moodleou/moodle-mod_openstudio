@@ -88,3 +88,15 @@ Feature: Export to my contents
         And I follow "Export"
         And I press "All content shown"
         Then I should see "Downloading ..."
+
+    @javascript
+    Scenario: Export python notebook file shows size
+        Given the following open studio "contents" exist:
+            | openstudio | user     | name   | description           | file                                        | visibility |
+            | OS1        | teacher1 | Python | Content Description 2 | mod/openstudio/tests/importfiles/test.ipynb | module     |
+        And I am on "Course 1" course homepage
+        And I follow "Sharing Studio"
+        And I follow "My Content"
+        And I follow "Export"
+        And I press "Selected posts"
+        Then I should see "111.09KB" in the "//label[text()='Python']/../following-sibling::td" "xpath_element"
