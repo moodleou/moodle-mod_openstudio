@@ -319,7 +319,7 @@ class privacy_provider_test extends provider_testcase {
         ]);
         // User2 reply comment in post of user1.
         comments::create(
-                $this->posts->two, $this->users->students->two->id, 'aaaaaaaaaaaaaaaaaaaaaaaaa',
+                $this->posts->two, $this->users->students->two->id, random_string(),
                 null, null, null, $this->commentspost2->two);
     }
 
@@ -1061,7 +1061,7 @@ class privacy_provider_test extends provider_testcase {
         ]);
         // User2 reply comment in post of user1.
         comments::create(
-                $contentid, $user2->id, 'aaaaaaaaaaaaaaaaaaaaaaaaa',
+                $contentid, $user2->id, random_string(),
                 null, null, null, $comment1);
         $approvedlist = new \core_privacy\local\request\approved_userlist($context, $component, [$user1->id, $user2->id]);
         provider::delete_data_for_users($approvedlist);
@@ -1173,5 +1173,77 @@ class privacy_provider_test extends provider_testcase {
         $this->assertEmpty($os2);
         $this->assertCount(1, $os3);
     }
-    
+    /**
+     * Test comment with own reply.
+     */
+    public function test_userlist_provider_comment_with_own_reply() {
+        global $DB;
+        $component = 'openstudio';
+
+        list($user1, $user2, $user3, $openstudio, $contentid) = $this->create_basic_test_data();
+        $context = \context_module::instance($openstudio->cmid);
+
+        $comment1 = $this->generator->create_comment([
+            'contentid' => $contentid,
+            'userid' => $user1->id,
+            'comment' => random_string(),
+        ]);
+        // User1 reply comment in post of user1.
+        comments::create(
+            $contentid, $user1->id, random_string(),
+            null, null, null, $comment1);
+        $approvedlist = new \core_privacy\local\request\approved_userlist($context, $component, [$user1->id, $user2->id]);
+        provider::delete_data_for_users($approvedlist);
+        $adminid = get_admin()->id;
+        $records = $DB->get_records_select('openstudio_comments', 'userid =:id1', [
+            'id1' => $adminid,
+        ]);
+        $this->assertEmpty($records);
+
+        $reply1 =  $DB->get_record_select('openstudio_comments', 'userid =:id1 AND inreplyto =:inreplyto', [
+            'id1' => $user1->id,
+            'inreplyto' => $comment1
+        ]);
+        $this->assertEmpty($reply1);
+
+        $comentuser1 = $DB->get_record_select('openstudio_comments', 'id =:id1', [
+            'id1' => $comment1
+        ]);
+        $this->assertEmpty($comentuser1);
+    }
+
+    /**
+     * Test comment with mixed reply.
+     */
+    public function test_userlist_provider_comment_with_mixed_reply() {
+        global $DB;
+        $component = 'openstudio';
+
+        list($user1, $user2, $user3, $openstudio, $contentid) = $this->create_basic_test_data();
+        $context = \context_module::instance($openstudio->cmid);
+
+        $comment1 = $this->generator->create_comment([
+            'contentid' => $contentid,
+            'userid' => $user1->id,
+            'comment' => random_string(),
+        ]);
+        // User3 reply comment in post of user1.
+        comments::create(
+            $contentid, $user3->id, random_string(),
+            null, null, null, $comment1);
+        // User1 reply comment in post of user1.
+        comments::create(
+            $contentid, $user1->id, random_string(),
+            null, null, null, $comment1);
+        $approvedlist = new \core_privacy\local\request\approved_userlist($context, $component, [$user1->id, $user2->id]);
+        provider::delete_data_for_users($approvedlist);
+        $adminid = get_admin()->id;
+        $records = $DB->get_records_select('openstudio_comments', 'userid =:id1', [
+            'id1' => $adminid,
+        ]);
+        $this->assertCount(1, $records);
+        $deletedcomment = reset($records);
+        $this->assertEquals(get_string('deletedbyrequest', 'mod_openstudio'), $deletedcomment->commenttext);
+    }
+
 }
