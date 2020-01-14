@@ -1,5 +1,5 @@
 @ou @ou_vle @mod @mod_openstudio @_file_upload @javascript
-Feature: Import zip file
+Feature: Import zip file to Open Studio
     When using Open Studio
     As a teacher
     I need to import contents by zip file

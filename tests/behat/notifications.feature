@@ -1,5 +1,5 @@
 @ou @ou_vle @mod @mod_openstudio @javascript
-Feature: Notifications
+Feature: Open Studio notifications
   In order to track activity on content I am interested in
   As a student
   I want recive notifications about my posts and comments

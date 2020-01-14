@@ -1,5 +1,5 @@
 @ou @ou_vle @mod @mod_openstudio @_file_upload
-Feature: Add/Reply/Flag/Delete comment
+Feature: Add/Reply/Flag/Delete Open Studio comment
     In order to Add/Reply/Flag/Delete comment
     As a student
     I need to be able to Add/Reply/Flag/Delete comment

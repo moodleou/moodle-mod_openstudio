@@ -1,5 +1,5 @@
 @ou @ou_vle @mod @mod_openstudio
-Feature: View author's work
+Feature: View author's work in Open Studio
     When using Open Studio with other users
     As a student
     I need to see other people's work
@@ -125,7 +125,7 @@ Feature: View author's work
         Then I should see "Content 3 - onlyme"
         Then I should see "Content 3 - tutor"
 
-    @javascript
+    @javascript @_file_upload
     Scenario: Students should not see activity slot links when don't have permission to view.
         Given I log in as "admin"
         When I am on "Course 1" course homepage

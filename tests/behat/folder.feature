@@ -1,5 +1,5 @@
 @ou @ou_vle @mod @mod_openstudio @mod_openstudio_test_folder @_file_upload @javascript
-Feature: Create and edit Folder
+Feature: Create and edit Open Studio Folder
     When using Open Studio with other users
     As a teacher
     I need to create a folder
@@ -176,7 +176,7 @@ Feature: Create and edit Folder
         And I follow "My content" in the openstudio navigation
         And I should see "Test my folder view 3"
         And the "src" attribute of "div.openstudio-folder-content img.openstudio-folder-tab" "css_element" should contain "openstudio_sets_preview_box"
-    
+
     Scenario: Edit Folder in other view
         Given I am on site homepage
         And I log out

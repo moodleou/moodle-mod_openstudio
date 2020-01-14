@@ -1,5 +1,5 @@
 @ou @ou_vle @mod @mod_openstudio @mod_openstudio_test_honesty
-Feature: Accept plagarism statement
+Feature: Accept plagarism statement in Open Studio
     In order to confirm I am not going to plagarise other peoples' work
     As a student
     I need to confirm acceptance of a statement before using open studio.

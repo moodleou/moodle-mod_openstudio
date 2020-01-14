@@ -1,5 +1,5 @@
 @ou @ou_vle @mod @mod_openstudio @mod_openstudio_test_share_tutor @javascript
-Feature: Share with tutor filter
+Feature: Open Studio share with tutor filter
 When using Open Studio to share content with my tutor
 As a tutor
 I can find out that content

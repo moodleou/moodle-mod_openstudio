@@ -1,5 +1,5 @@
 @ou @ou_vle @mod @mod_openstudio @mod_openstudio_test_content_detail @_file_upload @javascript
-Feature: Create and edit contents detail
+Feature: Create and edit Open Studio contents detail
     When using Open Studio with other users
     As a teacher
     I need to navigate to content pages
@@ -61,6 +61,7 @@ Feature: Create and edit contents detail
         And Open Studio test instance is configured for "Test Open Studio name 1"
         And all users have accepted the plagarism statement for "OS1" openstudio
 
+    @_file_upload
     Scenario: Add new content and check content details with img
         When I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
@@ -104,6 +105,7 @@ Feature: Create and edit contents detail
         And I press "Owner of this post"
         Then "#openstudio_content_view_post_owner > div.openstudio-content-view-user-info > a" "css_element" should exist
 
+    @_file_upload
     Scenario: Add new content and check content details with img exif
         When I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
@@ -720,7 +722,7 @@ Feature: Create and edit contents detail
         And I follow "Test My Content Details View"
         And "#osep-bottombutton-feedback-upper" "css_element" should not exist
 
-
+    @_file_upload
     Scenario: Add new content and check content details with abitily to remove image exif.
         When I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"

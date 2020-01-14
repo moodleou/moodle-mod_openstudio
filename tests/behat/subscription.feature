@@ -1,5 +1,5 @@
 @ou @ou_vle @mod @mod_openstudio @mod_openstudio_manage_folders
-Feature: Subscribe/Unsubscribe to my studio
+Feature: Subscribe/Unsubscribe to my Open Studio
   In order to subscribe/unsubscribe to my studio
   As a student
   I need to be able to subscribe/unsubscribe to my studio

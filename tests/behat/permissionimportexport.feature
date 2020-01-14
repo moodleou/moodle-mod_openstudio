@@ -1,5 +1,5 @@
 @ou @ou_vle @mod @mod_openstudio @mod_openstudio_test_permission @mod_openstudio_test_import @mod_openstudio_test_export
-Feature: Check permission import and export for student role.
+Feature: Check permission import and export for student role in Open Studio
 When using Open Studio with other users
 As a admin
 I stopped granting the rights to import and export for student
