@@ -170,7 +170,8 @@ Feature: Own profile view in Open Studio
       And I should see "Activity 2"
       And I should see "Activity 3"
 
-  Scenario:  Check progress of user
+  @_file_upload
+  Scenario: Check progress of user
       When I follow "Test Open Studio name 1"
       And I follow "My content > My Activities" in the openstudio navigation
       And I click on "a.openstudio-profile-mypaticipation" "css_element"

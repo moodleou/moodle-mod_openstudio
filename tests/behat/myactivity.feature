@@ -65,7 +65,7 @@ Feature: My Activity view in Open Studio
     And I press "Add another Content"
     And I set the field "Content Name" to "Content 3.1"
     And I press "Add another Content"
-    
+
   Scenario: Show My Activity Board View
     When I follow "Test Open Studio name 1"
     And I follow "My Content > My Activities" in the openstudio navigation
@@ -88,6 +88,7 @@ Feature: My Activity view in Open Studio
     And I should see "Content 1.1 Required"
     Then the "src" attribute of "img.openstudio-grid-item-thumbnail" "css_element" should contain "online_rgb_32px"
 
+  @_file_upload
   Scenario: Upload a new content with file upload
     When I follow "Test Open Studio name 1"
     And I follow "My Content > My Activities" in the openstudio navigation
@@ -122,6 +123,7 @@ Feature: My Activity view in Open Studio
     And I should see "Content 1.1 Required"
     Then the "src" attribute of "img.openstudio-grid-item-thumbnail" "css_element" should contain "online_rgb_32px"
 
+  @_file_upload
   Scenario:  Edit the setting of the new content uploaded
     When I follow "Test Open Studio name 1"
     And I follow "My Content > My Activities" in the openstudio navigation
