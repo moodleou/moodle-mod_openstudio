@@ -162,15 +162,17 @@ define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/modal_events', 'c
 
             if (gpslat && gpslng) {
                 var myLatLng = {lat: parseFloat(gpslat), lng: parseFloat(gpslng)};
-                var map = new google.maps.Map(document.getElementById('openstudio_content_view_map_canvas'), {
-                    center: myLatLng,
-                    zoom: 14
-                });
+                if (typeof google !== 'undefined' && typeof google.maps !== 'undefined') {
+                    var map = new google.maps.Map(document.getElementById('openstudio_content_view_map_canvas'), {
+                        center: myLatLng,
+                        zoom: 14
+                    });
 
-                new google.maps.Marker({
-                    position: myLatLng,
-                    map: map
-                });
+                    new google.maps.Marker({
+                        position: myLatLng,
+                        map: map
+                    });
+                }
             }
         },
 
