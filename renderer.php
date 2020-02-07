@@ -62,7 +62,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
     public function siteheader(
             $coursedata, $permissions, $theme, $sitename = 'Design', $searchtext = '',
             $viewmode = content::VISIBILITY_MODULE) {
-        global $OUTPUT, $PAGE, $USER;
+        global $OUTPUT, $PAGE, $USER, $CFG;
 
         $cm = $coursedata->cm;
         $cmid = $cm->id;
@@ -276,7 +276,10 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             ]);
             $data->notificationstopicon = $stopicon->export_for_template($this->output);
 
-            $addtodashboard = block_externaldashboard_backend::render_favourites_button($PAGE->cm, false);
+            $addtodashboard = '';
+            if (file_exists("{$CFG->dirroot}/blocks/externaldashboard/classes/backend.php")) {
+                $addtodashboard = block_externaldashboard_backend::render_favourites_button($PAGE->cm, false);
+            }
             $data->addtodashboard = $addtodashboard;
 
             // Subscription.
