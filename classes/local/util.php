@@ -760,6 +760,10 @@ EOF;
         $mimeinfo = get_mimetypes_array();
         foreach ($mimeinfo as $extension => $values) {
             if ($values['type'] == $mimetype) {
+                if ($mimetype == 'application/zip') {
+                    // Force zip extension as new h5p type uses zip mimetype also.
+                    $extension = 'zip';
+                }
                 $values['extension'] = $extension;
                 return $values;
             }
