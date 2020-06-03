@@ -114,6 +114,21 @@ function xmldb_openstudio_upgrade($oldversion=0) {
             // To stop any error messages being displayed since if type is already added add_type throws an exception.
         }
     }
+
+    if ($oldversion < 2019111300) {
+        // Add latesubmissionmessage field setting.
+        $table = new xmldb_table('openstudio');
+        $field = new xmldb_field('latesubmissionmessage', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
+
+        // Conditionally launch add field latesubmissionmessage.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Openstudio savepoint reached.
+        upgrade_mod_savepoint(true, 2019111300, 'openstudio');
+    }
+
         // Must always return true from these functions.
     return $result;
 

@@ -2882,6 +2882,10 @@ span.openstudio-content-view-title {
     position: relative;
 }
 
+.openstudio-folder-view-tags .openstudio-content-view-tag-item {
+    margin: 5px 5px 0px 5px;
+}
+
 .openstudio-content-view-archive {
     float: right;
     margin-bottom: 27px;

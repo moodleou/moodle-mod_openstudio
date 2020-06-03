@@ -43,7 +43,7 @@ Feature: Own profile view in Open Studio
       And I log in as "teacher1"
       And I am on "Course 1" course homepage
       And I turn editing mode on
-      And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+      And I add a "OpenStudio 2" to section "1" and I fill the form with:
         | Name                         | Test Open Studio name 1      |
         | Description                  | Test Open Studio description |
         | Group mode                   | Visible groups               |
@@ -52,7 +52,7 @@ Feature: Own profile view in Open Studio
         | Enable Folders               | 1                            |
         | Abuse reports are emailed to | teacher1@asd.com             |
         | ID number                    | OS1                          |
-      And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+      And I add a "OpenStudio 2" to section "1" and I fill the form with:
         | Name                         | Test Open Studio name 2      |
         | Description                  | Test Open Studio description |
         | Group mode                   | Visible groups               |
@@ -170,7 +170,8 @@ Feature: Own profile view in Open Studio
       And I should see "Activity 2"
       And I should see "Activity 3"
 
-  Scenario:  Check progress of user
+  @_file_upload
+  Scenario: Check progress of user
       When I follow "Test Open Studio name 1"
       And I follow "My content > My Activities" in the openstudio navigation
       And I click on "a.openstudio-profile-mypaticipation" "css_element"

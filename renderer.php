@@ -62,7 +62,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
     public function siteheader(
             $coursedata, $permissions, $theme, $sitename = 'Design', $searchtext = '',
             $viewmode = content::VISIBILITY_MODULE) {
-        global $OUTPUT, $PAGE, $USER;
+        global $OUTPUT, $PAGE, $USER, $CFG;
 
         $cm = $coursedata->cm;
         $cmid = $cm->id;
@@ -276,7 +276,10 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             ]);
             $data->notificationstopicon = $stopicon->export_for_template($this->output);
 
-            $addtodashboard = block_externaldashboard_backend::render_favourites_button($PAGE->cm, false);
+            $addtodashboard = '';
+            if (file_exists("{$CFG->dirroot}/blocks/externaldashboard/classes/backend.php")) {
+                $addtodashboard = block_externaldashboard_backend::render_favourites_button($PAGE->cm, false);
+            }
             $data->addtodashboard = $addtodashboard;
 
             // Subscription.
@@ -680,6 +683,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $pb = renderer_utils::openstudio_render_paging_bar($contentdata);
             $paging = $this->render($pb);
             $contentdata->paging = $paging;
+            $contentdata->multiplepages = $contentdata->streamdatapagesize < $contentdata->total;
         }
         $contentdata->available = $permissions->pinboarddata->available;
 
@@ -792,27 +796,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         // Not need generate full data for a content version.
         if (!$contentdata->iscontentversion) {
-            $tagsraw = array();
-            if (count($contentdata->tagsraw) > 0) {
-                foreach ($contentdata->tagsraw as $contenttag) {
-                    if (util::global_search_enabled($cm)) {
-                        $tagsearchtext = $contenttag->name;
-                    } else {
-                        $tagsearchtext = 'tag:' . str_replace(' ', '', $contenttag->name);
-                    }
-
-                    $taglink = new moodle_url('/mod/openstudio/search.php',
-                        array('id' => $cmid,
-                            'searchtext' => $tagsearchtext));
-
-                    $tagsraw[] = (object) [
-                        'taglink' => $taglink->out(false),
-                        'tagname' => $contenttag->rawname
-                    ];
-                }
-            }
-
-            $contentdata->tagsraw = $tagsraw;
+            $contentdata->tagsraw = $this->get_tagsraw_for_template($cm, $contentdata->tagsraw);
 
             // Generate content flags.
             $contentdata = renderer_utils::content_flags($cmid, $permissions, $contentdata);
@@ -1070,16 +1054,16 @@ class mod_openstudio_renderer extends plugin_renderer_base {
     /**
      * This function renders the HTML fragment for the folder page of Open Studio.
      *
-     * @param int $cmid The course module id.
+     * @param int $cm The course module object.
      * @param object $permissions The permission object for the given user/view.
      * @param object $contentdata The content detail to display.
      * @param int $cminstance The course module instance.
      * @return string The rendered HTML fragment.
      */
-    public function folder_page($cmid, $permissions, $folderdata, $cminstance) {
+    public function folder_page($cm, $permissions, $folderdata, $cminstance) {
         global $OUTPUT, $PAGE, $USER;
 
-        $folderdata->cmid = $cmid;
+        $folderdata->cmid = $cmid = $cm->id;
         $folderdata->contents = [];
         $folderdata = renderer_utils::folder_content($permissions->pinboardfolderlimit, $folderdata);
         $folderaddcontent = new moodle_url('/mod/openstudio/contentedit.php',
@@ -1105,6 +1089,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         if ($folderdata->userid != $USER->id) {
             $folderdata->myfolder = false;
         }
+
+        $folderdata->tagsraw = $this->get_tagsraw_for_template($cm, $folderdata->tagsraw);
 
         $user = user::get_user_by_id($folderdata->userid);
         $folderdata->fullname = fullname($user);
@@ -1362,5 +1348,29 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         }
 
         return $this->render_from_template('mod_openstudio/import_export_buttons', $data);
+    }
+
+    private function get_tagsraw_for_template($cm, $tagsraw){
+        $newtagsraw = array();
+        if (count($tagsraw) > 0) {
+            foreach ($tagsraw as $contenttag) {
+                if (util::global_search_enabled($cm)) {
+                    $tagsearchtext = $contenttag->name;
+                } else {
+                    $tagsearchtext = 'tag:' . str_replace(' ', '', $contenttag->name);
+                }
+
+                $taglink = new moodle_url('/mod/openstudio/search.php',
+                        array('id' => $cm->id,
+                                'searchtext' => $tagsearchtext));
+
+                $newtagsraw[] = (object) [
+                        'taglink' => $taglink->out(false),
+                        'tagname' => $contenttag->rawname
+                ];
+            }
+        }
+
+        return $newtagsraw;
     }
 }

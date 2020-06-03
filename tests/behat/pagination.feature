@@ -44,7 +44,7 @@ Feature: Pagination Open Studio stream views
         And I log in as "teacher1"
         And I am on "Course 1" course homepage
         And I turn editing mode on
-        And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+        And I add a "OpenStudio 2" to section "1" and I fill the form with:
             | Name                         | Test Open Studio name 1      |
             | Description                  | Test Open Studio description |
             | Group mode                   | Separate groups              |
@@ -131,8 +131,6 @@ Feature: Pagination Open Studio stream views
         And I follow "Shared content > My Module" in the openstudio navigation
         Then I should see "Test content N"
         And I should see "2"
-        And I click on "select#filter_pagesize" "css_element"
-        And I click on "option[value='50']" "css_element"
         When I click on ".openstudio-desktop-paging .next" "css_element"
         Then I should see "Test content A"
         And I should not see "Test content N"
@@ -564,8 +562,6 @@ Feature: Pagination Open Studio stream views
         When I reload the page
         And I follow "People" in the openstudio navigation
         And I follow "Shared content > My Module" in the openstudio navigation
-        And I click on "select#filter_pagesize" "css_element"
-        And I click on "option[value='50']" "css_element"
 
         # At the 1 begining page, see from 1 to 6 and last page 9
         And I should see "1" in the ".openstudio-desktop-paging .current-page" "css_element"

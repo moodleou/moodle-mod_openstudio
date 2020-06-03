@@ -1,5 +1,5 @@
 @ou @ou_vle @mod @mod_openstudio @mod_openstudio_sorting @javascript
-Feature: Preference
+Feature: Open Studio preference
   When using Open Studio with other users
   As a teacher
   I need to create a content and upload a file
@@ -39,7 +39,7 @@ Feature: Preference
       And I log in as "admin"
       And I am on "Course 1" course homepage
       And I turn editing mode on
-      And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+      And I add a "OpenStudio 2" to section "1" and I fill the form with:
         | Name                         | Test Open Studio name 1      |
         | Description                  | Test Open Studio description |
         | Group mode                   | Visible groups               |
@@ -78,7 +78,7 @@ Feature: Preference
       And the following open studio "level3contents" exist:
           | openstudio | user     | name                        | description                   | weblink                        | visibility | level3       | levelcontainer |
           | OS1        | teacher1 | Test My Preferences View 4  | My Preferences Description 4  | https://www.example.com        | module     | Content2.1   | module         |
-      
+
       And I am on site homepage
       And I log out
       And I log in as "teacher1"
@@ -178,11 +178,11 @@ Feature: Preference
         | OS1        | teacher1   | Test My Preferences View 1 | My Preferences Description 1 | mod/openstudio/tests/importfiles/test1.jpg | G1              |
         | OS1        | student2   | Test My Preferences View 2 | My Preferences Description 2 | mod/openstudio/tests/importfiles/test.mp4  | G1              |
         | OS1        | student3   | Test My Preferences View 3 | My Preferences Description 3 | mod/openstudio/tests/importfiles/test.mp3  | G1              |
-      
+
       And the following open studio "level3contents" exist:
         | openstudio | user     | name                        | description                   | weblink                        | visibilitygroup | level3       | levelcontainer |
         | OS1        | teacher1 | Test My Preferences View 4  | My Preferences Description 4  | https://www.example.com        | G1              | Content2.1   | module         |
-      
+
       And I am on site homepage
       And I log out
       And I log in as "teacher1"
@@ -361,11 +361,11 @@ Feature: Preference
         | OS1        | teacher1 | Test My Preferences View 1  | My Preferences Description 1  | mod/openstudio/tests/importfiles/test1.jpg         | module     | Content1.1   | module         |
         | OS1        | teacher1 | Test My Preferences View 2  | My Preferences Description 2  | mod/openstudio/tests/importfiles/test.mp4          | module     | Content2.1   | module         |
         | OS1        | teacher1 | Test My Preferences View 3  | My Preferences Description 3  | mod/openstudio/tests/importfiles/test.mp3          | module     | Content3.1   | module         |
-          
+
       Given the following open studio "level3contents" exist:
         | openstudio | user     | name                        | description                   | weblink                         | visibility | level3       | levelcontainer |
         | OS1        | teacher1 | Test My Preferences View 4  | My Preferences Description 4  | https://www.example.com         | module     | ContentB2    | module         |
-      
+
       And I am on site homepage
       And I log out
       And I log in as "teacher1"

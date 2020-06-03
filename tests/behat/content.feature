@@ -49,7 +49,7 @@ Feature: Create Open Studio contents
         And I log in as "teacher1"
         And I am on "Course 1" course homepage
         And I turn editing mode on
-        And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+        And I add a "OpenStudio 2" to section "1" and I fill the form with:
             | Name                         | Test Open Studio name 1      |
             | Description                  | Test Open Studio description |
             | Group mode                   | Visible groups               |
@@ -279,3 +279,17 @@ Feature: Create Open Studio contents
     And I press "Save"
     When I switch to "openstudio-content-view-iframe" iframe
     Then I should see "Anscombe's Quartet" in the "#notebook-container .text_cell_render h1" "css_element"
+
+  Scenario: Add new content just a title and description with a zip file
+    When I follow "Test Open Studio name 1"
+    And I follow "Add new content"
+    And I press "Add file"
+    And I set the following fields to these values:
+      | Who can view this content | My module                                   |
+      | Title                     | My Module Title                             |
+      | Description               | My Module Description                       |
+      | Files                     | mod/openstudio/tests/importfiles/test.zip   |
+    And I press "Save"
+    Then the "src" attribute of "img.openstudio-content-view-type-img" "css_element" should contain "zip_archive"
+    And I should see "Download file attachment"
+    And I follow "Download file attachment"

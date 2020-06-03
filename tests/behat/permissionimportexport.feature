@@ -1,5 +1,5 @@
 @ou @ou_vle @mod @mod_openstudio @mod_openstudio_test_permission @mod_openstudio_test_import @mod_openstudio_test_export
-Feature: Check permission import and export for student role.
+Feature: Check permission import and export for student role in Open Studio
 When using Open Studio with other users
 As a admin
 I stopped granting the rights to import and export for student
@@ -20,7 +20,7 @@ I stopped granting the rights to import and export for student
     Given I log in as "admin"
     And I am on "Course 1" course homepage
     And I turn editing mode on
-    And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+    And I add a "OpenStudio 2" to section "1" and I fill the form with:
       | Name        | Test Open Studio name 1      |
       | Description | Test Open Studio description |
       | ID number   | OS1                          |

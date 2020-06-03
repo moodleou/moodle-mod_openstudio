@@ -46,7 +46,7 @@ Feature: Open Studio pinboard stream
         And I log in as "teacher1"
         And I am on "Course 1" course homepage
         And I turn editing mode on
-        And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+        And I add a "OpenStudio 2" to section "1" and I fill the form with:
             | Name                         | Test Open Studio name 1      |
             | Description                  | Test Open Studio description |
             | Group mode                   | Visible groups               |
@@ -62,7 +62,7 @@ Feature: Open Studio pinboard stream
         # Add new content view Only me
         When I follow "Test Open Studio name 1"
         Then I should see "Test Open Studio name 1"
-        And I follow "Add new content"
+        And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | Only me                                    |
@@ -85,7 +85,7 @@ Feature: Open Studio pinboard stream
         Then I should not see "Test My Pinboard View"
 
         # Add Module view
-        And I follow "Add new content"
+        And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | My module                                       |

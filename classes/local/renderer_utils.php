@@ -238,7 +238,7 @@ class renderer_utils {
                                             array('id' => $contentdata->cmid, 'sid' => $activity->id,
                                                     'vuid' => $contentowner->id, 'lid' => $activity->level3id));
                                 } else {
-                                    $lockdata = self::content_lock_data((object) array('l3id' => $activities[$key]->level3id));
+                                    $lockdata = self::content_lock_data((object) array('l3id' => $activities[$key]->level3id), $permissions, $cminstance);
                                     $activities[$key]->contentislocked = $lockdata->contentislock;
                                 }
                             } else {
@@ -253,7 +253,7 @@ class renderer_utils {
                                             array('id' => $contentdata->cmid, 'sid' => $activity->id, 'vuid' => $contentowner->id));
                                 } else {
                                     $lockdata = self::content_lock_data((object) array(
-                                            'l3id' => $activities[$key]->level3id));
+                                            'l3id' => $activities[$key]->level3id), $permissions, $cminstance);
                                     $activities[$key]->contentislocked = $lockdata->contentislock;
                                 }
                             }
@@ -339,7 +339,7 @@ class renderer_utils {
                 if (!$iscontentversion && $contentdata->isownedbyviewer) {
                     $contentislock = false;
                     if ($permissions->feature_enablelock) {
-                        $lockdata = self::content_lock_data($contentdata, $permissions);
+                        $lockdata = self::content_lock_data($contentdata, $permissions, $context);
                         $contentislock = $lockdata->contentislock;
                     }
                     if ($contentislock === false) {
@@ -651,11 +651,14 @@ class renderer_utils {
      * This function will return lock data for a content.
      *
      * @param object $contentdata The content records to display.
+     * @param object $permissions The permission object for the given user/view.
+     * @param object $cminstance The course module instance.
      * @return object $contentdata
      */
-    public static function content_lock_data($contentdata) {
+    public static function content_lock_data($contentdata, $permissions, $cminstance) {
         $contentislock = false;
         $contentislockmessage = '';
+        $latesubmission = false;
         if ($contentdata->l3id > 0) {
 
             // Check lock level management access.
@@ -727,9 +730,16 @@ class renderer_utils {
                     }
                 }
 
+                if ($permissions->feature_allowlatesubmissions && $contentislock && $contentlocktime > $contentunlocktime) {
+                    $date = userdate($contentlocktime, get_string('strftimedaydatetime', 'langconfig'));
+                    $contentislockmessage = str_replace('%%DATE%%', $date, $cminstance->latesubmissionmessage);
+                    $latesubmission = true;
+                    $contentislock = false;
+                }
+
             }
         }
-        return (object) array('contentislock' => $contentislock, 'contentislockmessage' => $contentislockmessage);
+        return (object) array('contentislock' => $contentislock, 'contentislockmessage' => $contentislockmessage, 'latesubmission' => $latesubmission);
     }
 
 

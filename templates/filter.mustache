@@ -57,7 +57,8 @@
                "id" : "2",
                "name" : "Group 2"
             }
-        ]
+        ],
+        "multiplepages" : false
     }
 
 }}
@@ -109,6 +110,11 @@
 {{/myactivities}}
 {{^myactivities}}
     {{>mod_openstudio/filter_by_pagesizes}}
+    {{#multiplepages}}
+    <span class="openstudio-filter-text">
+        <a class="sr-only sr-only-focusable" href="#openstudio-paging">{{#str}} accessskipcontent, mod_openstudio {{/str}}</a>
+    </span>
+    {{/multiplepages}}
 {{/myactivities}}
 
 <div class="openstudio-filter-active {{^filteractive}}openstudio-hidden{{/filteractive}}">

@@ -255,6 +255,7 @@ class util {
         $permissions->feature_contentreciprocalaccess = self::has_feature($cminstance, util\feature::CONTENTRECIPROCALACCESS);
         $permissions->feature_participationsmiley = self::has_feature($cminstance, util\feature::PARTICIPATIONSMILEY);
         $permissions->feature_enablelock = self::has_feature($cminstance, util\feature::ENABLELOCK);
+        $permissions->feature_allowlatesubmissions = self::has_feature($cminstance, util\feature::LATESUBMISSIONS);
         if ($permissions->managecontent) {
             $permissions->feature_contentreciprocalaccess = false;
         }

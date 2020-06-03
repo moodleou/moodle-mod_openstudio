@@ -616,10 +616,6 @@ if ($contentform->is_cancelled()) {
             }
         }
 
-        if ($type === content::TYPE_FOLDER && $id) {
-             $contentformdata->tags = null;
-        }
-
         $contentid = content::update(
                 $userid,
                 $contentformdata->sid,

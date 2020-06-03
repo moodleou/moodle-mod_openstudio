@@ -1,5 +1,5 @@
 @ou @ou_vle @mod @mod_openstudio @mod_openstudio_manage_folders
-Feature: Export to my contents
+Feature: Export my Open Studio contents
     In order to export my contents
     As a student
     I need to be able to export my contents

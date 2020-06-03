@@ -1,5 +1,5 @@
 @ou @ou_vle @mod @mod_openstudio
-Feature: Search content
+Feature: Open Studio search content
 In order to search content
 As a student
 I need to be able to search within OpenStudio

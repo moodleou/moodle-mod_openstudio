@@ -37,6 +37,7 @@
         <FIELD NAME="themehelplink" TYPE="char" LENGTH="600" NOTNULL="false" SEQUENCE="false" COMMENT="Currently not being used"/>
         <FIELD NAME="themehelpname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Currently not being used"/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Time (in seconds since epoch)."/>
+        <FIELD NAME="latesubmissionmessage" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Warning message displayed for late submissions"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

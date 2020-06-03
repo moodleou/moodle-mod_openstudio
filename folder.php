@@ -216,7 +216,7 @@ echo $OUTPUT->header(); // Header.
 
 echo $html;
 
-echo $renderer->folder_page($cm->id, $permissions, $folderdata, $cminstance);
+echo $renderer->folder_page($cm, $permissions, $folderdata, $cminstance);
 
 // Finish the page.
 echo $OUTPUT->footer();

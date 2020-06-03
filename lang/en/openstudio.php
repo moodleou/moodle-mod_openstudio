@@ -28,7 +28,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['modulename'] = 'OpenStudio 2 (pilot only)';
+$string['modulename'] = 'OpenStudio 2';
 $string['modulenameplural'] = 'openstudios';
 $string['modulename_help'] = 'Open Studio is a creative, collaborative space that allows users to share images, videos,
 files and other media with others. It can shared within groups or used as an individual’s portfolio. Users can obtain
@@ -36,7 +36,7 @@ feedback on the content they have shared and comment on materials that others ha
 
 $string['openstudio'] = 'Open Studio';
 $string['pluginadministration'] = 'Open Studio administration';
-$string['pluginname'] = 'OpenStudio 2 (pilot only)';
+$string['pluginname'] = 'OpenStudio 2';
 
 $string['openstudio:addinstance'] = 'Add a new Studio';
 $string['openstudio:managelevels'] = 'Manage levels';
@@ -279,6 +279,11 @@ $string['settingsenableparticipationsmileydescription'] = 'Show a happy or sad e
 $string['settingstutorroles'] = "'Tutor' roles";
 $string['settingstutorroles_help'] = "Users with these roles at the course level will be able to see contents shared with 'My tutor' in their groups.";
 $string['settingstutorrolesdefault'] = 'Tutor';
+$string['settingsallowlatesubmissions'] = 'Allow late submissions';
+$string['settingsallowlatesubmissionsdescription'] = 'Allow contents to be added to activities after the submission date has passed';
+$string['settingslatesubmissionmessage'] = 'Warning message for late submissions';
+$string['settingslatesubmissionmessage_help'] = 'This is the message that will display on a content slot when the submission date has passed. The placeholder %%DATE%% will be replaced by the submission date.';
+$string['settingsdefaultlatesubmissionmessage'] = 'Please note that the submission deadline of %%DATE%% for this activity has passed.';
 
 $string['pinboard'] = 'Pinboard';
 $string['pinboard_help'] = 'Specify the number of pinboard contents that users can create or enter 0 to disable.';
@@ -469,6 +474,7 @@ $string['contentformvisibility'] = 'Who can view this content';
 $string['contentformheadermetadata'] = 'Optional information';
 $string['contentformdescription'] = 'Description';
 $string['folderformdescription'] = 'Folder description';
+$string['folderformtags'] = 'Folder tags';
 $string['contentformtags'] = 'Tags';
 $string['contentformownershipmyownwork'] = 'All my own work';
 $string['contentformownershipfoundonline'] = 'Found online';
@@ -1203,6 +1209,7 @@ $string['cron_deletenotifications'] = 'Delete notification job';
 $string['accesscurrentpage'] = 'Current Page';
 $string['accesscurrentcontent'] = 'Current Content';
 $string['accessskiptofoldercontent'] = 'Skip to Folder content';
+$string['accessskipcontent'] = 'Skip content';
 
 $string['overlaymodule'] = 'Module';
 $string['overlaygroup'] = 'Group';
@@ -1335,7 +1342,7 @@ $string['notificationslistheader'] = 'My Notifications';
 $string['youhavenotifications'] = 'You have';
 $string['unreadnotifications'] = 'unread notifications';
 
-$string['folderfoldercomments'] = 'Folder Comments';
+$string['folderfoldercomments'] = 'Folder comments';
 $string['folderselectexist'] = 'Select existing post to add to folder';
 $string['folderdeletedfolder'] = 'Delete folder';
 $string['folderlockfolder'] = 'Lock folder';

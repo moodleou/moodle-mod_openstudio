@@ -522,6 +522,7 @@ EOF;
                 }
             case content::TYPE_PRESENTATION:
             case content::TYPE_SPREADSHEET:
+            case content::TYPE_ZIP:
                 break;
 
             default:
@@ -954,6 +955,7 @@ function openstudio_feature_settings($studioorid, $updatedb = false) {
         );
         $studio->enableparticipationsmiley = $studio->themefeatures & feature::PARTICIPATIONSMILEY;
         $studio->enablelocking = $studio->themefeatures & feature::ENABLELOCK;
+        $studio->allowlatesubmissions = $studio->themefeatures & feature::LATESUBMISSIONS;
     }
 
     $featuremodule = ($studio->enablemodule > 0) ? feature::MODULE : 0;
@@ -1001,12 +1003,18 @@ function openstudio_feature_settings($studioorid, $updatedb = false) {
         $featureparticipationsmiley = feature::PARTICIPATIONSMILEY;
     }
 
+    $featurelatesubmissions = 0;
+    if ($studio->allowlatesubmissions) {
+        $featurelatesubmissions = feature::LATESUBMISSIONS;
+    }
+
     $themefeatures = $featuremodule + $featuregroup + $featurestudio + $featurepinboard;
     $themefeatures += $featurecontenttextuseshtml + $featurecontentcommentuseshtml;
     $themefeatures += $featurecontentcommentusesaudio + $featurecontentusesfileupload + $featureenablefolders;
     $themefeatures += $featurecontentallownotebooks;
     $themefeatures += $featurecontentreciprocalaccess + $featureenablefoldersanycontent;
     $themefeatures += $featureparticipationsmiley;
+    $themefeatures += $featurelatesubmissions;
 
     if (isset($studio->id) && $updatedb) {
         $DB->set_field('openstudio', 'themefeatures', $themefeatures, array('id' => $studio->id));

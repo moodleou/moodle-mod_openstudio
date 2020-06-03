@@ -50,14 +50,14 @@ Feature: Open Studio people view
     Scenario: Only show People link if module or group sharing is enabled
         When I am on "Course 1" course homepage
         And I turn editing mode on
-        And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+        And I add a "OpenStudio 2" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1      |
           | Description                  | Test Open Studio description |
           | Enable 'My Module'           | 0                            |
           | Abuse reports are emailed to | teacher1@asd.com             |
           | ID number                    | OS1                          |
 
-        And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+        And I add a "OpenStudio 2" to section "1" and I fill the form with:
           | Name                          | Test Open Studio name 2        |
           | Description                   | Test Open Studio description 2 |
           | Your word for 'My Module'     | My Module                      |
@@ -81,7 +81,7 @@ Feature: Open Studio people view
     Scenario: GIVEN My Module selected, THEN show all OS Members
         When I am on "Course 1" course homepage
         And I turn editing mode on
-        And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+        And I add a "OpenStudio 2" to section "1" and I fill the form with:
           | Name                          | Test Open Studio name 1        |
           | Description                   | Test Open Studio description 1 |
           | Your word for 'My Module'     | My Module                      |
@@ -96,7 +96,7 @@ Feature: Open Studio people view
           | ID number                     | OS1                            |
         And all users have accepted the plagarism statement for "OS1" openstudio
         And I follow "Test Open Studio name 1"
-        And I follow "Add new content"
+        And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | My module                                  |
@@ -112,7 +112,7 @@ Feature: Open Studio people view
         And I log in as "student1"
         And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
-        And I follow "Add new content"
+        And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | Only me                                    |
@@ -129,7 +129,7 @@ Feature: Open Studio people view
         And I log in as "student2"
         And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
-        And I follow "Add new content"
+        And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | Only me                                    |
@@ -147,7 +147,7 @@ Feature: Open Studio people view
         And I log in as "student5"
         And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
-        And I follow "Add new content"
+        And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | Only me                                    |
@@ -174,7 +174,7 @@ Feature: Open Studio people view
     Scenario: Group mode selected
         When I am on "Course 1" course homepage
         And I turn editing mode on
-        And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+        And I add a "OpenStudio 2" to section "1" and I fill the form with:
           | Name                          | Test Open Studio name 1        |
           | Description                   | Test Open Studio description 1 |
           | Your word for 'My Module'     | My Module                      |
@@ -192,7 +192,7 @@ Feature: Open Studio people view
         And I log in as "student2"
         And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
-        And I follow "Add new content"
+        And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | My module                                  |
@@ -206,7 +206,7 @@ Feature: Open Studio people view
         And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "My content" in the openstudio navigation
-        And I follow "Add new content"
+        And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
           | Who can view this content | My module                                  |

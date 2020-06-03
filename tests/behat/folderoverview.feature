@@ -1,5 +1,5 @@
 @ou @ou_vle @mod @mod_openstudio @mod_openstudio_folder_overview @javascript
-Feature: Folder Overview
+Feature: Open Studio Folder Overview
   When using Open Studio with other users
   As a teacher
   I need to create a content and upload a file
@@ -50,8 +50,8 @@ Feature: Folder Overview
 
   Scenario: Check Item Folder Overview
       Given the following open studio "folders" exist:
-        | openstudio | user     | name                   | description                       | visibility | contenttype    |
-        | OS1        | teacher1 | Test Folder Overview   | My Folder Overview Description 1  | module     | folder_content |
+        | openstudio | user     | name                   | description                       | visibility | contenttype    | tags     |
+        | OS1        | teacher1 | Test Folder Overview   | My Folder Overview Description 1  | module     | folder_content | testtag  |
       And I follow "Test Open Studio name 1"
       And I follow "People" in the openstudio navigation
       And I follow "Shared Content > My Module" in the openstudio navigation
@@ -73,9 +73,12 @@ Feature: Folder Overview
       And I should see "Folder description"
       And I press "Folder description"
       And I should see "My Folder Overview Description 1"
-      And I press "Folder Comments"
-      And I should see "Folder Comments"
+      And I should see "Folder comments"
+      And I press "Folder comments"
       And "Add new comment" "button" should exist
+      And I should see "Folder tags"
+      And I press "Folder tags"
+      And I should see "testtag"
 
       And "Delete folder" "button" should exist
       And "Lock folder" "button" should exist
@@ -86,6 +89,7 @@ Feature: Folder Overview
       And I should see "0 Inspired"
       And I should see "0 views"
 
+  @_file_upload
   Scenario: Upload content in Folder Overview
       Given the following open studio "folders" exist:
         | openstudio | user     | name                   | description                       | visibility | contenttype    |
@@ -113,7 +117,8 @@ Feature: Folder Overview
       And I follow "Test Folder Overview"
       And I should see "Test My Folder Overview"
       And the "src" attribute of "div.openstudio-grid-item-folder-preview > a > img" "css_element" should contain "test1.jpg"
-  
+
+  @_file_upload
   Scenario: Folder Overview in My Activities views
       Given the following open studio "level1s" exist:
           | openstudio  | name         | sortorder |
@@ -291,6 +296,7 @@ Feature: Folder Overview
       And ".openstudio-orderpost-item:nth-child(2) .openstudio-orderpost-item-moveup-button[title='Move content Test My Content Folder View 1 up to position 1.']" "css_element" should exist
       And ".openstudio-orderpost-item:nth-child(2) .openstudio-orderpost-item-movedown-button[title='Move content Test My Content Folder View 1 down to position 3.']" "css_element" should exist
 
+  @_file_upload
   Scenario: Content of order posts in folder overview
       Given the following open studio "folders" exist:
         | openstudio | user     | name                   | description                       | visibility | contenttype    |
@@ -331,6 +337,7 @@ Feature: Folder Overview
       And the "Move Up" "button" should be disabled
       And the "Move Down" "button" should be enabled
 
+  @_file_upload
   Scenario: Folder Overview in My Activities with item can not be reordered
       Given the following open studio "level1s" exist:
           | openstudio  | name         | sortorder |
@@ -388,10 +395,10 @@ Feature: Folder Overview
       And I follow "My Content > My Activities" in the openstudio navigation
       And I click on "a.openstudio-profile-mypaticipation" "css_element"
       And I follow "Content1.1"
-    And Open studio contents should be in the following order:
-      | Test My Folder Overview 1 |
-      | Test My Folder Overview 2 |
-      | Test My Folder Overview 3 |
+      And Open studio contents should be in the following order:
+        | Test My Folder Overview 1 |
+        | Test My Folder Overview 2 |
+        | Test My Folder Overview 3 |
       And I press "Order posts"
       # User cannot input number to order fixed content, error message will display
       And I click on "#openstudio-folder-reorder-down-0" "css_element"
@@ -461,7 +468,8 @@ Feature: Folder Overview
         | Test My Folder Overview 3 |
         | Test My Folder Overview 2 |
 
-   Scenario: Folder Overview in My Activities with Zero ordering
+    @_file_upload
+    Scenario: Folder Overview in My Activities with Zero ordering
 
       # Add 3 booked slot on Folder Activity
       Given the following open studio "level1s" exist:
@@ -487,7 +495,7 @@ Feature: Folder Overview
       And I follow "My Content > My Activities" in the openstudio navigation
       And I click on "Content1.1" "link" in the ".openstudio-grid-item" "css_element"
 
-      # Upload a new content 
+      # Upload a new content
       And I follow "Add new content"
       And I press "Add file"
       And I set the following fields to these values:

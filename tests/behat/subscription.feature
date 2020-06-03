@@ -1,5 +1,5 @@
 @ou @ou_vle @mod @mod_openstudio @mod_openstudio_manage_folders
-Feature: Subscribe/Unsubscribe to my studio
+Feature: Subscribe/Unsubscribe to my Open Studio
   In order to subscribe/unsubscribe to my studio
   As a student
   I need to be able to subscribe/unsubscribe to my studio
@@ -35,7 +35,7 @@ Feature: Subscribe/Unsubscribe to my studio
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I turn editing mode on
-    And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+    And I add a "OpenStudio 2" to section "1" and I fill the form with:
       | Name | Test Open Studio name 1 |
       | Description | Test Open Studio description |
       | Enable pinboard | 99 |

@@ -1,5 +1,5 @@
 @ou @ou_vle @mod @mod_openstudio @mod_openstudio_test_share_tutor @javascript
-Feature: Share with tutor filter
+Feature: Open Studio share with tutor filter
 When using Open Studio to share content with my tutor
 As a tutor
 I can find out that content
@@ -34,7 +34,7 @@ And Apply the filter
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I turn editing mode on
-    And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+    And I add a "OpenStudio 2" to section "1" and I fill the form with:
       | Name        | Test Open Studio name 1      |
       | Description | Test Open Studio description |
       | Group mode  | Visible groups               |
@@ -55,7 +55,7 @@ And Apply the filter
   Scenario: "Shared with tutor" functionality
     Given I am on "Course 1" course homepage
     And I follow "Test Open Studio name 1"
-    And I click on ".openstudio-add-new a" "css_element"
+    And I follow "Add new content"
     And I select "My tutor" from the "Who can view this content" singleselect
     And I set the following fields to these values:
       | Title       | Studio content 1 |

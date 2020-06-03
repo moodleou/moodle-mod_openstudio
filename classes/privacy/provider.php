@@ -1496,19 +1496,32 @@ class provider implements
                  WHERE c1.contentid $contentinsql
                        AND c1.userid $userinsql
                        AND c1.id IN (SELECT c2.inreplyto 
-                                              FROM {openstudio_comments} c2
-                                             WHERE c2.userid IN ($useridsin)
-                                                   AND c2.deletedby IS NULL 
-                                                   AND inreplyto IS NOT NULL)";
+                                       FROM {openstudio_comments} c2
+                                      WHERE c2.userid IN ($useridsin)
+                                           AND c2.deletedby IS NULL 
+                                           AND inreplyto IS NOT NULL)";
         $commentidshasreply = array_keys($DB->get_records_sql($sql, $params));
+
+        // Select comment has self reply.
+        $commentidshasselfreply = [];
+        $commentidshasselfreplyin = implode(',', $commentidshasreply);
+        if($commentidshasselfreplyin) {
+            $sql = "SELECT c.id
+                      FROM {openstudio_comments} c
+                     WHERE c.id IN ($commentidshasselfreplyin)
+                           AND (SELECT COUNT(*)
+                                 FROM {openstudio_comments} c1
+                                WHERE c1.inreplyto = c.id AND c1.userid != c.userid) = 0";
+            $commentidshasselfreply = array_keys($DB->get_records_sql($sql));
+        }
         // Select comments that can be deleted (another user didn't reply on it).
         $sql = "SELECT c1.id
                   FROM {openstudio_comments} c1
                  WHERE c1.contentid $contentinsql
                        AND c1.userid $userinsql
                        AND c1.id NOT IN (SELECT c2.inreplyto 
-                                              FROM {openstudio_comments} c2
-                                             WHERE c2.userid IN ($useridsin)
+                                           FROM {openstudio_comments} c2
+                                          WHERE c2.userid IN ($useridsin)
                                                    AND c2.deletedby IS NULL 
                                                    AND inreplyto IS NOT NULL)";
         $commentidsnothasreply = array_keys($DB->get_records_sql($sql, $params));
@@ -1523,6 +1536,7 @@ class provider implements
                 $fs->delete_area_files($context->id, 'mod_openstudio', 'contentcomment', $c);
             }
         }
+        $commentidsnothasreply = array_merge($commentidsnothasreply, $commentidshasselfreply);
         if ($commentidsnothasreply) {
             list($commentinsql, $commentinparams) = $DB->get_in_or_equal($commentidsnothasreply, SQL_PARAMS_NAMED);
             foreach ($commentidsnothasreply as $c) {
@@ -1560,7 +1574,7 @@ class provider implements
                                    WHERE f.component = 'mod_openstudio' AND f.userid $userinsql AND f.contextid = :contextid
                                      AND f.itemid NOT IN (SELECT oc.fileid
                                                             FROM {openstudio_contents} oc
-                                                            JOIN {files} f ON f.itemid = oc.fileid
+                                                            JOIN {files} f ON f.itemid = oc.fileid AND f.component = 'mod_openstudio'
                                                             JOIN {openstudio} o ON o.id = oc.openstudioid
                                                            WHERE o.id = :openstudioid AND oc.userid $user2insql)";
         $params = ['contextid' => $context->id, 'openstudioid' => $openstudioid];

@@ -1,5 +1,5 @@
 @ou @ou_vle @mod @mod_openstudio
-Feature: View author's work
+Feature: View author's work in Open Studio
     When using Open Studio with other users
     As a student
     I need to see other people's work
@@ -54,7 +54,7 @@ Feature: View author's work
         And I log in as "teacher1"
         And I am on "Course 1" course homepage
         And I turn editing mode on
-        And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+        And I add a "OpenStudio 2" to section "1" and I fill the form with:
             | Name                         | Test Open Studio name 1      |
             | Description                  | Test Open Studio description |
             | Group mode                   | Visible groups               |
@@ -125,12 +125,12 @@ Feature: View author's work
         Then I should see "Content 3 - onlyme"
         Then I should see "Content 3 - tutor"
 
-    @javascript
+    @javascript @_file_upload
     Scenario: Students should not see activity slot links when don't have permission to view.
         Given I log in as "admin"
         When I am on "Course 1" course homepage
         And I turn editing mode on
-        And I add a "OpenStudio 2 (pilot only)" to section "1" and I fill the form with:
+        And I add a "OpenStudio 2" to section "1" and I fill the form with:
             | Name                             | Test Open Studio name 2        |
             | Description                      | Test Open Studio description 2 |
             | Your word for 'My Module'        | My Module                      |

@@ -1,5 +1,5 @@
 @ou @ou_vle @mod @mod_openstudio @_file_upload @javascript
-Feature: Import zip file
+Feature: Import zip file to Open Studio
     When using Open Studio
     As a teacher
     I need to import contents by zip file
@@ -18,7 +18,7 @@ Feature: Import zip file
         And I log in as "admin"
         And I am on "Course 1" course homepage
         And I turn editing mode on
-        And I add a "OpenStudio 2 (pilot only)" to section "0" and I fill the form with:
+        And I add a "OpenStudio 2" to section "0" and I fill the form with:
             | Name        | Test Open Studio name 1      |
             | Description | Test Open Studio description |
             | ID number   | OS1                          |

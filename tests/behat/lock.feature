@@ -1,5 +1,5 @@
 @ou @ou_vle @mod @mod_openstudio
-Feature: Lock/Unlock my content
+Feature: Lock/Unlock my Open Studio content
   In order to lock/unlock my content
   As a teacher or manager
   I need to be able to lock/unlock my content

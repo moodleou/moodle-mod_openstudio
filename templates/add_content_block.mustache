@@ -39,9 +39,9 @@
 }}
 <div class="openstudio-add-new-container">
     <div class="openstudio-add-new">
-        <a href="{{{contentediturl}}}" class="openstudio-add-title">
+        <span class="openstudio-add-title">
             {{#str}} addnewcontent, mod_openstudio {{/str}}
-        </a>
+        </span>
     </div>
 {{#feature_enablefolders}}
     <a class="openstudio-create-new-content" href="{{{contentediturl}}}">
@@ -61,7 +61,7 @@
 {{/feature_enablefolders}}
 {{^feature_enablefolders}}
     <a href="{{{contentediturl}}}"><div class="openstudio-upload-container">
-         <img src="{{{createcontentthumbnail}}}" alt="{{{name}}}">
+         <img src="{{{createcontentthumbnail}}}" alt="{{#str}} addnewcontent, mod_openstudio {{/str}}">
     </div></a>
 {{/feature_enablefolders}}
 <div class="openstudio-available">
