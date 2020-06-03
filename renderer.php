@@ -276,7 +276,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             ]);
             $data->notificationstopicon = $stopicon->export_for_template($this->output);
 
-            $addtodashboard = '';
+            $addtodashboard = block_externaldashboard_backend::render_favourites_button($PAGE->cm, false);
             $data->addtodashboard = $addtodashboard;
 
             // Subscription.
