@@ -214,7 +214,7 @@ Feature: My Activity view in Open Studio
     Then I should see "Content 1.1 - Block 2"
     # Move Block 2 up on Block 1 and check the order of appearance.
     When I follow "Manage levels"
-    And I click on "//div[contains(@class, 'fcontainer')]/div[position()=1]/div[contains(@class, 'form-inline')]/input[contains(@name, 'movednbutton')]" "xpath_element"
+    And I click on "//div[contains(@class, 'fcontainer')]//div[position()=1]//div[contains(@class, 'form-inline')]//input[contains(@title, 'Move Down')]" "xpath_element"
     And I follow "Test Open Studio name 1"
     And I follow "My Content > My Activities" in the openstudio navigation
     Then the "Work:" select box should contain "All"
