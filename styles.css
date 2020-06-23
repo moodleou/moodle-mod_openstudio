@@ -2554,6 +2554,16 @@ iframe.openstudio-content-view-iframe {
     color: #ffffff;
 }
 
+#page-mod-openstudio-content:not(.safari) .openstudio-content-weblink-text {
+    margin-top: -1px;
+}
+
+#page-mod-openstudio-content.chrome .openstudio-content-weblink-text,
+#page-mod-openstudio-content.ie .openstudio-content-weblink-text,
+#page-mod-openstudio-content .openstudio-content-weblink-text img {
+    margin-left: 1px;
+}
+
 .openstudio-grid-item-content .openstudio-item-request-feedback span,
 .openstudio-grid-item-content .openstudio-item-lock span {
     font-size: 1em;

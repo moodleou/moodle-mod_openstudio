@@ -154,10 +154,6 @@
                     {{/contenttypeiframe}}
                 {{/contenttypeuseimagedefault}}
 
-                {{#contenttypefileurl}}
-                    <div><a href="{{contentfileurl}}">{{{contentweblinktext}}}</a></div>
-                {{/contenttypefileurl}}
-
                 {{#contenttypeimage}}
                     <a href="{{contentfileurl}}" tabindex="0">
                         <img src="{{{contentfileurl}}}" class="openstudio-content-view-img" alt="{{{contentdatatitle}}}">
@@ -178,6 +174,14 @@
                     <iframe class="openstudio-content-view-iframe{{#previewcontent}} ipynb-hide-iframe{{/previewcontent}}" name="openstudio-content-view-iframe"
                             src="{{contentiframesrc}}" sandbox=""></iframe>
                 {{/contenttypeiframe}}
+
+                {{#contenttypefileurl}}
+                    <div class="openstudio-content-weblink-text">
+                        <a href="{{contentfileurl}}">{{{contentweblinktext}}}
+                            {{#pix}} t/right, core{{/pix}}
+                        </a>
+                    </div>
+                {{/contenttypefileurl}}
               {{/contenttypenone}}
             </div>
             <div class="openstudio-content-view-date-box clearfix">
