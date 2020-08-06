@@ -1776,10 +1776,6 @@ label.openstudio-export-item-name {
     margin-top: 30px;
 }
 
-.openstudio-content-edit-form .form-autocomplete-selection:focus {
-    outline: 1px dotted grey;
-}
-
 .path-mod-openstudio .filemanager .fp-restrictions {
     font-size: 0.85714em;
 }
