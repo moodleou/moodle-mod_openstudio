@@ -62,9 +62,10 @@ $url = new \moodle_url('/mod/openstudio/managefolders.php',
 $PAGE->set_url($url);
 $mform = new managefolders_form($url->out(false), $options,
         'post', '', array('class' => 'unresponsive'));
-
+$mcontenturl = new \moodle_url('/mod/openstudio/managecontents.php',
+        ['id' => $cm->id, 'l1id' => $l1id, 'l2id' => $l2id]);
 if ($mform->is_cancelled()) {
-    return redirect($PAGE->url->out(false));
+    return redirect($mcontenturl);
 }
 
 if ($mform->is_submitted()) {
@@ -147,7 +148,7 @@ if ($mform->is_submitted()) {
             } catch (Exception $e) {
                 $message = get_string('templateupdatefail', 'openstudio') . $e->getMessage();
             }
-            redirect($url, $message);
+            redirect($mcontenturl, $message);
         }
     }
 }

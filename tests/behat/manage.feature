@@ -91,6 +91,7 @@ Feature: Manage open studio folders
       | Folder guidance text                     | Lorem ipsum dolor sit amet |
       | Number of additional contents allowed    | 2                          |
     And I press "Save Changes"
+    And I follow "Content 2"
     Then the following fields match these values:
       | Folder guidance text                     | Lorem ipsum dolor sit amet |
       | Number of additional contents allowed    | 2                          |
@@ -106,6 +107,7 @@ Feature: Manage open studio folders
       | Folder guidance text  | Nunc sagittis sit amet mauris. |
       | Prevent re-ordering?  | 1                              |
     And I press "Save Changes"
+    And I follow "Content 2"
     Then the following fields match these values:
       | Name                  | Set Content 1                  |
       | Folder guidance text  | Nunc sagittis sit amet mauris. |
@@ -116,6 +118,7 @@ Feature: Manage open studio folders
     And I press "Add another Content"
     And I set the field "id_contentname_2" to "Set Content 3"
     And I press "Save Changes"
+    And I follow "Content 2"
     Then the following fields match these values:
       | id_contentname_0  | Set Content 1 |
       | id_contentname_1  | Set Content 2 |
@@ -137,6 +140,7 @@ Feature: Manage open studio folders
     And "id_contentmoveup_3" "button" should not be visible
 
     Given I press "Cancel"
+    And I follow "Content 2"
     When I click on "id_contentmovedown_0" "button"
     Then the field "id_contentname_0" matches value "Set Content 2"
     And the field "id_contentname_1" matches value "Set Content 1"
