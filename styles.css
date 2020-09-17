@@ -1776,10 +1776,6 @@ label.openstudio-export-item-name {
     margin-top: 30px;
 }
 
-.openstudio-content-edit-form .form-autocomplete-selection:focus {
-    outline: 1px dotted grey;
-}
-
 .path-mod-openstudio .filemanager .fp-restrictions {
     font-size: 0.85714em;
 }
@@ -2044,8 +2040,8 @@ a.openstudio-add-title:hover  {
 }
 
 .openstudio-upload-file .fitemtitle,
-.openstudio-upload-file > div.felement > p:first-of-type,
-.openstudio-upload-file > div.felement > div.form-filetypes-descriptions {
+.openstudio-upload-file > div.felement p:first-of-type,
+.openstudio-upload-file > div.felement div.form-filetypes-descriptions {
     display: none;
 }
 
@@ -2552,6 +2548,16 @@ iframe.openstudio-content-view-iframe {
 
 .openstudio-item-request-feedback span {
     color: #ffffff;
+}
+
+#page-mod-openstudio-content:not(.safari) .openstudio-content-weblink-text {
+    margin-top: -1px;
+}
+
+#page-mod-openstudio-content.chrome .openstudio-content-weblink-text,
+#page-mod-openstudio-content.ie .openstudio-content-weblink-text,
+#page-mod-openstudio-content .openstudio-content-weblink-text img {
+    margin-left: 1px;
 }
 
 .openstudio-grid-item-content .openstudio-item-request-feedback span,
