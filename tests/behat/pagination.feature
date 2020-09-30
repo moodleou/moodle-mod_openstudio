@@ -140,6 +140,7 @@ Feature: Pagination Open Studio stream views
 
         # Mobile view
         When I change viewport size to "320x768"
+        And I click on "button.nav-link" "css_element"
         And "Next" "link" should exist
         And I should not see "1" in the ".paging" "css_element"
         When I click on ".openstudio-mobile-paging-next" "css_element"
@@ -608,6 +609,7 @@ Feature: Pagination Open Studio stream views
 
         # Check pagination in mobile
         When I change viewport size to "320x768"
+        And I click on "button.nav-link" "css_element"
         # In page 1, show next button
         And I should see "Next" in the ".openstudio-mobile-paging-next" "css_element"
         And I click on ".openstudio-mobile-paging-next" "css_element"
