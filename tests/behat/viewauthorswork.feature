@@ -131,17 +131,17 @@ Feature: View author's work in Open Studio
         When I am on "Course 1" course homepage
         And I turn editing mode on
         And I add a "OpenStudio 2" to section "1" and I fill the form with:
-            | Name                             | Test Open Studio name 2        |
-            | Description                      | Test Open Studio description 2 |
-            | Your word for 'My Module'        | My Module                      |
-            | Your word for 'My Group'         | My Group                       |
-            | Your word for 'My Activities'    | My Activities                  |
-            | Your word for 'My Pinboard'      | My Pinboard                    |
-            | Group mode                       | Visible groups                 |
-            | Grouping                         | grouping1                      |
-            | Enable pinboard                  | 99                             |
-            | ID number                        | OS2                            |
-            | Enable content reciprocal access | 1                              |
+            | Name                          | Test Open Studio name 2        |
+            | Description                   | Test Open Studio description 2 |
+            | Your word for 'My Module'     | My Module                      |
+            | Your word for 'My Group'      | My Group                       |
+            | Your word for 'My Activities' | My Activities                  |
+            | Your word for 'My Pinboard'   | My Pinboard                    |
+            | Group mode                    | Visible groups                 |
+            | Grouping                      | grouping1                      |
+            | Enable pinboard               | 99                             |
+            | ID number                     | OS2                            |
+            | Enable share to view          | 1                              |
         And the following open studio "level1s" exist:
             | openstudio | name   | sortorder |
             | OS2        | Block1 | 1         |

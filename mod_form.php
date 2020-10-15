@@ -212,9 +212,10 @@ class mod_openstudio_mod_form extends moodleform_mod {
                 array('group' => 1), array(0, 1));
 
         $mform->addElement('advcheckbox', 'enablecontentreciprocalaccess',
-                get_string('settingsenablecontentreciprocalaccess', 'openstudio'),
-                get_string('settingsenablecontentreciprocalaccessdescription', 'openstudio'),
+                get_string('settingsenablesharetoview', 'openstudio'),
+                get_string('settingsenablesharetoviewdescription', 'openstudio'),
                 array('group' => 1), array(0, 1));
+        $mform->addHelpButton('enablecontentreciprocalaccess', 'settingssharetoview', 'openstudio');
 
         $mform->addElement('advcheckbox', 'enableparticipationsmiley',
                 get_string('settingsenableparticipationsmiley', 'openstudio'),
