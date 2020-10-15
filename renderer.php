@@ -560,12 +560,13 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      */
     public function body($cmid, $cminstance, $theme, $viewmode = content::VISIBILITY_MODULE, $permissions, $contentdata,
             $issearch = false) {
-        global $OUTPUT;
+        global $OUTPUT, $USER;
 
         $placeholdertext = '';
         $selectview = false;
         $myactivities = false;
         $showprofilebarview = false;
+        $showsharetoviewbanner = true;
         $blocksdata = array();
         $contentdata->ismypinboard = false;
         $contentdata->ismyactivity = false;
@@ -583,6 +584,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
             case content::VISIBILITY_WORKSPACE:
             case content::VISIBILITY_PRIVATE:
+                $vuid = optional_param('vuid', $USER->id, PARAM_INT);
                 $showprofilebarview = true;
                 $placeholdertext = $theme->themestudioname;
                 if (!$issearch) {
@@ -598,12 +600,15 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                         $blocksdata[$key]->selected = true;
                     }
                 }
+
+                $showsharetoviewbanner = !($vuid === $USER->id);
                 break;
 
             case content::VISIBILITY_PRIVATE_PINBOARD:
                 $showprofilebarview = true;
                 $placeholdertext = $theme->themepinboardname;
                 $contentdata->ismypinboard = true;
+                $showsharetoviewbanner = false;
                 break;
         }
 
@@ -686,6 +691,9 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $contentdata->multiplepages = $contentdata->streamdatapagesize < $contentdata->total;
         }
         $contentdata->available = $permissions->pinboarddata->available;
+        $contentdata->sharetoview = $permissions->feature_contentreciprocalaccess;
+        $contentdata->showsharetoviewbanner = $showsharetoviewbanner;
+        $contentdata->sharetoviewhelpicon = $OUTPUT->help_icon('sharetoviewbanner', 'openstudio');
 
         // Prepare select from (all/pinboard/blocks) filter.
         if (property_exists($contentdata, 'openstudio_view_filters')) {

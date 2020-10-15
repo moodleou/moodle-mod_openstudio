@@ -1540,3 +1540,6 @@ $string['deletedbyrequest'] = 'Comment deleted by user request';
 $string['retainimagemetadata'] = 'Retain EXIF image data';
 $string['retainimagemetadata_help'] = 'Enable this option to retain it, note that once removed the data cannot be restored without re-uploading the image.';
 $string['retainimagemetadataerror'] = 'In order to show GPS or Image data the EXIF image data must be retained';
+$string['sharetoviewbanner'] = 'Share to view is enabled';
+$string['sharetoviewbanner_help'] = 'You will not see any other student\'s work until you share a post yourself.';
+

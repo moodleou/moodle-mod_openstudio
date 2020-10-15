@@ -32,6 +32,7 @@
         "adddisable": false,
         "filterdisable": false,
         "hasnormalshareditems": false,
+        "sharetoview": false;
         "contents": [
             {
                 "firstname" : "Admin",
@@ -112,6 +113,9 @@
 <div class="openstudio-container">
     <div class="openstudio-module-title">
         <h1>{{{placeholdertext}}}</h1>
+        {{#sharetoview}}
+            {{>mod_openstudio/share_to_view}}
+        {{/sharetoview}}
     </div>
     {{#searchmessage}}
         <div class="openstudio-search-message">

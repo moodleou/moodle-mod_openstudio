@@ -6716,6 +6716,26 @@ a.openstudio-add-new-content-link:hover  {
         margin-top: 0px;
     }
 
+    .path-mod-openstudio .openstudio-container .openstudio-module-title {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .path-mod-openstudio .openstudio-container .openstudio-module-title h1,
+    .path-mod-openstudio .openstudio-container .openstudio-module-title .openstudio-banner {
+        padding-left: 20px;
+    }
+
+    .path-mod-openstudio .openstudio-container .openstudio-module-title .openstudio-banner {
+        padding-bottom: 20px;
+        margin-right: 0;
+    }
+
+    .path-mod-openstudio .openstudio-container .openstudio-module-title .openstudio-banner > .openstudio-banner-label {
+        height: 26px;
+        padding: 0 14px 0 15px;
+        font-size: 1.28571em;
+    }
 }
 
 /* Mobile small. */
@@ -7281,4 +7301,33 @@ a.openstudio-add-new-content-link:hover  {
 
 #page-mod-openstudio-content #openstudio-content-previewipynb .token.entity {
     cursor: help;
+}
+
+.path-mod-openstudio .openstudio-module-title {
+    display: flex;
+    display: -ms-flexbox;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.path-mod-openstudio .openstudio-module-title .openstudio-banner {
+    display: flex;
+    align-items: center;
+    margin-right: 24px;
+}
+
+.path-mod-openstudio .openstudio-module-title .openstudio-banner > .openstudio-banner-label {
+    display: flex;
+    align-items: center;
+    height: 25px;
+    color: #ffffff;
+    background-color: #0b55a8;
+    padding: 0 9px 0 10px;
+    border-radius: 4px;
+    font-size: 1.14285em;
+}
+
+.path-mod-openstudio .openstudio-module-title .openstudio-banner > .btn-link > img.icon {
+    margin-right: 0;
+    margin-left: 5px;
 }
