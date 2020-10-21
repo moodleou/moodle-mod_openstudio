@@ -41,12 +41,14 @@ class contents_form_testcase extends \advanced_testcase {
 
         $user = $this->getDataGenerator()->create_user();
         $course = $this->getDataGenerator()->create_course();
+        $openstudio = $this->getDataGenerator()->create_module('openstudio', ['course' => $course->id]);
         $this->setUser($user);
         $this->resetAfterTest(true);
         $context = \context_user::instance($USER->id);
         $fs = get_file_storage();
         $options = array(
                 'courseid' => $course->id,
+                'cmid' => $openstudio->cmid,
                 'vid' => 0,
                 'feature_module' => 1,
                 'feature_group' => 0,

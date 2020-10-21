@@ -55,6 +55,8 @@ class mod_openstudio_content_form extends moodleform {
         $contenttitle = get_string('contentformname', 'openstudio');
         $contentdescription = get_string('contentformdescription', 'openstudio');
         $submitbuttontitle = get_string('contentformsubmitbutton', 'openstudio');
+        $context = context_module::instance($this->_customdata['cmid']);
+        $course = get_course($this->_customdata['courseid']);
         if (isset($this->_customdata['isfolderlock']) && $this->_customdata['isfolderlock']) {
             return;
         }
@@ -145,7 +147,11 @@ class mod_openstudio_content_form extends moodleform {
         $mform->addElement('text', 'name', $contenttitle);
         $mform->setType('name', PARAM_TEXT);
 
-        $mform->addElement('editor', 'description', $contentdescription);
+        $editoroptions = [
+            'maxfiles' => EDITOR_UNLIMITED_FILES,
+            'maxbytes' => get_user_max_upload_file_size($context, $course->maxbytes),
+        ];
+        $mform->addElement('editor', 'description', $contentdescription, null, $editoroptions);
         $mform->setType('description', PARAM_RAW);
 
         $defaultcontentuploadtype = '';
