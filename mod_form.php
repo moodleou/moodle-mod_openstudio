@@ -223,7 +223,8 @@ class mod_openstudio_mod_form extends moodleform_mod {
                 array('group' => 1), array(0, 1));
 
         $mform->addElement('advcheckbox', 'enablefolders',
-                get_string('settingsenablefolders', 'openstudio'), '&nbsp;');
+                get_string('settingsenablefolders', 'openstudio'),
+                get_string('settingsenablefolders', 'openstudio'));
 
         $mform->addElement('advcheckbox', 'enablefoldersanycontent',
                 get_string('settingsenablefoldersanycontent', 'openstudio'),

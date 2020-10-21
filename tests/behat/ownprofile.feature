@@ -49,7 +49,7 @@ Feature: Own profile view in Open Studio
         | Group mode                   | Visible groups               |
         | Grouping                     | grouping1                    |
         | Enable pinboard              | 99                           |
-        | Enable Folders               | 1                            |
+        | Enable folders               | 1                            |
         | Abuse reports are emailed to | teacher1@asd.com             |
         | ID number                    | OS1                          |
       And I add a "OpenStudio 2" to section "1" and I fill the form with:
@@ -58,7 +58,7 @@ Feature: Own profile view in Open Studio
         | Group mode                   | Visible groups               |
         | Grouping                     | grouping1                    |
         | Enable pinboard              | 99                           |
-        | Enable Folders               | 1                            |
+        | Enable folders               | 1                            |
         | Abuse reports are emailed to | teacher1@asd.com             |
         | ID number                    | OS2                          |
       And all users have accepted the plagarism statement for "OS1" openstudio

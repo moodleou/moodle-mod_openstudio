@@ -67,7 +67,7 @@ Feature: Create and edit Open Studio Folder
         And I should not see "Create new folder"
         And I follow "Administration > Edit" in the openstudio navigation
         And I follow "Expand all"
-        And I set the field "Enable Folders" to "1"
+        And I set the field "Enable folders" to "1"
         And I press "Save and display"
         And I should see "Upload content"
         And I should see "Create new folder"
@@ -79,7 +79,7 @@ Feature: Create and edit Open Studio Folder
         And I should not see "Create new folder"
         And I follow "Administration > Edit" in the openstudio navigation
         And I follow "Expand all"
-        And I set the field "Enable Folders" to "1"
+        And I set the field "Enable folders" to "1"
         And I press "Save and display"
         And I should see "Upload content"
         And I should see "Create new folder"
@@ -140,7 +140,7 @@ Feature: Create and edit Open Studio Folder
         When I follow "Test Open Studio name 1"
         And I follow "Administration > Edit" in the openstudio navigation
         And I follow "Expand all"
-        And I set the field "Enable Folders" to "1"
+        And I set the field "Enable folders" to "1"
         And I press "Save and display"
 
         # Create new folder in My Module view
@@ -185,7 +185,7 @@ Feature: Create and edit Open Studio Folder
         When I follow "Test Open Studio name 1"
         And I follow "Administration > Edit" in the openstudio navigation
         And I follow "Expand all"
-        And I set the field "Enable Folders" to "1"
+        And I set the field "Enable folders" to "1"
         And I press "Save and display"
 
         # Create new folder in My Module view
@@ -215,7 +215,7 @@ Feature: Create and edit Open Studio Folder
         When I follow "Test Open Studio name 1"
         And I follow "Administration > Edit" in the openstudio navigation
         And I follow "Expand all"
-        And I set the field "Enable Folders" to "1"
+        And I set the field "Enable folders" to "1"
         And I press "Save and display"
 
         # Add new folder
@@ -257,7 +257,7 @@ Feature: Create and edit Open Studio Folder
         When I follow "Test Open Studio name 1"
         And I follow "Administration > Edit" in the openstudio navigation
         And I follow "Expand all"
-        And I set the field "Enable Folders" to "1"
+        And I set the field "Enable folders" to "1"
         And I press "Save and display"
 
         # Create new folder in My Module view

@@ -35,7 +35,7 @@ Feature: My Activity view in Open Studio
       | Group mode                   | Visible groups               |
       | Grouping                     | grouping1                    |
       | Enable pinboard              | 99                           |
-      | Enable Folders               | 1                            |
+      | Enable folders               | 1                            |
       | Abuse reports are emailed to | teacher1@asd.com             |
       | ID number                    | OS1                          |
     And all users have accepted the plagarism statement for "OS1" openstudio

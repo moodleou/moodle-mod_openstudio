@@ -67,7 +67,7 @@ Feature: Open Studio people view
           | Group mode                    | Visible groups                 |
           | Grouping                      | grouping1                      |
           | Enable pinboard               | 99                             |
-          | Enable Folders                | 1                              |
+          | Enable folders                | 1                              |
           | Abuse reports are emailed to  | teacher1@asd.com               |
           | ID number                     | OS2                            |
         And all users have accepted the plagarism statement for "OS1" openstudio
@@ -91,7 +91,7 @@ Feature: Open Studio people view
           | Group mode                    | Visible groups                 |
           | Grouping                      | grouping1                      |
           | Enable pinboard               | 99                             |
-          | Enable Folders                | 1                              |
+          | Enable folders                | 1                              |
           | Abuse reports are emailed to  | teacher1@asd.com               |
           | ID number                     | OS1                            |
         And all users have accepted the plagarism statement for "OS1" openstudio
@@ -105,7 +105,7 @@ Feature: Open Studio people view
           | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
         And I follow "People" in the openstudio navigation
-        
+
         # switch student1 user
         And I am on site homepage
         And I log out
@@ -184,7 +184,7 @@ Feature: Open Studio people view
           | Group mode                    | Visible groups                 |
           | Grouping                      | grouping1                      |
           | Enable pinboard               | 99                             |
-          | Enable Folders                | 1                              |
+          | Enable folders                | 1                              |
           | Abuse reports are emailed to  | teacher1@asd.com               |
           | ID number                     | OS1                            |
         And all users have accepted the plagarism statement for "OS1" openstudio
@@ -214,7 +214,7 @@ Feature: Open Studio people view
           | Description               | My Pinboard View Description 1             |
           | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
-        
+
         # GIVEN Group Name selected, THEN show all members of the selected group
         And I am on site homepage
         And I log out

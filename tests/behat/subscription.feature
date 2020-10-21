@@ -39,7 +39,7 @@ Feature: Subscribe/Unsubscribe to my Open Studio
       | Name | Test Open Studio name 1 |
       | Description | Test Open Studio description |
       | Enable pinboard | 99 |
-      | Enable Folders  | 1 |
+      | Enable folders  | 1 |
       | Abuse reports are emailed to | teacher1@asd.com |
       | ID number                    | OS1              |
 
