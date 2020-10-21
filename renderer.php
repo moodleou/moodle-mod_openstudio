@@ -95,8 +95,11 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
             case content::VISIBILITY_WORKSPACE:
             case content::VISIBILITY_PRIVATE:
+                // Get user id that we need to show stream for.
+                $vuid = optional_param('vuid', $USER->id, PARAM_INT);
+                $currentuserid = $USER->id;
                 $placeholdertext = $theme->themestudioname;
-                $menuhighlight->myactivity = true;
+                $menuhighlight->myactivity = $vuid === $currentuserid;
                 break;
 
             case content::VISIBILITY_PRIVATE_PINBOARD:

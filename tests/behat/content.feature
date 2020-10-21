@@ -293,3 +293,46 @@ Feature: Create Open Studio contents
     Then the "src" attribute of "img.openstudio-content-view-type-img" "css_element" should contain "zip_archive"
     And I should see "Download file attachment"
     And I follow "Download file attachment"
+
+  Scenario: View activity by other user
+    When I am on "Course 1" course homepage
+    And I follow "Test Open Studio name 1"
+    And I follow "Administration > Manage levels" in the openstudio navigation
+    And I press "Add another Block"
+    And I set the field "Block Name" to "Block 1"
+    And I press "Save Changes"
+    And I follow "Block 1"
+    And I press "Add another Activity"
+    And I set the field "Activity Name" to "Activity 1"
+    And I press "Save Changes"
+    And I press "Add another Activity"
+    And I set the field "Activity Name" to "Activity 2"
+    And I press "Save Changes"
+    And I press "Add another Activity"
+    And I set the field "Activity Name" to "Activity 3"
+    And I press "Save Changes"
+    And I follow "Activity 1"
+    And I press "Add another Content"
+    And I set the field "Content Name" to "Content 1.1 Required"
+    And I set the field "Required (TMA)" to "1"
+    And I press "Add another Content"
+    And I follow "Manage levels"
+    And I follow "Block 1"
+    And I follow "Activity 3"
+    And I press "Add another Content"
+    And I set the field "Content Name" to "Content 3.1"
+    And I press "Add another Content"
+    And I follow "Test Open Studio name 1"
+    And I follow "Add new content"
+    And I set the following fields to these values:
+      | Who can view this content | My module                         |
+      | Title                     | Test My Group Board View 1        |
+      | Description               | My Group Board View Description 1 |
+    And I press "Save"
+    Then I log out
+    And I log in as "student2"
+    And I am on "Course 1" course homepage
+    And I follow "Test Open Studio name 1"
+    And I click on ".openstudio-grid-item-content-detail-owner-view" "css_element"
+    And I follow "My Content > My Activities" in the openstudio navigation
+    Then I should see "Content 1.1 Required"
