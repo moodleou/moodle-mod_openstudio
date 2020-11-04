@@ -217,7 +217,7 @@ class mod_openstudio_external extends external_api {
                         break;
 
                     case content::VISIBILITY_GROUP:
-                        $contenticon = $OUTPUT->image_url('group_rgb_32px', 'openstudio');
+                        $contenticon = $OUTPUT->image_url('share_with_my_group_rgb_32px', 'openstudio');
                         $contentlocation = group::get_name(abs($content->visibility));
                         break;
 

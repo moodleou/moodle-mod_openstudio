@@ -148,7 +148,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $submenuitem = array(
                     'name' => $groupname,
                     'url' => $navigationurls->mygroupurl,
-                    'pix' => $OUTPUT->image_url('group_rgb_32px', 'openstudio'),
+                    'pix' => $OUTPUT->image_url('share_with_my_group_rgb_32px', 'openstudio'),
                     'active' => $menuhighlight->mygroup
             );
             $menuitem['hassubnavigation'] = true;

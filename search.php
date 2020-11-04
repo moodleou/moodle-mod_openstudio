@@ -270,7 +270,7 @@ if (trim($searchtext) == '') {
                         break;
 
                     case content::VISIBILITY_GROUP:
-                        $contenticon = $OUTPUT->image_url('group_rgb_32px', 'openstudio');
+                        $contenticon = $OUTPUT->image_url('share_with_my_group_rgb_32px', 'openstudio');
                         $itemsharewith = get_string('contentitemsharewithgroup', 'openstudio',
                                 group::get_name(abs($visibilityid)));
                         break;
