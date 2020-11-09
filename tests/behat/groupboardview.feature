@@ -211,3 +211,24 @@ Feature: Open Studio group stream
         And I should see "Test My Group Board View 2"
         And I should see "Owner of this post"
         And "Add new comment" "button" should exist
+
+    @javascript
+    Scenario: Test Open Studio My Groupboard View
+        When I add a "OpenStudio 2" to section "1" and I fill the form with:
+            | Name                         | Test Open Studio name 2      |
+            | Description                  | Test Open Studio description |
+            | Group mode                   | Separate groups              |
+            | Grouping                     | grouping1                    |
+            | Enable 'My Module'           | 0                            |
+            | Enable pinboard              | 99                           |
+            | Abuse reports are emailed to | teacher1@asd.com             |
+            | ID number                    | OS2                          |
+            | Sharing level                | 1,7,2                        |
+        And all users have accepted the plagarism statement for "OS2" openstudio
+        And I follow "Test Open Studio name 2"
+        And I follow "People"
+        And I click on "select#openstudio-people-groupid" "css_element"
+        And I click on "option[name='group1']" "css_element"
+        Then I should see "group1"
+        And I click on "option[name='All Group']" "css_element"
+        Then I should see "All Group"
