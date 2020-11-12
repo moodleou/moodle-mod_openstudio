@@ -174,7 +174,9 @@
                     <iframe class="openstudio-content-view-iframe{{#previewcontent}} ipynb-hide-iframe{{/previewcontent}}" name="openstudio-content-view-iframe"
                             src="{{contentiframesrc}}" sandbox=""></iframe>
                 {{/contenttypeiframe}}
-
+                {{#preventiframe}}
+                    <span class="openstudio-content-prevent-iframe">{{{preventmessage}}}</span>
+                {{/preventiframe}}
                 {{#contenttypefileurl}}
                     <div class="openstudio-content-weblink-text">
                         <a href="{{contentfileurl}}">{{{contentweblinktext}}}

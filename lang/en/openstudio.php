@@ -1543,4 +1543,6 @@ $string['retainimagemetadata_help'] = 'Enable this option to retain it, note tha
 $string['retainimagemetadataerror'] = 'In order to show GPS or Image data the EXIF image data must be retained';
 $string['sharetoviewbanner'] = 'Share to view is enabled';
 $string['sharetoviewbanner_help'] = 'You will not see any other student\'s work until you share a post yourself.';
-
+$string['iplayererrormessage'] = 'This website doesn\'t allow display of embedded content. Please select \'web link\' to view the content.';
+$string['preventiframe'] = 'List of unsupported addresses';
+$string['preventiframedescription'] = 'List of addresses (one per line, partial match supported) that will not output an iframe.';

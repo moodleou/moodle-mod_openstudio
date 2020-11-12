@@ -336,3 +336,17 @@ Feature: Create Open Studio contents
     And I click on ".openstudio-grid-item-content-detail-owner-view" "css_element"
     And I follow "My Content > My Activities" in the openstudio navigation
     Then I should see "Content 1.1 Required"
+
+  Scenario: Add new content just a title and description
+    When I follow "Test Open Studio name 1"
+    And I follow "Add new content"
+    And I press "Add web/embed link"
+    And I set the following fields to these values:
+      | Who can view this content | My module                                                 |
+      | Title                     | Test Content with iplayer web/embed link                  |
+      | Description               | Test Content with iplayer web/embed link                  |
+      | Web link                  | https://www.bbc.co.uk/iplayer/episode/m000pb58/perfect-10 |
+    And I press "Save"
+    And I follow "Shared content > My Module" in the openstudio navigation
+    And I follow "Test Content with iplayer web/embed link"
+    Then I should see "This website doesn't allow display of embedded content. Please select 'web link' to view the content."

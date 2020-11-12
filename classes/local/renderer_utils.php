@@ -317,6 +317,8 @@ class renderer_utils {
         $contenttypedownloadfile = false;
         $contenttypeiframe = false;
         $contenttypeuseimagedefault = false;
+        $preventiframe = false;
+        $preventmessage = '';
         $contentdatahtml = '';
         $contentfileurl = '';
         $contentthumbnailfileurl = '';
@@ -434,6 +436,17 @@ class renderer_utils {
                 $contentweblinktext = get_string('contentcontentweblink', 'openstudio');
                 $embeddata = isset($contentdata->weblink) && embedcode::is_ouembed_installed() ? embedcode::parse(embedcode::get_ouembed_api(),
                     $contentdata->weblink) : false;
+
+                $preventiframesettings = get_config('openstudio', 'preventiframe');
+                foreach (array_map('trim', preg_split("/\r\n|\n|\r/", $preventiframesettings)) as $address) {
+                    if (strpos($contentdata->content, $address)) {
+                        $preventiframe = true;
+                        $preventmessage = get_string('iplayererrormessage', 'openstudio');
+                        $contenttypefileurl = true;
+                        break 2;
+                    }
+                }
+
                 if ($embeddata === false) {
                     $contenttypefileurl = true;
                     if ($contentdata->contenttype == content::TYPE_URL_IMAGE) {
@@ -568,6 +581,8 @@ class renderer_utils {
         $contentdata->contenttypeimage = $contenttypeimage;
         $contentdata->contenttypemedia = $contenttypemedia;
         $contentdata->contenttypefileurl = $contenttypefileurl;
+        $contentdata->preventiframe = $preventiframe;
+        $contentdata->preventmessage = $preventmessage;
         $contentdata->contenttypeembed = $contenttypeembed;
         $contentdata->contenttypedownloadfile = $contenttypedownloadfile;
         $contentdata->contenttypeiframe = $contenttypeiframe;
