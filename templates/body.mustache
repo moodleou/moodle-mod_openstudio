@@ -25,7 +25,7 @@
     Data attributes required for JS:
     * none
 
-    
+
     Example context (json):
     {
         "placeholdertext" : "My module",
@@ -108,7 +108,7 @@
         ]
     }
 }}
-                                                    
+
 <div class="openstudio-container">
     <div class="openstudio-module-title">
         <h1>{{{placeholdertext}}}</h1>
@@ -154,15 +154,15 @@
             <div class="openstudio-activity-title">{{{activityname}}}</div>
             <div class="openstudio-grid openstudio-activity-grid" id="openstudio_grid_{{activityid}}">
                 {{#activities}}
-                    {{^adddisable}}
-                        <div class="openstudio-grid-item
-                            {{#contentempty}}
-                                 openstudio-grid-item-add-new{{#contentislocked}}-locked{{/contentislocked}}{{#l3required}}-required{{/l3required}}
-                            {{/contentempty}}">
-                            {{^contentempty}}{{>mod_openstudio/activity_content_block}}{{/contentempty}}
+                    <div class="openstudio-grid-item
+                        {{#contentempty}}
+                             openstudio-grid-item-add-new{{#contentislocked}}-locked{{/contentislocked}}{{#l3required}}-required{{/l3required}}
+                        {{/contentempty}}">
+                        {{^contentempty}}{{>mod_openstudio/activity_content_block}}{{/contentempty}}
+                        {{^adddisable}}
                             {{#contentempty}}{{>mod_openstudio/add_activity_content_block}}{{/contentempty}}
-                        </div>
-                    {{/adddisable}}
+                        {{/adddisable}}
+                    </div>
                 {{/activities}}
             </div>
         {{/activityitems}}
