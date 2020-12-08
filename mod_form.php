@@ -381,4 +381,20 @@ class mod_openstudio_mod_form extends moodleform_mod {
             $defaultvalues['allowlatesubmissions'] = 0;
         }
     }
+
+    /**
+     * Validation for mod_form.
+     *
+     * @param array $data
+     * @param array $files
+     * @return array
+     */
+    public function validation($data, $files) {
+        $errors = parent::validation($data, $files);
+        if (!empty($data['enabledvisibility']) && in_array(content::VISIBILITY_MODULE, $data['enabledvisibility'])
+                && empty($data['enablemodule'])) {
+            $errors['enablemodule'] = get_string('errorsharinglevel', 'openstudio');
+        }
+        return $errors;
+    }
 }

@@ -858,6 +858,7 @@ $string['errorcontentnotebookerror'] = 'There was a problem reading one of the f
 $string['errorinvalidcomment'] = 'Comment does not exist.';
 $string['errorcommentnotdeleted'] = 'The comment could not be deleted due to an error.';
 $string['errorcontentnotdeleted'] = 'Delete content error!';
+$string['errorsharinglevel'] = 'Enable \'My Module\' must be chosen when option \'Module - visible all module members\' in Sharing level is selected';
 
 $string['modulejsdialogreturntostudio'] = 'Return to Studio';
 $string['modulejsdialogyes'] = 'Yes';
