@@ -42,7 +42,9 @@ Feature: Export my Open Studio contents
         And the following open studio "contents" exist:
             | openstudio | user     | name      | description           | file                                       | visibility |
             | OS1        | teacher1 | Content 2 | Content Description 2 | mod/openstudio/tests/importfiles/test2.jpg | module     |
-
+        And the following open studio "contents" exist:
+          | openstudio | user     | name                    | description | visibility |
+          | OS1        | teacher1 | Content with empty slot |             | module     |
         And all users have accepted the plagarism statement for "OS1" openstudio
         And I turn editing mode on
 
@@ -99,4 +101,6 @@ Feature: Export my Open Studio contents
         And I follow "My Content"
         And I follow "Export"
         And I press "Selected posts"
+        # Empty content is not include.
+        And "//tr[4]" "xpath_element" should not exist
         Then I should see "111.09KB" in the "//label[text()='Python']/../following-sibling::td" "xpath_element"

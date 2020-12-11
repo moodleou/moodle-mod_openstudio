@@ -60,6 +60,7 @@
                         </div>
                     </div>
                 </a>
+                {{#donotexport}}
                 <a id="openstudio_profile_fullusername_mobile" class="openstudio-profile-mypaticipation collapsed"
                    data-toggle="collapse" data-target=" #openstudio_profile_bar_mobile,
                         #profile_comment_view_mobile, #profile_percent_mobile" href="">
@@ -71,7 +72,9 @@
                         {{#pix}} t/collapsed, core, {{#str}} navprofileexpandoff, openstudio {{/str}}{{/pix}}
                     </span>
                 </a>
+                {{/donotexport}}
             </div>
+            {{#donotexport}}
             <div id="profile_mypaticipation" class="openstudio-profile-date collapse">
                 <div class="openstudio-profile-last-active-date">
                     {{#str}} profilebarlastactivedate, mod_openstudio {{/str}}
@@ -80,12 +83,15 @@
                     {{activedate}}
                 </div>
             </div>
+            {{/donotexport}}
         </div>
     </div>
     <div class="clearfix" id="openstudio_profile_bar">
         {{>mod_openstudio/profile_bar_details}}
     </div>
-    <div class="clearfix collapse" id="openstudio_profile_bar_mobile">
+    {{#donotexport}}
+        <div class="clearfix collapse" id="openstudio_profile_bar_mobile">
         {{>mod_openstudio/profile_bar_details_mobile}}
-    </div>
+        </div>
+    {{/donotexport}}
 </div>

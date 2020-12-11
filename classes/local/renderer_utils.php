@@ -212,7 +212,8 @@ class renderer_utils {
         $contentdata->participationenable = $permissions->feature_participationsmiley;
         $contentdata->participationlow = isset($userprogressdata['participationstatus'])
                 && ($userprogressdata['participationstatus'] == 'low');
-
+        $contentdata->activitydataexport = '';
+        $contentdata->slotnameexport = '';
         if (isset($userprogressdata['progressdetail']) && $userprogressdata['progressdetail']) {
             $profileactivityitems = [];
 
@@ -224,7 +225,14 @@ class renderer_utils {
                         foreach ($activities as $key => $activity) {
                             $activities[$key]->canreadcontent = util::can_read_content($cminstance, $permissions, $activity);
                             $activityname = $activity->level2name;
-
+                            if (isset($activity->level2id) && isset($contentdata->l2id) &&
+                                    $activity->level2id == $contentdata->l2id) {
+                                $contentdata->activitydataexport = $activityname;
+                            }
+                            if (isset($activity->level3id) && isset($contentdata->l3id) &&
+                                    $activity->level3id == $contentdata->l3id) {
+                                $contentdata->slotnameexport = $activity->level3name;
+                            }
                             $activities[$key]->isactive = false;
                             if ($activities[$key]->slotcontenttype2 == content::TYPE_FOLDER) {
                                 $activities[$key]->activityediturl = new \moodle_url('/mod/openstudio/folder.php',
@@ -296,9 +304,10 @@ class renderer_utils {
      * @param object $permissions The permission object for the given user/view.
      * @param object $contentdata The content records to display.
      * @param boolean $iscontentversion Indicate if content is a content version record.
+     * @param boolean $donotexport Check if this is exported
      * @return object $contentdata
      */
-    public static function content_details($cmid, $permissions, $contentdata, $iscontentversion) {
+    public static function content_details($cmid, $permissions, $contentdata, $iscontentversion, $donotexport = true) {
         global $OUTPUT, $CFG;
 
         if ($iscontentversion) {
@@ -365,14 +374,19 @@ class renderer_utils {
             case content::TYPE_AUDIO:
                 $contenttypemedia = true;
                 $contenttypedownloadfile = true;
-                $contentfileurl = self::make_plugin_file($context->id, $contentarea, $contentdata->id,
-                        $contentdata->content, $folderid);
+                if ($donotexport) {
+                    $contentfileurl = self::make_plugin_file($context->id, $contentarea, $contentdata->id,
+                            $contentdata->content, $folderid);
 
-                // This used for media filter.
-                $contentdatahtml = \html_writer::start_tag('a',
-                    array('href' => $contentfileurl, 'target' => '_top'));
-                $contentdatahtml .= \html_writer::end_tag('a');
-                $contentdatahtml = format_text($contentdatahtml);
+                    // This used for media filter.
+                    $contentdatahtml = \html_writer::start_tag('a',
+                            array('href' => $contentfileurl, 'target' => '_top'));
+                    $contentdatahtml .= \html_writer::end_tag('a');
+                    $contentdatahtml = format_text($contentdatahtml);
+                } else {
+                    $contentdatahtml = $contentdata->content;
+                }
+
                 break;
             case content::TYPE_DOCUMENT:
                 $contenttypedownloadfile = true;
@@ -1564,13 +1578,15 @@ class renderer_utils {
      * @param $contentdata Object
      * @param $permissions Object
      * @param $cmid int Course module ID
+     * @param bool $donotexport check if content is exported.
      * @param $cminstance object Course module instance
      */
-    public static function process_content_comment(&$contentdata, $permissions, $cmid, $cminstance) {
+    public static function process_content_comment(&$contentdata, $permissions, $cmid, $cminstance, $donotexport = true) {
         global $PAGE, $CFG, $USER;
 
         // Check comment permission.
         $contentdata->contentcommentenable = $permissions->addcomment ? true : false;
+        $contentdata->donotexport = $donotexport;
 
         // Check comment like setting enabled.
         $flagsenabled = explode(',', $permissions->flags);
@@ -1598,7 +1614,11 @@ class renderer_utils {
 
                     // Check comment attachment.
                     if ($file = comments::get_attachment($comment->id)) {
-                        $comment->commenttext .= self::get_media_filter_markup($file);
+                        if (!$donotexport) {
+                            $comment->commenttext .= $file->filename;
+                        } else {
+                            $comment->commenttext .= self::get_media_filter_markup($file);
+                        }
                     }
 
                     // Filter comment text.

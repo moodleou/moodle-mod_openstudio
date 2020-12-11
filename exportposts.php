@@ -56,7 +56,19 @@ $index = 1;
 $folderitemfilesizes = array();
 foreach ($contentdatatemp as $content) {
     $contentids[] = $content->id;
-
+    // Skip empty slot and empty folder.
+    if (empty($content->description) && empty($content->fileid) && empty($content->content)) {
+        continue;
+    }
+    if (empty($content->name)) {
+        if (!empty($content->l1name)) {
+            $content->name = $content->l1name;
+        } else if (!empty($content->l2name)) {
+            $content->name = $content->l2name;
+        } else if (!empty($content->l3name)) {
+            $content->name = $content->l3name;
+        }
+    }
     // Calculate folder size.
     if ($content->contenttype == content::TYPE_FOLDER) {
         // Get content IDs inside folder.

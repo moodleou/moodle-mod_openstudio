@@ -788,13 +788,15 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      * @param object $permissions The permission object for the given user/view.
      * @param object $contentdata The content detail to display.
      * @param int $cminstance The course module instance.
+     * @param bool $donotexport check if this is exported.
      * @return string The rendered HTML fragment.
      */
-    public function content_page($cm, $permissions, $contentdata, $cminstance) {
+    public function content_page($cm, $permissions, $contentdata, $cminstance, $donotexport = true) {
         global $CFG, $PAGE, $OUTPUT, $USER;
 
         $openstudioid = $cminstance->id;
         $contentdata->cmid = $cmid = $cm->id;
+        $contentdata->donotexport = $donotexport;
         if (!property_exists($contentdata, 'profilebarenable')) {
             $contentdata->profilebarenable = true;
         }
@@ -803,19 +805,26 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $contentdata = renderer_utils::profile_bar($permissions, $cminstance, $contentdata);
         }
 
-        $contentdata = renderer_utils::content_details($cmid, $permissions, $contentdata, $contentdata->iscontentversion);
-
+        $contentdata = renderer_utils::content_details($cmid, $permissions, $contentdata, $contentdata->iscontentversion, $donotexport);
+        $contentdata->contentfavouritetotaldonotexport = false;
+        $contentdata->contentsmiletotaldonotexport = false;
+        $contentdata->contentinspiretotaldonotexport = false;
         // Not need generate full data for a content version.
         if (!$contentdata->iscontentversion) {
             $contentdata->tagsraw = $this->get_tagsraw_for_template($cm, $contentdata->tagsraw);
 
             // Generate content flags.
             $contentdata = renderer_utils::content_flags($cmid, $permissions, $contentdata);
+            if (!$donotexport) {
+                $contentdata->contentfavouritetotaldonotexport = $contentdata->contentfavouritetotal > 0;
+                $contentdata->contentsmiletotaldonotexport = $contentdata->contentsmiletotal > 0;
+                $contentdata->contentinspiretotaldonotexport = $contentdata->contentinspiretotal > 0;
+            }
 
             // Process lock.
             renderer_utils::process_content_lock($contentdata, $permissions, $cmid);
             // Process comment.
-            renderer_utils::process_content_comment($contentdata, $permissions, $cmid, $cminstance);
+            renderer_utils::process_content_comment($contentdata, $permissions, $cmid, $cminstance, $donotexport);
 
             // Get copies count.
             $contenthash = item::generate_hash($contentdata->id);

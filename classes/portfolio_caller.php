@@ -86,7 +86,20 @@ class portfolio_caller extends \portfolio_module_caller_base {
             $contentdata->folderid = $folderid;
             // After all, call renderer to get content page.
             $contentdata->contentpage = $renderer->content_page($coursedata->cm, $coursedata->permissions,
-                    $contentdata, $coursedata->cminstance);
+                    $contentdata, $coursedata->cminstance, false);
+            // Skip empty slot and empty folder.
+            if (empty($contentdata->description) && empty($contentdata->fileid) && empty($contentdata->content)) {
+                continue;
+            }
+            if (empty($contentdata->name)) {
+                if (!empty($contentdata->l1name)) {
+                    $contentdata->name = $contentdata->l1name;
+                } else if (!empty($contentdata->l2name)) {
+                    $contentdata->name = $contentdata->l2name;
+                } else if (!empty($contentdata->l3name)) {
+                    $contentdata->name = $contentdata->l3name;
+                }
+            }
             $contents[] = $contentdata;
         }
 

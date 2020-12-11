@@ -80,7 +80,8 @@
             {{/comments}}
         </div>
     </div>
-    <a id="openstudio_comment_form" href="" tabindex="-1"></a>
+    {{#donotexport}}
+        <a id="openstudio_comment_form" href="" tabindex="-1"></a>
     <button id="id_addcomment" name="addcommentbutton" class="openstudio-content-actions
            {{#contentcommentlocked}} locked {{/contentcommentlocked}}
            osep-smallbutton btn btn-secondary">{{#str}} contentcommentsaddnewcomment, mod_openstudio {{/str}}
@@ -107,4 +108,5 @@
             </div>
         </div>
     </div>
+    {{/donotexport}}
 </div>
