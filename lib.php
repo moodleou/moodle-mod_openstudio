@@ -422,7 +422,8 @@ EOF;
 
             // If the content is shared with the course users, then proceed.
             if ($visibility == content::VISIBILITY_MODULE) {
-                $sql = <<<EOF
+                if (!util::is_ignore_enrol($modulecontext)) {
+                    $sql = <<<EOF
 SELECT ue1.id
   FROM {user_enrolments} ue1
   JOIN {enrol} e1 ON e1.id = ue1.enrolid
@@ -433,8 +434,9 @@ SELECT ue1.id
                         WHERE e2.courseid = ?)
 
 EOF;
-                if (!$DB->record_exists_sql($sql, array($USER->id, $contentdata->userid, $course->id))) {
-                    return false;
+                    if (!$DB->record_exists_sql($sql, array($USER->id, $contentdata->userid, $course->id))) {
+                        return false;
+                    }
                 }
             }
 
@@ -765,6 +767,12 @@ EOF;
     // Note: assumption is that the search results are already retricted by
     // course module.
     if ($result->intref2 == content::VISIBILITY_MODULE) {
+        $cm = get_coursemodule_from_id('openstudio', $result->coursemoduleid);
+        $modulecontext = \context_module::instance($cm->id);
+        if (util::is_ignore_enrol($modulecontext)) {
+            return true;
+        }
+
         $sql = <<<EOF
 SELECT ue1.id
   FROM {user_enrolments} ue1

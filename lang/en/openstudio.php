@@ -65,6 +65,7 @@ $string['event:contentedited'] = 'Content edited';
 
 $string['openstudio:canlock'] = 'Can lock';
 $string['openstudio:canlockothers'] = 'Can lock others';
+$string['openstudio:ignoreenrolment'] = 'Ignore enrolment';
 $string['event:contentlocked'] = 'Content locked';
 $string['event:contentunlocked'] = 'Content unlocked';
 $string['errorcontentlock'] = 'Lock content error!';
