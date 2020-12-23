@@ -1174,6 +1174,8 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
 .openstudio-comment-owner img {
     max-width: 48px;
     max-height: 48px;
+    border-radius: 50%;
+    width: 48px;
 }
 
 .openstudio-comment-flag {
@@ -1306,16 +1308,16 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
 }
 
 .openstudio-folder-view-comments .openstudio-comment-owner-name {
-    margin-left: 8px;
+    margin-left: 10px;
     float: left;
     margin-top: -6px;
     margin-bottom: 1px;
     margin-bottom: 0;
-    width: calc(100% - 56px);
+    width: calc(100% - 60px);
 }
 
 .openstudio-folder-view-comments .openstudio-comment-time {
-    margin-left: 8px;
+    margin-left: 10px;
     display: block;
     float: left;
 }
@@ -2412,6 +2414,7 @@ a.openstudio-add-title:hover  {
 .openstudio-grid-item-content-detail-owner-img img {
     width: 30px;
     height: 30px;
+    border-radius: 50%;
 }
 
 .openstudio-grid-item-content-detail-owner {
@@ -3063,6 +3066,7 @@ body:not(.ios):not(.android) .openstudio-content-view-flag-icon.has-hover:hover 
 .openstudio-content-view-user-picture img {
     width: 64px;
     height: auto;
+    border-radius: 50%;
 }
 
 .openstudio-content-view-user-info {
@@ -3656,12 +3660,13 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 
 .openstudio-profile-img {
     float: left;
-    margin-right: 15px;
+    margin-right: 10px;
 }
 
 .openstudio-profile-img img {
     width: 48px;
     height: 48px;
+    border-radius: 50%;
 }
 
 .openstudio-profile-name {
@@ -3788,14 +3793,14 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     margin-left: 15px;
 }
 
-.openstudio-profile-bar .openstudio-profile-user-picture  img{
+.openstudio-profile-bar .openstudio-profile-user-picture img{
     float: left;
     display: inline-block;
-    height: 50px;
     width: 48px;
     height: 48px;
-    padding-top: 10px;
     box-sizing: content-box;
+    border-radius: 50%;
+    margin-top: 10px;
 }
 
 .openstudio-profile-bar .openstudio-profile-head {
