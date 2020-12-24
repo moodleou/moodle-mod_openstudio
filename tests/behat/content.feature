@@ -350,3 +350,57 @@ Feature: Create Open Studio contents
     And I follow "Shared content > My Module" in the openstudio navigation
     And I follow "Test Content with iplayer web/embed link"
     Then I should see "This website doesn't allow display of embedded content. Please select 'web link' to view the content."
+
+  Scenario: Add new content without mandatory title
+    When I follow "Test Open Studio name 1"
+    And I follow "Add new content"
+    And I set the following fields to these values:
+      | Who can view this content | My module          |
+      | Description               | Just a description |
+    And I press "Save"
+    Then I should see "Add new content"
+    And "input.is-invalid" "css_element" should exist
+    Then I set the following fields to these values:
+      | Title | Just a title |
+    And I press "Save"
+    And I follow "Shared content > My Module" in the openstudio navigation
+    Then I should see "Just a title"
+
+  Scenario: Add new content without mandatory title in My activities
+    And I am on "Course 1" course homepage
+    And I add a "OpenStudio 2" to section "1" and I fill the form with:
+      | Name                         | Test Open Studio name 2      |
+      | Description                  | Test Open Studio description |
+      | Group mode                   | Visible groups               |
+      | Grouping                     | grouping1                    |
+      | Enable pinboard              | 99                           |
+      | Abuse reports are emailed to | teacher1@asd.com             |
+      | ID number                    | OS2                          |
+      | Enable folders               | 1                            |
+    And all users have accepted the plagarism statement for "OS2" openstudio
+    When I follow "Test Open Studio name 2"
+    And I follow "Administration > Manage levels" in the openstudio navigation
+    And I press "Add another Block"
+    And I set the field "Block Name" to "Block 1"
+    And I press "Save Changes"
+    And I follow "Block 1"
+    And I press "Add another Activity"
+    And I set the field "Activity Name" to "Activity 1"
+    And I press "Save Changes"
+    And I follow "Activity 1"
+    And I press "Add another Content"
+    And I set the field "Content Name" to "Content in My Activities"
+    And I press "Add another Content"
+    And I set the field "Content Name" to "Folder in My Activities"
+    And I set the field "Is folder?" to "1"
+    And I press "Save Changes"
+    And I follow "Test Open Studio name 2"
+    And I follow "My Content > My Activities" in the openstudio navigation
+    And I follow "Content in My Activities"
+    Then the "value" attribute of "input#id_name" "css_element" should contain "Content in My Activities"
+    When I follow "Test Open Studio name 2"
+    And I follow "My Content > My Activities" in the openstudio navigation
+    And I follow "Folder in My Activities"
+    And I should see "Upload content to folder"
+    And I click on "span.openstudio-new-folder-title" "css_element"
+    Then the "value" attribute of "input#id_name" "css_element" should contain "Folder in My Activities"

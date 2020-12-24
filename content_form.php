@@ -147,6 +147,7 @@ class mod_openstudio_content_form extends moodleform {
 
         $mform->addElement('text', 'name', $contenttitle);
         $mform->setType('name', PARAM_TEXT);
+        $mform->addRule('name', get_string('required'), 'required',  null, 'client');
 
         $editoroptions = [
             'maxfiles' => EDITOR_UNLIMITED_FILES,

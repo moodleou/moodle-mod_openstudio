@@ -809,6 +809,9 @@ if ($contentform->is_cancelled()) {
 
     if ($contentdata->contenttype == content::TYPE_FOLDER) {
         $contentupdatemode .= content::UPDATEMODE_FOLDER;
+        $contentdata->name = empty($contentdata->name) ? $contentdata->l3name : $contentdata->name;
+    } else if ($vid === content::VISIBILITY_PRIVATE) {
+        $contentdata->name = $contentdata->name ?? $level3data->name;
     }
 
     $contentform->set_data($contentdata);
