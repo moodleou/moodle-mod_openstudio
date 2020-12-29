@@ -1659,6 +1659,18 @@ label.openstudio-export-item-name {
     display: inline;
 }
 
+.openstudio-grid-item-content-detail-owner-view-icon {
+    display: inline-block;
+    width: 60px;
+}
+.openstudio-grid-item-content-detail-owner-view-icon {
+    text-decoration: inherit;
+}
+.openstudio-grid-item-content-detail-owner-view:hover > .openstudio-grid-item-content-detail-owner-view-icon,
+.openstudio-grid-item-content-detail-owner-view-icon:hover {
+    text-decoration: underline;
+}
+
 /**
  * End export feature.
  */
@@ -4952,11 +4964,43 @@ a.openstudio-add-new-content-link:hover  {
     }
 }
 
+@media (min-width: 768px) {
+    body.path-mod-openstudio .openstudio-grid-item-content-detail-owner-view-icon img.icon {
+        width: 9px;
+        vertical-align: unset;
+        margin-bottom: -4px;
+    }
+}
+@media (max-width: 767px) {
+    body.path-mod-openstudio .openstudio-grid-item-content-detail-owner-view-icon img.icon {
+        padding-bottom: 1px;
+    }
+    body.path-mod-openstudio.android .openstudio-grid-item-content-detail-owner-view-icon img.icon {
+        padding-bottom: 2px;
+    }
+}
 /* Mobile. */
 @media (max-width: 767px) {
 
     .path-mod-openstudio #region-main {
         padding: 0 0 0px;
+    }
+
+    .path-mod-openstudio #openstudio_profile_fullusername_mobile {
+        display: flex;
+        max-width: 100%;
+    }
+    #openstudio_profile_fullusername_mobile .openstudio-profile-expand-image,
+    #openstudio_profile_fullusername_mobile .openstudio-profile-collapse-image {
+        padding-left: 0;
+    }
+    #openstudio_profile_fullusername_mobile .openstudio-profile-fullname {
+        margin-right: 6px;
+    }
+
+    .openstudio-grid-item-content-detail-owner-view-icon {
+        display: inline-table;
+        width: unset;
     }
 
     .openstudio-content-view-file > a > img,
@@ -5640,7 +5684,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-profile-bar .openstudio-profile-mypaticipation-content {
-        height: 25px;
+        height: unset;
     }
 
     .openstudio-profile-bar .openstudio-profile-mypaticipation {

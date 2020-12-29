@@ -126,8 +126,12 @@
                     <a class="openstudio-profile-view" href="{{{viewuserworkurl}}}">
                         {{#str}} contentitemview, mod_openstudio {{/str}}
                         {{{firstname}}}’s
-                        {{#str}} contentitemwork, mod_openstudio {{/str}}
-                        {{#pix}} t/right, core{{/pix}}
+                        <span class="openstudio-grid-item-content-detail-owner-view-icon">
+                              {{#str}} contentitemwork, mod_openstudio {{/str}}
+                            {{#pix}}
+                                t/right, core, {{#str}} contentitemview, openstudio {{/str}}
+                            {{/pix}}
+                        </span>
                     </a>
                 </div>
             </div>
