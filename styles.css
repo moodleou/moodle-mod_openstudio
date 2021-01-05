@@ -1478,6 +1478,10 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
 /**
  * Content modal.
  */
+
+.openstudio-fullscreen-modal .modal-content {
+    background-color: #464542;
+}
 .openstudio-fullscreen-modal .modal-header,
 .openstudio-fullscreen-modal .modal-footer {
     display: none;
@@ -1509,7 +1513,7 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
 }
 
 .openstudio-modal-content-title span {
-    font-size: 1.125em;
+    font-size: 1.28571em;
     font-weight: bold;
 }
 
@@ -1519,6 +1523,10 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
     width: 30px;
     height: 30px;
 }
+.path-mod-openstudio .openstudio-modal-content-close:focus {
+    outline: 2px solid #0a3c75;
+    background: unset;
+}
 
 .path-mod-openstudio .openstudio-modal-content-close {
     background-color: transparent;
@@ -1527,7 +1535,7 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
 }
 
 .path-mod-openstudio .modal-backdrop {
-    opacity: 0.7;
+    opacity: 0.7 !important;
 }
 
 .path-mod-openstudio .modal-container.large .modal {
@@ -2876,6 +2884,9 @@ span.openstudio-content-view-title {
 
 .openstudio-content-view-maximize.minimize img {
     margin-right: 6px;
+}
+.path-mod-openstudio.gecko .openstudio-content-view-maximize.minimize img {
+    margin-right: 5px;
 }
 
 .openstudio-content-view-description {
