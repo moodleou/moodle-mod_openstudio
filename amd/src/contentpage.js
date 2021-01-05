@@ -123,24 +123,17 @@ define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/modal_events', 'c
             } else {
                 t.modal.show();
 
-                // Set focus on close button when open content model.
-                t.modal.getRoot().on(ModalEvents.shown, function() {
-                    $('.openstudio-modal-content-close').get(0).focus();
-
+                // Auto scroll to close button when open content model.
+                t.modal.getRoot().on(ModalEvents.shown, function(e) {
+                    if (e.type === 'modal:shown')          {
+                         $('.openstudio-modal-content-close')[0].scrollIntoView();
+                    }
                     $('.openstudio-modal-content-close, #openstudio_content_view_minimize').keydown(function (e) {
                         if (e.keyCode == 13) {
                             t.modal.hide();
                             $('#openstudio_content_view_maximize').focus();
 
                             return false;
-                        }
-                    });
-
-                    // Set focus on Close button when tab from Minimize.
-                    $('#openstudio_content_view_minimize').keydown(function (e) {
-                        e.preventDefault();
-                        if (e.keyCode == 9) {
-                            $('.openstudio-modal-content-close').get(0).focus();
                         }
                     });
                 });
