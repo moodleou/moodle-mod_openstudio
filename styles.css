@@ -2315,7 +2315,7 @@ a.openstudio-add-title:hover  {
 .openstudio-item-lock img {
     width: 14px;
     height: 14px;
-    padding-left: 8px;
+    padding-left: 6px;
     padding-right: 3px;
     box-sizing: content-box;
 }
@@ -4036,7 +4036,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 /* Handle folder overview */
 .openstudio-folder-header {
     margin: 20px 24px 15px 24px;
-    padding: 12px 0 4px 0;
+    padding: 12px 0 1px 0;
 }
 
 .openstudio-folder-header .openstudio-folder-header-left {
@@ -4059,15 +4059,21 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     position: relative;
     line-height: 23px;
     margin-top: 4px;
-    margin-left: 34px;
+    margin-left: 36px;
     font-size: 1.57142em;
+}
+.gecko .openstudio-folder-header-left .openstudio-folder-header-title {
+    margin-left: 35px;
 }
 
 .openstudio-folder-header-right .openstudio-folder-header-title {
-    vertical-align: middle;
+    vertical-align: text-bottom;
     position: relative;
     font-size: 1em;
     margin-left: 4px;
+}
+.gecko .openstudio-folder-header-right .openstudio-folder-header-title {
+    top: -1px;
 }
 
 #page-mod-openstudio-content .openstudio-folder-header img,
@@ -4103,10 +4109,13 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 .openstudio-folder-view-title-background {
     font-size: 1.28571em ;
     float: left;
+    margin-top: 1px;
 }
 
 .openstudio-folder-view-title-managepost {
     float: right;
+    position: relative;
+    top: 2px;
 }
 
 .openstudio-folder-view-request-feedback {
@@ -4303,12 +4312,18 @@ a.openstudio-add-new-content-link:hover  {
     height: 48px;
     line-height: 36px;
 }
-
+.openstudio-folder-view-title-icon {
+    position: relative;
+    top: 1px;
+}
 .openstudio-folder-view-title-icon img {
     width: 24px;
     height: 24px;
+    margin-right: 0;
 }
-
+.gecko .openstudio-folder-view-title-icon img {
+    margin-right: -1px;
+}
 .openstudio-add-new-content-link img{
     vertical-align: top;
     margin-top: 10px;
