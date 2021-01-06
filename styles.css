@@ -6252,6 +6252,11 @@ a.openstudio-add-new-content-link:hover  {
         left: auto;
     }
 
+    .openstudio-filter-preference-text .openstudio-filter-text a {
+        font-size: 1.428571em;
+        font-weight: 700;
+    }
+
     .openstudio-filter-preference-text img{
         width: 20px;
         margin-right: 15px;
