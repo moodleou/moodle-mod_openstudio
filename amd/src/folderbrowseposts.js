@@ -208,7 +208,10 @@ define([
                 width: 640,
                 responsiveWidth: 767,
                 focusOnPreviousTargetAfterHide: true,
-                extraClasses: [t.CSS.BROWSEPOSTDIALOGUECONTAINER.replace('.', '')]
+                extraClasses: [
+                    t.CSS.BROWSEPOSTDIALOGUECONTAINER.replace('.', ''),
+                    'openstudio-browseposts-dialogue'
+                ]
             });
 
             setHeader();

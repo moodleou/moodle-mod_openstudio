@@ -71,12 +71,33 @@
                             {{#pix}}
                                 participation_rgb_32px, openstudio, {{#str}} contentcommentliked, openstudio {{/str}}
                             {{/pix}}
+                            {{#donotexport}}
+                                <sup class="openstudio-comment-flag-count
+                                {{#flagcount}}
+                                flagged
+                                {{/flagcount}}
+                                ">{{flagcount}}</sup>
+                            {{/donotexport}}
+                            {{^donotexport}}
+                                {{#flagcount}}
+                                    <sup class="openstudio-comment-flag-count
+                                    {{#flagcount}}
+                                    flagged
+                                    {{/flagcount}}
+                                    ">{{flagcount}}</sup>
+                                {{/flagcount}}
+                            {{/donotexport}}
                         </span>
                         {{#donotexport}}
                             <span class="openstudio-comment-flag-status unflagged openstudio-hidden">
                                 {{#pix}}
                                     participation_grey_rgb_32px, openstudio, {{#str}} contentcommentnotliked, openstudio {{/str}}
                                 {{/pix}}
+                                <sup class="openstudio-comment-flag-count
+                                {{#flagcount}}
+                                flagged
+                                {{/flagcount}}
+                                ">{{flagcount}}</sup>
                             </span>
                         {{/donotexport}}
                     {{/flagcount}}
@@ -86,30 +107,24 @@
                                 {{#pix}}
                                     participation_rgb_32px, openstudio, {{#str}} contentcommentliked, openstudio {{/str}}
                                 {{/pix}}
+                                <sup class="openstudio-comment-flag-count
+                                {{#flagcount}}
+                                flagged
+                                {{/flagcount}}
+                                ">{{flagcount}}</sup>
                             </span>
                         <span class="openstudio-comment-flag-status unflagged">
                             {{#pix}}
                                 participation_grey_rgb_32px, openstudio, {{#str}} contentcommentnotliked, openstudio {{/str}}
                             {{/pix}}
+                            <sup class="openstudio-comment-flag-count
+                            {{#flagcount}}
+                            flagged
+                            {{/flagcount}}
+                            ">{{flagcount}}</sup>
                         </span>
                         {{/donotexport}}
                     {{/flagcount}}
-                    {{#donotexport}}
-                        <span class="openstudio-comment-flag-count
-                        {{#flagcount}}
-                            flagged
-                        {{/flagcount}}
-                    ">{{flagcount}}</span>
-                    {{/donotexport}}
-                    {{^donotexport}}
-                        {{#flagcount}}
-                        <span class="openstudio-comment-flag-count
-                        {{#flagcount}}
-                            flagged
-                        {{/flagcount}}
-                    ">{{flagcount}}</span>
-                        {{/flagcount}}
-                    {{/donotexport}}
                     {{^userhasflagged}}
                         {{#donotexport}}
                         <a class="openstudio-comment-flag-link openstudio-content-actions

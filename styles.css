@@ -1194,15 +1194,13 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
 .openstudio-comment-flag-status img {
     width: 14px;
     height: 14px;
+    margin-right: 0px;
 }
 
 .openstudio-comment-flag-count {
     color: #dfdfdf;
     font-size: 0.857em;
     display: inline-block;
-    position: absolute;
-    top: -5px;
-    left: 16px;
 }
 
 .openstudio-comment-flag-count.flagged {
