@@ -88,8 +88,52 @@ class portfolio_caller extends \portfolio_module_caller_base {
             $contentdata->contentpage = $renderer->content_page($coursedata->cm, $coursedata->permissions,
                     $contentdata, $coursedata->cminstance, false);
             // Skip empty slot and empty folder.
-            if (empty($contentdata->description) && empty($contentdata->fileid) && empty($contentdata->content)) {
-                continue;
+            $contentdatasinfolder = [];
+            if ($contentandversions->contentdata->contenttype == content::TYPE_FOLDER) {
+                $foldercontents = folder::get_contents($contentid);
+                $numberofemptycontent = 0;
+                $numberofcontent = count($foldercontents);
+                if ($foldercontents) {
+                    // We have content here.
+                    foreach ($foldercontents as $key => $contentinfolder) {
+                        $contentandversions = contentversion::get_content_and_versions($contentinfolder->id, $USER->id,
+                                $showdeletedcontentversions);
+                        $contentdatainfolder = lock::determine_lock_status($contentandversions->contentdata);
+                        // Skip empty slot content in folder.
+                        if (empty($contentdatainfolder->description) && empty($contentdatainfolder->fileid)
+                                && empty($contentdatainfolder->content)) {
+                            $numberofemptycontent++;
+                            continue;
+                        }
+                        $contentdatainfolder->contentversions = array_values($contentandversions->contentversions);
+                        $contentdatainfolder->vid = $contentdata->visibilitycontext;
+                        $contentdatainfolder->iscontentversion = false;
+                        $contentdatainfolder->isarchiveversion = false;
+                        $folderid = 0;
+                        $containingfolder = folder::get_containing_folder($contentdata->id);
+                        if ($containingfolder) {
+                            $folderid = $containingfolder->id;
+                        }
+                        $contentdatainfolder->isinfolder = true;
+                        $contentdatainfolder->foldername = $contentdata->name;
+                        $contentdatainfolder->folderid = $folderid;
+                        // After all, call renderer to get content page.
+                        $contentdatainfolder->contentpage = $renderer->content_page($coursedata->cm, $coursedata->permissions,
+                                $contentdatainfolder, $coursedata->cminstance, false);
+                        $contentdatasinfolder[] = $contentdatainfolder;
+                    }
+                }
+                if ($numberofcontent == $numberofemptycontent) {
+                    // It mean all the content in folder is empty or don't have any content.
+                    // We need to check description of the folder.
+                    if (empty($contentdata->description) && empty($contentdata->fileid) && empty($contentdata->content)) {
+                        continue;
+                    }
+                }
+            } else {
+                if (empty($contentdata->description) && empty($contentdata->fileid) && empty($contentdata->content)) {
+                    continue;
+                }
             }
             if (empty($contentdata->name)) {
                 if (!empty($contentdata->l1name)) {
@@ -101,6 +145,7 @@ class portfolio_caller extends \portfolio_module_caller_base {
                 }
             }
             $contents[] = $contentdata;
+            $contents = array_merge($contents, $contentdatasinfolder);
         }
 
         $this->load_contents($contents);
@@ -127,6 +172,8 @@ class portfolio_caller extends \portfolio_module_caller_base {
             $contentpage = $OUTPUT->render_from_template('mod_openstudio/export', ['content' => $content]);
             if (!empty($content->folderid)) {
                 $suffix = ' - Folder ' . $content->folderid;
+            } else if (!empty($content->isinfolder) && !empty($content->foldername)) {
+                $suffix = ' - Content in Folder ' . $content->foldername;
             } else {
                 $suffix = '';
             }
@@ -186,14 +233,9 @@ class portfolio_caller extends \portfolio_module_caller_base {
             if ($content->userid != $this->user->id) {
                 throw new \portfolio_caller_exception('exportwronguser', 'openstudio', '', $content->name);
             }
-            if ($content->contenttype == content::TYPE_FOLDER) {
-                $foldercontents = folder::get_contents($content->id);
-                $this->load_contents($foldercontents, $content->id);
-            } else {
-                if (!empty($content->fileid)) {
-                    $this->files[] = $fs->get_file($this->context->id, 'mod_openstudio', 'content',
-                            $content->fileid, '/', $content->content);
-                }
+            if (!empty($content->fileid)) {
+                $this->files[] = $fs->get_file($this->context->id, 'mod_openstudio', 'content',
+                        $content->fileid, '/', $content->content);
             }
             $content = util::add_additional_content_data($content, true);
             $content->folderid = $folderid;
