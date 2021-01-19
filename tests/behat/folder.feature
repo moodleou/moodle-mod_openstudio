@@ -268,6 +268,7 @@ Feature: Create and edit Open Studio Folder
             | Folder description        | My folder view description 1               |
             | Tags                      | createdtag                                 |
         And I press "Create folder"
+        And I wait until "//div[@data-target='#openstudio_folder_view_folder_tags']" "xpath_element" exists
         And I press "Folder tags"
         And I should see "createdtag"
 
@@ -275,6 +276,7 @@ Feature: Create and edit Open Studio Folder
         And I follow "Edit folder details and sharing"
         And I set the field "Tags" to "editedtag"
         And I press "Save"
+        And I wait until "//div[@data-target='#openstudio_folder_view_folder_tags']" "xpath_element" exists
         And I press "Folder tags"
         And I should see "createdtag"
         And I should see "editedtag"
@@ -283,6 +285,7 @@ Feature: Create and edit Open Studio Folder
         And I follow "Edit folder details and sharing"
         And I click on "//span[@data-value='createdtag']" "xpath_element"
         And I press "Save"
+        And I wait until "//div[@data-target='#openstudio_folder_view_folder_tags']" "xpath_element" exists
         And I press "Folder tags"
         And I should not see "createdtag"
         And I should see "editedtag"

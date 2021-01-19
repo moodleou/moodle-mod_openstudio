@@ -793,7 +793,6 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      */
     public function content_page($cm, $permissions, $contentdata, $cminstance, $donotexport = true) {
         global $CFG, $PAGE, $OUTPUT, $USER;
-
         $openstudioid = $cminstance->id;
         $contentdata->cmid = $cmid = $cm->id;
         $contentdata->donotexport = $donotexport;
@@ -802,7 +801,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         }
 
         if ($contentdata->profilebarenable === true) {
-            $contentdata = renderer_utils::profile_bar($permissions, $cminstance, $contentdata);
+            $contentdata = renderer_utils::profile_bar($permissions, $cminstance, $contentdata, $donotexport);
         }
 
         $contentdata = renderer_utils::content_details($cmid, $permissions, $contentdata, $contentdata->iscontentversion, $donotexport);

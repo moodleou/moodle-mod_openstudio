@@ -162,9 +162,10 @@ class renderer_utils {
      * @param object $permissions The permission object for the given user/view.
      * @param object $cminstance The course module instance.
      * @param object $contentdata The content records to display.
+     * @param bool $donotexport Export state.
      * @return object $contentdata
      */
-    public static function profile_bar($permissions, $cminstance, $contentdata) {
+    public static function profile_bar($permissions, $cminstance, $contentdata, $donotexport = true) {
         global $USER, $OUTPUT, $PAGE;
 
         $vuid = optional_param('vuid', $USER->id, PARAM_INT);
@@ -190,7 +191,7 @@ class renderer_utils {
         if (array_key_exists(flags::READ_CONTENT, $flagsdata)) {
             $flagscontentread = $flagsdata[flags::READ_CONTENT]->count;
         }
-
+        $contentdata->donotexport = $donotexport;
         $contentdata->percentcompleted = 0;
         $contentdata->showprofileactivities = $userprogressdata['totalslots'] > 0;
         if ($contentdata->showprofileactivities) {

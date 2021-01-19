@@ -65,6 +65,7 @@ Feature: Edit Open Studio settings
           | Name                         | Test Open Studio name 1      |
           | Description                  | Test Open Studio description |
           | Enable 'My Module'           | 0                            |
+          | Sharing level                | 1,7,2                        |
           | Abuse reports are emailed to | teacher1@asd.com             |
           | ID number                    | OS1                          |
 
@@ -100,6 +101,7 @@ Feature: Edit Open Studio settings
           | Your word for 'My Activities' | My Activities                  |
           | Your word for 'My Pinboard'   | My Pinboard                    |
           | Enable 'My Module'            | 0                              |
+          | Sharing level                 | 1,7,2                          |
           | Group mode                    | Visible groups                 |
           | Grouping                      | grouping1                      |
           | Enable pinboard               | 99                             |

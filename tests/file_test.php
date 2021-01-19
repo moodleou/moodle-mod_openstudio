@@ -293,7 +293,9 @@ class file_testcase extends \advanced_testcase {
         ob_start();
         openstudio_pluginfile($this->course, $this->cm, $this->context, 'content',
                               array($this->files['rtf']->contentdata['id'], $this->files['rtf']->filename), 0, $options);
-        ob_end_clean();
+        if (ob_get_contents()) {
+            ob_end_clean();
+        }
         if (function_exists('xdebug_get_headers')) {
             $headers = $this->get_header_array();
             list($disposition, $filename) = explode(';', $headers['Content-Disposition']);
@@ -308,7 +310,9 @@ class file_testcase extends \advanced_testcase {
         ob_start();
         openstudio_pluginfile($this->course, $this->cm, $this->context, 'notebook',
                 array($this->files['nbk']->contentdata['id'], $this->files['html']->file->get_filename()), 0, $options);
-        ob_end_clean();
+        if (ob_get_contents()) {
+            ob_end_clean();
+        }
         if (function_exists('xdebug_get_headers')) {
             $headers = $this->get_header_array();
             list($disposition, $filename) = explode(';', $headers['Content-Disposition']);
@@ -321,7 +325,9 @@ class file_testcase extends \advanced_testcase {
         ob_start();
         openstudio_pluginfile($this->course, $this->cm, $this->context, 'notebook',
                 array($this->files['nbk']->contentdata['id'], $this->files['ipynb']->file->get_filename()), 0, $options);
-        ob_end_clean();
+        if (ob_get_contents()) {
+            ob_end_clean();
+        }
         if (function_exists('xdebug_get_headers')) {
             $headers = $this->get_header_array();
             list($disposition, $filename) = explode(';', $headers['Content-Disposition']);

@@ -816,6 +816,7 @@ class mod_openstudio_external extends external_api {
 
                     // Render comment html and send to client.
                     $commentdata = comments::get($commentid, $userid);
+                    $commentdata->donotexport = true;
                     $commentdata->timemodified = userdate($commentdata->timemodified,
                             get_string('formattimedatetime', 'openstudio'));
 
