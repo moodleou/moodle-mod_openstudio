@@ -290,11 +290,12 @@ class file_testcase extends \advanced_testcase {
         $options = array('dontdie' => true);
 
         $this->setUser($this->users->students->two);
-        ob_start();
+
         openstudio_pluginfile($this->course, $this->cm, $this->context, 'content',
                               array($this->files['rtf']->contentdata['id'], $this->files['rtf']->filename), 0, $options);
-        if (ob_get_contents()) {
-            ob_end_clean();
+        // Note moodle send_file() destroys the PHP Unit object level - so we created again here.
+        if (!ob_get_level()) {
+            ob_start();
         }
         if (function_exists('xdebug_get_headers')) {
             $headers = $this->get_header_array();
@@ -306,12 +307,31 @@ class file_testcase extends \advanced_testcase {
             $this->markTestSkipped('Cannot fully run test_studio_pluiginfile without xdebug enabled');
         }
 
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function test_openstudio_pluginfile2() {
+
+        try {
+            header('X-Header-Test: test');
+        } catch (\PHPUnit\Framework\Error\Warning $e) {
+            $this->markTestSkipped('Cannot run test_studio_pluginfile due to a problem with Moodle\'s PHPUnit integration. ' .
+                    'To workaround the problem, add ob_start(); at the start of the phpunit_util::bootstrap_moodle_info() '.
+                    'method. See MDL-49713 for more information.');
+        }
+        $options = array('dontdie' => true);
+
+        $this->setUser($this->users->students->two);
+
         $options['filename'] = $this->files['html']->filename;
-        ob_start();
+
         openstudio_pluginfile($this->course, $this->cm, $this->context, 'notebook',
                 array($this->files['nbk']->contentdata['id'], $this->files['html']->file->get_filename()), 0, $options);
-        if (ob_get_contents()) {
-            ob_end_clean();
+        // Note moodle send_file() destroys the PHP Unit object level - so we created again here.
+        if (!ob_get_level()) {
+            ob_start();
         }
         if (function_exists('xdebug_get_headers')) {
             $headers = $this->get_header_array();
@@ -320,13 +340,30 @@ class file_testcase extends \advanced_testcase {
             $this->assertStringStartsWith('text/html', $headers['Content-type']);
             $this->assertEquals($this->files['html']->file->get_filesize(), $headers['Content-Length']);
         }
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function test_openstudio_pluginfile3() {
+
+        try {
+            header('X-Header-Test: test');
+        } catch (\PHPUnit\Framework\Error\Warning $e) {
+            $this->markTestSkipped('Cannot run test_studio_pluginfile due to a problem with Moodle\'s PHPUnit integration. ' .
+                    'To workaround the problem, add ob_start(); at the start of the phpunit_util::bootstrap_moodle_info() '.
+                    'method. See MDL-49713 for more information.');
+        }
+        $options = array('dontdie' => true);
+
+        $this->setUser($this->users->students->two);
 
         $options['filename'] = $this->files['ipynb']->filename;
-        ob_start();
         openstudio_pluginfile($this->course, $this->cm, $this->context, 'notebook',
                 array($this->files['nbk']->contentdata['id'], $this->files['ipynb']->file->get_filename()), 0, $options);
-        if (ob_get_contents()) {
-            ob_end_clean();
+        // Note moodle send_file() destroys the PHP Unit object level - so we created again here.
+        if (!ob_get_level()) {
+            ob_start();
         }
         if (function_exists('xdebug_get_headers')) {
             $headers = $this->get_header_array();
@@ -335,5 +372,7 @@ class file_testcase extends \advanced_testcase {
             $this->assertEquals($this->files['ipynb']->file->get_filesize(), $headers['Content-Length']);
         }
     }
+
+
 }
 

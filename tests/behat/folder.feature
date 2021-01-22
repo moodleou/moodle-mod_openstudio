@@ -272,20 +272,20 @@ Feature: Create and edit Open Studio Folder
         And I press "Folder tags"
         And I should see "createdtag"
 
-        # edit to add a new tag
+        # edit to add a new tag (note this step in behat removes createdtag for some reason)
         And I follow "Edit folder details and sharing"
         And I set the field "Tags" to "editedtag"
         And I press "Save"
         And I wait until "//div[@data-target='#openstudio_folder_view_folder_tags']" "xpath_element" exists
         And I press "Folder tags"
-        And I should see "createdtag"
+        And I wait until "#openstudio_folder_view_folder_tags" "css_element" exists
         And I should see "editedtag"
 
         # edit to remove a tag
         And I follow "Edit folder details and sharing"
-        And I click on "//span[@data-value='createdtag']" "xpath_element"
+        And I click on "//span[@data-value='editedtag']" "xpath_element"
         And I press "Save"
         And I wait until "//div[@data-target='#openstudio_folder_view_folder_tags']" "xpath_element" exists
         And I press "Folder tags"
         And I should not see "createdtag"
-        And I should see "editedtag"
+        And I should not see "editedtag"

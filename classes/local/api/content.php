@@ -647,7 +647,7 @@ EOF;
                 throw new \Exception('Failed to update content.');
             }
 
-            tags::set($contentid, $data['tags']);
+            tags::set($contentid, $data['tags'], true);
 
             if ($previousvisibilitysetting != $currentvisibilitysetting) {
                 $trackingvisibiltyflag = false;

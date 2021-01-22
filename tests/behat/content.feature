@@ -396,11 +396,11 @@ Feature: Create Open Studio contents
     And I press "Save Changes"
     And I follow "Test Open Studio name 2"
     And I follow "My Content > My Activities" in the openstudio navigation
-    And I follow "Content in My Activities"
+    And I click on "a[data-name='Content in My Activities']" "css_element"
     Then the "value" attribute of "input#id_name" "css_element" should contain "Content in My Activities"
     When I follow "Test Open Studio name 2"
     And I follow "My Content > My Activities" in the openstudio navigation
-    And I follow "Folder in My Activities"
+    And I click on "a[data-name='Folder in My Activities']" "css_element"
     And I should see "Upload content to folder"
     And I click on "span.openstudio-new-folder-title" "css_element"
     Then the "value" attribute of "input#id_name" "css_element" should contain "Folder in My Activities"
