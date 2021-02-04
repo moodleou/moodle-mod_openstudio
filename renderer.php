@@ -796,6 +796,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $openstudioid = $cminstance->id;
         $contentdata->cmid = $cmid = $cm->id;
         $contentdata->donotexport = $donotexport;
+        $context = context_module::instance($cm->id);
         if (!property_exists($contentdata, 'profilebarenable')) {
             $contentdata->profilebarenable = true;
         }
@@ -981,6 +982,10 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                         ' - ' . $contentfolder->l3name;
             }
         }
+
+        $contentdata->description =
+                file_rewrite_pluginfile_urls($contentdata->description, 'pluginfile.php', $context->id, 'mod_openstudio',
+                        'description', $contentdata->id);
 
         return $this->render_from_template('mod_openstudio/content_page', $contentdata);
     }

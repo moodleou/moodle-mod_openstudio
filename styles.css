@@ -1296,9 +1296,13 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
     padding: 15px;
 }
 
+.openstudio-folder-view-comments .openstudio-comment-owner {
+    display: flex;
+}
+
 .openstudio-folder-view-comments .openstudio-comment-owner img {
     float: left;
-    width: 53px;
+    width: 100%;
 }
 
 .openstudio-folder-view-comments .openstudio-comment-thread-original-item {
@@ -2890,6 +2894,11 @@ span.openstudio-content-view-title {
 .openstudio-content-view-description {
     font-size: 1em;
     margin-top: 10px;
+}
+
+.openstudio-content-view-description img {
+    width: 100%;
+    height: auto;
 }
 
 .openstudio-content-view-tags {

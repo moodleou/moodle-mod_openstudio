@@ -245,6 +245,12 @@ if ($sid > 0) {
         }
     }
 
+    $context = context_module::instance($cm->id);
+    $descriptionitemid = file_get_submitted_draft_itemid('description');
+    $contentdata->description = file_prepare_draft_area($descriptionitemid,
+            $context->id, 'mod_openstudio', 'description', $contentdata->id, ['subdirs' => false],
+            $contentdata->description);
+
     // Given the content exists, get the content owner again to prevent user spoofing.
     $userid = $contentdata->userid;
     $userrecord = $DB->get_record('user', array('id' => $userid), '*', MUST_EXIST);
@@ -616,6 +622,12 @@ if ($contentform->is_cancelled()) {
             }
         }
 
+        if (!empty($contentformdatadescription['itemid'])) {
+            $contentformdata->description = file_save_draft_area_files($contentformdatadescription['itemid'],
+                    $context->id, 'mod_openstudio', 'description',
+                    $contentformdata->sid, ['subdirs' => false], $contentformdatadescription['text']);
+        }
+
         $contentid = content::update(
                 $userid,
                 $contentformdata->sid,
@@ -649,6 +661,15 @@ if ($contentform->is_cancelled()) {
                 $cm
         );
         flags::toggle($contentid, flags::FOLLOW_CONTENT, 'on', $userid);
+
+        if (!empty($contentformdatadescription['itemid'])) {
+            $newtext = file_save_draft_area_files($contentformdatadescription['itemid'],
+                    $context->id, 'mod_openstudio', 'description', $contentid, ['subdirs' => false],
+                    $contentformdatadescription['text']);
+            if ($newtext !== $contentformdatadescription['text']) {
+                $DB->set_field('openstudio_contents', 'description', $newtext, ['id' => $contentid]);
+            }
+        }
 
         if ($type === content::TYPE_FOLDER_CONTENT) {
             if ($foldertemplatecontentid > 0) {

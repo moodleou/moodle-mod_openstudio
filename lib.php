@@ -355,13 +355,13 @@ function openstudio_pluginfile($course, $cm, $context, $filearea, array $args, $
 
     if (! in_array($filearea,
             array('content', 'contentthumbnail', 'contentversion', 'contentthumbnailversion',
-                    'contentcomment', 'notebook', 'notebookversion'))) {
+                    'contentcomment', 'notebook', 'notebookversion', 'description'))) {
         return false;
     }
 
     require_login($course, false, $cm);
     $itemid = (int) array_shift($args);
-    if (($filearea === 'content') || ($filearea === 'contentthumbnail') || ($filearea == 'notebook')) {
+    if (in_array($filearea, ['content', 'contentthumbnail', 'notebook', 'description'])) {
         $record = $contentdata = $DB->get_record('openstudio_contents', array('id' => $itemid), '*', MUST_EXIST);
     } else if ($filearea === 'contentcomment') {
         $sql = <<<EOF
@@ -489,7 +489,7 @@ EOF;
         }
     }
 
-    if ($filearea === 'contentcomment') {
+    if ($filearea === 'contentcomment' || $filearea === 'description') {
         $relativepath = array_pop($args);
         $fullpath = "/{$context->id}/mod_openstudio/$filearea/{$itemid}/$relativepath";
     } else {
