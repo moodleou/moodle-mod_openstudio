@@ -249,6 +249,10 @@
                             class="osep-smallbutton btn btn-secondary"
                         />
                     {{/contentlockenable}}
+                    {{#viewdeletedpostenable}}
+                        <input id="id_viewdeletedpostbutton" name="viewdeletedpostbutton" type="button"
+                               class="osep-smallbutton btn btn-secondary" value="{{#str}}openstudio:viewdeletedposts, mod_openstudio{{/str}}"/>
+                    {{/viewdeletedpostenable}}
                 </div>
                 <div class="openstudio-folder-view-request-feedback clearfix">
                     {{#contentrequestfeedbackenable}}
@@ -263,10 +267,6 @@
                     {{/contentrequestfeedbackenable}}
                 </div>
             </div>
-            {{#viewdeletedpostenable}}
-                <input id="id_viewdeletedpostbutton" name="viewdeletedpostbutton" type="button"
-                       class="osep-smallbutton btn btn-secondary" value="{{#str}}openstudio:viewdeletedposts, mod_openstudio{{/str}}"/>
-            {{/viewdeletedpostenable}}
         </div>
     </div>
 </div>

@@ -24,7 +24,7 @@
 /**
  * @module mod_openstudio/notificationlist
  */
-define(['jquery', 'core/ajax', 'core/modal', 'core/templates', 'theme_bootstrapbase/boostrap'],
+define(['jquery', 'core/ajax', 'core/modal', 'core/templates'],
         function ($, Ajax, Modal, Templates) {
     var SELECTORS = {
         STOPBUTTONS: '.openstudio-notification-stopbutton',
@@ -50,7 +50,7 @@ define(['jquery', 'core/ajax', 'core/modal', 'core/templates', 'theme_bootstrapb
             priv.cmid = cmid;
             priv.followflag = followflag;
             $(SELECTORS.STOPBUTTONS).on('click', t.stopNotifications);
-            $('[data-toggle="tooltip"]').tooltip();
+            // $('[data-toggle="tooltip"]').tooltip();
             if ($(SELECTORS.UNREAD).length > 0) {
                 $(SELECTORS.NOTIFICATIONBUTTON).on('click', t.readNotifications);
             }

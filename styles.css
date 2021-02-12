@@ -3527,13 +3527,6 @@ div.openstudio-browse-post-item-filename {
     display: inline;
 }
 
-/**
- * View deleted post
- */
-#id_viewdeletedpostbutton {
-    margin-top: 28px;
-}
-
 .path-mod-openstudio .moodle-dialogue-base .openstudio-view-deleted-dialogue.moodle-dialogue .moodle-dialogue-content
 .moodle-dialogue-ft {
     display: none;
@@ -4111,16 +4104,16 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     width: calc(62% - 36px);
     float: left;
     margin-right: 40px;
+    display: flex;
 }
 
 .openstudio-folder-view-title-background {
     font-size: 1.28571em ;
-    float: left;
+    flex-grow: 1;
     margin-top: 1px;
 }
 
 .openstudio-folder-view-title-managepost {
-    float: right;
     position: relative;
     top: 2px;
 }
@@ -4291,7 +4284,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 }
 
 .openstudio-folder-view-buttons {
-    margin-top: 28px;
+    margin-top: 18px;
     float: left;
 }
 
@@ -4301,6 +4294,10 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 
 .path-mod-openstudio .openstudio-folder-view-buttons #id_lockbutton {
     margin-right: 10px;
+}
+
+.path-mod-openstudio .openstudio-folder-view-buttons input {
+    margin-top: 10px;
 }
 
 .openstudio-add-new-content-link {
@@ -4318,6 +4315,9 @@ a.openstudio-add-new-content-link:hover  {
 .openstudio-folder-view-add-new-content-title {
     height: 48px;
     line-height: 36px;
+}
+.openstudio-folder-view-add-new-content-title .icon {
+    margin-right: 0;
 }
 .openstudio-folder-view-title-icon {
     position: relative;
@@ -4543,13 +4543,6 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-folder-view-buttons {
         float: none;
-    }
-
-    /**
-     * View deleted post
-     */
-    #id_viewdeletedpostbutton {
-        margin-top: 15px;
     }
 
     .openstudio-folder-items {
@@ -4986,10 +4979,6 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-folder-view-title-background {
         padding-bottom: 6px;
-    }
-
-    .openstudio-folder-view-title-managepost {
-        float: right;
     }
 
     .openstudio-folder-view-hasguidance {
@@ -5813,13 +5802,6 @@ a.openstudio-add-new-content-link:hover  {
         float: none;
     }
 
-    /**
-     * View deleted post
-     */
-    #id_viewdeletedpostbutton {
-        margin-top: 10px;
-    }
-
     .openstudio-folder-view-container .openstudio-content-view-animation-icons {
         padding-left: 0px;
     }
@@ -5834,7 +5816,6 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-folder-view-title-background {
-        float: left;
         padding-bottom: 8px;
     }
 
@@ -7073,10 +7054,7 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-folder-view-title {
         width: 100%;
-    }
-
-    .openstudio-folder-view-title-managepost  {
-        float: left;
+        display: block;
     }
 
     .openstudio-folder-view-title-background {
