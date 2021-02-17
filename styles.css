@@ -3853,7 +3853,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 .openstudio-profile-bar .openstudio-profile-comment-view {
     float: left;
     padding-left: 5px;
-    margin-top : 22px;
+    margin-top : 1px;
 }
 
 .openstudio-profile-bar .openstudio-profile-comment-view.show {
@@ -3995,7 +3995,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 .openstudio-profile-bar .openstudio-profile-progress-content {
     display: inline-block;
     vertical-align: top;
-    margin-top: 4px;
+    margin-top: 5px;
     float: right;
     margin-right: 14px;
 }
@@ -4358,6 +4358,44 @@ a.openstudio-add-new-content-link:hover  {
 .openstudio-mobile-paging-first img:nth-child(2) {
     margin-left: -20px;
 }
+.openstudio-profile-bar-participation + .openstudio-profile-comment-view.show {
+    margin-bottom: 6px;
+}
+.openstudio-profile-comment-view.show {
+    margin-bottom: 25px;
+}
+
+@media only screen and (max-width: 1279px) and (min-width: 1025px) {
+    .openstudio-profile-bar-participation + .openstudio-profile-comment-view.show {
+        margin-bottom: 1px;
+    }
+    .openstudio-profile-comment-view.show {
+        margin-bottom: 20px;
+    }
+}
+
+@media only screen and (max-width: 1139px) and (min-width: 1025px) {
+    .openstudio-profile-progress-content {
+        margin-top: 0;
+    }
+}
+@media only screen and (max-width: 1023px) and (min-width: 769px) {
+    .openstudio-profile-bar .openstudio-profile-progress-content {
+        margin: 4px 0 0 0;
+    }
+}
+
+@media  only screen and (max-width: 938px) and (min-width: 829px) {
+    .openstudio-profile-bar-participation + .openstudio-profile-comment-view.show {
+        margin-bottom: 2px;
+    }
+}
+
+@media  only screen and (max-width: 938px) and (min-width: 768px) {
+    .openstudio-profile-comment-view.show {
+        margin-bottom: 21px;
+    }
+}
 
 .openstudio-folder-global-background .openstudio-content-view-animation-icons {
     margin-top: 25px;
@@ -4405,7 +4443,6 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-profile-bar .openstudio-profile-progress-content {
         float: right;
         width: 402px;
-        margin: 1px 0px 0px 0px;
         padding: 0;
     }
 
@@ -4761,12 +4798,6 @@ a.openstudio-add-new-content-link:hover  {
         display: none;
     }
 
-    .openstudio-profile-bar .openstudio-profile-progress-content {
-        float: left;
-        margin-top: 15px;
-        margin-left: 8px;
-    }
-
     .openstudio-profile-work-progress {
         width: 100%;
         margin-left: 0px;
@@ -5003,6 +5034,11 @@ a.openstudio-add-new-content-link:hover  {
         width: 9px;
         vertical-align: unset;
         margin-bottom: -4px;
+    }
+}
+@media (max-width: 768px) {
+    body.path-mod-openstudio .openstudio-profile-bar .openstudio-profile-progress-content {
+        margin-top: 4px;
     }
 }
 @media (max-width: 767px) {
@@ -7183,6 +7219,12 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-folder-preview-default img  {
         width: 72px;
+    }
+}
+
+@media (max-width: 320px) {
+    .path-mod-openstudio #openstudio_profile_fullusername_mobile {
+        display: block !important;
     }
 }
 
