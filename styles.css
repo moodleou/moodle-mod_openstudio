@@ -5205,9 +5205,12 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-navigation-notification {
-        margin-top: 0px;
-        width: 70px;
-        height: 74px;
+        margin-top: 0;
+        width: 72px;
+        height: 78px;
+    }
+    .openstudio-navigation-notification:focus {
+        background-color: #bfe2ef;
     }
 
     .openstudio-navigation-notification-icon {
@@ -6804,6 +6807,10 @@ a.openstudio-add-new-content-link:hover  {
         padding: 0 14px 0 15px;
         font-size: 1.28571em;
     }
+    .openstudio-navigation-notification-icon {
+        width: 64px;
+        height: 64px;
+    }
 }
 
 /* Mobile small. */
@@ -6812,6 +6819,13 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-content-view-file > a > img,
     .openstudio-content-view-file > iframe {
         max-width: 252px;
+    }
+
+    .openstudio-navigation-notification {
+        margin-top: 0;
+        width: 60px;
+        height: 60px;
+        padding-left: 0;
     }
 
     .openstudio-navigation-icon {
@@ -6845,7 +6859,8 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-navigation-notification-icon {
-        margin-top: 8px;
+        margin-top: 6px;
+        margin-left: 6px;
         width: 48px;
         height: 48px;
     }
