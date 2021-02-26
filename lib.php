@@ -837,6 +837,87 @@ function openstudio_ousearch_filter_browseslots_useronly(&$result) {
 }
 
 /**
+ * OU Alerts plugin callback to add additional email recipients when alerts are
+ * reported.  The additional email recipients will be sent an email.
+ *
+ * @param string $itemtype The item type being reported.
+ * @param int $itemid The item id being reported.
+ * @return array Return list of people that should be sent email for the alert.
+ */
+function openstudio_oualerts_additional_recipients($itemtype, $itemid) {
+    global $CFG, $USER, $DB;
+
+    $additionalemails = [];
+
+    switch ($itemtype) {
+        case 'content':
+            $contentdata = content::get_record($USER->id, $itemid);
+            break;
+
+        case 'contentcomment':
+            $contentid = $DB->get_field('openstudio_comments', 'contentid', ['id' => $itemid]);
+            if ($contentid != false) {
+                $contentdata = content::get_record($USER->id, $contentid);
+            }
+            break;
+
+        default:
+            $contentdata = false;
+            break;
+    }
+    if ($contentdata != false) {
+        $reportingemail = $DB->get_field('openstudio', 'reportingemail', ['id' => $contentdata->openstudioid]);
+        if ($reportingemail != false) {
+            $reportingemailarray = explode(',', $reportingemail);
+            foreach ($reportingemailarray as $reportingemailarrayitem) {
+                $reportingemailarrayitem = trim($reportingemailarrayitem);
+                if (filter_var($reportingemailarrayitem, FILTER_VALIDATE_EMAIL) !== false) {
+                    $additionalemails[] = $reportingemailarrayitem;
+                }
+            }
+            $additionalemails = array_unique($additionalemails);
+        }
+    }
+    return $additionalemails;
+}
+
+/**
+ * OU Alerts plugin callback to provide additional information to the OU Alert plugin.
+ *
+ * @param string $itemtype The item type being reported.
+ * @param int $itemid The item id being reported.
+ * @return string Return item displayable name.
+ */
+function openstudio_oualerts_custom_info($itemtype, $itemid) {
+    global $USER, $DB;
+
+    $itemtitle = '';
+
+    switch ($itemtype) {
+        case 'content':
+            $contentdata = content::get_record($USER->id, $itemid);
+            break;
+
+        case 'contentcomment':
+            $contentid = $DB->get_field('openstudio_comments', 'contentid', ['id' => $itemid]);
+            if ($contentid != false) {
+                $contentdata = content::get_record($USER->id, $contentid);
+            }
+            break;
+
+        default:
+            $contentdata = false;
+            break;
+    }
+
+    if ($contentdata != false) {
+        $itemtitle = util::get_content_name($contentdata);
+    }
+
+    return $itemtitle;
+}
+
+/**
  * Update all documents for ousearch.
  *
  * @param bool $feedback If true, prints feedback as HTML list items

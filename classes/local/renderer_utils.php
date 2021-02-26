@@ -1640,7 +1640,7 @@ class renderer_utils {
                     $comment->reportenable = ($permissions->activeuserid != $comment->userid) && !$permissions->managecontent;
 
                     $comment->reportabuselink = util::render_report_abuse_link('openstudio', $permissions->activecmcontextid,
-                        'content', $comment->id, $pageurl, $pageurl, $permissions->activeuserid);
+                        'contentcomment', $comment->id, $pageurl, $pageurl, $permissions->activeuserid);
                     $comment->timemodified = userdate($comment->timemodified, get_string('formattimedatetime', 'openstudio'));
 
                     if (is_null($comment->inreplyto)) { // This is a new comment.
