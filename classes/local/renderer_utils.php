@@ -333,6 +333,7 @@ class renderer_utils {
         $contentfileurl = '';
         $contentthumbnailfileurl = '';
         $contenttypeiconurl = '';
+        $contenttypeiconclass = 'typeicon';
         $contentdatatitle = '';
         $contentiframesrc = '';
         $previewcontent = '';
@@ -517,6 +518,7 @@ class renderer_utils {
                     if ($contentdata->mimetype == 'image/bmp') {
                         $contenttypeiconurl = $OUTPUT->image_url('image_rgb_32px', 'openstudio');
                     } else {
+                        $contenttypeiconclass = 'typethumbnail';
                         $contenttypeiconurl = self::make_plugin_file($context->id, $contentthumbnailarea, $contentdata->id,
                                 $contentdata->content, $folderid);
                     }
@@ -604,6 +606,7 @@ class renderer_utils {
         $contentdata->contentiframesrc = $contentiframesrc;
         $contentdata->contentdatahtml = $contentdatahtml;
         $contentdata->contenttypeiconurl = $contenttypeiconurl;
+        $contentdata->contenttypeiconclass = $contenttypeiconclass;
         $contentdata->contenttypeuseimagedefault = $contenttypeuseimagedefault;
         $contentdata->previewcontent = $previewcontent;
         $contentdata->contentfileurl = $contentfileurl;

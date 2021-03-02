@@ -41,34 +41,35 @@
 {{#socialdatatotal}}
     {{#socialdata}}
         <div class="openstudio-grid-item-content-detail-info">
-            <span class="openstudio-grid-item-content-detail-info-box">
-                <span class="openstudio-grid-item-content-detail-info-text{{#commentsnew}}-new{{/commentsnew}} {{#isdoubledigitcomments}}double-digit{{/isdoubledigitcomments}}">
-                    {{#comments}} {{comments}} {{/comments}}
+            <div class="openstudio-grid-item-content-detail-info-group">
+                <span class="openstudio-grid-item-content-detail-info-box">
+                    <span class="openstudio-grid-item-content-detail-info-text{{#commentsnew}}-new{{/commentsnew}} {{#isdoubledigitcomments}}double-digit{{/isdoubledigitcomments}}">
+                        {{#comments}} {{comments}} {{/comments}}
+                    </span>
+                    <span>
+                        <img src="{{#comments}}{{commentsicon}}{{/comments}}{{^comments}}{{commentsgreyicon}}{{/comments}}"
+                             class="openstudio-grid-item-content-detail-info-icon " alt="{{#str}} commentslabel, openstudio {{/str}}"/>
+                    </span>
                 </span>
-                <span>
-                    <img src="{{#comments}}{{commentsicon}}{{/comments}}{{^comments}}{{commentsgreyicon}}{{/comments}}"
-                         class="openstudio-grid-item-content-detail-info-icon " alt="{{#str}} commentslabel, openstudio {{/str}}"/>
+                <span class="openstudio-grid-item-content-detail-info-box">
+                    <span class="openstudio-grid-item-content-detail-info-text{{#inspirednew}}-new{{/inspirednew}} {{#isdoubledigitinspired}}double-digit{{/isdoubledigitinspired}}">
+                        {{#inspired}} {{inspired}} {{/inspired}}
+                    </span>
+                    <span>
+                        <img src="{{#inspired}}{{inspirationicon}}{{/inspired}}{{^inspired}}{{inspirationgreyicon}}{{/inspired}}"
+                            class="openstudio-grid-item-content-detail-info-icon" alt="{{#str}} inspirationlabel, openstudio {{/str}}" />
+                    </span>
                 </span>
-            </span>
-            <span class="openstudio-grid-item-content-detail-info-box">
-                <span class="openstudio-grid-item-content-detail-info-text{{#inspirednew}}-new{{/inspirednew}} {{#isdoubledigitinspired}}double-digit{{/isdoubledigitinspired}}">
-                    {{#inspired}} {{inspired}} {{/inspired}}
+                <span class="openstudio-grid-item-content-detail-info-box">
+                    <span class="openstudio-grid-item-content-detail-info-text{{#mademelaughnew}}-new{{/mademelaughnew}} {{#isdoubledigitmademelaugh}}double-digit{{/isdoubledigitmademelaugh}}">
+                        {{#mademelaugh}} {{mademelaugh}} {{/mademelaugh}}
+                    </span>
+                    <span>
+                        <img src="{{#mademelaugh}}{{participationicon}}{{/mademelaugh}}{{^mademelaugh}}{{participationgreyicon}}{{/mademelaugh}}"
+                            class="openstudio-grid-item-content-detail-info-icon" alt="{{#str}} participationlabel, openstudio {{/str}}" />
+                    </span>
                 </span>
-                <span>
-                    <img src="{{#inspired}}{{inspirationicon}}{{/inspired}}{{^inspired}}{{inspirationgreyicon}}{{/inspired}}"
-                        class="openstudio-grid-item-content-detail-info-icon" alt="{{#str}} inspirationlabel, openstudio {{/str}}" />
-                </span>
-            </span>
-            <span class="openstudio-grid-item-content-detail-info-box">
-                <span class="openstudio-grid-item-content-detail-info-text{{#mademelaughnew}}-new{{/mademelaughnew}} {{#isdoubledigitmademelaugh}}double-digit{{/isdoubledigitmademelaugh}}">
-                    {{#mademelaugh}} {{mademelaugh}} {{/mademelaugh}}
-                </span>
-                <span>
-                    <img src="{{#mademelaugh}}{{participationicon}}{{/mademelaugh}}{{^mademelaugh}}{{participationgreyicon}}{{/mademelaugh}}"
-                        class="openstudio-grid-item-content-detail-info-icon" alt="{{#str}} participationlabel, openstudio {{/str}}" />
-                </span>
-            </span>
-            <span class="openstudio-grid-item-content-detail-info-box">
+                <span class="openstudio-grid-item-content-detail-info-box">
                 <span class="openstudio-grid-item-content-detail-info-text{{#favouritenew}}-new{{/favouritenew}} {{#isdoubledigitfavourite}}double-digit{{/isdoubledigitfavourite}}">
                     {{#favourite}} {{favourite}} {{/favourite}}
                 </span>
@@ -77,6 +78,7 @@
                         class="openstudio-grid-item-content-detail-info-icon" alt="{{#str}} favouritelabel, openstudio {{/str}}" />
                 </span>
             </span>
+            </div>
         </div>
     {{/socialdata}}
 {{/socialdatatotal}}

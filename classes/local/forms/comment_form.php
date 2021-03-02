@@ -62,8 +62,6 @@ class comment_form extends \moodleform {
             // Static text for comment attachment.
             $mform->addElement('static', 'commentheader', null,
                 get_string('contentcommentsformheader2', 'mod_openstudio'));
-            $mform->addElement('static', 'commentattachmentguidance', null,
-                get_string('contentcommentsformattachment', 'mod_openstudio'));
 
             // Filepicker for comment attachment.
             if ($this->_customdata['max_bytes']) {

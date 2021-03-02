@@ -97,7 +97,9 @@
         {{/isfolder}}
     </div>
     <div class="openstudio-grid-item-content-detail">
-        <div class="openstudio-grid-item-content-detail-updated">{{datetimeupdated}}</div>
+        <div class="openstudio-grid-item-content-detail-updated {{#isfolder}}flex-center{{/isfolder}}">
+            <div class="openstudio-detail-date">{{datetimeupdated}}</div>
+        </div>
         <div class="openstudio-grid-item-content-detail-owner clearfix">
             <div class="openstudio-grid-item-content-detail-owner-img">
                 <img class="defaultuserpic" src="{{{userpictureurl}}}"
