@@ -239,6 +239,14 @@
     .openstudio-filter-arrow-box:before {
         left: 160px;
     }
+
+    .openstudio-folder-global-background .openstudio-comment-thread-header {
+        margin-bottom: 13px;
+    }
+
+    #page-mod-openstudio-content .openstudio-folder-global-background .openstudio-folder-header-left .openstudio-folder-header-title {
+        margin-left: 36px;
+    }
 }
 
 .openstudio-filter-arrow-box:after {
@@ -1105,10 +1113,10 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
 .openstudio-comment-thread-header {
     font-size: 1.28571em;
     font-weight: bold;
-    margin-bottom: 18px;
+    margin-bottom: 12px;
 }
 .openstudio-comment-thread-body {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 .openstudio-comment-leftcolumn {
     float: left;
@@ -1175,7 +1183,7 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
     max-width: 48px;
     max-height: 48px;
     border-radius: 50%;
-    width: 48px;
+    width: 36px;
 }
 
 .openstudio-comment-flag {
@@ -1192,8 +1200,8 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
 }
 
 .openstudio-comment-flag-status img {
-    width: 14px;
-    height: 14px;
+    width: 18px;
+    height: 18px;
     margin-right: 0px;
 }
 
@@ -4351,6 +4359,10 @@ a.openstudio-add-new-content-link:hover  {
     margin-left: -20px;
 }
 
+.openstudio-folder-global-background .openstudio-content-view-animation-icons {
+    margin-top: 25px;
+}
+
 /* Tablet. */
 @media only screen and (max-device-width: 1024px) {
 
@@ -6810,6 +6822,24 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-navigation-notification-icon {
         width: 64px;
         height: 64px;
+    }
+
+    .openstudio-folder-global-background .openstudio-content-view-description:empty {
+        display: none;
+    }
+
+    .openstudio-folder-global-background .openstudio-content-view-description p:last-child {
+        margin-bottom: 0px;
+    }
+
+    .openstudio-folder-global-background .openstudio-content-view-date-box + .clearfix  + div:empty + div + .openstudio-content-view-animation-icons {
+        margin-top: 27px;
+    }
+
+    @-moz-document url-prefix() {
+        .openstudio-folder-global-background .openstudio-content-view-date-box + .clearfix  + div:not(:empty) + div + .openstudio-content-view-animation-icons {
+            margin-top: 25px;
+        }
     }
 }
 

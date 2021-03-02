@@ -269,16 +269,16 @@
             {{/contenttypenone}}
             {{^iscontentversion}}
             <div class="openstudio-content-view-tags-container clearfix">
+                {{#tagsraw}}
                 <div class="openstudio-content-view-tags">
                     <ul class="openstudio-content-view-tag-item">
-                        {{#tagsraw}}
-                            <li class="openstudio-content-view-tag
-                                {{#isfoldercontent}}openstudio-folder-block-content-background{{/isfoldercontent}}">
-                                <a href="{{{taglink}}}">{{{tagname}}}</a>
-                            </li>
-                        {{/tagsraw}}
+                        <li class="openstudio-content-view-tag
+                            {{#isfoldercontent}}openstudio-folder-block-content-background{{/isfoldercontent}}">
+                            <a href="{{{taglink}}}">{{{tagname}}}</a>
+                        </li>
                     </ul>
                 </div>
+                {{/tagsraw}}
                 {{^contenttypenone}}
                     {{#donotexport}}
                         <div class="openstudio-content-view-archive">
