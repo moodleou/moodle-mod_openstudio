@@ -41,53 +41,96 @@
 <div class="openstudio-content-view-animation-icons clearfix openstudio-content-actions
         {{#contentflaglocked}} locked {{/contentflaglocked}}">
     <div class="openstudio-content-view-animation-icons-left">
+    {{#donotexport}}
         {{#contentflagfavouriteenabled}}
-            <a id="content_view_icon_{{contentflagfavourite}}"
-           href=""
-           data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagfavourite}}"
-           {{#contentflagfavouriteactive}}data-mode="off"{{/contentflagfavouriteactive}}
-           {{^contentflagfavouriteactive}}data-mode="on"{{/contentflagfavouriteactive}}
-           {{#contentflagfavouriteactive}}
-               title="{{#str}} contentclicktounfavourite, openstudio {{/str}}"
-           {{/contentflagfavouriteactive}}
-           {{^contentflagfavouriteactive}}
-               title="{{#str}} contentclicktofavourite, openstudio {{/str}}"
-           {{/contentflagfavouriteactive}}
-           class="openstudio-content-view-flag-icon openstudio-content-view-icon-favourite has-hover
+                <a id="content_view_icon_{{contentflagfavourite}}"
+               href=""
+               data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagfavourite}}"
+               {{#contentflagfavouriteactive}}data-mode="off"{{/contentflagfavouriteactive}}
+               {{^contentflagfavouriteactive}}data-mode="on"{{/contentflagfavouriteactive}}
+               {{#contentflagfavouriteactive}}
+                   title="{{#str}} contentclicktounfavourite, openstudio {{/str}}"
+               {{/contentflagfavouriteactive}}
+               {{^contentflagfavouriteactive}}
+                   title="{{#str}} contentclicktofavourite, openstudio {{/str}}"
+               {{/contentflagfavouriteactive}}
+               class="openstudio-content-view-flag-icon openstudio-content-view-icon-favourite has-hover
+                        {{#contentflagfavouriteactive}}
+                            openstudio-content-view-icon-active
+                        {{/contentflagfavouriteactive}}">
+                <span class="openstudio-content-view-icon-active-image">
+                    {{#pix}}
+                        favourite_btn_blue_rgb_32px, openstudio, {{#str}} contentclicktofavourite, openstudio {{/str}}
+                    {{/pix}}
+                </span>
+                <span class="openstudio-content-view-icon-inactive-image">
+                    {{#pix}}
+                        favourite_btn_grey_rgb_32px, openstudio, {{#str}} contentclicktounfavourite, openstudio {{/str}}
+                    {{/pix}}
+                </span>
+                <span class="openstudio-content-view-icon-text">
+                    {{#str}}
+                        contentflagxfavourites, mod_openstudio,
+                        { "number": {{#quote}}{{contentfavouritetotal}}{{/quote}} }
+                    {{/str}}
+                </span>
+            </a>
+            {{/contentflagfavouriteenabled}}
+        {{/donotexport}}
+        {{^donotexport}}
+            {{#contentflagfavouriteenabled}}
+                <span id="content_view_icon_{{contentflagfavourite}}"
+                   href=""
+                   data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagfavourite}}"
+                   {{#contentflagfavouriteactive}}data-mode="off"{{/contentflagfavouriteactive}}
+                    {{^contentflagfavouriteactive}}data-mode="on"{{/contentflagfavouriteactive}}
                     {{#contentflagfavouriteactive}}
-                        openstudio-content-view-icon-active
-                    {{/contentflagfavouriteactive}}">
-            <span class="openstudio-content-view-icon-active-image">
-                {{#pix}}
-                    favourite_btn_blue_rgb_32px, openstudio, {{#str}} contentclicktofavourite, openstudio {{/str}}
-                {{/pix}}
-            </span>
-            <span class="openstudio-content-view-icon-inactive-image">
-                {{#pix}}
-                    favourite_btn_grey_rgb_32px, openstudio, {{#str}} contentclicktounfavourite, openstudio {{/str}}
-                {{/pix}}
-            </span>
-            <span class="openstudio-content-view-icon-text">
-                {{#str}}
-                    contentflagxfavourites, mod_openstudio,
-                    { "number": {{#quote}}{{contentfavouritetotal}}{{/quote}} }
-                {{/str}}
-            </span>
-        </a>
-        {{/contentflagfavouriteenabled}}
-        {{#contentflagsmileenabled}}
-            <a id="content_view_icon_{{contentflagsmile}}"
-           href=""
-           data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagsmile}}"
-           {{#contentflagsmileactive}}data-mode="off"{{/contentflagsmileactive}}
-           {{^contentflagsmileactive}}data-mode="on"{{/contentflagsmileactive}}
-           {{#contentflagsmileactive}}
-                title="{{#str}} contentclicktounsmile, openstudio {{/str}}"
-           {{/contentflagsmileactive}}
-           {{^contentflagsmileactive}}
-                title="{{#str}} contentclicktosmile, openstudio {{/str}}"
-           {{/contentflagsmileactive}}
-           class="openstudio-content-view-flag-icon openstudio-content-view-icon-participation has-hover
+                   title="{{#str}} contentclicktounfavourite, openstudio {{/str}}"
+                    {{/contentflagfavouriteactive}}
+                    {{^contentflagfavouriteactive}}
+                   title="{{#str}} contentclicktofavourite, openstudio {{/str}}"
+                    {{/contentflagfavouriteactive}}
+                   class="openstudio-content-view-flag-icon openstudio-content-view-icon-favourite has-hover
+                        {{#contentflagfavouriteactive}}
+                            openstudio-content-view-icon-active
+                        {{/contentflagfavouriteactive}}">
+                    {{#contentfavouritetotaldonotexport}}
+                        <span class="openstudio-content-view-icon-active-image">
+                            {{#pix}}
+                                favourite_btn_blue_rgb_32px, openstudio, {{#str}} contentclicktofavourite, openstudio {{/str}}
+                            {{/pix}}
+                        </span>
+                    {{/contentfavouritetotaldonotexport}}
+                    {{^contentfavouritetotaldonotexport}}
+                        <span class="openstudio-content-view-icon-inactive-image">
+                            {{#pix}}
+                                favourite_btn_grey_rgb_32px, openstudio, {{#str}} contentclicktounfavourite, openstudio {{/str}}
+                            {{/pix}}
+                        </span>
+                    {{/contentfavouritetotaldonotexport}}
+                    <span class="openstudio-content-view-icon-text">
+                        {{#str}}
+                            contentflagxfavourites, mod_openstudio,
+                        { "number": {{#quote}}{{contentfavouritetotal}}{{/quote}} }
+                        {{/str}}
+                    </span>
+                </span>
+            {{/contentflagfavouriteenabled}}
+        {{/donotexport}}
+        {{#donotexport}}
+            {{#contentflagsmileenabled}}
+                <a id="content_view_icon_{{contentflagsmile}}"
+                   href=""
+                   data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagsmile}}"
+                   {{#contentflagsmileactive}}data-mode="off"{{/contentflagsmileactive}}
+                    {{^contentflagsmileactive}}data-mode="on"{{/contentflagsmileactive}}
+                    {{#contentflagsmileactive}}
+                   title="{{#str}} contentclicktounsmile, openstudio {{/str}}"
+                    {{/contentflagsmileactive}}
+                    {{^contentflagsmileactive}}
+                   title="{{#str}} contentclicktosmile, openstudio {{/str}}"
+                    {{/contentflagsmileactive}}
+                   class="openstudio-content-view-flag-icon openstudio-content-view-icon-participation has-hover
                     {{#contentflagsmileactive}}
                         openstudio-content-view-icon-active
                     {{/contentflagsmileactive}}">
@@ -96,31 +139,72 @@
                     participation_btn_blue_rgb_32px, openstudio, {{#str}} contentclicktounsmile, openstudio {{/str}}
                 {{/pix}}
             </span>
-            <span class="openstudio-content-view-icon-inactive-image">
-                {{#pix}}
-                    participation_btn_grey_rgb_32px, openstudio, {{#str}} contentclicktosmile, openstudio {{/str}}
-                {{/pix}}
-            </span>
-            <span class="openstudio-content-view-icon-text">
-                {{#str}}
-                    contentflagxsmiles, mod_openstudio, { "number": {{#quote}}{{contentsmiletotal}}{{/quote}} }
-                {{/str}}
-            </span>
-        </a>
-        {{/contentflagsmileenabled}}
-        {{#contentflaginspirenabled}}
-            <a id="content_view_icon_{{contentflaginspire}}"
-           href=""
-           data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflaginspire}}"
-           {{#contentflaginspireactive}}data-mode="off"{{/contentflaginspireactive}}
-           {{^contentflaginspireactive}}data-mode="on"{{/contentflaginspireactive}}
-           {{#contentflaginspireactive}}
-               title="{{#str}} contentclicktouninspire, openstudio {{/str}}"
-           {{/contentflaginspireactive}}
-           {{^contentflaginspireactive}}
-               title="{{#str}} contentclicktoinspire, openstudio {{/str}}"
-           {{/contentflaginspireactive}}
-           class="openstudio-content-view-flag-icon openstudio-content-view-icon-inspiration has-hover
+                    <span class="openstudio-content-view-icon-inactive-image">
+                        {{#pix}}
+                            participation_btn_grey_rgb_32px, openstudio, {{#str}} contentclicktosmile, openstudio {{/str}}
+                        {{/pix}}
+                    </span>
+                    <span class="openstudio-content-view-icon-text">
+                        {{#str}}
+                            contentflagxsmiles, mod_openstudio, { "number": {{#quote}}{{contentsmiletotal}}{{/quote}} }
+                        {{/str}}
+                    </span>
+                </a>
+            {{/contentflagsmileenabled}}
+        {{/donotexport}}
+        {{^donotexport}}
+            {{#contentflagsmileenabled}}
+                <span id="content_view_icon_{{contentflagsmile}}"
+                   href=""
+                   data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflagsmile}}"
+                   {{#contentflagsmileactive}}data-mode="off"{{/contentflagsmileactive}}
+                    {{^contentflagsmileactive}}data-mode="on"{{/contentflagsmileactive}}
+                    {{#contentflagsmileactive}}
+                   title="{{#str}} contentclicktounsmile, openstudio {{/str}}"
+                    {{/contentflagsmileactive}}
+                    {{^contentflagsmileactive}}
+                   title="{{#str}} contentclicktosmile, openstudio {{/str}}"
+                    {{/contentflagsmileactive}}
+                   class="openstudio-content-view-flag-icon openstudio-content-view-icon-participation has-hover
+                    {{#contentflagsmileactive}}
+                        openstudio-content-view-icon-active
+                    {{/contentflagsmileactive}}">
+                    {{#contentsmiletotaldonotexport}}
+                        <span class="openstudio-content-view-icon-active-image">
+                            {{#pix}}
+                                participation_btn_blue_rgb_32px, openstudio, {{#str}} contentclicktounsmile, openstudio {{/str}}
+                            {{/pix}}
+                        </span>
+                    {{/contentsmiletotaldonotexport}}
+                    {{^contentsmiletotaldonotexport}}
+                        <span class="openstudio-content-view-icon-inactive-image">
+                            {{#pix}}
+                                participation_btn_grey_rgb_32px, openstudio, {{#str}} contentclicktosmile, openstudio {{/str}}
+                            {{/pix}}
+                        </span>
+                    {{/contentsmiletotaldonotexport}}
+                    <span class="openstudio-content-view-icon-text">
+                        {{#str}}
+                            contentflagxsmiles, mod_openstudio, { "number": {{#quote}}{{contentsmiletotal}}{{/quote}} }
+                        {{/str}}
+                    </span>
+                </span>
+            {{/contentflagsmileenabled}}
+        {{/donotexport}}
+        {{#donotexport}}
+            {{#contentflaginspirenabled}}
+                <a id="content_view_icon_{{contentflaginspire}}"
+                   href=""
+                   data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflaginspire}}"
+                   {{#contentflaginspireactive}}data-mode="off"{{/contentflaginspireactive}}
+                    {{^contentflaginspireactive}}data-mode="on"{{/contentflaginspireactive}}
+                    {{#contentflaginspireactive}}
+                   title="{{#str}} contentclicktouninspire, openstudio {{/str}}"
+                    {{/contentflaginspireactive}}
+                    {{^contentflaginspireactive}}
+                   title="{{#str}} contentclicktoinspire, openstudio {{/str}}"
+                    {{/contentflaginspireactive}}
+                   class="openstudio-content-view-flag-icon openstudio-content-view-icon-inspiration has-hover
                     {{#contentflaginspireactive}}
                         openstudio-content-view-icon-active
                     {{/contentflaginspireactive}}">
@@ -129,18 +213,58 @@
                     inspiration_btn_blue_rgb_32px, openstudio, {{#str}} contentclicktoinspire, openstudio {{/str}}
                 {{/pix}}
             </span>
-            <span class="openstudio-content-view-icon-inactive-image">
-                {{#pix}}
-                    inspiration_btn_grey_rgb_32px, openstudio, {{#str}} contentclicktouninspire, openstudio {{/str}}
-                {{/pix}}
-            </span>
-            <span class="openstudio-content-view-icon-text">
-                {{#str}}
-                    contentflagxinspired, mod_openstudio, { "number": {{#quote}}{{contentinspiretotal}}{{/quote}} }
-                {{/str}}
-            </span>
-        </a>
-        {{/contentflaginspirenabled}}
+                    <span class="openstudio-content-view-icon-inactive-image">
+                        {{#pix}}
+                            inspiration_btn_grey_rgb_32px, openstudio, {{#str}} contentclicktouninspire, openstudio {{/str}}
+                        {{/pix}}
+                    </span>
+                    <span class="openstudio-content-view-icon-text">
+                        {{#str}}
+                            contentflagxinspired, mod_openstudio, { "number": {{#quote}}{{contentinspiretotal}}{{/quote}} }
+                        {{/str}}
+                    </span>
+                </a>
+            {{/contentflaginspirenabled}}
+        {{/donotexport}}
+        {{^donotexport}}
+            {{#contentflaginspirenabled}}
+                <span id="content_view_icon_{{contentflaginspire}}"
+                   href=""
+                   data-cmid="{{cmid}}" data-cid="{{id}}" data-fid="{{contentflaginspire}}"
+                   {{#contentflaginspireactive}}data-mode="off"{{/contentflaginspireactive}}
+                    {{^contentflaginspireactive}}data-mode="on"{{/contentflaginspireactive}}
+                    {{#contentflaginspireactive}}
+                   title="{{#str}} contentclicktouninspire, openstudio {{/str}}"
+                    {{/contentflaginspireactive}}
+                    {{^contentflaginspireactive}}
+                   title="{{#str}} contentclicktoinspire, openstudio {{/str}}"
+                    {{/contentflaginspireactive}}
+                   class="openstudio-content-view-flag-icon openstudio-content-view-icon-inspiration has-hover
+                    {{#contentflaginspireactive}}
+                        openstudio-content-view-icon-active
+                    {{/contentflaginspireactive}}">
+                    {{#contentinspiretotaldonotexport}}
+                        <span class="openstudio-content-view-icon-active-image">
+                            {{#pix}}
+                                inspiration_btn_blue_rgb_32px, openstudio, {{#str}} contentclicktoinspire, openstudio {{/str}}
+                            {{/pix}}
+                        </span>
+                    {{/contentinspiretotaldonotexport}}
+                    {{^contentinspiretotaldonotexport}}
+                        <span class="openstudio-content-view-icon-inactive-image">
+                            {{#pix}}
+                                inspiration_btn_grey_rgb_32px, openstudio, {{#str}} contentclicktouninspire, openstudio {{/str}}
+                            {{/pix}}
+                        </span>
+                    {{/contentinspiretotaldonotexport}}
+                    <span class="openstudio-content-view-icon-text">
+                        {{#str}}
+                            contentflagxinspired, mod_openstudio, { "number": {{#quote}}{{contentinspiretotal}}{{/quote}} }
+                        {{/str}}
+                    </span>
+                </span>
+            {{/contentflaginspirenabled}}
+        {{/donotexport}}
         <span class="openstudio-content-view-animation-icons-right">
             {{#contentcopyenable}}
                 <span class="openstudio-content-view-flag-icon openstudio-content-view-icon-copies openstudio-content-view-icon-active">
@@ -157,7 +281,8 @@
                     {{/str}}
                 </span>
             {{/contentcopyenable}}
-            <span class="openstudio-content-view-flag-icon openstudio-content-view-icon-views
+            {{#donotexport}}
+                <span class="openstudio-content-view-flag-icon openstudio-content-view-icon-views
                     {{#contentviewtotal}}openstudio-content-view-icon-active{{/contentviewtotal}}">
                 <span class="openstudio-content-view-icon-active-image">
                     {{#pix}}
@@ -175,10 +300,40 @@
                         {{/str}}
                     {{/pix}}
                 </span>
-                {{#str}}
-                    contentflagxviews, mod_openstudio, { "number": {{#quote}}{{contentviewtotal}}{{/quote}} }
-                {{/str}}
+                    {{#str}}
+                        contentflagxviews, mod_openstudio, { "number": {{#quote}}{{contentviewtotal}}{{/quote}} }
+                    {{/str}}
             </span>
+            {{/donotexport}}
+            {{^donotexport}}
+                <span class="openstudio-content-view-flag-icon openstudio-content-view-icon-views
+                    {{#contentviewtotal}}openstudio-content-view-icon-active{{/contentviewtotal}}">
+                    {{#contentviewtotal}}
+                        <span class="openstudio-content-view-icon-active-image">
+                            {{#pix}}
+                                viewed_btn_blue_rgb_32px, openstudio,
+                                {{#str}}
+                                    contentflagxviews, mod_openstudio, { "number": {{#quote}}{{contentviewtotal}}{{/quote}} }
+                                {{/str}}
+                            {{/pix}}
+                        </span>
+                    {{/contentviewtotal}}
+                    {{^contentviewtotal}}
+                        <span class="openstudio-content-view-icon-inactive-image">
+                            {{#pix}}
+                                viewed_btn_grey_rgb_32px, openstudio,
+                                {{#str}}
+                                    contentflagxviews, mod_openstudio, { "number": {{#quote}}{{contentviewtotal}}{{/quote}} }
+                                {{/str}}
+                            {{/pix}}
+                        </span>
+                    {{/contentviewtotal}}
+                    {{#str}}
+                        contentflagxviews, mod_openstudio, { "number": {{#quote}}{{contentviewtotal}}{{/quote}} }
+                    {{/str}}
+                </span>
+            {{/donotexport}}
+
         </span>
     </div>
 </div>

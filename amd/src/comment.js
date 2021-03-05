@@ -293,9 +293,9 @@ define([
                     likebtn
                         .hide()
                         // Update flag count.
-                        .siblings(t.CSS.FLAG_COUNT).addClass('flagged').text(res.count)
+                        .siblings(t.CSS.FLAG_STATUS + '.flagged').children(t.CSS.FLAG_COUNT).addClass('flagged').text(res.count)
                         // Update flag status.
-                        .siblings(t.CSS.FLAG_STATUS + '.flagged').removeClass('openstudio-hidden')
+                        .parent().removeClass('openstudio-hidden')
                         .siblings(t.CSS.FLAG_STATUS + '.unflagged').addClass('openstudio-hidden');
                 })
                 .always(function() {

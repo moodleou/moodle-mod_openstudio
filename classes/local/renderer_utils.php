@@ -162,9 +162,10 @@ class renderer_utils {
      * @param object $permissions The permission object for the given user/view.
      * @param object $cminstance The course module instance.
      * @param object $contentdata The content records to display.
+     * @param bool $donotexport Export state.
      * @return object $contentdata
      */
-    public static function profile_bar($permissions, $cminstance, $contentdata) {
+    public static function profile_bar($permissions, $cminstance, $contentdata, $donotexport = true) {
         global $USER, $OUTPUT, $PAGE;
 
         $vuid = optional_param('vuid', $USER->id, PARAM_INT);
@@ -190,7 +191,7 @@ class renderer_utils {
         if (array_key_exists(flags::READ_CONTENT, $flagsdata)) {
             $flagscontentread = $flagsdata[flags::READ_CONTENT]->count;
         }
-
+        $contentdata->donotexport = $donotexport;
         $contentdata->percentcompleted = 0;
         $contentdata->showprofileactivities = $userprogressdata['totalslots'] > 0;
         if ($contentdata->showprofileactivities) {
@@ -212,7 +213,8 @@ class renderer_utils {
         $contentdata->participationenable = $permissions->feature_participationsmiley;
         $contentdata->participationlow = isset($userprogressdata['participationstatus'])
                 && ($userprogressdata['participationstatus'] == 'low');
-
+        $contentdata->activitydataexport = '';
+        $contentdata->slotnameexport = '';
         if (isset($userprogressdata['progressdetail']) && $userprogressdata['progressdetail']) {
             $profileactivityitems = [];
 
@@ -224,7 +226,14 @@ class renderer_utils {
                         foreach ($activities as $key => $activity) {
                             $activities[$key]->canreadcontent = util::can_read_content($cminstance, $permissions, $activity);
                             $activityname = $activity->level2name;
-
+                            if (isset($activity->level2id) && isset($contentdata->l2id) &&
+                                    $activity->level2id == $contentdata->l2id) {
+                                $contentdata->activitydataexport = $activityname;
+                            }
+                            if (isset($activity->level3id) && isset($contentdata->l3id) &&
+                                    $activity->level3id == $contentdata->l3id) {
+                                $contentdata->slotnameexport = $activity->level3name;
+                            }
                             $activities[$key]->isactive = false;
                             if ($activities[$key]->slotcontenttype2 == content::TYPE_FOLDER) {
                                 $activities[$key]->activityediturl = new \moodle_url('/mod/openstudio/folder.php',
@@ -296,9 +305,10 @@ class renderer_utils {
      * @param object $permissions The permission object for the given user/view.
      * @param object $contentdata The content records to display.
      * @param boolean $iscontentversion Indicate if content is a content version record.
+     * @param boolean $donotexport Check if this is exported
      * @return object $contentdata
      */
-    public static function content_details($cmid, $permissions, $contentdata, $iscontentversion) {
+    public static function content_details($cmid, $permissions, $contentdata, $iscontentversion, $donotexport = true) {
         global $OUTPUT, $CFG;
 
         if ($iscontentversion) {
@@ -317,6 +327,8 @@ class renderer_utils {
         $contenttypedownloadfile = false;
         $contenttypeiframe = false;
         $contenttypeuseimagedefault = false;
+        $preventiframe = false;
+        $preventmessage = '';
         $contentdatahtml = '';
         $contentfileurl = '';
         $contentthumbnailfileurl = '';
@@ -363,14 +375,19 @@ class renderer_utils {
             case content::TYPE_AUDIO:
                 $contenttypemedia = true;
                 $contenttypedownloadfile = true;
-                $contentfileurl = self::make_plugin_file($context->id, $contentarea, $contentdata->id,
-                        $contentdata->content, $folderid);
+                if ($donotexport) {
+                    $contentfileurl = self::make_plugin_file($context->id, $contentarea, $contentdata->id,
+                            $contentdata->content, $folderid);
 
-                // This used for media filter.
-                $contentdatahtml = \html_writer::start_tag('a',
-                    array('href' => $contentfileurl, 'target' => '_top'));
-                $contentdatahtml .= \html_writer::end_tag('a');
-                $contentdatahtml = format_text($contentdatahtml);
+                    // This used for media filter.
+                    $contentdatahtml = \html_writer::start_tag('a',
+                            array('href' => $contentfileurl, 'target' => '_top'));
+                    $contentdatahtml .= \html_writer::end_tag('a');
+                    $contentdatahtml = format_text($contentdatahtml);
+                } else {
+                    $contentdatahtml = $contentdata->content;
+                }
+
                 break;
             case content::TYPE_DOCUMENT:
                 $contenttypedownloadfile = true;
@@ -434,6 +451,17 @@ class renderer_utils {
                 $contentweblinktext = get_string('contentcontentweblink', 'openstudio');
                 $embeddata = isset($contentdata->weblink) && embedcode::is_ouembed_installed() ? embedcode::parse(embedcode::get_ouembed_api(),
                     $contentdata->weblink) : false;
+
+                $preventiframesettings = get_config('openstudio', 'preventiframe');
+                foreach (array_map('trim', preg_split("/\r\n|\n|\r/", $preventiframesettings)) as $address) {
+                    if (strpos($contentdata->content, $address)) {
+                        $preventiframe = true;
+                        $preventmessage = get_string('iplayererrormessage', 'openstudio');
+                        $contenttypefileurl = true;
+                        break 2;
+                    }
+                }
+
                 if ($embeddata === false) {
                     $contenttypefileurl = true;
                     if ($contentdata->contenttype == content::TYPE_URL_IMAGE) {
@@ -568,6 +596,8 @@ class renderer_utils {
         $contentdata->contenttypeimage = $contenttypeimage;
         $contentdata->contenttypemedia = $contenttypemedia;
         $contentdata->contenttypefileurl = $contenttypefileurl;
+        $contentdata->preventiframe = $preventiframe;
+        $contentdata->preventmessage = $preventmessage;
         $contentdata->contenttypeembed = $contenttypeembed;
         $contentdata->contenttypedownloadfile = $contenttypedownloadfile;
         $contentdata->contenttypeiframe = $contenttypeiframe;
@@ -1549,13 +1579,15 @@ class renderer_utils {
      * @param $contentdata Object
      * @param $permissions Object
      * @param $cmid int Course module ID
+     * @param bool $donotexport check if content is exported.
      * @param $cminstance object Course module instance
      */
-    public static function process_content_comment(&$contentdata, $permissions, $cmid, $cminstance) {
+    public static function process_content_comment(&$contentdata, $permissions, $cmid, $cminstance, $donotexport = true) {
         global $PAGE, $CFG, $USER;
 
         // Check comment permission.
         $contentdata->contentcommentenable = $permissions->addcomment ? true : false;
+        $contentdata->donotexport = $donotexport;
 
         // Check comment like setting enabled.
         $flagsenabled = explode(',', $permissions->flags);
@@ -1583,7 +1615,11 @@ class renderer_utils {
 
                     // Check comment attachment.
                     if ($file = comments::get_attachment($comment->id)) {
-                        $comment->commenttext .= self::get_media_filter_markup($file);
+                        if (!$donotexport) {
+                            $comment->commenttext .= $file->filename;
+                        } else {
+                            $comment->commenttext .= self::get_media_filter_markup($file);
+                        }
                     }
 
                     // Filter comment text.
@@ -1604,7 +1640,7 @@ class renderer_utils {
                     $comment->reportenable = ($permissions->activeuserid != $comment->userid) && !$permissions->managecontent;
 
                     $comment->reportabuselink = util::render_report_abuse_link('openstudio', $permissions->activecmcontextid,
-                        'content', $comment->id, $pageurl, $pageurl, $permissions->activeuserid);
+                        'contentcomment', $comment->id, $pageurl, $pageurl, $permissions->activeuserid);
                     $comment->timemodified = userdate($comment->timemodified, get_string('formattimedatetime', 'openstudio'));
 
                     if (is_null($comment->inreplyto)) { // This is a new comment.

@@ -66,23 +66,8 @@ if (! in_array($vid, array(content::VISIBILITY_GROUP, content::VISIBILITY_MODULE
     $vid = content::VISIBILITY_MODULE;
 }
 
-// Get first group when my module disabled.
 if (!$permissions->feature_module && !$groupid) {
     $vid = content::VISIBILITY_GROUP;
-
-    $grouplist = group::group_list(
-            $permissions->activecid, $permissions->groupingid,
-            $permissions->activeuserid, $permissions->groupmode);
-
-    if (!empty($grouplist)) {
-        $cnt = 0;
-        foreach ($grouplist as $group) {
-            if ($cnt == 0) {
-                $groupid = $group->groupid;
-                break;
-            }
-        }
-    }
 }
 
 switch($vid) {

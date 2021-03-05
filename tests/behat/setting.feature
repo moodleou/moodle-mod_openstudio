@@ -65,6 +65,7 @@ Feature: Edit Open Studio settings
           | Name                         | Test Open Studio name 1      |
           | Description                  | Test Open Studio description |
           | Enable 'My Module'           | 0                            |
+          | Sharing level                | 1,7,2                        |
           | Abuse reports are emailed to | teacher1@asd.com             |
           | ID number                    | OS1                          |
 
@@ -100,6 +101,7 @@ Feature: Edit Open Studio settings
           | Your word for 'My Activities' | My Activities                  |
           | Your word for 'My Pinboard'   | My Pinboard                    |
           | Enable 'My Module'            | 0                              |
+          | Sharing level                 | 1,7,2                          |
           | Group mode                    | Visible groups                 |
           | Grouping                      | grouping1                      |
           | Enable pinboard               | 99                             |
@@ -311,3 +313,30 @@ Feature: Edit Open Studio settings
         And I should see "Test content B"
         And I should not see "Add new content"
         And I should not see "My Content"
+
+  Scenario: Behavior handling content when we don't choose module sharing level:
+    When I am on "Course 1" course homepage
+    And I turn editing mode on
+    And I add a "OpenStudio 2" to section "1" and I fill the form with:
+      | Name                         | Test Open Studio name 1      |
+      | Description                  | Test Open Studio description |
+      | Enable 'My Module'           | 0                            |
+      | Sharing level                | 1,7,2                        |
+      | Abuse reports are emailed to | teacher1@asd.com             |
+      | ID number                    | OS1                          |
+    And all users have accepted the plagarism statement for "OS1" openstudio
+    And I follow "Test Open Studio name 1"
+    And I follow "Administration > Edit settings" in the openstudio navigation
+    And I set the following fields to these values:
+      | Enable 'My Module' | 0       |
+      | Sharing level      | 1,7,2,3 |
+    And I press "Save and display"
+    And I should see "Enable 'My Module' must be chosen when option 'Module - visible all module members' in Sharing level is selected"
+    And I set the following fields to these values:
+      | Enable 'My Module' | 1 |
+    And I press "Save and display"
+    Then I should see "Shared Content"
+    And I follow "Add new content"
+    And I set the following fields to these values:
+      | Who can view this content | My module |
+    Then I should see "My module" in the "//select[@name='visibility']" "xpath_element"

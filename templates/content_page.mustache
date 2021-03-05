@@ -119,6 +119,8 @@
         </div>
         <div class="openstudio-content-view-primary" id="openstudio_content_view_primary">
             <div class="openstudio-content-view-file {{#locked}} locked {{/locked}} openstudio-content-actions">
+                {{^donotexport}}
+                {{#contentflagrequestfeedbackactive}}
                 <div id="openstudio_item_request_feedback"
                      class="{{#contentflagrequestfeedbackactive}}
                                 openstudio-item-request-feedback
@@ -129,11 +131,36 @@
                     <span>{{#pix}} request_feedback_white_rgb_32px, mod_openstudio, {{#str}} contentneedhelp, mod_openstudio {{/str}} {{/pix}}</span>
                     <span>{{#str}} contentneedhelp, mod_openstudio {{/str}}</span>
                 </div>
+                {{/contentflagrequestfeedbackactive}}
+                {{/donotexport}}
+                {{#donotexport}}
+                    <div id="openstudio_item_request_feedback"
+                         class="{{#contentflagrequestfeedbackactive}}
+                                openstudio-item-request-feedback
+                            {{/contentflagrequestfeedbackactive}}
+                             {{^contentflagrequestfeedbackactive}}
+                                openstudio-item-request-feedback-cancel
+                            {{/contentflagrequestfeedbackactive}}">
+                        <span>{{#pix}} request_feedback_white_rgb_32px, mod_openstudio, {{#str}} contentneedhelp, mod_openstudio {{/str}} {{/pix}}</span>
+                        <span>{{#str}} contentneedhelp, mod_openstudio {{/str}}</span>
+                    </div>
+                {{/donotexport}}
+                {{#donotexport}}
                 <div id="openstudio_item_lock"
                      class="{{#locked}}openstudio-item-lock{{/locked}}{{^locked}}openstudio-item-unlock{{/locked}}">
-                        <span>{{#pix}} lock_grey_rgb_32px, mod_openstudio, {{#str}} postlocked, mod_openstudio {{/str}} {{/pix}}</span>
+                         <span>{{#pix}} lock_grey_rgb_32px, mod_openstudio, {{#str}} postlocked, mod_openstudio {{/str}} {{/pix}}</span>
                     <span>{{#str}} postlocked, mod_openstudio {{/str}}</span>
                 </div>
+                {{/donotexport}}
+                {{^donotexport}}
+                    {{#locked}}
+                    <div id="openstudio_item_lock"
+                         class="{{#locked}}openstudio-item-lock{{/locked}}{{^locked}}openstudio-item-unlock{{/locked}}">
+                        <span>{{#pix}} lock_grey_rgb_32px, mod_openstudio, {{#str}} postlocked, mod_openstudio {{/str}} {{/pix}}</span>
+                        <span>{{#str}} postlocked, mod_openstudio {{/str}}</span>
+                    </div>
+                    {{/locked}}
+                {{/donotexport}}
                 {{#contenttypenone}}
                         <div class="openstudio-content-view-edit">
                             <a href="{{{contenteditlink}}}" class="openstudio-content-view-edit-link">
@@ -171,15 +198,32 @@
                 <div id="openstudio-content-previewipynb" class="openstudio-content-preview">{{{previewcontent}}}</div>
                 {{/previewcontent}}
                 {{#contenttypeiframe}}
-                    <iframe class="openstudio-content-view-iframe{{#previewcontent}} ipynb-hide-iframe{{/previewcontent}}" name="openstudio-content-view-iframe"
-                            src="{{contentiframesrc}}" sandbox=""></iframe>
+                    {{#donotexport}}
+                        <iframe class="openstudio-content-view-iframe{{#previewcontent}} ipynb-hide-iframe{{/previewcontent}}" name="openstudio-content-view-iframe"
+                                src="{{contentiframesrc}}" sandbox=""></iframe>
+                    {{/donotexport}}
+                    {{^donotexport}}
+                        {{^contenttypefileurl}}
+                        <iframe class="openstudio-content-view-iframe{{#previewcontent}} ipynb-hide-iframe{{/previewcontent}}" name="openstudio-content-view-iframe"
+                                src="{{contentiframesrc}}" sandbox=""></iframe>
+                        {{/contenttypefileurl}}
+                    {{/donotexport}}
                 {{/contenttypeiframe}}
-
+                {{#preventiframe}}
+                    <span class="openstudio-content-prevent-iframe">{{{preventmessage}}}</span>
+                {{/preventiframe}}
                 {{#contenttypefileurl}}
                     <div class="openstudio-content-weblink-text">
-                        <a href="{{contentfileurl}}">{{{contentweblinktext}}}
-                            {{#pix}} t/right, core{{/pix}}
-                        </a>
+                        {{#donotexport}}
+                            <a href="{{contentfileurl}}">{{{contentweblinktext}}}
+                                {{#pix}} t/right, core{{/pix}}
+                            </a>
+                        {{/donotexport}}
+                        {{^donotexport}}
+                            <a href="{{contentfileurl}}" style="font-size:20px">{{{contentweblinktext}}}
+                                {{#pix}} t/right, core{{/pix}}
+                            </a>
+                        {{/donotexport}}
                     </div>
                 {{/contenttypefileurl}}
               {{/contenttypenone}}
@@ -201,10 +245,24 @@
                 {{/contenttypenone}}
             </div>
             {{#contenttypedownloadfile}}
+                {{#donotexport}}
                 <div class="clearfix"><a href="{{contentfileurl}}">{{#str}} contentcontentdownload, mod_openstudio {{/str}}</a></div>
+                {{/donotexport}}
             {{/contenttypedownloadfile}}
             {{#l3name}}
-                <div class="openstudio-content-view-subtitle">{{name}}</div>
+                {{#donotexport}}
+                    <div class="openstudio-content-view-subtitle">{{name}}</div>
+                {{/donotexport}}
+                {{^donotexport}}
+                    <div class="openstudio-content-view-activity-name" style="font-size:20px">{{{activitydataexport}}}</div>
+                    <div class="openstudio-content-view-slot-name" style="font-size:20px">{{{slotnameexport}}}</div>
+                    <div class="openstudio-content-view-subtitle" style="font-size:20px">{{name}}</div>
+                {{/donotexport}}
+            {{/l3name}}
+            {{^l3name}}
+                {{^donotexport}}
+                    <div class="openstudio-content-view-subtitle" style="font-size:20px">{{name}}</div>
+                {{/donotexport}}
             {{/l3name}}
             {{^contenttypenone}}
                 <div class="openstudio-content-view-description">{{{description}}}</div>
@@ -222,24 +280,26 @@
                     </ul>
                 </div>
                 {{^contenttypenone}}
-                    <div class="openstudio-content-view-archive">
-                        {{#showarchivebutton}}
-                            <input id="id_archivebutton" name="archivebutton"
-                                   class="{{#locked}} locked {{/locked}} openstudio-content-actions osep-smallbutton btn btn-secondary"
-                               value="{{#str}}contentactionarchivepost, mod_openstudio{{/str}}" type="button">
-                        {{/showarchivebutton}}
-                        {{#reportabuselink}}
-                            <a id="id_reportbutton_link" href="{{{reportabuselink}}}" tabindex="-1">
-                                <input id="id_reportbutton" name="reportbutton" class="btn btn-secondary"
-                                   value="{{#str}}contentactionreportpost, mod_openstudio{{/str}}" type="button">
-                            </a>
-                        {{/reportabuselink}}
-                    </div>
+                    {{#donotexport}}
+                        <div class="openstudio-content-view-archive">
+                            {{#showarchivebutton}}
+                                <input id="id_archivebutton" name="archivebutton"
+                                       class="{{#locked}} locked {{/locked}} openstudio-content-actions osep-smallbutton btn btn-secondary"
+                                   value="{{#str}}contentactionarchivepost, mod_openstudio{{/str}}" type="button">
+                            {{/showarchivebutton}}
+                            {{#reportabuselink}}
+                                <a id="id_reportbutton_link" href="{{{reportabuselink}}}" tabindex="-1">
+                                    <input id="id_reportbutton" name="reportbutton" class="btn btn-secondary"
+                                       value="{{#str}}contentactionreportpost, mod_openstudio{{/str}}" type="button">
+                                </a>
+                            {{/reportabuselink}}
+                        </div>
+                    {{/donotexport}}
                 {{/contenttypenone}}
             </div>
 
             {{>mod_openstudio/content_flags}}
-
+            {{#donotexport}}
             <div class="openstudio-content-view-actions clearfix">
                 {{#actionenable}}
                     <div class="openstudio-content-view-actions-icons-left">
@@ -293,8 +353,9 @@
                     {{/contentrequestfeedbackenable}}
                 </div>
             </div>
+            {{/donotexport}}
             {{#contentcommentenable}}
-                {{>mod_openstudio/comment}}
+                    {{>mod_openstudio/comment}}
             {{/contentcommentenable}}
             {{/iscontentversion}}
             {{#iscontentversion}}
@@ -338,8 +399,12 @@
                     <a class="openstudio-content-view-user-info-view" href="{{{viewuserworkurl}}}">
                         {{#str}} contentitemview, mod_openstudio {{/str}}
                         {{{firstname}}}’s
-                        {{#str}} contentitemwork, mod_openstudio {{/str}}
-                        {{#pix}} t/right, core{{/pix}}
+                        <span class="openstudio-grid-item-content-detail-owner-view-icon">
+                              {{#str}} contentitemwork, mod_openstudio {{/str}}
+                            {{#pix}}
+                                t/right, core, {{#str}} contentitemview, openstudio {{/str}}
+                            {{/pix}}
+                        </span>
                     </a>
                 </div>
             </div>
@@ -362,20 +427,22 @@
                                         <h4 class="openstudio-content-view-version-info-name">{{{name}}}</h4>
                                         <span class="openstudio-content-view-version-date">{{contentdatadate}}</span>
                                     </span>
-                                    <span class="openstudio-content-view-version-actions clearfix">
-                                        <a href="{{{contentviewversionlink}}}" class="openstudio-content-view-version-button-link">
-                                        <input id="id_viewversionbutton" name="viewversionbutton"
-                                               class="openstudio-content-view-version-button osep-smallbutton btn btn-secondary"
-                                               value="{{#str}}contentactionview, mod_openstudio{{/str}}" type="button">
-                                        </a>
-                                        {{#contentdeleteenable}}
-                                            <input data-cmid="{{cmid}}" data-cid="{{contentid}}"
-                                                   data-cvid="{{id}}"
-                                                   id="deleteversionbutton" name="deleteversionbutton"
-                                                   class="openstudio-delete-content-version osep-smallbutton btn btn-secondary"
-                                                   value="{{#str}}contentactiondelete, mod_openstudio{{/str}}" type="button">
-                                        {{/contentdeleteenable}}
-                                    </span>
+                                    {{#donotexport}}
+                                        <span class="openstudio-content-view-version-actions clearfix">
+                                            <a href="{{{contentviewversionlink}}}" class="openstudio-content-view-version-button-link">
+                                            <input id="id_viewversionbutton" name="viewversionbutton"
+                                                   class="openstudio-content-view-version-button osep-smallbutton btn btn-secondary"
+                                                   value="{{#str}}contentactionview, mod_openstudio{{/str}}" type="button">
+                                            </a>
+                                            {{#contentdeleteenable}}
+                                                <input data-cmid="{{cmid}}" data-cid="{{contentid}}"
+                                                       data-cvid="{{id}}"
+                                                       id="deleteversionbutton" name="deleteversionbutton"
+                                                       class="openstudio-delete-content-version osep-smallbutton btn btn-secondary"
+                                                       value="{{#str}}contentactiondelete, mod_openstudio{{/str}}" type="button">
+                                            {{/contentdeleteenable}}
+                                        </span>
+                                    {{/donotexport}}
                                 </div>
                             {{/contentversions}}
                         </div>

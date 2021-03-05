@@ -172,7 +172,8 @@ class util {
                 'import' => has_capability('mod/openstudio:import', $modulecontext, $userid),
                 'export' => has_capability('mod/openstudio:export', $modulecontext, $userid),
                 'canlock' => has_capability('mod/openstudio:canlock', $modulecontext, $userid),
-                'canlockothers' => has_capability('mod/openstudio:canlockothers', $modulecontext, $userid)
+                'canlockothers' => has_capability('mod/openstudio:canlockothers', $modulecontext, $userid),
+                'ignoreenrolment' => self::is_ignore_enrol($modulecontext),
         );
 
         // Note: it is assumed that if a userid can addcomment, they can also set flags such as smile, favourite, etc.
@@ -197,8 +198,8 @@ class util {
         $permissions->activecmid = $cm->id;
         $permissions->activecminstanceid = $cminstance->id;
         $permissions->activecmcontextid = $modulecontext->id;
-        $permissions->activeenrollment = is_enrolled($coursecontext, $permissions->activeuserid);
-
+        $permissions->activeenrollment = is_enrolled($coursecontext, $permissions->activeuserid) ||
+                                            $permissions->ignoreenrolment;
         $permissions->coursecontext = $coursecontext;
 
         $permissions->flags = $cminstance->flags;
@@ -519,7 +520,7 @@ EOF;
             return api\group::has_same_course(
                     $permissions->activecid,
                     $content->userid,
-                    $permissions->activeuserid);
+                    $permissions->activeuserid) || $permissions->ignoreenrolment;
         } else if (($content->visibility == content::VISIBILITY_GROUP) || ($content->visibility < 0)) {
             if ($permissions->accessallgroups) {
                 return true;
@@ -1675,5 +1676,15 @@ EOF;
         $socialitem->isdoubledigitfavourite = $socialitem->favourite > 9;
 
         return $socialitem;
+    }
+
+    /**
+     * Check capability ignoreenrolemnt.
+     *
+     * @param $modulecontext \context Module context.
+     * return bool
+     */
+    public static function is_ignore_enrol($modulecontext) {
+        return has_capability('mod/openstudio:ignoreenrolment', $modulecontext);
     }
 }

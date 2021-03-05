@@ -65,6 +65,7 @@ $string['event:contentedited'] = 'Content edited';
 
 $string['openstudio:canlock'] = 'Can lock';
 $string['openstudio:canlockothers'] = 'Can lock others';
+$string['openstudio:ignoreenrolment'] = 'Ignore enrolment';
 $string['event:contentlocked'] = 'Content locked';
 $string['event:contentunlocked'] = 'Content unlocked';
 $string['errorcontentlock'] = 'Lock content error!';
@@ -858,6 +859,7 @@ $string['errorcontentnotebookerror'] = 'There was a problem reading one of the f
 $string['errorinvalidcomment'] = 'Comment does not exist.';
 $string['errorcommentnotdeleted'] = 'The comment could not be deleted due to an error.';
 $string['errorcontentnotdeleted'] = 'Delete content error!';
+$string['errorsharinglevel'] = 'Enable \'My Module\' must be chosen when option \'Module - visible all module members\' in Sharing level is selected';
 
 $string['modulejsdialogreturntostudio'] = 'Return to Studio';
 $string['modulejsdialogyes'] = 'Yes';
@@ -1542,4 +1544,6 @@ $string['retainimagemetadata_help'] = 'Enable this option to retain it, note tha
 $string['retainimagemetadataerror'] = 'In order to show GPS or Image data the EXIF image data must be retained';
 $string['sharetoviewbanner'] = 'Share to view is enabled';
 $string['sharetoviewbanner_help'] = 'You will not see any other student\'s work until you share a post yourself.';
-
+$string['iplayererrormessage'] = 'This website doesn\'t allow display of embedded content. Please select \'web link\' to view the content.';
+$string['preventiframe'] = 'List of unsupported addresses';
+$string['preventiframedescription'] = 'List of addresses (one per line, partial match supported) that will not output an iframe.';

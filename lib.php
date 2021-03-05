@@ -355,13 +355,13 @@ function openstudio_pluginfile($course, $cm, $context, $filearea, array $args, $
 
     if (! in_array($filearea,
             array('content', 'contentthumbnail', 'contentversion', 'contentthumbnailversion',
-                    'contentcomment', 'notebook', 'notebookversion'))) {
+                    'contentcomment', 'notebook', 'notebookversion', 'description'))) {
         return false;
     }
 
     require_login($course, false, $cm);
     $itemid = (int) array_shift($args);
-    if (($filearea === 'content') || ($filearea === 'contentthumbnail') || ($filearea == 'notebook')) {
+    if (in_array($filearea, ['content', 'contentthumbnail', 'notebook', 'description'])) {
         $record = $contentdata = $DB->get_record('openstudio_contents', array('id' => $itemid), '*', MUST_EXIST);
     } else if ($filearea === 'contentcomment') {
         $sql = <<<EOF
@@ -422,7 +422,8 @@ EOF;
 
             // If the content is shared with the course users, then proceed.
             if ($visibility == content::VISIBILITY_MODULE) {
-                $sql = <<<EOF
+                if (!util::is_ignore_enrol($modulecontext)) {
+                    $sql = <<<EOF
 SELECT ue1.id
   FROM {user_enrolments} ue1
   JOIN {enrol} e1 ON e1.id = ue1.enrolid
@@ -433,8 +434,9 @@ SELECT ue1.id
                         WHERE e2.courseid = ?)
 
 EOF;
-                if (!$DB->record_exists_sql($sql, array($USER->id, $contentdata->userid, $course->id))) {
-                    return false;
+                    if (!$DB->record_exists_sql($sql, array($USER->id, $contentdata->userid, $course->id))) {
+                        return false;
+                    }
                 }
             }
 
@@ -487,7 +489,7 @@ EOF;
         }
     }
 
-    if ($filearea === 'contentcomment') {
+    if ($filearea === 'contentcomment' || $filearea === 'description') {
         $relativepath = array_pop($args);
         $fullpath = "/{$context->id}/mod_openstudio/$filearea/{$itemid}/$relativepath";
     } else {
@@ -765,6 +767,12 @@ EOF;
     // Note: assumption is that the search results are already retricted by
     // course module.
     if ($result->intref2 == content::VISIBILITY_MODULE) {
+        $cm = get_coursemodule_from_id('openstudio', $result->coursemoduleid);
+        $modulecontext = \context_module::instance($cm->id);
+        if (util::is_ignore_enrol($modulecontext)) {
+            return true;
+        }
+
         $sql = <<<EOF
 SELECT ue1.id
   FROM {user_enrolments} ue1
@@ -826,6 +834,87 @@ function openstudio_ousearch_filter_browseslots_useronly(&$result) {
     } else {
         return false;
     }
+}
+
+/**
+ * OU Alerts plugin callback to add additional email recipients when alerts are
+ * reported.  The additional email recipients will be sent an email.
+ *
+ * @param string $itemtype The item type being reported.
+ * @param int $itemid The item id being reported.
+ * @return array Return list of people that should be sent email for the alert.
+ */
+function openstudio_oualerts_additional_recipients($itemtype, $itemid) {
+    global $CFG, $USER, $DB;
+
+    $additionalemails = [];
+
+    switch ($itemtype) {
+        case 'content':
+            $contentdata = content::get_record($USER->id, $itemid);
+            break;
+
+        case 'contentcomment':
+            $contentid = $DB->get_field('openstudio_comments', 'contentid', ['id' => $itemid]);
+            if ($contentid != false) {
+                $contentdata = content::get_record($USER->id, $contentid);
+            }
+            break;
+
+        default:
+            $contentdata = false;
+            break;
+    }
+    if ($contentdata != false) {
+        $reportingemail = $DB->get_field('openstudio', 'reportingemail', ['id' => $contentdata->openstudioid]);
+        if ($reportingemail != false) {
+            $reportingemailarray = explode(',', $reportingemail);
+            foreach ($reportingemailarray as $reportingemailarrayitem) {
+                $reportingemailarrayitem = trim($reportingemailarrayitem);
+                if (filter_var($reportingemailarrayitem, FILTER_VALIDATE_EMAIL) !== false) {
+                    $additionalemails[] = $reportingemailarrayitem;
+                }
+            }
+            $additionalemails = array_unique($additionalemails);
+        }
+    }
+    return $additionalemails;
+}
+
+/**
+ * OU Alerts plugin callback to provide additional information to the OU Alert plugin.
+ *
+ * @param string $itemtype The item type being reported.
+ * @param int $itemid The item id being reported.
+ * @return string Return item displayable name.
+ */
+function openstudio_oualerts_custom_info($itemtype, $itemid) {
+    global $USER, $DB;
+
+    $itemtitle = '';
+
+    switch ($itemtype) {
+        case 'content':
+            $contentdata = content::get_record($USER->id, $itemid);
+            break;
+
+        case 'contentcomment':
+            $contentid = $DB->get_field('openstudio_comments', 'contentid', ['id' => $itemid]);
+            if ($contentid != false) {
+                $contentdata = content::get_record($USER->id, $contentid);
+            }
+            break;
+
+        default:
+            $contentdata = false;
+            break;
+    }
+
+    if ($contentdata != false) {
+        $itemtitle = util::get_content_name($contentdata);
+    }
+
+    return $itemtitle;
 }
 
 /**

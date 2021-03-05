@@ -94,4 +94,9 @@ if ($ADMIN->fulltree) {
             get_string('confighonestytextdefault', 'openstudio'),
             PARAM_RAW
     ));
+    $settings->add(new admin_setting_configtextarea('openstudio/preventiframe',
+        get_string('preventiframe', 'openstudio'),
+        get_string('preventiframedescription', 'openstudio'),
+        'bbc.co.uk/iplayer',
+        PARAM_RAW));
 }

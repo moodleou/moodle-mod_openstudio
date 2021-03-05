@@ -217,5 +217,11 @@ $capabilities = array(
             'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW
         )
-    )
+    ),
+
+    'mod/openstudio:ignoreenrolment' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_MODULE,
+        'archetypes' => array()
+    ),
 );

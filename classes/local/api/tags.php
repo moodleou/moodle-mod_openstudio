@@ -36,11 +36,12 @@ class tags {
      *
      * @param int $contentid.
      * @param string|array $tags Tags to set as an array of word or string, comma-seperated word list.
+     * @param bool $update Set true is updating tags (allows empty)
      */
-    public static function set($contentid, $tags) {
+    public static function set($contentid, $tags, $update = false) {
         global $DB;
 
-        if (empty($tags)) {
+        if (empty($tags) && !$update) {
             return;
         }
 

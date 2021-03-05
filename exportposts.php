@@ -56,13 +56,30 @@ $index = 1;
 $folderitemfilesizes = array();
 foreach ($contentdatatemp as $content) {
     $contentids[] = $content->id;
+    // Skip empty slot and empty folder.
 
+    if (empty($content->name)) {
+        if (!empty($content->l1name)) {
+            $content->name = $content->l1name;
+        } else if (!empty($content->l2name)) {
+            $content->name = $content->l2name;
+        } else if (!empty($content->l3name)) {
+            $content->name = $content->l3name;
+        }
+    }
     // Calculate folder size.
     if ($content->contenttype == content::TYPE_FOLDER) {
+        $numberofemptycontent = 0;
         // Get content IDs inside folder.
         $foldercontentids = array();
         $foldercontenttemp = folder::get_contents($content->id);
+        $numberofcontent = count($foldercontenttemp);
         foreach ($foldercontenttemp as $folderitem) {
+            if (empty($folderitem->description) && empty($folderitem->fileid)
+                    && empty($folderitem->content)) {
+                $numberofemptycontent++;
+                continue;
+            }
             $foldercontentids[] = $folderitem->id;
         }
 
@@ -71,6 +88,17 @@ foreach ($contentdatatemp as $content) {
         $folderitemfilesizes[$content->id] = 0;
         foreach ($rs as $r) {
             $folderitemfilesizes[$content->id] += $r->filesize;
+        }
+        if ($numberofcontent == $numberofemptycontent) {
+            // It mean all the content in folder is empty or don't have any content.
+            // We need to check description of the folder.
+            if (empty($content->description) && empty($content->fileid) && empty($content->content)) {
+                continue;
+            }
+        }
+    } else {
+        if (empty($content->description) && empty($content->fileid) && empty($content->content)) {
+            continue;
         }
     }
 

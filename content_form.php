@@ -71,9 +71,6 @@ class mod_openstudio_content_form extends moodleform {
             $mform->setDefault('visibility', content::VISIBILITY_INFOLDERONLY);
         } else {
             $options = array();
-            if (in_array(content::VISIBILITY_PRIVATE, $this->_customdata['allowedvisibility'])) {
-                $options[content::VISIBILITY_PRIVATE] = get_string('contentformvisibilityprivate', 'openstudio');
-            }
             if ($this->_customdata['sharewithothers'] && $this->_customdata['isenrolled']) {
                 if ($this->_customdata['feature_module']
                         && in_array(content::VISIBILITY_MODULE, $this->_customdata['allowedvisibility'])) {
@@ -124,6 +121,10 @@ class mod_openstudio_content_form extends moodleform {
             } else {
                 $this->_customdata['defaultvisibility'] = content::VISIBILITY_PRIVATE;
             }
+            if (in_array(content::VISIBILITY_PRIVATE, $this->_customdata['allowedvisibility']) || empty($options)) {
+                // When the dropdown is empty. We should always add private value for the dropdown.
+                $options[content::VISIBILITY_PRIVATE] = get_string('contentformvisibilityprivate', 'openstudio');
+            }
 
             $mform->addElement('html', html_writer::start_tag('div',
                     array('class' => 'openstudio-content-form-visibility')));
@@ -146,6 +147,7 @@ class mod_openstudio_content_form extends moodleform {
 
         $mform->addElement('text', 'name', $contenttitle);
         $mform->setType('name', PARAM_TEXT);
+        $mform->addRule('name', get_string('required'), 'required',  null, 'client');
 
         $editoroptions = [
             'maxfiles' => EDITOR_UNLIMITED_FILES,

@@ -228,6 +228,8 @@ EOF;
         $permissionsql = '';
         $fromsql = '';
         $params = array();
+        $cm = get_coursemodule_from_instance('openstudio', $studioid);
+        $modulecontext = \context_module::instance($cm->id);
 
         // Permission checks.
         switch ($visibility) {
@@ -496,6 +498,9 @@ EOF;
                         $courseid = 0;
                     }
 
+                    if (util::is_ignore_enrol($modulecontext)) {
+                        break;
+                    }
                     // Find all slots that has been granted to courses
                     // that the $userid is a also enrolled on.
                     $permissionsql .= <<<EOF
@@ -547,6 +552,13 @@ EOF;
                         $params[] = $courseid;
                         $params[] = $userid;
                     } else {
+                        $ignoreenrolment = util::is_ignore_enrol($modulecontext);
+                        $checkenrolmentquery = $ignoreenrolment ? '' : <<<EOF
+                                             AND EXISTS (SELECT 1
+                                                           FROM {user_enrolments} ue
+                                                           JOIN {enrol} e ON e.id = ue.enrolid AND e.courseid = ?
+                                                          WHERE ue.userid = ?)
+EOF;
                         $permissionsql .= <<<EOF
                         AND s.contenttype <> ?
                         AND (   (           (2 = ? AND s.visibility = ?)
@@ -564,10 +576,7 @@ EOF;
                                               WHERE gm3.groupid = (0 - s.visibility)
                                                 AND gm3.userid = ?))
                              OR (           s.visibility = ?
-                                 AND EXISTS (SELECT 1
-                                               FROM {user_enrolments} ue
-                                               JOIN {enrol} e ON e.id = ue.enrolid AND e.courseid = ?
-                                              WHERE ue.userid = ?))
+                                 {$checkenrolmentquery})
                             )
 
 EOF;
@@ -580,8 +589,10 @@ EOF;
                         $params[] = $userid;
                         $params[] = $userid;
                         $params[] = content::VISIBILITY_MODULE;
-                        $params[] = $courseid;
-                        $params[] = $userid;
+                        if (!$ignoreenrolment) {
+                            $params[] = $courseid;
+                            $params[] = $userid;
+                        }
                     }
                 }
                 break;

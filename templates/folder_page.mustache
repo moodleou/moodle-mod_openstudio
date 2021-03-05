@@ -179,8 +179,12 @@
                     <a class="openstudio-content-view-user-info-view" href="{{{viewuserworkurl}}}">
                         {{#str}} contentitemview, mod_openstudio {{/str}}
                         {{{firstname}}}’s
-                        {{#str}} contentitemwork, mod_openstudio {{/str}}
-                        {{#pix}} t/right, core{{/pix}}
+                        <span class="openstudio-grid-item-content-detail-owner-view-icon">
+                              {{#str}} contentitemwork, mod_openstudio {{/str}}
+                            {{#pix}}
+                                t/right, core, {{#str}} contentitemview, openstudio {{/str}}
+                            {{/pix}}
+                        </span>
                     </a>
                 </div>
             </div>
@@ -245,6 +249,10 @@
                             class="osep-smallbutton btn btn-secondary"
                         />
                     {{/contentlockenable}}
+                    {{#viewdeletedpostenable}}
+                        <input id="id_viewdeletedpostbutton" name="viewdeletedpostbutton" type="button"
+                               class="osep-smallbutton btn btn-secondary" value="{{#str}}openstudio:viewdeletedposts, mod_openstudio{{/str}}"/>
+                    {{/viewdeletedpostenable}}
                 </div>
                 <div class="openstudio-folder-view-request-feedback clearfix">
                     {{#contentrequestfeedbackenable}}
@@ -259,10 +267,6 @@
                     {{/contentrequestfeedbackenable}}
                 </div>
             </div>
-            {{#viewdeletedpostenable}}
-                <input id="id_viewdeletedpostbutton" name="viewdeletedpostbutton" type="button"
-                       class="osep-smallbutton btn btn-secondary" value="{{#str}}openstudio:viewdeletedposts, mod_openstudio{{/str}}"/>
-            {{/viewdeletedpostenable}}
         </div>
     </div>
 </div>

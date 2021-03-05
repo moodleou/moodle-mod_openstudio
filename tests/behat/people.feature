@@ -54,6 +54,7 @@ Feature: Open Studio people view
           | Name                         | Test Open Studio name 1      |
           | Description                  | Test Open Studio description |
           | Enable 'My Module'           | 0                            |
+          | Sharing level                | 1,7,2                        |
           | Abuse reports are emailed to | teacher1@asd.com             |
           | ID number                    | OS1                          |
 
