@@ -38,7 +38,7 @@ class tags_testcase extends \advanced_testcase {
     /**
      * Sets up our fixtures.
      */
-    protected function setUp() {
+    protected function setUp(): void {
         $this->resetAfterTest(true);
         $studentroleid = 5;
 
@@ -72,7 +72,7 @@ class tags_testcase extends \advanced_testcase {
         $this->tags = [strtolower(random_string()), strtolower(random_string()), strtolower(random_string())];
     }
 
-    protected function tearDown() {
+    protected function tearDown(): void {
         $this->course = '';
         $this->generator = '';
         $this->studiolevels = '';

@@ -35,7 +35,7 @@ class tracking_testcase extends \advanced_testcase {
     /**
      * Sets up our fixtures.
      */
-    protected function setUp() {
+    protected function setUp(): void {
         $this->resetAfterTest(true);
         $studentroleid = 5;
 

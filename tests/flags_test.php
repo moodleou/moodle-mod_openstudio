@@ -39,7 +39,7 @@ class flags_testcase extends \advanced_testcase   {
     /**
      * Sets up our fixtures.
      */
-    protected function setUp() {
+    protected function setUp(): void {
         $this->resetAfterTest(true);
         $teacherroleid = 3;
         $studentroleid = 5;
@@ -112,7 +112,7 @@ class flags_testcase extends \advanced_testcase   {
         $this->studiolevels->leveldata = $this->generator->create_mock_levels($this->studiolevels->id);
     }
 
-    protected function tearDown() {
+    protected function tearDown(): void {
         $this->course = '';
         $this->generator = '';
         $this->studiolevels = '';

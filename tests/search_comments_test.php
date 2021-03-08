@@ -60,7 +60,7 @@ class search_comments_testcase extends \advanced_testcase {
     /**
      * Sets up our fixtures.
      */
-    protected function setUp() {
+    protected function setUp(): void {
         global $DB;
 
         $this->resetAfterTest(true);
@@ -145,7 +145,7 @@ class search_comments_testcase extends \advanced_testcase {
         );
     }
 
-    public function tearDown() {
+    public function tearDown(): void {
         \testable_openstudio_search::$fakeresult = null;
         parent::tearDown();
     }

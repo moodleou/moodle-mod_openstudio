@@ -53,7 +53,7 @@ class search_folders_test extends \advanced_testcase {
     /**
      * Sets up our fixtures.
      */
-    protected function setUp() {
+    protected function setUp(): void {
         $this->resetAfterTest(true);
         $this->studentroleid = 5;
 
@@ -123,7 +123,7 @@ class search_folders_test extends \advanced_testcase {
         search_posts_test::fix_timemodified_order();
     }
 
-    public function tearDown() {
+    public function tearDown(): void {
         testable_openstudio_search::$fakeresult = null;
         parent::tearDown();
     }

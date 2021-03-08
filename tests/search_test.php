@@ -40,7 +40,7 @@ class search_testcase extends \advanced_testcase {
     private $content2;
     private $content3;
 
-    protected function setUp() {
+    protected function setUp(): void {
         if (!\mod_openstudio\local\util::search_installed()) {
             $this->markTestSkipped('This test uses local_ousearch, which is not installed. Skipping.');
         }
@@ -182,7 +182,7 @@ class search_testcase extends \advanced_testcase {
                 $this->studiolevels->id, $this->users->students->one->id, $contententry2, $this->cm);
     }
 
-    protected function tearDown() {
+    protected function tearDown(): void {
         $this->course = '';
         $this->generator = '';
         $this->studiolevels = '';

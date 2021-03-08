@@ -54,7 +54,7 @@ class search_posts_test extends \advanced_testcase {
     /**
      * Sets up our fixtures.
      */
-    protected function setUp() {
+    protected function setUp(): void {
         global $CFG, $DB;
 
         $this->resetAfterTest(true);
@@ -150,7 +150,7 @@ class search_posts_test extends \advanced_testcase {
         self::fix_timemodified_order();
     }
 
-    public function tearDown() {
+    public function tearDown(): void {
         testable_openstudio_search::$fakeresult = null;
         parent::tearDown();
     }

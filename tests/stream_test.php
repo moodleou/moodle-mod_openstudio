@@ -49,7 +49,7 @@ class stream_testcase extends \advanced_testcase {
     /**
      * Sets up our fixtures.
      */
-    protected function setUp() {
+    protected function setUp(): void {
         global $DB;
         $this->resetAfterTest(true);
         $this->teacherroleid = 3;
@@ -228,7 +228,7 @@ class stream_testcase extends \advanced_testcase {
 
     }
 
-    protected function tearDown() {
+    protected function tearDown(): void {
         $this->course = '';
         $this->users = '';
         $this->groups = '';

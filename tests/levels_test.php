@@ -31,7 +31,7 @@ class levels_testcase extends \advanced_testcase {
     private $generator; // Contains mod_openstudio specific data generator functions.
     private $studiogeneric; // Generic studio instance with no levels or slots.
 
-    protected function setUp() {
+    protected function setUp(): void {
         $this->resetAfterTest(true);
 
         // Our test data has 1 course, 2 groups, 2 teachers and 10 students.
@@ -46,7 +46,7 @@ class levels_testcase extends \advanced_testcase {
         $this->studiogeneric = $this->generator->create_instance(array('course' => $this->course->id, 'idnumber' => 'OS1'));
     }
 
-    protected function tearDown() {
+    protected function tearDown(): void {
         $this->course = '';
         $this->generator = '';
         $this->studiogeneric = '';

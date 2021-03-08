@@ -42,7 +42,7 @@ class file_testcase extends \advanced_testcase {
     /**
      * Prepares things before this test case is initialised.
      */
-    public static function setUpBeforeClass() {
+    public static function setUpBeforeClass(): void {
         global $CFG;
         require_once($CFG->dirroot . '/mod/openstudio/lib.php');
     }
@@ -50,7 +50,7 @@ class file_testcase extends \advanced_testcase {
     /**
      * Sets up our fixtures.
      */
-    protected function setUp() {
+    protected function setUp(): void {
         global $CFG, $DB;
         $this->resetAfterTest(true);
         $studentroleid = 5;
@@ -258,7 +258,7 @@ class file_testcase extends \advanced_testcase {
         $this->files['ipynb']->filename = 'openstudio_' . $this->files['nbk']->contentdata['id'] . '_notebook.ipynb';
     }
 
-    protected function tearDown() {
+    protected function tearDown(): void {
         $this->course = '';
         $this->generator = '';
         $this->studiolevels = '';

@@ -45,7 +45,7 @@ class template_testcase extends \advanced_testcase {
     /**
      * Sets up our fixtures.
      */
-    protected function setUp() {
+    protected function setUp(): void {
         global $DB;
         $this->resetAfterTest(true);
         $studentroleid = 5;
@@ -138,7 +138,7 @@ class template_testcase extends \advanced_testcase {
 
     }
 
-    protected function tearDown() {
+    protected function tearDown(): void {
         $this->course = '';
         $this->generator = '';
         $this->studiolevels = '';

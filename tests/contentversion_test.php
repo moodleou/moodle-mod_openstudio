@@ -33,7 +33,7 @@ class contentversion_testcase extends \advanced_testcase {
     private $content;
     private $versions;
 
-    public function setUp() {
+    public function setUp(): void {
         $this->resetAfterTest(true);
         $studentroleid = 5;
 

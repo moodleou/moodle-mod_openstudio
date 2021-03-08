@@ -84,7 +84,7 @@ class privacy_provider_test extends provider_testcase {
      * @throws dml_exception
      * @throws moodle_exception
      */
-    public function setUp() {
+    public function setUp(): void {
         global $DB;
         $this->resetAfterTest(true);
         $teacherroleid = 3;

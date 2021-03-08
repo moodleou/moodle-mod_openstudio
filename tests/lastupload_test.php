@@ -38,7 +38,7 @@ class lastupload_test extends \advanced_testcase {
     private $totalcontents;
     private $pinboardcontents;
 
-    protected function setUp() {
+    protected function setUp(): void {
         $this->resetAfterTest(true);
         $teacherroleid = 3;
         $studentroleid = 5;
@@ -100,7 +100,7 @@ class lastupload_test extends \advanced_testcase {
         $this->studiolevels->final->leveldata = $this->generator->create_mock_levels($this->studiolevels->final->id);
     }
 
-    protected function tearDown() {
+    protected function tearDown(): void {
         $this->course = '';
         $this->generator = '';
         $this->studiolevels = '';

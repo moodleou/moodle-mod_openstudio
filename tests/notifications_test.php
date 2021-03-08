@@ -45,7 +45,7 @@ class notifications_test extends \advanced_testcase {
     private $flags;
     private $studio;
 
-    protected function setUp() {
+    protected function setUp(): void {
         $this->resetAfterTest(true);
         $teacherroleid = 3;
         $studentroleid = 5;

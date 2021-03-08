@@ -36,7 +36,7 @@ class import_testcase extends \advanced_testcase {
     /**
      * Set up a studio instance with a low pinboard limit, and create a temporary directory.
      */
-    public function setUp() {
+    public function setUp(): void {
         $this->resetAfterTest(true);
         // Create course.
         $course = $this->getDataGenerator()->create_course();
@@ -51,7 +51,7 @@ class import_testcase extends \advanced_testcase {
     /**
      * Clean up temporary directory.
      */
-    public function tearDown() {
+    public function tearDown(): void {
         \mod_openstudio\local\api\filesystem::rrmdir($this->tempdir);
     }
 

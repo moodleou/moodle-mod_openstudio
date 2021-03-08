@@ -38,7 +38,7 @@ class item_testcase extends \advanced_testcase  {
     private $contentversions;
     private $items;
 
-    protected function setUp() {
+    protected function setUp(): void {
         global $DB, $CFG;
         $this->resetAfterTest(true);
         $teacherroleid = 3;
@@ -343,7 +343,7 @@ class item_testcase extends \advanced_testcase  {
 
     }
 
-    protected function tearDown() {
+    protected function tearDown(): void {
         $this->course = '';
         $this->generator = '';
         $this->studiolevels = '';
