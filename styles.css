@@ -1118,10 +1118,10 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
 .openstudio-comment-thread-header {
     font-size: 1.28571em;
     font-weight: bold;
-    margin-bottom: 12px;
+    margin-bottom: 18px;
 }
 .openstudio-comment-thread-body {
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 .openstudio-comment-leftcolumn {
     float: left;
@@ -1188,7 +1188,7 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
     max-width: 48px;
     max-height: 48px;
     border-radius: 50%;
-    width: 36px;
+    width: 48px;
 }
 
 .openstudio-comment-flag {
@@ -1205,8 +1205,8 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
 }
 
 .openstudio-comment-flag-status img {
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
     margin-right: 0px;
 }
 
@@ -4402,6 +4402,23 @@ a.openstudio-add-new-content-link:hover  {
     }
 }
 
+.openstudio-folder-global-background .openstudio-comment-thread-header {
+    margin-bottom: 12px;
+}
+
+.openstudio-folder-global-background .openstudio-comment-thread-body {
+    margin-bottom: 25px;
+}
+
+.openstudio-folder-global-background .openstudio-comment-owner img {
+    width: 36px;
+}
+
+.openstudio-folder-global-background .openstudio-comment-flag-status img {
+    width: 18px;
+    height: 18px;
+}
+
 .openstudio-folder-global-background .openstudio-content-view-animation-icons {
     margin-top: 25px;
 }
@@ -5723,7 +5740,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-grid-item-content-detail-info-box:nth-child(n+2) {
-        margin-left: 65px;
+        margin-left: 20px;
     }
 
     .openstudio-grid-item-content-preview-default {
@@ -6395,7 +6412,8 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-grid-item-content-title {
-        width: 90%;
+        width: auto;
+        max-width: 90%;
         margin-top: 5px;
     }
 
@@ -6404,7 +6422,7 @@ a.openstudio-add-new-content-link:hover  {
         margin-left: -110px;
     }
     .openstudio-grid-item-content .openstudio-tooltip {
-        display: inline;
+        float: right;
     }
     .openstudio-tooltip .openstudio-tooltiptext::after {
         left: 87%;
@@ -7145,10 +7163,6 @@ a.openstudio-add-new-content-link:hover  {
         text-align: left;
     }
 
-    .openstudio-grid-item-content-detail-info-box:nth-child(n+2) {
-        margin-left: 20px;
-    }
-
     .openstudio-buttons-settings {
         margin-top: 0px;
         margin-right: 0px;
@@ -7223,7 +7237,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-grid-item-content-title {
-        width: 84%;
+        max-width: 84%;
     }
 
     .openstudio-profile-info .openstudio-profile-description {
