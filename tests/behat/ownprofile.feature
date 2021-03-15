@@ -114,7 +114,8 @@ Feature: Own profile view in Open Studio
       When I follow "Test Open Studio name 1"
       And I follow "Administration > Edit" in the openstudio navigation
       And I follow "Expand all"
-      And I set the field "Show a happy or sad emoticon according to the user's level of participation" to "1"
+      And I set the following fields to these values:
+      |  Show Participation smiley | 1 |
       And I press "Save and display"
       And I follow "My Content > My Activities" in the openstudio navigation
       Then I should see "Teacher 1"
@@ -148,9 +149,8 @@ Feature: Own profile view in Open Studio
       When I follow "Test Open Studio name 1"
       And I follow "My content > My Activities" in the openstudio navigation
       And I click on "a.openstudio-profile-mypaticipation" "css_element"
-      Then I should see "Last active date:"
-      And I should see "comments made"
-      And I should see "viewed"
+    Then I should see "comments made"
+    And I should see "viewed"
       And I should see "Activity 1"
       And I should see "Activity 2"
       And I should see "Activity 3"
@@ -162,10 +162,9 @@ Feature: Own profile view in Open Studio
       And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 1"
       And I follow "My content > My Activities" in the openstudio navigation
-      And I click on "a.openstudio-profile-mypaticipation" "css_element"
-      Then I should see "Last active date:"
-      And I should see "comments made"
-      And I should see "viewed"
+    And I click on "a.openstudio-profile-mypaticipation" "css_element"
+    Then I should see "comments made"
+    And I should see "viewed"
       And I should see "Activity 1"
       And I should see "Activity 2"
       And I should see "Activity 3"
@@ -218,7 +217,8 @@ Feature: Own profile view in Open Studio
       And I follow "Test Open Studio name 2"
       And I follow "Administration > Edit" in the openstudio navigation
       And I follow "Expand all"
-      And I set the field "Show a happy or sad emoticon according to the user's level of participation" to "1"
+      And I set the following fields to these values:
+        | Show Participation smiley | 1 |
       And I press "Save and display"
       And I follow "My Content"
       And I should see "Participation"

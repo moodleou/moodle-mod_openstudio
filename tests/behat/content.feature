@@ -118,7 +118,7 @@ Feature: Create Open Studio contents
           | Title                     | Test My Group Board View 4 ownership All my own work |
           | Description               | My Group Board View Description 4 ownership          |
           | Files                     | mod/openstudio/tests/importfiles/test3.jpg           |
-        Then the "disabled" attribute of "div.felement input[name='ownershipdetail']" "css_element" should contain "disabled"
+        Then "//input[@id='id_ownershipdetail' and @disabled='disabled']" "xpath_element" should exist
         And I press "Save"
         And I follow "Shared content > My Module" in the openstudio navigation
         Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test3.jpg"
@@ -177,7 +177,7 @@ Feature: Create Open Studio contents
           | Title                     | Test My Group Board View 5 ownership All my own work |
           | Description               | My Group Board View Description 5 ownership          |
           | Web link                  | https://www.youtube.com/watch?v=Y7uGHY-t80I          |
-        Then the "disabled" attribute of "div.felement input[name='ownershipdetail']" "css_element" should contain "disabled"
+        Then "//input[@id='id_ownershipdetail' and @disabled='disabled']" "xpath_element" should exist
         And I press "Save"
         And I follow "Shared content > My Module" in the openstudio navigation
         Then I should see "Test My Group Board View 5 ownership All my own work"
