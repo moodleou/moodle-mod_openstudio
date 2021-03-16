@@ -38,7 +38,7 @@ class testable_openstudio_search extends \core_search\manager {
      * @param  \core_search\engine|bool $searchengine
      * @return testable_openstudio_search
      */
-    public static function instance($searchengine = false) {
+    public static function instance($searchengine = false, bool $query = false) {
 
         // One per request, this should be purged during testing.
         if (self::$instance !== null) {
