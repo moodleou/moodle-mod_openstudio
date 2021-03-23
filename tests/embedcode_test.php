@@ -42,6 +42,6 @@ class embedcode_testcase extends \advanced_testcase {
         $embedresponse = \mod_openstudio\local\api\embedcode::parse($embedapi, $testurl);
         $this->assertEquals(\mod_openstudio\local\api\content::TYPE_URL, $embedresponse->type);
         $this->assertEquals($testurl, $embedresponse->url);
-        $this->assertContains($testurl, $embedresponse->html);
+        $this->assertStringContainsString($testurl, $embedresponse->html);
     }
 }
