@@ -42,7 +42,7 @@
     <div class="openstudio-profile-user-picture">
         <img src="{{{userpictureurl}}}">
     </div>
-    <div class="openstudio-profile-head clearfix">
+    <div class="openstudio-profile-head {{^activedate}}openstudio-profile-without-own-date{{/activedate}} clearfix">
         <div class="openstudio-profile-mypaticipation-content">
             <div class="openstudio-profile-profile-header">
                 <a id="openstudio_profile_fullusername" class="openstudio-profile-mypaticipation collapsed"
@@ -77,14 +77,16 @@
                 {{/donotexport}}
             </div>
             {{#donotexport}}
-            <div id="profile_mypaticipation" class="openstudio-profile-date collapse">
-                <div class="openstudio-profile-last-active-date">
-                    {{#str}} profilebarlastactivedate, mod_openstudio {{/str}}
+            {{#activedate}}
+                <div id="profile_mypaticipation" class="openstudio-profile-date collapse">
+                    <div class="openstudio-profile-last-active-date">
+                        {{#str}} profilebarlastactivedate, mod_openstudio {{/str}}
+                    </div>
+                    <div class="openstudio-profile-own-date">
+                        {{activedate}}
+                    </div>
                 </div>
-                <div class="openstudio-profile-own-date">
-                    {{activedate}}
-                </div>
-            </div>
+            {{/activedate}}
             {{/donotexport}}
         </div>
     </div>

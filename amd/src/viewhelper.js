@@ -66,6 +66,7 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
             t.handleViewSizeSwitcher();
             t.handleBlockSwitcher();
             t.initSearchForm();
+            t.handleCollapseClick();
         },
 
         /**
@@ -287,6 +288,65 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
             $('.openstudio-filter-link a.collapsed').each(function() {
                 $($(this).data('target')).find('input, select').attr('tabindex', -1);
             });
+        },
+        handleCollapseClick: function() {
+            var myprofile = document.querySelector('.openstudio-profile-mypaticipation-content');
+            var fullusername = document.getElementById('openstudio_profile_fullusername');
+            var profilleparticipate = document.querySelector('#openstudio_profile_bar .openstudio-profile-bar-participation-content');
+            var profilleparticipatemobile = document.querySelector('#openstudio_profile_bar_mobile .openstudio-profile-bar-participation-content');
+            var progressbar = document.getElementsByClassName('openstudio-profile-progress-content');
+            var showprofile = null;
+            var showparticipate = null;
+            var body = document.querySelector('body');
+            for(var i = 0; i < progressbar.length; i++) {
+                if (progressbar && progressbar[i] && progressbar[i].clientHeight > 0) {
+                    showprofile = progressbar[i];
+                }
+            }
+            if (body.classList.contains('ios') || body.classList.contains('android')) {
+                showparticipate = profilleparticipatemobile;
+            } else {
+                showparticipate = profilleparticipate;
+            }
+            if (fullusername) {
+                var originalmarginTop = showprofile.style.marginTop ? showprofile.style.marginTop : '0px';
+                var originalpaddingTop = showprofile.style.paddingTop ? showprofile.style.paddingTop : '0px';
+                fullusername.addEventListener('click', function() {
+                    var w = window.innerWidth;
+                    if ((w > 767 && w < 1204 && (!body.classList.contains('ios') && !body.classList.contains('android')))
+                        || (w > 767 && w < 940 && (body.classList.contains('ios') || body.classList.contains('android')))) {
+                        if(fullusername.classList.contains('collapsed')) {
+                            setTimeout(function() {
+                                // Two line
+                                if (showparticipate && fullusername.clientHeight > 21) {
+                                    if (myprofile.getBoundingClientRect().height > showparticipate.getBoundingClientRect().height) {
+                                        if (showprofile.getBoundingClientRect().top > myprofile.getBoundingClientRect().bottom) {
+                                            showprofile.style.marginTop = originalmarginTop + 3 + 'px';
+                                        } else {
+                                            showprofile.style.marginTop = myprofile.getBoundingClientRect().bottom - showprofile.getBoundingClientRect().top + 'px';
+                                        }
+                                    } else {
+                                        if (showprofile.getBoundingClientRect().top > showparticipate.getBoundingClientRect().bottom) {
+                                            showprofile.style.marginTop = originalmarginTop + 3 + 'px';
+                                        } else {
+                                            showprofile.style.marginTop = showparticipate.getBoundingClientRect().bottom - showprofile.getBoundingClientRect().top + 'px';
+                                        }
+                                    }
+                                    if (body.classList.contains('ios') || body.classList.contains('android')) {
+                                        showprofile.style.paddingTop = '5px';
+                                    } else {
+                                        showprofile.style.paddingTop = '9px';
+                                    }
+                                }
+
+                            }, 500);
+                        } else {
+                            showprofile.style.paddingTop = originalpaddingTop;
+                            showprofile.style.marginTop = originalmarginTop;
+                        }
+                     }
+                });
+            }
         },
 
         /**

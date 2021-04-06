@@ -3771,10 +3771,14 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     position: relative;
 }
 
+.openstudio-progressbar svg {
+    border-radius: 10px;
+    height: 24px;
+}
 .openstudio-work-progress {
     width: 229px;
     height: 16px;
-    border-radius: 5px;
+    border-radius: 6px;
     border: 1px solid #d4d2d2;
     position: absolute;
     top: 2px;
@@ -3793,7 +3797,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 
 .openstudio-work-progress div:nth-child(n+2) {
     border-left: 1px solid #f0f0f1;
-    height: 18px;
+    height: 16px;
 }
 
 .openstudio-work-progress-percent {
@@ -3853,7 +3857,6 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 
 .openstudio-profile-head .openstudio-profile-date {
     float: left;
-    padding-left: 7px;
 }
 
 .openstudio-profile-head .openstudio-profile-date.show {
@@ -3881,7 +3884,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 }
 
 .openstudio-profile-comment .openstudio-profile-comment-text {
-    margin-left: 7px;
+    margin-left: 5px;
 }
 
 .openstudio-profile-comment-view .openstudio-own-view img{
@@ -4005,9 +4008,9 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 .openstudio-profile-bar .openstudio-profile-progress-content {
     display: inline-block;
     vertical-align: top;
-    margin-top: 5px;
     float: right;
-    margin-right: 14px;
+    margin-right: 13px;
+    margin-top: 5px;
 }
 
 .openstudio-profile-progress-content .openstudio-profile-progress-content-description {
@@ -4370,6 +4373,7 @@ a.openstudio-add-new-content-link:hover  {
 }
 .openstudio-profile-bar-participation + .openstudio-profile-comment-view.show {
     margin-bottom: 6px;
+    padding-top: 2px;
 }
 .openstudio-profile-comment-view.show {
     margin-bottom: 25px;
@@ -4402,9 +4406,34 @@ a.openstudio-add-new-content-link:hover  {
         margin-top: 0;
     }
 }
-@media only screen and (max-width: 1023px) and (min-width: 769px) {
+@media only screen and (max-width: 1187px) and (min-width: 1025px) {
     .openstudio-profile-bar .openstudio-profile-progress-content {
-        margin: 4px 0 0 0;
+        margin-right: 14px;
+    }
+}
+
+@media only screen and (max-width: 768px) and (min-width: 768px) {
+    .openstudio-profile-bar .openstudio-profile-progress-content {
+        margin-right: 3px;
+    }
+}
+@media only screen and (max-width: 1024px) and (min-width: 1024px) {
+    body.android .openstudio-profile-bar .openstudio-profile-progress-content,
+    body.ios .openstudio-profile-bar .openstudio-profile-progress-content {
+        margin-right: 3px;
+    }
+}
+
+@media only screen and (max-width: 1024px) and (min-width: 768px) {
+    .openstudio-profile-bar .openstudio-profile-progress-content {
+       margin-right: 14px;
+    }
+}
+
+@media only screen and (max-width: 1023px) and (min-width: 769px) {
+    body.android .openstudio-profile-bar .openstudio-profile-progress-content,
+    body.ios .openstudio-profile-bar .openstudio-profile-progress-content {
+        margin: 0 1px 0 0;
     }
 }
 
@@ -5153,6 +5182,9 @@ a.openstudio-add-new-content-link:hover  {
     }
     body.path-mod-openstudio.android .openstudio-grid-item-content-detail-owner-view-icon img.icon {
         padding-bottom: 2px;
+    }
+    .openstudio-content-view-description:empty + .openstudio-content-view-tags-container > .openstudio-content-view-archive {
+        margin-top: 26px;
     }
 }
 
@@ -6032,7 +6064,11 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-work-progress-container {
         margin-right: 0;
-        width: 240px;
+        width: 250px;
+    }
+
+    .openstudio-progressbar svg {
+        width: 192px;
     }
 
     .openstudio-profile-participation-value {
@@ -6677,6 +6713,7 @@ a.openstudio-add-new-content-link:hover  {
         color: #464542;
         line-height: 30px;
         margin-top: -3px;
+        width: auto;
     }
 
     /**
@@ -7820,4 +7857,7 @@ a.openstudio-add-new-content-link:hover  {
 
 .path-mod-openstudio #id_commentattachment_fieldset p {
     font-weight: 700;
+}
+.openstudio-profile-head.openstudio-profile-without-own-date {
+    padding-bottom: 20px;
 }
