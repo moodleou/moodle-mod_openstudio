@@ -289,6 +289,11 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
                 $($(this).data('target')).find('input, select').attr('tabindex', -1);
             });
         },
+        /**
+         * Handle collapse click for profile bar.
+         *
+         * @method handleCollapseClick
+         */
         handleCollapseClick: function() {
             var myprofile = document.querySelector('.openstudio-profile-mypaticipation-content');
             var fullusername = document.getElementById('openstudio_profile_fullusername');
@@ -308,7 +313,7 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
             } else {
                 showparticipate = profilleparticipate;
             }
-            if (fullusername) {
+            if (fullusername && showprofile) {
                 var originalmarginTop = showprofile.style.marginTop ? showprofile.style.marginTop : '0px';
                 var originalpaddingTop = showprofile.style.paddingTop ? showprofile.style.paddingTop : '0px';
                 fullusername.addEventListener('click', function() {
@@ -319,13 +324,13 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
                             setTimeout(function() {
                                 // Two line
                                 if (showparticipate && fullusername.clientHeight > 21) {
-                                    if (myprofile.getBoundingClientRect().height > showparticipate.getBoundingClientRect().height) {
+                                    if (myprofile && myprofile.getBoundingClientRect().height > showparticipate.getBoundingClientRect().height) {
                                         if (showprofile.getBoundingClientRect().top > myprofile.getBoundingClientRect().bottom) {
                                             showprofile.style.marginTop = originalmarginTop + 3 + 'px';
                                         } else {
                                             showprofile.style.marginTop = myprofile.getBoundingClientRect().bottom - showprofile.getBoundingClientRect().top + 'px';
                                         }
-                                    } else {
+                                    } else if (showparticipate) {
                                         if (showprofile.getBoundingClientRect().top > showparticipate.getBoundingClientRect().bottom) {
                                             showprofile.style.marginTop = originalmarginTop + 3 + 'px';
                                         } else {
