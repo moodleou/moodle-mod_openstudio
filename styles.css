@@ -5202,6 +5202,10 @@ a.openstudio-add-new-content-link:hover  {
         display: flex;
         justify-content: center;
     }
+    .openstudio-grid-item-content-preview,
+    .openstudio-grid-item-content-preview-default {
+        margin-top: 1px;
+    }
     .openstudio-profile-bar .openstudio-profile-user-picture img {
         margin-top: 9px;
     }
@@ -5769,7 +5773,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-add-new {
-        padding-bottom: 14px;
+        padding-bottom: 19px;
         padding-top: 2px;
     }
 
@@ -5806,7 +5810,7 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-grid-item-content-title {
         font-size: 1.42857em;
         padding-top: 3px;
-        padding-bottom: 23px;
+        padding-bottom: 20px;
     }
 
     .openstudio-grid-item-content-detail-updated {
@@ -6730,6 +6734,44 @@ a.openstudio-add-new-content-link:hover  {
         margin-left: 20px;
     }
 
+    .openstudio-activity-title:nth-child(n+5) {
+        padding-top: 18px;
+        margin-bottom: -4px;
+    }
+
+    .openstudio-add-new-activity .openstudio-add-new {
+        padding-top: 0;
+    }
+
+    .openstudio-add-new-activity .openstudio-add-new > a {
+        margin-bottom: 1px;
+    }
+
+    .openstudio-add-new-activity .openstudio-add-new-folder > a {
+        margin-bottom: 9px;
+    }
+
+    .openstudio-activity-grid {
+        padding-bottom: 6px;
+    }
+
+    .openstudio-activity-grid:last-child {
+        padding-bottom: 0;
+        margin-bottom: -2px;
+    }
+
+    .openstudio-add-new-activity .openstudio-upload-container,
+    .openstudio-add-new-activity .openstudio-folder-content .openstudio-folder-background {
+        margin-bottom: 0;
+    }
+
+    .openstudio-activity-grid .openstudio-grid-item .openstudio-grid-item-content .openstudio-tooltip + a {
+        clear: left;
+        position: relative;
+        display: flex;
+        justify-content: center;
+    }
+
     /**
      * Comment feature
      */
@@ -7149,29 +7191,31 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-folder-content .openstudio-folder-background {
-        padding: 2px 25px 25px;
+        width: 88%;
+        padding-left: 15px;
+        padding-bottom: 15px;
+        padding-right: 15px;
     }
 
     .openstudio-folder-background .openstudio-content-folder-img {
-        width: calc(100% - 20px);
-        height: auto;
+        height: 131px;
+        width: 212px;
         border: 7px solid #ffffff;
     }
 
     .openstudio-folder-background .openstudio-default-folder-background {
         height: auto;
-        padding: 18px 20px 18px 18px;
+        padding: 11px 12px 10px 10px;
     }
 
     .openstudio-default-folder-background .openstudio-default-folder-img {
-        height: 158px;
-        padding-top: 25px;
+        height: 64px;
+        padding-bottom: 27px;
+        padding-top: 27px;
     }
 
     .openstudio-default-folder-background .openstudio-default-folder-empty-img {
-        height: 134px;
-        padding-bottom: 40px;
-        padding-top: 43px;
+        height: 80px;
     }
 
     .openstudio-item-request-feedback,
@@ -7493,13 +7537,6 @@ a.openstudio-add-new-content-link:hover  {
         margin-bottom: 0px;
     }
 
-    .openstudio-folder-content .openstudio-folder-background {
-        width: 88%;
-        padding-left: 15px;
-        padding-bottom: 15px;
-        padding-right: 15px;
-    }
-
     .openstudio-folder-view-title {
         width: 100%;
         display: block;
@@ -7507,16 +7544,6 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-folder-view-title-background {
         float: none;
-    }
-
-    .openstudio-folder-background .openstudio-default-folder-background {
-        height: 135px;
-    }
-
-    .openstudio-default-folder-background .openstudio-default-folder-img {
-        height: 80px;
-        padding-bottom: 27px;
-        padding-top: 27px;
     }
 
     .openstudio-upload-folder .openstudio-new-folder-title-device,
@@ -7562,8 +7589,6 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-folder-background .openstudio-content-folder-img {
         border: 4px solid #ffffff;
-        height: 131px;
-        width: 212px;
     }
 
     #fgroup_id_openstudio_upload_content_buttons .helptooltip {
@@ -7582,10 +7607,6 @@ a.openstudio-add-new-content-link:hover  {
      */
     .openstudio-grid-item-folder-preview img {
         width: 200px;
-    }
-
-    .openstudio-folder-background .openstudio-default-folder-background {
-        padding: 10px 12px 10px 10px;
     }
 
     .openstudio-folder-preview-default img  {
