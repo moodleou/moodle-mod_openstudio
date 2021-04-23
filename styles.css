@@ -549,6 +549,13 @@ button.openstudio-notification-stopbutton:focus {
     .path-mod-openstudio .openstudio-filter-mobile .openstudio-collapse-image img.icon {
         padding-right: 0;
     }
+    .path-mod-openstudio #osep-mainwrapper .openstudio-header .row-fluid {
+        flex-direction: column;
+    }
+    .path-mod-openstudio #osep-mainwrapper .openstudio-header .row-fluid .openstudio-subscribe-button,
+    .path-mod-openstudio #osep-mainwrapper .openstudio-header .row-fluid .openstudio-add-dashboard-button {
+        float: left;
+    }
 }
 
 @media (max-width: 419px) {
