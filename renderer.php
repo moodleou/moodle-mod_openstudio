@@ -983,9 +983,9 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             }
         }
 
-        $contentdata->description =
-                file_rewrite_pluginfile_urls($contentdata->description, 'pluginfile.php', $context->id, 'mod_openstudio',
-                        'description', $contentdata->id);
+        $description = file_rewrite_pluginfile_urls($contentdata->description, 'pluginfile.php', $context->id, 'mod_openstudio',
+                'description', $contentdata->id);
+        $contentdata->description = format_text($description, $contentdata->textformat);
 
         return $this->render_from_template('mod_openstudio/content_page', $contentdata);
     }
@@ -1128,6 +1128,10 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $user = user::get_user_by_id($folderdata->userid);
             $picture = new user_picture($user);
             $folderdata->userpicturehtml = $OUTPUT->render($picture);
+        }
+
+        if ($folderdata->description) {
+            $folderdata->description = format_text($folderdata->description, $folderdata->textformat);
         }
 
         $folderdata->addcontentthumbnail = $OUTPUT->image_url('uploads_rgb_32px', 'openstudio');

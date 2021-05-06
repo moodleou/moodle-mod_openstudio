@@ -404,3 +404,20 @@ Feature: Create Open Studio contents
     And I should see "Upload content to folder"
     And I click on "span.openstudio-new-folder-title" "css_element"
     Then the "value" attribute of "input#id_name" "css_element" should contain "Folder in My Activities"
+
+  Scenario: Convert to a link for post description
+    Given I log out
+    And I log in as "admin"
+    And I am on "Course 1" course homepage
+    And I navigate to "Plugins > Filters > Manage filters" in site administration
+    And I click on "On" "option" in the "Convert URLs into links and images" "table_row"
+    And I am on "Course 1" course homepage
+    When I follow "Test Open Studio name 1"
+    And I should see "Test Open Studio name 1"
+    And I follow "Add new content"
+    And I set the following fields to these values:
+      | Who can view this content | My module                 |
+      | Title                     | Test link                 |
+      | Description               | https://learn2.open.ac.uk |
+    And I press "Save"
+    Then "//a[@href='https://learn2.open.ac.uk']" "xpath_element" should exist
