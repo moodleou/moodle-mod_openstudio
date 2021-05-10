@@ -371,3 +371,41 @@ Feature: Open Studio notifications
     And I am on "Course 1" course homepage
     And I follow "Notification Studio"
     Then ".openstudio-navigation-notification-number" "css_element" should not exist
+
+  Scenario: Notification for folder in My Activities views
+    Given the following open studio "level1s" exist:
+      | openstudio  | name         | sortorder |
+      | OS1         | Block1       | 1         |
+    And the following open studio "level2s" exist:
+      | level1      | name         | sortorder |
+      | Block1      | Activity1    | 1         |
+    And the following open studio "level3s" exist:
+      | level2      | name         | sortorder | contenttype    |
+      | Activity1   | Content1.1   | 1         | folder         |
+    And I log in as "student2"
+    And I am on "Course 1" course homepage
+    And I follow "Notification Studio"
+    And I follow "My Content > My Activities" in the openstudio navigation
+    And I click on "Content1.1" "link" in the ".openstudio-grid-item" "css_element"
+    And I follow "Edit folder details and sharing"
+    And I set the field "Folder title" to "Content student 2"
+    And I press "Save"
+    And I log out
+    And I log in as "student1"
+    And I am on "Course 1" course homepage
+    And I follow "Notification Studio"
+    And I follow "My Content > My Activities" in the openstudio navigation
+    And I click on "Content1.1" "link" in the ".openstudio-grid-item" "css_element"
+    And I follow "Edit folder details and sharing"
+    And I set the field "Folder title" to "Content student 1"
+    And I press "Save"
+    And I follow "Shared Content > My Module" in the openstudio navigation
+    And I follow "Content student 2"
+    And I click on "0 Smiles" "text"
+    And I log out
+    And I log in as "student2"
+    And I am on "Course 1" course homepage
+    And I follow "Notification Studio"
+    And I follow "My Content > My Activities" in the openstudio navigation
+    And I click on "Content student 2" "link" in the ".openstudio-grid-item" "css_element"
+    And I should see "1" in the ".openstudio-navigation-notification-number" "css_element"

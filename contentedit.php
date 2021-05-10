@@ -627,7 +627,9 @@ if ($contentform->is_cancelled()) {
                     $context->id, 'mod_openstudio', 'description',
                     $contentformdata->sid, ['subdirs' => false], $contentformdatadescription['text']);
         }
-
+        if ($permissions->contentismine) {
+            flags::toggle($contentformdata->sid, flags::FOLLOW_CONTENT, 'on', $userid);
+        }
         $contentid = content::update(
                 $userid,
                 $contentformdata->sid,

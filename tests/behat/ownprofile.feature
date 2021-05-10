@@ -149,8 +149,8 @@ Feature: Own profile view in Open Studio
       When I follow "Test Open Studio name 1"
       And I follow "My content > My Activities" in the openstudio navigation
       And I click on "a.openstudio-profile-mypaticipation" "css_element"
-    Then I should see "comments made"
-    And I should see "viewed"
+      Then I should see "comments made"
+      And I should see "viewed"
       And I should see "Activity 1"
       And I should see "Activity 2"
       And I should see "Activity 3"
@@ -162,9 +162,9 @@ Feature: Own profile view in Open Studio
       And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 1"
       And I follow "My content > My Activities" in the openstudio navigation
-    And I click on "a.openstudio-profile-mypaticipation" "css_element"
-    Then I should see "comments made"
-    And I should see "viewed"
+      And I click on "a.openstudio-profile-mypaticipation" "css_element"
+      Then I should see "comments made"
+      And I should see "viewed"
       And I should see "Activity 1"
       And I should see "Activity 2"
       And I should see "Activity 3"
