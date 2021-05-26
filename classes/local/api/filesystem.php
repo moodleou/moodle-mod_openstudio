@@ -58,6 +58,7 @@ SELECT c.fileid, c.content, f.filearea
  WHERE c.openstudioid = ?
    AND f.component = ?
    AND f.contextid = ?
+   AND (f.filearea = ? OR f.filearea = ? OR filearea = ?)
 
  UNION
 
@@ -68,10 +69,12 @@ SELECT cv.fileid, cv.content, f.filearea
  WHERE c1.openstudioid = ?
    AND f.component = ?
    AND f.contextid = ?
+   AND (f.filearea = ? OR f.filearea = ? OR filearea = ?)
 
 EOF;
 
-            $params = [$studioid, self::COMPONENT, $contextid, $studioid, self::COMPONENT, $contextid];
+            $params = [$studioid, self::COMPONENT, $contextid, 'content', 'notebook', 'contentthumbnail', $studioid, self::COMPONENT,
+                    $contextid, 'content', 'notebook', 'contentthumbnail'];
             $result = $DB->get_recordset_sql($sql, $params);
             if (!$result->valid()) {
                 return false;
@@ -138,6 +141,7 @@ SELECT c.fileid, c.content, f.filearea
    AND f.contextid = ?
    AND c.deletedby IS NOT NULL
    AND c.deletedtime < ?
+   AND (f.filearea = ? OR f.filearea = ? OR filearea = ?)
 
  UNION
 
@@ -151,13 +155,15 @@ SELECT cv.fileid, cv.content, f.filearea
    AND f.contextid = ?
    AND cv.deletedby IS NOT NULL
    AND cv.deletedtime < ?
+   AND (f.filearea = ? OR f.filearea = ? OR filearea = ?)
 
 EOF;
 
                 // Find time which is 7 days before current time.
                 $old = (new \DateTime('7 days ago', \core_date::get_server_timezone_object()))->getTimestamp();
 
-                $params = [$studioid, self::COMPONENT, $contextid, $old, $studioid, self::COMPONENT, $contextid, $old];
+                $params = [$studioid, self::COMPONENT, $contextid, $old, 'content', 'notebook', 'contentthumbnail', $studioid, self::COMPONENT,
+                        $contextid, $old, 'content', 'notebook', 'contentthumbnail'];
                 $result = $DB->get_recordset_sql($sql, $params);
                 if (!$result->valid()) {
                     return false;
