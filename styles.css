@@ -5297,9 +5297,13 @@ a.openstudio-add-new-content-link:hover  {
         padding-top: 21px;
     }
     .path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue .yui3-button.closebutton {
-        margin: 8px 18px 0 9px;
-        width: fit-content;
-        height: fit-content;
+        margin: 8px 21px 0 9px;
+        padding: 0;
+    }
+    .path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue .yui3-button.closebutton:after {
+        display: block;
+        line-height: initial;
+        height: 30px;
     }
     .path-mod-openstudio .moodle-dialogue-base .openstudio-dialogue .moodle-dialogue-bd span {
         line-height: 21px;
