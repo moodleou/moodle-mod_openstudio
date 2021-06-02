@@ -205,4 +205,12 @@
         </div>
         {{/people}}
     </div>
+    {{#paging}}
+    <div class="openstudio-people-paging" id="openstudio-people-paging">
+        {{{paging}}}
+    </div>
+    {{/paging}}
+    <input type="hidden" id="view_sort_action_url" value="{{sortactionurl}}">
+    <input type="hidden" id="vid" value="{{vid}}">
+    <input type="hidden" id="groupid" value="{{selectedgroupid}}">
 </div>

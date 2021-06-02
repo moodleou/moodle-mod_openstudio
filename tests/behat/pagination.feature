@@ -3,12 +3,62 @@ Feature: Pagination Open Studio stream views
 
     Background: Setup course and studio
         Given the following "users" exist:
-            | username | firstname | lastname | email |
-            | teacher1 | Teacher | 1 | teacher1@asd.com |
-            | student1 | Student | 1 | student1@asd.com |
-            | student2 | Student | 2 | student2@asd.com |
-            | student3 | Student | 3 | student3@asd.com |
-            | student4 | Student | 4 | student4@asd.com |
+          | username  | firstname | lastname | email            |
+          | teacher1  | Teacher   | 1        | teacher1@asd.com |
+          | student1  | Student   | 1        | student1@asd.com |
+          | student2  | Student   | 2        | student2@asd.com |
+          | student3  | Student   | 3        | student3@asd.com |
+          | student4  | Student   | 4        | student4@asd.com |
+          | student5  | Student   | 1        | student5@asd.com |
+          | student6  | Student   | 2        | student6@asd.com |
+          | student7  | Student   | 3        | student7@asd.com |
+          | student8  | Student   | 4        | student8@asd.com |
+          | student9  | Student   | 1        | student5@asd.com |
+          | student10 | Student   | 2        | student6@asd.com |
+          | student11 | Student   | 3        | student7@asd.com |
+          | student12 | Student   | 4        | student8@asd.com |
+          | student13 | Student   | 1        | student5@asd.com |
+          | student14 | Student   | 2        | student6@asd.com |
+          | student15 | Student   | 3        | student7@asd.com |
+          | student16 | Student   | 4        | student8@asd.com |
+          | student17 | Student   | 1        | student5@asd.com |
+          | student18 | Student   | 2        | student6@asd.com |
+          | student19 | Student   | 3        | student7@asd.com |
+          | student20 | Student   | 4        | student8@asd.com |
+          | student21 | Student   | 2        | student6@asd.com |
+          | student22 | Student   | 3        | student7@asd.com |
+          | student23 | Student   | 4        | student8@asd.com |
+          | student24 | Student   | 1        | student5@asd.com |
+          | student25 | Student   | 2        | student6@asd.com |
+          | student26 | Student   | 3        | student7@asd.com |
+          | student27 | Student   | 4        | student8@asd.com |
+          | student28 | Student   | 1        | student5@asd.com |
+          | student29 | Student   | 2        | student6@asd.com |
+          | student30 | Student   | 3        | student7@asd.com |
+          | student31 | Student   | 4        | student8@asd.com |
+          | student32 | Student   | 2        | student6@asd.com |
+          | student33 | Student   | 3        | student7@asd.com |
+          | student34 | Student   | 4        | student8@asd.com |
+          | student35 | Student   | 1        | student5@asd.com |
+          | student36 | Student   | 2        | student6@asd.com |
+          | student37 | Student   | 3        | student7@asd.com |
+          | student38 | Student   | 4        | student8@asd.com |
+          | student39 | Student   | 1        | student5@asd.com |
+          | student40 | Student   | 2        | student6@asd.com |
+          | student41 | Student   | 3        | student7@asd.com |
+          | student42 | Student   | 4        | student8@asd.com |
+          | student43 | Student   | 4        | student8@asd.com |
+          | student44 | Student   | 2        | student6@asd.com |
+          | student45 | Student   | 3        | student7@asd.com |
+          | student46 | Student   | 4        | student8@asd.com |
+          | student47 | Student   | 1        | student5@asd.com |
+          | student48 | Student   | 2        | student6@asd.com |
+          | student49 | Student   | 3        | student7@asd.com |
+          | student50 | Student   | 4        | student8@asd.com |
+          | student51 | Student   | 1        | student5@asd.com |
+          | student52 | Student   | 2        | student6@asd.com |
+          | student53 | Student   | 3        | student7@asd.com |
+          | student54 | Student   | 4        | student8@asd.com |
         And the following "courses" exist:
             | fullname | shortname | category |
             | Course 1 | C1 | 0 |
@@ -969,3 +1019,78 @@ Feature: Pagination Open Studio stream views
         And I should see "4" in the ".openstudio-desktop-paging" "css_element"
         And I should see "5" in the ".openstudio-desktop-paging" "css_element"
         And I should see "6" in the ".openstudio-desktop-paging" "css_element"
+
+  Scenario: Test Pagination numbers in people page
+    When I log out
+    And I log in as "teacher1"
+    And I am on "Course 1" course homepage
+    And I follow "Test Open Studio name 1"
+    And I wait "2" seconds
+    And the following open studio "contents" exist:
+      | openstudio | user      | name         | description                 | visibility |
+      | OS1        | student1  | Test content | Test content 1 description  | module     |
+      | OS1        | student2  | Test content | Test content 2 description  | module     |
+      | OS1        | student3  | Test content | Test content 3 description  | module     |
+      | OS1        | student4  | Test content | Test content 4 description  | module     |
+      | OS1        | student5  | Test content | Test content 5 description  | module     |
+      | OS1        | student6  | Test content | Test content 6 description  | module     |
+      | OS1        | student7  | Test content | Test content 7 description  | module     |
+      | OS1        | student8  | Test content | Test content 8 description  | module     |
+      | OS1        | student9  | Test content | Test content 9 description  | module     |
+      | OS1        | student10 | Test content | Test content 10 description | module     |
+      | OS1        | student11 | Test content | Test content 11 description | module     |
+      | OS1        | student12 | Test content | Test content 12 description | module     |
+      | OS1        | student13 | Test content | Test content 13 description | module     |
+      | OS1        | student14 | Test content | Test content 14 description | module     |
+      | OS1        | student15 | Test content | Test content 15 description | module     |
+      | OS1        | student16 | Test content | Test content 16 description | module     |
+      | OS1        | student17 | Test content | Test content 17 description | module     |
+      | OS1        | student18 | Test content | Test content 18 description | module     |
+      | OS1        | student19 | Test content | Test content 19 description | module     |
+      | OS1        | student20 | Test content | Test content 20 description | module     |
+      | OS1        | student21 | Test content | Test content 21 description | module     |
+      | OS1        | student22 | Test content | Test content 22 description | module     |
+      | OS1        | student23 | Test content | Test content 23 description | module     |
+      | OS1        | student24 | Test content | Test content 24 description | module     |
+      | OS1        | student25 | Test content | Test content 25 description | module     |
+      | OS1        | student26 | Test content | Test content 26 description | module     |
+      | OS1        | student27 | Test content | Test content 27 description | module     |
+      | OS1        | student28 | Test content | Test content 28 description | module     |
+      | OS1        | student29 | Test content | Test content 29 description | module     |
+      | OS1        | student30 | Test content | Test content 30 description | module     |
+      | OS1        | student31 | Test content | Test content 31 description | module     |
+      | OS1        | student32 | Test content | Test content 32 description | module     |
+      | OS1        | student33 | Test content | Test content 33 description | module     |
+      | OS1        | student34 | Test content | Test content 34 description | module     |
+      | OS1        | student35 | Test content | Test content 35 description | module     |
+      | OS1        | student36 | Test content | Test content 36 description | module     |
+      | OS1        | student37 | Test content | Test content 37 description | module     |
+      | OS1        | student38 | Test content | Test content 38 description | module     |
+      | OS1        | student39 | Test content | Test content 39 description | module     |
+      | OS1        | student40 | Test content | Test content 40 description | module     |
+      | OS1        | student41 | Test content | Test content 41 description | module     |
+      | OS1        | student42 | Test content | Test content 42 description | module     |
+      | OS1        | student43 | Test content | Test content 43 description | module     |
+      | OS1        | student44 | Test content | Test content 44 description | module     |
+      | OS1        | student45 | Test content | Test content 45 description | module     |
+      | OS1        | student46 | Test content | Test content 46 description | module     |
+      | OS1        | student47 | Test content | Test content 47 description | module     |
+      | OS1        | student48 | Test content | Test content 48 description | module     |
+      | OS1        | student49 | Test content | Test content 49 description | module     |
+      | OS1        | student50 | Test content | Test content 50 description | module     |
+      | OS1        | student51 | Test content | Test content 51 description | module     |
+      | OS1        | student52 | Test content | Test content 52 description | module     |
+      | OS1        | student53 | Test content | Test content 53 description | module     |
+    When I reload the page
+    And I follow "People" in the openstudio navigation
+         # At the 1 begining page, see from 1 to 6 and last page 9
+    And I should see "1" in the ".openstudio-desktop-paging .current-page" "css_element"
+    And I should see "2" in the ".openstudio-desktop-paging" "css_element"
+      # Check pagination in mobile
+    When I change viewport size to "320x768"
+    And I click on "button.nav-link" "css_element"
+        # In page 1, show next button
+    And I should see "Next" in the ".openstudio-mobile-paging-next" "css_element"
+    And I click on ".openstudio-mobile-paging-next" "css_element"
+    Then I should see "Page 2" in the ".openstudio-mobile-paging-current" "css_element"
+    And ".openstudio-mobile-paging-previous" "css_element" should exist

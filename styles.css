@@ -3677,7 +3677,11 @@ div.openstudio-profile-details div.openstudio-profile-row:nth-of-type(odd)
 }
 
 div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
-    margin-bottom: 60px;
+    margin-bottom: 20px;
+}
+.openstudio-people-paging {
+    text-align: center;
+    font-size: 1.14285em;
 }
 
 .openstudio-profile-info {

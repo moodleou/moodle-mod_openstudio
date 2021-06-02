@@ -37,6 +37,13 @@ require_once(dirname(__FILE__).'/lib.php');
 
 $id = optional_param('id', 0, PARAM_INT); // Course_module ID.
 $groupid = optional_param('groupid', 0, PARAM_INT); // Group id to filter against.
+$pagesize = mod_openstudio\local\util\defaults::STREAMPAGESIZE;
+$pagedefault = 0;
+$pagesize = optional_param('pagesize', $pagesize, PARAM_INT);
+$pagestart = optional_param('page', $pagedefault, PARAM_INT);
+if ($pagestart < 0) {
+    $pagestart = 0;
+}
 
 // Page init and security checks.
 $coursedata = util::render_page_init($id, array('mod/openstudio:view'));
@@ -97,7 +104,7 @@ $peopledata = (object) array('people' => array(), 'total' => 0);
 
 $peopledatatemp = user::get_all($cminstance->id,
     $permissions->groupmode, $permissions->groupingid, $groupid,
-    $filterflag, $fsort, $osort, null, 0, true);
+    $filterflag, $fsort, $osort, $pagestart, $pagesize, true);
 
 if (!empty($peopledatatemp)) {
     $peopledata->total = $peopledatatemp->total;
@@ -145,21 +152,35 @@ if (!empty($peopledatatemp)) {
 }
 
 // Sort action url.
-$sortactionurl = new moodle_url('/mod/openstudio/people.php', ['id' => $id, 'osort' => $osort, 'fsort' => $fsort]);
+$sortactionurl = new moodle_url('/mod/openstudio/people.php', ['id' => $id, 'osort' => $osort, 'fsort' => $fsort, 'pagesize' => $pagesize]);
 $sortactionurl = $sortactionurl->out(false);
 $peopledata->sortactionurl = $sortactionurl;
-
+$peopledata->vid = $vid;
 $nextosort = 1 - $osort;
-
 $sortbydateurl = new moodle_url('/mod/openstudio/people.php', ['id' => $id, 'osort' => $nextosort,
-        'fsort' => stream::SORT_BY_DATE, 'vid' => $vid, 'groupid' => $groupid], 'date');
+        'fsort' => stream::SORT_BY_DATE, 'vid' => $vid, 'groupid' => $groupid, 'pagesize' => $pagesize, 'page' => $pagestart], 'date');
 $sortbydateurl = $sortbydateurl->out(false);
 $peopledata->sortbydateurl = $sortbydateurl;
 
 $sortbyusernameurl = new moodle_url('/mod/openstudio/people.php', ['id' => $id, 'osort' => $nextosort,
-        'fsort' => stream::SORT_BY_USERNAME, 'vid' => $vid, 'groupid' => $groupid], 'username');
+        'fsort' => stream::SORT_BY_USERNAME, 'vid' => $vid, 'groupid' => $groupid, 'pagesize' => $pagesize, 'page' => $pagestart], 'username');
 $sortbyusernameurl = $sortbyusernameurl->out(false);
 $peopledata->sortbyusernameurl = $sortbyusernameurl;
+
+$viewsizes[0] = (object) ['size' => 50, 'selected' => false];
+$viewsizes[1] = (object) ['size' => 100, 'selected' => false];
+$viewsizes[2] = (object) ['size' => 150, 'selected' => false];
+$viewsizes[3] = (object) ['size' => 250, 'selected' => false];
+
+foreach ($viewsizes as $key => $value) {
+    if ($value->size == $pagesize) {
+        $viewsizes[$key]->selected = true;
+    }
+}
+$peopledata->pageurl = $pageurl;
+$peopledata->streamdatapagesize = $pagesize;
+$peopledata->pagestart = $pagestart;
+$peopledata->viewsizes = $viewsizes;
 
 $sortbydate = false;
 $sortbyusername = false;
@@ -193,7 +214,7 @@ $peopledata->selectedgroupid = $groupid;
 
 // Breadcrumb.
 $peoplepageurl = new moodle_url('/mod/openstudio/people.php',
-        array('id' => $cm->id, 'vid' => content::VISIBILITY_MODULE));
+        ['id' => $cm->id, 'vid' => content::VISIBILITY_MODULE]);
 $crumbarray[get_string('menupeople', 'openstudio')] = $peoplepageurl;
 util::add_breadcrumb($PAGE, $cm->id, navigation_node::TYPE_ACTIVITY, $crumbarray);
 
@@ -212,5 +233,6 @@ echo $html;
 
 echo $renderer->people_page($permissions, $peopledata); // Body.
 
+$PAGE->requires->js_call_amd('mod_openstudio/viewhelper', 'init');
 // Finish the page.
 echo $OUTPUT->footer();

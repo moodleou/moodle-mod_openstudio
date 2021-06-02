@@ -777,7 +777,12 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $peopledata->showmultigroup = $showmultigroup;
         $peopledata->commentsicon = $OUTPUT->image_url('comments_rgb_32px', 'openstudio');
         $peopledata->viewedicon = $OUTPUT->image_url('viewed_rgb_32px', 'openstudio');
-
+        if ($peopledata && !empty($peopledata->streamdatapagesize)) {
+            $pb = renderer_utils::openstudio_render_paging_bar($peopledata);
+            $paging = $this->render($pb);
+            $peopledata->paging = $paging;
+            $peopledata->multiplepages = $peopledata->streamdatapagesize < $peopledata->total;
+        }
         return $this->render_from_template('mod_openstudio/people_page', $peopledata);
     }
 

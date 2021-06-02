@@ -164,7 +164,11 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
         redirectURL: function() {
             var url = $('#view_sort_action_url').val();
             var vid = $('#vid').val();
-
+            var groupidelement = $('#groupid');
+            if (groupidelement.length > 0) {
+                var groupid = groupidelement.val();
+                url = url + '&groupid=' + groupid;
+            }
             url = url + '&vid=' + vid;
 
             $('.openstudio-filter-select-box:visible').each(function() {
