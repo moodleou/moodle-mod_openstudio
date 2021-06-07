@@ -1317,8 +1317,9 @@ EOF;
                                 'filename'  => $contentfile->get_filename(),
                                 'userid'    => $contentfile->get_userid()
                         );
-                        @$fs->convert_image(
+                        $thumbnail = @$fs->convert_image(
                                 $contenttumbnailfile, $contentfile, defaults::CONTENTTHUMBNAIL_WIDTH, null, true, null);
+                        self::rotate_thumbnail_to_original($contentfile->get_id(), $thumbnail, $contenttumbnailfile);
                     } else {
                         $contenttumbnailfile = array(
                                 'filearea' => $newfilearea, 'itemid' => $contentfile->get_itemid());
@@ -1686,5 +1687,91 @@ EOF;
         // Delete the temp file.
         $newfile->delete();
         unlink($tmpfilepath);
+    }
+
+    /**
+     * @param int|\stored_file $originalfileid original file id or stored file object
+     * @param \stored_file $thumbnailfile thumbnail file object
+     * @param \stdClass|array $filerecord object or array describing thumbnail file
+     * @return \stored_file|bool
+     * @throws \file_exception
+     */
+    public static function rotate_thumbnail_to_original($originalfileid, $thumbnailfile, $filerecord) {
+        global $CFG;
+        $fs = get_file_storage();
+
+        if ($originalfileid instanceof \stored_file) {
+            $originalfileid = $originalfileid->get_id();
+        }
+
+        if (!$originalfile = $fs->get_file_by_id($originalfileid)) {
+            throw new \file_exception('storedfileproblem', 'File does not exist');
+        }
+        if (!$imageinfo = $originalfile->get_imageinfo()) {
+            throw new \file_exception('storedfileproblem', 'File is not an image');
+        }
+
+        if (isset($CFG->filedir)) {
+            $filedir = $CFG->filedir;
+        } else {
+            $filedir = $CFG->dataroot . '/filedir';
+        }
+
+        if (!isset($filerecord['mimetype'])) {
+            $filerecord['mimetype'] = $imageinfo['mimetype'];
+        }
+
+        try {
+            $contenthash = $originalfile->get_contenthash();
+            $l1 = $contenthash[0] . $contenthash[1];
+            $l2 = $contenthash[2] . $contenthash[3];
+            $pathfile = "{$filedir}/{$l1}/{$l2}/{$contenthash}";
+            $exif = @exif_read_data($pathfile);
+
+            // Rotating image.
+            $image = imagecreatefromstring($thumbnailfile->get_content());
+            if (isset($exif['Orientation'])) {
+                switch ($exif['Orientation']) {
+                    case 8:
+                        $image = imagerotate($image, 90, 0);
+                        break;
+                    case 3:
+                        $image = imagerotate($image, 180, 0);
+                        break;
+                    case 6:
+                        $image = imagerotate($image, -90, 0);
+                        break;
+                }
+
+                // Get image content.
+                ob_start();
+                switch ($filerecord['mimetype']) {
+                    case 'image/gif':
+                        imagegif($image);
+                        break;
+
+                    case 'image/jpeg':
+                        imagejpeg($image);
+                        break;
+
+                    case 'image/png':
+                        imagepng($image);
+                        break;
+
+                    default:
+                        throw new file_exception('storedfileproblem', 'Unsupported mime type');
+                }
+                $content = ob_get_contents();
+                ob_end_clean();
+                imagedestroy($image);
+
+                // Replace to rotated image.
+                $thumbnailfile->delete();
+                return $fs->create_file_from_string($filerecord, $content);
+            }
+
+        } catch (\Exception $ex) {
+            return false;
+        }
     }
 }

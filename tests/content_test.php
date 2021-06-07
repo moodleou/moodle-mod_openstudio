@@ -675,14 +675,14 @@ class content_testcase extends \advanced_testcase {
         // Add to server to simulate file upload.
         $context = \context_module::instance($this->studiolevels->cmid);
         $filedata = (object) array(
-            'filearea' => 'content',
-            'filepath' => '/',
-            'filename' => 'geotagged.jpg',
-            'component' => 'mod_openstudio',
-            'datecreated' => time(),
-            'datemodified' => time(),
-            'itemid' => 1,
-            'contextid' => $context->id
+                'filearea' => 'content',
+                'filepath' => '/',
+                'filename' => 'geotagged.jpg',
+                'component' => 'mod_openstudio',
+                'datecreated' => time(),
+                'datemodified' => time(),
+                'itemid' => 1,
+                'contextid' => $context->id
         );
         $fs = get_file_storage();
         $fs->create_file_from_string($filedata, 'this really is not a jpg');
@@ -690,5 +690,41 @@ class content_testcase extends \advanced_testcase {
         $this->expectException('moodle_exception');
         $this->expectExceptionMessage('There was an error when processing your image');
         \mod_openstudio\local\api\content::strip_metadata_for_image(['file' => $filedata], $context, 1);
+    }
+
+    public function test_rotate_image() {
+        global $CFG;
+        $this->resetAfterTest(true);
+
+        $context = \context_module::instance($this->studiolevels->cmid);
+
+        // Path to the error image.
+        $filepath = $CFG->dirroot . '/mod/openstudio/tests/importfiles/20191116_170509.jpg';
+        $fs = get_file_storage();
+        $contenttumbnailfile = (object) array(
+                'contextid' => $context->id,
+                'component' => 'mod_openstudio',
+                'filearea' => 'content',
+                'itemid' => 1,
+                'filepath' => '/',
+                'filename' => '20191116_170509.jpg',
+        );
+        $contentfile = $fs->create_file_from_pathname($contenttumbnailfile, $filepath);
+
+        // Convert to the error thumbnail.
+        $contenttumbnailfile->filearea = 'contentthumbnail';
+        $errorthumbnail = @$fs->convert_image(
+                $contenttumbnailfile, $contentfile, \mod_openstudio\local\util\defaults::CONTENTTHUMBNAIL_WIDTH, null, true, null);
+
+        $errorimageinfo = $errorthumbnail->get_imageinfo();
+
+        // Rotate the error thumbnail to original orientation.
+        $contenttumbnailfile = (array) $contenttumbnailfile;
+        $rotatedimg = \mod_openstudio\local\api\content::rotate_thumbnail_to_original($contentfile->get_id(), $errorthumbnail,
+                $contenttumbnailfile);
+        $rotatedimageinfo = $rotatedimg->get_imageinfo();
+
+        $this->assertEquals($errorimageinfo['width'], $rotatedimageinfo['height']);
+        $this->assertEquals($errorimageinfo['height'], $rotatedimageinfo['width']);
     }
 }
