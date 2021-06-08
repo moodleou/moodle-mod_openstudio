@@ -556,6 +556,23 @@ button.openstudio-notification-stopbutton:focus {
     .path-mod-openstudio #osep-mainwrapper .openstudio-header .row-fluid .openstudio-add-dashboard-button {
         float: left;
     }
+
+    div.openstudio-comment-leftcolumn {
+        padding-left: 5px;
+        margin-right: -5px;
+    }
+
+    .openstudio-content-view-primary .openstudio-comment-metadata .openstudio-comment-leftcolumn {
+        padding-bottom: 5px;
+    }
+
+    div.openstudio-comment-leftcolumn.openstudio-comment-owner {
+        padding-top: 5px;
+    }
+
+    span.openstudio-comment-delete-short-link {
+        padding-right: 5px;
+    }
 }
 
 @media (max-width: 419px) {
