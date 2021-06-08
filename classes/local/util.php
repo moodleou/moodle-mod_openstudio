@@ -316,15 +316,7 @@ class util {
 
         // If admin pages, the page is rendered like a standard Moodle module with a left-hand navigation bar.
         // Main studio workspace pages takes the full-page width with no sidebars.
-        if ($view === 'manage') {
-            $PAGE->set_pagelayout('admin');
-        } else {
-            $PAGE->set_pagelayout('base');
-            if ($PAGE->theme->name === 'ou') {
-                $PAGE->set_pagelayout('fullpage');
-            }
-        }
-
+        $PAGE->set_pagelayout('standard');
     }
 
     /**

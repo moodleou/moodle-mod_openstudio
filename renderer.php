@@ -63,7 +63,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $coursedata, $permissions, $theme, $sitename = 'Design', $searchtext = '',
             $viewmode = content::VISIBILITY_MODULE) {
         global $OUTPUT, $PAGE, $USER, $CFG;
-
+        // This will force the setting navigation appear in boost theme.
+        $PAGE->force_settings_menu();
         $cm = $coursedata->cm;
         $cmid = $cm->id;
 
@@ -255,12 +256,6 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             }
         }
 
-        // Generate admin items.
-        $adminmenuitem = $this->navigation_admin($coursedata, $permissions);
-        if ($adminmenuitem['hassubnavigation']) {
-            $data->navigation[] = $adminmenuitem;
-        }
-
         if (!isguestuser()) {
             $data->notificationicon = $OUTPUT->image_url('notifications_rgb_32px', 'openstudio');
             $data->notifications = [];
@@ -322,147 +317,6 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         return $this->render_from_template('mod_openstudio/header', $data);
 
-    }
-
-    /**
-     * This function renders admin menu items for Open Studio module.
-     *
-     * @param int $cmid The course module id.
-     * @param object $permissions The permission object for the given user/view.
-     * @return menu items array.
-     */
-    public function navigation_admin($coursedata, $permissions) {
-        global $OUTPUT, $CFG;
-
-        $cm = $coursedata->cm;
-        $course = $coursedata->course;
-        $context = context_module::instance($cm->id);
-
-        $menuitem = array(
-                'hassubnavigation' => false,
-                'subnavigation' => array()
-        );
-
-        if ($permissions->addinstance || $permissions->managelevels) {
-
-            if ($permissions->addinstance) {
-                $redirectorurl = new moodle_url('/course/modedit.php',
-                    array('update' => $cm->id, 'return' => 0, 'sr' => ''));
-                $submenuitem = array(
-                        'name' => get_string('navadmineditsettings', 'openstudio'),
-                        'url' => $redirectorurl
-                );
-                $menuitem['hassubnavigation'] = true;
-                $menuitem['subnavigation'][] = $submenuitem;
-            }
-            if ($permissions->managelevels) {
-                $redirectorurl = new moodle_url('/mod/openstudio/manageblocks.php',
-                    array('id' => $cm->id));
-
-                $submenuitem = array(
-                        'name' => get_string('navadminmanagelevel', 'openstudio'),
-                        'url' => $redirectorurl
-                );
-                $menuitem['hassubnavigation'] = true;
-                $menuitem['subnavigation'][] = $submenuitem;
-            }
-            if (has_capability('moodle/role:assign', $permissions->coursecontext)) {
-                $redirectorurl = new moodle_url('/admin/roles/assign.php',
-                    array('contextid' => $context->id));
-
-                $submenuitem = array(
-                        'name' => get_string('navadminassignroles', 'openstudio'),
-                        'url' => $redirectorurl
-                );
-                $menuitem['hassubnavigation'] = true;
-                $menuitem['subnavigation'][] = $submenuitem;
-            }
-            if (has_capability('moodle/role:review', $permissions->coursecontext)) {
-                $redirectorurl = new moodle_url('/admin/roles/permissions.php',
-                array('contextid' => $context->id));
-
-                $submenuitem = array(
-                        'name' => get_string('navadminpermissions', 'openstudio'),
-                        'url' => $redirectorurl
-                );
-                $menuitem['hassubnavigation'] = true;
-                $menuitem['subnavigation'][] = $submenuitem;
-            }
-            if (has_any_capability(array('moodle/role:assign',
-                    'moodle/role:safeoverride',
-                    'moodle/role:override',
-                    'moodle/role:manage'),
-                    $permissions->coursecontext)) {
-
-                $redirectorurl = new moodle_url('/admin/roles/check.php',
-                    array('contextid' => $context->id));
-
-                $submenuitem = array(
-                        'name' => get_string('navadmincheckpermissions', 'openstudio'),
-                        'url' => $redirectorurl
-                );
-                $menuitem['hassubnavigation'] = true;
-                $menuitem['subnavigation'][] = $submenuitem;
-            }
-            if (has_capability('moodle/filter:manage', $permissions->coursecontext)) {
-                $redirectorurl = new moodle_url('/filter/manage.php',
-                    array('contextid' => $context->id));
-
-                $submenuitem = array(
-                        'name' => get_string('navadminfilters', 'openstudio'),
-                        'url' => $redirectorurl
-                );
-                $menuitem['hassubnavigation'] = true;
-                $menuitem['subnavigation'][] = $submenuitem;
-            }
-            if (has_capability('report/log:view', $permissions->coursecontext)) {
-                $redirectorurl = new moodle_url('/report/log/index.php',
-                    array('id' => $course->id, 'modid' => $cm->id, 'chooselog' => 1));
-
-                $submenuitem = array(
-                        'name' => get_string('navadminlogs', 'openstudio'),
-                        'url' => $redirectorurl
-                );
-                $menuitem['hassubnavigation'] = true;
-                $menuitem['subnavigation'][] = $submenuitem;
-            }
-            if (has_capability('mod/openstudio:managecontent', $permissions->coursecontext)) {
-                $redirectorurl = new moodle_url('/mod/openstudio/reportusage.php',
-                    array('id' => $cm->id));
-
-                $submenuitem = array(
-                        'name' => get_string('navadminusagereport', 'openstudio'),
-                        'url' => $redirectorurl
-                );
-                $menuitem['hassubnavigation'] = true;
-                $menuitem['subnavigation'][] = $submenuitem;
-            }
-            if (file_exists("{$CFG->dirroot}/report/restrictuser/lib.php") &&
-                    has_any_capability(array('report/restrictuser:view',
-                            'report/restrictuser:restrict',
-                            'report/restrictuser:removerestrict'),
-                            context_module::instance($cm->id))) {
-                // Restrict user report available.
-                require_once("{$CFG->dirroot}/report/restrictuser/lib.php");
-                $redirectorurl = report_restrictuser_get_user_navurl($context);
-
-                $submenuitem = array(
-                        'name' => get_string('navlink', 'report_restrictuser'),
-                        'url' => $redirectorurl
-                );
-                $menuitem['hassubnavigation'] = true;
-                $menuitem['subnavigation'][] = $submenuitem;
-            }
-
-            if (!empty($menuitem['subnavigation'])) {
-                $menuitem['name'] = get_string('menuadministration', 'openstudio');
-                $menuitem['url'] = '#';
-                $menuitem['pix'] = $OUTPUT->image_url('administration_rgb_32px', 'openstudio');
-                $menuitem['class'] = 'administration';
-            }
-        }
-
-        return $menuitem;
     }
 
     /**

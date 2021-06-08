@@ -157,7 +157,7 @@ Feature: Open Studio group stream
         And I log in as "teacher1"
         And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
-        And I follow "Administration > Edit settings" in the openstudio navigation
+        And I navigate to "Edit settings" in current page administration
         And I set the following fields to these values:
           | Group mode | No groups |
           | Grouping   | None      |
@@ -170,7 +170,7 @@ Feature: Open Studio group stream
         And I should not see "Test My Group Board View 3"
 
         # When groups mode is separate groups - Each group member can only see their own group, others are invisible
-        And I follow "Administration > Edit settings" in the openstudio navigation
+        And I navigate to "Edit settings" in current page administration
         And I set the following fields to these values:
           | Group mode | Separate groups      |
           | Grouping   | grouping1            |
@@ -193,7 +193,7 @@ Feature: Open Studio group stream
         And I log in as "teacher1"
         And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
-        And I follow "Administration > Edit settings" in the openstudio navigation
+        And I navigate to "Edit settings" in current page administration
         And I set the following fields to these values:
           | Group mode | Visible groups      |
         And I press "Save and display"

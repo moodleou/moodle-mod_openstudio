@@ -1163,3 +1163,26 @@ function openstudio_get_extra_capabilities() {
             'report/restrictuser:removerestrict');
 }
 
+/**
+ * This function extends the settings navigation block for the module.
+ *
+ * @param settings_navigation $settings
+ * @param navigation_node $modnode
+ */
+function openstudio_extend_settings_navigation(settings_navigation $settings,
+        navigation_node $modnode)
+{
+    global $PAGE, $USER;
+    if (has_capability('mod/openstudio:managelevels', $PAGE->context, $USER->id)) {
+        $node = navigation_node::create(get_string('navadminmanagelevel', 'openstudio'),
+                new \moodle_url('/mod/openstudio/manageblocks.php', ['id' => $PAGE->cm->id]), navigation_node::TYPE_SETTING,
+                'openstudiomanagelevel');
+        $modnode->add_node($node, 'roleassign');
+    }
+    if (has_capability('mod/openstudio:managecontent', $PAGE->context)) {
+        $node = navigation_node::create(get_string('navadminusagereport', 'openstudio'),
+                new \moodle_url('/mod/openstudio/reportusage.php', ['id' => $PAGE->cm->id]), navigation_node::TYPE_SETTING,
+                'openstudioreportusage');
+        $modnode->add_node($node, 'backup');
+    }
+}

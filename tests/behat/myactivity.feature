@@ -40,7 +40,7 @@ Feature: My Activity view in Open Studio
       | ID number                    | OS1                          |
     And all users have accepted the plagarism statement for "OS1" openstudio
     And I follow "Test Open Studio name 1"
-    And I follow "Administration > Manage levels" in the openstudio navigation
+    And I navigate to "Manage levels" in current page administration
     And I press "Add another Block"
     And I set the field "Block Name" to "Block 1"
     And I press "Save Changes"
@@ -178,7 +178,7 @@ Feature: My Activity view in Open Studio
     And "//div[@class='openstudio-container']/div[position()=6 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 1.1 Required')]" "xpath_element" should exist
     And I should see "Activity 3" in the "div.openstudio-container > div:nth-child(7)" "css_element"
     # Add new content to Activity 1.
-    When I follow "Administration > Manage levels" in the openstudio navigation
+    And I navigate to "Manage levels" in current page administration
     And I follow "Block 1"
     And I follow "Activity 1"
     And I press "Add another Content"
@@ -195,7 +195,7 @@ Feature: My Activity view in Open Studio
     And I should see "Activity 3" in the "div.openstudio-container > div:nth-child(7)" "css_element"
     And "//div[@class='openstudio-container']/div[position()=8 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 3.1')]" "xpath_element" should exist
     # Add new Block 2.
-    When I follow "Administration > Manage levels" in the openstudio navigation
+    And I navigate to "Manage levels" in current page administration
     And I press "Add another Block"
     And I set the field "Block Name" to "Block 2"
     And I press "Save Changes"

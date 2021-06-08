@@ -28,7 +28,7 @@ I view report usage
       | ID number                    | OS1                          |
     And all users have accepted the plagarism statement for "OS1" openstudio
     And I follow "Test Open Studio name 1"
-    And I follow "Administration > Manage levels" in the openstudio navigation
+    And I navigate to "Manage levels" in current page administration
     And I press "Add another Block"
     And I set the field "Block Name" to "Block 1"
     And I press "Save Changes"
@@ -76,7 +76,7 @@ I view report usage
       | Description               | Test My Activities View 3 Add web/embed link |
       | Web link                  | https://www.youtube.com/watch?v=ktAnpf_nu5c  |
     And I press "Save"
-    And I follow "Administration > Report usage" in the openstudio navigation
+    And I navigate to "Report usage" in current page administration
     And I should see "1" in the "//table[1]/tbody/tr[2]/td[6]" "xpath_element"
     And I should see "1" in the "//table[2]/tbody/tr[2]/td[5]" "xpath_element"
     And I should see "1" in the "//table[3]/tbody/tr[2]/td[6]" "xpath_element"

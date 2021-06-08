@@ -28,7 +28,7 @@ Feature: Open Studio share to view setting is enable
       | Enable share to view | 1                            |
     And all users have accepted the plagarism statement for "OS1" openstudio
     And I follow "Test Open Studio name 1"
-    And I follow "Administration > Manage levels" in the openstudio navigation
+    And I navigate to "Manage levels" in current page administration
     And I press "Add another Block"
     And I set the field "Block Name" to "Block 1"
     And I press "Save Changes"
@@ -87,7 +87,7 @@ Feature: Open Studio share to view setting is enable
     And I should see "Test My Activities View 1"
     And I should see "Test My Activities View 2"
     And I should not see "Share to view is enabled"
-    And I follow "Administration > Edit" in the openstudio navigation
+    And I navigate to "Edit settings" in current page administration
     And I follow "Expand all"
     And I set the field "Enable share to view" to "0"
     And I press "Save and display"

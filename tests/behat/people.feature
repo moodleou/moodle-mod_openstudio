@@ -264,7 +264,7 @@ Feature: Open Studio people view
         And I log in as "teacher1"
         And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
-        And I follow "Administration > Edit" in the openstudio navigation
+        And I navigate to "Edit settings" in current page administration
         And I follow "Expand all"
         And I set the field "Grouping" to "None"
         And I press "Save and display"

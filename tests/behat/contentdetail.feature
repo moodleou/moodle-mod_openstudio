@@ -687,7 +687,7 @@ Feature: Create and edit Open Studio contents detail
         And I log in as "admin"
         And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
-        And I follow "Administration > Edit settings" in the openstudio navigation
+        And I navigate to "Edit settings" in current page administration
         And I set the following fields to these values:
           | Flags | Favourite, Made me laugh |
         And I press "Save and display"

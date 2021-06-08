@@ -44,7 +44,7 @@ Feature: Manage open studio folders
   @javascript
   Scenario: Manage folder templates
     Given I follow "Test Open Studio name 1"
-    And I follow "Administration > Manage levels" in the openstudio navigation
+    And I navigate to "Manage levels" in current page administration
     And I press "Add another Block"
     And I set the field "Block Name" to "Block 1"
     And I press "Save Changes"

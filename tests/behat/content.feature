@@ -291,7 +291,7 @@ Feature: Create Open Studio contents
   Scenario: View activity by other user
     When I am on "Course 1" course homepage
     And I follow "Test Open Studio name 1"
-    And I follow "Administration > Manage levels" in the openstudio navigation
+    And I navigate to "Manage levels" in current page administration
     And I press "Add another Block"
     And I set the field "Block Name" to "Block 1"
     And I press "Save Changes"
@@ -373,7 +373,7 @@ Feature: Create Open Studio contents
       | Enable folders               | 1                            |
     And all users have accepted the plagarism statement for "OS2" openstudio
     When I follow "Test Open Studio name 2"
-    And I follow "Administration > Manage levels" in the openstudio navigation
+    And I navigate to "Manage levels" in current page administration
     And I press "Add another Block"
     And I set the field "Block Name" to "Block 1"
     And I press "Save Changes"
