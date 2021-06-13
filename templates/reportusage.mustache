@@ -255,61 +255,6 @@
         {{/flagdata}}
     </table>
     <hr />
-    <h2>{{#str}} reportusagetitle2, mod_openstudio {{/str}}</h2>
-    <table>
-        <caption>{{#str}} reportusage5section1, mod_openstudio {{/str}}</caption>
-        <tr>
-            <th>{{#str}} reportusage5section2, mod_openstudio {{/str}}</th>
-            <th>{{#str}} reportusage5section3, mod_openstudio {{/str}}</th>
-            <th>{{#str}} reportusage5section4, mod_openstudio {{/str}}</th>
-        </tr>
-        {{#flagdata}}
-            {{#people}}
-                <tr>
-                    <td>{{#str}} reportusage5section5, mod_openstudio {{/str}}</td>
-                    <td>{{totalusers}}</td>
-                    <td>{{totalpeople}}</td>
-                </tr>
-            {{/people}}
-        {{/flagdata}}
-    </table>
-    <table>
-        <caption>{{#str}} reportusage6section1, mod_openstudio {{/str}}</caption>
-        <tr>
-            <th>{{#str}} reportusage6section2, mod_openstudio {{/str}}</th>
-            <th>{{#str}} reportusage6section3, mod_openstudio {{/str}}</th>
-        </tr>
-        {{#flagdata}}
-            {{#peopletop20}}
-                <tr>
-                    <td>{{firstname}} {{lastname}}</td>
-                    <td>{{totalusers}}</td>
-                </tr>
-            {{/peopletop20}}
-        {{/flagdata}}
-    </table>
-    <table>
-        <caption>{{#str}} reportusage7section1, mod_openstudio {{/str}}</caption>
-        <tr>
-            <th colspan="3">{{#str}} reportusage7section2, mod_openstudio {{/str}}</th>
-            <th>{{#str}} reportusage7section3, mod_openstudio {{/str}}</th>
-            <th>{{#str}} reportusage7section4, mod_openstudio {{/str}}</th>
-        </tr>
-        {{#flagdata}}
-            {{#flagdatacontentstrackedtop20}}
-                <tr>
-                    {{#levelname}}
-                        <td>{{level1name}}</td>
-                        <td>{{level2name}}</td>
-                        <td>{{level3name}}</td>
-                    {{/levelname}}
-                    <td>{{contentname}}</td>
-                    <td>{{totalcontents}}</td>
-                </tr>
-            {{/flagdatacontentstrackedtop20}}
-        {{/flagdata}}
-    </table>
-    <hr />
     {{#summarydata}}
         <p>
             {{#str}}

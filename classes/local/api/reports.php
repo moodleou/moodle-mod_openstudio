@@ -296,72 +296,10 @@ LEFT JOIN {openstudio_comments} sc ON sc.contentid = f.contentid
 EOF;
 
         $slotstop20 = $DB->get_recordset_sql($sql, array($studioid, flags::READ_CONTENT), 0, 20);
-
-        $sql = <<<EOF
-  SELECT f.flagid,
-         COUNT(DISTINCT f.personid) AS totalpeople,
-         COUNT(DISTINCT f.userid) AS totalusers
-    FROM {openstudio_flags} f
-    JOIN {openstudio_contents} s ON s.userid = f.userid
-   WHERE s.openstudioid = ?
-     AND s.deletedby IS NULL
-     AND f.contentid = 0
-GROUP BY f.flagid
-ORDER BY f.flagid
-
-EOF;
-
-        $people = $DB->get_record_sql($sql, array($studioid));
-
-        $sql = <<<EOF
-  SELECT f.userid,
-         u.firstname,
-         u.lastname,
-         COUNT(DISTINCT f.personid) AS totalusers
-    FROM {openstudio_flags} f
-    JOIN {openstudio_contents} s ON s.userid = f.userid
-    JOIN {user} u ON u.id = f.userid
-   WHERE s.openstudioid = ?
-     AND s.deletedby IS NULL
-     AND f.contentid = 0
-GROUP BY f.userid,
-         u.firstname,
-         u.lastname
-ORDER BY COUNT(DISTINCT f.personid) DESC
-
-EOF;
-
-        $peopletop20 = $DB->get_recordset_sql($sql, array($studioid), 0, 20);
-
-        $sql = <<<EOF
-  SELECT s.levelid,
-         s.levelcontainer,
-         s.name,
-         COUNT(DISTINCT f.id) AS totals
-    FROM {openstudio_flags} f
-    JOIN {openstudio_contents} s ON s.id = f.contentid
-    JOIN {user} u ON u.id = f.userid
-   WHERE s.openstudioid = ?
-     AND s.deletedby IS NULL
-     AND f.flagid = ?
-     AND f.personid = 0
-GROUP BY s.levelid,
-         s.levelcontainer,
-         s.name
-ORDER BY COUNT(DISTINCT f.id) DESC,
-         s.levelcontainer,
-         s.levelid
-
-EOF;
-
-        $slotstrackedtop20 = $DB->get_recordset_sql($sql, array($studioid, flags::FOLLOW_CONTENT), 0, 20);
-
-        return (object) array(
+        return (object) [
                 'slots' => $slots,
-                'slotstop20' => $slotstop20,
-                'people' => $people,
-                'peopletop20' => $peopletop20,
-                'slotstrackedtop20' => $slotstrackedtop20);
+                'slotstop20' => $slotstop20
+        ];
     }
 
     /*

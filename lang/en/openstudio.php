@@ -1056,7 +1056,6 @@ $string['pinboardcontentsremaining'] = 'You have {$a->available} remaining pinbo
 $string['pinboardcontentsunavailable'] = 'You have used all your allocated pinboard contents.  To create a new content, please delete an existing pinboard content.';
 
 $string['reportusagetitle1'] = 'Content activities';
-$string['reportusagetitle2'] = 'Social activities';
 $string['reportusagetitle3'] = 'Storage';
 
 $string['reportusage1section1'] = 'Total users: {$a->registeredusers}';
@@ -1085,21 +1084,6 @@ $string['reportusage4section2'] = 'Activity name';
 $string['reportusage4section3'] = 'Content name';
 $string['reportusage4section4'] = 'Content owner';
 $string['reportusage4section5'] = 'No. of activities';
-
-$string['reportusage5section1'] = 'Summary of social activities';
-$string['reportusage5section2'] = 'Flags';
-$string['reportusage5section3'] = 'No. of users';
-$string['reportusage5section4'] = 'No. of contents';
-$string['reportusage5section5'] = 'Following people';
-
-$string['reportusage6section1'] = 'Top 20 list of people with most followers';
-$string['reportusage6section2'] = 'Person';
-$string['reportusage6section3'] = 'No. of followers';
-
-$string['reportusage7section1'] = 'Top 20 list of contents with most trackers';
-$string['reportusage7section2'] = 'Activity name';
-$string['reportusage7section3'] = 'Content name';
-$string['reportusage7section4'] = 'No. of trackers';
 
 $string['reportusage8section1'] = 'Total storage: {$a->storagetotalmb} MB / {$a->storagetotalgb} GB';
 $string['reportusage8section2'] = 'Total content storage: {$a->storagebycontentmb} MB / {$a->storagebycontentgb} GB';

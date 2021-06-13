@@ -108,18 +108,6 @@ foreach ($flagdata->slots as $value) {
 }
 $flagdata->flagdatacontents = $flagdatacontents;
 
-$flagdatacontentstrackedtop20 = array();
-foreach ($flagdata->slotstrackedtop20 as $value) {
-    $flagdatacontentstrackedtop20[] = array(
-            'levelname' => levels::get_name($value->levelcontainer, $value->levelid),
-            'contentname' => (trim($value->name) == '') ? 'No name' : $value->name,
-            'totalcontents' => $value->totals
-    );
-    $levelname = levels::get_name($value->levelcontainer, $value->levelid);
-    $contentname = (trim($value->name) == '') ? 'No name' : $value->name;
-}
-$flagdata->flagdatacontentstrackedtop20 = $flagdatacontentstrackedtop20;
-
 $storagebycontent = round($storage->storagebyslot / 1024 / 1024, 2);
 $storagebycontentversion = round($storage->storagebyslotversion / 1024 / 1024, 2);
 $storagebythumbnail = round($storage->storagebythumbnail / 1024 / 1024, 2);
