@@ -47,7 +47,11 @@ $n  = optional_param('n', 0, PARAM_INT);  // ... openstudio instance ID - it sho
 $filteropen = optional_param('filteropen', 0, PARAM_INT);
 $filteractive = optional_param('filteractive', 0, PARAM_INT);
 $userid = optional_param('vuid', 0, PARAM_INT); // User id.
-
+$pagedefault = 0;
+$pagestart = optional_param('page', $pagedefault, PARAM_INT);
+if ($pagestart < 0) {
+    $pagestart = 0;
+}
 // Page init and security checks.
 
 $coursedata = util::render_page_init($id, array('mod/openstudio:view'));
@@ -232,7 +236,6 @@ if (isset($SESSION->openstudio_view_filters)) {
 $streamdatapagesize = optional_param('pagesize', $streamdatapagesize, PARAM_INT);
 
 // Pagination settings.
-$pagedefault = 0;
 if (isset($SESSION->openstudio_view_filters)) {
     if (isset($SESSION->openstudio_view_filters[$vid]->page)) {
         if ($streamdatapagesize != $SESSION->openstudio_view_filters[$vid]->pagesize) {
@@ -243,10 +246,6 @@ if (isset($SESSION->openstudio_view_filters)) {
     }
 }
 
-$pagestart = optional_param('page', $pagedefault, PARAM_INT);
-if ($pagestart < 0) {
-    $pagestart = 0;
-}
 
 // Check if filter reset request givem, if so, then clear all the filters by redirecting the browser.
 $resetfilter = optional_param('reset', 0, PARAM_INT);

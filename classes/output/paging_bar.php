@@ -135,12 +135,18 @@ class paging_bar extends \paging_bar {
              */
             $lastarrangepage = $totalpage - (self::MAX_DISPLAY - 2);
             if ($this->currentpage <= $lastarrangepage) {
-                for ($i = $currentpageindex - self::BEFORE_AFTER_VALUE; $i <= $currentpageindex + self::BEFORE_AFTER_VALUE; $i++) {
+                $index = max($currentpageindex - self::BEFORE_AFTER_VALUE, 0);
+                for ($i =  $index; $i <= $currentpageindex + self::BEFORE_AFTER_VALUE; $i++) {
                     if ($this->pagelinks[$i]) {
                         array_push($arrpaging, $this->pagelinks[$i]);
                     }
                 }
-                $this->lastlink = \html_writer::link(str_replace($this->page, $totalpage - 1, $this->baseurl), $totalpage);
+                if (is_null($this->lastlink)) {
+                    $lastlinkurl = new \moodle_url($this->baseurl, ['page' => $totalpage - 1]);
+                    $this->lastlink = \html_writer::link($lastlinkurl->out(false), $totalpage);
+                } else {
+                    $this->lastlink = \html_writer::link(str_replace($this->page, $totalpage - 1, $this->baseurl), $totalpage);
+                }
             } else {
                 $arrpaging = array_slice($this->pagelinks, 1 - self::MAX_DISPLAY);
             }
