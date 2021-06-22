@@ -1678,10 +1678,11 @@ class renderer_utils {
             $PAGE->requires->strings_for_js(
                 array('contentcommentliked', 'contentcommentsdelete', 'modulejsdialogcommentdeleteconfirm',
                     'modulejsdialogcancel', 'modulejsdialogdelete'), 'mod_openstudio');
-
+            $folder = $contentdata->contenttype == content::TYPE_FOLDER || !empty($contentdata->folderid);
             $PAGE->requires->js_call_amd('mod_openstudio/comment', 'init', [[
                 'cmid' => $cmid,
-                'cid' => $contentdata->id]]);
+                'cid' => $contentdata->id,
+                'folder' => $folder]]);
 
             // Init OUMP module (Media player).
             // We need to init oump here to make sure that oump is always loaded even when no comment loaded.

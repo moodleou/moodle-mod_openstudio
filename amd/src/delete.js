@@ -153,7 +153,12 @@ define([
                         dialogue.addButton(cancelBtnProperty, ['footer']);
                     });
             }
-
+            var hasFolderClass = '';
+            if (t.mconfig.isfolder) {
+                hasFolderClass = 'openstudio-folder';
+            } else if(t.mconfig.folderid) {
+                hasFolderClass = 'openstudio-is-belong-to-folder';
+            }
             var dialogue = new osDialogue({
                 closeButton: true,
                 visible: false,
@@ -163,7 +168,7 @@ define([
                 width: 640,
                 responsiveWidth: 767,
                 focusOnPreviousTargetAfterHide: true,
-                extraClasses: [t.CSS.DELETEDIALOGUECONTAINER.replace('.', '')]
+                extraClasses: [t.CSS.DELETEDIALOGUECONTAINER.replace('.', ''), hasFolderClass]
             });
 
             setHeader();

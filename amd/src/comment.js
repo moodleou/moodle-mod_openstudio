@@ -369,6 +369,10 @@ define([
          * @method createDeleteCommentDialogue
          */
         createDeleteCommentDialogue: function(osDialogue) {
+            var folderClass = '';
+            if (t.mconfig.folder) {
+                folderClass = 'openstudio-folder';
+            }
             var dialogue = new osDialogue({
                 closeButton: true,
                 visible: false,
@@ -378,7 +382,7 @@ define([
                 modal: true,
                 focusOnPreviousTargetAfterHide: true,
                 width: 521,
-                extraClasses: [t.CSS.BOUNDING_BOX.replace('.', '')]
+                extraClasses: [t.CSS.BOUNDING_BOX.replace('.', ''), folderClass]
             });
 
             // Button [Cancel]
