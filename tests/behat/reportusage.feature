@@ -80,4 +80,3 @@ I view report usage
     And I should see "1" in the "//table[1]/tbody/tr[2]/td[6]" "xpath_element"
     And I should see "1" in the "//table[2]/tbody/tr[2]/td[5]" "xpath_element"
     And I should see "1" in the "//table[3]/tbody/tr[2]/td[6]" "xpath_element"
-    And I should see "1" in the "//table[6]/tbody/tr[2]/td[5]" "xpath_element"

@@ -168,6 +168,10 @@ class levels {
             return $data;
         }
 
+        if ($level != 0 && $levelid <= 0) {
+            return false;
+        }
+
         if ($level == 1) {
             $level1data = self::get_record(1, $levelid);
             if (!$level1data) {

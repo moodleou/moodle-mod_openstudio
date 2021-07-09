@@ -67,12 +67,16 @@ $activitylog = reports::get_activity_log($course->id, $cm->id);
 
 $contentdataactivity = array();
 foreach ($contentdata->slotactivity as $value) {
-    $contentdataactivity[] = array(
-            'levelname' => levels::get_name($value->levelcontainer, $value->levelid),
-            'contenttypename' => get_string('reportcontenttypename' . $value->contenttype, 'openstudio'),
-            'totalusers' => $value->totalusers,
-            'totalcontents' => $value->totalslots
-    );
+    $levelname = levels::get_name($value->levelcontainer, $value->levelid);
+    // Skip the invalid data.
+    if ($levelname) {
+        $contentdataactivity[] = array(
+                'levelname' => levels::get_name($value->levelcontainer, $value->levelid),
+                'contenttypename' => get_string('reportcontenttypename' . $value->contenttype, 'openstudio'),
+                'totalusers' => $value->totalusers,
+                'totalcontents' => $value->totalslots
+        );
+    }
 }
 
 $contentdatavisbility = array();
