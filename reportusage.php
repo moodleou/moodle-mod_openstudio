@@ -158,6 +158,12 @@ $storage->storagestoragebyuser = $storagestoragebyuser;
 $html = $renderer->reportusage($summarydata, $contentdataactivity, $contentdatavisbility, $flagdata, $storage, $activitylog);
 
 echo $html;
-
+// After using recordset. Close all recordset to improve performance.
+$contentdata->slotactivity->close();
+$flagdata->slots->close();
+$flagdata->slotstop20->close();
+$storage->slotsbymimetype->close();
+$storage->storagebyuser->close();
+$activitylog->close();
 // Finish the page.
 echo $OUTPUT->footer();

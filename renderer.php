@@ -990,6 +990,9 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         }
 
         if ($folderdata->description) {
+            $context = \context_module::instance($cm->id);
+            $folderdata->description = file_rewrite_pluginfile_urls($folderdata->description, 'pluginfile.php',
+                    $context->id, 'mod_openstudio', 'description', $folderdata->id);
             $folderdata->description = format_text($folderdata->description, $folderdata->textformat);
         }
 

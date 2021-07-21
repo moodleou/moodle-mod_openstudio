@@ -183,7 +183,10 @@ class levels {
 
         if ($level == 2) {
             $level2data = self::get_record(2, $levelid);
-            $level1data = self::get_record(1, $level2data->level1id);
+            $level1data = '';
+            if (!empty($level2data->level1id)) {
+                $level1data = self::get_record(1, $level2data->level1id);
+            }
             if (!$level2data || !$level1data) {
                 return false;
             }
@@ -195,8 +198,14 @@ class levels {
 
         if ($level == 3) {
             $level3data = self::get_record(3, $levelid);
-            $level2data = self::get_record(2, $level3data->level2id);
-            $level1data = self::get_record(1, $level2data->level1id);
+            $level2data = '';
+            $level1data = '';
+            if (!empty($level3data->level2id)) {
+                $level2data = self::get_record(2, $level3data->level2id);
+                if (!empty($level2data->level1id)) {
+                    $level1data = self::get_record(1, $level2data->level1id);
+                }
+            }
             if (!$level3data || !$level2data || !$level1data) {
                 return false;
             }
