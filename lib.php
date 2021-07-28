@@ -355,7 +355,7 @@ function openstudio_pluginfile($course, $cm, $context, $filearea, array $args, $
 
     if (! in_array($filearea,
             array('content', 'contentthumbnail', 'contentversion', 'contentthumbnailversion',
-                    'contentcomment', 'notebook', 'notebookversion', 'description'))) {
+                    'contentcomment', 'notebook', 'notebookversion', 'description', 'descriptionversion'))) {
         return false;
     }
 
@@ -489,7 +489,7 @@ EOF;
         }
     }
 
-    if ($filearea === 'contentcomment' || $filearea === 'description') {
+    if (in_array($filearea, ['contentcomment', 'description', 'descriptionversion'])) {
         $relativepath = array_pop($args);
         $fullpath = "/{$context->id}/mod_openstudio/$filearea/{$itemid}/$relativepath";
     } else {
@@ -1185,4 +1185,34 @@ function openstudio_extend_settings_navigation(settings_navigation $settings,
                 'openstudioreportusage');
         $modnode->add_node($node, 'backup');
     }
+}
+
+/**
+ * Move all the files in a file area to another.
+ *
+ * @param string $newarea area the files are being moved to.
+ * @param int $newitemid item id the files are being moved to.
+ * @param int $contextid the context the files.
+ * @param string $oldearea area the files are being moved from.
+ * @param int $olditemid item id the files are being moved from.
+ * @param bool $deleteoldfile
+ * @return int the number of files moved, for information.
+ */
+function openstudio_move_area_files_to_new_area($newarea, $newitemid, $contextid, $oldearea, $olditemid, $deleteoldfile = true): int {
+    $count = 0;
+    $fs = get_file_storage();
+    $oldfiles = $fs->get_area_files($contextid, 'mod_openstudio', $oldearea, $olditemid, 'id', false);
+    foreach ($oldfiles as $oldfile) {
+        $filerecord = new stdClass();
+        $filerecord->filearea = $newarea;
+        $filerecord->itemid = $newitemid;
+        $fs->create_file_from_storedfile($filerecord, $oldfile);
+        $count += 1;
+    }
+
+    if ($count && $deleteoldfile) {
+        $fs->delete_area_files($contextid, 'mod_openstudio', $oldearea, $olditemid);
+    }
+
+    return $count;
 }

@@ -373,6 +373,52 @@ class file_testcase extends \advanced_testcase {
         }
     }
 
+    public function test_openstudio_move_area_files_to_new_area() {
+        $this->resetAfterTest();
+
+        // Mock data.
+        $gen = $this->getDataGenerator();
+        $course1 = $gen->create_course();
+        $this->contexts = [
+                1 => \context_course::instance($course1->id),
+        ];
+
+        $fs = get_file_storage();
+        $fs->create_file_from_string([
+                'contextid' => $this->contexts[1]->id,
+                'component' => 'mod_openstudio',
+                'filearea' => 'description',
+                'itemid' => 1,
+                'filepath' => '/',
+                'filename' => 'example1.jpg',
+        ], 'picture contents (not really)');
+        $fs->create_file_from_string([
+                'contextid' => $this->contexts[1]->id,
+                'component' => 'mod_openstudio',
+                'filearea' => 'description',
+                'itemid' => 1,
+                'filepath' => '/',
+                'filename' => 'example2.jpg',
+        ], 'picture contents (not really)');
+
+        // Move to new area and remove old file.
+        openstudio_move_area_files_to_new_area('descriptionversion', 2, $this->contexts[1]->id, 'description', 1, true);
+
+        $oldarea = $fs->get_area_files($this->contexts[1]->id, 'mod_openstudio', 'description', 1, 'id', false);
+        $this->assertEquals(0, count($oldarea));
+
+        $newarea = $fs->get_area_files($this->contexts[1]->id, 'mod_openstudio', 'descriptionversion', 2, 'id', false);
+        $this->assertEquals(2, count($newarea));
+
+        // Move to new area and keep old file.
+        openstudio_move_area_files_to_new_area('content', 1, $this->contexts[1]->id, 'descriptionversion', 2, false);
+
+        $oldarea = $fs->get_area_files($this->contexts[1]->id, 'mod_openstudio', 'descriptionversion', 2, 'id', false);
+        $this->assertEquals(2, count($oldarea));
+
+        $newarea = $fs->get_area_files($this->contexts[1]->id, 'mod_openstudio', 'content', 1, 'id', false);
+        $this->assertEquals(2, count($newarea));
+    }
 
 }
 

@@ -799,6 +799,12 @@ EOF;
                     throw new \Exception('Failed to add content version during content delete.');
                 }
 
+                if ($cm !== null) {
+                    $context = \context_module::instance($cm->id);
+                    openstudio_move_area_files_to_new_area('descriptionversion', $contentversionid, $context->id, 'description',
+                            $contentdata->id);
+                }
+
                 item::toversion($contentid, $contentversionid);
 
                 $existingversioncount = contentversion::count($contentdata->id);
@@ -906,7 +912,7 @@ EOF;
                     array('id' => $contentversionid), '*', MUST_EXIST);
 
             // First archive the current content data.
-            if (self::archive($userid, $contentversiondata->contentid, false)) {
+            if (self::archive($userid, $contentversiondata->contentid, false, $cm)) {
 
                 $contentdata = $DB->get_record('openstudio_contents',
                         array('id' => $contentversiondata->contentid), '*', MUST_EXIST);
@@ -928,6 +934,11 @@ EOF;
                     throw new \Exception('Failed to update content.');
                 }
 
+                if ($cm !== null) {
+                    $context = \context_module::instance($cm->id);
+                    openstudio_move_area_files_to_new_area('description', $contentversiondata->contentid, $context->id,
+                            'descriptionversion', $contentversionid, false);
+                }
                 tracking::log_action($contentdata->id, tracking::UPDATE_CONTENT, $userid);
 
                 // Update search index for content.
@@ -1206,9 +1217,10 @@ EOF;
      * @param int $userid
      * @param int $contentid
      * @param bool $logaction
+     * @param \cm_info $cm
      * @return bool Return true if successful.
      */
-    private static function archive($userid, $contentid, $logaction = true) {
+    private static function archive($userid, $contentid, $logaction = true, $cm = null) {
         global $DB;
 
         try {
@@ -1245,6 +1257,11 @@ EOF;
                 throw new \Exception('Failed to add content version during content delete.');
             }
 
+            if ($cm !== null) {
+                $context = \context_module::instance($cm->id);
+                openstudio_move_area_files_to_new_area('descriptionversion', $contentversionid, $context->id, 'description',
+                        $contentdata->id);
+            }
             item::toversion($contentid, $contentversionid);
 
             // Update tracking.

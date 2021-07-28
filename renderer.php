@@ -842,8 +842,9 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             }
         }
 
+        $descriptionarea = $contentdata->iscontentversion ? 'descriptionversion' : 'description';
         $description = file_rewrite_pluginfile_urls($contentdata->description, 'pluginfile.php', $context->id, 'mod_openstudio',
-                'description', $contentdata->id);
+                $descriptionarea, $contentdata->id);
         $contentdata->description = format_text($description, $contentdata->textformat);
 
         return $this->render_from_template('mod_openstudio/content_page', $contentdata);
