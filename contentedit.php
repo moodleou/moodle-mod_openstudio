@@ -246,10 +246,13 @@ if ($sid > 0) {
     }
 
     $context = context_module::instance($cm->id);
-    $descriptionitemid = file_get_submitted_draft_itemid('description');
-    $contentdata->description = file_prepare_draft_area($descriptionitemid,
-            $context->id, 'mod_openstudio', 'description', $contentdata->id, ['subdirs' => false],
-            $contentdata->description);
+    if (strpos($contentdata->description, '@@PLUGINFILE@@') !== false) {
+        // Only prepare a draft area if the description already contains files.
+        $descriptionitemid = file_get_submitted_draft_itemid('description');
+        $contentdata->description = file_prepare_draft_area($descriptionitemid,
+                $context->id, 'mod_openstudio', 'description', $contentdata->id, ['subdirs' => false],
+                $contentdata->description);
+    }
 
     // Given the content exists, get the content owner again to prevent user spoofing.
     $userid = $contentdata->userid;
