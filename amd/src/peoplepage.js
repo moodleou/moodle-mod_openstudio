@@ -46,8 +46,7 @@ define(['jquery'], function($) {
          * @method handleGroupSwitcher
          */
         handleGroupSwitcher: function() {
-            $('#openstudio-people-groupid').change(function() {
-
+            $('#openstudio-people-groupid,#openstudio-people-groupid-mobile').change(function() {
                 var url = $('#openstudio-people-sort-action-url').val();
                 var groupid = $(this).val();
                 var vid = $('option:selected', this).attr('vid');

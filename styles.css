@@ -5225,7 +5225,9 @@ a.openstudio-add-new-content-link:hover  {
 
 /* Mobile. */
 @media (max-width: 767px) {
-
+    #openstudio-people-groupid-mobile {
+        max-width: 65%;
+    }
     .openstudio-grid-item-content-box a {
         display: flex;
         justify-content: center;
