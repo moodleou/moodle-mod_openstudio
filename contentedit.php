@@ -665,6 +665,9 @@ if ($contentform->is_cancelled()) {
                 $context,
                 $cm
         );
+        if (!$contentid) {
+            throw new \Exception('Could not create new content item.');
+        }
         flags::toggle($contentid, flags::FOLLOW_CONTENT, 'on', $userid);
 
         if (!empty($contentformdatadescription['itemid'])) {

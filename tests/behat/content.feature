@@ -46,18 +46,12 @@ Feature: Create Open Studio contents
             | teacher1 | G3 |
             | student3 | G3 |
             | student4 | G3 |
+        And the following open studio "instances" exist:
+            | course | name                    | description                  | pinboard | idnumber | groupmode | grouping  | pinboard | reportingemail   |
+            | C1     | Test Open Studio name 1 | Test Open Studio description | 99       | OS1      | 2         | GI1       | 99       | teacher1@asd.com |
+        And all users have accepted the plagarism statement for "OS1" openstudio
         And I log in as "teacher1"
         And I am on "Course 1" course homepage
-        And I turn editing mode on
-        And I add a "OpenStudio 2" to section "1" and I fill the form with:
-            | Name                         | Test Open Studio name 1      |
-            | Description                  | Test Open Studio description |
-            | Group mode                   | Visible groups               |
-            | Grouping                     | grouping1                    |
-            | Enable pinboard              | 99                           |
-            | Abuse reports are emailed to | teacher1@asd.com             |
-            | ID number                    | OS1                          |
-        And all users have accepted the plagarism statement for "OS1" openstudio
 
     Scenario: Add new content just a title and description
         When I follow "Test Open Studio name 1"

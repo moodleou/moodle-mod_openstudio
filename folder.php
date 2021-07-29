@@ -105,6 +105,9 @@ if ($folderid == 0) {
             $lid,
             $data
         );
+        if (!$folderid) {
+            throw new \Exception('Could not create new folder.');
+        }
     }
 }
 

@@ -246,139 +246,135 @@ EOF;
             $studioid, $userid, $level, $levelid, $data, $file = null, $context = null, $cm = null, $import = false) {
         global $DB;
 
-        try {
-            // Make sure $data is an array.
-            $data = (array) $data;
+        // Make sure $data is an array.
+        $data = (array) $data;
 
-            // We enforce $levelid, $level, $userid uniqueness if we are not
-            // inseting into the the pinboard which has $level = 0.
-            if ($level > 0) {
-                $sql = <<<EOF
+        // We enforce $levelid, $level, $userid uniqueness if we are not
+        // inseting into the the pinboard which has $level = 0.
+        if ($level > 0) {
+            $sql = <<<EOF
 SELECT *
-  FROM {openstudio_contents}
- WHERE levelid = ? AND levelcontainer = ? AND userid = ? AND deletedby IS NULL
+FROM {openstudio_contents}
+WHERE levelid = ? AND levelcontainer = ? AND userid = ? AND deletedby IS NULL
 
 EOF;
 
-                $result = $DB->record_exists_sql($sql, array($levelid, $level, $userid));
-                if ($result) {
-                    return false;
-                }
+            $result = $DB->record_exists_sql($sql, array($levelid, $level, $userid));
+            if ($result) {
+                return false;
             }
-
-            if (($file !== null) && ($context !== null)) {
-                $data = self::get_contenttype($data, $file);
-            } else {
-                $data = self::process_data($data);
-            }
-
-            $slotfileid = null;
-            if (($file !== null) && ($context !== null)
-                    && ($data['contenttype'] !== self::TYPE_URL)) {
-                // Get slot file id that will be associated the the slot's uploaded file.
-                $slotfiledata = array('refcount' => 1);
-                if ($import) {
-                    $slotfileid = $data['fileid'];
-                } else if (pathinfo($file['file']->filename, PATHINFO_EXTENSION) == 'ipynb') {
-                    $slotfileid = $DB->insert_record('openstudio_content_files', $slotfiledata);
-                    file_save_draft_area_files($file['id'], $context->id, 'mod_openstudio', 'notebook', $slotfileid);
-                } else {
-                    $slotfileid = $DB->insert_record('openstudio_content_files', $slotfiledata);
-                    file_save_draft_area_files($file['id'], $context->id, 'mod_openstudio', 'content', $slotfileid);
-                }
-
-                // Check if image type and create thumbnail if necessary.
-                if (!empty($file['mimetype']['string']) && $file['mimetype']['string'] == 'image' && empty($file['retainimagemetadata'])) {
-                    self::strip_metadata_for_image($file, $context, $slotfileid);
-                }
-                self::create_thumbnail($data,
-                        $context->id, 'mod_openstudio', 'content', $slotfileid, '/', $data['content']);
-            }
-
-            // Populate data.
-            $insertdata = array();
-            $insertdata['retainimagemetadata'] = isset($data['retainimagemetadata']) ? $data['retainimagemetadata'] : 0;
-            $insertdata['openstudioid'] = $studioid;
-            $insertdata['levelid'] = $levelid;
-            $insertdata['levelcontainer'] = $level;
-            $insertdata['contenttype'] = $data['contenttype'];
-            $insertdata['fileid'] = $slotfileid;
-            $insertdata['name'] = $data['name'];
-
-            if (array_key_exists('mimetype', $data)) {
-                $insertdata['mimetype'] = $data['mimetype'];
-            }
-            if (array_key_exists('content', $data)) {
-                $insertdata['content'] = $data['content'];
-            }
-            if (array_key_exists('thumbnail', $data)) {
-                $insertdata['thumbnail'] = $data['thumbnail'];
-            }
-            if (array_key_exists('urltitle', $data)) {
-                $insertdata['urltitle'] = $data['urltitle'];
-            }
-            if (array_key_exists('description', $data)) {
-                $insertdata['description'] = $data['description'];
-            }
-            $insertdata['showextradata'] = 0;
-            if (array_key_exists('showextradata', $data)) {
-                $insertdata['showextradata'] = $data['showextradata'];
-            }
-            if (array_key_exists('showgps', $data)) {
-                $insertdata['showextradata'] = $insertdata['showextradata'] + $data['showgps'];
-            }
-            if (array_key_exists('showimagedata', $data)) {
-                $insertdata['showextradata'] = $insertdata['showextradata'] + $data['showimagedata'];
-            }
-            if (array_key_exists('ownership', $data)) {
-                $insertdata['ownership'] = $data['ownership'];
-            }
-            if (array_key_exists('ownershipdetail', $data)) {
-                $insertdata['ownershipdetail'] = $data['ownershipdetail'];
-            }
-            if (array_key_exists('visibility', $data)) {
-                $insertdata['visibility'] = $data['visibility'];
-            }
-
-            $insertdata['userid'] = $userid;
-            $insertdata['timemodified'] = time();
-            $insertdata['timeflagged'] = time();
-
-            $contentid = $DB->insert_record('openstudio_contents', $insertdata);
-
-            if ($contentid != false) {
-                if (array_key_exists('tags', $data)) {
-                    tags::set($contentid, $data['tags']);
-                }
-
-                if (!isset($data['folderid'])) {
-                    if ($data['contenttype'] == self::TYPE_FOLDER) {
-                        $data['folderid'] = $contentid;
-                    } else {
-                        $data['folderid'] = null;
-                    }
-                }
-                tracking::log_action($contentid, tracking::CREATE_CONTENT, $userid, $data['folderid']);
-
-                if (isset($data['visibility']) && ($data['visibility'] == self::VISIBILITY_TUTOR)) {
-                    tracking::log_action(
-                            $contentid, tracking::UPDATE_CONTENT_VISIBILITY_TUTOR, $userid, $data['folderid']);
-                }
-
-                // Update search index for slot.
-                $slotdata = self::get_record($userid, $contentid);
-                if (($cm != null) && ($slotdata != false)) {
-                    search::update($cm, $slotdata);
-                }
-
-                // Log content hash for slot.
-                item::log($contentid);
-            }
-
-            return $contentid;
-        } catch (\Exception $e) {
-            return false;
         }
+
+        if (($file !== null) && ($context !== null)) {
+            $data = self::get_contenttype($data, $file);
+        } else {
+            $data = self::process_data($data);
+        }
+
+        $slotfileid = null;
+        if (($file !== null) && ($context !== null)
+                && ($data['contenttype'] !== self::TYPE_URL)) {
+            // Get slot file id that will be associated the the slot's uploaded file.
+            $slotfiledata = array('refcount' => 1);
+            if ($import) {
+                $slotfileid = $data['fileid'];
+            } else if (pathinfo($file['file']->filename, PATHINFO_EXTENSION) == 'ipynb') {
+                $slotfileid = $DB->insert_record('openstudio_content_files', $slotfiledata);
+                file_save_draft_area_files($file['id'], $context->id, 'mod_openstudio', 'notebook', $slotfileid);
+            } else {
+                $slotfileid = $DB->insert_record('openstudio_content_files', $slotfiledata);
+                file_save_draft_area_files($file['id'], $context->id, 'mod_openstudio', 'content', $slotfileid);
+            }
+
+            // Check if image type and create thumbnail if necessary.
+            if (!empty($file['mimetype']['string']) && $file['mimetype']['string'] == 'image' && empty($file['retainimagemetadata'])) {
+                self::strip_metadata_for_image($file, $context, $slotfileid);
+            }
+            self::create_thumbnail($data,
+                    $context->id, 'mod_openstudio', 'content', $slotfileid, '/', $data['content']);
+        }
+
+        // Populate data.
+        $insertdata = array();
+        $insertdata['retainimagemetadata'] = isset($data['retainimagemetadata']) ? $data['retainimagemetadata'] : 0;
+        $insertdata['openstudioid'] = $studioid;
+        $insertdata['levelid'] = $levelid;
+        $insertdata['levelcontainer'] = $level;
+        $insertdata['contenttype'] = $data['contenttype'];
+        $insertdata['fileid'] = $slotfileid;
+        $insertdata['name'] = $data['name'];
+
+        if (array_key_exists('mimetype', $data)) {
+            $insertdata['mimetype'] = $data['mimetype'];
+        }
+        if (array_key_exists('content', $data)) {
+            $insertdata['content'] = $data['content'];
+        }
+        if (array_key_exists('thumbnail', $data)) {
+            $insertdata['thumbnail'] = $data['thumbnail'];
+        }
+        if (array_key_exists('urltitle', $data)) {
+            $insertdata['urltitle'] = $data['urltitle'];
+        }
+        if (array_key_exists('description', $data)) {
+            $insertdata['description'] = $data['description'];
+        }
+        $insertdata['showextradata'] = 0;
+        if (array_key_exists('showextradata', $data)) {
+            $insertdata['showextradata'] = $data['showextradata'];
+        }
+        if (array_key_exists('showgps', $data)) {
+            $insertdata['showextradata'] = $insertdata['showextradata'] + $data['showgps'];
+        }
+        if (array_key_exists('showimagedata', $data)) {
+            $insertdata['showextradata'] = $insertdata['showextradata'] + $data['showimagedata'];
+        }
+        if (array_key_exists('ownership', $data)) {
+            $insertdata['ownership'] = $data['ownership'];
+        }
+        if (array_key_exists('ownershipdetail', $data)) {
+            $insertdata['ownershipdetail'] = $data['ownershipdetail'];
+        }
+        if (array_key_exists('visibility', $data)) {
+            $insertdata['visibility'] = $data['visibility'];
+        }
+
+        $insertdata['userid'] = $userid;
+        $insertdata['timemodified'] = time();
+        $insertdata['timeflagged'] = time();
+
+        $contentid = $DB->insert_record('openstudio_contents', $insertdata);
+
+        if ($contentid != false) {
+            if (array_key_exists('tags', $data)) {
+                tags::set($contentid, $data['tags']);
+            }
+
+            if (!isset($data['folderid'])) {
+                if ($data['contenttype'] == self::TYPE_FOLDER) {
+                    $data['folderid'] = $contentid;
+                } else {
+                    $data['folderid'] = null;
+                }
+            }
+            tracking::log_action($contentid, tracking::CREATE_CONTENT, $userid, $data['folderid']);
+
+            if (isset($data['visibility']) && ($data['visibility'] == self::VISIBILITY_TUTOR)) {
+                tracking::log_action(
+                        $contentid, tracking::UPDATE_CONTENT_VISIBILITY_TUTOR, $userid, $data['folderid']);
+            }
+
+            // Update search index for slot.
+            $slotdata = self::get_record($userid, $contentid);
+            if (($cm != null) && ($slotdata != false)) {
+                search::update($cm, $slotdata);
+            }
+
+            // Log content hash for slot.
+            item::log($contentid);
+        }
+
+        return $contentid;
     }
 
     /**
