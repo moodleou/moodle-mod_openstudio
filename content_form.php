@@ -149,10 +149,8 @@ class mod_openstudio_content_form extends moodleform {
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', get_string('required'), 'required',  null, 'client');
 
-        $mform->addElement('static', 'descriptionwarning', '',
-                'Uploading files in the description has been disabled. Please use "Add file" below.');
         $editoroptions = [
-            'maxfiles' => 0, // Don't allow users to upload files in the description field, see #485772
+            'maxfiles' => EDITOR_UNLIMITED_FILES,
             'maxbytes' => get_user_max_upload_file_size($context, $course->maxbytes),
         ];
         $mform->addElement('editor', 'description', $contentdescription, null, $editoroptions);
@@ -363,23 +361,6 @@ class mod_openstudio_content_form extends moodleform {
         $mform->closeHeaderBefore('buttonar');
         $mform->addElement('html', html_writer::end_tag('div'));
 
-    }
-
-    /**
-     * Set maxfiles on the description field.
-     *
-     * If editing existing content, allow files in the description if it already contains some, to prevent errors when saving.
-     * If there are no files already in the description, don't allow any to be added. This is a mitigation for #485772.
-     */
-    public function definition_after_data() {
-        $mform =& $this->_form;
-        $description = $mform->getElementValue('description');
-        $files = 0;
-        if (!is_null($description['text'])) {
-            $files = preg_match_all('~draftfile.php~', $description['text']);
-        }
-        $editor = $mform->getElement('description');
-        $editor->setMaxfiles($files);
     }
 
     public function validation($data, $files) {
