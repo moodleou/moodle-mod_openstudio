@@ -665,4 +665,30 @@ class content_testcase extends \advanced_testcase {
         $this->assertEquals(-110.72466283333, $info['GPSData']['lng']);
 
     }
+
+    public function test_broken_image_process() {
+        if (!extension_loaded('imagick') || !class_exists('Imagick')) {
+            $this->markTestSkipped('Imagick not enabled');
+        }
+        $this->resetAfterTest(true);
+
+        // Add to server to simulate file upload.
+        $context = \context_module::instance($this->studiolevels->cmid);
+        $filedata = (object) array(
+            'filearea' => 'content',
+            'filepath' => '/',
+            'filename' => 'geotagged.jpg',
+            'component' => 'mod_openstudio',
+            'datecreated' => time(),
+            'datemodified' => time(),
+            'itemid' => 1,
+            'contextid' => $context->id
+        );
+        $fs = get_file_storage();
+        $fs->create_file_from_string($filedata, 'this really is not a jpg');
+
+        $this->expectException('moodle_exception');
+        $this->expectExceptionMessage('There was an error when processing your image');
+        \mod_openstudio\local\api\content::strip_metadata_for_image(['file' => $filedata], $context, 1);
+    }
 }

@@ -1649,6 +1649,7 @@ EOF;
      * @throws \stored_file_creation_exception
      */
     public static function strip_metadata_for_image($file, $context, $slotfileid) {
+        global $PAGE;
         if (!extension_loaded('imagick') || !class_exists('Imagick')) {
             return;
         }
@@ -1658,11 +1659,16 @@ EOF;
         $tmproot = make_temp_directory('tempimage');
         $tmpfilepath = $tmproot . '/' . $realfile->get_contenthash();
         $realfile->copy_content_to($tmpfilepath);
-        $img = new \Imagick($tmpfilepath);
-        $profiles = $img->getImageProfiles('icc', true);
-        $img->stripImage();
-        if(!empty($profiles)) {
-            $img->profileImage('icc', $profiles['icc']);
+        try {
+            $img = new \Imagick($tmpfilepath);
+            $profiles = $img->getImageProfiles('icc', true);
+            $img->stripImage();
+            if (!empty($profiles)) {
+                $img->profileImage('icc', $profiles['icc']);
+            }
+        } catch (\ImagickException $e) {
+            // Throw a more helpful error if processing image fails.
+            throw new \moodle_exception('errorimageprocess', 'openstudio', $PAGE->url, $e->getMessage());
         }
         $img->writeImage($tmpfilepath);
         $img->clear();

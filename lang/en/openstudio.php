@@ -860,6 +860,7 @@ $string['errorinvalidcomment'] = 'Comment does not exist.';
 $string['errorcommentnotdeleted'] = 'The comment could not be deleted due to an error.';
 $string['errorcontentnotdeleted'] = 'Delete content error!';
 $string['errorsharinglevel'] = 'Enable \'My Module\' must be chosen when option \'Module - visible all module members\' in Sharing level is selected';
+$string['errorimageprocess'] = 'There was an error when processing your image. Please check the image file before uploading again. Error reported: "{$a}"';
 
 $string['modulejsdialogreturntostudio'] = 'Return to Studio';
 $string['modulejsdialogyes'] = 'Yes';
