@@ -362,6 +362,7 @@ Feature: Create Open Studio contents
 
   Scenario: Add new content without mandatory title in My activities
     And I am on "Course 1" course homepage
+    And I turn editing mode on
     And I add a "OpenStudio 2" to section "1" and I fill the form with:
       | Name                         | Test Open Studio name 2      |
       | Description                  | Test Open Studio description |
