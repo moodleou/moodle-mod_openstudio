@@ -81,9 +81,12 @@ class template_testcase extends \advanced_testcase {
         $this->studiolevels->leveldata = $this->generator->create_mock_levels($this->studiolevels->id);
 
         // Create a folder without a template.
+        $activitylevels = reset($this->studiolevels->leveldata['contentslevels']);
+        $slotlevels = end($activitylevels);
+        $level3id = end($slotlevels);
         $this->folder = \mod_openstudio\local\api\content::create($this->studiolevels->id,
                 $this->users->students->two->id,
-                3, $this->contentlevelid, $this->generate_folder_data());
+                3, $level3id, $this->generate_folder_data());
 
         // Create folder templates.
         $activitylevels = end($this->studiolevels->leveldata['contentslevels']);

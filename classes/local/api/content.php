@@ -1473,8 +1473,8 @@ EOF;
         if (array_key_exists('content', $data) && (trim($data['content']) != '')) {
             unset($data['urltitle']);
         } else {
-            $data['urltitle'] = trim($data['urltitle']);
-            $data['weblink'] = trim($data['weblink']);
+            $data['urltitle'] = empty($data['urltitle']) ? '' : trim($data['urltitle']);
+            $data['weblink'] = empty($data['weblink']) ? '' : trim($data['weblink']);
             if ($data['weblink'] !== '') {
                 if ((stripos($data['weblink'], 'http://') !== false)
                         || (stripos($data['weblink'], 'https://') !== false)
@@ -1504,7 +1504,7 @@ EOF;
         }
 
         if ($data['contenttype'] === null) {
-            if (trim($data['description']) !== '') {
+            if (!empty($data['description'])) {
                 $data['contenttype'] = self::TYPE_URL;
             } else {
                 $data['contenttype'] = self::TYPE_NONE;

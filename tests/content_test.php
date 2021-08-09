@@ -667,6 +667,8 @@ class content_testcase extends \advanced_testcase {
     }
 
     public function test_broken_image_process() {
+        global $PAGE;
+        $PAGE->set_url('/');
         if (!extension_loaded('imagick') || !class_exists('Imagick')) {
             $this->markTestSkipped('Imagick not enabled');
         }

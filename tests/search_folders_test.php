@@ -85,15 +85,6 @@ class search_folders_test extends \advanced_testcase {
 
         $this->cm = get_coursemodule_from_id('openstudio', $this->openstudiolevels->cmid);
 
-        // Create content entry.
-        $emptycontententry = (object)[
-            'name' => 'Empty content entry',
-            'visibility' => content::VISIBILITY_MODULE,
-            'contenttype' => content::TYPE_NONE,
-            'ownership' => 0,
-            'sid' => 0
-        ];
-
         $sharedcontententry = $this->generator->generate_single_data_array($this->user);
         $sharedcontententry['contenttype'] = content::TYPE_URL;
 
@@ -104,9 +95,6 @@ class search_folders_test extends \advanced_testcase {
         $foldercontententry = $this->generator->generate_single_data_array($this->user);
         $foldercontententry['contenttype'] = content::TYPE_FOLDER;
 
-        // Create real content based on entry.
-        $this->emptycontent = content::create_in_pinboard($this->openstudiolevels->id, $this->user->id,
-                $emptycontententry, $this->cm);
 
         $this->sharedcontent = content::create_in_pinboard($this->openstudiolevels->id, $this->user->id,
                 $sharedcontententry, $this->cm);
@@ -191,8 +179,6 @@ class search_folders_test extends \advanced_testcase {
         // Check as admin.
         $this->setAdminUser();
 
-        // Deleted if trying to get  belong to empty content since it will not indexed.
-        $this->assertEquals(\core_search\manager::ACCESS_DELETED, $folders->check_access($this->emptycontent));
         // Deleted if trying to get  that not existed.
         $this->assertEquals(\core_search\manager::ACCESS_DELETED, $folders->check_access(0));
         // Check return granted when get url  and folder .
@@ -202,8 +188,6 @@ class search_folders_test extends \advanced_testcase {
         // Check as owner user.
         $this->setUser($this->user);
 
-        // Deleted if trying to get  belong to empty content since it will not indexed.
-        $this->assertEquals(\core_search\manager::ACCESS_DELETED, $folders->check_access($this->emptycontent));
         // Deleted if trying to get  that not existed.
         $this->assertEquals(\core_search\manager::ACCESS_DELETED, $folders->check_access(0));
         // Check return granted when get url  and folder .
@@ -217,8 +201,6 @@ class search_folders_test extends \advanced_testcase {
             $anotheruser->id, $this->course->id, $this->studentroleid, 'manual');
         $this->setUser($anotheruser);
 
-        // Deleted if trying to get  belong to empty content since it will not indexed.
-        $this->assertEquals(\core_search\manager::ACCESS_DELETED, $folders->check_access($this->emptycontent));
         // Deleted if trying to get  that not existed.
         $this->assertEquals(\core_search\manager::ACCESS_DELETED, $folders->check_access(0));
         // Check return granted when get url , folder  and deny when get private .
