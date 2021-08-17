@@ -777,6 +777,12 @@ button.openstudio-orderpost-save-button {
     overflow: hidden;
 }
 
+.openstudio-orderpost-item-picture img,
+.openstudio-folder-background .openstudio-content-folder-img {
+    object-fit: cover;
+    object-position: center;
+}
+
 .path-mod-openstudio .openstudio-orderpost-item-order-number-input {
     width: 17px;
     height: 17px;
@@ -3198,9 +3204,11 @@ body:not(.ios):not(.android) .openstudio-content-view-flag-icon.has-hover:hover 
 
 .openstudio-content-view-version-img img {
     width: 64px;
-    height: auto;
+    height: 64px;
     float: left;
     margin-bottom: 15px;
+    object-fit: cover;
+    object-position: center;
 }
 
 .openstudio-content-view-version-info {
@@ -3383,7 +3391,7 @@ div.openstudio-browse-post-item-filename {
 .openstudio-browse-post-item-img {
     float: left;
     width: 73px;
-    padding: 13px 0px 0px 20px;
+    padding: 13px 0px 17px 20px;
     position: relative;
 }
 
@@ -3394,7 +3402,9 @@ div.openstudio-browse-post-item-filename {
 
 .openstudio-browse-post-item-img .openstudio-browse-post-item-thumbnail {
     width: 64px;
-    height: 44px;
+    height: 64px;
+    object-fit: cover;
+    object-position: center;
 }
 
 .openstudio-browse-post-item-title-box,
@@ -3532,7 +3542,9 @@ div.openstudio-browse-post-item-filename {
     margin-top: -13px;
     position: relative;
     width: 48px;
-    height: 33px;
+    height: 48px;
+    object-fit: cover;
+    object-position: center;
 }
 
 .openstudio-folder-browseposts-deselect .openstudio-folder-remove-icon {
@@ -3629,6 +3641,9 @@ button.openstudio-view-deleted-save-button {
 
 .openstudio-view-deleted-item-picture img {
     width: 64px;
+    height: 64px;
+    object-fit: cover;
+    object-position: center;
 }
 
 .openstudio-view-deleted-item-name {
@@ -5290,7 +5305,6 @@ a.openstudio-add-new-content-link:hover  {
         margin-inline-start: 0;
     }
     .openstudio-content-view-block-content .openstudio-content-view-version-detail .openstudio-content-view-version-img > img.typethumbnail {
-        height: auto;
         max-width: 64px;
         width: 100%;
     }
@@ -6564,6 +6578,7 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-browse-post-item-img-default .openstudio-browse-post-item-thumbnail {
         height: 80px;
         margin-top: 47px;
+        object-fit: unset;
     }
 
     .openstudio-folder-browse-posts-header-result-buttons-bottom {
@@ -7085,6 +7100,7 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-view-deleted-item-picture img {
         width: 100%;
+        height: auto;
     }
 
     .openstudio-view-deleted-item-ordernumber-guide {
