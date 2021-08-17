@@ -67,6 +67,7 @@ Feature: Create and edit Open Studio Folder
         And I should not see "Create new folder"
         And I navigate to "Edit settings" in current page administration
         And I follow "Expand all"
+        And I should see "Request feedback (own content only)"
         And I set the field "Enable folders" to "1"
         And I press "Save and display"
         And I should see "Upload content"
