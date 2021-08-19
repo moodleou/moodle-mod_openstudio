@@ -7932,3 +7932,18 @@ a.openstudio-add-new-content-link:hover  {
 .openstudio-profile-head.openstudio-profile-without-own-date {
     padding-bottom: 20px;
 }
+
+/* High contrast mode */
+
+/* For firefox */
+@media (forced-colors: active) {
+    .gecko .openstudio-folder-content .openstudio-folder-background {
+        border: 1px solid;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    body:not(.safari) .openstudio-folder-content .openstudio-folder-background {
+        border: 1px solid;
+    }
+}
