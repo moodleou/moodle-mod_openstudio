@@ -675,7 +675,7 @@ EOF;
      * @param string $shortname Course short name
      * @return int
      */
-    protected function get_course_id($shortname) {
+    protected function get_course_id($shortname): ?int {
         global $DB;
 
         if (!$id = $DB->get_field('course', 'id', array('shortname' => $shortname))) {
