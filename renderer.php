@@ -886,26 +886,74 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      * This function renders the HTML fragment for the report usage content of Open Studio.
      *
      * @param array $summarydata Summary data of report usage.
-     * @param array $contentdataactivity Summary of content activities.
-     * @param array $contentdatavisbility Summary of content by sharing/visibility setting.
-     * @param array $flagdata Summary of flagging activity data for a given studio instance.
-     * @param array $storage Storage usage for a given studio instance.
-     * @param array $activitylog Logged actions.
-     * @return string The rendered HTM fragment.
+     * @return bool|string
+     * @throws moodle_exception
      */
-    public function reportusage($summarydata, $contentdataactivity, $contentdatavisbility, $flagdata, $storage, $activitylog) {
-        global $OUTPUT;
-
+    public function report_summary($summarydata) {
         $data = new stdClass();
-
         $data->summarydata = $summarydata;
+
+        return $this->render_from_template('mod_openstudio/reportsummary', $data);
+    }
+
+    /**
+     * This function renders the HTML fragment for the report usage content of Open Studio.
+     *
+     * @param array $contentdataactivity
+     * @param array $contentdatavisbility
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    public function report_contentactivity($contentdataactivity, $contentdatavisbility) {
+        $data = new stdClass();
         $data->contentdataactivity = $contentdataactivity;
         $data->contentdatavisbility = $contentdatavisbility;
+
+        return $this->render_from_template('mod_openstudio/reportcontentactivity', $data);
+    }
+
+    /**
+     * This function renders the HTML fragment for the report usage content of Open Studio.
+     *
+     * @param array $flagdata
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    public function report_flag($flagdata) {
+        $data = new stdClass();
         $data->flagdata = $flagdata;
+
+        return $this->render_from_template('mod_openstudio/reportflag', $data);
+    }
+
+    /**
+     * This function renders the HTML fragment for the report usage content of Open Studio.
+     *
+     * @param array $summarydata
+     * @param array $storage
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    public function report_storage($summarydata, $storage) {
+        $data = new stdClass();
+        $data->summarydata = $summarydata;
         $data->storage = $storage;
+
+        return $this->render_from_template('mod_openstudio/reportstorage', $data);
+    }
+
+    /**
+     * This function renders the HTML fragment for the report usage content of Open Studio.
+     *
+     * @param array $activitylog
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    public function report_activitylog($activitylog) {
+        $data = new stdClass();
         $data->activitylog = $activitylog;
 
-        return $this->render_from_template('mod_openstudio/reportusage', $data);
+        return $this->render_from_template('mod_openstudio/reportactivitylog', $data);
     }
 
     /**

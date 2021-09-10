@@ -19,7 +19,7 @@
  * @copyright The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+define('NO_OUTPUT_BUFFERING', true);
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
 
@@ -56,15 +56,15 @@ util::add_breadcrumb($PAGE, $cm->id, navigation_node::TYPE_ACTIVITY, $crumbarray
 
 // Output HTML.
 echo $OUTPUT->header(); // Header.
-
+echo html_writer::tag('h1', get_string('navadminusagereport', 'openstudio'));
+echo html_writer::start_tag('div', ['class' => 'openstudio-report-usage']);
 $studioid = util::get_studioid_from_coursemodule($cm->id);
 
 $summarydata = reports::get_activity_summary($course->id, $studioid);
-$contentdata = reports::get_total_slots($studioid);
-$flagdata = reports::get_total_flags($studioid);
-$storage = reports::get_total_storage($studioid);
-$activitylog = reports::get_activity_log($course->id, $cm->id);
+$htmlsummary = $renderer->report_summary($summarydata);
+echo $htmlsummary;
 
+$contentdata = reports::get_total_slots($studioid);
 $contentdataactivity = array();
 foreach ($contentdata->slotactivity as $value) {
     $levelname = levels::get_name($value->levelcontainer, $value->levelid);
@@ -90,7 +90,11 @@ foreach ($contentdata->slotvisbility as $value) {
             'totalcontents' => $value->totalslots
     );
 }
+$contentdata->slotactivity->close();
+$htmlcontentactivity = $renderer->report_contentactivity($contentdataactivity, $contentdatavisbility);
+echo $htmlcontentactivity;
 
+$flagdata = reports::get_total_flags($studioid);
 $flagdatacontentstop20 = array();
 foreach ($flagdata->slotstop20 as $value) {
     $flagdatacontentstop20[] = array(
@@ -111,7 +115,12 @@ foreach ($flagdata->slots as $value) {
     );
 }
 $flagdata->flagdatacontents = $flagdatacontents;
+$flagdata->slots->close();
+$flagdata->slotstop20->close();
+$htmlflag = $renderer->report_flag($flagdata);
+echo $htmlflag;
 
+$storage = reports::get_total_storage($studioid);
 $storagebycontent = round($storage->storagebyslot / 1024 / 1024, 2);
 $storagebycontentversion = round($storage->storagebyslotversion / 1024 / 1024, 2);
 $storagebythumbnail = round($storage->storagebythumbnail / 1024 / 1024, 2);
@@ -154,16 +163,16 @@ foreach ($storage->storagebyuser as $value) {
     );
 }
 $storage->storagestoragebyuser = $storagestoragebyuser;
-
-$html = $renderer->reportusage($summarydata, $contentdataactivity, $contentdatavisbility, $flagdata, $storage, $activitylog);
-
-echo $html;
 // After using recordset. Close all recordset to improve performance.
-$contentdata->slotactivity->close();
-$flagdata->slots->close();
-$flagdata->slotstop20->close();
 $storage->slotsbymimetype->close();
 $storage->storagebyuser->close();
+$htmlstorage = $renderer->report_storage($summarydata, $storage);
+echo $htmlstorage;
+
+$activitylog = reports::get_activity_log($course->id, $cm->id);
 $activitylog->close();
+$htmlactivitylog = $renderer->report_activitylog($activitylog);
+echo $htmlactivitylog;
+echo html_writer::end_tag('div');
 // Finish the page.
 echo $OUTPUT->footer();

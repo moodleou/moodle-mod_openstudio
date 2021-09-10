@@ -1,0 +1,159 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_openstudio/reportusage
+
+    Report usage template of the OpenStudio UI.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Example context (json):
+    {
+        "summarydata": {
+            "registeredusers" : 1,
+            "activeusers" : 2,
+            "averagecontentperuser" : 3,
+            "averagepinboardcontentperuser" : 4,
+            "averageactivitycontentperuser" : 5,
+            "slots" : {
+                "slots" : 1,
+                "slotsdeleted" : 0
+            },
+            "slotversions" : {
+                "slotversions" : 1,
+                "slotversionsdeleted" : 0
+            },
+            "slotcomments" : {
+                "slotcomments" : 1,
+                "slotaudiocomments" : 1,
+                "slotcommentsdeleted" : 0
+            }
+         },
+         "contentdataactivity" : {
+            "levelname" : {
+                "level1name" : "level 1",
+                "level2name" : "level 2",
+                "level3name" : "level 3"
+            },
+            "contenttypename" : "Image",
+            "totalusers" : 10,
+            "totalcontents": 5
+        },
+        "flagdata" : {
+            "flagdatacontentstop20" : {
+                 "levelname" : {
+                    "level1name" : "level 1",
+                    "level2name" : "level 2",
+                    "level3name" : "level 3"
+                },
+                "contentname" : "Content A",
+                "ownername": "Admin",
+                "totalcontents": "10"
+             },
+            "people" : {
+                "totalusers" : 10,
+                "totalpeople" : 5
+             },
+            "peopletop20" : {
+                "firstname" : "Admin",
+                "lastname" : "User",
+                "totalusers" : 5
+             },
+            "flagdatacontentstrackedtop20" : {
+                 "levelname" : {
+                    "level1name" : "level 1",
+                    "level2name" : "level 2",
+                    "level3name" : "level 3"
+                },
+                "totalcontents": "10"
+             }
+        },
+        "storagetotalmb" : 10,
+        "storagetotalgb" : 1,
+        "storagebycontentmb" : 10,
+        "storagebycontentgb" : 1,
+        "storagebycontentversionmb" : 10,
+        "storagebycontentversiongb" : 1,
+        "storagebythumbnailmb" : 10,
+        "storagebythumbnailgb" : 1,
+        "storagebycommentmb" : 10,
+        "storagebycommentgb" : 1,
+        "storage" : {
+            "storagecontentsbymimetype" : {
+                "mimetype" : "image/jpeg",
+                "totals" : 100,
+                "storageusedmb" : 100,
+                "storageusedgb" : 1
+            },
+            "storagestoragebyuser" : {
+                "owner" : "Admin User",
+                "totals" : 100,
+                "storageusedmb" : 100,
+                "storageusedgb" : 1
+            }
+        },
+         "activitylog" : {
+            "action" : "Add",
+            "totals" : 100
+        }
+    }
+}}
+
+<table>
+    <caption>{{#str}} reportusage2section1, mod_openstudio {{/str}}</caption>
+    <tr>
+        <th colspan="3">{{#str}} reportusage2section2, mod_openstudio {{/str}}</th>
+        <th>{{#str}} reportusage2section3, mod_openstudio {{/str}}</th>
+        <th>{{#str}} reportusage2section4, mod_openstudio {{/str}}</th>
+        <th>{{#str}} reportusage2section5, mod_openstudio {{/str}}</th>
+    </tr>
+    {{#contentdataactivity}}
+        <tr>
+            {{#levelname}}
+                <td>{{level1name}}</td>
+                <td>{{level2name}}</td>
+                <td>{{level3name}}</td>
+            {{/levelname}}
+            <td>{{contenttypename}}</td>
+            <td>{{totalusers}}</td>
+            <td>{{totalcontents}}</td>
+        </tr>
+    {{/contentdataactivity}}
+</table>
+<table>
+    <caption>{{#str}} reportusage3section1, mod_openstudio {{/str}}</caption>
+    <tr>
+        <th colspan="3">{{#str}} reportusage2section2, mod_openstudio {{/str}}</th>
+        <th>{{#str}} reportusage3section3, mod_openstudio {{/str}}</th>
+        <th>{{#str}} reportusage3section4, mod_openstudio {{/str}}</th>
+    </tr>
+    {{#contentdatavisbility}}
+        <tr>
+            {{#levelname}}
+                <td>{{level1name}}</td>
+                <td>{{level2name}}</td>
+                <td>{{level3name}}</td>
+            {{/levelname}}
+            <td>{{visibilitytypename}}</td>
+            <td>{{totalcontents}}</td>
+        </tr>
+    {{/contentdatavisbility}}
+</table>
