@@ -1,4 +1,4 @@
-@ou @ou_vle @mod @mod_openstudio @mod_openstudio_test_honesty
+@ou @ou_vle @mod @mod_openstudio @mod_openstudio_test_honesty @javascript
 Feature: Accept plagarism statement in Open Studio
     In order to confirm I am not going to plagarise other peoples' work
     As a student
