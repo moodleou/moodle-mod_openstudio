@@ -236,7 +236,7 @@ EOF;
         // This SQL gets the list of people who have created slots and also get the dates when they last flagged on slots.
         $sql = <<<EOF
 SELECT DISTINCT u.id, u.username, u.firstname, u.lastname, u.email,
-                u.picture, u.url, u.description, u.imagealt,
+                u.picture, u.description, u.imagealt,
                 u.firstnamephonetic, u.lastnamephonetic, u.middlename, u.alternatename,
                 max(s.timemodified) AS slottimemodified,
                 max(f.timemodified) AS flagtimemodified
@@ -321,7 +321,7 @@ EOF;
         }
         $sql .= " {$sqlhelpneeded}";
 
-        $sql .= " GROUP BY u.id, u.username, u.firstname, u.lastname, u.email, u.picture, u.url,";
+        $sql .= " GROUP BY u.id, u.username, u.firstname, u.lastname, u.email, u.picture,";
         $sql .= " u.description, u.imagealt, u.firstnamephonetic, u.lastnamephonetic, u.middlename, u.alternatename";
 
         // Sort the result based on requested ordering.
