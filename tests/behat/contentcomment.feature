@@ -21,7 +21,7 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
         Then I log in as "admin"
         And the following config values are set as admin:
             | enablewebservices | 1 |
-        And I navigate to "Plugins > Manage protocols" in site administration
+        And I navigate to "Server > Manage protocols" in site administration
         And I click on "Enable" "link" in the "REST protocol" "table_row"
         And I press "Save changes"
 

@@ -20,7 +20,8 @@ Feature: Export my Open Studio contents
         And the following config values are set as admin:
             | enablewebservices | 1 |
             | enableportfolios  | 1 |
-        And I navigate to "Plugins > Manage protocols" in site administration
+
+        And I navigate to "Server > Manage protocols" in site administration
         And I click on "Enable" "link" in the "REST protocol" "table_row"
         And I press "Save changes"
         And I navigate to "Plugins > Manage portfolios" in site administration
