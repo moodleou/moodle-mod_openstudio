@@ -1174,12 +1174,10 @@ class folder_testcase extends \advanced_testcase {
         // Slots copy1, copy2 and edited are all copies of original, so should get all 3 back.
         $originalcopies = \mod_openstudio\local\api\folder::get_content_copies($this->provenance->original->id);
         $this->assertEquals(3, count($originalcopies));
-        $originalcopyids = array_map(function($a) {
-            return $a->contentid;
-        }, $originalcopies);
-        $this->assertContains($this->provenance->copy1->id, $originalcopyids);
-        $this->assertContains($this->provenance->copy2->id, $originalcopyids);
-        $this->assertContains($this->provenance->edited->id, $originalcopyids);
+        $originalcopyids = array_column($originalcopies, 'contentid');
+        $this->assertEquals(true, in_array($this->provenance->copy1->id, $originalcopyids));
+        $this->assertEquals(true, in_array($this->provenance->copy2->id, $originalcopyids));
+        $this->assertEquals(true, in_array($this->provenance->edited->id, $originalcopyids));
     }
 
     public function test_get_content_copies_copy_of_copy() {

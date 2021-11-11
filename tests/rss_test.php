@@ -483,8 +483,8 @@ class rss_testcase extends \advanced_testcase {
             // Finally, as group will return both module and group slots (but within the group only.
             // This we have established by checking for user 7 and a false returning for users in other groups).
             // Let's then make sure all our slots are either module or group visibility.
-            $this->assertContains($slot->visibility,
-                    [\mod_openstudio\local\api\content::VISIBILITY_GROUP, \mod_openstudio\local\api\content::VISIBILITY_MODULE]);
+            $this->assertEquals(true, in_array($slot->visibility,
+                    [\mod_openstudio\local\api\content::VISIBILITY_GROUP, \mod_openstudio\local\api\content::VISIBILITY_MODULE]));
         }
         // Make sure total is less than or equal to 25.
         $this->assertLessThanOrEqual(25, $returnedslots);

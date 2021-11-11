@@ -29,7 +29,7 @@ class tool_datamasking_test extends \advanced_testcase {
      * Tests actual behaviour of the masking applied in this plugin.
      */
     public function test_behaviour(): void {
-        global $DB;
+        global $DB, $CFG;
 
         $this->resetAfterTest();
 
@@ -89,12 +89,13 @@ class tool_datamasking_test extends \advanced_testcase {
         $openstudiocommentscommenttextsql = 'SELECT commenttext FROM {openstudio_comments} ORDER BY id';
         $this->assertEquals(['X.', ''], $DB->get_fieldset_sql($openstudiocommentscommenttextsql));
         $this->assertEquals(['Masked content', ''], $DB->get_fieldset_sql($openstudiocontentssql));
+        $maskedlength = strlen(file_get_contents($CFG->dirroot . '/admin/tool/datamasking/placeholders/text_plain.txt'));
 
-        \tool_datamasking\testing_utils::check_file($this, $fileids[0], 'masked.txt', 224);
-        \tool_datamasking\testing_utils::check_file($this, $fileids[1], 'masked.txt', 224);
-        \tool_datamasking\testing_utils::check_file($this, $fileids[2], 'masked.txt', 224);
-        \tool_datamasking\testing_utils::check_file($this, $fileids[3], 'masked.txt', 224);
-        \tool_datamasking\testing_utils::check_file($this, $fileids[4], 'masked.txt', 224);
+        \tool_datamasking\testing_utils::check_file($this, $fileids[0], 'masked.txt', $maskedlength);
+        \tool_datamasking\testing_utils::check_file($this, $fileids[1], 'masked.txt', $maskedlength);
+        \tool_datamasking\testing_utils::check_file($this, $fileids[2], 'masked.txt', $maskedlength);
+        \tool_datamasking\testing_utils::check_file($this, $fileids[3], 'masked.txt', $maskedlength);
+        \tool_datamasking\testing_utils::check_file($this, $fileids[4], 'masked.txt', $maskedlength);
         \tool_datamasking\testing_utils::check_file($this, $fileids[5], 'f.txt', 6);
     }
 }

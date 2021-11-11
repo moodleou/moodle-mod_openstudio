@@ -797,8 +797,8 @@ class privacy_provider_test extends provider_testcase {
         provider::get_users_in_context($userlist);
         $userids = $userlist->get_userids();
         $this->assertCount(2, $userids);
-        $this->assertContains($user1->id, $userids);
-        $this->assertContains($user3->id, $userids);
+        $this->assertEquals(true, in_array($user1->id, $userids));
+        $this->assertEquals(true, in_array($user3->id, $userids));
 
         // Test delete data for users.
         $this->assertNotEmpty($DB->get_records('openstudio_subscriptions', ['userid' => $user1->id]));
@@ -824,9 +824,9 @@ class privacy_provider_test extends provider_testcase {
         provider::get_users_in_context($userlist);
         $userids = $userlist->get_userids();
         $this->assertCount(3, $userids);
-        $this->assertContains($user1->id, $userids);
-        $this->assertContains($user2->id, $userids);
-        $this->assertContains($user3->id, $userids);
+        $this->assertEquals(true, in_array($user1->id, $userids));
+        $this->assertEquals(true, in_array($user2->id, $userids));
+        $this->assertEquals(true, in_array($user3->id, $userids));
 
         // Test delete data for users.
         $records = $DB->get_records_select('openstudio_honesty_checks', 'userid IN (:user1, :user2)', [
@@ -877,9 +877,9 @@ class privacy_provider_test extends provider_testcase {
         $userids = $userlist->get_userids();
 
         $this->assertCount(3, $userids);
-        $this->assertContains($user1->id, $userids);
-        $this->assertContains($user2->id, $userids);
-        $this->assertContains($user3->id, $userids);
+        $this->assertEquals(true, in_array($user1->id, $userids));
+        $this->assertEquals(true, in_array($user2->id, $userids));
+        $this->assertEquals(true, in_array($user3->id, $userids));
 
         // Test delete data for users.
         $approvedlist = new \core_privacy\local\request\approved_userlist($context, $component, [$user1->id, $user2->id]);
@@ -916,9 +916,9 @@ class privacy_provider_test extends provider_testcase {
         provider::get_users_in_context($userlist);
         $userids = $userlist->get_userids();
         $this->assertCount(3, $userids);
-        $this->assertContains($user1->id, $userids);
-        $this->assertContains($user2->id, $userids);
-        $this->assertContains($user3->id, $userids);
+        $this->assertEquals(true, in_array($user1->id, $userids));
+        $this->assertEquals(true, in_array($user2->id, $userids));
+        $this->assertEquals(true, in_array($user3->id, $userids));
 
         // Test delete data for users.
         $approvedlist = new \core_privacy\local\request\approved_userlist($context, $component, [$user1->id, $user2->id]);
@@ -968,9 +968,9 @@ class privacy_provider_test extends provider_testcase {
         $userids = $userlist->get_userids();
 
         $this->assertCount(3, $userids);
-        $this->assertContains($user1->id, $userids);
-        $this->assertContains($user2->id, $userids);
-        $this->assertContains($user3->id, $userids);
+        $this->assertEquals(true, in_array($user1->id, $userids));
+        $this->assertEquals(true, in_array($user2->id, $userids));
+        $this->assertEquals(true, in_array($user3->id, $userids));
 
         // Test delete data for users.
         $approvedlist = new \core_privacy\local\request\approved_userlist($context, $component, [$user1->id]);
@@ -1028,9 +1028,9 @@ class privacy_provider_test extends provider_testcase {
         provider::get_users_in_context($userlist);
         $userids = $userlist->get_userids();
         $this->assertCount(3, $userids);
-        $this->assertContains($user1->id, $userids);
-        $this->assertContains($user2->id, $userids);
-        $this->assertContains($user3->id, $userids);
+        $this->assertEquals(true, in_array($user1->id, $userids));
+        $this->assertEquals(true, in_array($user2->id, $userids));
+        $this->assertEquals(true, in_array($user3->id, $userids));
         // Test delete data for users.
         $approvedlist = new \core_privacy\local\request\approved_userlist($context, $component, [$user1->id, $user2->id, $user3->id]);
         provider::delete_data_for_users($approvedlist);
