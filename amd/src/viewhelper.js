@@ -89,22 +89,9 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
             });
 
             // Once all images loaded, try to re-arrange all items.
-            var imgs = container.find('img').not(function() {
-                return this.complete;
-            });
-
-            var count = imgs.length;
-
-            if (count) {
-                imgs.on('load', function() {
-                    count--;
-                    if (!count) {
-                        t.reArrangeItems();
-                    }
-                });
-            } else {
+            $(window).on('load',function(){
                 t.reArrangeItems();
-            }
+            });
         },
 
         /**
