@@ -25,7 +25,7 @@ Feature: Subscribe/Unsubscribe to my Open Studio
     And I follow "Advanced features"
     And I set the field "Enable web services" to "1"
     And I press "Save changes"
-    When I navigate to "Plugins > Web services > Overview" in site administration
+    When I navigate to "Server > Web services > Overview" in site administration
     And I click on "Enable protocols" "link" in the "onesystemcontrol" "table"
     And I click on "Enable" "link" in the "REST protocol" "table_row"
     And I press "Save changes"
