@@ -60,7 +60,7 @@ class levels {
         // Validate data parameters.
         switch ($level) {
             case 1:
-                if (!array_key_exists('openstudioid', $data)) {
+                if (!property_exists($data, 'openstudioid')) {
                     return false;
                 }
                 $tablename = 'openstudio_level1';
@@ -72,7 +72,7 @@ class levels {
                 // No break statement, since other than hidelevel, level2 records use the same fields as level3 records.
 
             case 3:
-                if (!array_key_exists('parentid', $data)) {
+                if (!property_exists($data, 'parentid')) {
                     return false;
                 }
                 $tablename = 'openstudio_level' . $level;
@@ -85,7 +85,7 @@ class levels {
                 return false;
         }
 
-        if (!array_key_exists('name', $data)) {
+        if (!property_exists($data, 'name')) {
             return false;
         }
 
