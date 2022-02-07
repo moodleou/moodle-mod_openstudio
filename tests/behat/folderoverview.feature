@@ -321,7 +321,7 @@ Feature: Open Studio Folder Overview
       # Only once content Move Up and Move Down Button disable
       And the "Move Up" "button" should be disabled
       And the "Move Down" "button" should be disabled
-
+      And I wait until the page is ready
       And I click on "Close" "button" in the "Order posts" "dialogue"
       And I follow "Add new content"
       And I press "Add file"
@@ -425,6 +425,7 @@ Feature: Open Studio Folder Overview
       And I set the field "Move to post number" to "4"
       And I click on "Save order" "button" in the "Order posts" "dialogue"
       And I should see "You cannot move this content beyond other fixed contents."
+      And I wait until the page is ready
       And I click on "Close" "button" in the "Order posts" "dialogue"
       And Open studio contents should be in the following order:
         | Test My Folder Overview 1 |
@@ -442,6 +443,7 @@ Feature: Open Studio Folder Overview
       And I click on "Move to post number" "text"
       Then I should see "You cannot move this content beyond other fixed contents."
 
+      And I wait until the page is ready
       And I click on "Close" "button" in the "Order posts" "dialogue"
       And I press "Order posts"
 
@@ -455,12 +457,14 @@ Feature: Open Studio Folder Overview
       And I should see "You cannot move this content beyond other fixed contents."
 
       # Multiply movement content
+      And I wait until the page is ready
       And I click on "Close" "button" in the "Order posts" "dialogue"
       And I press "Order posts"
       And I set the field with xpath "//input[@id='openstudio-folder-reorder-input-4']" to "3"
       And I click on "Move to post number" "text"
       And I set the field with xpath "//input[@id='openstudio-folder-reorder-input-4']" to "2"
       And I click on "Move to post number" "text"
+      And I wait until the page is ready
       And I click on "Save order" "button" in the "Order posts" "dialogue"
       And Open studio contents should be in the following order:
         | Test My Folder Overview 1 |
