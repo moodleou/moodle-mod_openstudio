@@ -137,7 +137,7 @@ Feature: My Activity view in Open Studio
       | Files                     | mod/openstudio/tests/importfiles/test2.jpg |
     And I press "Save"
     And I follow "My Content > My Activities" in the openstudio navigation
-    And I click on "div.openstudio-grid-item-content" "css_element"
+    And I click on "div.openstudio-grid-item-content-preview" "css_element"
     And I go to content edit view
     And I set the following fields to these values:
       | Who can view this content | My module                                  |
