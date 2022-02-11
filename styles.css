@@ -2139,6 +2139,84 @@ a.openstudio-add-title:hover  {
     font-weight: bold;
 }
 
+#page-mod-openstudio-contentedit #osep-mainwrapper .openstudio-showgps-box {
+    display: flex;
+    padding-bottom: 10px;
+    padding-left: 3px;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper .openstudio-showgps-box .advcheckbox {
+    display: contents;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper .openstudio-showgps-box .advcheckbox .checkbox {
+    padding-left: 0;
+    display: contents;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper .openstudio-showgps-box .advcheckbox:nth-child(2) .col-md-3 {
+    display: inherit;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper .openstudio-showgps-box .checkbox .form-check {
+    margin-right: 7px;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper #contentformownershipdata .form-inline {
+    margin-top: -5px;
+
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper #contentformownershipdata .form-inline .inline-radio em {
+    font-style: normal;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper #openstudio_upload_content_add_file #id_retainimagemetadata {
+    margin-right: 6px;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper #openstudio_upload_content_add_file .openstudio-showgps-box #id_showimagedata,
+#page-mod-openstudio-contentedit #osep-mainwrapper #openstudio_upload_content_add_file .openstudio-showgps-box #id_showgps {
+    margin-right: 5px;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper #openstudio_upload_content_add_file .openstudio-showgps-box .btn.btn-link[data-content*="help-popover-container"] {
+    margin-left: -7px;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper #openstudio_upload_content_add_file label[for*="id_retainimagemetadata"] + span .btn.btn-link[data-content*="help-popover-container"] {
+    margin-left: -3px;
+}
+
+#page-mod-openstudio-contentedit.gecko #osep-mainwrapper #openstudio_upload_content_add_file label[for*="id_retainimagemetadata"] + span .btn.btn-link[data-content*="help-popover-container"] {
+    margin-left: -4px;
+}
+
+body#page-mod-openstudio-contentedit:not(.osep-layoutnoblocks) form .form-group .col-md-3 p[id*="_label"] {
+    float: none;
+}
+
+@media (max-width: 1199px) {
+    .mform #openstudio_upload_content_add_file .form-group .col-form-label {
+        float: none;
+    }
+
+    .mform #openstudio_upload_content_add_file > .advcheckbox {
+        margin-left: 1px;
+    }
+
+    #page-mod-openstudio-contentedit #osep-mainwrapper #contentformoptionalmetadata .openstudio_contentform_tag .btn.btn-link[data-content*="help-popover-container"] {
+        margin-left: -3px;
+    }
+
+}
+
+@media (max-width: 767px) {
+    #page-mod-openstudio-contentedit #osep-mainwrapper .openstudio-showgps-box .advcheckbox .checkbox {
+        display: block;
+    }
+}
+
 .path-mod-openstudio span > label {
     font-size: 1em;
 }

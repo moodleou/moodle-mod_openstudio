@@ -488,12 +488,12 @@ $string['contentformsubmitbutton'] = 'Save';
 $string['folderformsubmitbutton'] = 'Create folder';
 $string['folderformvisibility'] = 'Who can view this folder';
 
-$string['contentformshowgps'] = 'Show GPS Data';
+$string['contentformshowgps'] = 'Show GPS data';
 $string['contentformshowgpsdescription'] = 'Show GPS location of where image was taken if available';
-$string['contentformshowgps_help'] = 'Show GPS location of where image was taken if available';
-$string['contentformshowimagedata'] = 'Show Image Data';
+$string['contentformshowgps_help'] = 'GPS information stored by your digital camera includes the location that digital images were taken. If selected, this will display next to your image.';
+$string['contentformshowimagedata'] = 'Show image data';
 $string['contentformshowimagedatadescription'] = 'Show metadata embedded in the image if available';
-$string['contentformshowimagedata_help'] = 'Show metadata embedded in the image if available';
+$string['contentformshowimagedata_help'] = 'Image data stored by your digital camera includes date, time and exposure information. If selected, this will display next to your image.';
 
 $string['contentformhelp1'] = '
 Upload a file from your computer.';
@@ -1530,8 +1530,8 @@ $string['privacy:subcontext:comments'] = 'Comments';
 $string['privacy:subcontext:flags'] = 'Flags';
 $string['privacy:subcontext:notifications'] = 'Notifications';
 $string['deletedbyrequest'] = 'Comment deleted by user request';
-$string['retainimagemetadata'] = 'Retain EXIF image data';
-$string['retainimagemetadata_help'] = 'Enable this option to retain it, note that once removed the data cannot be restored without re-uploading the image.';
+$string['retainimagemetadata'] = 'Retain EXIF data';
+$string['retainimagemetadata_help'] = 'Exchangeable image file format includes data stored by a digital camera such as exposure, date and time captured and GPS data. Tick to retain this information. Choose the options below so that others can see the information next to the image. Note once removed the data can’t be restored without reuploading your image.';
 $string['retainimagemetadataerror'] = 'In order to show GPS or Image data the EXIF image data must be retained';
 $string['sharetoviewbanner'] = 'Share to view is enabled';
 $string['sharetoviewbanner_help'] = 'You will not see any other student\'s work until you share a post yourself.';

@@ -227,6 +227,16 @@ class mod_openstudio_content_form extends moodleform {
 
             }
 
+            if (!extension_loaded('imagick') || !class_exists('Imagick')) {
+                $mform->addElement('hidden', 'retainimagemetadata');
+                $mform->setType('retainimagemetadata', PARAM_INT);
+                $mform->setDefault('retainimagemetadata', 0);
+            } else {
+                $mform->addElement('advcheckbox', 'retainimagemetadata',
+                        get_string('retainimagemetadata', 'openstudio'), null, [0, 1]);
+                $mform->addHelpButton('retainimagemetadata', 'retainimagemetadata', 'openstudio');
+            }
+
             if (!$this->_customdata['feature_contentusesfileupload'] ||
                     (((int) $this->_customdata['contenttype']) === content::TYPE_FOLDER)) {
                 $mform->addElement('hidden', 'showgps');
@@ -240,15 +250,16 @@ class mod_openstudio_content_form extends moodleform {
                 $mform->addElement('html', html_writer::start_tag('div',
                         array('class' => 'openstudio-showgps-box')));
 
-                $showgpsarray = array();
-                $showgpsarray[] = $mform->createElement('advcheckbox', 'showgps', '',
-                                  get_string('contentformshowgps', 'openstudio'),
-                                  array('group' => 1), array(0, content::INFO_GPSDATA));
-
-                $showgpsarray[] = $mform->createElement('advcheckbox', 'showimagedata', '',
+                $mform->addElement('advcheckbox', 'showimagedata', '',
                         get_string('contentformshowimagedata', 'openstudio'),
                         array('group' => 1), array(0, content::INFO_IMAGEDATA));
-                $mform->addGroup($showgpsarray, 'showgpsarray', '',  array(' '), false);
+                $mform->addHelpButton('showimagedata', 'contentformshowimagedata', 'openstudio');
+
+                $mform->addElement('advcheckbox', 'showgps', '',
+                        get_string('contentformshowgps', 'openstudio'),
+                        array('group' => 1), array(0, content::INFO_GPSDATA));
+                $mform->addHelpButton('showgps', 'contentformshowgps', 'openstudio');
+
                 $mform->setDefault('showgps', 0);
                 $mform->setDefault('showimagedata', 0);
                 $mform->addElement('html', html_writer::end_tag('div'));
@@ -264,14 +275,7 @@ class mod_openstudio_content_form extends moodleform {
                     }
                 }
             }
-            if (!extension_loaded('imagick') || !class_exists('Imagick')) {
-                $mform->addElement('hidden', 'retainimagemetadata');
-                $mform->setType('retainimagemetadata', PARAM_INT);
-                $mform->setDefault('retainimagemetadata', 0);
-            } else {
-                $mform->addElement('checkbox', 'retainimagemetadata', get_string('retainimagemetadata', 'openstudio'));
-                $mform->addHelpButton('retainimagemetadata', 'retainimagemetadata', 'openstudio');
-            }
+
 
             if (!empty($this->_customdata['retainimagemetadata'])) {
                 $mform->setDefault('retainimagemetadata', $this->_customdata['retainimagemetadata']);
