@@ -183,6 +183,7 @@ Feature: View author's work in Open Studio
         And I follow "Test Open Studio name 2"
         And I follow "People" in the openstudio navigation
         Then I should see "Student 1"
+        And I should see "View all"
         And I click on ".openstudio-profile-details a.openstudio-profile-view" "css_element"
         Then I should see "Student 1" in the "#openstudio_profile_fullusername" "css_element"
         And the "class" attribute of "#profile_percent div:nth-child(2) span.openstudio-profile-progress-step" "css_element" should contain "content-block-active"

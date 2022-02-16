@@ -2288,6 +2288,20 @@ a.openstudio-add-title:hover  {
     float: left;
 }
 
+.openstudio-grid-item-content-title a,
+.openstudio-grid-item-content-title a:hover,
+.openstudio-grid-item-content-title a:active,
+body .openstudio-grid-item-content-title a:focus {
+    color: #002158;
+}
+.openstudio-grid-item-content-title a:hover,
+.openstudio-grid-item-content-title a:active {
+    text-decoration: underline;
+}
+.openstudio-grid-item-content-title a {
+    text-decoration: none;
+}
+
 .openstudio-grid-item-content-icon {
     width: 18px;
     height: 18px;

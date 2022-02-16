@@ -327,6 +327,7 @@ Feature: Create Open Studio contents
     And I log in as "student2"
     And I am on "Course 1" course homepage
     And I follow "Test Open Studio name 1"
+    And I should see "View all"
     And I click on ".openstudio-grid-item-content-detail-owner-view" "css_element"
     And I follow "My Content > My Activities" in the openstudio navigation
     Then I should see "Content 1.1 Required"

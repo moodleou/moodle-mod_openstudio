@@ -56,7 +56,7 @@
      }
 }}
 <div class="openstudio-grid-item-content">
-    <div class="openstudio-grid-item-content-title">{{{name}}}</div>
+    <div class="openstudio-grid-item-content-title"><a href="{{#isfolder}}{{{folderlink}}}{{/isfolder}}{{^isfolder}}{{{contentlink}}}{{/isfolder}}">{{{name}}}</a></div>
     <div class="openstudio-tooltip">
         <img class="openstudio-grid-item-content-icon" src="{{{contenticon}}}" alt="{{{name}}}" tabindex="0">
         <span class="openstudio-tooltiptext {{#isonlyme}}openstudio-tooltiptext-onlyme{{/isonlyme}}">{{itemsharewith}}</span>
