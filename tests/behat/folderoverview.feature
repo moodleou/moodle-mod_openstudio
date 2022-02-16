@@ -579,8 +579,8 @@ Feature: Open Studio Folder Overview
       And I follow "My Content > My Activities" in the openstudio navigation
       And I click on "Folder 1" "link" in the ".openstudio-grid-item" "css_element"
       Then I press "Activity guidance"
-      And I should see "Folder guidance text"
-      And I should see "Content 1"
-      And I should see "Content 1 guidance"
-      And I should see "Content 2"
-      And I should see "No guidance has been given for this content"
+      And I should see "Folder guidance text" in the ".modal-body" "css_element"
+      And I should see "Content 1" in the ".modal-body" "css_element"
+      And I should see "Content 1 guidance" in the ".modal-body" "css_element"
+      And I should see "Content 2" in the ".modal-body" "css_element"
+      And I should see "No guidance has been given for this content" in the ".modal-body" "css_element"

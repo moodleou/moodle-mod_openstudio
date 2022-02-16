@@ -87,6 +87,7 @@ Feature: Create and edit Open Studio Folder
 
         # Enable Folder in My Module
         And I follow "People" in the openstudio navigation
+        And I should see "View other students’ progress, their participation and their uploads."
         And I follow "Shared content > Module 1" in the openstudio navigation
         And I should see "Module 1"
         And I should see "Upload content"

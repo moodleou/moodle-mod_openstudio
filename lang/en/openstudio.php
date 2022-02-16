@@ -808,6 +808,12 @@ $string['commenterror'] = 'Comment error from database';
 $string['subemailunsubscribecontent'] = 'Unsubscribe from this content';
 $string['subemailunsubscribestream'] = 'Unsubscribe from this stream';
 
+$string['subtitleofthememodulename'] = 'View all work that’s been shared with the module cohort, including your own.';
+$string['subtitleofthemegroupname'] = 'View all work that’s been shared with your group cohort, including your own.';
+$string['subtitleofthemegroupprivatename'] = 'Pre-defined activity slots set by module teams. Your shared posts will also be seen in corresponding shared content areas.';
+$string['subtitleofthemepinboardname'] = 'View your private posts in this area. Your shared posts will also be seen in shared content areas.';
+$string['subtitleofpeoplename'] = 'View other students’ progress, their participation and their uploads.';
+
 $string['folderactivityguidance'] = 'Activity guidance';
 $string['foldernoguidance'] = 'No guidance has been given for this folder';
 $string['foldernocontentguidance'] = 'No guidance has been given for this content';

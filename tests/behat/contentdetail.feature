@@ -50,6 +50,7 @@ Feature: Create and edit Open Studio contents detail
         And I log in as "teacher1"
         And I am on "Course 1" course homepage
         And I turn editing mode on
+        And I wait until the page is ready
         And I add a "OpenStudio 2" to section "1" and I fill the form with:
             | Name                         | Test Open Studio name 1      |
             | Description                  | Test Open Studio description |
@@ -134,6 +135,7 @@ Feature: Create and edit Open Studio contents detail
         And I press "Save"
 
         And the "src" attribute of "#openstudio_content_view_primary > div.openstudio-content-view-file > a > img" "css_element" should contain "geotagged.jpg"
+        And I wait until the page is ready
         And I should see "Test slot 1 description"
 
         And I should see "0 Favourites"

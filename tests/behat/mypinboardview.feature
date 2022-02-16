@@ -72,6 +72,7 @@ Feature: Open Studio pinboard stream
         And I press "Save"
         And I follow "My Content > My Pinboard" in the openstudio navigation
         Then I should see "Test My Pinboard View"
+        Then I should see "View your private posts in this area. Your shared posts will also be seen in shared content areas."
         And I follow "Shared content > My Module" in the openstudio navigation
         Then I should not see "Test My Pinboard View"
 

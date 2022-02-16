@@ -70,6 +70,7 @@ Feature: My Activity view in Open Studio
     When I follow "Test Open Studio name 1"
     And I follow "My Content > My Activities" in the openstudio navigation
     Then I should see "Activity 1"
+    Then I should see "Pre-defined activity slots set by module teams. Your shared posts will also be seen in corresponding shared content areas."
     And I should not see "Activity 2"
     And I should see "Activity 3"
 

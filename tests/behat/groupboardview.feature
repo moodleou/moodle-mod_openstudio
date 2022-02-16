@@ -70,6 +70,7 @@ Feature: Open Studio group stream
           | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
         And I follow "Shared content > My Group" in the openstudio navigation
+        And I should see "View all work that’s been shared with your group cohort, including your own."
         Then I should see "Test My Group Board View 1"
 
         # Check that content posted in one group can be viewed by a user in another group when in Visible Groups mode

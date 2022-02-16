@@ -70,6 +70,7 @@ Feature: Create Open Studio contents
         And I should not see "Details"
         And I press "Save"
         And I follow "Shared content > My Module" in the openstudio navigation
+        And I should see "View all work that’s been shared with the module cohort, including your own."
         Then the "src" attribute of "img.openstudio-grid-item-thumbnail" "css_element" should contain "online_rgb_32p"
 
     Scenario: Add new content just a title and description with a file

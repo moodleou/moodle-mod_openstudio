@@ -1858,7 +1858,21 @@ label.openstudio-export-item-name {
     font-size: 1.57142em;
     line-height: 22px;
     margin: 0;
-    padding: 15px 24px 13px;
+    padding: 0 24px 0;
+}
+
+.mymodule-subttile.subtitle-sharetoview,
+.mygroup-subttile.subtitle-sharetoview {
+    padding-top: 5px !important;
+}
+
+.openstudio-module-subtitle {
+    font-size: 1em;
+    line-height: 18px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 8px 24px 19px;
+    color: #002158;
 }
 
 .openstudio-content-view-profile-bar,
@@ -7334,8 +7348,29 @@ a.openstudio-add-new-content-link:hover  {
         padding-left: 20px;
     }
 
+    .path-mod-openstudio .openstudio-container .openstudio-module-subtitle {
+        padding: 11px 20px 19px;
+        font-size: 1.275em;
+        line-height: 23px;
+    }
+
+    .path-mod-openstudio .openstudio-container .pinboard-subttile,
+    .path-mod-openstudio .openstudio-container .activities-subttile {
+        padding-bottom: 15px !important;;
+    }
+
+    .path-mod-openstudio .openstudio-container .mymodule-subttile.subtitle-sharetoview,
+    .path-mod-openstudio .openstudio-container .mygroup-subttile.subtitle-sharetoview {
+        padding-top: 10px !important;
+    }
+
+    .path-mod-openstudio .openstudio-container .subtitle-people {
+        padding-top: 12px;
+    }
+
     .path-mod-openstudio .openstudio-container .openstudio-module-title .openstudio-banner {
-        padding-bottom: 20px;
+        padding-bottom: 0;
+        padding-top: 15px;
         margin-right: 0;
     }
 
@@ -7930,8 +7965,9 @@ a.openstudio-add-new-content-link:hover  {
 .path-mod-openstudio .openstudio-module-title {
     display: flex;
     display: -ms-flexbox;
+    flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    padding-top: 10px;
 }
 
 .path-mod-openstudio .openstudio-module-title .openstudio-banner {
