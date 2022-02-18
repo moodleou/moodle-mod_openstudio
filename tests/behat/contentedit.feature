@@ -59,9 +59,9 @@ Feature: Create and edit Open Studio contents
         And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | My module                         |
-          | Title                     | Test My Group Board View 1        |
-          | Description               | My Group Board View Description 1 |
+            | My Module   | 1                                 |
+            | Title       | Test My Group Board View 1        |
+            | Description | My Group Board View Description 1 |
         And I press "Save"
         And I go to content edit view
         Then I should see "Test Open Studio name 1"
@@ -69,10 +69,10 @@ Feature: Create and edit Open Studio contents
 
         And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | My module                                  |
-          | Title                     | Test My Group Board View modify 1          |
-          | Description               | My Group Board View Description modify 1   |
-          | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
+            | My Module   | 1                                          |
+            | Title       | Test My Group Board View modify 1          |
+            | Description | My Group Board View Description modify 1   |
+            | Files       | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
         And I follow "Shared content" in the openstudio navigation
         Then I should see "Test My Group Board View modify 1"
@@ -85,19 +85,19 @@ Feature: Create and edit Open Studio contents
         And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | My module                                  |
-          | Title                     | Test My Group Board View 1                 |
-          | Description               | My Group Board View Description 1          |
-          | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
+            | My Module   | 1                                          |
+            | Title       | Test My Group Board View 1                 |
+            | Description | My Group Board View Description 1          |
+            | Files       | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
         And I go to content edit view
         Then I should see "Test Open Studio name 1"
         And I should see "Upload content"
         And I should see "test1.jpg"
         And I set the following fields to these values:
-          | Who can view this content | My module                                |
-          | Title                     | Test My Group Board View modify 1        |
-          | Description               | My Group Board View Description modify 1 |
+            | My Module   | 1                                        |
+            | Title       | Test My Group Board View modify 1        |
+            | Description | My Group Board View Description modify 1 |
         And I press "Save"
         And I follow "Shared content" in the openstudio navigation
         Then I should see "Test My Group Board View modify 1"
@@ -110,9 +110,9 @@ Feature: Create and edit Open Studio contents
         And I follow "Add new content"
         And I press "Add web/embed link"
         And I set the following fields to these values:
-          | Who can view this content | My module                         |
-          | Title                     | Test My Group Board View 1        |
-          | Description               | My Group Board View Description 1 |
+            | My Module   | 1                                 |
+            | Title       | Test My Group Board View 1        |
+            | Description | My Group Board View Description 1 |
         And I press "Save"
         And I go to content edit view
         Then I should see "Test Open Studio name 1"
@@ -120,10 +120,10 @@ Feature: Create and edit Open Studio contents
 
         And I press "Add web/embed link"
         And I set the following fields to these values:
-          | Who can view this content | My module                                   |
-          | Title                     | Test My Group Board View modify 1           |
-          | Description               | My Group Board View Description modify 1    |
-          | Web link                  | https://www.youtube.com/watch?v=BGD6L-4yceY |
+            | My Module   | 1                                           |
+            | Title       | Test My Group Board View modify 1           |
+            | Description | My Group Board View Description modify 1    |
+            | Web link    | https://www.youtube.com/watch?v=BGD6L-4yceY |
         And I press "Save"
         And I follow "Shared content" in the openstudio navigation
         Then the "src" attribute of "img.openstudio-grid-item-thumbnail" "css_element" should contain "online_rgb_32px"
@@ -136,20 +136,20 @@ Feature: Create and edit Open Studio contents
         And I follow "Add new content"
         And I press "Add web/embed link"
         And I set the following fields to these values:
-          | Who can view this content | My module                                   |
-          | Title                     | Test My Group Board View 1                  |
-          | Description               | My Group Board View Description 1           |
-          | Web link                  | https://www.youtube.com/watch?v=BGD6L-4yceY |
+            | My Module   | 1                                           |
+            | Title       | Test My Group Board View 1                  |
+            | Description | My Group Board View Description 1           |
+            | Web link    | https://www.youtube.com/watch?v=BGD6L-4yceY |
         And I press "Save"
         And I go to content edit view
         Then I should see "Test Open Studio name 1"
         And I should see "Web link"
 
         And I set the following fields to these values:
-          | Who can view this content | My module                                   |
-          | Title                     | Test My Group Board View modify 1           |
-          | Description               | My Group Board View Description modify 1    |
-          | Web link                  | https://www.youtube.com/watch?v=R4_rYoK4aLE |
+            | My Module   | 1                                           |
+            | Title       | Test My Group Board View modify 1           |
+            | Description | My Group Board View Description modify 1    |
+            | Web link    | https://www.youtube.com/watch?v=R4_rYoK4aLE |
         And I press "Save"
         And I follow "Shared content" in the openstudio navigation
         Then the "src" attribute of "img.openstudio-grid-item-thumbnail" "css_element" should contain "online_rgb_32px"
@@ -173,10 +173,10 @@ Feature: Create and edit Open Studio contents
         And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
-            | Who can view this content | My module                                  |
-            | Title                     | Test My Group Board View 1                 |
-            | Description               | My Group Board View Description 1          |
-            | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
+            | My Module   | 1                                          |
+            | Title       | Test My Group Board View 1                 |
+            | Description | My Group Board View Description 1          |
+            | Files       | mod/openstudio/tests/importfiles/test1.jpg |
         And I click on "Insert or edit image" "button"
         And I click on "Browse repositories..." "button"
         # Because of two file pickers we have to do very specific css selectors.
@@ -194,8 +194,8 @@ Feature: Create and edit Open Studio contents
         And I should see "test1.jpg"
         And "//img[contains(@src, 'user/draft') and contains(@src, '/test2.jpg') and @alt='An image']" "xpath_element" should exist
         And I set the following fields to these values:
-            | Who can view this content | My module                                |
-            | Title                     | Test My Group Board View modify 1        |
+            | My Module | 1                                 |
+            | Title     | Test My Group Board View modify 1 |
         And I press "Save"
         And I follow "Shared content" in the openstudio navigation
         Then I should see "Test My Group Board View modify 1"

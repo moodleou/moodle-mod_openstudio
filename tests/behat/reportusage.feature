@@ -52,29 +52,29 @@ I view report usage
     And I click on "a.openstudio-profile-mypaticipation" "css_element"
     And I follow "Content 1.1 Required"
     And I set the following fields to these values:
-      | Who can view this content | My module                   |
-      | Title                     | Test My Activities View 1   |
-      | Description               | My Activities Description 1 |
+      | My Module   | 1                           |
+      | Title       | Test My Activities View 1   |
+      | Description | My Activities Description 1 |
     And I press "Save"
     And I follow "My Content > My Activities" in the openstudio navigation
     And I click on "a.openstudio-profile-mypaticipation" "css_element"
     And I follow "Content 1.2 Required"
     And I press "Add file"
     And I set the following fields to these values:
-      | Who can view this content | My module                                  |
-      | Title                     | Test My Activities View 2                  |
-      | Description               | My Activities Description 2                |
-      | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
+      | My Module   | 1                                          |
+      | Title       | Test My Activities View 2                  |
+      | Description | My Activities Description 2                |
+      | Files       | mod/openstudio/tests/importfiles/test1.jpg |
     And I press "Save"
     And I follow "My Content > My Activities" in the openstudio navigation
     And I click on "a.openstudio-profile-mypaticipation" "css_element"
     And I follow "Content 1.3 Required"
     And I press "Add web/embed link"
     And I set the following fields to these values:
-      | Who can view this content | My module                                    |
-      | Title                     | Test My Activities View 3                    |
-      | Description               | Test My Activities View 3 Add web/embed link |
-      | Web link                  | https://www.youtube.com/watch?v=ktAnpf_nu5c  |
+      | My Module   | 1                                            |
+      | Title       | Test My Activities View 3                    |
+      | Description | Test My Activities View 3 Add web/embed link |
+      | Web link    | https://www.youtube.com/watch?v=ktAnpf_nu5c  |
     And I press "Save"
     And I navigate to "Report usage" in current page administration
     And I should see "1" in the "//table[1]/tbody/tr[2]/td[6]" "xpath_element"

@@ -473,7 +473,7 @@ $string['commentformexpand'] = 'Comment form hidden, click to show comment form'
 $string['commentformcollapse'] = 'Comment form shown, click to hide comment form';
 
 $string['contentformcreatefolderbutton'] = 'Create folder';
-$string['contentformvisibility'] = 'Who can view this content';
+$string['contentformvisibility'] = 'Share content with';
 $string['contentformheadermetadata'] = 'Optional information';
 $string['contentformdescription'] = 'Description';
 $string['folderformdescription'] = 'Folder description';

@@ -177,10 +177,10 @@ Feature: Own profile view in Open Studio
       And I click on "a.openstudio-profile-progress-step" "css_element"
       And I press "Add file"
       And I set the following fields to these values:
-        | Who can view this content | My module                                  |
-        | Title                     | Test My Ownprofile View                    |
-        | Description               | My Ownprofile View Description             |
-        | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
+        | My Module   | 1                                          |
+        | Title       | Test My Ownprofile View                    |
+        | Description | My Ownprofile View Description             |
+        | Files       | mod/openstudio/tests/importfiles/test1.jpg |
       And I press "Save"
       And I follow "My content > My Activities" in the openstudio navigation
       Then I should see "Test My Ownprofile View"
@@ -200,10 +200,10 @@ Feature: Own profile view in Open Studio
       And I click on "a.openstudio-profile-progress-step" "css_element"
       And I press "Add file"
       And I set the following fields to these values:
-        | Who can view this content | My module                                  |
-        | Title                     | Test My Ownprofile View Student            |
-        | Description               | Test My Ownprofile View Description        |
-        | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
+        | My Module   | 1                                          |
+        | Title       | Test My Ownprofile View Student            |
+        | Description | Test My Ownprofile View Description        |
+        | Files       | mod/openstudio/tests/importfiles/test1.jpg |
       And I press "Save"
       And I follow "My content > My Activities" in the openstudio navigation
       Then I should see "Test My Ownprofile View Student"

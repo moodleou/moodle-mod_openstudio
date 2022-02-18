@@ -36,12 +36,12 @@ Feature: Subscribe/Unsubscribe to my Open Studio
     And I am on "Course 1" course homepage
     And I turn editing mode on
     And I add a "OpenStudio 2" to section "1" and I fill the form with:
-      | Name | Test Open Studio name 1 |
-      | Description | Test Open Studio description |
-      | Enable pinboard | 99 |
-      | Enable folders  | 1 |
-      | Abuse reports are emailed to | teacher1@asd.com |
-      | ID number                    | OS1              |
+      | Name                         | Test Open Studio name 1      |
+      | Description                  | Test Open Studio description |
+      | Enable pinboard              | 99                           |
+      | Enable folders               | 1                            |
+      | Abuse reports are emailed to | teacher1@asd.com             |
+      | ID number                    | OS1                          |
 
     And I am on site homepage
     And I log out

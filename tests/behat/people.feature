@@ -100,10 +100,10 @@ Feature: Open Studio people view
         And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | My module                                  |
-          | Title                     | Test My Pinboard View                      |
-          | Description               | My Pinboard View Description               |
-          | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
+          | My Module   | 1                                          |
+          | Title       | Test My Pinboard View                      |
+          | Description | My Pinboard View Description               |
+          | Files       | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
         And I follow "People" in the openstudio navigation
 
@@ -116,10 +116,10 @@ Feature: Open Studio people view
         And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | Only me                                    |
-          | Title                     | Test My Pinboard View Student 1            |
-          | Description               | My Pinboard View Description 1             |
-          | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
+          | Only Me     | 1                                          |
+          | Title       | Test My Pinboard View Student 1            |
+          | Description | My Pinboard View Description 1             |
+          | Files       | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
         And I follow "People" in the openstudio navigation
         Then I should see "Teacher 1"
@@ -133,10 +133,10 @@ Feature: Open Studio people view
         And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | Only me                                    |
-          | Title                     | Test My Pinboard View Student 2            |
-          | Description               | My Pinboard View Description 2             |
-          | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
+          | Only Me     | 1                                          |
+          | Title       | Test My Pinboard View Student 2            |
+          | Description | My Pinboard View Description 2             |
+          | Files       | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
         And I follow "People" in the openstudio navigation
         Then I should see "Teacher 1"
@@ -151,10 +151,10 @@ Feature: Open Studio people view
         And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | Only me                                    |
-          | Title                     | Test My Pinboard View Student 5            |
-          | Description               | My Pinboard View Description 5             |
-          | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
+          | Only Me     | 1                                          |
+          | Title       | Test My Pinboard View Student 5            |
+          | Description | My Pinboard View Description 5             |
+          | Files       | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
         And I follow "People" in the openstudio navigation
         Then I should see "Teacher 1"
@@ -196,10 +196,10 @@ Feature: Open Studio people view
         And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | My module                                  |
-          | Title                     | Test My Pinboard View 1                    |
-          | Description               | My Pinboard View Description 1             |
-          | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
+          | My Module   | 1                                          |
+          | Title       | Test My Pinboard View 1                    |
+          | Description | My Pinboard View Description 1             |
+          | Files       | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
         And I am on site homepage
         And I log out
@@ -210,10 +210,10 @@ Feature: Open Studio people view
         And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | My module                                  |
-          | Title                     | Test My Pinboard View 1                    |
-          | Description               | My Pinboard View Description 1             |
-          | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
+          | My Module   | 1                                          |
+          | Title       | Test My Pinboard View 1                    |
+          | Description | My Pinboard View Description 1             |
+          | Files       | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
 
         # GIVEN Group Name selected, THEN show all members of the selected group

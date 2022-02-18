@@ -65,7 +65,7 @@ Feature: Open Studio pinboard stream
         And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | Only me                                    |
+          | Only Me                   | 1                                          |
           | Title                     | Test My Pinboard View                      |
           | Description               | My Pinboard View Description               |
           | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
@@ -89,7 +89,7 @@ Feature: Open Studio pinboard stream
         And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | My module                                       |
+          | My Module                 | 1                                               |
           | Title                     | My Module Title                                 |
           | Description               | My Module Description                           |
           | Files                     | mod/openstudio/tests/importfiles/Winterfell.jpg |
@@ -107,6 +107,6 @@ Feature: Open Studio pinboard stream
         And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "My Content" in the openstudio navigation
-        
+
         And I follow "Shared content > My Module" in the openstudio navigation
         Then I should see "My Module Title"

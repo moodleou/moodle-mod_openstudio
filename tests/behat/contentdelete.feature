@@ -100,10 +100,10 @@ Feature: Delete my Open Studio content/other contents
         And I follow "S1"
         And I press "Add file"
         And I set the following fields to these values:
-            | Who can view this content | My module                                  |
-            | Title                     | Student content 3                          |
-            | Description               | Student content 3 description              |
-            | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
+            | My Module   | 1                                          |
+            | Title       | Student content 3                          |
+            | Description | Student content 3 description              |
+            | Files       | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
         And I press "Delete"
         And I click on "Delete" "button" in the "Delete post?" "dialogue"
@@ -124,10 +124,10 @@ Feature: Delete my Open Studio content/other contents
       And I follow "S1"
       And I press "Add file"
       And I set the following fields to these values:
-        | Who can view this content | My module                                  |
-        | Title                     | Student content 4                          |
-        | Description               | Student content 4 description              |
-        | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
+          | My Module   | 1                                          |
+          | Title       | Student content 4                          |
+          | Description | Student content 4 description              |
+          | Files       | mod/openstudio/tests/importfiles/test1.jpg |
       And I press "Save"
       And I press "Delete"
       And I click on "Delete" "button" in the "Delete post?" "dialogue"

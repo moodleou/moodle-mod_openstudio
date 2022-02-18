@@ -64,10 +64,10 @@ Feature: Open Studio group stream
        And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | Group - group1                             |
-          | Title                     | Test My Group Board View 1                 |
-          | Description               | My Group Board View Description 1          |
-          | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
+          | Group - Group1 | 1                                          |
+          | Title          | Test My Group Board View 1                 |
+          | Description    | My Group Board View Description 1          |
+          | Files          | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
         And I follow "Shared content > My Group" in the openstudio navigation
         And I should see "View all work that’s been shared with your group cohort, including your own."
@@ -95,10 +95,10 @@ Feature: Open Studio group stream
        And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | Group - group3                             |
-          | Title                     | Test My Group Board View 3                 |
-          | Description               | My Group Board View Description 3          |
-          | Files                     | mod/openstudio/tests/importfiles/test3.jpg |
+          | Group - Group3 | 1                                          |
+          | Title          | Test My Group Board View 3                 |
+          | Description    | My Group Board View Description 3          |
+          | Files          | mod/openstudio/tests/importfiles/test3.jpg |
         And I press "Save"
         And I follow "Shared content > My Group" in the openstudio navigation
         Then I should see "Test My Group Board View 3"
@@ -122,10 +122,10 @@ Feature: Open Studio group stream
        And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | Group - group2                             |
-          | Title                     | Test My Group Board View 2                 |
-          | Description               | My Group Board View Description 2          |
-          | Files                     | mod/openstudio/tests/importfiles/test2.jpg |
+          | Group - Group2 | 1                                          |
+          | Title          | Test My Group Board View 2                 |
+          | Description    | My Group Board View Description 2          |
+          | Files          | mod/openstudio/tests/importfiles/test2.jpg |
         And I press "Save"
         And I follow "Shared content > My Group" in the openstudio navigation
         Then I should see "Test My Group Board View 2"

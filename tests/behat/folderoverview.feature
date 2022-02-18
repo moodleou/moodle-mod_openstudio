@@ -151,9 +151,9 @@ Feature: Open Studio Folder Overview
       And the "src" attribute of "img.openstudio-content-view-img" "css_element" should contain "test1.jpg"
       And I follow "Edit folder details and sharing"
       And I set the following fields to these values:
-        | Who can view this folder  | My module                                  |
-        | Folder title              | Test my folder view 1                      |
-        | Folder description        | My folder view description 1               |
+        | My Module          | 1                            |
+        | Folder title       | Test my folder view 1        |
+        | Folder description | My folder view description 1 |
       And I press "Save"
       # Folder Title has value
       And I should see "Test my folder view 1"
@@ -322,7 +322,7 @@ Feature: Open Studio Folder Overview
       And the "Move Up" "button" should be disabled
       And the "Move Down" "button" should be disabled
       And I wait until the page is ready
-      And I click on "Close" "button" in the "Order posts" "dialogue"
+      And I click on "//button[contains(@class,'closebutton')]" "xpath_element" in the "Order posts" "dialogue"
       And I follow "Add new content"
       And I press "Add file"
       And I set the following fields to these values:

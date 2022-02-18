@@ -69,11 +69,11 @@ Feature: Create and edit Open Studio contents detail
         And I follow "Upload content"
         And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | My module                                  |
-          | Title                     | Test My Content Details View               |
-          | Description               | Test My Content Details View               |
-          | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
-          | Tags                      | Tests Add New Tags                         |
+            | My Module   | 1                                          |
+            | Title       | Test My Content Details View               |
+            | Description | Test My Content Details View               |
+            | Files       | mod/openstudio/tests/importfiles/test1.jpg |
+            | Tags        | Tests Add New Tags                         |
         And I press "Save"
 
         # Redirect to content detail
@@ -128,8 +128,8 @@ Feature: Create and edit Open Studio contents detail
 
         # Enable Show GPS Data and Show Image Data
         And I click on "input#id_editbutton" "css_element"
-        And I should see "Show GPS Data"
-        And I should see "Show Image Data"
+        And I should see "Show GPS data"
+        And I should see "Show image data"
         And I click on "input#id_showgps" "css_element"
         And I click on "input#id_showimagedata" "css_element"
         And I press "Save"
@@ -178,8 +178,8 @@ Feature: Create and edit Open Studio contents detail
 
         # Enable Show GPS Data and Show Image Data
         And I click on "input#id_editbutton" "css_element"
-        And I should see "Show GPS Data"
-        And I should see "Show Image Data"
+        And I should see "Show GPS data"
+        And I should see "Show image data"
         And I click on "input#id_showgps" "css_element"
         And I click on "input#id_showimagedata" "css_element"
         And I click on "input#id_retainimagemetadata" "css_element"
@@ -229,8 +229,8 @@ Feature: Create and edit Open Studio contents detail
 
         # Enable Show GPS Data and Show Image Data
         And I click on "input#id_editbutton" "css_element"
-        And I should see "Show GPS Data"
-        And I should see "Show Image Data"
+        And I should see "Show GPS data"
+        And I should see "Show image data"
         And I click on "input#id_showgps" "css_element"
         And I click on "input#id_showimagedata" "css_element"
         And I click on "input#id_retainimagemetadata" "css_element"
@@ -266,11 +266,11 @@ Feature: Create and edit Open Studio contents detail
         And I follow "Upload content"
         And I press "Add web/embed link"
         And I set the following fields to these values:
-          | Who can view this content | My module                                            |
-          | Title                     | Test My Content Details View 4                       |
-          | Description               | My Content Details View Description 4                |
-          | Web link                  | https://www.youtube.com/watch?v=ktAnpf_nu5c          |
-          | Tags                      | Tests Add New Tags  4                                |
+            | My Module   | 1                                           |
+            | Title       | Test My Content Details View 4              |
+            | Description | My Content Details View Description 4       |
+            | Web link    | https://www.youtube.com/watch?v=ktAnpf_nu5c |
+            | Tags        | Tests Add New Tags  4                       |
         And I press "Save"
 
         # Redirect to content detail
@@ -279,8 +279,8 @@ Feature: Create and edit Open Studio contents detail
         And I should see "Test My Content Details View"
         And I should see "Owner of this post"
         And I should not see "Post archive"
-        And I should not see "Show GPS Data"
-        And I should not see "Show Image Data"
+        And I should not see "Show GPS data"
+        And I should not see "Show image data"
 
         And I should see "My Content Details View Description 4"
         And I should see "Tests Add New Tags 4"
@@ -325,8 +325,8 @@ Feature: Create and edit Open Studio contents detail
 
         # Enable Show GPS Data and Show Image Data
         And I click on "input#id_editbutton" "css_element"
-        And I should see "Show GPS Data"
-        And I should see "Show Image Data"
+        And I should see "Show GPS data"
+        And I should see "Show image data"
         And I click on "input#id_showgps" "css_element"
         And I click on "input#id_showimagedata" "css_element"
         And I click on "input#id_retainimagemetadata" "css_element"
@@ -376,8 +376,8 @@ Feature: Create and edit Open Studio contents detail
 
         # Enable Show GPS Data and Show Image Data
         And I click on "input#id_editbutton" "css_element"
-        And I should see "Show GPS Data"
-        And I should see "Show Image Data"
+        And I should see "Show GPS data"
+        And I should see "Show image data"
         And I click on "input#id_showgps" "css_element"
         And I click on "input#id_showimagedata" "css_element"
         And I click on "input#id_retainimagemetadata" "css_element"
@@ -560,11 +560,11 @@ Feature: Create and edit Open Studio contents detail
         And I follow "Edit this post"
         And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | My module                                  |
-          | Title                     | Test My Content Details View Archive 1     |
-          | Description               | Test My Content Details View Archive 1     |
-          | Files                     | mod/openstudio/tests/importfiles/test2.jpg |
-          | Tags                      | Tests Add New Tags                         |
+            | My Module   | 1                                          |
+            | Title       | Test My Content Details View Archive 1     |
+            | Description | Test My Content Details View Archive 1     |
+            | Files       | mod/openstudio/tests/importfiles/test2.jpg |
+            | Tags        | Tests Add New Tags                         |
         And I press "Save"
         And I should see "Post archive"
         And I press "Post archive"
@@ -591,11 +591,11 @@ Feature: Create and edit Open Studio contents detail
         And I follow "Edit this post"
         And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | My module                                  |
-          | Title                     | Test My Content Details View Archive 2     |
-          | Description               | Test My Content Details View Archive 2     |
-          | Files                     | mod/openstudio/tests/importfiles/test3.jpg |
-          | Tags                      | Tests Add New Tags                         |
+            | My Module   | 1                                          |
+            | Title       | Test My Content Details View Archive 2     |
+            | Description | Test My Content Details View Archive 2     |
+            | Files       | mod/openstudio/tests/importfiles/test3.jpg |
+            | Tags        | Tests Add New Tags                         |
         And I press "Save"
         And I press "Post archive"
         And I should see "Test My Content Details View Archive"
@@ -746,13 +746,13 @@ Feature: Create and edit Open Studio contents detail
         And I click on "Upload content" "text"
         And I press "Add file"
         And I set the following fields to these values:
-            | Who can view this content | My module                                      |
-            | Title                     | Test My Content Details View                   |
-            | Description               | Test My Content Details View                   |
-            | Files                     | mod/openstudio/tests/importfiles/geotagged.jpg |
-            | Tags                      | Tests Add New Tags                             |
-            | showimagedata             | 1                                              |
-            | showgps                   | 1                                              |
+            | My Module     | 1                                              |
+            | Title         | Test My Content Details View                   |
+            | Description   | Test My Content Details View                   |
+            | Files         | mod/openstudio/tests/importfiles/geotagged.jpg |
+            | Tags          | Tests Add New Tags                             |
+            | showimagedata | 1                                              |
+            | showgps       | 1                                              |
         And I press "Save"
         Then I should not see "Image meta-data"
 
@@ -762,10 +762,10 @@ Feature: Create and edit Open Studio contents detail
         And I click on "Upload content" "text"
         And I press "Add file"
         And I set the following fields to these values:
-            | Who can view this content | My module                                   |
-            | Title                     | Test My Content Details View                |
-            | Description               | Test My Content Details View                |
-            | Files                     | mod/openstudio/tests/importfiles/test.ipynb |
+            | My Module   | 1                                           |
+            | Title       | Test My Content Details View                |
+            | Description | Test My Content Details View                |
+            | Files       | mod/openstudio/tests/importfiles/test.ipynb |
         And I press "Save"
         When I wait until "Graphs in Statistical Analysis" "text" exists
         Then I should see "usefulness of graphs"

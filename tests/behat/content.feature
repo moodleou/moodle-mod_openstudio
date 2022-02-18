@@ -58,9 +58,9 @@ Feature: Create Open Studio contents
         And I should see "Test Open Studio name 1"
         And I follow "Add new content"
         And I set the following fields to these values:
-          | Who can view this content | My module                         |
-          | Title                     | Test My Group Board View 1        |
-          | Description               | My Group Board View Description 1 |
+          | My Module   | 1                                 |
+          | Title       | Test My Group Board View 1        |
+          | Description | My Group Board View Description 1 |
         And I press "Add file"
         And I wait "1" seconds
         And I should see "Maximum file size"
@@ -78,10 +78,10 @@ Feature: Create Open Studio contents
         And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | My module                                  |
-          | Title                     | Test My Group Board View 2                 |
-          | Description               | My Group Board View Description 2          |
-          | Files                     | mod/openstudio/tests/importfiles/test2.jpg |
+          | My Module   | 1                                          |
+          | Title       | Test My Group Board View 2                 |
+          | Description | My Group Board View Description 2          |
+          | Files       | mod/openstudio/tests/importfiles/test2.jpg |
         And I press "Save"
         And I follow "Shared content > My Module" in the openstudio navigation
         Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test2.jpg"
@@ -92,14 +92,14 @@ Feature: Create Open Studio contents
         And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | My module                                  |
-          | Title                     | Test My Group Board View 3                 |
-          | Description               | My Group Board View Description 3          |
-          | Files                     | mod/openstudio/tests/importfiles/test3.jpg |
-          | Show GPS Data             | 1                                          |
-          | Show Image Data           | 1                                          |
-          | Retain EXIF image data    | 1                                          |
-      And I press "Save"
+          | My Module        | 1                                          |
+          | Title            | Test My Group Board View 3                 |
+          | Description      | My Group Board View Description 3          |
+          | Files            | mod/openstudio/tests/importfiles/test3.jpg |
+          | Show GPS data    | 1                                          |
+          | Show image data  | 1                                          |
+          | Retain EXIF data | 1                                          |
+        And I press "Save"
         And I follow "Shared content > My Module" in the openstudio navigation
         Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test3.jpg"
         And I should see "Test My Group Board View 3"
@@ -109,10 +109,10 @@ Feature: Create Open Studio contents
         And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | My module                                            |
-          | Title                     | Test My Group Board View 4 ownership All my own work |
-          | Description               | My Group Board View Description 4 ownership          |
-          | Files                     | mod/openstudio/tests/importfiles/test3.jpg           |
+          | My Module   | 1                                                    |
+          | Title       | Test My Group Board View 4 ownership All my own work |
+          | Description | My Group Board View Description 4 ownership          |
+          | Files       | mod/openstudio/tests/importfiles/test3.jpg           |
         Then "//input[@id='id_ownershipdetail' and @disabled='disabled']" "xpath_element" should exist
         And I press "Save"
         And I follow "Shared content > My Module" in the openstudio navigation
@@ -122,12 +122,12 @@ Feature: Create Open Studio contents
         And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | My module                                            |
-          | Title                     | Test My Group Board View 4 ownership Found elsewhere |
-          | Description               | My Group Board View Description 3 ownership          |
-          | Files                     | mod/openstudio/tests/importfiles/test3.jpg           |
-          | Found elsewhere           | 1                                                    |
-          | Details                   | Test 4                                               |
+          | My Module       | 1                                                    |
+          | Title           | Test My Group Board View 4 ownership Found elsewhere |
+          | Description     | My Group Board View Description 3 ownership          |
+          | Files           | mod/openstudio/tests/importfiles/test3.jpg           |
+          | Found elsewhere | 1                                                    |
+          | Details         | Test 4                                               |
         And I press "Save"
         And I follow "Shared content > My Module" in the openstudio navigation
         Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test3.jpg"
@@ -138,11 +138,11 @@ Feature: Create Open Studio contents
         And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | My module                                  |
-          | Title                     | Test My Group Board View 4 Tags            |
-          | Description               | My Group Board View Description 4 Tags     |
-          | Files                     | mod/openstudio/tests/importfiles/test4.jpg |
-          | Tags                      | Tests Add New Tags                         |
+          | My Module   | 1                                          |
+          | Title       | Test My Group Board View 4 Tags            |
+          | Description | My Group Board View Description 4 Tags     |
+          | Files       | mod/openstudio/tests/importfiles/test4.jpg |
+          | Tags        | Tests Add New Tags                         |
         And I wait "2" seconds
         And I should see "Tests Add New Tags"
         And I press "Save"
@@ -155,10 +155,10 @@ Feature: Create Open Studio contents
         And I follow "Add new content"
         And I press "Add web/embed link"
         And I set the following fields to these values:
-          | Who can view this content | My module                                            |
-          | Title                     | Test My Group Board View 5 Add web/embed link        |
-          | Description               | My Group Board View Description 5 Add web/embed link |
-          | Web link                  | https://www.youtube.com/watch?v=ktAnpf_nu5c          |
+          | My Module   | 1                                                    |
+          | Title       | Test My Group Board View 5 Add web/embed link        |
+          | Description | My Group Board View Description 5 Add web/embed link |
+          | Web link    | https://www.youtube.com/watch?v=ktAnpf_nu5c          |
         And I press "Save"
         And I follow "Shared content > My Module" in the openstudio navigation
         Then I should see "Test My Group Board View 5 Add web/embed link"
@@ -168,10 +168,10 @@ Feature: Create Open Studio contents
         And I follow "Add new content"
         And I press "Add web/embed link"
         And I set the following fields to these values:
-          | Who can view this content | My module                                            |
-          | Title                     | Test My Group Board View 5 ownership All my own work |
-          | Description               | My Group Board View Description 5 ownership          |
-          | Web link                  | https://www.youtube.com/watch?v=Y7uGHY-t80I          |
+          | My Module   | 1                                                    |
+          | Title       | Test My Group Board View 5 ownership All my own work |
+          | Description | My Group Board View Description 5 ownership          |
+          | Web link    | https://www.youtube.com/watch?v=Y7uGHY-t80I          |
         Then "//input[@id='id_ownershipdetail' and @disabled='disabled']" "xpath_element" should exist
         And I press "Save"
         And I follow "Shared content > My Module" in the openstudio navigation
@@ -180,12 +180,12 @@ Feature: Create Open Studio contents
         And I follow "Add new content"
         And I press "Add web/embed link"
         And I set the following fields to these values:
-          | Who can view this content | My module                                            |
-          | Title                     | Test My Group Board View 5 ownership Found elsewhere |
-          | Description               | My Group Board View Description 5 ownership          |
-          | Web link                  | https://www.youtube.com/watch?v=BGD6L-4yceY          |
-          | Found elsewhere           | 1                                                    |
-          | Details                   | Test 5                                               |
+          | My Module       | 1                                                    |
+          | Title           | Test My Group Board View 5 ownership Found elsewhere |
+          | Description     | My Group Board View Description 5 ownership          |
+          | Web link        | https://www.youtube.com/watch?v=BGD6L-4yceY          |
+          | Found elsewhere | 1                                                    |
+          | Details         | Test 5                                               |
         And I press "Save"
         And I follow "Shared content > My Module" in the openstudio navigation
         Then I should see "Test My Group Board View 5 ownership Found elsewhere"
@@ -195,11 +195,11 @@ Feature: Create Open Studio contents
         And I follow "Add new content"
         And I press "Add web/embed link"
         And I set the following fields to these values:
-          | Who can view this content | My module                                   |
-          | Title                     | Test My Group Board View 5 Tags             |
-          | Description               | My Group Board View Description 5 Tags      |
-          | Web link                  | https://www.youtube.com/watch?v=qyId4XZdC_4 |
-          | Tags                      | Tests Add New Tags web/embed link           |
+          | My Module   | 1                                           |
+          | Title       | Test My Group Board View 5 Tags             |
+          | Description | My Group Board View Description 5 Tags      |
+          | Web link    | https://www.youtube.com/watch?v=qyId4XZdC_4 |
+          | Tags        | Tests Add New Tags web/embed link           |
         And I wait "2" seconds
         And I should see "Tests Add New Tags web/embed link"
         And I press "Save"
@@ -211,11 +211,11 @@ Feature: Create Open Studio contents
         And I follow "Add new content"
         And I press "Add file"
         And I set the following fields to these values:
-          | Who can view this content | My module                                  |
-          | Title                     | Test My Group Board View 6 Tags            |
-          | Description               | My Group Board View Description 6 Tags     |
-          | Files                     | mod/openstudio/tests/importfiles/test.txt  |
-          | Tags                      | Tests Add New Tags                         |
+          | My Module   | 1                                         |
+          | Title       | Test My Group Board View 6 Tags           |
+          | Description | My Group Board View Description 6 Tags    |
+          | Files       | mod/openstudio/tests/importfiles/test.txt |
+          | Tags        | Tests Add New Tags                        |
         And I wait "2" seconds
         And I should see "Tests Add New Tags"
         And I press "Save"
@@ -227,11 +227,11 @@ Feature: Create Open Studio contents
       And I follow "Add new content"
       And I press "Add file"
       And I set the following fields to these values:
-        | Who can view this content | My module                                 |
-        | Title                     | Test My Group Board View 7 Tags           |
-        | Description               | My Group Board View Description 7 Tags    |
-        | Files                     | mod/openstudio/tests/importfiles/test.m4v |
-        | Tags                      | Tests Add New Tags add file m4v           |
+        | My Module   | 1                                         |
+        | Title       | Test My Group Board View 7 Tags           |
+        | Description | My Group Board View Description 7 Tags    |
+        | Files       | mod/openstudio/tests/importfiles/test.m4v |
+        | Tags        | Tests Add New Tags add file m4v           |
       And I wait "2" seconds
       And I should see "Tests Add New Tags add file m4v"
       And I press "Save"
@@ -247,11 +247,11 @@ Feature: Create Open Studio contents
       And I follow "Add new content"
       And I press "Add file"
       And I set the following fields to these values:
-        | Who can view this content | My module                                 |
-        | Title                     | Test My Group Board View 8 Tags           |
-        | Description               | My Group Board View Description 8 Tags    |
-        | Files                     | mod/openstudio/tests/importfiles/test.m4a |
-        | Tags                      | Tests Add New Tags add file m4a           |
+        | My Module   | 1                                         |
+        | Title       | Test My Group Board View 8 Tags           |
+        | Description | My Group Board View Description 8 Tags    |
+        | Files       | mod/openstudio/tests/importfiles/test.m4a |
+        | Tags        | Tests Add New Tags add file m4a           |
       And I wait "2" seconds
       And I should see "Tests Add New Tags add file m4a"
       And I press "Save"
@@ -267,10 +267,10 @@ Feature: Create Open Studio contents
     And I follow "Add new content"
     And I press "Add file"
     And I set the following fields to these values:
-      | Who can view this content | My module                                   |
-      | Title                     | My Module Title                             |
-      | Description               | My Module Description                       |
-      | Files                     | mod/openstudio/tests/importfiles/3files.nbk |
+      | My Module   | 1                                           |
+      | Title       | My Module Title                             |
+      | Description | My Module Description                       |
+      | Files       | mod/openstudio/tests/importfiles/3files.nbk |
     And I press "Save"
     When I switch to "openstudio-content-view-iframe" iframe
     Then I should see "Anscombe's Quartet" in the "#notebook-container .text_cell_render h1" "css_element"
@@ -280,10 +280,10 @@ Feature: Create Open Studio contents
     And I follow "Add new content"
     And I press "Add file"
     And I set the following fields to these values:
-      | Who can view this content | My module                                   |
-      | Title                     | My Module Title                             |
-      | Description               | My Module Description                       |
-      | Files                     | mod/openstudio/tests/importfiles/test.zip   |
+      | My Module   | 1                                         |
+      | Title       | My Module Title                           |
+      | Description | My Module Description                     |
+      | Files       | mod/openstudio/tests/importfiles/test.zip |
     And I press "Save"
     Then the "src" attribute of "img.openstudio-content-view-type-img" "css_element" should contain "zip_archive"
     And I should see "Download file attachment"
@@ -320,9 +320,9 @@ Feature: Create Open Studio contents
     And I follow "Test Open Studio name 1"
     And I follow "Add new content"
     And I set the following fields to these values:
-      | Who can view this content | My module                         |
-      | Title                     | Test My Group Board View 1        |
-      | Description               | My Group Board View Description 1 |
+      | My Module   | 1                                 |
+      | Title       | Test My Group Board View 1        |
+      | Description | My Group Board View Description 1 |
     And I press "Save"
     Then I log out
     And I log in as "student2"
@@ -338,10 +338,10 @@ Feature: Create Open Studio contents
     And I follow "Add new content"
     And I press "Add web/embed link"
     And I set the following fields to these values:
-      | Who can view this content | My module                                                 |
-      | Title                     | Test Content with iplayer web/embed link                  |
-      | Description               | Test Content with iplayer web/embed link                  |
-      | Web link                  | https://www.bbc.co.uk/iplayer/episode/m000pb58/perfect-10 |
+      | My Module   | 1                                                         |
+      | Title       | Test Content with iplayer web/embed link                  |
+      | Description | Test Content with iplayer web/embed link                  |
+      | Web link    | https://www.bbc.co.uk/iplayer/episode/m000pb58/perfect-10 |
     And I press "Save"
     And I follow "Shared content > My Module" in the openstudio navigation
     And I follow "Test Content with iplayer web/embed link"
@@ -351,8 +351,8 @@ Feature: Create Open Studio contents
     When I follow "Test Open Studio name 1"
     And I follow "Add new content"
     And I set the following fields to these values:
-      | Who can view this content | My module          |
-      | Description               | Just a description |
+        | My Module   | 1                  |
+        | Description | Just a description |
     And I press "Save"
     Then I should see "Add new content"
     And "input.is-invalid" "css_element" should exist
@@ -413,8 +413,8 @@ Feature: Create Open Studio contents
     And I should see "Test Open Studio name 1"
     And I follow "Add new content"
     And I set the following fields to these values:
-      | Who can view this content | My module                 |
-      | Title                     | Test link                 |
-      | Description               | https://learn2.open.ac.uk |
+      | My Module   | 1                         |
+      | Title       | Test link                 |
+      | Description | https://learn2.open.ac.uk |
     And I press "Save"
     Then "//a[@href='https://learn2.open.ac.uk']" "xpath_element" should exist

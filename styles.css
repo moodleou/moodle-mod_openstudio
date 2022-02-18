@@ -2331,6 +2331,55 @@ body#page-mod-openstudio-contentedit:not(.osep-layoutnoblocks) form .form-group 
     margin-right: 0px;
 }
 
+.path-mod-openstudio .openstudio-content-edit-form #fgroup_id_visibilityarray .col-md-3 p[id*="_label"] {
+    float: right;
+}
+
+.path-mod-openstudio .openstudio-content-edit-form #fgroup_id_visibilityarray .form-check-inline.inline-radio {
+    margin-top: 0;
+}
+
+.path-mod-openstudio .openstudio-content-edit-form #fgroup_id_visibilityarray .col-md-9 fieldset > div {
+    align-items: normal !important;
+}
+
+.path-mod-openstudio .openstudio-content-edit-form #fgroup_id_visibilityarray .col-md-9 fieldset > div {
+    width: 40%;
+}
+
+.path-mod-openstudio .openstudio-content-edit-form #fgroup_id_visibilityarray .col-md-9 fieldset > div > label {
+    flex-basis: 40%;
+    margin-bottom: 10px;
+    margin-right: 22px;
+}
+
+.path-mod-openstudio .openstudio-content-edit-form #fgroup_id_visibilityarray .openstudio-content-form-visibility-label {
+    font-style: normal;
+    font-weight: normal;
+}
+
+.path-mod-openstudio .openstudio-content-edit-form #fgroup_id_visibilityarray .col-md-9 fieldset > div > label {
+    display: block;
+}
+
+.path-mod-openstudio .openstudio-content-edit-form #fgroup_id_visibilityarray .openstudio-content-form-select-visibility .openstudio-content-form-visibility-icon {
+    vertical-align: text-bottom;
+    margin: 0 6px;
+    width: 18px;
+}
+
+.path-mod-openstudio .openstudio-content-edit-form #fitem_id_name {
+    margin-top: 27px;
+}
+
+.path-mod-openstudio .openstudio-content-edit-form div.required {
+    font-weight: bold;
+}
+
+.path-mod-openstudio .openstudio-content-edit-form div.required img {
+    margin-right: 2px;
+}
+
 .path-mod-openstudio #fgroup_id_ownershiparray {
     padding-bottom: 10px;
 }
@@ -5331,6 +5380,10 @@ a.openstudio-add-new-content-link:hover  {
     body.path-mod-openstudio .openstudio-profile-bar .openstudio-profile-progress-content {
         margin-top: 4px;
     }
+
+    .path-mod-openstudio .openstudio-content-edit-form .openstudio-content-form-visibility #fgroup_id_visibilityarray .col-md-9 fieldset > div {
+        width: 100%;
+    }
 }
 @media (max-width: 767px) {
     body.path-mod-openstudio .openstudio-grid-item-content-detail-owner-view-icon img.icon {
@@ -8089,5 +8142,15 @@ a.openstudio-add-new-content-link:hover  {
 @media (prefers-color-scheme: dark) {
     body:not(.safari) .openstudio-folder-content .openstudio-folder-background {
         border: 1px solid;
+    }
+}
+
+@media (max-width: 1199px) {
+    body#page-mod-openstudio-contentedit:not(.osep-layoutnoblocks) .openstudio-content-edit-form  #fgroup_id_visibilityarray .col-md-3 p[id*="_label"] {
+        float: left;
+    }
+
+    .path-mod-openstudio .openstudio-content-edit-form #fgroup_id_visibilityarray .col-md-9 fieldset > div {
+        width: 50%;
     }
 }

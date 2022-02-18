@@ -341,5 +341,5 @@ Feature: Edit Open Studio settings
     Then I should see "Shared Content"
     And I follow "Add new content"
     And I set the following fields to these values:
-      | Who can view this content | My module |
-    Then I should see "My module" in the "//select[@name='visibility']" "xpath_element"
+      | My Module | 1 |
+    Then I should see "My Module"

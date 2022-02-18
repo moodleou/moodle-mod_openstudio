@@ -149,9 +149,9 @@ Feature: Create and edit Open Studio Folder
         And I follow "Create new folder"
         Then "Create" "text" should exist in the ".breadcrumb" "css_element"
         And I set the following fields to these values:
-          | Who can view this folder  | My module                                  |
-          | Folder title              | Test my folder view 1                      |
-          | Folder description        | My folder view description 1               |
+            | My Module          | 1                            |
+            | Folder title       | Test my folder view 1        |
+            | Folder description | My folder view description 1 |
         And I press "Create folder"
         And I follow "Shared content > Module 1" in the openstudio navigation
         And I should see "Test my folder view 1"
@@ -160,9 +160,9 @@ Feature: Create and edit Open Studio Folder
         # Create new folder in My Group view
         And I follow "Create new folder"
         And I set the following fields to these values:
-          | Who can view this folder  | Group - group1                             |
-          | Folder title              | Test my folder view 2                      |
-          | Folder description        | My folder view description 2               |
+            | Group - Group1     | 1                            |
+            | Folder title       | Test my folder view 2        |
+            | Folder description | My folder view description 2 |
         And I press "Create folder"
         And I follow "Shared content > My Group" in the openstudio navigation
         And I should see "Test my folder view 2"
@@ -171,9 +171,9 @@ Feature: Create and edit Open Studio Folder
         # Create new folder in My Pinboard view
         And I follow "Create new folder"
         And I set the following fields to these values:
-          | Who can view this folder  | Only me                                    |
-          | Folder title              | Test my folder view 3                      |
-          | Folder description        | My folder view description 3               |
+            | Only Me            | 1                            |
+            | Folder title       | Test my folder view 3        |
+            | Folder description | My folder view description 3 |
         And I press "Create folder"
         And I follow "My content" in the openstudio navigation
         And I should see "Test my folder view 3"
@@ -193,9 +193,9 @@ Feature: Create and edit Open Studio Folder
         # Create new folder in My Module view
         And I follow "Create new folder"
         And I set the following fields to these values:
-          | Who can view this folder  | My module                                  |
-          | Folder title              | Test my folder view 1                      |
-          | Folder description        | My folder view description 1               |
+            | My Module          | 1                            |
+            | Folder title       | Test my folder view 1        |
+            | Folder description | My folder view description 1 |
         And I press "Create folder"
 
         # edit folder in My Module view
@@ -265,10 +265,10 @@ Feature: Create and edit Open Studio Folder
         # Create new folder in My Module view
         And I follow "Create new folder"
         And I set the following fields to these values:
-            | Who can view this folder  | My module                                  |
-            | Folder title              | Test my folder view 1                      |
-            | Folder description        | My folder view description 1               |
-            | Tags                      | createdtag                                 |
+            | My Module          | 1                            |
+            | Folder title       | Test my folder view 1        |
+            | Folder description | My folder view description 1 |
+            | Tags               | createdtag                   |
         And I press "Create folder"
         And I wait until "//div[@data-target='#openstudio_folder_view_folder_tags']" "xpath_element" exists
         And I press "Folder tags"

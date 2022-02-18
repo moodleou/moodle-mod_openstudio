@@ -51,9 +51,9 @@ Feature: Open Studio share to view setting is enable
     And I click on "a.openstudio-profile-mypaticipation" "css_element"
     And I follow "Content 1.1 Required"
     And I set the following fields to these values:
-      | Who can view this content | My module                   |
-      | Title                     | Test My Activities View 1   |
-      | Description               | My Activities Description 1 |
+      | My Module   | 1                           |
+      | Title       | Test My Activities View 1   |
+      | Description | My Activities Description 1 |
     And I press "Save"
     And I should see "Test My Activities View 1"
     And I should not see "Share to view is enabled"
@@ -71,9 +71,9 @@ Feature: Open Studio share to view setting is enable
     And I click on "a.openstudio-profile-mypaticipation" "css_element"
     And I follow "Content 1.1 Required"
     And I set the following fields to these values:
-      | Who can view this content | My module                   |
-      | Title                     | Test My Activities View 2   |
-      | Description               | My Activities Description 2 |
+      | My Module   | 1                           |
+      | Title       | Test My Activities View 2   |
+      | Description | My Activities Description 2 |
     And I press "Save"
     And I should see "Test My Activities View 2"
     And I follow "Shared Content" in the openstudio navigation

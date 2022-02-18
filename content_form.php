@@ -139,9 +139,44 @@ class mod_openstudio_content_form extends moodleform {
                 $contenttitle = get_string('folderformname', 'openstudio');
                 $contentdescription = get_string('folderformdescription', 'openstudio');
             }
-            $mform->addElement('select', 'visibility', $visibilitytitle, $options,
-                    array('class' => 'openstudio-content-form-select-visibility'));
-            $mform->setDefault('visibility', $this->_customdata['defaultvisibility']);
+            $visibilityarray = [];
+            foreach ($options as $option => $label) {
+                $contenticon = '';
+                $visibility = (int)$option;
+                if ($visibility < 0) {
+                    $visibility = content::VISIBILITY_GROUP;
+                }
+                switch ($visibility) {
+                    case content::VISIBILITY_MODULE:
+                        $contenticon = $OUTPUT->image_url('mymodule_rgb_32px', 'openstudio');
+                        break;
+
+                    case content::VISIBILITY_GROUP:
+                        $contenticon = $OUTPUT->image_url('share_with_my_group_rgb_32px', 'openstudio');
+                        break;
+
+                    case content::VISIBILITY_WORKSPACE:
+                    case content::VISIBILITY_PRIVATE:
+                    case content::VISIBILITY_PRIVATE_PINBOARD:
+                        $contenticon = $OUTPUT->image_url('onlyme_rgb_32px', 'openstudio');
+                        break;
+
+                    case content::VISIBILITY_TUTOR:
+                        $contenticon = $OUTPUT->image_url('share_with_tutor_rgb_32px', 'openstudio');
+                        break;
+                    default:
+                        $contenticon = $OUTPUT->image_url('onlyme_rgb_32px', 'openstudio');
+                        break;
+                }
+                $optionlabel = html_writer::img($contenticon, '', ['class' => 'openstudio-content-form-visibility-icon']);
+                $optionlabel .= html_writer::start_tag('span', ['class' => 'openstudio-content-form-visibility-label']);
+                $optionlabel .= ucwords($label);
+                $optionlabel .= html_writer::end_tag('span');
+                $visibilityarray[] = $mform->createElement('radio', 'visibility', '', $optionlabel, $option,
+                        ['class' => 'openstudio-content-form-select-visibility']);
+            }
+            $mform->addGroup($visibilityarray, 'visibilityarray', $visibilitytitle, [' '], false);
+            $mform->addRule('visibilityarray', get_string('required'), 'required',  null, 'client');
             $mform->addElement('html', html_writer::end_tag('div'));
         }
 
