@@ -2196,6 +2196,10 @@ body#page-mod-openstudio-contentedit:not(.osep-layoutnoblocks) form .form-group 
     float: none;
 }
 
+#page-mod-openstudio-contentedit #osep-mainwrapper #fitem_id_tags .col-md-3 a img.icon {
+    margin-right: 0;
+}
+
 @media (max-width: 1199px) {
     .mform #openstudio_upload_content_add_file .form-group .col-form-label {
         float: none;
