@@ -41,6 +41,7 @@ use mod_openstudio\local\api\folder;
 use mod_openstudio\local\api\user;
 use mod_openstudio\local\api\group;
 use mod_openstudio\local\api\levels;
+use mod_openstudio\local\api\tracking;
 
 require_once($CFG->libdir . '/externallib.php');
 
@@ -561,7 +562,7 @@ class mod_openstudio_external extends external_api {
      *  ]
      */
     public static function flag_content($cmid, $cid, $fid, $mode) {
-        global $USER;
+        global $USER, $OUTPUT;
 
         $params = self::validate_parameters(self::flag_content_parameters(), array(
                 'cmid' => $cmid,
@@ -576,8 +577,10 @@ class mod_openstudio_external extends external_api {
         $warnings = array();
         $success = false;
         $flagtext = '';
+        $flagvalue = 0;
         $flagremoveclass = '';
         $flagaddclass = '';
+        $flagiconimage = '';
         $mode = trim($params['mode']);
 
         list($course, $cm) = get_course_and_cm_from_cmid($params['cmid'], 'openstudio');
@@ -623,9 +626,13 @@ class mod_openstudio_external extends external_api {
             } else {
                 notifications::delete_unread_for_flag($params['cid'], $USER->id, $params['fid']);
             }
+            // Update flag and tracking.
+            flags::toggle($params['cid'], flags::READ_CONTENT, $mode, $USER->id, $params['cid']);
+            tracking::log_action($params['cid'], flags::READ_CONTENT, $USER->id);
 
             $iscontentflagrequestfeedback = false;
             $total = flags::count_for_content($params['cid'], $params['fid']) + 0;
+            $flagvalue = $total;
             $flagaccessiblemessage = '';
             switch ($params['fid']) {
                 case flags::FAVOURITE:
@@ -633,9 +640,11 @@ class mod_openstudio_external extends external_api {
                             array('number' => $total));
                     switch ($mode) {
                         case 'on':
+                            $flagiconimage = $OUTPUT->image_url('favourite_rgb_32px', 'openstudio')->out(false);
                             $flagaccessiblemessage = get_string('contentclicktounfavourite', 'openstudio');
                         break;
                         case 'off':
+                            $flagiconimage = $OUTPUT->image_url('favourite_grey_rgb_32px', 'openstudio')->out(false);
                             $flagaccessiblemessage = get_string('contentclicktofavourite', 'openstudio');
                             break;
                     }
@@ -645,9 +654,11 @@ class mod_openstudio_external extends external_api {
                             array('number' => $total));
                     switch ($mode) {
                         case 'on':
+                            $flagiconimage = $OUTPUT->image_url('participation_rgb_32px', 'openstudio')->out(false);
                             $flagaccessiblemessage = get_string('contentclicktounsmile', 'openstudio');
                             break;
                         case 'off':
+                            $flagiconimage = $OUTPUT->image_url('participation_grey_rgb_32px', 'openstudio')->out(false);
                             $flagaccessiblemessage = get_string('contentclicktosmile', 'openstudio');
                             break;
                     }
@@ -657,9 +668,11 @@ class mod_openstudio_external extends external_api {
                             array('number' => $total));
                     switch ($mode) {
                         case 'on':
+                            $flagiconimage = $OUTPUT->image_url('inspiration_rgb_32px', 'openstudio')->out(false);
                             $flagaccessiblemessage = get_string('contentclicktouninspire', 'openstudio');
                             break;
                         case 'off':
+                            $flagiconimage = $OUTPUT->image_url('inspiration_grey_rgb_32px', 'openstudio')->out(false);
                             $flagaccessiblemessage = get_string('contentclicktoinspire', 'openstudio');
                             break;
                     }
@@ -692,6 +705,8 @@ class mod_openstudio_external extends external_api {
         $results['warnings'] = $warnings;
         $results['mode'] = $mode == 'on' ? 'off' : 'on';
         $results['flagtext'] = $flagtext;
+        $results['flagvalue'] = $flagvalue;
+        $results['flagiconimage'] = $flagiconimage;
         $results['flagremoveclass'] = $flagremoveclass;
         $results['flagaddclass'] = $flagaddclass;
         $results['fid'] = $params['fid'];
@@ -711,6 +726,8 @@ class mod_openstudio_external extends external_api {
                 'success' => new external_value(PARAM_BOOL, 'flag successfully'),
                 'mode' => new external_value(PARAM_TEXT, 'flag mode'),
                 'flagtext' => new external_value(PARAM_TEXT, 'flag text'),
+                'flagvalue' => new external_value(PARAM_INT, 'total flag value'),
+                'flagiconimage' => new external_value(PARAM_TEXT, 'flag icon image value'),
                 'flagremoveclass' => new external_value(PARAM_TEXT, 'flag remove class'),
                 'flagaddclass' => new external_value(PARAM_TEXT, 'flag add new class'),
                 'fid' => new external_value(PARAM_INT, 'flag ID'),
@@ -732,6 +749,18 @@ class mod_openstudio_external extends external_api {
                 'commentattachment' => new external_value(PARAM_INT, 'Comment attachment'),
                 'inreplyto' => new external_value(PARAM_INT, 'Parent comment ID'))
         );
+    }
+
+    /**
+     * Returns description of method parameters
+     *
+     * @return external_function_parameters
+     */
+    public static function get_comments_by_contentid_parameters() {
+        return new external_function_parameters(array(
+            'cmid' => new external_value(PARAM_INT, 'Course Module ID'),
+            'contentid' => new external_value(PARAM_INT, 'Content ID'),
+        ));
     }
 
     /**
@@ -860,6 +889,65 @@ class mod_openstudio_external extends external_api {
             'commentid' => $commentid,
             'commenthtml' => $commenthtml
         ];
+    }
+
+    /**
+     * Get list of comment by contentid.
+     *
+     * @param $cmid int course module id of course.
+     * @param $contentid int content id of course
+     * @return array
+     * @throws coding_exception
+     * @throws dml_exception
+     * @throws invalid_parameter_exception
+     * @throws restricted_context_exception
+     */
+    public static function get_comments_by_contentid($cmid, $contentid) {
+        $coursedata = util::render_page_init($cmid, array('mod/openstudio:view'));
+        $mcontext = $coursedata->mcontext;
+        $permissions = $coursedata->permissions;
+
+        // Validate input parameters and context.
+        self::validate_context($mcontext);
+        self::validate_parameters(self::get_comments_by_contentid_parameters(), array(
+            'cmid' => $cmid,
+            'contentid' => $contentid,
+        ));
+        $listofcomment = [];
+        if ($permissions) {
+            $listofcomment = comments::get_comments_by_contentid($cmid, $contentid);
+        }
+        return [
+            'comments' => $listofcomment
+        ];
+    }
+
+    /**
+     * Returns description of method result value
+     *
+     * @return external_single_structure
+     */
+    public static function get_comments_by_contentid_returns() {
+        return new external_single_structure(
+            array(
+                'comments' => new external_multiple_structure(
+                    new external_single_structure(
+                        array(
+                            'id' => new external_value(PARAM_INT, 'The id of comment'),
+                            'comment' => new external_value(PARAM_RAW, 'The comment of content'),
+                            'contentid' => new external_value(PARAM_INT, 'The contentid of content'),
+                            'userid' => new external_value(PARAM_INT, 'The userid of user'),
+                            'userpicture' => new external_value(PARAM_RAW, 'The userpicture of user'),
+                            'fullname' => new external_value(PARAM_RAW, 'The fullname of user'),
+                            'isnewcomment' => new external_value(PARAM_BOOL, 'The flag to check comment is new'),
+                            'commenturl' => new external_value(PARAM_RAW, 'The comment url of user'),
+                            'timemodified' => new external_value(PARAM_RAW, 'The comment of content'),
+                        )
+                    ),
+                    'Comments data'
+               )
+            )
+        );
     }
 
     /**

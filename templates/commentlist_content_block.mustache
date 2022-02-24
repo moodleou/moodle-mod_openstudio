@@ -1,0 +1,90 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_openstudio/commentlist_content_block
+
+    A list of notifications, used in HTML subscription emails, and the notifications drop-down list.
+
+    Classes required for JS:
+    * .openstudio-notitifications-list .stopicon
+    * openstudio-notitication-stopicon
+
+    Data attributes required for JS:
+    * id
+    * contentid
+
+    Context variables required for this template:
+    * notifications
+
+    Example context (json):
+    {
+        "notifications": [
+            {
+                "id": 1,
+                "contentid":
+                "picture": "<img src=\"http://placehold.it/48/48\" width=\"48\" height=\"48\" alt=\"Image of User 1\" />",
+                "message": "User 1 commented on your post '<a href=\"http://localhost\">Really cool image</a>'",
+                "messageplain": "User 1 commented on your post 'Really cool image'",
+                "icon": {
+                    "attributes": [
+                        {"name": "src", "value": "http://placehold.it/16/16"},
+                        {"name": "alt", "value": ""}
+                    ]
+                },
+                "url": "http://example.com",
+                "timecreated": "2 hours ago",
+                "isread": false,
+                "isfollowing": true
+            },
+            {
+                "id": 5,
+                "picture": "<img src=\"http://placehold.it/48/48\" width=\"48\" height=\"48\" alt=\"Image of User 1\" />",
+                "message": "User 1 liked your post '<a href=\"http://localhost\">Really cool image</a>'",
+                "messageplain": "User 1 liked your post 'Really cool image'",
+                "icon": {
+                    "attributes": [
+                        {"name": "src", "value": "http://placehold.it/16/16"},
+                        {"name": "alt", "value": ""}
+                    ]
+                },
+                "url": "http://example.com",
+                "timecreated": "3 hours ago",
+                "isread": true,
+                "isfollowing": false
+            }
+        ],
+        "notificationstopicon" : {
+            "attributes": [
+                {"name": "src", "value": "http://placehold.it/16/16"},
+                {"name": "alt", "value": ""}
+            ]
+        }
+    }
+
+}}
+<div class="dropdown-menu comments-content-popup">
+    <h2 class="openstudio-notifications-heading">
+        <div class="openstudio-notifications-arrow">{{#pix}} notifications_arrow, mod_openstudio {{/pix}}</div>
+        {{#pix}} comments_white_rgb_32px, mod_openstudio {{/pix}}{{#str}} commenttitleboxcontentblock, mod_openstudio {{/str}}</h2>
+    <ul class="openstudio-notifications-list comment-block-list"></ul>
+    <div class="d-flex justify-content-end align-items-center add-comment">
+        {{#pix}} add_comment_rgb_32px, mod_openstudio {{/pix}}
+        <a href="{{#isfolder}}{{{folderlink}}}{{/isfolder}}{{^isfolder}}{{{contentlink}}}{{/isfolder}}#id_addcomment" class="comments-content-popup-add-comment">
+            <strong>{{#str}} addcomment, mod_openstudio {{/str}}</strong>
+        </a>
+    </div>
+</div>

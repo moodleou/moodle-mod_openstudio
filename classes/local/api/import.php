@@ -209,6 +209,9 @@ EOF;
                     // Create a new pinboard content.
                     $x = content::create($cm->instance, $userid, 0, 0, $pbcontentdata,
                             $ourfile, $context, $cm, true);
+                    // Update flag and tracking.
+                    flags::toggle($x, flags::READ_CONTENT, 'on', $USER->id, $x);
+                    tracking::log_action($x, flags::READ_CONTENT, $USER->id);
                 }
 
                 if ($x === false) {

@@ -471,6 +471,8 @@ $string['contentformmetadataexpand'] = 'Expand';
 $string['contentformmetadatacollapse'] = 'Collapse';
 $string['commentformexpand'] = 'Comment form hidden, click to show comment form';
 $string['commentformcollapse'] = 'Comment form shown, click to hide comment form';
+$string['commenttitleboxcontentblock'] = 'Comments on this post';
+$string['commentuserboxcontentblock'] = '<strong>{$a}</strong> commented on this post.';
 
 $string['contentformcreatefolderbutton'] = 'Create folder';
 $string['contentformvisibility'] = 'Share content with';
@@ -666,6 +668,7 @@ $string['contentcommentliked'] = 'Users have liked this comment.';
 $string['contentcommentnotliked'] = 'No users have liked this comment yet.';
 $string['errorlikingcomment'] = 'There was an error when recording your "Like". Please try again.';
 $string['nocommentpermissions'] = 'You do not have permission to modify comments on this content.';
+$string['nocommentsinboxcomment'] = 'There are no comments.';
 $string['commentdoesnotexist'] = 'The comment ID you provided does not exist.';
 $string['commentdeleted'] = 'This comment has been removed by {$a}.';
 
@@ -985,6 +988,7 @@ $string['deletelevel'] = 'Delete';
 $string['undeletelevel'] = 'Undelete';
 $string['configurefolder'] = 'Configure folder';
 $string['addacontent'] = 'Add a Content';
+$string['addcomment'] = 'Add comment';
 $string['addanothercontent'] = 'Add another Content';
 $string['folderguidance'] = 'Folder guidance text';
 $string['additionalcontents'] = 'Number of additional contents allowed';

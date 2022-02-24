@@ -388,7 +388,7 @@
 .openstudio-nav-primary .notifications .openstudio-notifications-arrow {
     display: none;
 }
-
+.openstudio-grid-item-content-detail-info-group .openstudio-notifications-arrow,
 .openstudio-nav-primary .notifications.open .openstudio-notifications-arrow {
     display: block;
     position: absolute;
@@ -484,6 +484,99 @@ button.openstudio-notification-stopbutton:focus {
     outline: 1px dotted grey;
 }
 
+.path-mod-openstudio .comments-content-popup {
+    left: 50px !important;
+    top: -5px !important;
+    width: 445px;
+    padding: 0px !important;
+    transform: none !important;
+}
+
+.path-mod-openstudio .comments-content-popup .openstudio-notifications-arrow {
+    transform: rotate(-90deg);
+    left: -18px;
+    top: -4px;
+}
+
+.path-mod-openstudio .comments-content-popup .openstudio-notifications-heading > img {
+    margin-right: 7px;
+    margin-left: 5px;
+    width: 16px;
+}
+
+.path-mod-openstudio .comments-content-popup img.defaultuserpic {
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+    margin-left: 15px;
+}
+
+.path-mod-openstudio .comments-content-popup .comment-block-list {
+    padding-left: 0;
+    padding-right: 0;
+    max-height: 301px;
+    margin-bottom: 0;
+}
+
+.path-mod-openstudio .comments-content-popup .comment-block-list li {
+    padding: 15px 0 9px;
+    display: flex;
+}
+
+.path-mod-openstudio .comments-content-popup .comment-block-list .comment-title {
+    font-size: 0.95em;
+    color: #312b39;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    line-height: 10px;
+}
+
+.path-mod-openstudio .comments-content-popup .comment-block-list .comment-text-link {
+    color: #0b55a8;
+    font-size: 0.92em;
+    margin: 0 auto;
+    padding: 8px 0 0;
+    line-height: 17px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    -webkit-box-orient: vertical;
+}
+
+.path-mod-openstudio .comments-content-popup .comment-block-list .comment-time {
+    font-size: 12px;
+    color: #676463;
+    padding-top: 3px;
+    margin-bottom: 1px;
+}
+
+.path-mod-openstudio .comments-content-popup .add-comment {
+    height: 16px;
+    padding: 8px 15px;
+    background: #e7f4fa;
+    border-bottom: 2px #0b55a8 solid;
+}
+
+.path-mod-openstudio .comments-content-popup .add-comment img {
+    margin-right: 5px;
+}
+
+.path-mod-openstudio .comments-content-popup .add-comment span {
+    font-size: 17px;
+    color: #0b55a8;
+}
+
+.path-mod-openstudio .comments-content-popup .add-comment span:hover {
+    text-decoration: underline;
+}
+
+.path-mod-openstudio .comments-content-popup .comment-list-none {
+    font-size: 0.95em;
+    line-height: 17px;
+    padding-left: 14px !important;
+}
+
 @media (max-width: 1023px) {
     .path-mod-openstudio .openstudio-notifications.dropdown-menu {
         width: 393px;
@@ -573,6 +666,91 @@ button.openstudio-notification-stopbutton:focus {
     #openstudio_folder_view_folder_comments .openstudio-folder-view-comments .openstudio-comment-owner-name {
         margin-bottom: 0;
     }
+
+    .path-mod-openstudio .comments-content-popup h2.openstudio-notifications-heading {
+        font-size: 1.475em;
+        padding-left: 15px;
+    }
+
+    .path-mod-openstudio .comments-content-popup .openstudio-notifications-heading > img {
+        height: 24px;
+        width: 24px;
+        padding-right: 4px;
+    }
+
+    .path-mod-openstudio .comments-content-popup img.defaultuserpic {
+        width: 46px;
+        height: 46px;
+        margin-left: 20px !important;
+        margin-top: 4px !important;
+        margin-right: 9px !important;
+    }
+
+    .path-mod-openstudio .comments-content-popup .add-comment {
+        height: 31px;
+        padding: 6px 15px 9px;
+    }
+
+    .path-mod-openstudio .comments-content-popup .add-comment span {
+        font-weight: 400 !important;
+    }
+
+    .path-mod-openstudio .comments-content-popup .add-comment a {
+        font-size: 1.3em;
+        color: #0b55a8;
+        font-weight: 700;
+        padding-right: 5px;
+    }
+
+    .path-mod-openstudio .comments-content-popup .add-comment img {
+        height: 24px !important;
+        width: 24px !important;
+        padding-left: 15px;
+        margin-right: 6px !important;
+    }
+
+    .path-mod-openstudio .comments-content-popup .comment-block-list {
+        max-height: 563px;
+    }
+
+    .path-mod-openstudio .comments-content-popup .comment-block-list li {
+        padding-top: 16px !important;
+        padding-bottom: 16px !important;
+    }
+
+    .path-mod-openstudio .comments-content-popup .comment-block-list .comment-title {
+        font-size: 1.3em;
+        line-height: 1.1em;
+        padding-top: 1px;
+        color: #312B39;
+    }
+
+    .path-mod-openstudio .comments-content-popup .comment-block-list .comment-text-link {
+        font-size: 1.3em;
+        line-height: 1.3em;
+        padding: 12px 18px 0 0;
+        color: #0B55A8;
+        -webkit-line-clamp: 4 !important;
+    }
+
+    .path-mod-openstudio .comments-content-popup .comment-block-list .comment-time {
+        font-size: 1.135em;
+        color: #676463;
+        padding-top: 0;
+        padding-top: 7px;
+    }
+
+    .path-mod-openstudio .comments-content-popup .comment-list-none {
+        padding-left: 20px !important;
+        font-size: 1.3em;
+        line-height: 1.3em;
+    }
+
+    .path-mod-openstudio .comments-content-popup-add-comment span {
+        font-size: 19px !important;
+        color: #0B55A8;
+    }
+
 }
 
 @media (max-width: 419px) {
@@ -2213,11 +2391,40 @@ body#page-mod-openstudio-contentedit:not(.osep-layoutnoblocks) form .form-group 
         margin-left: -3px;
     }
 
+    .path-mod-openstudio .comments-content-popup {
+        left: -33px !important;
+        top: 31px !important;
+    }
+
+    .path-mod-openstudio .comments-content-popup .openstudio-notifications-arrow {
+        transform: rotate(0deg);
+        left: 46px;
+        top: -23px;
+    }
 }
 
 @media (max-width: 767px) {
     #page-mod-openstudio-contentedit #osep-mainwrapper .openstudio-showgps-box .advcheckbox .checkbox {
         display: block;
+    }
+
+    .path-mod-openstudio .comments-content-popup {
+        left: -50px !important;
+        top: 49px !important;
+        padding: 0px !important;
+        transform: none !important;
+        width: 100vw !important;
+    }
+
+    .path-mod-openstudio .comments-content-popup .openstudio-notifications-arrow {
+        transform: rotate(0deg);
+        left: 46px;
+        top: -23px;
+    }
+
+    .path-mod-openstudio .content-block-social-group  .openstudio-grid-item-content-detail-info-text-new {
+        position: relative !important;
+        top: 0 !important;
     }
 }
 
@@ -2406,6 +2613,17 @@ body#page-mod-openstudio-contentedit:not(.osep-layoutnoblocks) form .form-group 
     border-color: lightgrey;
     border-style: solid;
     border-width: 1px;
+}
+
+.path-mod-openstudio .box-notification-content-block {
+    top: -11px !important;
+    left: 55px !important;
+}
+
+.path-mod-openstudio .box-notification-content-block .openstudio-notifications-arrow {
+    transform: rotate(-90deg);
+    left: -18px;
+    top: -4px;
 }
 
 .openstudio-grid-item-add-new {
@@ -2672,6 +2890,7 @@ body .openstudio-grid-item-content-title a:focus {
     width: 47px;
     text-align: center;
     position: relative;
+    cursor: pointer;
 }
 
 .openstudio-grid-item-content-detail-info-icon {
@@ -7539,6 +7758,13 @@ a.openstudio-add-new-content-link:hover  {
         .openstudio-folder-global-background .openstudio-content-view-date-box + .clearfix  + div:not(:empty) + div + .openstudio-content-view-animation-icons {
             margin-top: 25px;
         }
+    }
+
+    .path-mod-openstudio .content-block-social-group {
+        display: flex;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        justify-content: space-around;
     }
 }
 

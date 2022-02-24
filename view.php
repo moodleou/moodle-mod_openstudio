@@ -41,7 +41,7 @@ use mod_openstudio\local\api\user;
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
 
-$id = optional_param('id', 0, PARAM_INT); // Course_module ID, or
+$id = optional_param('id', 0, PARAM_INT); // Course_module ID.
 $groupid = optional_param('groupid', 0, PARAM_INT); // Group id to filter against.
 $n  = optional_param('n', 0, PARAM_INT);  // ... openstudio instance ID - it should be named as the first character of the module.
 $filteropen = optional_param('filteropen', 0, PARAM_INT);
@@ -507,7 +507,8 @@ if ($finalviewpermissioncheck) {
     // it to the default stream page size.  To  achieve this, we remove the pagination limit
     // by setting it to 0.
 
-    if ((($vid == content::VISIBILITY_MODULE || $vid == content::VISIBILITY_GROUP) && ($fblock > 0) && ($fblockarray !== null) && (count($fblockarray) == 1))
+    if ((($vid == content::VISIBILITY_MODULE || $vid == content::VISIBILITY_GROUP)
+        && ($fblock > 0) && ($fblockarray !== null) && (count($fblockarray) == 1))
             || $vid == content::VISIBILITY_PRIVATE) {
         $streamdatapagesize = 0;
     }
@@ -662,7 +663,8 @@ if ($finalviewpermissioncheck) {
                     // Activity content.
 
                     // Process lock for activity content.
-                    $lockdata = renderer_utils::content_lock_data((object) array('l3id' => $content->l3id), $permissions, $cminstance);
+                    $lockdata = renderer_utils::content_lock_data(
+                        (object) array('l3id' => $content->l3id), $permissions, $cminstance);
                     $content->contentislocked = $lockdata->contentislock;
                     $content->contentislockmessage = $lockdata->contentislockmessage;
 
@@ -700,6 +702,11 @@ if ($finalviewpermissioncheck) {
         // Gather content social data.
         $socialdatatotal = 0;
         $contentsocialdata = notifications::get_activities($permissions->activeuserid, $contentslist);
+        // List of user commented.
+        $lsofusercommented = util::get_list_comment_of_user_by_contentid($contentslist);
+        // List of flag content of user.
+        $lsoflagcontentuser = flags::get_list_flag_content_by_user($contentslist, $permissions->activeuserid);
+
         if ($contentsocialdata) {
             foreach ($contentsocialdata as $socialitem) {
                 if (array_key_exists($socialitem->contentid, $contentdata->contents)) {
@@ -712,20 +719,46 @@ if ($finalviewpermissioncheck) {
                         $socialitem->inspired = $socialitem->inspirednewcontent + $socialitem->inspirednew;
                         $socialitem->mademelaugh = $socialitem->mademelaughnewcontent + $socialitem->mademelaughnew;
                         $socialitem->favourite = $socialitem->favouritenewcontent + $socialitem->favouritenew;
-
                     } else {
                         $socialitem->comments = $socialitem->commentsold;
                         $socialitem->inspired = $socialitem->inspiredold;
                         $socialitem->mademelaugh = $socialitem->mademelaughold;
                         $socialitem->favourite = $socialitem->favouriteold;
                     }
+                    // Display total react of user in emoticons.
+                    $socialitem->totalcomments = $socialitem->totalcomments > 0 ? $socialitem->totalcomments : "";
+                    $socialitem->totalinspired = $socialitem->totalinspired > 0 ? $socialitem->totalinspired : "";
+                    $socialitem->totalmademelaugh = $socialitem->totalmademelaugh > 0 ? $socialitem->totalmademelaugh : "";
+                    $socialitem->totalfavourite = $socialitem->totalfavourite > 0 ? $socialitem->totalfavourite : "";
 
+                    // Check permission to allow user react emoticons in content block social.
+                    $isreactemoticon = true;
+                    if (!util::can_read_content($cminstance, $permissions, $contentdata->contents[$socialitem->contentid])) {
+                        $isreactemoticon = false;
+                    }
                     // Check if social item is double digit.
                     $socialitem = util::check_item_double_digit($socialitem);
-
                     $contentdata->contents[$socialitem->contentid]->socialdata = $socialitem;
-
-                    $socialdatatotal = $socialitem->comments + $socialitem->inspired + $socialitem->mademelaugh + $socialitem->favourite;
+                    $contentdata->contents[$socialitem->contentid]->contentid = $socialitem->contentid;
+                    $contentdata->contents[$socialitem->contentid]->isreactemoticon = $isreactemoticon;
+                    // Generate content flags.
+                    if (isset($lsoflagcontentuser[$socialitem->contentid])) {
+                        $flagstatus = explode(',', $lsoflagcontentuser[$socialitem->contentid]->flagstatus);
+                        if (in_array(flags::FAVOURITE, $flagstatus)) {
+                            $contentdata->contents[$socialitem->contentid]->contentflagfavouriteactive = true;
+                        }
+                        if (in_array(flags::MADEMELAUGH, $flagstatus)) {
+                            $contentdata->contents[$socialitem->contentid]->contentflagsmileactive = true;
+                        }
+                        if (in_array(flags::INSPIREDME, $flagstatus)) {
+                            $contentdata->contents[$socialitem->contentid]->contentflaginspireactive = true;
+                        }
+                    }
+                    if (isset($lsofusercommented[$socialitem->contentid])) {
+                        $contentdata->contents[$socialitem->contentid]->iscurrentusercomment = true;
+                    }
+                    $socialdatatotal = $socialitem->comments + $socialitem->inspired
+                        + $socialitem->mademelaugh + $socialitem->favourite;
 
                     $contentdata->contents[$socialitem->contentid]->socialdatatotal = $socialdatatotal;
                 }
@@ -876,7 +909,6 @@ if (isguestuser()) {
     $SESSION->wantsurl = $PAGE->url->out();
     $contentdata->guestmessage = format_text(get_string('guestmessage', 'mod_openstudio', $url), FORMAT_MARKDOWN);
 }
-
 // Generate stream html.
 $PAGE->set_button($renderer->searchform($theme, $vid, $id, $groupid));
 
@@ -888,6 +920,7 @@ echo $OUTPUT->header(); // Header.
 echo $html;
 
 echo $renderer->body($cm->id, $cminstance, $theme, $vid, $permissions, $contentdata); // Body.
+$PAGE->requires->js_call_amd('mod_openstudio/content_block_social', 'init');
 
 echo $renderer->render_import_export_buttons($importenable, $exportenable, $id);
 

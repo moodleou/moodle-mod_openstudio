@@ -415,8 +415,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      * @param boolean $issearch Detect search behaviour
      * @return string The rendered HTM fragment.
      */
-    public function body($cmid, $cminstance, $theme, $viewmode = content::VISIBILITY_MODULE, $permissions, $contentdata,
-            $issearch = false) {
+    public function body($cmid, $cminstance, $theme, $viewmode = content::VISIBILITY_MODULE, $permissions, $contentdata, $issearch = false) {
         global $OUTPUT, $USER;
 
         $placeholdertext = '';
@@ -512,7 +511,9 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         $contentdata->cmid = $cmid;
         $contentdata = renderer_utils::profile_bar($permissions, $cminstance, $contentdata);
-
+        $contentdata->contentflagfavourite = flags::FAVOURITE;
+        $contentdata->contentflagsmile = flags::MADEMELAUGH;
+        $contentdata->contentflaginspire = flags::INSPIREDME;
         $contentdata->showprofilebarview = $showprofilebarview;
         $contentdata->groupitems = array_values($groupitem);
         $contentdata->showmultigroup = $showmultigroup;

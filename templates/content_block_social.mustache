@@ -27,6 +27,7 @@
 
     Example context (json):
     {
+        "isreactemoticon: true,
         "socialdatatotal" : 6,
         "socialdata" : {
             "comments" : 1,
@@ -38,47 +39,74 @@
          }
      }
 }}
-{{#socialdatatotal}}
+{{#isreactemoticon}}
     {{#socialdata}}
         <div class="openstudio-grid-item-content-detail-info">
-            <div class="openstudio-grid-item-content-detail-info-group">
-                <span class="openstudio-grid-item-content-detail-info-box">
-                    <span class="openstudio-grid-item-content-detail-info-text{{#commentsnew}}-new{{/commentsnew}} {{#isdoubledigitcomments}}double-digit{{/isdoubledigitcomments}}">
-                        {{#comments}} {{comments}} {{/comments}}
-                    </span>
-                    <span>
-                        <img src="{{#comments}}{{commentsicon}}{{/comments}}{{^comments}}{{commentsgreyicon}}{{/comments}}"
-                             class="openstudio-grid-item-content-detail-info-icon " alt="{{#str}} commentslabel, openstudio {{/str}}"/>
-                    </span>
+            <div class="openstudio-grid-item-content-detail-info-group content-block-social-group">
+                <span class="openstudio-grid-item-content-detail-info-box" tabindex="0">
+                    <div role="presentation" class="dropdown notifications ">
+                        <span id="openstudio_navigation_notification" class="show-popup-comment" data-toggle="dropdown" data-boundary="viewport" role="button"
+                              aria-haspopup="true" aria-expanded="false" data-cmid="{{cmid}}" data-contentid="{{contentid}}">
+                            <span class="openstudio-grid-item-content-detail-info-text{{#commentsnew}}-new{{/commentsnew}} {{#isdoubledigitcomments}}double-digit{{/isdoubledigitcomments}}">
+                                {{#comments}}{{comments}}{{/comments}}
+                                {{^comments}}{{totalcomments}}{{/comments}}
+                            </span>
+                            <span>
+                                <img src="{{#iscurrentusercomment}}{{commentsicon}}{{/iscurrentusercomment}}
+                                          {{^iscurrentusercomment}}{{commentsgreyicon}}{{/iscurrentusercomment}}"
+                                    class="openstudio-grid-item-content-detail-info-icon" alt="{{#str}} commentslabel, openstudio {{/str}}"/>
+                            </span>
+                        </span>
+                        {{>mod_openstudio/commentlist_content_block}}
+                    </div>
                 </span>
-                <span class="openstudio-grid-item-content-detail-info-box">
-                    <span class="openstudio-grid-item-content-detail-info-text{{#inspirednew}}-new{{/inspirednew}} {{#isdoubledigitinspired}}double-digit{{/isdoubledigitinspired}}">
-                        {{#inspired}} {{inspired}} {{/inspired}}
+                <span id="content_view_icon_{{contentflaginspire}}" class="openstudio-grid-item-content-detail-info-box flag_content_block"
+                      data-cmid="{{cmid}}" data-contentid="{{contentid}}" data-fid="{{contentflaginspire}}" tabindex="0"
+                      {{#contentflaginspireactive}}data-mode="off"{{/contentflaginspireactive}}
+                      {{^contentflaginspireactive}}data-mode="on"{{/contentflaginspireactive}}
+                >
+                    <span class="openstudio-grid-item-content-detail-info-text{{#inspirednew}}-new{{/inspirednew}}
+                        {{#isdoubledigitinspired}}double-digit{{/isdoubledigitinspired}} content_block_info_value">
+                        {{#inspired}}{{inspired}}{{/inspired}}
+                        {{^inspired}}{{totalinspired}}{{/inspired}}
                     </span>
                     <span>
-                        <img src="{{#inspired}}{{inspirationicon}}{{/inspired}}{{^inspired}}{{inspirationgreyicon}}{{/inspired}}"
+                        <img src="{{#contentflaginspireactive}}{{inspirationicon}}{{/contentflaginspireactive}}
+                            {{^contentflaginspireactive}}{{inspirationgreyicon}}{{/contentflaginspireactive}}"
                             class="openstudio-grid-item-content-detail-info-icon" alt="{{#str}} inspirationlabel, openstudio {{/str}}" />
                     </span>
                 </span>
-                <span class="openstudio-grid-item-content-detail-info-box">
+                <span id="content_view_icon_{{contentflagsmile}}" class="openstudio-grid-item-content-detail-info-box flag_content_block"
+                      data-cmid="{{cmid}}" data-contentid="{{contentid}}" data-fid="{{contentflagsmile}}" tabindex="0"
+                      {{#contentflagsmileactive}}data-mode="off"{{/contentflagsmileactive}}
+                      {{^contentflagsmileactive}}data-mode="on"{{/contentflagsmileactive}}
+                >
                     <span class="openstudio-grid-item-content-detail-info-text{{#mademelaughnew}}-new{{/mademelaughnew}} {{#isdoubledigitmademelaugh}}double-digit{{/isdoubledigitmademelaugh}}">
-                        {{#mademelaugh}} {{mademelaugh}} {{/mademelaugh}}
+                        {{#mademelaugh}}{{mademelaugh}}{{/mademelaugh}}
+                        {{^mademelaugh}}{{totalmademelaugh}}{{/mademelaugh}}
                     </span>
                     <span>
-                        <img src="{{#mademelaugh}}{{participationicon}}{{/mademelaugh}}{{^mademelaugh}}{{participationgreyicon}}{{/mademelaugh}}"
+                        <img src="{{#contentflagsmileactive}}{{participationicon}}{{/contentflagsmileactive}}
+                            {{^contentflagsmileactive}}{{participationgreyicon}}{{/contentflagsmileactive}}"
                             class="openstudio-grid-item-content-detail-info-icon" alt="{{#str}} participationlabel, openstudio {{/str}}" />
                     </span>
                 </span>
-                <span class="openstudio-grid-item-content-detail-info-box">
-                <span class="openstudio-grid-item-content-detail-info-text{{#favouritenew}}-new{{/favouritenew}} {{#isdoubledigitfavourite}}double-digit{{/isdoubledigitfavourite}}">
-                    {{#favourite}} {{favourite}} {{/favourite}}
+                <span id="content_view_icon_{{contentflagfavourite}}" class="openstudio-grid-item-content-detail-info-box flag_content_block"
+                      data-cmid="{{cmid}}" data-contentid="{{contentid}}" data-fid="{{contentflagfavourite}}" tabindex="0"
+                      {{#contentflagfavouriteactive}}data-mode="off"{{/contentflagfavouriteactive}}
+                      {{^contentflagfavouriteactive}}data-mode="on"{{/contentflagfavouriteactive}}
+                >
+                    <span class="openstudio-grid-item-content-detail-info-text{{#favouritenew}}-new{{/favouritenew}} {{#isdoubledigitfavourite}}double-digit{{/isdoubledigitfavourite}}">
+                        {{#favourite}}{{favourite}}{{/favourite}}
+                        {{^favourite}}{{totalfavourite}}{{/favourite}}
+                    </span>
+                    <span>
+                        <img src="{{#contentflagfavouriteactive}}{{favouriteicon}}{{/contentflagfavouriteactive}}
+                            {{^contentflagfavouriteactive}}{{favouritegreyicon}}{{/contentflagfavouriteactive}}"
+                            class="openstudio-grid-item-content-detail-info-icon" alt="{{#str}} favouritelabel, openstudio {{/str}}" />
+                    </span>
                 </span>
-                <span>
-                    <img src="{{#favourite}}{{favouriteicon}}{{/favourite}}{{^favourite}}{{favouritegreyicon}}{{/favourite}}"
-                        class="openstudio-grid-item-content-detail-info-icon" alt="{{#str}} favouritelabel, openstudio {{/str}}" />
-                </span>
-            </span>
             </div>
         </div>
     {{/socialdata}}
-{{/socialdatatotal}}
+{{/isreactemoticon}}

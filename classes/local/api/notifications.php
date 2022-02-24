@@ -208,6 +208,10 @@ EOF;
         $folderdata = array();
         foreach ($results as $content) {
             $contentdata[$content->contentid] = $content;
+            $contentdata[$content->contentid]->totalcomments = $content->commentsold + $content->commentsnew;
+            $contentdata[$content->contentid]->totalinspired = $content->inspiredold + $content->inspirednew;
+            $contentdata[$content->contentid]->totalmademelaugh = $content->mademelaughold + $content->mademelaughnew;
+            $contentdata[$content->contentid]->totalfavourite = $content->favouriteold + $content->favouritenew;
             $contentdata[$content->contentid]->folder = false;
 
             if ($content->folderid > 0) {

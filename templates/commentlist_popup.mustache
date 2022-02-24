@@ -1,0 +1,71 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_openstudio/commentlist_popup
+
+    A list of notifications, used in HTML subscription emails, and the notifications drop-down list.
+
+    Classes required for JS:
+    * .openstudio-notitifications-list .stopicon
+    * openstudio-notitication-stopicon
+
+    Data attributes required for JS:
+    * id
+    * contentid
+
+    Context variables required for this template:
+    * notifications
+
+    Example context (json):
+    {
+        "commentlist": [
+            {
+                "id": id,
+                "comment": 1
+                "contentid": 2,
+                "commenttext": "Something went right",
+                "userid": 1,
+                "userpicture": "<img src=\"http://placehold.it/48/48\" width=\"48\" height=\"48\" alt=\"Image of User 1\" />",
+                "fullname": "Lorem ipsum",
+                "timemodified": "3 hours ago"
+            },
+            {
+                "id": id,
+                "comment": 1
+                "contentid": 2,
+                "commenttext": "Something went right",
+                "userid": 1,
+                "userpicture": "<img src=\"http://placehold.it/48/48\" width=\"48\" height=\"48\" alt=\"Image of User 1\" />",
+                "fullname": "Lorem ipsum",
+                "timemodified": "3 hours ago"
+            },
+        ],
+    }
+}}
+{{#commentlist}}
+    <li class="openstudio-notification openstudio-notification-{{#isnewcomment}}unread{{/isnewcomment}}{{^isnewcomment}}read{{/isnewcomment}}">
+        <img class="defaultuserpic" src="{{{userpicture}}}" alt="{{{fullname}}}"/>
+        <div class="openstudio-notification-body">
+            <p class="comment-title">{{#str}}commentuserboxcontentblock, mod_openstudio, {{fullname}}{{/str}}</p>
+            <a href="{{{commenturl}}}" class="comment-text-link">{{{comment}}}</a>
+            <p class="comment-time">{{{timemodified}}}</p>
+        </div>
+    </li>
+{{/commentlist}}
+{{^commentlist}}
+    <li class="openstudio-notification comment-list-none">{{#str}} nocommentsinboxcomment, mod_openstudio {{/str}}</li>
+{{/commentlist}}
