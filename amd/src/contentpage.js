@@ -82,6 +82,9 @@ define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/modal_events', 'c
                 $(".openstudio-content-view-flag-icon").bind('click', function() {
                     t.doFlagContent($(this));
                 });
+                $(".openstudio-content-view-icon-active-image").bind('mouseover', function() {
+                    t.doHoverFlagIcon($(this));
+                });
 
                 $(".openstudio-request-feedback-button").bind('click', function() {
                     t.doFlagContent($(this));
@@ -209,6 +212,17 @@ define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/modal_events', 'c
                 .fail(function(ex) {
                     window.console.error('Error saving social flag ' + ex.message);
                 });
+        },
+        /**
+         * Hover flag icons on content page.
+         *
+         * @param {Event} event
+         * @method doHoverFlagIcon
+         */
+        doHoverFlagIcon: function(event) {
+            var parent = event.parents('.openstudio-content-view-flag-icon');
+            var activeImage = event.find('img');
+            activeImage.attr('title', parent.attr('title'));
         },
 
         /**
