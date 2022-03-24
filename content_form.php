@@ -402,6 +402,23 @@ class mod_openstudio_content_form extends moodleform {
 
     }
 
+    public function definition_after_data() {
+        global $PAGE;
+
+        $mform = $this->_form;
+
+        // Check attachments field for errors.
+        $element =& $mform->getElement('attachments');
+        if ($element) {
+            $value = $mform->getSubmitValue('attachments');
+            $result = $element->validateSubmitValue($value);
+            if (!empty($result) && is_string($result)) {
+                // Show Add File so that the error is visible.
+                $PAGE->requires->js_call_amd('mod_openstudio/contentedit', 'showAddFile', [true]);
+            }
+        }
+    }
+
     public function validation($data, $files) {
         global $USER;
         $errors = parent::validation($data, $files);
