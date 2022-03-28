@@ -16,7 +16,7 @@
 /**
  * JavaScript to order posts on folder.
  *
- * @package mod_openstudio
+ * @package
  * @copyright 2017 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

@@ -16,10 +16,12 @@
 /**
  * JavaScript to manage content detail page.
  *
- * @package mod_oucontent
+ * @package
  * @copyright 2017 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+/*global google: true*/
 
 /**
  * @module mod_oucontent/contentpage
@@ -227,7 +229,10 @@ define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/modal_events', 'c
 
         /**
          * Set header for dialog
+         *
          * @method setHeader
+         * @param {Element} dialogue
+         * @param {Element} label
          */
         setHeader: function(dialogue, label) {
             Str
@@ -240,7 +245,10 @@ define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/modal_events', 'c
 
         /**
          * Set body for dialog
+         *
          * @method setBody
+         * @param {Element} dialogue
+         * @param {Element} label
          */
         setBody: function(dialogue, label) {
             Str
@@ -254,8 +262,8 @@ define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/modal_events', 'c
         /**
          * Create archive dialogue and some events on it.
          *
-         * @return M.core.dialog instance
          * @method createArchiveDialogue
+         * @param {Element} osDialogue
          * @return M.core.dialogue
          */
         createArchiveDialogue: function(osDialogue) {
@@ -316,8 +324,8 @@ define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/modal_events', 'c
         /**
          * Create delete content dialogue and some events on it.
          *
-         * @return M.core.dialog instance
          * @method createDeleteContentDialogue
+         * @param {Element} osDialogue
          * @return M.core.dialogue
          */
         createDeleteContentDialogue: function(osDialogue) {

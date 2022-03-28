@@ -3,7 +3,7 @@ define(['jquery',
     'mod_openstudio/marked',
     'mod_openstudio/es5-shim',
     'mod_openstudio/notebook',
-    'mod_openstudio/prism'], function($, ansiup, marked, es5shim, notebook, prism) {
+    'mod_openstudio/prism'], function($, ansiup, marked, es5shim, nb, prism) {
     var t;
     t = {
         /**
@@ -27,11 +27,12 @@ define(['jquery',
                 }
             });
         },
+
         /**
          * Render view for ipynb content.
          *
-         * @param wrapper
-         * @param root
+         * @param {Element} wrapper
+         * @param {Element} root
          */
         renderView: function(wrapper, root) {
             var notebook = root.notebook = nb.parse(JSON.parse(wrapper.text()));

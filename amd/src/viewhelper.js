@@ -16,7 +16,7 @@
 /**
  * JavaScript to manage on view page.
  *
- * @package mod_openstudio
+ * @package
  * @copyright 2017 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -89,7 +89,7 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
             });
 
             // Once all images loaded, try to re-arrange all items.
-            $(window).on('load',function(){
+            $(window).on('load', function() {
                 t.reArrangeItems();
             });
         },
@@ -114,7 +114,7 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
          */
         handleGroupSwitcher: function() {
             // This should work for mobile also.
-            $(document).on('change','#filter_groupid',function(){
+            $(document).on('change', '#filter_groupid', function() {
                 t.redirectURL();
             });
         },
@@ -126,7 +126,7 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
          */
         handleBlockSwitcher: function() {
             // This should work for mobile also.
-            $(document).on('change','#filter_block_activity',function(){
+            $(document).on('change', '#filter_block_activity', function() {
                 t.redirectURL();
             });
         },
@@ -138,7 +138,7 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
          */
         handleViewSizeSwitcher: function() {
             // This should work for mobile also.
-            $(document).on('change','#filter_pagesize',function(){
+            $(document).on('change', '#filter_pagesize', function() {
                 t.redirectURL();
             });
         },
@@ -175,7 +175,7 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
         handleFilter: function() {
 
             // By post types.
-            $('#openstudio_filter_types_0').on('click', function (e) {
+            $('#openstudio_filter_types_0').on('click', function(e) {
                 var checkbox = $(this);
 
                 // Prevent checkbox from unchecking when clicked.
@@ -288,13 +288,15 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
         handleCollapseClick: function() {
             var myprofile = document.querySelector('.openstudio-profile-mypaticipation-content');
             var fullusername = document.getElementById('openstudio_profile_fullusername');
-            var profilleparticipate = document.querySelector('#openstudio_profile_bar .openstudio-profile-bar-participation-content');
-            var profilleparticipatemobile = document.querySelector('#openstudio_profile_bar_mobile .openstudio-profile-bar-participation-content');
+            var profilleparticipate =
+                document.querySelector('#openstudio_profile_bar .openstudio-profile-bar-participation-content');
+            var profilleparticipatemobile =
+                document.querySelector('#openstudio_profile_bar_mobile .openstudio-profile-bar-participation-content');
             var progressbar = document.getElementsByClassName('openstudio-profile-progress-content');
             var showprofile = null;
             var showparticipate = null;
             var body = document.querySelector('body');
-            for(var i = 0; i < progressbar.length; i++) {
+            for (var i = 0; i < progressbar.length; i++) {
                 if (progressbar && progressbar[i] && progressbar[i].clientHeight > 0) {
                     showprofile = progressbar[i];
                 }
@@ -311,21 +313,25 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
                     var w = window.innerWidth;
                     if ((w > 767 && w < 1204 && (!body.classList.contains('ios') && !body.classList.contains('android')))
                         || (w > 767 && w < 940 && (body.classList.contains('ios') || body.classList.contains('android')))) {
-                        if(fullusername.classList.contains('collapsed')) {
+                        if (fullusername.classList.contains('collapsed')) {
                             setTimeout(function() {
                                 // Two line
                                 if (showparticipate && fullusername.clientHeight > 21) {
-                                    if (myprofile && myprofile.getBoundingClientRect().height > showparticipate.getBoundingClientRect().height) {
+                                    if (myprofile && myprofile.getBoundingClientRect().height >
+                                        showparticipate.getBoundingClientRect().height) {
                                         if (showprofile.getBoundingClientRect().top > myprofile.getBoundingClientRect().bottom) {
                                             showprofile.style.marginTop = originalmarginTop + 3 + 'px';
                                         } else {
-                                            showprofile.style.marginTop = myprofile.getBoundingClientRect().bottom - showprofile.getBoundingClientRect().top + 'px';
+                                            showprofile.style.marginTop = myprofile.getBoundingClientRect().bottom -
+                                                showprofile.getBoundingClientRect().top + 'px';
                                         }
                                     } else if (showparticipate) {
-                                        if (showprofile.getBoundingClientRect().top > showparticipate.getBoundingClientRect().bottom) {
+                                        if (showprofile.getBoundingClientRect().top >
+                                            showparticipate.getBoundingClientRect().bottom) {
                                             showprofile.style.marginTop = originalmarginTop + 3 + 'px';
                                         } else {
-                                            showprofile.style.marginTop = showparticipate.getBoundingClientRect().bottom - showprofile.getBoundingClientRect().top + 'px';
+                                            showprofile.style.marginTop = showparticipate.getBoundingClientRect().bottom -
+                                                showprofile.getBoundingClientRect().top + 'px';
                                         }
                                     }
                                     if (body.classList.contains('ios') || body.classList.contains('android')) {
@@ -340,7 +346,7 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
                             showprofile.style.paddingTop = originalpaddingTop;
                             showprofile.style.marginTop = originalmarginTop;
                         }
-                     }
+                    }
                 });
             }
         },
