@@ -26,6 +26,7 @@ namespace mod_openstudio\local\notifications;
 
 use renderer_base;
 use mod_openstudio\local\api\flags;
+use mod_openstudio\local\util;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -116,27 +117,6 @@ class notification implements \templatable {
         }
     }
 
-    private function get_time_since() {
-        $tz = \core_date::get_user_timezone_object($this->userid);
-        $timecreated = new \DateTime('now', $tz);
-        $timecreated->setTimestamp($this->timecreated);
-        $interval = $timecreated->diff(new \DateTime('now', $tz));
-
-        if ($interval->y > 0) {
-            return get_string('notification_yearsago', 'mod_openstudio');
-        } else if ($interval->m > 0) {
-            return get_string('notification_monthsago', 'mod_openstudio', $interval->m);
-        } else if ($interval->d > 0) {
-            return get_string('notification_daysago', 'mod_openstudio', $interval->d);
-        } else if ($interval->h > 0) {
-            return get_string('notification_hoursago', 'mod_openstudio', $interval->h);
-        } else if ($interval->i > 0) {
-            return get_string('notification_minutesago', 'mod_openstudio', $interval->i);
-        } else {
-            return get_string('notification_secondsago', 'mod_openstudio');
-        }
-    }
-
     public function export_for_template(renderer_base $output) {
         global $DB, $OUTPUT;
         $userfrom = $DB->get_record('user', ['id' => $this->userfrom]);
@@ -145,7 +125,7 @@ class notification implements \templatable {
         $picture->size = 48;
         // Action type icon, no alt text as it's supplementary to the message.
         $icon = new \pix_icon($this->icon . '_rgb_32px', '', 'mod_openstudio');
-        $timesince = $this->get_time_since();
+        $timesince = util::get_time_since_readable($this->userid, $this->timecreated);
         if (empty($this->commentid)) {
             $isfollowing = !empty(flags::get_content_flags($this->contentid, flags::FOLLOW_CONTENT, $this->userid));
         } else {

@@ -1681,34 +1681,6 @@ EOF;
     }
 
     /**
-     * Get time since readable.
-     *
-     * @param int $userid ID of user to setup timezone.
-     * @param int $timemodified timestamp of content.
-     * @return lang_string|string time readadble of content.
-     * @throws coding_exception
-     */
-    public static function get_time_since_readable($userid, $timemodified): string {
-        $timezone = \core_date::get_user_timezone_object($userid);
-        $timecreated = new \DateTime('now', $timezone);
-        $timecreated->setTimestamp($timemodified);
-        $interval = $timecreated->diff(new \DateTime('now', $timezone));
-
-        if ($interval->y > 0) {
-            return get_string('notification_yearsago', 'mod_openstudio');
-        } else if ($interval->m > 0) {
-            return get_string('notification_monthsago', 'mod_openstudio', $interval->m);
-        } else if ($interval->d > 0) {
-            return get_string('notification_daysago', 'mod_openstudio', $interval->d);
-        } else if ($interval->h > 0) {
-            return get_string('notification_hoursago', 'mod_openstudio', $interval->h);
-        } else if ($interval->i > 0) {
-            return get_string('notification_minutesago', 'mod_openstudio', $interval->i);
-        }
-        return get_string('notification_secondsago', 'mod_openstudio');
-    }
-
-    /**
      * Get list of comment user is comment by content id.
      *
      * @param array list of content id.
@@ -1753,5 +1725,50 @@ EOF;
               GROUP BY sc2.id, sf.contentid";
         $sqlparams = [$userid, $userid, $contentid];
         return $DB->get_records_sql($sql, $sqlparams);
+    }
+
+    /*
+     * Get time readable for user.
+     *
+     * @param {int} id of user.
+     * @param {int|timestamp} time convert to read.
+     * @return {string|lang_string} time converted.
+     * @throws coding_exception
+     */
+    public static function get_time_since_readable($userid, $timeread): string {
+        $tz = \core_date::get_user_timezone_object($userid);
+        $timecreated = new \DateTime('now', $tz);
+        $timecreated->setTimestamp($timeread);
+        $interval = $timecreated->diff(new \DateTime('now', $tz));
+
+        if ($interval->y > 0) {
+            return get_string('timereable_yearsago', 'mod_openstudio');
+        } else if ($interval->m > 0) {
+            if ($interval->m === 1) {
+                return get_string('timereable_monthago', 'mod_openstudio', $interval->m);
+            } else {
+                return get_string('timereable_monthsago', 'mod_openstudio', $interval->m);
+            }
+        } else if ($interval->d > 0) {
+            if ($interval->d === 1) {
+                return get_string('timereable_dayago', 'mod_openstudio', $interval->d);
+            } else {
+                return get_string('timereable_daysago', 'mod_openstudio', $interval->d);
+            }
+        } else if ($interval->h > 0) {
+            if ($interval->h === 1) {
+                return get_string('timereable_hourago', 'mod_openstudio', $interval->h);
+            } else {
+                return get_string('timereable_hoursago', 'mod_openstudio', $interval->h);
+            }
+        } else if ($interval->i > 0) {
+            if ($interval->i === 1) {
+                return get_string('timereable_minuteago', 'mod_openstudio', $interval->i);
+            } else {
+                return get_string('timereable_minutesago', 'mod_openstudio', $interval->i);
+            }
+        } else {
+            return get_string('timereable_secondsago', 'mod_openstudio');
+        }
     }
 }
