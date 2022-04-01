@@ -8376,7 +8376,7 @@ a.openstudio-add-new-content-link:hover  {
 }
 
 @media (max-width: 1199px) {
-    body#page-mod-openstudio-contentedit:not(.osep-layoutnoblocks) .openstudio-content-edit-form  #fgroup_id_visibilityarray .col-md-3 p[id*="_label"] {
+    body#page-mod-openstudio-contentedit .openstudio-content-edit-form #fgroup_id_visibilityarray .col-md-3 p[id*="_label"] {
         float: left;
     }
 

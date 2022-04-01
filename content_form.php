@@ -404,17 +404,19 @@ class mod_openstudio_content_form extends moodleform {
 
     public function definition_after_data() {
         global $PAGE;
-
         $mform = $this->_form;
-
-        // Check attachments field for errors.
-        $element =& $mform->getElement('attachments');
-        if ($element) {
-            $value = $mform->getSubmitValue('attachments');
-            $result = $element->validateSubmitValue($value);
-            if (!empty($result) && is_string($result)) {
-                // Show Add File so that the error is visible.
-                $PAGE->requires->js_call_amd('mod_openstudio/contentedit', 'showAddFile', [true]);
+        $contenttype = (int)$this->_customdata['contenttype'];
+        if (!in_array($contenttype, [content::TYPE_FOLDER_CONTENT, content::TYPE_FOLDER])
+        && $this->_customdata['feature_contentusesfileupload']) {
+            // Check attachments field for errors.
+            $element =& $mform->getElement('attachments');
+            if ($element) {
+                $value = $mform->getSubmitValue('attachments');
+                $result = $element->validateSubmitValue($value);
+                if (!empty($result) && is_string($result)) {
+                    // Show Add File so that the error is visible.
+                    $PAGE->requires->js_call_amd('mod_openstudio/contentedit', 'showAddFile', [true]);
+                }
             }
         }
     }

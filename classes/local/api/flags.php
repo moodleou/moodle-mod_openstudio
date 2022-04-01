@@ -360,6 +360,9 @@ EOF;
      * @return array
      */
     public static function get_list_flag_content_by_user($contentids, $userid) {
+        if (empty($contentids) || empty($userid)) {
+            return false;
+        }
         global $DB;
         list($sqlcontent, $sqlparams) = $DB->get_in_or_equal($contentids, SQL_PARAMS_NAMED);
         $sqlflag = $DB->sql_group_concat('sf.flagid', ',');

@@ -1687,6 +1687,9 @@ EOF;
      * @return array list of comment of user.
      */
     public static function get_list_comment_of_user_by_contentid($listcontentid) {
+        if (empty($listcontentid)) {
+            return false;
+        }
         global $USER, $DB;
         list($sql, $sqlparams) = $DB->get_in_or_equal($listcontentid, SQL_PARAMS_NAMED);
         $sql = "SELECT oc.contentid
