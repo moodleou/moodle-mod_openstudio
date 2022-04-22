@@ -2374,8 +2374,22 @@ body#page-mod-openstudio-contentedit:not(.osep-layoutnoblocks) form .form-group 
     float: none;
 }
 
-#page-mod-openstudio-contentedit #osep-mainwrapper #fitem_id_tags .col-md-3 a img.icon {
+#page-mod-openstudio-contentedit #osep-mainwrapper #fitem_id_tags .col-md-3 a img.icon,
+#page-mod-openstudio-contentedit #osep-mainwrapper #fitem_id_weblink .col-md-3 a img.icon {
     margin-right: 0;
+    margin-left: 1px;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper #fgroup_id_openstudio_upload_content_buttons .btn.btn-link[data-content*="help-popover-container"] {
+    margin-left: 2px;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper #fgroup_id_openstudio_upload_content_buttons .btn.btn-link[data-content*="help-popover-container"]:first-of-type img.icon {
+    margin-right: 11px;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper #fgroup_id_openstudio_upload_content_buttons .btn.btn-link[data-content*="help-popover-container"] img.icon {
+    margin-left: 0;
 }
 
 @media (max-width: 1199px) {
@@ -2385,10 +2399,6 @@ body#page-mod-openstudio-contentedit:not(.osep-layoutnoblocks) form .form-group 
 
     .mform #openstudio_upload_content_add_file > .advcheckbox {
         margin-left: 1px;
-    }
-
-    #page-mod-openstudio-contentedit #osep-mainwrapper #contentformoptionalmetadata .openstudio_contentform_tag .btn.btn-link[data-content*="help-popover-container"] {
-        margin-left: -3px;
     }
 
     .path-mod-openstudio .comments-content-popup {
@@ -3891,6 +3901,10 @@ div.openstudio-browse-post-item-filename {
 
 .openstudio-folder-browseposts-selected-box {
     padding-top: 8px;
+}
+
+.openstudio-folder-browseposts-selected-box #openstudio-browseposts-helpicon .btn.btn-link[data-content*="help-popover-container"] {
+    margin-left: 3px;
 }
 
 .openstudio-folder-browseposts-deselect {
