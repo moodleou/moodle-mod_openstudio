@@ -431,6 +431,20 @@ class util {
      */
     public static function can_read_content($studio, $permissions, $content, $folderid = 0) {
         global $DB;
+        // If the slot is shared with the group, check permissions.
+        if (($content->visibility == content::VISIBILITY_GROUP) || ($content->visibility < 0)) {
+            if (!$permissions->accessallgroups) {
+                $ismember = api\group::is_content_group_member(
+                        $permissions->groupmode,
+                        $content->visibility,
+                        $permissions->groupingid,
+                        $content->userid, $permissions->activeuserid);
+                if (!$ismember) {
+                    return false;
+                }
+            }
+        }
+
         // If I have managecontent capability, then I can read any slot.
         if ($permissions->managecontent) {
             return true;

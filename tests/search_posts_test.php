@@ -260,6 +260,103 @@ class search_posts_test extends \advanced_testcase {
     }
 
     /**
+     *  Tests group support for os posts.
+     */
+    public function test_posts_for_group_support() {
+        global $DB;
+        $posts = new posts();
+        $this->setAdminUser();
+
+        $teacherroleid = 3;
+        $studentroleid = 5;
+
+        $generator = $this->getDataGenerator();
+        $teacher = $generator->create_user();
+        $generator->enrol_user($teacher->id, $this->course->id, $teacherroleid, 'manual');
+        $student1 = $generator->create_user();
+        $generator->enrol_user($student1->id, $this->course->id, $studentroleid, 'manual');
+        $student2 = $generator->create_user();
+        $generator->enrol_user($student2->id, $this->course->id, $studentroleid, 'manual');
+
+        $group1 = $generator->create_group(['courseid' => $this->course->id]);
+        $group2 = $generator->create_group(['courseid' => $this->course->id]);
+
+        $grouping = $generator->create_grouping(['courseid' => $this->course->id, 'name' => 'Grouping A']);
+
+        // Add groups to our groupings.
+        $insert = new \stdClass();
+        $insert->groupingid = $grouping->id;
+        $insert->groupid = $group1->id;
+
+        $DB->insert_record('groupings_groups', $insert);
+        $insert->groupingid = $grouping->id;
+        $insert->groupid = $group2->id;
+        $DB->insert_record('groupings_groups', $insert);
+
+        $this->generator->add_users_to_groups([
+                $group1->id => [
+                        $student1->id,
+                        $teacher->id
+                ],
+                $group2->id => [
+                        $student2->id
+                ]
+        ]);
+
+        $role = $DB->get_record('role', ['id' => $teacherroleid], '*', MUST_EXIST);
+        unassign_capability('moodle/site:accessallgroups', $role->id);
+
+        $studiogroup = $this->generator->create_instance(['course' => $this->course->id],
+                ['groupmode' => 1, 'groupingid' => $grouping->id]);
+        $studiogroup->leveldata = $this->generator->create_mock_levels($studiogroup->id);
+
+        $blockid = key($studiogroup->leveldata['contentslevels']);
+        $activityid = key($studiogroup->leveldata['contentslevels'][$blockid]);
+        $content1id = key($studiogroup->leveldata['contentslevels'][$blockid][$activityid]);
+
+        $contententry1 = array(
+                'name' => 'The new content 1',
+                'attachments' => '',
+                'embedcode' => '',
+                'weblink' => 'http://www.youtube.com/watch?v=R4XSeW4B5Rg',
+                'urltitle' => 'Vesica Timeline',
+                'visibility' => 0 - $group1->id,
+                'description' => 'os rainbow',
+                'tags' => array('Communist', 'Socialist', 'Democrat'),
+                'ownership' => 0,
+                'sid' => 0 // For a new content.
+        );
+        $contententry2 = array(
+                'name' => 'The new content 2',
+                'attachments' => '',
+                'embedcode' => '',
+                'weblink' => 'http://www.youtube.com/watch?v=R4XSeW4B5Rg',
+                'urltitle' => 'Vesica Timeline',
+                'visibility' => 0 - $group2->id,
+                'description' => 'os rainbow',
+                'tags' => array('Communist', 'Socialist', 'Democrat'),
+                'ownership' => 0,
+                'sid' => 0 // For a new content.
+        );
+
+        $content1 = content::create(
+                $studiogroup->id, $student1->id, 3,
+                $studiogroup->leveldata['contentslevels'][$blockid][$activityid][$content1id], $contententry1,
+                null, null, $this->cm);
+        $content2 = content::create(
+                $studiogroup->id, $student2->id, 3,
+                $studiogroup->leveldata['contentslevels'][$blockid][$activityid][$content1id], $contententry2,
+                null, null, $this->cm);
+
+        $this->setUser($student1);
+        $this->assertEquals(\core_search\manager::ACCESS_GRANTED, $posts->check_access($content1));
+        $this->setUser($student2);
+        $this->assertEquals(\core_search\manager::ACCESS_DENIED, $posts->check_access($content1));
+        $this->setUser($teacher);
+        $this->assertEquals(\core_search\manager::ACCESS_DENIED, $posts->check_access($content2));
+    }
+
+    /**
      * Test check get document.
      */
     public function test_check_get_permission() {

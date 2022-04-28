@@ -707,10 +707,8 @@ class notifications_test extends \advanced_testcase {
         $currenttimestamp = $currenttimestamp - 691200;
         $result = util::get_time_since_readable($this->users->students->one->id, $currenttimestamp);
         $this->assertEquals("8 days ago", $result);
-        $currenttimestamp = new DateTime();
-        $currenttimestamp = $currenttimestamp->getTimestamp();
-        $currenttimestamp = $currenttimestamp - 2592000;
-        $result = util::get_time_since_readable($this->users->students->one->id, $currenttimestamp);
+        $currenttimestamp = strtotime('-1 month');
+        $result = util::get_time_since_readable($this->users->students->one->id,  $currenttimestamp);
         $this->assertEquals("1 month ago", $result);
         $currenttimestamp = new DateTime();
         $currenttimestamp = $currenttimestamp->getTimestamp();
