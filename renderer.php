@@ -415,7 +415,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      * @param boolean $issearch Detect search behaviour
      * @return string The rendered HTM fragment.
      */
-    public function body($cmid, $cminstance, $theme, $viewmode = content::VISIBILITY_MODULE, $permissions, $contentdata, $issearch = false) {
+    public function body($cmid, $cminstance, $theme, $viewmode, $permissions, $contentdata, $issearch = false) {
         global $OUTPUT, $USER;
 
         $placeholdertext = '';
