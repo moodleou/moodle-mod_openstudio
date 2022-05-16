@@ -200,7 +200,7 @@ Feature: Open Studio group stream
         And I press "Save and display"
         And I am on site homepage
         And I log out
-        And I log in as "student1"
+        And I log in as "student3"
         And I am on "Course 1" course homepage
         And I follow "Test Open Studio name 1"
         And I follow "Shared content > My Group" in the openstudio navigation
@@ -208,8 +208,7 @@ Feature: Open Studio group stream
         And I should see "Test My Group Board View 2"
         And I should see "Test My Group Board View 3"
         And I follow "Test My Group Board View 2"
-        Then I should see "My Module"
-        And I should see "Test My Group Board View 2"
+        Then I should see "Test My Group Board View 2"
         And I should see "Owner of this post"
         And "Add new comment" "button" should exist
 
