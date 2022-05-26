@@ -5923,10 +5923,10 @@ a.openstudio-add-new-content-link:hover  {
         margin-right: 20px;
     }
 
-    .path-mod-openstudio .openstudio-create-new-content {
+    .path-mod-openstudio .openstudio-add-new-container .openstudio-create-new-content {
         margin-bottom: 8px;
         border-radius: 8px;
-        height: 130px;
+        min-height: 130px;
         text-align: center;
     }
 
@@ -8372,6 +8372,45 @@ a.openstudio-add-new-content-link:hover  {
 }
 .openstudio-profile-head.openstudio-profile-without-own-date {
     padding-bottom: 20px;
+}
+
+.path-mod-openstudio .openstudio-filter-text.openstudio-filter-link {
+    width: auto;
+}
+
+.path-mod-openstudio .openstudio-filter-text.openstudio-filter-link [data-toggle="collapse"] .openstudio-collapse-image,
+.path-mod-openstudio .openstudio-filter-text.openstudio-filter-link [data-toggle="collapse"] .openstudio-expand-image,
+.path-mod-openstudio .openstudio-filter-link a[data-toggle="collapse"] {
+    position: static;
+}
+
+.path-mod-openstudio .openstudio-filter-text.openstudio-filter-link [data-toggle="collapse"].collapsed .openstudio-collapse-image,
+.path-mod-openstudio .openstudio-filter-text.openstudio-filter-link [data-toggle="collapse"] .openstudio-expand-image {
+    display: inline-block;
+    padding-left: 5px;
+}
+
+.path-mod-openstudio .openstudio-filter-text.openstudio-filter-link + .openstudio-filter-divider {
+    padding-right: 0;
+}
+
+.path-mod-openstudio .openstudio-filter-text.openstudio-filter-link [data-toggle="collapse"].collapsed .openstudio-expand-image {
+    display: none;
+}
+
+.path-mod-openstudio .openstudio-create-new-content {
+    min-height: 66px;
+    height: auto;
+}
+
+.path-mod-openstudio .openstudio-create-new-content img {
+    margin-right: 9px;
+}
+
+.path-mod-openstudio .openstudio-create-new-content .openstudio-create-content-title {
+    text-align: left;
+    float: none;
+    margin-left: 0;
 }
 
 /* High contrast mode */
