@@ -56,7 +56,7 @@ And Apply the filter
     Given I am on "Course 1" course homepage
     And I follow "Test Open Studio name 1"
     And I follow "Add new content"
-    And I select "My tutor" from the "Who can view this content" singleselect
+    And I set the field "My Tutor" to "1"
     And I set the following fields to these values:
       | Title       | Studio content 1 |
       | Description | Description 1    |

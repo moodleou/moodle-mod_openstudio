@@ -151,9 +151,9 @@ Feature: Open Studio Folder Overview
       And the "src" attribute of "img.openstudio-content-view-img" "css_element" should contain "test1.jpg"
       And I follow "Edit folder details and sharing"
       And I set the following fields to these values:
-        | Who can view this folder  | My module                                  |
-        | Folder title              | Test my folder view 1                      |
-        | Folder description        | My folder view description 1               |
+        | My Module          | 1                            |
+        | Folder title       | Test my folder view 1        |
+        | Folder description | My folder view description 1 |
       And I press "Save"
       # Folder Title has value
       And I should see "Test my folder view 1"
@@ -321,8 +321,8 @@ Feature: Open Studio Folder Overview
       # Only once content Move Up and Move Down Button disable
       And the "Move Up" "button" should be disabled
       And the "Move Down" "button" should be disabled
-
-      And I click on "Close" "button" in the "Order posts" "dialogue"
+      And I wait until the page is ready
+      And I click on "//button[contains(@class,'closebutton')]" "xpath_element" in the "Order posts" "dialogue"
       And I follow "Add new content"
       And I press "Add file"
       And I set the following fields to these values:
@@ -425,6 +425,7 @@ Feature: Open Studio Folder Overview
       And I set the field "Move to post number" to "4"
       And I click on "Save order" "button" in the "Order posts" "dialogue"
       And I should see "You cannot move this content beyond other fixed contents."
+      And I wait until the page is ready
       And I click on "Close" "button" in the "Order posts" "dialogue"
       And Open studio contents should be in the following order:
         | Test My Folder Overview 1 |
@@ -442,6 +443,7 @@ Feature: Open Studio Folder Overview
       And I click on "Move to post number" "text"
       Then I should see "You cannot move this content beyond other fixed contents."
 
+      And I wait until the page is ready
       And I click on "Close" "button" in the "Order posts" "dialogue"
       And I press "Order posts"
 
@@ -455,12 +457,14 @@ Feature: Open Studio Folder Overview
       And I should see "You cannot move this content beyond other fixed contents."
 
       # Multiply movement content
+      And I wait until the page is ready
       And I click on "Close" "button" in the "Order posts" "dialogue"
       And I press "Order posts"
       And I set the field with xpath "//input[@id='openstudio-folder-reorder-input-4']" to "3"
       And I click on "Move to post number" "text"
       And I set the field with xpath "//input[@id='openstudio-folder-reorder-input-4']" to "2"
       And I click on "Move to post number" "text"
+      And I wait until the page is ready
       And I click on "Save order" "button" in the "Order posts" "dialogue"
       And Open studio contents should be in the following order:
         | Test My Folder Overview 1 |
@@ -575,8 +579,8 @@ Feature: Open Studio Folder Overview
       And I follow "My Content > My Activities" in the openstudio navigation
       And I click on "Folder 1" "link" in the ".openstudio-grid-item" "css_element"
       Then I press "Activity guidance"
-      And I should see "Folder guidance text"
-      And I should see "Content 1"
-      And I should see "Content 1 guidance"
-      And I should see "Content 2"
-      And I should see "No guidance has been given for this content"
+      And I should see "Folder guidance text" in the ".modal-body" "css_element"
+      And I should see "Content 1" in the ".modal-body" "css_element"
+      And I should see "Content 1 guidance" in the ".modal-body" "css_element"
+      And I should see "Content 2" in the ".modal-body" "css_element"
+      And I should see "No guidance has been given for this content" in the ".modal-body" "css_element"

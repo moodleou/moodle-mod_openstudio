@@ -141,5 +141,6 @@ I need to be able to search within OpenStudio
         And I press "Add file"
         And I set the field with xpath "//input[@placeholder='Enter tags...']" to "tag1"
         And I press "Save"
+        And I wait until the page is ready
         When I follow "tag1"
         Then I should see "tag1 — No results"

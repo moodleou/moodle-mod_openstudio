@@ -16,7 +16,7 @@
 /**
  * JavaScript to manage on view page.
  *
- * @package mod_openstudio
+ * @package
  * @copyright 2017 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -55,7 +55,8 @@ define([
             REMOVELASTSELECTED: '.folder-browse-post-remove-last-selection',
             SAVECHANGEBUTTON: '.folder-browse-post-save-change',
             DIALOGHEADER: '.openstudio-dialogue-common-header',
-            BROWSEPOSTDIALOGUECONTAINER: '.openstudio-folder-posts-dialogue'
+            BROWSEPOSTDIALOGUECONTAINER: '.openstudio-folder-posts-dialogue',
+            BOX_FOLDER_COMMENT: '#toggle_folder_view_folder_comments'
         },
 
         /**
@@ -124,6 +125,8 @@ define([
             // Responsive.
             $(window).resize(t.resize.bind(t));
 
+            // Toggle box comment
+            $(document).ready(this.toggleBoxComment);
         },
 
         /**
@@ -379,6 +382,18 @@ define([
             $(".openstudio-browse-post-item").removeClass('browse-post-item-even').removeClass('browse-post-item-odd');
             $(".openstudio-browse-post-item:visible:even").addClass('browse-post-item-even');
             $(".openstudio-browse-post-item:visible:odd").addClass('browse-post-item-odd');
+        },
+
+        /**
+         * Toggle function to show box comment.
+         */
+        toggleBoxComment: function() {
+            $(t.CSS.BOX_FOLDER_COMMENT).ready(function() {
+                const hash = window.location.hash;
+                if (hash && hash.replace("#", "") === "id_addcomment") {
+                    $(t.CSS.BOX_FOLDER_COMMENT).click();
+                }
+            });
         }
     };
 

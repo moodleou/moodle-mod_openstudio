@@ -114,10 +114,13 @@ Feature: Manage open studio folders
       | Prevent re-ordering?  | 1                              |
 
     When I press "Add another Content"
+    And I wait until the page is ready
     And I set the field "id_contentname_1" to "Set Content 2"
     And I press "Add another Content"
+    And I wait until the page is ready
     And I set the field "id_contentname_2" to "Set Content 3"
     And I press "Save Changes"
+    And I wait until the page is ready
     And I follow "Content 2"
     Then the following fields match these values:
       | id_contentname_0  | Set Content 1 |

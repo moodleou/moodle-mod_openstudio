@@ -52,9 +52,9 @@ Feature: Test for new capability 'mod/openstudio:ignoreenrolment'
     And I press "Accept"
     And I follow "Upload content"
     And I set the following fields to these values:
-      | Who can view this content | My module                            |
-      | Title                     | Test content of student2             |
-      | Description               | Test content of student2 description |
+      | My Module   | 1                                    |
+      | Title       | Test content of student2             |
+      | Description | Test content of student2 description |
     And I press "Save"
     And I follow "Shared content" in the openstudio navigation
     Then I should see "Student1 slot 1"

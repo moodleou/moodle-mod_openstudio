@@ -139,9 +139,44 @@ class mod_openstudio_content_form extends moodleform {
                 $contenttitle = get_string('folderformname', 'openstudio');
                 $contentdescription = get_string('folderformdescription', 'openstudio');
             }
-            $mform->addElement('select', 'visibility', $visibilitytitle, $options,
-                    array('class' => 'openstudio-content-form-select-visibility'));
-            $mform->setDefault('visibility', $this->_customdata['defaultvisibility']);
+            $visibilityarray = [];
+            foreach ($options as $option => $label) {
+                $contenticon = '';
+                $visibility = (int)$option;
+                if ($visibility < 0) {
+                    $visibility = content::VISIBILITY_GROUP;
+                }
+                switch ($visibility) {
+                    case content::VISIBILITY_MODULE:
+                        $contenticon = $OUTPUT->image_url('mymodule_rgb_32px', 'openstudio');
+                        break;
+
+                    case content::VISIBILITY_GROUP:
+                        $contenticon = $OUTPUT->image_url('share_with_my_group_rgb_32px', 'openstudio');
+                        break;
+
+                    case content::VISIBILITY_WORKSPACE:
+                    case content::VISIBILITY_PRIVATE:
+                    case content::VISIBILITY_PRIVATE_PINBOARD:
+                        $contenticon = $OUTPUT->image_url('onlyme_rgb_32px', 'openstudio');
+                        break;
+
+                    case content::VISIBILITY_TUTOR:
+                        $contenticon = $OUTPUT->image_url('share_with_tutor_rgb_32px', 'openstudio');
+                        break;
+                    default:
+                        $contenticon = $OUTPUT->image_url('onlyme_rgb_32px', 'openstudio');
+                        break;
+                }
+                $optionlabel = html_writer::img($contenticon, '', ['class' => 'openstudio-content-form-visibility-icon']);
+                $optionlabel .= html_writer::start_tag('span', ['class' => 'openstudio-content-form-visibility-label']);
+                $optionlabel .= ucwords($label);
+                $optionlabel .= html_writer::end_tag('span');
+                $visibilityarray[] = $mform->createElement('radio', 'visibility', '', $optionlabel, $option,
+                        ['class' => 'openstudio-content-form-select-visibility']);
+            }
+            $mform->addGroup($visibilityarray, 'visibilityarray', $visibilitytitle, [' '], false);
+            $mform->addRule('visibilityarray', get_string('required'), 'required',  null, 'client');
             $mform->addElement('html', html_writer::end_tag('div'));
         }
 
@@ -227,6 +262,16 @@ class mod_openstudio_content_form extends moodleform {
 
             }
 
+            if (!extension_loaded('imagick') || !class_exists('Imagick')) {
+                $mform->addElement('hidden', 'retainimagemetadata');
+                $mform->setType('retainimagemetadata', PARAM_INT);
+                $mform->setDefault('retainimagemetadata', 0);
+            } else {
+                $mform->addElement('advcheckbox', 'retainimagemetadata',
+                        get_string('retainimagemetadata', 'openstudio'), null, [0, 1]);
+                $mform->addHelpButton('retainimagemetadata', 'retainimagemetadata', 'openstudio');
+            }
+
             if (!$this->_customdata['feature_contentusesfileupload'] ||
                     (((int) $this->_customdata['contenttype']) === content::TYPE_FOLDER)) {
                 $mform->addElement('hidden', 'showgps');
@@ -240,15 +285,16 @@ class mod_openstudio_content_form extends moodleform {
                 $mform->addElement('html', html_writer::start_tag('div',
                         array('class' => 'openstudio-showgps-box')));
 
-                $showgpsarray = array();
-                $showgpsarray[] = $mform->createElement('advcheckbox', 'showgps', '',
-                                  get_string('contentformshowgps', 'openstudio'),
-                                  array('group' => 1), array(0, content::INFO_GPSDATA));
-
-                $showgpsarray[] = $mform->createElement('advcheckbox', 'showimagedata', '',
+                $mform->addElement('advcheckbox', 'showimagedata', '',
                         get_string('contentformshowimagedata', 'openstudio'),
                         array('group' => 1), array(0, content::INFO_IMAGEDATA));
-                $mform->addGroup($showgpsarray, 'showgpsarray', '',  array(' '), false);
+                $mform->addHelpButton('showimagedata', 'contentformshowimagedata', 'openstudio');
+
+                $mform->addElement('advcheckbox', 'showgps', '',
+                        get_string('contentformshowgps', 'openstudio'),
+                        array('group' => 1), array(0, content::INFO_GPSDATA));
+                $mform->addHelpButton('showgps', 'contentformshowgps', 'openstudio');
+
                 $mform->setDefault('showgps', 0);
                 $mform->setDefault('showimagedata', 0);
                 $mform->addElement('html', html_writer::end_tag('div'));
@@ -264,14 +310,7 @@ class mod_openstudio_content_form extends moodleform {
                     }
                 }
             }
-            if (!extension_loaded('imagick') || !class_exists('Imagick')) {
-                $mform->addElement('hidden', 'retainimagemetadata');
-                $mform->setType('retainimagemetadata', PARAM_INT);
-                $mform->setDefault('retainimagemetadata', 0);
-            } else {
-                $mform->addElement('checkbox', 'retainimagemetadata', get_string('retainimagemetadata', 'openstudio'));
-                $mform->addHelpButton('retainimagemetadata', 'retainimagemetadata', 'openstudio');
-            }
+
 
             if (!empty($this->_customdata['retainimagemetadata'])) {
                 $mform->setDefault('retainimagemetadata', $this->_customdata['retainimagemetadata']);
@@ -361,6 +400,25 @@ class mod_openstudio_content_form extends moodleform {
         $mform->closeHeaderBefore('buttonar');
         $mform->addElement('html', html_writer::end_tag('div'));
 
+    }
+
+    public function definition_after_data() {
+        global $PAGE;
+        $mform = $this->_form;
+        $contenttype = (int)$this->_customdata['contenttype'];
+        if (!in_array($contenttype, [content::TYPE_FOLDER_CONTENT, content::TYPE_FOLDER])
+        && $this->_customdata['feature_contentusesfileupload']) {
+            // Check attachments field for errors.
+            $element =& $mform->getElement('attachments');
+            if ($element) {
+                $value = $mform->getSubmitValue('attachments');
+                $result = $element->validateSubmitValue($value);
+                if (!empty($result) && is_string($result)) {
+                    // Show Add File so that the error is visible.
+                    $PAGE->requires->js_call_amd('mod_openstudio/contentedit', 'showAddFile', [true]);
+                }
+            }
+        }
     }
 
     public function validation($data, $files) {

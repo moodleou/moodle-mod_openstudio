@@ -73,7 +73,7 @@ class stream {
        u.firstnamephonetic, u.lastnamephonetic, u.middlename, u.alternatename,
        s.id, s.contenttype, s.mimetype, s.content, s.thumbnail, s.urltitle,
        s.name, s.description, s.ownership, s.ownershipdetail,
-       s.visibility, s.userid, s.timemodified, s.timeflagged, s.showextradata,
+       s.visibility, s.deletedby, s.userid, s.timemodified, s.timeflagged, s.showextradata,
        s.levelid, s.levelcontainer, s.openstudioid, s.locktype, s.lockedby, s.fileid';
 
     /**

@@ -70,6 +70,7 @@ Feature: My Activity view in Open Studio
     When I follow "Test Open Studio name 1"
     And I follow "My Content > My Activities" in the openstudio navigation
     Then I should see "Activity 1"
+    Then I should see "Pre-defined activity slots set by module teams. Your shared posts will also be seen in corresponding shared content areas."
     And I should not see "Activity 2"
     And I should see "Activity 3"
 
@@ -79,9 +80,9 @@ Feature: My Activity view in Open Studio
     And I click on "a.openstudio-profile-mypaticipation" "css_element"
     And I follow "Content 1.1 Required"
     And I set the following fields to these values:
-      | Who can view this content | My module                   |
-      | Title                     | Test My Activities View 1   |
-      | Description               | My Activities Description 1 |
+      | My Module   | 1                           |
+      | Title       | Test My Activities View 1   |
+      | Description | My Activities Description 1 |
     And I press "Save"
     And I follow "My Content > My Activities" in the openstudio navigation
     And I should see "Test My Activities View 1"
@@ -96,10 +97,10 @@ Feature: My Activity view in Open Studio
     And I follow "Content 1.1 Required"
     And I press "Add file"
     And I set the following fields to these values:
-      | Who can view this content | My module                                  |
-      | Title                     | Test My Activities View 2                  |
-      | Description               | My Activities Description 2                |
-      | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
+      | My Module   | 1                                          |
+      | Title       | Test My Activities View 2                  |
+      | Description | My Activities Description 2                |
+      | Files       | mod/openstudio/tests/importfiles/test1.jpg |
     And I press "Save"
     And I follow "My Content > My Activities" in the openstudio navigation
     And I should see "Test My Activities View 2"
@@ -113,10 +114,10 @@ Feature: My Activity view in Open Studio
     And I follow "Content 1.1 Required"
     And I press "Add web/embed link"
     And I set the following fields to these values:
-      | Who can view this content | My module                                    |
-      | Title                     | Test My Activities View 3                    |
-      | Description               | Test My Activities View 3 Add web/embed link |
-      | Web link                  | https://www.youtube.com/watch?v=ktAnpf_nu5c  |
+      | My Module   | 1                                            |
+      | Title       | Test My Activities View 3                    |
+      | Description | Test My Activities View 3 Add web/embed link |
+      | Web link    | https://www.youtube.com/watch?v=ktAnpf_nu5c  |
     And I press "Save"
     And I follow "My Content > My Activities" in the openstudio navigation
     And I should see "Test My Activities View 3"
@@ -131,18 +132,18 @@ Feature: My Activity view in Open Studio
     And I follow "Content 1.1 Required"
     And I press "Add file"
     And I set the following fields to these values:
-      | Who can view this content | My module                                  |
-      | Title                     | Test My Activities View 4                  |
-      | Description               | My Activities Description 4                |
-      | Files                     | mod/openstudio/tests/importfiles/test2.jpg |
+      | My Module   | 1                                          |
+      | Title       | Test My Activities View 4                  |
+      | Description | My Activities Description 4                |
+      | Files       | mod/openstudio/tests/importfiles/test2.jpg |
     And I press "Save"
     And I follow "My Content > My Activities" in the openstudio navigation
-    And I click on "div.openstudio-grid-item-content" "css_element"
+    And I click on "div.openstudio-grid-item-content-preview" "css_element"
     And I go to content edit view
     And I set the following fields to these values:
-      | Who can view this content | My module                                  |
-      | Title                     | Test My Activities View 5                  |
-      | Description               | My Activities Description 5                |
+      | My Module   | 1                           |
+      | Title       | Test My Activities View 5   |
+      | Description | My Activities Description 5 |
     And I press "Save"
     And I follow "My Content > My Activities" in the openstudio navigation
     And I should see "Test My Activities View 5"
@@ -174,9 +175,9 @@ Feature: My Activity view in Open Studio
     And I follow "My Content > My Activities" in the openstudio navigation
     Then the "Work:" select box should not contain "All"
     And the "Work:" select box should contain "Block 1"
-    And I should see "Activity 1" in the "div.openstudio-container > div:nth-child(5)" "css_element"
+    And I should see "Activity 1" in the "div.openstudio-container > div:nth-child(6)" "css_element"
     And "//div[@class='openstudio-container']/div[position()=6 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 1.1 Required')]" "xpath_element" should exist
-    And I should see "Activity 3" in the "div.openstudio-container > div:nth-child(7)" "css_element"
+    And I should see "Activity 3" in the "div.openstudio-container > div:nth-child(8)" "css_element"
     # Add new content to Activity 1.
     And I navigate to "Manage levels" in current page administration
     And I follow "Block 1"
@@ -188,11 +189,11 @@ Feature: My Activity view in Open Studio
     And I press "Save Changes"
     And I follow "Test Open Studio name 1"
     And I follow "My Content > My Activities" in the openstudio navigation
-    Then I should see "Activity 1" in the "div.openstudio-container > div:nth-child(5)" "css_element"
+    Then I should see "Activity 1" in the "div.openstudio-container > div:nth-child(6)" "css_element"
     And "//div[@class='openstudio-container']/div[position()=6 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 1.1 Required')]" "xpath_element" should exist
     And "//div[@class='openstudio-container']/div[position()=6 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=2], 'Content 1.2')]" "xpath_element" should exist
     And "//div[@class='openstudio-container']/div[position()=6 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=3], 'Content 1.3')]" "xpath_element" should exist
-    And I should see "Activity 3" in the "div.openstudio-container > div:nth-child(7)" "css_element"
+    And I should see "Activity 3" in the "div.openstudio-container > div:nth-child(8)" "css_element"
     And "//div[@class='openstudio-container']/div[position()=8 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 3.1')]" "xpath_element" should exist
     # Add new Block 2.
     And I navigate to "Manage levels" in current page administration
@@ -220,13 +221,13 @@ Feature: My Activity view in Open Studio
     Then the "Work:" select box should contain "All"
     And the "Work:" select box should contain "Block 2"
     And the "Work:" select box should contain "Block 1"
-    And I should see "Activity 1 - Block 2" in the "div.openstudio-container > div:nth-child(5)" "css_element"
+    And I should see "Activity 1 - Block 2" in the "div.openstudio-container > div:nth-child(6)" "css_element"
     And "//div[@class='openstudio-container']/div[position()=6 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 1.1 - Block 2')]" "xpath_element" should exist
-    And I should see "Activity 1" in the "div.openstudio-container > div:nth-child(7)" "css_element"
+    And I should see "Activity 1" in the "div.openstudio-container > div:nth-child(8)" "css_element"
     And "//div[@class='openstudio-container']/div[position()=8 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 1.1 Required')]" "xpath_element" should exist
     And "//div[@class='openstudio-container']/div[position()=8 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=2], 'Content 1.2')]" "xpath_element" should exist
     And "//div[@class='openstudio-container']/div[position()=8 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=3], 'Content 1.3')]" "xpath_element" should exist
-    And I should see "Activity 3" in the "div.openstudio-container > div:nth-child(9)" "css_element"
+    And I should see "Activity 3" in the "div.openstudio-container > div:nth-child(10)" "css_element"
     And "//div[@class='openstudio-container']/div[position()=10 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 3.1')]" "xpath_element" should exist
 
   Scenario: Set "Enable pinboard" is 0 and check order of blocks defined in manage levels.
@@ -238,6 +239,6 @@ Feature: My Activity view in Open Studio
     And I press "Save and display"
     Then the "Work:" select box should not contain "All"
     And the "Work:" select box should contain "Block 1"
-    And I should see "Activity 1" in the "div.openstudio-container > div:nth-child(5)" "css_element"
+    And I should see "Activity 1" in the "div.openstudio-container > div:nth-child(6)" "css_element"
     And "//div[@class='openstudio-container']/div[position()=6 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 1.1 Required')]" "xpath_element" should exist
-    And I should see "Activity 3" in the "div.openstudio-container > div:nth-child(7)" "css_element"
+    And I should see "Activity 3" in the "div.openstudio-container > div:nth-child(8)" "css_element"

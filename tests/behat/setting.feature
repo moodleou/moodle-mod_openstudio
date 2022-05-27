@@ -158,6 +158,7 @@ Feature: Edit Open Studio settings
     Scenario: Behavior handling for My Content with My Activities:
         When I am on "Course 1" course homepage
         And I turn editing mode on
+        And I wait until the page is ready
         And I add a "OpenStudio 2" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1      |
           | Description                  | Test Open Studio description |
@@ -190,6 +191,7 @@ Feature: Edit Open Studio settings
     Scenario: Behavior handling for My Content without My Activities:
         When I am on "Course 1" course homepage
         And I turn editing mode on
+        And I wait until the page is ready
         And I add a "OpenStudio 2" to section "1" and I fill the form with:
           | Name                         | Test Open Studio name 1      |
           | Description                  | Test Open Studio description |
@@ -207,6 +209,7 @@ Feature: Edit Open Studio settings
     Scenario: Behavior handling drop down label to make consistency to Setting:
         When I am on "Course 1" course homepage
         And I turn editing mode on
+        And I wait until the page is ready
         And I add a "OpenStudio 2" to section "1" and I fill the form with:
           | Name                          | Test Open Studio name 1      |
           | Description                   | Test Open Studio description |
@@ -338,5 +341,5 @@ Feature: Edit Open Studio settings
     Then I should see "Shared Content"
     And I follow "Add new content"
     And I set the following fields to these values:
-      | Who can view this content | My module |
-    Then I should see "My module" in the "//select[@name='visibility']" "xpath_element"
+      | My Module | 1 |
+    Then I should see "My Module"

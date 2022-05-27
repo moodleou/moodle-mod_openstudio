@@ -166,10 +166,10 @@ Feature: View author's work in Open Studio
         And I click on "#profile_percent div:nth-child(2) a.openstudio-profile-progress-step" "css_element"
         And I press "Add file"
         And I set the following fields to these values:
-            | Who can view this content | Only me                                    |
-            | Title                     | Test My Pinboard View 1                    |
-            | Description               | My Pinboard View Description 1             |
-            | Files                     | mod/openstudio/tests/importfiles/test1.jpg |
+            | Only Me     | 1                                          |
+            | Title       | Test My Pinboard View 1                    |
+            | Description | My Pinboard View Description 1             |
+            | Files       | mod/openstudio/tests/importfiles/test1.jpg |
         And I press "Save"
         And I click on "a.openstudio-profile-mypaticipation" "css_element"
         And I click on "#profile_percent div:nth-child(2) a.openstudio-profile-progress-step" "css_element"
@@ -183,6 +183,7 @@ Feature: View author's work in Open Studio
         And I follow "Test Open Studio name 2"
         And I follow "People" in the openstudio navigation
         Then I should see "Student 1"
+        And I should see "View all"
         And I click on ".openstudio-profile-details a.openstudio-profile-view" "css_element"
         Then I should see "Student 1" in the "#openstudio_profile_fullusername" "css_element"
         And the "class" attribute of "#profile_percent div:nth-child(2) span.openstudio-profile-progress-step" "css_element" should contain "content-block-active"

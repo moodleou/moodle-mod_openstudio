@@ -204,10 +204,6 @@ $PAGE->requires->js_call_amd('mod_openstudio/folderhelper', 'init');
 $PAGE->requires->strings_for_js(
         array('folderbrowseposts', 'folderbrowsepostshint', 'folderbrowseremovepostfromselection'), 'mod_openstudio');
 
-$PAGE->requires->js_call_amd('mod_openstudio/folderbrowseposts', 'init', [[
-        'folderid' => $folderid,
-        'cmid' => $cm->id]]);
-
 // Generate stream html.
 $renderer = $PAGE->get_renderer('mod_openstudio');
 $PAGE->set_button($renderer->searchform($theme, $vid, $id));
@@ -220,6 +216,10 @@ echo $OUTPUT->header(); // Header.
 echo $html;
 
 echo $renderer->folder_page($cm, $permissions, $folderdata, $cminstance);
+
+$PAGE->requires->js_call_amd('mod_openstudio/folderbrowseposts', 'init', [[
+    'folderid' => $folderid,
+    'cmid' => $cm->id]]);
 
 // Finish the page.
 echo $OUTPUT->footer();

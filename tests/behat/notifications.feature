@@ -1,4 +1,4 @@
-@ou @ou_vle @mod @mod_openstudio @javascript
+@ou @ou_vle @mod @mod_openstudio @javascript @mod_openstudio_notifications
 Feature: Open Studio notifications
   In order to track activity on content I am interested in
   As a student
@@ -45,16 +45,16 @@ Feature: Open Studio notifications
     And I follow "Notification Studio"
     And I follow "Add new content"
     And I set the following fields to these values:
-      | Who can view this content | My module    |
-      | Title                     | Module post  |
-      | Description               | Module post  |
+      | My Module   | 1           |
+      | Title       | Module post |
+      | Description | Module post |
     And I press "Save"
     And I follow "My Content"
     And I follow "Add new content"
     And I set the following fields to these values:
-      | Who can view this content | My tutor    |
-      | Title                     | Tutor post  |
-      | Description               | Tutor post  |
+      | My Tutor    | 1          |
+      | Title       | Tutor post |
+      | Description | Tutor post |
     And I press "Save"
     And I am on site homepage
     And I log out
@@ -129,6 +129,7 @@ Feature: Open Studio notifications
     And I follow "Notification post 1"
     And I press "Reply"
     And I set the field "Comment" to "Test comment"
+    And I wait until the page is ready
     And I press "Post comment"
     And I am on site homepage
     And I log out
@@ -179,13 +180,16 @@ Feature: Open Studio notifications
     And I follow "Notification post 1"
     And I click on "Like comment" "link"
     And I press "Reply"
+    And I wait until the page is ready
     And I set the field "Comment" to "Test comment"
+    And I wait until the page is ready
     And I press "Post comment"
     And I am on site homepage
     And I log out
     When I log in as "student2"
     And I am on "Course 1" course homepage
     And I follow "Notification Studio"
+    And I wait until the page is ready
     Then I should see "2" in the ".openstudio-navigation-notification-number" "css_element"
     When I click on "Notifications" "button"
     And I reload the page
@@ -271,16 +275,16 @@ Feature: Open Studio notifications
     And I follow "Notification Studio"
     And I follow "Add new content"
     And I set the following fields to these values:
-      | Who can view this content | My module    |
-      | Title                     | Module post  |
-      | Description               | Module post  |
+      | My Module   | 1           |
+      | Title       | Module post |
+      | Description | Module post |
     And I press "Save"
     And I follow "My Content"
     And I follow "Add new content"
     And I set the following fields to these values:
-      | Who can view this content | My tutor    |
-      | Title                     | Tutor post  |
-      | Description               | Tutor post  |
+      | My Tutor    | 1          |
+      | Title       | Tutor post |
+      | Description | Tutor post |
     And I press "Save"
     And I am on site homepage
     And I log out
@@ -356,7 +360,7 @@ Feature: Open Studio notifications
     And I log in as "student1"
     And I am on "Course 1" course homepage
     And I follow "Notification Studio"
-    And I should see "1" in the ".openstudio-navigation-notification-number" "css_element"
+    Then ".openstudio-navigation-notification-number" "css_element" should exist
     And I am on site homepage
     And I log out
     When I log in as "student2"
@@ -388,6 +392,7 @@ Feature: Open Studio notifications
     And I follow "My Content > My Activities" in the openstudio navigation
     And I click on "Content1.1" "link" in the ".openstudio-grid-item" "css_element"
     And I follow "Edit folder details and sharing"
+    And I set the field "My Module" to "1"
     And I set the field "Folder title" to "Content student 2"
     And I press "Save"
     And I log out
@@ -397,6 +402,7 @@ Feature: Open Studio notifications
     And I follow "My Content > My Activities" in the openstudio navigation
     And I click on "Content1.1" "link" in the ".openstudio-grid-item" "css_element"
     And I follow "Edit folder details and sharing"
+    And I set the field "My Module" to "1"
     And I set the field "Folder title" to "Content student 1"
     And I press "Save"
     And I follow "Shared Content > My Module" in the openstudio navigation

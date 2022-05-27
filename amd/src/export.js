@@ -16,7 +16,7 @@
 /**
  * JavaScript to manage export feature.
  *
- * @package mod_openstudio
+ * @package
  * @copyright 2017 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -90,12 +90,11 @@ define([
         /**
          * Create export dialogue and some events on it.
          *
-         * @return M.core.dialog instance
          * @method createExportDialogue
+         * @param {Element} osDialogue
          * @return M.core.dialogue
          */
         createExportDialogue: function(osDialogue) {
-
             /**
              * Set header for dialog
              * @method setHeader

@@ -388,7 +388,7 @@
 .openstudio-nav-primary .notifications .openstudio-notifications-arrow {
     display: none;
 }
-
+.openstudio-grid-item-content-detail-info-group .openstudio-notifications-arrow,
 .openstudio-nav-primary .notifications.open .openstudio-notifications-arrow {
     display: block;
     position: absolute;
@@ -484,6 +484,99 @@ button.openstudio-notification-stopbutton:focus {
     outline: 1px dotted grey;
 }
 
+.path-mod-openstudio .comments-content-popup {
+    left: 50px !important;
+    top: -5px !important;
+    width: 445px;
+    padding: 0px !important;
+    transform: none !important;
+}
+
+.path-mod-openstudio .comments-content-popup .openstudio-notifications-arrow {
+    transform: rotate(-90deg);
+    left: -18px;
+    top: -4px;
+}
+
+.path-mod-openstudio .comments-content-popup .openstudio-notifications-heading > img {
+    margin-right: 7px;
+    margin-left: 5px;
+    width: 16px;
+}
+
+.path-mod-openstudio .comments-content-popup img.defaultuserpic {
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+    margin-left: 15px;
+}
+
+.path-mod-openstudio .comments-content-popup .comment-block-list {
+    padding-left: 0;
+    padding-right: 0;
+    max-height: 301px;
+    margin-bottom: 0;
+}
+
+.path-mod-openstudio .comments-content-popup .comment-block-list li {
+    padding: 15px 0 9px;
+    display: flex;
+}
+
+.path-mod-openstudio .comments-content-popup .comment-block-list .comment-title {
+    font-size: 0.95em;
+    color: #312b39;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    line-height: 10px;
+}
+
+.path-mod-openstudio .comments-content-popup .comment-block-list .comment-text-link {
+    color: #0b55a8;
+    font-size: 0.92em;
+    margin: 0 auto;
+    padding: 8px 0 0;
+    line-height: 17px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    -webkit-box-orient: vertical;
+}
+
+.path-mod-openstudio .comments-content-popup .comment-block-list .comment-time {
+    font-size: 12px;
+    color: #676463;
+    padding-top: 3px;
+    margin-bottom: 1px;
+}
+
+.path-mod-openstudio .comments-content-popup .add-comment {
+    height: 16px;
+    padding: 8px 15px;
+    background: #e7f4fa;
+    border-bottom: 2px #0b55a8 solid;
+}
+
+.path-mod-openstudio .comments-content-popup .add-comment img {
+    margin-right: 5px;
+}
+
+.path-mod-openstudio .comments-content-popup .add-comment span {
+    font-size: 17px;
+    color: #0b55a8;
+}
+
+.path-mod-openstudio .comments-content-popup .add-comment span:hover {
+    text-decoration: underline;
+}
+
+.path-mod-openstudio .comments-content-popup .comment-list-none {
+    font-size: 0.95em;
+    line-height: 17px;
+    padding-left: 14px !important;
+}
+
 @media (max-width: 1023px) {
     .path-mod-openstudio .openstudio-notifications.dropdown-menu {
         width: 393px;
@@ -573,6 +666,91 @@ button.openstudio-notification-stopbutton:focus {
     #openstudio_folder_view_folder_comments .openstudio-folder-view-comments .openstudio-comment-owner-name {
         margin-bottom: 0;
     }
+
+    .path-mod-openstudio .comments-content-popup h2.openstudio-notifications-heading {
+        font-size: 1.475em;
+        padding-left: 15px;
+    }
+
+    .path-mod-openstudio .comments-content-popup .openstudio-notifications-heading > img {
+        height: 24px;
+        width: 24px;
+        padding-right: 4px;
+    }
+
+    .path-mod-openstudio .comments-content-popup img.defaultuserpic {
+        width: 46px;
+        height: 46px;
+        margin-left: 20px !important;
+        margin-top: 4px !important;
+        margin-right: 9px !important;
+    }
+
+    .path-mod-openstudio .comments-content-popup .add-comment {
+        height: 31px;
+        padding: 6px 15px 9px;
+    }
+
+    .path-mod-openstudio .comments-content-popup .add-comment span {
+        font-weight: 400 !important;
+    }
+
+    .path-mod-openstudio .comments-content-popup .add-comment a {
+        font-size: 1.3em;
+        color: #0b55a8;
+        font-weight: 700;
+        padding-right: 5px;
+    }
+
+    .path-mod-openstudio .comments-content-popup .add-comment img {
+        height: 24px !important;
+        width: 24px !important;
+        padding-left: 15px;
+        margin-right: 6px !important;
+    }
+
+    .path-mod-openstudio .comments-content-popup .comment-block-list {
+        max-height: 563px;
+    }
+
+    .path-mod-openstudio .comments-content-popup .comment-block-list li {
+        padding-top: 16px !important;
+        padding-bottom: 16px !important;
+    }
+
+    .path-mod-openstudio .comments-content-popup .comment-block-list .comment-title {
+        font-size: 1.3em;
+        line-height: 1.1em;
+        padding-top: 1px;
+        color: #312B39;
+    }
+
+    .path-mod-openstudio .comments-content-popup .comment-block-list .comment-text-link {
+        font-size: 1.3em;
+        line-height: 1.3em;
+        padding: 12px 18px 0 0;
+        color: #0B55A8;
+        -webkit-line-clamp: 4 !important;
+    }
+
+    .path-mod-openstudio .comments-content-popup .comment-block-list .comment-time {
+        font-size: 1.135em;
+        color: #676463;
+        padding-top: 0;
+        padding-top: 7px;
+    }
+
+    .path-mod-openstudio .comments-content-popup .comment-list-none {
+        padding-left: 20px !important;
+        font-size: 1.3em;
+        line-height: 1.3em;
+    }
+
+    .path-mod-openstudio .comments-content-popup-add-comment span {
+        font-size: 19px !important;
+        color: #0B55A8;
+    }
+
 }
 
 @media (max-width: 419px) {
@@ -1858,7 +2036,21 @@ label.openstudio-export-item-name {
     font-size: 1.57142em;
     line-height: 22px;
     margin: 0;
-    padding: 15px 24px 13px;
+    padding: 0 24px 0;
+}
+
+.mymodule-subttile.subtitle-sharetoview,
+.mygroup-subttile.subtitle-sharetoview {
+    padding-top: 5px !important;
+}
+
+.openstudio-module-subtitle {
+    font-size: 1em;
+    line-height: 18px;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 8px 24px 19px;
+    color: #002158;
 }
 
 .openstudio-content-view-profile-bar,
@@ -2125,6 +2317,127 @@ a.openstudio-add-title:hover  {
     font-weight: bold;
 }
 
+#page-mod-openstudio-contentedit #osep-mainwrapper .openstudio-showgps-box {
+    display: flex;
+    padding-bottom: 10px;
+    padding-left: 3px;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper .openstudio-showgps-box .advcheckbox {
+    display: contents;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper .openstudio-showgps-box .advcheckbox .checkbox {
+    padding-left: 0;
+    display: contents;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper .openstudio-showgps-box .advcheckbox:nth-child(2) .col-md-3 {
+    display: inherit;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper .openstudio-showgps-box .checkbox .form-check {
+    margin-right: 7px;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper #contentformownershipdata .form-inline {
+    margin-top: -5px;
+
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper #contentformownershipdata .form-inline .inline-radio em {
+    font-style: normal;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper #openstudio_upload_content_add_file #id_retainimagemetadata {
+    margin-right: 6px;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper #openstudio_upload_content_add_file .openstudio-showgps-box #id_showimagedata,
+#page-mod-openstudio-contentedit #osep-mainwrapper #openstudio_upload_content_add_file .openstudio-showgps-box #id_showgps {
+    margin-right: 5px;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper #openstudio_upload_content_add_file .openstudio-showgps-box .btn.btn-link[data-content*="help-popover-container"] {
+    margin-left: -7px;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper #openstudio_upload_content_add_file label[for*="id_retainimagemetadata"] + span .btn.btn-link[data-content*="help-popover-container"] {
+    margin-left: -3px;
+}
+
+#page-mod-openstudio-contentedit.gecko #osep-mainwrapper #openstudio_upload_content_add_file label[for*="id_retainimagemetadata"] + span .btn.btn-link[data-content*="help-popover-container"] {
+    margin-left: -4px;
+}
+
+body#page-mod-openstudio-contentedit:not(.osep-layoutnoblocks) form .form-group .col-md-3 p[id*="_label"] {
+    float: none;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper #fitem_id_tags .col-md-3 a img.icon,
+#page-mod-openstudio-contentedit #osep-mainwrapper #fitem_id_weblink .col-md-3 a img.icon {
+    margin-right: 0;
+    margin-left: 1px;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper #fgroup_id_openstudio_upload_content_buttons .btn.btn-link[data-content*="help-popover-container"] {
+    margin-left: 2px;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper #fgroup_id_openstudio_upload_content_buttons .btn.btn-link[data-content*="help-popover-container"]:first-of-type img.icon {
+    margin-right: 11px;
+}
+
+#page-mod-openstudio-contentedit #osep-mainwrapper #fgroup_id_openstudio_upload_content_buttons .btn.btn-link[data-content*="help-popover-container"] img.icon {
+    margin-left: 0;
+}
+
+@media (max-width: 1199px) {
+    .mform #openstudio_upload_content_add_file .form-group .col-form-label {
+        float: none;
+    }
+
+    .mform #openstudio_upload_content_add_file > .advcheckbox {
+        margin-left: 1px;
+    }
+
+    .path-mod-openstudio .comments-content-popup {
+        left: -33px !important;
+        top: 31px !important;
+    }
+
+    .path-mod-openstudio .comments-content-popup .openstudio-notifications-arrow {
+        transform: rotate(0deg);
+        left: 46px;
+        top: -23px;
+    }
+}
+
+@media (max-width: 767px) {
+    #page-mod-openstudio-contentedit #osep-mainwrapper .openstudio-showgps-box .advcheckbox .checkbox {
+        display: block;
+    }
+
+    .path-mod-openstudio .comments-content-popup {
+        left: -50px !important;
+        top: 49px !important;
+        padding: 0px !important;
+        transform: none !important;
+        width: 100vw !important;
+    }
+
+    .path-mod-openstudio .comments-content-popup .openstudio-notifications-arrow {
+        transform: rotate(0deg);
+        left: 46px;
+        top: -23px;
+    }
+
+    .path-mod-openstudio .content-block-social-group  .openstudio-grid-item-content-detail-info-text-new {
+        position: relative !important;
+        top: 0 !important;
+    }
+}
+
 .path-mod-openstudio span > label {
     font-size: 1em;
 }
@@ -2239,6 +2552,55 @@ a.openstudio-add-title:hover  {
     margin-right: 0px;
 }
 
+.path-mod-openstudio .openstudio-content-edit-form #fgroup_id_visibilityarray .col-md-3 p[id*="_label"] {
+    float: right;
+}
+
+.path-mod-openstudio .openstudio-content-edit-form #fgroup_id_visibilityarray .form-check-inline.inline-radio {
+    margin-top: 0;
+}
+
+.path-mod-openstudio .openstudio-content-edit-form #fgroup_id_visibilityarray .col-md-9 fieldset > div {
+    align-items: normal !important;
+}
+
+.path-mod-openstudio .openstudio-content-edit-form #fgroup_id_visibilityarray .col-md-9 fieldset > div {
+    width: 40%;
+}
+
+.path-mod-openstudio .openstudio-content-edit-form #fgroup_id_visibilityarray .col-md-9 fieldset > div > label {
+    flex-basis: 40%;
+    margin-bottom: 10px;
+    margin-right: 22px;
+}
+
+.path-mod-openstudio .openstudio-content-edit-form #fgroup_id_visibilityarray .openstudio-content-form-visibility-label {
+    font-style: normal;
+    font-weight: normal;
+}
+
+.path-mod-openstudio .openstudio-content-edit-form #fgroup_id_visibilityarray .col-md-9 fieldset > div > label {
+    display: block;
+}
+
+.path-mod-openstudio .openstudio-content-edit-form #fgroup_id_visibilityarray .openstudio-content-form-select-visibility .openstudio-content-form-visibility-icon {
+    vertical-align: text-bottom;
+    margin: 0 6px;
+    width: 18px;
+}
+
+.path-mod-openstudio .openstudio-content-edit-form #fitem_id_name {
+    margin-top: 27px;
+}
+
+.path-mod-openstudio .openstudio-content-edit-form div.required {
+    font-weight: bold;
+}
+
+.path-mod-openstudio .openstudio-content-edit-form div.required img {
+    margin-right: 2px;
+}
+
 .path-mod-openstudio #fgroup_id_ownershiparray {
     padding-bottom: 10px;
 }
@@ -2261,6 +2623,17 @@ a.openstudio-add-title:hover  {
     border-color: lightgrey;
     border-style: solid;
     border-width: 1px;
+}
+
+.path-mod-openstudio .box-notification-content-block {
+    top: -11px !important;
+    left: 55px !important;
+}
+
+.path-mod-openstudio .box-notification-content-block .openstudio-notifications-arrow {
+    transform: rotate(-90deg);
+    left: -18px;
+    top: -4px;
 }
 
 .openstudio-grid-item-add-new {
@@ -2286,6 +2659,20 @@ a.openstudio-add-title:hover  {
     display: inline;
     width: calc(100% - 33px);
     float: left;
+}
+
+.openstudio-grid-item-content-title a,
+.openstudio-grid-item-content-title a:hover,
+.openstudio-grid-item-content-title a:active,
+body .openstudio-grid-item-content-title a:focus {
+    color: #002158;
+}
+.openstudio-grid-item-content-title a:hover,
+.openstudio-grid-item-content-title a:active {
+    text-decoration: underline;
+}
+.openstudio-grid-item-content-title a {
+    text-decoration: none;
 }
 
 .openstudio-grid-item-content-icon {
@@ -2513,6 +2900,7 @@ a.openstudio-add-title:hover  {
     width: 47px;
     text-align: center;
     position: relative;
+    cursor: pointer;
 }
 
 .openstudio-grid-item-content-detail-info-icon {
@@ -3513,6 +3901,10 @@ div.openstudio-browse-post-item-filename {
 
 .openstudio-folder-browseposts-selected-box {
     padding-top: 8px;
+}
+
+.openstudio-folder-browseposts-selected-box #openstudio-browseposts-helpicon .btn.btn-link[data-content*="help-popover-container"] {
+    margin-left: 3px;
 }
 
 .openstudio-folder-browseposts-deselect {
@@ -5224,6 +5616,10 @@ a.openstudio-add-new-content-link:hover  {
 @media (max-width: 768px) {
     body.path-mod-openstudio .openstudio-profile-bar .openstudio-profile-progress-content {
         margin-top: 4px;
+    }
+
+    .path-mod-openstudio .openstudio-content-edit-form .openstudio-content-form-visibility #fgroup_id_visibilityarray .col-md-9 fieldset > div {
+        width: 100%;
     }
 }
 @media (max-width: 767px) {
@@ -7320,8 +7716,29 @@ a.openstudio-add-new-content-link:hover  {
         padding-left: 20px;
     }
 
+    .path-mod-openstudio .openstudio-container .openstudio-module-subtitle {
+        padding: 11px 20px 19px;
+        font-size: 1.275em;
+        line-height: 23px;
+    }
+
+    .path-mod-openstudio .openstudio-container .pinboard-subttile,
+    .path-mod-openstudio .openstudio-container .activities-subttile {
+        padding-bottom: 15px !important;;
+    }
+
+    .path-mod-openstudio .openstudio-container .mymodule-subttile.subtitle-sharetoview,
+    .path-mod-openstudio .openstudio-container .mygroup-subttile.subtitle-sharetoview {
+        padding-top: 10px !important;
+    }
+
+    .path-mod-openstudio .openstudio-container .subtitle-people {
+        padding-top: 12px;
+    }
+
     .path-mod-openstudio .openstudio-container .openstudio-module-title .openstudio-banner {
-        padding-bottom: 20px;
+        padding-bottom: 0;
+        padding-top: 15px;
         margin-right: 0;
     }
 
@@ -7355,6 +7772,13 @@ a.openstudio-add-new-content-link:hover  {
         .openstudio-folder-global-background .openstudio-content-view-date-box + .clearfix  + div:not(:empty) + div + .openstudio-content-view-animation-icons {
             margin-top: 25px;
         }
+    }
+
+    .path-mod-openstudio .content-block-social-group {
+        display: flex;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        justify-content: space-around;
     }
 }
 
@@ -7916,8 +8340,9 @@ a.openstudio-add-new-content-link:hover  {
 .path-mod-openstudio .openstudio-module-title {
     display: flex;
     display: -ms-flexbox;
+    flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    padding-top: 10px;
 }
 
 .path-mod-openstudio .openstudio-module-title .openstudio-banner {
@@ -7961,5 +8386,15 @@ a.openstudio-add-new-content-link:hover  {
 @media (prefers-color-scheme: dark) {
     body:not(.safari) .openstudio-folder-content .openstudio-folder-background {
         border: 1px solid;
+    }
+}
+
+@media (max-width: 1199px) {
+    body#page-mod-openstudio-contentedit .openstudio-content-edit-form #fgroup_id_visibilityarray .col-md-3 p[id*="_label"] {
+        float: left;
+    }
+
+    .path-mod-openstudio .openstudio-content-edit-form #fgroup_id_visibilityarray .col-md-9 fieldset > div {
+        width: 50%;
     }
 }

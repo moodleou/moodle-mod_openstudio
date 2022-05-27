@@ -45,6 +45,7 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
         And I follow "Student slot 1"
         And I press "Add new comment"
         And I set the field "Comment" to "Comment text"
+        And I wait until the page is ready
         And I upload "mod/openstudio/tests/importfiles/test.mp3" file to "Attach an audio (MP3 file) as comment" filemanager
         And I press "Post comment"
         Then I should see "Comment text"
@@ -69,11 +70,12 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
         And I follow "Student slot 1"
         Then I should see "Report comment"
         Then I should not see "Delete comment"
-
+        And I reload the page
         And I press "Reply"
         And I set the field "Comment" to "Comment text reply 2"
         And I press "Post comment"
-        Then I should see "Comment text reply"
+        Then I should see "Comment text reply 2"
+        And I wait until the page is ready
 
         # Delete comment
         And I follow "Delete comment"

@@ -415,11 +415,12 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      * @param boolean $issearch Detect search behaviour
      * @return string The rendered HTM fragment.
      */
-    public function body($cmid, $cminstance, $theme, $viewmode = content::VISIBILITY_MODULE, $permissions, $contentdata,
-            $issearch = false) {
+    public function body($cmid, $cminstance, $theme, $viewmode = content::VISIBILITY_MODULE, $permissions, $contentdata, $issearch = false) {
         global $OUTPUT, $USER;
 
         $placeholdertext = '';
+        $subplaceholdertext = '';
+        $othersubtitle = '';
         $selectview = false;
         $myactivities = false;
         $showprofilebarview = false;
@@ -432,10 +433,14 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         switch ($viewmode) {
             case content::VISIBILITY_MODULE:
                 $placeholdertext = $theme->thememodulename;
+                $subplaceholdertext = get_string('subtitleofthememodulename', 'openstudio');
+                $othersubtitle = 'mymodule-subttile';
                 break;
 
             case content::VISIBILITY_GROUP:
                 $placeholdertext = $theme->themegroupname;
+                $othersubtitle = 'mygroup-subttile';
+                $subplaceholdertext = get_string('subtitleofthemegroupname', 'openstudio');
                 $selectview = true;
                 break;
 
@@ -444,6 +449,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                 $vuid = optional_param('vuid', $USER->id, PARAM_INT);
                 $showprofilebarview = true;
                 $placeholdertext = $theme->themestudioname;
+                $subplaceholdertext = get_string('subtitleofthemegroupprivatename', 'openstudio');
+
                 if (!$issearch) {
                     $myactivities = true;
                 }
@@ -457,13 +464,15 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                         $blocksdata[$key]->selected = true;
                     }
                 }
-
+                $othersubtitle = 'activities-subttile';
                 $showsharetoviewbanner = !($vuid === $USER->id);
                 break;
 
             case content::VISIBILITY_PRIVATE_PINBOARD:
                 $showprofilebarview = true;
                 $placeholdertext = $theme->themepinboardname;
+                $subplaceholdertext = get_string('subtitleofthemepinboardname', 'openstudio');
+                $othersubtitle = 'pinboard-subttile';
                 $contentdata->ismypinboard = true;
                 $showsharetoviewbanner = false;
                 break;
@@ -502,11 +511,15 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         $contentdata->cmid = $cmid;
         $contentdata = renderer_utils::profile_bar($permissions, $cminstance, $contentdata);
-
+        $contentdata->contentflagfavourite = flags::FAVOURITE;
+        $contentdata->contentflagsmile = flags::MADEMELAUGH;
+        $contentdata->contentflaginspire = flags::INSPIREDME;
         $contentdata->showprofilebarview = $showprofilebarview;
         $contentdata->groupitems = array_values($groupitem);
         $contentdata->showmultigroup = $showmultigroup;
         $contentdata->placeholdertext = $placeholdertext;
+        $contentdata->subplaceholdertext = $subplaceholdertext;
+        $contentdata->othersubtitle = $othersubtitle;
         $contentdata->selectview = $selectview;
         $contentdata->myactivities = $myactivities;
         $contentdata->blocksdata = property_exists($contentdata,

@@ -353,6 +353,30 @@ EOF;
     }
 
     /**
+     * Return flag list of IDs active on the specified list content post for the specified user.
+     *
+     * @param array $contentids
+     * @param int $userid
+     * @return array
+     */
+    public static function get_list_flag_content_by_user($contentids, $userid) {
+        if (empty($contentids) || empty($userid)) {
+            return false;
+        }
+        global $DB;
+        list($sqlcontent, $sqlparams) = $DB->get_in_or_equal($contentids, SQL_PARAMS_NAMED);
+        $sqlflag = $DB->sql_group_concat('sf.flagid', ',');
+        $sql = "SELECT sf.contentid, $sqlflag as flagstatus
+                  FROM {openstudio_flags} sf
+                 WHERE sf.contentid $sqlcontent
+                   AND sf.userid = :userid
+              GROUP BY sf.contentid
+              ORDER BY sf.contentid";
+        $sqlparams['userid'] = $userid;
+        return $DB->get_records_sql($sql, $sqlparams);
+    }
+
+    /**
      * Get the last social flag (not FOLLOW_* or READ_CONTENT) set on a content post, with the flagging user's data.
      *
      * @param $contentid

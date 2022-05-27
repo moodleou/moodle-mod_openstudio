@@ -358,4 +358,54 @@ EOF;
 
         return $DB->get_record_sql($sql, array('mod_openstudio', 'contentcomment', $commentid));
     }
+
+    /**
+     * Get all comments by content id.
+     *
+     * @param $cmdid course module ID
+     * @param $contentid content ID
+     * @return array
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
+    public static function get_comments_by_contentid($cmid, $contentid) {
+        global $DB, $USER, $PAGE;
+        $userfields = \core_user\fields::get_picture_fields();
+        $arrayuserfield = [];
+        foreach ($userfields as $userfield) {
+            $arrayuserfield[] = "u.{$userfield}";
+        }
+        $sqluser = implode(', ', $arrayuserfield);
+        $sql = "SELECT oc.id as commentid, oc.commenttext, oc.contentid, oc.userid, oc.timemodified, " . $sqluser .
+                " FROM {openstudio_comments} oc
+            INNER JOIN {user} u ON oc.userid = u.id
+                 WHERE oc.deletedby IS NULL
+                   AND oc.contentid = :contentid
+              ORDER BY oc.timemodified DESC";
+        $comments = $DB->get_records_sql($sql, ['contentid' => $contentid]);
+        $result = [];
+        if ($comments && count($comments) > 0) {
+            $lastestcomment = util::get_lastest_comment_by_contentid($USER->id, $contentid);
+            foreach ($comments as $comment) {
+                $commenturl = new \moodle_url('/mod/openstudio/content.php',
+                    ['id' => $cmid, 'sid' => $contentid, 'vuid' => $comment->userid]);
+                $picture = new \user_picture($comment);
+                $data = new \stdClass();
+                $data->id = $comment->commentid;
+                $data->isnewcomment = false;
+                if (isset($lastestcomment[$comment->commentid])) {
+                    $data->isnewcomment = true;
+                }
+                $data->comment = "'" . strip_tags($comment->commenttext) . "'";
+                $data->contentid = $comment->contentid;
+                $data->userid = $comment->userid;
+                $data->userpicture = $picture->get_url($PAGE)->out(false);
+                $data->fullname = fullname($comment);
+                $data->commenturl = $commenturl . "#openstudio-comment-" . $comment->commentid;
+                $data->timemodified = util::get_time_since_readable($USER->id, $comment->timemodified);
+                $result[] = $data;
+            }
+        }
+        return $result;
+    }
 }

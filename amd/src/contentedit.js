@@ -16,7 +16,7 @@
 /**
  * JavaScript to allow editing content.
  *
- * @package mod_oucontent
+ * @package
  * @copyright 2017 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,17 +25,17 @@
  * @module mod_oucontent/contentedit
  */
 
-define(['jquery', 'mod_openstudio/scrollto'], function($, Scrollto) {
+define(['jquery', 'mod_openstudio/scrollto'], function ($, Scrollto) {
     var t;
 
-        t = {
+    t = {
 
-        init: function() {
+        init: function () {
             $.fx.off = true;
 
             $('#id_openstudio_upload_content_buttons_addfilebutton').on('click', t.toogleAddFile);
             $('#id_openstudio_upload_content_buttons_addlinkbutton').on('click', t.toogleAddLink);
-         },
+        },
 
         /**
          * Height from DOMElement to top browser.
@@ -48,27 +48,41 @@ define(['jquery', 'mod_openstudio/scrollto'], function($, Scrollto) {
          * @param {Event} event
          * @method toogleAddFile
          */
-        toogleAddFile: function(event) {
+        toogleAddFile: function (event) {
             event.preventDefault();
 
+            $('#openstudio_upload_content_add_file').toggle(function () {
+                t.showAddFile(false);
+            });
+        },
+
+        /**
+         * Show Add File button.
+         *
+         * @param {bool} force
+         * @method showAddFile
+         */
+        showAddFile: function (force) {
             $('#openstudio_upload_content_add_link').hide();
 
-            $('#openstudio_upload_content_add_file').toggle(function() {
-                if ($(this).is(':visible')) {
-                    $('#contentformoptionalmetadata').show();
-                    $('input[name="contentuploadtype"]').val('addfile');
+            if (force) {
+                $('#openstudio_upload_content_add_file').show();
+            }
 
-                    $('#id_openstudio_upload_content_buttons_addlinkbutton').removeClass('openstudio-button-active');
-                    $('#id_openstudio_upload_content_buttons_addfilebutton').addClass('openstudio-button-active');
+            if ($('#openstudio_upload_content_add_file').is(':visible')) {
+                $('#contentformoptionalmetadata').show();
+                $('input[name="contentuploadtype"]').val('addfile');
 
-                    Scrollto.scrollToEl($('#id_openstudio_upload_content_buttons_addfilebutton'), t.HEIGHT_TO_TOP);
-                } else {
-                    $('#contentformoptionalmetadata').hide();
-                    $('input[name="contentuploadtype"]').val('');
+                $('#id_openstudio_upload_content_buttons_addlinkbutton').removeClass('openstudio-button-active');
+                $('#id_openstudio_upload_content_buttons_addfilebutton').addClass('openstudio-button-active');
 
-                    $('#id_openstudio_upload_content_buttons_addfilebutton').removeClass('openstudio-button-active');
-                }
-            });
+                Scrollto.scrollToEl($('#id_openstudio_upload_content_buttons_addfilebutton'), t.HEIGHT_TO_TOP);
+            } else {
+                $('#contentformoptionalmetadata').hide();
+                $('input[name="contentuploadtype"]').val('');
+
+                $('#id_openstudio_upload_content_buttons_addfilebutton').removeClass('openstudio-button-active');
+            }
         },
 
         /**
@@ -77,12 +91,12 @@ define(['jquery', 'mod_openstudio/scrollto'], function($, Scrollto) {
          * @param {Event} event
          * @method toogleAddLink
          */
-        toogleAddLink: function(event) {
+        toogleAddLink: function (event) {
             event.preventDefault();
 
-            $('#openstudio_upload_content_add_file').hide();
+            $('#openstudio_upload_content_add_link').toggle(function () {
+                $('#openstudio_upload_content_add_file').hide();
 
-            $('#openstudio_upload_content_add_link').toggle(function() {
                 if ($(this).is(':visible')) {
                     $('#contentformoptionalmetadata').show();
                     $('input[name="contentuploadtype"]').val('addlink');

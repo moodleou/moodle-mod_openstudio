@@ -1170,21 +1170,35 @@ function openstudio_get_extra_capabilities() {
  * @param navigation_node $modnode
  */
 function openstudio_extend_settings_navigation(settings_navigation $settings,
-        navigation_node $modnode)
-{
+        navigation_node $modnode) {
     global $PAGE, $USER;
+
     if (has_capability('mod/openstudio:managelevels', $PAGE->context, $USER->id)) {
         $node = navigation_node::create(get_string('navadminmanagelevel', 'openstudio'),
                 new \moodle_url('/mod/openstudio/manageblocks.php', ['id' => $PAGE->cm->id]), navigation_node::TYPE_SETTING,
                 'openstudiomanagelevel');
-        $modnode->add_node($node, 'roleassign');
+        $beforekey = openstudio_get_before_key($modnode, 'roleassign');
+        $modnode->add_node($node, $beforekey);
     }
     if (has_capability('mod/openstudio:managecontent', $PAGE->context)) {
         $node = navigation_node::create(get_string('navadminusagereport', 'openstudio'),
                 new \moodle_url('/mod/openstudio/reportusage.php', ['id' => $PAGE->cm->id]), navigation_node::TYPE_SETTING,
                 'openstudioreportusage');
-        $modnode->add_node($node, 'backup');
+        $beforekey = openstudio_get_before_key($modnode, 'backup');
+        $modnode->add_node($node, $beforekey);
     }
+}
+
+/**
+ * Gets the key before a key within the navigation node.
+ *
+ * @param navigation_node $modnode
+ * @param $key
+ * @return string|null the key or null if not found
+ */
+function openstudio_get_before_key(navigation_node $modnode, $key) {
+    $keys = $modnode->get_children_key_list();
+    return !empty($keys) && array_search($key, $keys) ? $key : null;
 }
 
 /**

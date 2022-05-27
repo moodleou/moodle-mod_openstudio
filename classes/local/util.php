@@ -431,6 +431,20 @@ class util {
      */
     public static function can_read_content($studio, $permissions, $content, $folderid = 0) {
         global $DB;
+        // If the slot is shared with the group, check permissions.
+        if (($content->visibility == content::VISIBILITY_GROUP && $permissions->groupmode != NOGROUPS) || ($content->visibility < 0)) {
+            if (!$permissions->accessallgroups) {
+                $ismember = api\group::is_content_group_member(
+                        $permissions->groupmode,
+                        $content->visibility,
+                        $permissions->groupingid,
+                        $content->userid, $permissions->activeuserid);
+                if (!$ismember) {
+                    return false;
+                }
+            }
+        }
+
         // If I have managecontent capability, then I can read any slot.
         if ($permissions->managecontent) {
             return true;
@@ -1678,5 +1692,100 @@ EOF;
      */
     public static function is_ignore_enrol($modulecontext) {
         return has_capability('mod/openstudio:ignoreenrolment', $modulecontext);
+    }
+
+    /**
+     * Get list of comment user is comment by content id.
+     *
+     * @param array list of content id.
+     * @return array list of comment of user.
+     */
+    public static function get_list_comment_of_user_by_contentid($listcontentid) {
+        if (empty($listcontentid)) {
+            return false;
+        }
+        global $USER, $DB;
+        list($sql, $sqlparams) = $DB->get_in_or_equal($listcontentid, SQL_PARAMS_NAMED);
+        $sql = "SELECT oc.contentid
+                  FROM {openstudio_comments} oc
+                 WHERE oc.contentid $sql
+                   AND oc.userid = :userid
+              GROUP BY oc.contentid";
+        $sqlparams['userid'] = $USER->id;
+        return $DB->get_records_sql($sql, $sqlparams);
+    }
+
+    /**
+     * Get lastest comment when user add new a comment.
+     *
+     * @param $userid userid
+     * @param $contentid content ID
+     * @return array
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
+    public static function get_lastest_comment_by_contentid($userid, $contentid) {
+        global $DB;
+        $sql = "SELECT sc2.id as commentid, sf.contentid AS contentid
+                  FROM {openstudio_flags} sf
+                  JOIN {openstudio_comments} sc2
+                    ON sc2.contentid = sf.contentid
+                   AND sc2.deletedtime IS NULL
+                   AND sc2.userid != ?
+            AND EXISTS (SELECT 1
+                          FROM {openstudio_flags} sc2f
+                         WHERE sc2f.contentid = sc2.contentid
+                           AND sc2f.flagid = 6
+                           AND sc2f.userid = ?
+                           AND sc2.timemodified > sc2f.timemodified)
+                 WHERE sf.contentid = ?
+              GROUP BY sc2.id, sf.contentid";
+        $sqlparams = [$userid, $userid, $contentid];
+        return $DB->get_records_sql($sql, $sqlparams);
+    }
+
+    /*
+     * Get time readable for user.
+     *
+     * @param {int} id of user.
+     * @param {int|timestamp} time convert to read.
+     * @return {string|lang_string} time converted.
+     * @throws coding_exception
+     */
+    public static function get_time_since_readable($userid, $timeread): string {
+        $tz = \core_date::get_user_timezone_object($userid);
+        $timecreated = new \DateTime('now', $tz);
+        $timecreated->setTimestamp($timeread);
+        $interval = $timecreated->diff(new \DateTime('now', $tz));
+
+        if ($interval->y > 0) {
+            return get_string('timereable_yearsago', 'mod_openstudio');
+        } else if ($interval->m > 0) {
+            if ($interval->m === 1) {
+                return get_string('timereable_monthago', 'mod_openstudio', $interval->m);
+            } else {
+                return get_string('timereable_monthsago', 'mod_openstudio', $interval->m);
+            }
+        } else if ($interval->d > 0) {
+            if ($interval->d === 1) {
+                return get_string('timereable_dayago', 'mod_openstudio', $interval->d);
+            } else {
+                return get_string('timereable_daysago', 'mod_openstudio', $interval->d);
+            }
+        } else if ($interval->h > 0) {
+            if ($interval->h === 1) {
+                return get_string('timereable_hourago', 'mod_openstudio', $interval->h);
+            } else {
+                return get_string('timereable_hoursago', 'mod_openstudio', $interval->h);
+            }
+        } else if ($interval->i > 0) {
+            if ($interval->i === 1) {
+                return get_string('timereable_minuteago', 'mod_openstudio', $interval->i);
+            } else {
+                return get_string('timereable_minutesago', 'mod_openstudio', $interval->i);
+            }
+        } else {
+            return get_string('timereable_secondsago', 'mod_openstudio');
+        }
     }
 }

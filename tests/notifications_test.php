@@ -24,12 +24,14 @@
 
 namespace mod_openstudio;
 
+use DateTime;
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\flags;
 use mod_openstudio\local\api\notifications;
 use mod_openstudio\local\tests\mock_content_notifiable;
 use mod_openstudio\local\tests\mock_comment_notifiable;
 use mod_openstudio\local\tests\mock_tutor_notifiable;
+use mod_openstudio\local\util;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -652,5 +654,76 @@ class notifications_test extends \advanced_testcase {
         $this->assertTrue($DB->record_exists('openstudio_notifications', ['id' => $notification2->id]));
         $this->assertTrue($DB->record_exists('openstudio_notifications', ['id' => $notification3->id]));
         $this->assertTrue($DB->record_exists('openstudio_notifications', ['id' => $notification4->id]));
+    }
+
+    /**
+     * Test case time readable for user.
+     */
+    public function test_get_time_since_readable() {
+        $currenttimestamp = new DateTime();
+        $currenttimestamp = $currenttimestamp->getTimestamp();
+        $result = util::get_time_since_readable($this->users->students->one->id, $currenttimestamp);
+        $this->assertEquals("Less than a minute ago", $result);
+        $currenttimestamp = $currenttimestamp - 60;
+        $result = util::get_time_since_readable($this->users->students->one->id, $currenttimestamp);
+        $this->assertEquals("1 minute ago", $result);
+        $currenttimestamp = new DateTime();
+        $currenttimestamp = $currenttimestamp->getTimestamp();
+        $currenttimestamp = $currenttimestamp - 120;
+        $result = util::get_time_since_readable($this->users->students->one->id, $currenttimestamp);
+        $this->assertEquals("2 minutes ago", $result);
+        $currenttimestamp = new DateTime();
+        $currenttimestamp = $currenttimestamp->getTimestamp();
+        $currenttimestamp = $currenttimestamp - 360;
+        $result = util::get_time_since_readable($this->users->students->one->id, $currenttimestamp);
+        $this->assertEquals("6 minutes ago", $result);
+        $currenttimestamp = new DateTime();
+        $currenttimestamp = $currenttimestamp->getTimestamp();
+        $currenttimestamp = $currenttimestamp - 3600;
+        $result = util::get_time_since_readable($this->users->students->one->id, $currenttimestamp);
+        $this->assertEquals("1 hour ago", $result);
+        $currenttimestamp = new DateTime();
+        $currenttimestamp = $currenttimestamp->getTimestamp();
+        $currenttimestamp = $currenttimestamp - 7200;
+        $result = util::get_time_since_readable($this->users->students->one->id, $currenttimestamp);
+        $this->assertEquals("2 hours ago", $result);
+        $currenttimestamp = new DateTime();
+        $currenttimestamp = $currenttimestamp->getTimestamp();
+        $currenttimestamp = $currenttimestamp - 28800;
+        $result = util::get_time_since_readable($this->users->students->one->id, $currenttimestamp);
+        $this->assertEquals("8 hours ago", $result);
+        $currenttimestamp = new DateTime();
+        $currenttimestamp = $currenttimestamp->getTimestamp();
+        $currenttimestamp = $currenttimestamp - 86400;
+        $result = util::get_time_since_readable($this->users->students->one->id, $currenttimestamp);
+        $this->assertEquals("1 day ago", $result);
+        $currenttimestamp = new DateTime();
+        $currenttimestamp = $currenttimestamp->getTimestamp();
+        $currenttimestamp = $currenttimestamp - 172800;
+        $result = util::get_time_since_readable($this->users->students->one->id, $currenttimestamp);
+        $this->assertEquals("2 days ago", $result);
+        $currenttimestamp = new DateTime();
+        $currenttimestamp = $currenttimestamp->getTimestamp();
+        $currenttimestamp = $currenttimestamp - 691200;
+        $result = util::get_time_since_readable($this->users->students->one->id, $currenttimestamp);
+        $this->assertEquals("8 days ago", $result);
+        $currenttimestamp = strtotime('-1 month');
+        $result = util::get_time_since_readable($this->users->students->one->id,  $currenttimestamp);
+        $this->assertEquals("1 month ago", $result);
+        $currenttimestamp = new DateTime();
+        $currenttimestamp = $currenttimestamp->getTimestamp();
+        $currenttimestamp = $currenttimestamp - 5443000;
+        $result = util::get_time_since_readable($this->users->students->one->id, $currenttimestamp);
+        $this->assertEquals("2 months ago", $result);
+        $currenttimestamp = new DateTime();
+        $currenttimestamp = $currenttimestamp->getTimestamp();
+        $currenttimestamp = $currenttimestamp - 23328000;
+        $result = util::get_time_since_readable($this->users->students->one->id, $currenttimestamp);
+        $this->assertEquals("8 months ago", $result);
+        $currenttimestamp = new DateTime();
+        $currenttimestamp = $currenttimestamp->getTimestamp();
+        $currenttimestamp = $currenttimestamp - 33696000;
+        $result = util::get_time_since_readable($this->users->students->one->id, $currenttimestamp);
+        $this->assertEquals("Over a year ago", $result);
     }
 }
