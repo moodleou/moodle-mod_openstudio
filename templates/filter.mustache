@@ -86,16 +86,19 @@
 </span>
 <span class="openstudio-filter-divider"></span>
 
-{{^myactivities}}
 <span class="openstudio-filter-sort-divider">
-    <a id="date"></a>
-    {{>mod_openstudio/filter_by_date}}
-    <span class="openstudio-filter-sort-text openstudio-filter-sort-text-title">
-        <a id="title"></a>
-        {{>mod_openstudio/filter_by_title}}
+    <span class="openstudio-filter-select">
+        <!--- Sort by--->
+        {{>mod_openstudio/filter_sort_by}}
+        <!--- End Sort by--->
+    </span>
+
+    <span class="openstudio-filter-select">
+        <!--- Quick Select--->
+        {{>mod_openstudio/filter_quick_select}}
+        <!-- End Quick Select--->
     </span>
 </span>
-{{/myactivities}}
 
 <span class="openstudio-filter-text">
     <span>{{#str}} filtertotal, mod_openstudio {{/str}}: {{total}}</span>
@@ -105,9 +108,6 @@
     {{>mod_openstudio/filter_by_group}}
 {{/selectview}}
 
-{{#myactivities}}
-    {{>mod_openstudio/filter_by_activities}}
-{{/myactivities}}
 {{^myactivities}}
     {{>mod_openstudio/filter_by_pagesizes}}
     {{#multiplepages}}

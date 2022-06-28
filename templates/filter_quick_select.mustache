@@ -1,0 +1,47 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_openstudio/filter_quick_select
+
+    Quick Select Filter template of the OpenStudio UI.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Example context (json):
+    {
+        "quickselectlist" : [
+            {
+                "value": "1",
+                "text": "Other users posts with my comments",
+                "params": "{"ftypearray":[0],"fflagarray":[8],"fstatus":0,"fscope":2}",
+                "selected": true,
+            },
+        ],
+    }
+}}
+
+<select name="quickselect" class="openstudio-filter-select-box openstudio_filter_quick_select"
+        data-mobile="{{$ismobile}}0{{/ismobile}}"
+        aria-label="{{#str}} filterquickselect, mod_openstudio {{/str}}">
+    {{#quickselectlist}}
+        <option value="{{value}}" data-params="{{params}}" {{#selected}}selected="selected"{{/selected}}>{{text}}</option>
+    {{/quickselectlist}}
+</select>

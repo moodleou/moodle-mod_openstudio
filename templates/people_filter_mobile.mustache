@@ -76,36 +76,12 @@
 </div>
 
 <div id="preference_filter_container" class="collapse">
-    <div class="openstudio-preference-item">
-        <span class="openstudio-filter-sort-text ">{{#str}} filtersortby, mod_openstudio {{/str}}
-            <a href="{{sortbydateurl}}" class="
-            {{#sortbydate}}
-                openstudio-filter-text-selected
-                {{#sortdesc}}openstudio-filter-collapsed{{/sortdesc}}
-                {{#sortasc}}openstudio-filter-expanded{{/sortasc}}
-            {{/sortbydate}}">
-                {{#str}} filterdate, mod_openstudio {{/str}}
-                {{#sortdesc}}{{#pix}} t/collapsed, core, {{#str}}
-                    filtersortactivedesc, openstudio {{/str}} {{/pix}}{{/sortdesc}}
-                {{#sortasc}}{{#pix}} t/expanded, core, {{#str}}
-                    filtersortactiveasc, openstudio {{/str}} {{/pix}}{{/sortasc}}
-            </a>
-        </span>
-    </div>
-    <div class="openstudio-preference-item">
-    <span class="openstudio-filter-sort-text">
-        {{#str}} filtersortby, mod_openstudio {{/str}}
-        <a href="{{sortbyusernameurl}}" class="
-            {{#sortbyusername}}
-                    openstudio-filter-text-selected
-                    {{#sortdesc}}openstudio-filter-collapsed{{/sortdesc}}
-            {{#sortasc}}openstudio-filter-expanded{{/sortasc}}
-        {{/sortbyusername}}">
-            {{#str}} filtersortbyname, mod_openstudio {{/str}}
-            {{#sortdesc}}{{#pix}} t/collapsed, core, {{#str}} filtersortactivedesc, openstudio {{/str}} {{/pix}}{{/sortdesc}}
-            {{#sortasc}}{{#pix}} t/expanded, core, {{#str}} filtersortactiveasc, openstudio {{/str}} {{/pix}}{{/sortasc}}
-        </a>
-    </span>
+    <div class="openstudio-preference-item" id="openstudio-preference-sort-by">
+        <div class="openstudio-preference-content">
+            <!--- Sort by--->
+            {{>mod_openstudio/filter_sort_by}}
+            <!--- End Sort by--->
+        </div>
     </div>
     <div class="openstudio-preference-item">
         <span class="openstudio-filter-sort-text">{{#str}} filtergroup, mod_openstudio {{/str}}:</span>

@@ -1,4 +1,4 @@
-@ou @ou_vle @mod @mod_openstudio @mod_openstudio_manage_folders @javascript
+@ou @ou_vle @mod @mod_openstudio @mod_openstudio_manage_folders @mod_openstudio_myactivity @javascript
 Feature: My Activity view in Open Studio
   When using Open Studio with other users
   As a teacher
@@ -173,9 +173,7 @@ Feature: My Activity view in Open Studio
     # Check if there is only 1 activity block then selected it by default.
     When I follow "Test Open Studio name 1"
     And I follow "My Content > My Activities" in the openstudio navigation
-    Then the "Work:" select box should not contain "All"
-    And the "Work:" select box should contain "Block 1"
-    And I should see "Activity 1" in the "div.openstudio-container > div:nth-child(6)" "css_element"
+    Then I should see "Activity 1" in the "div.openstudio-container > div:nth-child(6)" "css_element"
     And "//div[@class='openstudio-container']/div[position()=6 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 1.1 Required')]" "xpath_element" should exist
     And I should see "Activity 3" in the "div.openstudio-container > div:nth-child(8)" "css_element"
     # Add new content to Activity 1.
@@ -218,10 +216,7 @@ Feature: My Activity view in Open Studio
     And I click on "//div[contains(@class, 'fcontainer')]//div[position()=1]//div[contains(@class, 'form-inline')]//input[contains(@title, 'Move Down')]" "xpath_element"
     And I follow "Test Open Studio name 1"
     And I follow "My Content > My Activities" in the openstudio navigation
-    Then the "Work:" select box should contain "All"
-    And the "Work:" select box should contain "Block 2"
-    And the "Work:" select box should contain "Block 1"
-    And I should see "Activity 1 - Block 2" in the "div.openstudio-container > div:nth-child(6)" "css_element"
+    Then I should see "Activity 1 - Block 2" in the "div.openstudio-container > div:nth-child(6)" "css_element"
     And "//div[@class='openstudio-container']/div[position()=6 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 1.1 - Block 2')]" "xpath_element" should exist
     And I should see "Activity 1" in the "div.openstudio-container > div:nth-child(8)" "css_element"
     And "//div[@class='openstudio-container']/div[position()=8 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 1.1 Required')]" "xpath_element" should exist
@@ -237,8 +232,6 @@ Feature: My Activity view in Open Studio
     And I follow "Custom features"
     And I set the field "pinboard" to "0"
     And I press "Save and display"
-    Then the "Work:" select box should not contain "All"
-    And the "Work:" select box should contain "Block 1"
-    And I should see "Activity 1" in the "div.openstudio-container > div:nth-child(6)" "css_element"
+    Then I should see "Activity 1" in the "div.openstudio-container > div:nth-child(6)" "css_element"
     And "//div[@class='openstudio-container']/div[position()=6 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 1.1 Required')]" "xpath_element" should exist
     And I should see "Activity 3" in the "div.openstudio-container > div:nth-child(8)" "css_element"

@@ -691,4 +691,48 @@ class levels_testcase extends \advanced_testcase {
                 '*', MUST_EXIST);
         $this->assertEquals('sit amet', $tempcontent2->guidance);
     }
+
+    public function test_get_all_activities_failed() {
+        $blocks = \mod_openstudio\local\api\levels::get_all_activities(-1);
+        $this->assertFalse($blocks);
+    }
+
+    /**
+     * @depends test_get_all_activities_failed
+     * @return void
+     */
+    public function test_get_all_activities() {
+        $this->resetAfterTest(true);
+
+        $level1id = \mod_openstudio\local\api\levels::create(1, [
+                'openstudioid' => $this->studiogeneric->id,
+                'name' => 'block',
+                'sortorder' => 1,
+        ]);
+        $this->assertGreaterThan(0, $level1id);
+
+        // Activity 1.
+        $level2id1 = \mod_openstudio\local\api\levels::create(2, [
+                'parentid' => $level1id,
+                'name' => 'activity',
+                'sortorder' => 1,
+        ]);
+        $this->assertGreaterThan(0, $level2id1);
+
+        // Activity 2.
+        $level2id2 = \mod_openstudio\local\api\levels::create(2, [
+                'parentid' => $level1id,
+                'name' => 'activity',
+                'sortorder' => 1,
+        ]);
+        $this->assertGreaterThan(0, $level2id2);
+
+        $blocks = \mod_openstudio\local\api\levels::get_all_activities($this->studiogeneric->id);
+        $this->assertCount(1, $blocks);
+
+        $block1 = $blocks[0];
+        $this->assertEquals($level1id, $block1->id);
+        $this->assertObjectHasAttribute('activities', $block1);
+        $this->assertCount(2, $block1->activities);
+    }
 }

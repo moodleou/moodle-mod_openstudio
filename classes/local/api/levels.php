@@ -47,8 +47,8 @@ class levels {
      *   status (optional)
      *
      * @param int $level level to create (1, 2, or 3)
-     * @param \stdClass $data level data
-     * @return int $result instance id
+     * @param \stdClass|array $data level data
+     * @return int instance id
      */
     public static function create($level, $data) {
         global $DB;
@@ -975,5 +975,23 @@ EOF;
      */
     public static function fixup_legacy_xml($xml) {
         return preg_replace('~(</?(additional)?)slot((s|order)?>)~', '\1content\3', $xml);
+    }
+
+    /**
+     * Get all activities.
+     *
+     * @param int $id
+     * @return array|bool
+     */
+    public static function get_all_activities(int $id) {
+        $blocks = static::get_records(1, $id);
+
+        if (!empty($blocks)) {
+            foreach ($blocks as $block) {
+                $block->activities = static::get_records(2, $block->id);
+            }
+        }
+
+        return $blocks;
     }
 }

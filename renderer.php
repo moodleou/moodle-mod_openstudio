@@ -582,6 +582,14 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $contentdata = renderer_utils::filter_scope($contentdata);
         }
 
+        $this->page->requires->js_call_amd('mod_openstudio/viewhelper', 'init', [[
+                'hasselectfrom' => !$contentdata->ismypinboard,
+                'searchtext' => '',
+                'hasfilterform' => true,
+        ]]);
+
+        $contentdata->filterfromhelpicon = $this->output->help_icon('filterchoosefromhelpicon', 'mod_openstudio');
+
         return $this->render_from_template('mod_openstudio/body', $contentdata);
     }
 
@@ -650,6 +658,13 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $peopledata->paging = $paging;
             $peopledata->multiplepages = $peopledata->streamdatapagesize < $peopledata->total;
         }
+
+        $this->page->requires->js_call_amd('mod_openstudio/viewhelper', 'init', [
+                'hasselectfrom' => false,
+                'searchtext' => '',
+                'hasfilterform' => false,
+        ]);
+
         return $this->render_from_template('mod_openstudio/people_page', $peopledata);
     }
 

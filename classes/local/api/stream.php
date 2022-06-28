@@ -29,6 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 
 class stream {
 
+    const FILTER_STATUS_ALL_POST = 0;
     const FILTER_EMPTYCONTENT = 1;
     const FILTER_NOTREAD = 2;
     const FILTER_FAVOURITES = 3;
@@ -638,6 +639,39 @@ EOF;
     }
 
     /**
+     * Process a list of level 2 IDs into SQL and parameters.
+     *
+     * @param array|int $filteractivities Array of level 2 IDs, or -1.
+     * @return array SQL condition followed by array of parameters.
+     */
+    private static function activity_filter_sql($filteractivities): array {
+        global $DB;
+
+        // Filter by activity level.
+        $sql = '';
+        $params = [];
+
+        if (is_array($filteractivities)) {
+            // Defensive check to make sure the parameters are what we
+            // expect, which is an array of numbers.
+            $checked = [];
+            foreach ($filteractivities as $value) {
+                if (trim($value) != '') {
+                    $checked[] = (int) $value;
+                }
+            }
+            if (!empty($checked)) {
+                list($insql, $params) = $DB->get_in_or_equal($checked);
+                $sql = 'AND l2.id ' . $insql;
+            }
+        } else if ($filteractivities === -1) {
+            $sql = 'AND s.levelid = 0 ';
+        }
+
+        return [$sql, $params];
+    }
+
+    /**
      * Process a list of content types into SQL and parameters.
      *
      * Each top-level type includes a number of subtypes, so we filter by any of the subtypes
@@ -989,6 +1023,9 @@ EOF;
      * @param bool $incollectionmode
      * @param bool $slotreciprocalaccess
      * @param array $tutorroles Role IDs of roles considered to be "tutors"
+     * @param int $streamviewid
+     * @param array $filteractivities
+     * @param null|int $ownerscope
      * @return mixed Return recordset of false if error.
      */
     public static function get_contents(
@@ -1000,7 +1037,11 @@ EOF;
             $pinboardonly = false, $includecount = false, $canmanagecontent = false,
             $groupid = 0, $groupmode = 0, $activitymode = false,
             $canaccessallgroup = false, $incollectionmode = false,
-            $slotreciprocalaccess = false, $tutorroles = array()) {
+            $slotreciprocalaccess = false, $tutorroles = array(),
+            $streamviewid = 0,
+            $filteractivities = [],
+            $ownerscope = null
+    ) {
 
         global $DB;
 
@@ -1098,6 +1139,14 @@ EOF;
         $studioinstancesql = 'AND (s.openstudioid IS NULL OR s.openstudioid = ?) ';
         $params[] = $studioid;
 
+        [$alterblocks, $activities] = openstudio_extract_blocks_activities($filteractivities);
+        $filteractivitiessql = '';
+        $activityparams = [];
+        if (!empty($activities)) {
+            $filterblocks = array_unique(array_merge($filterblocks, $alterblocks));
+            list($filteractivitiessql, $activityparams) = self::activity_filter_sql($activities);
+        }
+
         // Get filter SQL and params.
         list($filterblockssql, $blockparams) = self::block_filter_sql($filterblocks);
         list($filtertypesql, $typeparams) = self::type_filter_sql($filtertype);
@@ -1110,7 +1159,24 @@ EOF;
             $reciprocalaccesssql = '';
             $reciprocalparams = [];
         }
-        $params = array_merge($params, $blockparams, $typeparams, $tagparams, $flagparams, $statusparams, $reciprocalparams);
+        $params = array_merge($params,
+                $blockparams,
+                $activityparams,
+                $typeparams,
+                $tagparams,
+                $flagparams,
+                $statusparams,
+                $reciprocalparams,
+        );
+
+        $ownersql = '';
+        if ($ownerscope === self::SCOPE_MY) {
+            $ownersql .= ' AND s.userid = ? ';
+            $params[] = $userid;
+        } else if ($ownerscope === self::SCOPE_THEIRS) {
+            $ownersql .= ' AND s.userid <> ? ';
+            $params[] = $userid;
+        }
 
         // Apply sort ordering.
         $sortordersql = '';
@@ -1132,24 +1198,46 @@ EOF;
                         break;
 
                     case self::SORT_BY_ACTIVITYTITLE:
-                        if ($pinboardonly) {
-                            $sortordersql = 'ORDER BY s.name DESC ';
-                            if ($sortordering == self::SORT_ASC) {
-                                $sortordersql = 'ORDER BY s.name ASC ';
-                            }
-                        } else {
-                            $sortordersql = 'ORDER BY l1sortorder, l2sortorder, l3sortorder, s.name DESC ';
-                            if ($sortordering == self::SORT_ASC) {
-                                $sortordersql = 'ORDER BY l1sortorder, l2sortorder, l3sortorder, s.name ASC ';
-                            }
+                        switch ($streamviewid) {
+                            case content::VISIBILITY_PRIVATE:
+                                $sortordersql = 'ORDER BY l1sortorder, l2sortorder, l3.name DESC ';
+                                if ($sortordering == self::SORT_ASC) {
+                                    $sortordersql = 'ORDER BY l1sortorder, l2sortorder, l3.name ASC ';
+                                }
+                                break;
+                            default:
+                                $sortordersql = 'ORDER BY s.name DESC ';
+                                if ($sortordering == self::SORT_ASC) {
+                                    $sortordersql = 'ORDER BY s.name ASC ';
+                                }
                         }
                         break;
 
                     case self::SORT_BY_DATE: // Fall through as sorting by date is the default.
                     default:
-                        $sortordersql = 'ORDER BY s.timemodified DESC ';
-                        if ($sortordering == self::SORT_ASC) {
-                            $sortordersql = 'ORDER BY s.timemodified ASC ';
+                        switch ($streamviewid) {
+                            case content::VISIBILITY_PRIVATE:
+                                $datecasewhen = '
+                                    ORDER BY
+                                        l1sortorder, l2sortorder,
+                                        (CASE
+                                            WHEN s.timemodified IS NULL THEN 1
+                                            WHEN s.deletedby IS NOT NULL THEN 1
+                                            WHEN s.deletedtime IS NOT NULL THEN 1
+                                            ELSE 0
+                                        END),
+                                        s.timemodified %s,
+                                        l3sortorder ASC ';
+                                $sortordersql = sprintf($datecasewhen, 'DESC');
+                                if ($sortordering == self::SORT_ASC) {
+                                    $sortordersql = sprintf($datecasewhen, 'ASC');
+                                }
+                                break;
+                            default:
+                                $sortordersql = 'ORDER BY s.timemodified DESC ';
+                                if ($sortordering == self::SORT_ASC) {
+                                    $sortordersql = 'ORDER BY s.timemodified ASC ';
+                                }
                         }
                         break;
                 }
@@ -1180,6 +1268,8 @@ EOF;
 
 {$filterblockssql}
 
+{$filteractivitiessql}
+
 {$filtertypesql}
 
 {$filtertagsql}
@@ -1189,6 +1279,8 @@ EOF;
 {$filterstatussql}
 
 {$reciprocalaccesssql}
+
+{$ownersql}
 
 AND (s.visibility IS NULL OR s.visibility != ?)
 

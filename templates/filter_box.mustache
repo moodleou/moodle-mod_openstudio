@@ -101,6 +101,8 @@
     <input name="vuid" value="{{vuid}}" type="hidden">
     <input name="fsort" value="{{fsort}}" type="hidden">
     <input name="osort" value="{{osort}}" type="hidden">
+    <input name="sortby" value="{{sortby}}" type="hidden">
+    <input name="quickselect" value="{{quickselect}}" type="hidden">
     <input name="groupid" value="{{groupid}}" type="hidden">
     <input name="pagesize" value="{{page}}" type="hidden">
     <input name="reset" id="reset_filter" value="0" type="hidden">
@@ -112,22 +114,14 @@
             {{^ismypinboard}}
                 <div class="openstudio-filter-box clearfix">
                     <span class="openstudio-filter-header">{{#str}} filterselectfrom, mod_openstudio {{/str}}</span>
-                    <div>
-                        <select name="fblock" id="filter_block" class="filter-block-select">
-                            {{#area}}
-                                <option name="{{{label}}}" value="{{value}}" {{#checked}}selected="selected"{{/checked}} >
-                                    {{label}}
-                                </option>
-                            {{/area}}
-                        </select>
-                    </div>
-                    {{#blocksdata}}
-                        <div class="openstudio-filter-blocks">
-                            <input type="checkbox" name="fblockarray[]" id="openstudio_filter_block_{{id}}"
-                                   class="openstudio-filter-block" value="{{id}}" {{#checked}}checked="checked"{{/checked}} />
-                            <label name="{{name}}" for="openstudio_filter_block_{{id}}">{{name}}</label>
-                        </div>
-                    {{/blocksdata}}
+                    <select name="fblock" id="filter_block" class="filter-block-select">
+                        {{#area}}
+                            <option name="{{{label}}}" value="{{value}}" {{#checked}}selected="selected"{{/checked}} >
+                                {{label}}
+                            </option>
+                        {{/area}}
+                    </select>
+                    {{> mod_openstudio/filter_select_from}}
                 </div>
             {{/ismypinboard}}
             <div class="openstudio-filter-box clearfix">
@@ -167,7 +161,7 @@
                 {{/selectstatus}}
             </div>
             <div class="openstudio-filter-box openstudio-filter-box-last clearfix">
-                <span class="openstudio-filter-header">{{#str}} filterselectfrom, mod_openstudio {{/str}}</span>
+                <span class="openstudio-filter-header">{{#str}} filterbyauthor, mod_openstudio {{/str}}</span>
                 <div class="openstudio-filter-all"></div>
                 {{#selectfrom}}
                     <div class="openstudio-filter-from">
