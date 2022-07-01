@@ -267,7 +267,7 @@ class posts extends \core_search\base_mod {
 
         if ($contentdata && $contentdata->fileid) {
             $files = array_merge($files, $fs->get_area_files($document->get('contextid'), $this->componentname,
-                    self::FILEAREA['CONTENT'], $contentdata->fileid));
+                    self::FILEAREA['CONTENT'], $contentdata->fileid, 'itemid, filepath, filename', false));
         }
 
         foreach ($files as $file) {
