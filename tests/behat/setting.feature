@@ -250,7 +250,7 @@ Feature: Edit Open Studio settings
 
         # remove Your word for 'My Module' in Setting
         And I follow "My Content"
-        And I navigate to "Edit settings" in current page administration
+        And I navigate to "Settings" in current page administration
         And I set the following fields to these values:
           | Your word for 'My Module'     |     |
         And I press "Save and display"
@@ -307,7 +307,7 @@ Feature: Edit Open Studio settings
             | OS1        | student1 | Test content A | Test content 1 description | module     |
             | OS1        | student1 | Test content B | Test content 2 description | module     |
         And I follow "Test Open Studio name 1"
-        And I navigate to "Edit settings" in current page administration
+        And I navigate to "Settings" in current page administration
         And I follow "Expand all"
         # disabled pinboard
         And I set the field "Enable pinboard" to "0"
@@ -329,7 +329,7 @@ Feature: Edit Open Studio settings
       | ID number                    | OS1                          |
     And all users have accepted the plagarism statement for "OS1" openstudio
     And I follow "Test Open Studio name 1"
-    And I navigate to "Edit settings" in current page administration
+    And I navigate to "Settings" in current page administration
     And I set the following fields to these values:
       | Enable 'My Module' | 0       |
       | Sharing level      | 1,7,2,3 |

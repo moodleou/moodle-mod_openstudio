@@ -65,7 +65,7 @@ Feature: Create and edit Open Studio Folder
         And I should see "You have 100 uploads available."
         And I should not see "Upload content"
         And I should not see "Create new folder"
-        And I navigate to "Edit settings" in current page administration
+        And I navigate to "Settings" in current page administration
         And I follow "Expand all"
         And I should see "Request feedback (own content only)"
         And I set the field "Enable folders" to "1"
@@ -78,7 +78,7 @@ Feature: Create and edit Open Studio Folder
         And I should see "You have 100 uploads available."
         And I should not see "Upload content"
         And I should not see "Create new folder"
-        And I navigate to "Edit settings" in current page administration
+        And I navigate to "Settings" in current page administration
         And I follow "Expand all"
         And I set the field "Enable folders" to "1"
         And I press "Save and display"
@@ -140,7 +140,7 @@ Feature: Create and edit Open Studio Folder
         And I log in as "teacher1"
         And I am on "Course 1" course homepage
         When I follow "Test Open Studio name 1"
-        And I navigate to "Edit settings" in current page administration
+        And I navigate to "Settings" in current page administration
         And I follow "Expand all"
         And I set the field "Enable folders" to "1"
         And I press "Save and display"
@@ -185,7 +185,7 @@ Feature: Create and edit Open Studio Folder
         And I log in as "teacher1"
         And I am on "Course 1" course homepage
         When I follow "Test Open Studio name 1"
-        And I navigate to "Edit settings" in current page administration
+        And I navigate to "Settings" in current page administration
         And I follow "Expand all"
         And I set the field "Enable folders" to "1"
         And I press "Save and display"
@@ -215,7 +215,7 @@ Feature: Create and edit Open Studio Folder
         And I log in as "teacher1"
         And I am on "Course 1" course homepage
         When I follow "Test Open Studio name 1"
-        And I navigate to "Edit settings" in current page administration
+        And I navigate to "Settings" in current page administration
         And I follow "Expand all"
         And I set the field "Enable folders" to "1"
         And I press "Save and display"
@@ -257,7 +257,7 @@ Feature: Create and edit Open Studio Folder
         And I log in as "teacher1"
         And I am on "Course 1" course homepage
         When I follow "Test Open Studio name 1"
-        And I navigate to "Edit settings" in current page administration
+        And I navigate to "Settings" in current page administration
         And I follow "Expand all"
         And I set the field "Enable folders" to "1"
         And I press "Save and display"

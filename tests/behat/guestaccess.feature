@@ -25,8 +25,7 @@ Feature: Open Studio guest access
     And I set the following system permissions of "Guest" role:
       | capability          | permission |
       | mod/openstudio:view | Allow      |
-    And I am on "Course 1" course homepage
-    And I navigate to "Users > Enrolment methods" in current page administration
+    And I am on the "Course 1" "enrolment methods" page
     And I click on "Enable" "link" in the "Guest access" "table_row"
     And I log out
 

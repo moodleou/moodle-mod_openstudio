@@ -37,8 +37,7 @@ Feature: Test for new capability 'mod/openstudio:ignoreenrolment'
     And the following open studio "contents" exist:
       | openstudio | user     | name            | description             | visibility |
       | OS1        | student1 | Student1 slot 1 | Test slot 1 description | module     |
-    And I am on "Course 1" course homepage
-    And I navigate to "Users > Enrolment methods" in current page administration
+    And I am on the "Course 1" "enrolment methods" page
     And I click on "Edit" "link" in the "Guest access" "table_row"
     And I set the following fields to these values:
       | Allow guest access | Yes |

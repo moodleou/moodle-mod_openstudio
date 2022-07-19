@@ -87,7 +87,7 @@ Feature: Open Studio share to view setting is enable
     And I should see "Test My Activities View 1"
     And I should see "Test My Activities View 2"
     And I should not see "Share to view is enabled"
-    And I navigate to "Edit settings" in current page administration
+    And I navigate to "Settings" in current page administration
     And I follow "Expand all"
     And I set the field "Enable share to view" to "0"
     And I press "Save and display"

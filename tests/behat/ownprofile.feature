@@ -112,7 +112,7 @@ Feature: Own profile view in Open Studio
 
   Scenario: Check existing of View My Own Profile in My Activities/My Pinboard view
       When I follow "Test Open Studio name 1"
-      And I navigate to "Edit settings" in current page administration
+      And I navigate to "Settings" in current page administration
       And I follow "Expand all"
       And I set the following fields to these values:
       |  Show Participation smiley | 1 |
@@ -215,7 +215,7 @@ Feature: Own profile view in Open Studio
   Scenario: Check own profile in case of empty content
       When I am on "Course 1" course homepage
       And I follow "Test Open Studio name 2"
-      And I navigate to "Edit settings" in current page administration
+      And I navigate to "Settings" in current page administration
       And I follow "Expand all"
       And I set the following fields to these values:
         | Show Participation smiley | 1 |

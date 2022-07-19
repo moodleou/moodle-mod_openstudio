@@ -201,7 +201,7 @@ Feature: Open Studio Folder Overview
       # Enable Add any contents to folders
       And I am on "Course 1" course homepage
       And I follow "Test Open Studio name 1"
-      And I navigate to "Edit settings" in current page administration
+      And I navigate to "Settings" in current page administration
       And I follow "Expand all"
       And I set the field "Add any contents to folders" to "1"
       And I press "Save and display"
