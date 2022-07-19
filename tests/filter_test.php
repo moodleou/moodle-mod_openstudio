@@ -170,7 +170,6 @@ class filter_test extends \advanced_testcase {
                         [
                                 filter::FILTER_COMBINATION_MY_POSTS_WITH_MY_COMMENTS,
                                 filter::FILTER_COMBINATION_MY_POSTS_WITH_USERS_COMMENTS,
-
                         ],
                 ],
                 [
@@ -178,20 +177,22 @@ class filter_test extends \advanced_testcase {
                         [
                                 filter::FILTER_COMBINATION_MY_POSTS_WITH_MY_COMMENTS,
                                 filter::FILTER_COMBINATION_MY_POSTS_WITH_USERS_COMMENTS,
-
                         ],
                 ],
                 [
                         content::VISIBILITY_GROUP,
                         [
+                                filter::FILTER_COMBINATION_MY_POSTS_WITH_MY_COMMENTS,
+                                filter::FILTER_COMBINATION_MY_POSTS_WITH_USERS_COMMENTS,
                                 filter::FILTER_COMBINATION_USERS_POSTS_WITH_MY_COMMENTS,
                                 filter::FILTER_COMBINATION_USERS_POSTS_WITH_FEEDBACK_REQUESTS,
-
                         ],
                 ],
                 [
                         content::VISIBILITY_MODULE,
                         [
+                                filter::FILTER_COMBINATION_MY_POSTS_WITH_MY_COMMENTS,
+                                filter::FILTER_COMBINATION_MY_POSTS_WITH_USERS_COMMENTS,
                                 filter::FILTER_COMBINATION_USERS_POSTS_WITH_MY_COMMENTS,
                                 filter::FILTER_COMBINATION_USERS_POSTS_WITH_FEEDBACK_REQUESTS,
                         ],

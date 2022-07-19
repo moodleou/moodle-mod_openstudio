@@ -100,6 +100,8 @@ Feature: Open Studio preference
       And "Title A-Z" "option" should exist in the "sortby" "field"
       And "Title Z-A" "option" should exist in the "sortby" "field"
       And I should see "Quick select"
+      And "My posts with my comments" "option" should exist in the "quickselect" "field"
+      And "My posts with other users comments" "option" should exist in the "quickselect" "field"
       And "Other users posts with my comments" "option" should exist in the "quickselect" "field"
       And "Other users posts with feedback requests" "option" should exist in the "quickselect" "field"
 
@@ -269,6 +271,8 @@ Feature: Open Studio preference
       And "Title A-Z" "option" should exist in the "sortby" "field"
       And "Title Z-A" "option" should exist in the "sortby" "field"
       And I should see "Quick select"
+      And "My posts with my comments" "option" should exist in the "quickselect" "field"
+      And "My posts with other users comments" "option" should exist in the "quickselect" "field"
       And "Other users posts with my comments" "option" should exist in the "quickselect" "field"
       And "Other users posts with feedback requests" "option" should exist in the "quickselect" "field"
 
@@ -440,6 +444,8 @@ Feature: Open Studio preference
       And I should see "Quick select"
       And "My posts with my comments" "option" should exist in the "quickselect" "field"
       And "My posts with other users comments" "option" should exist in the "quickselect" "field"
+      And "Other users posts with my comments" "option" should not exist in the "quickselect" "field"
+      And "Other users posts with feedback requests" "option" should not exist in the "quickselect" "field"
 
       # Filter Select from (don't have in Pinboard).
       And I press "Filter"
@@ -547,6 +553,8 @@ Feature: Open Studio preference
       And I should see "Quick select"
       And "My posts with my comments" "option" should exist in the "quickselect" "field"
       And "My posts with other users comments" "option" should exist in the "quickselect" "field"
+      And "Other users posts with my comments" "option" should not exist in the "quickselect" "field"
+      And "Other users posts with feedback requests" "option" should not exist in the "quickselect" "field"
       # Removed Work filter.
       And I should not see "Work"
 

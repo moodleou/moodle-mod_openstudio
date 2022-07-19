@@ -99,6 +99,7 @@ class filter {
                         ],
                         'fstatus' => stream::FILTER_STATUS_ALL_POST,
                         'fscope' => stream::SCOPE_MY,
+                        'fownerscope' => stream::SCOPE_MY,
                 ],
                 self::FILTER_COMBINATION_MY_POSTS_WITH_USERS_COMMENTS => [
                         'ftypearray' => [
@@ -109,6 +110,7 @@ class filter {
                         ],
                         'fstatus' => stream::FILTER_STATUS_ALL_POST,
                         'fscope' => stream::SCOPE_THEIRS,
+                        'fownerscope' => stream::SCOPE_MY,
                 ],
                 self::FILTER_COMBINATION_USERS_POSTS_WITH_MY_COMMENTS => [
                         'ftypearray' => [
@@ -158,6 +160,10 @@ class filter {
             case content::VISIBILITY_GROUP:
             case content::VISIBILITY_MODULE:
                 $result = [
+                        self::FILTER_COMBINATION_MY_POSTS_WITH_MY_COMMENTS
+                        => get_string('filtermypostswithmycomments', 'mod_openstudio'),
+                        self::FILTER_COMBINATION_MY_POSTS_WITH_USERS_COMMENTS
+                        => get_string('filtermypostswithotheruserscomments', 'mod_openstudio'),
                         self::FILTER_COMBINATION_USERS_POSTS_WITH_MY_COMMENTS
                         => get_string('filterotheruserspostswithmycomments', 'mod_openstudio'),
                         self::FILTER_COMBINATION_USERS_POSTS_WITH_FEEDBACK_REQUESTS
