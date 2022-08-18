@@ -1230,3 +1230,40 @@ function openstudio_move_area_files_to_new_area($newarea, $newitemid, $contextid
 
     return $count;
 }
+
+/**
+ * Extract block IDs + activity IDs from a list.
+ *
+ * @param array|null $activities [ '1_1', '1_2'],
+ * @return array [ [1], [1,2] ]
+ */
+function openstudio_extract_blocks_activities(?array $activities = null, string $separator = '_'): array {
+    $blockids = [];
+    $activityids = [];
+    if (!empty($activities)) {
+        foreach ($activities as $activity) {
+            $extractdata = explode($separator, $activity);
+            if ($extractdata === false || !isset($extractdata[0]) || !isset($extractdata[1])) {
+                continue;
+            }
+            [$blockid, $activityid] = $extractdata;
+            $blockid = intval($blockid);
+            $activityid = intval($activityid);
+            // Prevent duplicate block ids.
+            if (!isset($blockids[$blockid])) {
+                $blockids[$blockid] = $blockid;
+            }
+            if (!isset($activityids[$activityid])) {
+                $activityids[$activityid] = $activityid;
+            }
+        }
+        if (!empty($blockids)) {
+            $blockids = array_values($blockids);
+        }
+        if (!empty($activityids)) {
+            $activityids = array_values($activityids);
+        }
+    }
+
+    return [$blockids, $activityids];
+}

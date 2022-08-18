@@ -1,0 +1,115 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_openstudio/filter_select_from
+
+    Select From Filter template of the OpenStudio UI.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Example context (json):
+    {
+        "filterfromhelpicon": "text",
+        "area" : [
+            {
+                "value": 0,
+                "checked": true,
+                "label": "All",
+            },
+        ],
+        "blocksdata" : [
+            {
+               "id" : "1",
+               "name" : "Block 1",
+               "checked" : false,
+               "activities": [],
+            },
+            {
+               "id" : "2",
+               "name" : "Block 2",
+               "checked" : true,
+               "activities": [
+                    {
+                        "id": "1",
+                        "level1id": "1",
+                        "name": "Activity 1",
+                        "checked": true,
+                    },
+               ],
+            },
+        ],
+    }
+}}
+<div id="openstudio-filter-select-from" class="openstudio-filter-select-from">
+    <div class="openstudio-filter-select-from-header">
+        <div id="openstudio-filter-select-from-anchor" class="openstudio-filter-select-from-anchor" tabindex="0">
+            <span id="openstudio-filter-select-from-placeholder" class="placeholder"
+            >{{#str}} filterall, mod_openstudio {{/str}}</span>
+            <div class="openstudio-collapse-arrow">
+                <i class="down"></i>
+            </div>
+        </div>
+        <div class="openstudio-filter-select-from-help-icon">
+            {{{filterfromhelpicon}}}
+        </div>
+    </div>
+
+    <div id="openstudio-filter-select-from-area" class="openstudio-filter-select-from-area">
+        <div class="openstudio-filter-select-from-area-inner">
+            {{#area}}
+                <div class="openstudio-filter-area">
+                    <input type="checkbox"
+                           id="filter_block_{{value}}"
+                           name="filter_block_{{value}}"
+                           class="openstudio-filter-area-input filter_block_{{value}}"
+                           value="{{value}}"
+                           {{#checked}}checked="checked"{{/checked}}
+                    />
+                    <label name="{{label}}" for="filter_block_{{value}}">{{label}}</label>
+                </div>
+            {{/area}}
+            {{#blocksdata}}
+                <div class="openstudio-filter-blocks">
+                    <input type="checkbox" name="fblockarray[]"
+                           id="openstudio_filter_block_{{id}}"
+                           class="openstudio-filter-block"
+                           value="{{id}}" {{#checked}}checked="checked"{{/checked}}
+                    />
+                    <label name="{{name}}" for="openstudio_filter_block_{{id}}">{{name}}</label>
+                    {{#activities}}
+                        <div class="openstudio-filter-block-activities">
+                            <input type="checkbox"
+                                   name="factivityarray[]"
+                                   id="openstudio_filter_block_activity_{{id}}"
+                                   class="openstudio-filter-block-activity openstudio-filter-block-{{level1id}}-activity"
+                                   value="{{level1id}}_{{id}}"
+                                   {{#checked}}checked="checked"{{/checked}}
+                                   data-block-id="{{level1id}}"
+                                   data-activity-id="{{id}}"
+                            />
+                            <label name="{{name}}" for="openstudio_filter_block_activity_{{id}}">{{name}}</label>
+                        </div>
+                    {{/activities}}
+                </div>
+            {{/blocksdata}}
+        </div>
+   </div>
+</div>

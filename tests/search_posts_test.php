@@ -425,7 +425,7 @@ class search_posts_test extends \advanced_testcase {
         $searcharea->attach_files($doc);
         $files = $doc->get_files();
 
-        $this->assertCount(2, $files);
+        $this->assertCount(1, $files);
 
         foreach ($files as $file) {
             if ($file->is_directory()) {

@@ -243,7 +243,7 @@ class comments extends \core_search\base_mod {
         $files = [];
 
         $files = array_merge($files, $fs->get_area_files($document->get('contextid'), $this->componentname,
-            self::FILEAREA['COMMENT'], $document->get('itemid')));
+            self::FILEAREA['COMMENT'], $document->get('itemid'), 'itemid, filepath, filename', false));
 
         foreach ($files as $file) {
             $document->add_stored_file($file);

@@ -326,6 +326,7 @@
     margin: 8px 0px 8px 0px;
     padding: 0;
     width: 140px;
+    display: none;
 }
 
 .openstudio-filter-box [type="checkbox"],
@@ -351,12 +352,108 @@
     vertical-align: top;
 }
 
-.openstudio-filter-blocks:last-of-type,
 .openstudio-filter-types:last-of-type,
 .openstudio-filter-user-flags:last-of-type,
 .openstudio-filter-status:last-of-type,
 .openstudio-filter-from:last-of-type {
     margin-bottom: -5px;
+}
+
+.openstudio-filter-user-flags {
+    line-height: 17px;
+}
+
+.openstudio-filter-user-flags::first-line {
+    line-height: 1.5;
+}
+
+.openstudio-filter-blocks,
+.openstudio-filter-block-activities {
+    margin-left: .85714em;
+}
+
+.openstudio-filter-select-from {
+    display: block;
+    position: relative;
+    height: 26px;
+}
+
+.openstudio-filter-select-from .openstudio-filter-select-from-header {
+    display: flex;
+}
+
+.openstudio-filter-select-from-anchor {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    font-size: .85714em;
+}
+
+.openstudio-filter-select-from-anchor .openstudio-collapse-arrow .down {
+    border: solid black;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 2px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    margin: 1px;
+}
+
+.openstudio-filter-select-from-area {
+    display: none;
+    position: absolute;
+    background-color: #f0f0f1;
+    min-width: 180px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    z-index: 1;
+    top: 25px;
+    width: 100%;
+}
+
+.openstudio-filter-select-from-area.visible {
+    display: block;
+    /**
+    * Select from area is absolute. Without this will cause tabindex incorrect.
+    */
+    height: max-content;
+}
+
+.openstudio-filter-select-from-area [type="checkbox"] {
+    margin-right: 0;
+}
+
+.openstudio-filter-select-from-area div > label,
+.openstudio-filter-select-from-area div > input {
+    vertical-align: middle;
+    font-size: .85714em;
+}
+
+.openstudio-filter-select-from-area-inner {
+    padding: 5px;
+}
+
+.openstudio-filter-select-from .placeholder {
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 2px 5px 2px 5px;
+}
+
+.openstudio-filter-select-from .openstudio-collapse-arrow {
+    padding: 1px 5px 1px 5px;
+}
+
+.openstudio-filter-select-work {
+    display: inline-flex;
+}
+
+.openstudio-filter-work-buttons {
+    float: right;
 }
 
 .openstudio-filter-mobile {
@@ -751,6 +848,21 @@ button.openstudio-notification-stopbutton:focus {
         color: #0B55A8;
     }
 
+    body #preference_filter_container select[name="sortby"],
+    body #preference_filter_container select[name="quickselect"] {
+        margin-bottom: 0;
+        padding: 4px 0 4px 0;
+        width: 100%;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        height: 30px;
+    }
+
+    body.safari #preference_filter_container select[name="sortby"],
+    body.safari #preference_filter_container select[name="quickselect"] {
+        padding-left: 4px;
+        width: calc(100% - 4px);
+    }
 }
 
 @media (max-width: 419px) {
@@ -2110,7 +2222,7 @@ label.openstudio-export-item-name {
 }
 
 .openstudio-filter-select select {
-    padding: 2px 0 0 0;
+    padding: 0;
     margin-bottom: 0px;
     width: 140px;
     font-size: 0.85714em;
@@ -2469,8 +2581,6 @@ body#page-mod-openstudio-contentedit:not(.osep-layoutnoblocks) form .form-group 
 }
 
 .path-mod-openstudio .dndupload-arrow {
-    background-image: url([[pix:openstudio|content_upload_rgb_32px]]);
-    background-size: auto 100%;
     height: 64px;
     position: absolute;
     top: 10px;
@@ -4601,7 +4711,8 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 }
 
 .openstudio-folder-items {
-    padding: 0px 37px;
+    padding: 0px 31px;
+    top: -5px;
 }
 
 .openstudio-folder-show-content-block {
@@ -4773,6 +4884,7 @@ a.openstudio-add-new-content-link:hover  {
 .openstudio-folder-view-add-new-content-title {
     height: 48px;
     line-height: 36px;
+    padding-top: 1px;
 }
 .openstudio-folder-view-add-new-content-title .icon {
     margin-right: 0;
@@ -5003,6 +5115,15 @@ a.openstudio-add-new-content-link:hover  {
         width: 100%;
     }
 
+    .openstudio-folder-view-add-new-content-title {
+        line-height: 30px;
+        margin-top: 13px;
+    }
+
+    .openstudio-add-new-content-link img {
+        margin-top: 7px;
+    }
+
     .openstudio-nav-settings {
         display: none;
     }
@@ -5100,6 +5221,7 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-folder-view-primary {
         width: calc(59% - 39px);
         margin-right: 10px;
+        padding-left: 3px;
     }
 
     .openstudio-folder-view-content {
@@ -5111,6 +5233,7 @@ a.openstudio-add-new-content-link:hover  {
         float: none;
         width: auto;
         margin-bottom: 5px;
+        margin-top: 8px;
     }
 
     .openstudio-folder-available {
@@ -5125,10 +5248,6 @@ a.openstudio-add-new-content-link:hover  {
         height: 90px;
     }
 
-    .openstudio-folder-items {
-        margin-left: 15px;
-    }
-
     .openstudio-upload-new-content-to-folder,
     .openstudio-select-existing-post {
         float: none;
@@ -5139,7 +5258,7 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-select-content {
         margin-bottom: 10px;
-        margin-left: 15px;
+        margin-left: 13px;
     }
 
     .openstudio-folder-show-content-block {
@@ -5147,6 +5266,7 @@ a.openstudio-add-new-content-link:hover  {
         margin-top: -3px;
         padding-left: 10px;
         padding-right: 10px;
+        margin-left: 0px;
     }
 
     .openstudio-folder-show-content-block:nth-child(odd) {
@@ -5178,6 +5298,8 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-folder-items {
         padding: 0px;
+        margin-left: 15px;
+        margin-top: 3px;
     }
 
     .openstudio-folder-item {
@@ -5479,8 +5601,13 @@ a.openstudio-add-new-content-link:hover  {
         margin-bottom: 15px;
     }
 
+    .openstudio-select-content {
+        margin-left: 8px;
+    }
+
     .openstudio-folder-items {
         margin-left: 0px;
+        padding: 0px;
     }
 
     .openstudio-grid-item-folder-preview {
@@ -5522,7 +5649,7 @@ a.openstudio-add-new-content-link:hover  {
         width: 246px;
         padding-top: 10px;
         margin-bottom: 20px;
-        margin-left: 20px;
+        margin-left: 16px;
         padding-right: 15px;
         padding-left: 15px;
     }
@@ -5533,10 +5660,6 @@ a.openstudio-add-new-content-link:hover  {
 
     .path-mod-openstudio .openstudio-folder-view-container #id_lockfolder {
         margin-right: 0px;
-    }
-
-    .openstudio-folder-items {
-        padding: 0px;
     }
 
     .openstudio-folder-header .openstudio-folder-header-left {
@@ -5620,6 +5743,18 @@ a.openstudio-add-new-content-link:hover  {
 
     .path-mod-openstudio .openstudio-content-edit-form .openstudio-content-form-visibility #fgroup_id_visibilityarray .col-md-9 fieldset > div {
         width: 100%;
+    }
+
+    .openstudio-select-content {
+        margin-left: 11px;
+    }
+
+    .openstudio-folder-show-content-block {
+        margin-left: 16px;
+    }
+
+    .openstudio-folder-view-add-new-content-title {
+        margin-top: 5px;
     }
 }
 @media (max-width: 767px) {
@@ -5923,10 +6058,10 @@ a.openstudio-add-new-content-link:hover  {
         margin-right: 20px;
     }
 
-    .path-mod-openstudio .openstudio-create-new-content {
+    .path-mod-openstudio .openstudio-add-new-container .openstudio-create-new-content {
         margin-bottom: 8px;
         border-radius: 8px;
-        height: 130px;
+        min-height: 130px;
         text-align: center;
     }
 
@@ -6759,6 +6894,10 @@ a.openstudio-add-new-content-link:hover  {
         width: 100%;
     }
 
+    .openstudio-folder-view-add-new-content-title {
+        margin-top: 10px;
+    }
+
     .openstudio-folder-view-add-new-content-title img {
         width: 25px;
     }
@@ -7085,6 +7224,11 @@ a.openstudio-add-new-content-link:hover  {
         display: block;
     }
 
+    #openstudio-preference-quick-select {
+        border-top: none;
+        height: 43px;
+    }
+
     .openstudio-preference-item {
         border-top: 1px solid #dfdfdf;
         border-right: 1px solid #dfdfdf;
@@ -7093,6 +7237,11 @@ a.openstudio-add-new-content-link:hover  {
         display: block;
         height: 42px;
         line-height: 43px;
+    }
+
+    .openstudio-preference-content {
+        margin-left: 10px;
+        margin-right: 10px;
     }
 
     .openstudio-preference-item:nth-child(4),
@@ -7113,6 +7262,13 @@ a.openstudio-add-new-content-link:hover  {
         margin-right: 10px;
         width: 100%;
         margin-left: 7px;
+    }
+
+    #openstudio-filter-select-work {
+        display: flex;
+        padding-left: 10px;
+        padding-right: 10px;
+        width: initial;
     }
 
     .openstudio-filter-link,
@@ -7157,6 +7313,10 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-filter-select-group {
         width: 168px;
+    }
+
+    #openstudio-filter-select-work-label {
+        margin-left: 0;
     }
 
     .path-mod-openstudio .openstudio-filter-select label {
@@ -8372,6 +8532,45 @@ a.openstudio-add-new-content-link:hover  {
 }
 .openstudio-profile-head.openstudio-profile-without-own-date {
     padding-bottom: 20px;
+}
+
+.path-mod-openstudio .openstudio-filter-text.openstudio-filter-link {
+    width: auto;
+}
+
+.path-mod-openstudio .openstudio-filter-text.openstudio-filter-link [data-toggle="collapse"] .openstudio-collapse-image,
+.path-mod-openstudio .openstudio-filter-text.openstudio-filter-link [data-toggle="collapse"] .openstudio-expand-image,
+.path-mod-openstudio .openstudio-filter-link a[data-toggle="collapse"] {
+    position: static;
+}
+
+.path-mod-openstudio .openstudio-filter-text.openstudio-filter-link [data-toggle="collapse"].collapsed .openstudio-collapse-image,
+.path-mod-openstudio .openstudio-filter-text.openstudio-filter-link [data-toggle="collapse"] .openstudio-expand-image {
+    display: inline-block;
+    padding-left: 5px;
+}
+
+.path-mod-openstudio .openstudio-filter-text.openstudio-filter-link + .openstudio-filter-divider {
+    padding-right: 0;
+}
+
+.path-mod-openstudio .openstudio-filter-text.openstudio-filter-link [data-toggle="collapse"].collapsed .openstudio-expand-image {
+    display: none;
+}
+
+.path-mod-openstudio .openstudio-create-new-content {
+    min-height: 66px;
+    height: auto;
+}
+
+.path-mod-openstudio .openstudio-create-new-content img {
+    margin-right: 9px;
+}
+
+.path-mod-openstudio .openstudio-create-new-content .openstudio-create-content-title {
+    text-align: left;
+    float: none;
+    margin-left: 0;
 }
 
 /* High contrast mode */

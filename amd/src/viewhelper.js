@@ -52,13 +52,38 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
         },
 
         /**
+         * Element selectors.
+         */
+        SELECTOR: {
+            FILTER_CONTAINER: '#filter_container',
+            FILTER_FORM: '#openstudio-filter-form',
+            SELECT_FROM: '#openstudio-filter-select-from',
+            AREA_ALL: '#filter_block_0',
+            AREA_ACTIVITIES_ID: '#filter_block_2',
+            AREA_INPUT: '#openstudio-filter-select-from .openstudio-filter-area-input',
+            BLOCK_ITEM: '#openstudio-filter-select-from .openstudio-filter-block',
+            ACTIVITY_ITEM: '#openstudio-filter-select-from .openstudio-filter-block-activity',
+            FILTER_SORT_BY: '.openstudio_filter_sort_by',
+            FILTER_QUICK_SELECT: '.openstudio_filter_quick_select',
+            FILTER_LINK: '.openstudio-filter-link a',
+        },
+
+        /**
+         * Default config.
+         */
+        CONFIG: {
+            searchtext: '',
+            hasselectfrom: false,
+            hasfilterform: false,
+        },
+
+        /**
          * Initialise this module.
          *
          * @param {JSON} options  The settings for this feature.
          */
         init: function(options) {
-
-            t.mconfig = options || {searchtext: ''};
+            t.mconfig = options || t.CONFIG;
 
             t.handleFilter();
             t.handleIsotope();
@@ -67,6 +92,10 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
             t.handleBlockSwitcher();
             t.initSearchForm();
             t.handleCollapseClick();
+
+            if (t.mconfig.hasOwnProperty('hasselectfrom') && t.mconfig.hasselectfrom === true) {
+                t.handleSelectFrom(t.SELECTOR.SELECT_FROM);
+            }
         },
 
         /**
@@ -125,10 +154,45 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
          * @method handleBlockSwitcher
          */
         handleBlockSwitcher: function() {
-            // This should work for mobile also.
-            $(document).on('change', '#filter_block_activity', function() {
-                t.redirectURL();
+
+            $(t.SELECTOR.AREA_INPUT).on('click', function() {
+                $(t.SELECTOR.AREA_INPUT).not(this).prop('checked', false);
             });
+
+            $(t.SELECTOR.AREA_INPUT).on('change', function() {
+                var value = $(this).val();
+                var checked = $(this).is(':checked');
+                var areaActivityValue = $('#filter_area_activity_value').val();
+                var checkBlocks = false;
+
+                if (checked) {
+                    // If we check on activity, then all blocks and activities should be checked all.
+                    if (parseInt(value) === parseInt(areaActivityValue)) {
+                        checkBlocks = true;
+                    }
+                } else {
+                    value = 0;
+                    $(t.SELECTOR.AREA_ALL).prop('checked', true);
+                }
+
+                $(t.SELECTOR.BLOCK_ITEM).prop('checked', checkBlocks);
+                $(t.SELECTOR.ACTIVITY_ITEM).prop('checked', checkBlocks);
+
+                t.updateFilterBlock(value);
+            });
+        },
+
+        /**
+         * Update to the old filter block hidden input + change placeholder.
+         *
+         * @param {Integer} value
+         */
+        updateFilterBlock: function(value) {
+            // Apply to old filter_block.
+            $('#filter_block').val(value);
+
+            // Change the placeholder.
+            $(t.SELECTOR.SELECT_FROM + '-placeholder').html($('#filter_block option:selected').text());
         },
 
         /**
@@ -186,6 +250,9 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
 
                 $('.openstudio-filter-types-checkbox').prop("checked", false);
                 $('#openstudio_filter_types_0').prop("checked", true);
+
+                // Clear quick select.
+                t.updateQuickSelect(null);
             });
 
             $('.openstudio-filter-types-checkbox').on("click", function() {
@@ -200,6 +267,9 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
                 if (length == 0) {
                     $('#openstudio_filter_types_0').prop("checked", true);
                 }
+
+                // Clear quick select.
+                t.updateQuickSelect(null);
             });
 
 
@@ -215,6 +285,9 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
 
                 $('.openstudio-filter-user-flags-checkbox').prop("checked", false);
                 $('#openstudio_filter_user_flags_0').prop("checked", true);
+
+                // Clear quick select.
+                t.updateQuickSelect(null);
             });
 
             $('.openstudio-filter-user-flags-checkbox').on("click", function() {
@@ -229,56 +302,84 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
                 if (length == 0) {
                     $('#openstudio_filter_user_flags_0').prop("checked", true);
                 }
+
+                // Clear quick select.
+                t.updateQuickSelect(null);
+            });
+
+            // Select status.
+            $('input[name="fstatus"]').on('change', function() {
+                // Clear quick select.
+                t.updateQuickSelect(null);
+            });
+
+            // By author.
+            $('input[name="fscope"]').on('change', function() {
+                // Clear quick select.
+                t.updateQuickSelect(null);
             });
 
             // Reset button.
             $('#reset_filter_btn').on('click', function() {
                 $('#reset_filter').val(1);
                 $('#filteractive').val(0);
-                $('#openstudio-filter-form').submit();
-
+                $(t.SELECTOR.FILTER_FORM).submit();
             });
 
             // Set Blocks option selected when a block checked.
             // When do not has any block checked, all option should be selected.
-            $('.openstudio-filter-block').on('click', function() {
+            $(t.SELECTOR.BLOCK_ITEM).on('click', function() {
                 var checkbox = $(this);
-                var filter_area_activity_value = $('#filter_area_activity_value').val();
-                var length = $('[name="fblockarray[]"]:checked').length;
+                var value = $(this).val();
+                var checkActivities = false;
+                var className = '.openstudio-filter-block-' + value + '-activity';
 
                 if (checkbox.is(":checked")) {
-                    $('#filter_block').val(filter_area_activity_value);
+                    t.checkAreaInput(t.SELECTOR.AREA_ACTIVITIES_ID, true);
+                    checkActivities = true;
                 }
 
-                if (length == 0) {
-                    $('#filter_block').val(0);
+                $(className).prop("checked", checkActivities);
+
+                var length = $('[name="fblockarray[]"]:checked').length;
+                var lengthActivity = $('[name="factivityarray[]"]:checked').length;
+
+                if (length === 0 && lengthActivity === 0) {
+                    t.checkAreaInput(t.SELECTOR.AREA_ALL, true);
                 }
             });
 
-            // Uncheck all blocks option when ALl/Pinboard selected.
-            $('#filter_block').on('change', function() {
-                var filter_block = $(this).val();
-                var filter_area_activity_value = $('#filter_area_activity_value').val();
+            // Set Activities option selected when a activity checked.
+            $(t.SELECTOR.ACTIVITY_ITEM).on('click', function() {
+                var checkbox = $(this);
+                var blockId = $(this).attr('data-block-id');
+                var blockElementId = '#openstudio_filter_block_' + blockId;
+                var className = '.openstudio-filter-block-' + blockId + '-activity';
+                var hasUnchecked = $(className + ':not(:checked)').length;
 
-                if (parseInt(filter_block) == filter_area_activity_value) {
-                    $('#filter_block').val(0);
+                if (checkbox.is(":checked")) {
+                    t.checkAreaInput(t.SELECTOR.AREA_ACTIVITIES_ID, true);
+                    $(blockElementId).prop("checked", true);
+                }
+
+                // If all activities are all un-checked, then block should be un-checked.
+                if (hasUnchecked === 0) {
+                    $(blockElementId).prop("checked", true);
                 } else {
-                    $('.openstudio-filter-block').prop("checked", false);
+                    $(blockElementId).prop("checked", false);
+                }
+
+                var hasCheck = $(t.SELECTOR.ACTIVITY_ITEM + ':checked').length;
+                if (hasCheck === 0) {
+                    t.checkAreaInput(t.SELECTOR.AREA_ALL, true);
                 }
             });
 
-            // Some works to help page accessible.
-            // Because collapse/expand mechanism of bootstrap is that setting the height of target element to 0
-            // and overflow to hidden. So target element is invisible but focusable.
-            // So when pressing tab key, the invisible elements is focused also.
-            $('.openstudio-filter-link a').on('click', function() {
-                var isCollapsed = !($(this).hasClass('collapsed'));
-                $($(this).data('target')).find('input, select').attr('tabindex', isCollapsed ? -1 : 0);
-            });
+            // Sort by.
+            t.handleSortBy();
 
-            $('.openstudio-filter-link a.collapsed').each(function() {
-                $($(this).data('target')).find('input, select').attr('tabindex', -1);
-            });
+            // Handle Quick Select.
+            t.handleQuickSelect();
         },
         /**
          * Handle collapse click for profile bar.
@@ -359,8 +460,141 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
          */
         initSearchForm: function() {
             $(t.CSS.SEARCHBOX).val(t.mconfig.searchtext);
-        }
+        },
 
+        /**
+         * Handle select from dropdown.
+         *
+         * @param {String} id
+         */
+        handleSelectFrom: function(id) {
+            // Get the placeholder at the begining.
+            var placeholder = $(id + '-placeholder');
+            placeholder.text($('#filter_block option:selected').text());
+
+            // Build select dropdown.
+            var area = $(id);
+            var anchor = $(id + '-anchor');
+            var contentArea = $(id + '-area');
+
+            anchor.on('click', function() {
+                if (contentArea.hasClass('visible')) {
+                    contentArea.removeClass('visible');
+                } else {
+                    contentArea.addClass('visible');
+                }
+            });
+
+            // Support for tab.
+            anchor.on('keydown', function(e) {
+                // Work with Space + Enter.
+                if (e.keyCode === 32 || e.keyCode === 13) {
+                    e.preventDefault();
+                    anchor.trigger('click');
+                }
+            });
+
+            // Handle click outside should close content area.
+            $(window).click(function(e) {
+                var target = $(e.target);
+                var areaHTML = area.get(0);
+                var targetHTML = target.get(0);
+                // If target is on area => skip.
+                // If target is area itself => skip.
+                if ($.contains(areaHTML, targetHTML) || this === areaHTML) {
+                    return;
+                }
+                if (contentArea.hasClass('visible')) {
+                    contentArea.removeClass('visible');
+                }
+            });
+        },
+
+        /**
+         * Check event for area input.
+         *
+         * @param {String} input
+         * @param {Bool} checked
+         */
+        checkAreaInput: function(input, checked = true) {
+            $(input).prop('checked', checked);
+            $(t.SELECTOR.AREA_INPUT).not(input).prop('checked', !checked);
+            t.updateFilterBlock($(input).val());
+        },
+
+        /**
+         * Check if the main filter is expanded.
+         *
+         * @returns {boolean}
+         */
+        isFilterExpanded: function() {
+            return $(t.SELECTOR.FILTER_CONTAINER).hasClass('show');
+        },
+
+        /**
+         * Handle sort by filter.
+         */
+        handleSortBy: function() {
+            $(t.SELECTOR.FILTER_SORT_BY).on('change', function() {
+                t.redirectURL();
+            });
+        },
+
+        /**
+         * Handle Quick Select filter.
+         */
+        handleQuickSelect: function() {
+            $(t.SELECTOR.FILTER_QUICK_SELECT).on('change', function() {
+                var params = $(this).find(':selected').data('params');
+                var value = $(this).val();
+                var isMobile = $(this).data('mobile');
+
+                // If filter is not expand, open it.
+                if (!t.isFilterExpanded() && !isMobile) {
+                    $(t.SELECTOR.FILTER_LINK).trigger('click');
+                }
+
+                if (typeof params !== 'object' || params.length === 0) {
+                    return;
+                }
+
+                // Apply quick select.
+                t.updateQuickSelect(value);
+
+                // Apply post types.
+                if (params.hasOwnProperty('ftypearray')) {
+                    $('[name="ftypearray[]"]').val(params.ftypearray);
+                }
+
+                // Apply user flags.
+                if (params.hasOwnProperty('fflagarray')) {
+                    $('[name="fflagarray[]"]').val(params.fflagarray);
+                }
+
+                // Apply user status.
+                if (params.hasOwnProperty('fstatus')) {
+                    $('[name="fstatus"]').val([params.fstatus]);
+                }
+
+                // Apply scope.
+                if (params.hasOwnProperty('fscope')) {
+                    $('[name="fscope"]').val([params.fscope]);
+                }
+
+                if (isMobile) {
+                    $(t.SELECTOR.FILTER_FORM).submit();
+                }
+            });
+        },
+
+        /**
+         * Update quick select input.
+         *
+         * @param {?Integer} value
+         */
+        updateQuickSelect: function(value = null) {
+            $('[name="quickselect"]').val(value);
+        }
     };
 
     return t;

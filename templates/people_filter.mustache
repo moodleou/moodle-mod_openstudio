@@ -60,35 +60,9 @@
 </span>
 <span class="openstudio-filter-divider"></span>
 <span class="openstudio-filter-sort-devider">
-    <span class="openstudio-filter-sort-text ">{{#str}} filtersortby, mod_openstudio {{/str}}
-        <a id="date"></a>
-        <a href="{{sortbydateurl}}" class="
-            {{#sortbydate}}
-                openstudio-filter-text-selected
-                {{#sortdesc}}openstudio-filter-collapsed{{/sortdesc}}
-            {{#sortasc}}openstudio-filter-expanded{{/sortasc}}
-        {{/sortbydate}}">
-            {{#str}} filterdate, mod_openstudio {{/str}}
-            {{#sortdesc}}{{#pix}} t/collapsed, core, {{#str}} filtersortactivedesc, openstudio {{/str}} {{/pix}}{{/sortdesc}}
-            {{#sortasc}}{{#pix}} t/expanded, core, {{#str}} filtersortactiveasc, openstudio {{/str}} {{/pix}}{{/sortasc}}
-        </a>
-    </span>
-</span>
-<span class="openstudio-filter-divider"></span>
-<span class="openstudio-filter-sort-devider">
-    <span class="openstudio-filter-sort-text openstudio-filter-sort-text-title">
-        <a id="username"></a>
-        <a href="{{sortbyusernameurl}}" class="
-            {{#sortbyusername}}
-                    openstudio-filter-text-selected
-                    {{#sortdesc}}openstudio-filter-collapsed{{/sortdesc}}
-            {{#sortasc}}openstudio-filter-expanded{{/sortasc}}
-        {{/sortbyusername}}">
-            {{#str}} filtersortbyname, mod_openstudio {{/str}}
-            {{#sortdesc}}{{#pix}} t/collapsed, core, {{#str}} filtersortactivedesc, openstudio {{/str}} {{/pix}}{{/sortdesc}}
-            {{#sortasc}}{{#pix}} t/expanded, core, {{#str}} filtersortactiveasc, openstudio {{/str}} {{/pix}}{{/sortasc}}
-        </a>
-    </span>
+     <span class="openstudio-filter-select">
+        {{>mod_openstudio/filter_sort_by}}
+     </span>
 </span>
 <span class="openstudio-filter-divider"></span>
 <span class="openstudio-filter-text openstudio-filter-select">

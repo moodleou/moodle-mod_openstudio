@@ -81,6 +81,9 @@ class renderer_utils {
             $activityparams['ftype'] = $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE]->ftype;
             $activityparams['fflag'] = $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE]->fflag;
             $activityparams['ftags'] = $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE]->ftags;
+            $activityparams['sortby'] = $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE]->sortby;
+            $activityparams['quickselect'] = $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE]->quickselect;
+            $activityparams = static::transform($activityparams, $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE]);
         }
 
         $navigationurls->myworkurl = new \moodle_url('/mod/openstudio/view.php', $activityparams);
@@ -88,55 +91,81 @@ class renderer_utils {
         if (isset($SESSION->openstudio_view_filters)
             && isset($SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE_PINBOARD])
             && isset($SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE_PINBOARD]->ftype)) {
-            $navigationurls->pinboardurl = new \moodle_url('/mod/openstudio/view.php',
-                    array('id' => $cmid, 'vid' => content::VISIBILITY_PRIVATE_PINBOARD, 'fblock' => -1,
-                            'ftype' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE_PINBOARD]->ftype,
-                            'fflag' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE_PINBOARD]->fflag,
-                            'ftags' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE_PINBOARD]->ftags,
-                            'fsort' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE_PINBOARD]->fsort,
-                            'osort' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE_PINBOARD]->osort));
+            $pinboardparams = [
+                    'id' => $cmid,
+                    'vid' => content::VISIBILITY_PRIVATE_PINBOARD,
+                    'fblock' => -1,
+                    'ftype' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE_PINBOARD]->ftype,
+                    'fflag' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE_PINBOARD]->fflag,
+                    'ftags' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE_PINBOARD]->ftags,
+                    'fsort' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE_PINBOARD]->fsort,
+                    'osort' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE_PINBOARD]->osort,
+                    'sortby' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE_PINBOARD]->sortby,
+                    'quickselect' => $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE_PINBOARD]->quickselect,
+            ];
+            $pinboardparams = static::transform($pinboardparams,
+                    $SESSION->openstudio_view_filters[content::VISIBILITY_PRIVATE_PINBOARD]);
+            $navigationurls->pinboardurl = new \moodle_url('/mod/openstudio/view.php', $pinboardparams);
         } else {
             $navigationurls->pinboardurl = new \moodle_url('/mod/openstudio/view.php',
                     array('id' => $cmid, 'vid' => content::VISIBILITY_PRIVATE_PINBOARD, 'fblock' => -1,
                             'ftype' => 0, 'fflag' => 0,
-                            'ftags' => '', 'fsort' => stream::SORT_BY_DATE, 'osort' => 0));
+                            'ftags' => '', 'fsort' => stream::SORT_BY_DATE, 'osort' => 0,
+                            'quickselect' => null,
+                            ));
         }
 
         if (isset($SESSION->openstudio_view_filters)
             && isset($SESSION->openstudio_view_filters[content::VISIBILITY_GROUP])
             && isset($SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->fblock)) {
-            $navigationurls->mygroupurl = new \moodle_url('/mod/openstudio/view.php',
-                    array('id' => $cmid, 'vid' => content::VISIBILITY_GROUP,
-                            'fblock' => $SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->fblock,
-                            'ftype' => $SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->ftype,
-                            'fflag' => $SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->fflag,
-                            'ftags' => $SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->ftags,
-                            'fsort' => $SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->fsort,
-                            'osort' => $SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->osort,
-                            'groupid' => $SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->groupid));
+            $groupparams = [
+                    'id' => $cmid,
+                    'vid' => content::VISIBILITY_GROUP,
+                    'fblock' => $SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->fblock,
+                    'ftype' => $SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->ftype,
+                    'fflag' => $SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->fflag,
+                    'ftags' => $SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->ftags,
+                    'fsort' => $SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->fsort,
+                    'osort' => $SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->osort,
+                    'groupid' => $SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->groupid,
+                    'sortby' => $SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->sortby,
+                    'quickselect' => $SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]->quickselect,
+            ];
+            $groupparams = static::transform($groupparams, $SESSION->openstudio_view_filters[content::VISIBILITY_GROUP]);
+            $navigationurls->mygroupurl = new \moodle_url('/mod/openstudio/view.php', $groupparams);
         } else {
             $navigationurls->mygroupurl = new \moodle_url('/mod/openstudio/view.php',
                     array('id' => $cmid, 'vid' => content::VISIBILITY_GROUP, 'fblock' => 0,
                             'ftype' => 0, 'fflag' => 0,
-                            'ftags' => '', 'fsort' => stream::SORT_BY_DATE, 'osort' => 0));
+                            'ftags' => '', 'fsort' => stream::SORT_BY_DATE, 'osort' => 0,
+                            'quickselect' => null,
+                            ));
         }
 
         if (isset($SESSION->openstudio_view_filters)
             && isset($SESSION->openstudio_view_filters[content::VISIBILITY_MODULE])
             && isset($SESSION->openstudio_view_filters[content::VISIBILITY_MODULE]->fblock)) {
-            $navigationurls->mymoduleurl = new \moodle_url('/mod/openstudio/view.php',
-                    array('id' => $cmid, 'vid' => content::VISIBILITY_MODULE,
-                            'fblock' => $SESSION->openstudio_view_filters[content::VISIBILITY_MODULE]->fblock,
-                            'ftype' => $SESSION->openstudio_view_filters[content::VISIBILITY_MODULE]->ftype,
-                            'fflag' => $SESSION->openstudio_view_filters[content::VISIBILITY_MODULE]->fflag,
-                            'ftags' => $SESSION->openstudio_view_filters[content::VISIBILITY_MODULE]->ftags,
-                            'fsort' => $SESSION->openstudio_view_filters[content::VISIBILITY_MODULE]->fsort,
-                            'osort' => $SESSION->openstudio_view_filters[content::VISIBILITY_MODULE]->osort));
+            $moduleparams = [
+                    'id' => $cmid,
+                    'vid' => content::VISIBILITY_MODULE,
+                    'fblock' => $SESSION->openstudio_view_filters[content::VISIBILITY_MODULE]->fblock,
+                    'ftype' => $SESSION->openstudio_view_filters[content::VISIBILITY_MODULE]->ftype,
+                    'fflag' => $SESSION->openstudio_view_filters[content::VISIBILITY_MODULE]->fflag,
+                    'ftags' => $SESSION->openstudio_view_filters[content::VISIBILITY_MODULE]->ftags,
+                    'fsort' => $SESSION->openstudio_view_filters[content::VISIBILITY_MODULE]->fsort,
+                    'osort' => $SESSION->openstudio_view_filters[content::VISIBILITY_MODULE]->osort,
+                    'sortby' => $SESSION->openstudio_view_filters[content::VISIBILITY_MODULE]->sortby,
+                    'quickselect' => $SESSION->openstudio_view_filters[content::VISIBILITY_MODULE]->quickselect,
+            ];
+            $moduleparams = static::transform($moduleparams, $SESSION->openstudio_view_filters[content::VISIBILITY_MODULE]);
+            $navigationurls->mymoduleurl = new \moodle_url('/mod/openstudio/view.php', $moduleparams);
         } else {
             $navigationurls->mymoduleurl = new \moodle_url('/mod/openstudio/view.php',
                     array('id' => $cmid, 'vid' => content::VISIBILITY_MODULE, 'fblock' => 0,
                             'ftype' => 0, 'fflag' => 0,
-                            'ftags' => '', 'fsort' => stream::SORT_BY_DATE, 'osort' => 0));
+                            'ftags' => '', 'fsort' => stream::SORT_BY_DATE, 'osort' => 0,
+                            'quickselect' => null,
+                            ));
         }
 
         $navigationurls->listpeopleurl = new \moodle_url('/mod/openstudio/people.php', array('id' => $cmid));
@@ -954,7 +983,7 @@ class renderer_utils {
         }
 
         $area[] = (object) [
-            'checked' => $filters->fblockarray !== null && count($filters->fblockarray) > 0,
+            'checked' => $filters->fblock == stream::FILTER_AREA_ACTIVITY,
             'value' => stream::FILTER_AREA_ACTIVITY,
             'icon' => '',
             'label' => get_string('filterblocks', 'openstudio')
@@ -1818,5 +1847,23 @@ class renderer_utils {
             }
         }
         return $content;
+    }
+
+    /**
+     * Transform array for request data.
+     * Moodle Url is not supported array type.
+     *
+     * @param array $params
+     * @param \stdClass $session
+     * @return array
+     */
+    private static function transform(array $params, $session): array {
+        $factivityarray = $session->factivityarray;
+        if (!empty($factivityarray)) {
+            foreach ($factivityarray as $kactivity => $factivityvalue) {
+                $params["factivityarray[$kactivity]"] = $factivityvalue;
+            }
+        }
+        return $params;
     }
 }

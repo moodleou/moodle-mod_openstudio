@@ -26,6 +26,7 @@
  */
 
 use mod_openstudio\local\api\content;
+use mod_openstudio\local\api\filter;
 use mod_openstudio\local\api\lock;
 use mod_openstudio\local\api\stream;
 use mod_openstudio\local\api\group;
@@ -191,10 +192,27 @@ if ((($vid == content::VISIBILITY_MODULE) || ($vid == content::VISIBILITY_GROUP)
 }
 
 // Sort options.
+// Sort by is a combination of fsort + osort. If sort by is invalid, it will return null.
+$sortby = optional_param('sortby', null, PARAM_INT);
+// If we don't have GET paramater, try to search inside session.
+if ($sortby === null) {
+    if (isset($SESSION->openstudio_view_filters)) {
+        if (isset($SESSION->openstudio_view_filters[$vid]->sortby)) {
+            $sortby = $SESSION->openstudio_view_filters[$vid]->sortby;
+        }
+    }
+}
 $fsortdefault = defaults::OPENSTUDIO_SORT_FLAG_DATE;
 $osortdefault = defaults::OPENSTUDIO_SORT_DESC;
 $fsort = optional_param('fsort', $fsortdefault, PARAM_INT);
 $osort = optional_param('osort', $osortdefault, PARAM_INT);
+$sortbyparams = filter::get_sort_by_params($sortby);
+if ($sortbyparams === null) {
+    $sortby = null;
+} else {
+    $fsort = $sortbyparams['fsort'];
+    $osort = $sortbyparams['osort'];
+}
 $sortflag = array('id' => $fsort, 'asc' => $osort);
 
 
@@ -218,7 +236,7 @@ if (!$permissions->feature_module && ($vid == content::VISIBILITY_MODULE)) {
     $vid = $permissions->allow_visibilty_modes[0];
 }
 
-if ($vid == content::VISIBILITY_WORKSPACE || $vid == content::VISIBILITY_PRIVATE) {
+if ($vid == content::VISIBILITY_WORKSPACE) {
     $fsort = stream::SORT_BY_ACTIVITYTITLE;
     $osort = stream::SORT_ASC;
     $sortflag = [
@@ -257,9 +275,44 @@ $fflagarray = optional_param_array('fflagarray', array(), PARAM_INT);
 $ftypearray = optional_param_array('ftypearray', array(), PARAM_INT);
 $fstatus = optional_param('fstatus', 0, PARAM_INT);
 $fscope = optional_param('fscope', 0, PARAM_INT);
+$fownerscope = null;
+
+$quickselect = optional_param('quickselect', null, PARAM_INT);
+// If we don't have GET paramater, try to search inside session.
+if ($quickselect === null) {
+    if (isset($SESSION->openstudio_view_filters)) {
+        if (isset($SESSION->openstudio_view_filters[$vid]->quickselect)) {
+            $quickselect = $SESSION->openstudio_view_filters[$vid]->quickselect;
+        }
+    }
+}
+if ($quickselect !== null) {
+    $quickselectparams = filter::get_quick_select_params($quickselect);
+    // If not having quick select params, fallback as default.
+    if ($quickselectparams === null) {
+        $quickselect = null;
+        $quickselectparams = [];
+    }
+    if (array_key_exists('ftypearray', $quickselectparams)) {
+        $ftypearray = $quickselectparams['ftypearray'];
+    }
+    if (array_key_exists('fflagarray', $quickselectparams)) {
+        $fflagarray = $quickselectparams['fflagarray'];
+    }
+    if (array_key_exists('fstatus', $quickselectparams)) {
+        $fstatus = $quickselectparams['fstatus'];
+    }
+    if (array_key_exists('fscope', $quickselectparams)) {
+        $fscope = $quickselectparams['fscope'];
+    }
+    if (array_key_exists('fownerscope', $quickselectparams)) {
+        $fownerscope = $quickselectparams['fownerscope'];
+    }
+}
 
 if ($filteractive && $farea == stream::FILTER_AREA_ALL && isset($fflagarray[0]) && $fflagarray[0] == 0 &&
-        isset($ftypearray[0]) && $ftypearray[0] == 0 && $fstatus == 0 && $fscope == stream::SCOPE_EVERYONE  ) {
+        isset($ftypearray[0]) && $ftypearray[0] == 0 && $fstatus == stream::FILTER_STATUS_ALL_POST &&
+        $fscope == stream::SCOPE_EVERYONE) {
     $resetfilter = true;
 }
 
@@ -285,6 +338,8 @@ if ($resetfilter) {
     $SESSION->openstudio_view_filters[$vid]->page = $streamdatapagesize;
     $SESSION->openstudio_view_filters[$vid]->pagesize = defaults::STREAMPAGESIZE;
     $SESSION->openstudio_view_filters[$vid]->filteractive = 0;
+    $SESSION->openstudio_view_filters[$vid]->sortby = null;
+    $SESSION->openstudio_view_filters[$vid]->quickselect = null;
 
     $reseturl = new moodle_url('/mod/openstudio/view.php', array(
             'id' => $id, 'vid' => $vid, 'page' => 0, 'pagesize' => $streamdatapagesize));
@@ -301,41 +356,52 @@ if (isset($SESSION->openstudio_view_filters)) {
     }
 }
 $fblockarray = optional_param_array('fblockarray', $fblockarraydefault, PARAM_INT);
-$pinboardonly = false;
-
-$blockid = optional_param('blockid', 0, PARAM_INT); // Block id from Block drop down.
-
-// Stream get contents need to pass block array if existed.
-if ($blockid) {
-    array_push($fblockarray, $blockid);
-} else {
-    switch ($fblock) {
-        case stream::FILTER_AREA_ALL:
-        case stream::FILTER_AREA_PINBOARD:
-            $fblockarray = null;
-            break;
-        default:
-            if (empty($fblockarray)) {
-                $fblockarray = explode(",", $fblock);
-                $fblock = implode(",", $fblockarray);
-            } else {
-                $fblock = implode(",", $fblockarray);
-            }
-            break;
-    }
-
-    if (trim($fblock) == '') {
-        // If fblock is not set, then set it to default.
-        $fblock = 0;
+$factivityarray = optional_param_array('factivityarray', null, PARAM_TEXT);
+// If we don't have GET paramater, try to search inside session.
+if ($factivityarray === null) {
+    if (isset($SESSION->openstudio_view_filters)) {
+        if (isset($SESSION->openstudio_view_filters[$vid]->factivityarray)) {
+            $factivityarray = $SESSION->openstudio_view_filters[$vid]->factivityarray;
+        }
     }
 }
+$pinboardonly = false;
 
-$isblockchecked = false;
-$fblockdataarray = levels::get_records(1, $cminstance->id);
+// Stream get contents need to pass block array if existed.
+switch ($fblock) {
+    case stream::FILTER_AREA_ALL:
+    case stream::FILTER_AREA_PINBOARD:
+        $fblockarray = null;
+        $factivityarray = null;
+        break;
+    case stream::FILTER_AREA_ACTIVITY:
+        // Get parent blocks from activities.
+        // In this case, we won't implode $fblock, keep it as stream::FILTER_AREA_ACTIVITY.
+        [$tempblocks, ] = openstudio_extract_blocks_activities($factivityarray);
+        $fblockarray = $tempblocks;
+        break;
+    default:
+        if (empty($fblockarray)) {
+            $fblockarray = explode(",", $fblock);
+            $fblock = implode(",", $fblockarray);
+        } else {
+            $fblock = implode(",", $fblockarray);
+        }
+        break;
+}
+
+if (trim($fblock) == '') {
+    // If fblock is not set, then set it to default.
+    $fblock = stream::FILTER_AREA_ALL;
+}
+
+$fblockdataarray = levels::get_all_activities($cminstance->id);
 if ($fblockdataarray === false) {
     $fblockdataarray = array();
 } else {
     $blockslotcount = levels::l1s_count_l3s($cminstance->id);
+    $factivityids = !empty($factivityarray) ? array_flip($factivityarray) : [];
+
     foreach ($fblockdataarray as $key => $blockdata) {
         // Dont show the level 1 block if it has no level slots associated with it.
         if (!array_key_exists($blockdata->id, $blockslotcount) || ($blockslotcount[$blockdata->id] <= 0)) {
@@ -344,17 +410,35 @@ if ($fblockdataarray === false) {
         }
 
         // Check if the block being checked as been selected by the user for filtering.
-        if ((is_array($fblockarray) && ($fblockarray !== null) && in_array((int) $blockdata->id, $fblockarray))
-                || $blockdata->id == $blockid) {
-            $fblockdataarray[$key]->checked = $isblockchecked = true;
+        if ((is_array($fblockarray) && ($fblockarray !== null) && in_array((int) $blockdata->id, $fblockarray))) {
+            $fblockdataarray[$key]->checked = true;
         } else {
             $fblockdataarray[$key]->checked = false;
         }
-    }
-}
 
-if (!$isblockchecked && !$blockid) {
-    $fblockarray = null;
+        if (property_exists($blockdata, 'activities') && !empty($blockdata->activities)) {
+
+            $allcheck = true;
+
+            foreach ($blockdata->activities as $activity) {
+                $key = $blockdata->id . '_' . $activity->id;
+                // If we select "Activities", and we don't have $_GET for activities then all should be checked by default.
+                // Or else it will be checked if ids contains in $_GET.
+                $activity->checked = $fblock == stream::FILTER_AREA_ACTIVITY
+                        && ($factivityarray === null || isset($factivityids[$key]));
+                $activity->checkedworkfilter = $fblock == stream::FILTER_AREA_ALL || $activity->checked;
+
+                if (!$activity->checked) {
+                    if ($allcheck) {
+                        $allcheck = false;
+                    }
+                }
+            }
+
+            // If any activity is not checked, uncheck this block.
+            $blockdata->checked = $allcheck;
+        }
+    }
 }
 
 // Filter by content type.
@@ -396,7 +480,7 @@ if (!is_array($ftypearray) || empty($ftypearray)) {
 }
 
 // Filter by status.
-$fstatusdefault = 0;
+$fstatusdefault = stream::FILTER_STATUS_ALL_POST;
 if (isset($SESSION->openstudio_view_filters)) {
     if (isset($SESSION->openstudio_view_filters[$vid]->fstatus)) {
         $fstatusdefault = $SESSION->openstudio_view_filters[$vid]->fstatus;
@@ -408,7 +492,7 @@ if (! in_array($fstatus, array(stream::FILTER_LOCKED,
         stream::FILTER_EMPTYCONTENT,
         stream::FILTER_NOTREAD,
         stream::FILTER_READ))) {
-    $fstatus = 0;
+    $fstatus = $fstatusdefault;
 }
 
 // Filter by scope.
@@ -478,7 +562,8 @@ if (!isset($SESSION->openstudio_view_filters[$vid])) {
 
 $ftags = null;
 $SESSION->openstudio_view_filters[$vid]->fblock = $fblock;
-$SESSION->openstudio_view_filters[$vid]->fblockarray = !$blockid ? $fblockarray : array();
+$SESSION->openstudio_view_filters[$vid]->fblockarray = $fblockarray;
+$SESSION->openstudio_view_filters[$vid]->factivityarray = $factivityarray;
 $SESSION->openstudio_view_filters[$vid]->ftype = $ftype;
 $SESSION->openstudio_view_filters[$vid]->ftypearray = $ftypearray;
 $SESSION->openstudio_view_filters[$vid]->fscope = $fscope;
@@ -494,6 +579,8 @@ $SESSION->openstudio_view_filters[$vid]->groupid = $groupid;
 $SESSION->openstudio_view_filters[$vid]->filteropen = $filteropen;
 $SESSION->openstudio_view_filters[$vid]->filteractive = $filteractive;
 $SESSION->openstudio_view_filters[$vid]->fblockdataarray = $fblockdataarray;
+$SESSION->openstudio_view_filters[$vid]->sortby = $sortby;
+$SESSION->openstudio_view_filters[$vid]->quickselect = $quickselect;
 
 // Get stream of contents.
 $contentids = array(); // For export feature.
@@ -515,13 +602,18 @@ if ($finalviewpermissioncheck) {
 
     $contentdatatemp = stream::get_contents(
             $cminstance->id, $permissions->groupingid, $viewuser->id, $contentowner->id, $vid,
-            $fblockarray, $ftype, $fscope, $fflag, $fstatus, $ftags,
+            $fblockarray, $ftype, $fscope,
+            $fflag, $fstatus, $ftags,
             $sortflag, $pagestart, $streamdatapagesize, ($fblock == -1), true,
             $permissions->managecontent, $groupid, $permissions->groupmode,
             false,
             $permissions->accessallgroups,
             false,
-            $permissions->feature_contentreciprocalaccess, $permissions->tutorroles);
+            $permissions->feature_contentreciprocalaccess, $permissions->tutorroles,
+            $vid,
+            $factivityarray,
+            $fownerscope
+    );
     // Process the level management locks.
     if (isset($contentdatatemp->contents)) {
         $contentslist = array();
@@ -811,8 +903,6 @@ if ($importenable) {
     $renderer->add_import_button($importurl, $importstr);
 }
 
-$PAGE->requires->js_call_amd('mod_openstudio/viewhelper', 'init');
-
 // Only content owner can export.
 $exportenable = $exportenable && ($vuid == $USER->id) && has_capability('mod/openstudio:export', $mcontext);
 if ($exportenable) {
@@ -829,53 +919,6 @@ if ($exportenable) {
         "contentids" => $contentids]]);
 }
 
-// Sort action url.
-$sortactionurl = new moodle_url('/mod/openstudio/view.php', ['id' => $id, 'osort' => $osort, 'fsort' => $fsort,
-        'vuid' => $vuid]);
-$sortactionurl = $sortactionurl->out(false);
-$contentdata->sortactionurl = $sortactionurl;
-
-$nextosort = 1 - $osort;
-$sortbydateurl = new moodle_url('/mod/openstudio/view.php',
-        ['id' => $id, 'vid' => $vid, 'groupid' => $groupid, 'pagesize' => $streamdatapagesize, 'vuid' => $vuid,
-                'blockid' => $blockid, 'osort' => $nextosort, 'fsort' => stream::SORT_BY_DATE], 'date');
-
-$contentdata->sortbydateurl = $sortbydateurl->out(false);
-
-$sortbytitleurl = new moodle_url('/mod/openstudio/view.php',
-        ['id' => $id, 'vid' => $vid, 'groupid' => $groupid, 'pagesize' => $streamdatapagesize, 'vuid' => $vuid,
-                'blockid' => $blockid, 'osort' => $nextosort, 'fsort' => stream::SORT_BY_ACTIVITYTITLE], 'title');
-
-$contentdata->sortbytitleurl = $sortbytitleurl->out(false);
-
-$sortbydate = false;
-$sortbytitle = false;
-switch ($fsort) {
-    case stream::SORT_BY_ACTIVITYTITLE:
-        $sortbytitle = true;
-        break;
-    case stream::SORT_BY_DATE:
-    default:
-        $sortbydate = true;
-        break;
-}
-
-$sortasc = false;
-$sortdesc = false;
-switch ($osort) {
-    case stream::SORT_ASC:
-        $sortasc = true;
-        break;
-    case stream::SORT_DESC:
-    default:
-        $sortdesc = true;
-        break;
-}
-
-$contentdata->sortbydate = $sortbydate;
-$contentdata->sortbytitle = $sortbytitle;
-$contentdata->sortasc = $sortasc;
-$contentdata->sortdesc = $sortdesc;
 $contentdata->selectedgroupid = $groupid;
 
 $viewsizes[0] = (object) ['size' => 50, 'selected' => false];
@@ -890,7 +933,7 @@ foreach ($viewsizes as $key => $value) {
 }
 
 $contentdata->viewsizes = $viewsizes;
-$contentdata->blockid = $blockid;
+$contentdata->blockid = 0;
 
 // Set params used for preferences filter.
 $contentdata->id = $id;
@@ -914,6 +957,44 @@ $PAGE->set_button($renderer->searchform($theme, $vid, $id, $groupid));
 
 $html = $renderer->siteheader(
         $coursedata, $permissions, $theme, $cm->name, '', $vid);
+
+$defaultparams = [
+        'id' => $id,
+        'vuid' => $vuid,
+        'fblock' => $fblock,
+        'fstatus' => $fstatus,
+        'fscope' => $fscope,
+];
+
+if (!empty($ftypearray)) {
+    foreach ($ftypearray as $k => $ftypevalue) {
+        $defaultparams["ftypearray[$k]"] = $ftypevalue;
+    }
+}
+
+if (!empty($fflagarray)) {
+    foreach ($fflagarray as $kfflag => $fflagvalue) {
+        $defaultparams["fflagarray[$kfflag]"] = $fflagvalue;
+    }
+}
+
+if ($factivityarray !== null && !empty($factivityarray)) {
+    foreach ($factivityarray as $kactivity => $factivityvalue) {
+        $defaultparams["factivityarray[$kactivity]"] = $factivityvalue;
+    }
+}
+
+// Sort action url.
+$sortactionurl = new moodle_url('/mod/openstudio/view.php', $defaultparams);
+$sortactionurl = $sortactionurl->out(false);
+$contentdata->sortactionurl = $sortactionurl;
+
+$contentdata->sortlist = filter::build_sort_by_filter(filter::PAGE_VIEW, $sortby);
+// Set params used for preferences filter.
+$contentdata->sortby = $sortby;
+$contentdata->quickselectlist = filter::build_quick_select_filter($vid, $quickselect);
+// Set params used for preferences filter.
+$contentdata->quickselect = $quickselect;
 
 echo $OUTPUT->header(); // Header.
 

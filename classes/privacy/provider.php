@@ -595,7 +595,7 @@ class provider implements
      * @throws \dml_exception
      * @throws \coding_exception
      */
-    public static function export_content_version(\stdClass $user, \context_module $context, \stdClass $content = null,
+    public static function export_content_version(\stdClass $user, \context_module $context, ?\stdClass $content,
             $contentpath, int $openstudioid = null) {
         global $DB;
 
@@ -710,7 +710,7 @@ class provider implements
      * @throws \dml_exception
      * @throws \coding_exception
      */
-    public static function export_tracking_data(\stdClass $user, \context_module $context, \stdClass $content = null,
+    public static function export_tracking_data(\stdClass $user, \context_module $context, ?\stdClass $content,
             $contentpath, int $openstudioid = null) {
         global $DB;
 
@@ -770,7 +770,7 @@ class provider implements
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public static function export_comments_data(\stdClass $user, \context_module $context, \stdClass $content = null,
+    public static function export_comments_data(\stdClass $user, \context_module $context, ?\stdClass $content,
             $contentpath, int $openstudioid = null) {
         global $DB;
         $userid = $user->id;
@@ -844,7 +844,7 @@ class provider implements
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public static function export_flags_data(\stdClass $user, \context_module $context, \stdClass $content = null,
+    public static function export_flags_data(\stdClass $user, \context_module $context, ?\stdClass $content,
             $contentpath, int $openstudioid = null) {
         global $DB;
         $userid = $user->id;
@@ -909,7 +909,7 @@ class provider implements
      * @throws \dml_exception
      * @throws \coding_exception
      */
-    public static function export_notifications_data(\stdClass $user, \context_module $context, \stdClass $content = null,
+    public static function export_notifications_data(\stdClass $user, \context_module $context, ?\stdClass $content,
             $contentpath, int $openstudioid = null, $isinfolder = false) {
         global $DB;
 

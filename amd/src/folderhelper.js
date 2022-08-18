@@ -50,10 +50,14 @@ define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
          * @method handleTooltip
          */
         handleIsotope: function() {
-
             var containerCLass = '.openstudio-folder-items';
-            var colWidth = 243;
-            var gutters = 20;
+            var isAdminBlock = $(".block_settings")[0];
+            var colWidth = 200;
+            var gutters = 75;
+            // Checking for special user.
+            if (isAdminBlock) {
+                gutters = 70;
+            }
             if ($(window).width() <= 1024) {
                 colWidth = 175;
                 gutters = 15;

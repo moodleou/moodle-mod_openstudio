@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 class flags {
 
+    const DEFAULT = 0;
     const ALERT = 1;
     const FAVOURITE = 2;
     const NEEDHELP = 3;

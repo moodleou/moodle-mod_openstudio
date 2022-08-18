@@ -69,16 +69,23 @@
 </div>
 
 <div id="preference_filter_container" class="collapse">
-    {{^myactivities}}
-    <div class="openstudio-preference-item">
-        {{>mod_openstudio/filter_by_date}}
+    <div class="openstudio-preference-item" id="openstudio-preference-sort-by">
+        <div class="openstudio-preference-content">
+            <!--- Sort by--->
+            {{>mod_openstudio/filter_sort_by}}
+            <!--- End Sort by--->
+        </div>
     </div>
-    <div class="openstudio-preference-item">
-        <span class="openstudio-filter-sort-text">{{#str}} filtersortby, mod_openstudio {{/str}}
-            {{>mod_openstudio/filter_by_title}}
-        </span>
+
+    <div class="openstudio-preference-item" id="openstudio-preference-quick-select">
+        <div class="openstudio-preference-content">
+            <!--- Quick Select--->
+            {{< mod_openstudio/filter_quick_select}}
+                {{$ismobile}}1{{/ismobile}}
+            {{/mod_openstudio/filter_quick_select}}
+            <!-- End Quick Select--->
+        </div>
     </div>
-    {{/myactivities}}
     <div class="openstudio-preference-item">
         <span class="openstudio-filter-sort-text ">{{#str}} filtertotal, mod_openstudio {{/str}}:
             {{total}}
@@ -87,11 +94,6 @@
     {{^myactivities}}
         <div class="openstudio-preference-item">
             {{>mod_openstudio/filter_by_pagesizes}}
-        </div>
-    {{/myactivities}}
-    {{#myactivities}}
-        <div class="openstudio-preference-item">
-            {{>mod_openstudio/filter_by_activities}}
         </div>
     {{/myactivities}}
 
