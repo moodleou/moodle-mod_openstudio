@@ -1,4 +1,4 @@
-define(['mod_openstudio/config', 'ansi_up'], function(unused, ansiup) {
+define(['ansi_up'], function(ansiup) {
         return ansiup;
     }
 );

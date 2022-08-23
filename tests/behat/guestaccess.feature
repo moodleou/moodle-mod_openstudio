@@ -1,4 +1,4 @@
-@ou @ou_vle @mod @mod_openstudio
+@ou @ou_vle @mod @mod_openstudio @javascript
 Feature: Open Studio guest access
   In order to Access open studio
   As a guest
@@ -18,21 +18,18 @@ Feature: Open Studio guest access
       | course | name         | description              | pinboard | idnumber | tutorroles | enablesubscriptions |
       | C1     | Guest studio | Guest studio description | 99       | OS1      | manager    | 1                   |
     And the following open studio "contents" exist:
-      | openstudio | user     | name            | description              | visibility |
-      | OS1        | student1 | Student slot 1  | Test slot 1 description  | module     |
-    And I log in as "admin"
+      | openstudio | user     | name           | description             | visibility |
+      | OS1        | student1 | Student slot 1 | Test slot 1 description | module     |
+    And I am logged in as "admin"
     # Give guest the default student permissions so that they could view and post content if they weren't prevented.
     And I set the following system permissions of "Guest" role:
       | capability          | permission |
       | mod/openstudio:view | Allow      |
     And I am on the "Course 1" "enrolment methods" page
     And I click on "Enable" "link" in the "Guest access" "table_row"
-    And I log out
 
   Scenario: Access Open Studio as a guest
-    Given I log in as "guest"
-    And I am on "Course 1" course homepage
-    When I follow "Guest studio"
+    Given I am on the "Guest studio" "openstudio activity" page logged in as "guest"
     Then I should not see "Add new content"
     And I should not see "Student slot 1"
     And I should not see "My Content"

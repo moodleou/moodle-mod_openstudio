@@ -31,8 +31,7 @@ And Apply the filter
       | user     | group |
       | teacher1 | G1    |
       | student1 | G1    |
-    And I log in as "teacher1"
-    And I am on "Course 1" course homepage
+    And I am on the "Course 1" "Course" page logged in as "teacher1"
     And I turn editing mode on
     And I add a "OpenStudio 2" to section "1" and I fill the form with:
       | Name        | Test Open Studio name 1      |
@@ -45,16 +44,14 @@ And Apply the filter
     And all users have accepted the plagarism statement for "OS2" openstudio
 
   Scenario: Can see "Shared with tutor" filter in My group
-    Given I am on "Course 1" course homepage
-    And I follow "Test Open Studio name 1"
+    Given I am on the "Test Open Studio name 1" "openstudio activity" page
     And I follow "Shared Content"
     And I click on "My Group" "link"
     And I click on "filter" "link"
     Then I should see "Shared with tutor"
 
   Scenario: "Shared with tutor" functionality
-    Given I am on "Course 1" course homepage
-    And I follow "Test Open Studio name 1"
+    Given I am on the "Test Open Studio name 1" "openstudio activity" page
     And I follow "Add new content"
     And I set the field "My Tutor" to "1"
     And I set the following fields to these values:

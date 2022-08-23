@@ -25,7 +25,7 @@
  * @module mod_openstudio/folderhelper
  */
 
-define(['jquery', 'amd/build/isotope.pkgd.min.js'], function($, Isotope) {
+define(['jquery', 'js/isotope.pkgd.min.js'], function($, Isotope) {
     var t;
 
     t = {

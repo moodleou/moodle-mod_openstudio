@@ -18,8 +18,7 @@ Feature: Open Studio share to view setting is enable
       | teacher1 | C1     | editingteacher |
       | student1 | C1     | student        |
       | student2 | C1     | student        |
-    And I log in as "teacher1"
-    And I am on "Course 1" course homepage
+    And I am on the "Course 1" "Course" page logged in as "teacher1"
     And I turn editing mode on
     And I add a "OpenStudio 2" to section "1" and I fill the form with:
       | Name                 | Test Open Studio name 1      |
@@ -27,7 +26,7 @@ Feature: Open Studio share to view setting is enable
       | ID number            | OS1                          |
       | Enable share to view | 1                            |
     And all users have accepted the plagarism statement for "OS1" openstudio
-    And I follow "Test Open Studio name 1"
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
     And I navigate to "Manage levels" in current page administration
     And I press "Add another Block"
     And I set the field "Block Name" to "Block 1"
@@ -40,12 +39,9 @@ Feature: Open Studio share to view setting is enable
     And I press "Add another Content"
     And I set the field "Content Name" to "Content 1.1 Required"
     And I press "Save Changes"
-    And I log out
 
   Scenario: Show share to view banner
-    Given I log in as "student1"
-    And I am on "Course 1" course homepage
-    And I follow "Test Open Studio name 1"
+    Given I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "student1"
     And I follow "My Content > My Activities" in the openstudio navigation
     Then I should see "Activity 1"
     And I click on "a.openstudio-profile-mypaticipation" "css_element"
@@ -60,10 +56,7 @@ Feature: Open Studio share to view setting is enable
     And I follow "Shared Content" in the openstudio navigation
     And I should see "Test My Activities View 1"
     And I should see "Share to view is enabled"
-    And I log out
-    Then I log in as "student2"
-    And I am on "Course 1" course homepage
-    And I follow "Test Open Studio name 1"
+    Then I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "student2"
     And I should not see "Test My Activities View 1"
     And I should see "Share to view is enabled"
     And I should not see "Test My Activities View 1"
@@ -80,10 +73,7 @@ Feature: Open Studio share to view setting is enable
     And I should see "Test My Activities View 2"
     And I should see "Test My Activities View 1"
     And I should see "Share to view is enabled"
-    And I log out
-    Then I log in as "teacher1"
-    And I am on "Course 1" course homepage
-    And I follow "Test Open Studio name 1"
+    Then I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "teacher1"
     And I should see "Test My Activities View 1"
     And I should see "Test My Activities View 2"
     And I should not see "Share to view is enabled"
@@ -91,10 +81,7 @@ Feature: Open Studio share to view setting is enable
     And I follow "Expand all"
     And I set the field "Enable share to view" to "0"
     And I press "Save and display"
-    And I log out
-    Then I log in as "student1"
-    And I am on "Course 1" course homepage
-    And I follow "Test Open Studio name 1"
+    Then I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "student1"
     And I should see "Test My Activities View 1"
     And I should see "Test My Activities View 2"
     And I should not see "Share to view is enabled"

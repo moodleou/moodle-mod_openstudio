@@ -16,8 +16,7 @@ I view report usage
       | user     | course | role           |
       | teacher1 | C1     | editingteacher |
       | student1 | C1     | student        |
-    And I log in as "teacher1"
-    And I am on "Course 1" course homepage
+    And I am on the "Course 1" "Course" page logged in as "teacher1"
     And I turn editing mode on
     And I add a "OpenStudio 2" to section "1" and I fill the form with:
       | Name                         | Test Open Studio name 1      |
@@ -27,7 +26,7 @@ I view report usage
       | Abuse reports are emailed to | teacher1@asd.com             |
       | ID number                    | OS1                          |
     And all users have accepted the plagarism statement for "OS1" openstudio
-    And I follow "Test Open Studio name 1"
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
     And I navigate to "Manage levels" in current page administration
     And I press "Add another Block"
     And I set the field "Block Name" to "Block 1"
@@ -44,7 +43,7 @@ I view report usage
     And I press "Add another Content"
     And I set the field "Content Name" to "Content 1.3 Required"
     And I press "Add another Content"
-    And I follow "Test Open Studio name 1"
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
 
   @_file_upload
   Scenario: Creating dummy data for report

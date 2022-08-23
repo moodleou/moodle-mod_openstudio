@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <libraries>
     <library>
-        <location>amd/src/isotope.pkgd.js</location>
+        <location>js/isotope.pkgd.min.js</location>
         <name>Isotope</name>
         <license>MIT</license>
         <version>3.0.4</version>

@@ -17,8 +17,7 @@ I stopped granting the rights to import and export for student
 
   @javascript
   Scenario: Permission setting by edit teacher and student not see Import and Export button in 'My Content' tab
-    Given I log in as "admin"
-    And I am on "Course 1" course homepage
+    Given I am on the "Course 1" "Course" page logged in as "admin"
     And I turn editing mode on
     And I add a "OpenStudio 2" to section "1" and I fill the form with:
       | Name        | Test Open Studio name 1      |
@@ -29,11 +28,7 @@ I stopped granting the rights to import and export for student
       | capability            | permission |
       | mod/openstudio:import | Prevent    |
       | mod/openstudio:export | Prevent    |
-    And I log out
-    And I am on site homepage
-    And I log in as "student1"
-    And I am on "Course 1" course homepage
-    And I follow "Test Open Studio name 1"
+    And I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "student1"
     When I follow "My Content"
     Then I should not see "Import"
     And I should not see "Export"

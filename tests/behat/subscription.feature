@@ -7,20 +7,20 @@ Feature: Subscribe/Unsubscribe to my Open Studio
 
   Background: Setup course and studio
     Given the following "users" exist:
-      | username | firstname | lastname | email |
-      | teacher1 | Teacher | 1 | teacher1@asd.com |
-      | student1 | Student | 1 | student1@asd.com |
+      | username | firstname | lastname | email            |
+      | teacher1 | Teacher   | 1        | teacher1@asd.com |
+      | student1 | Student   | 1        | student1@asd.com |
     And the following "courses" exist:
       | fullname | shortname | category |
-      | Course 1 | C1 | 0 |
+      | Course 1 | C1        | 0        |
     And the following "course enrolments" exist:
-      | user | course | role |
-      | teacher1 | C1 | editingteacher |
-      | student1 | C1 | student |
+      | user     | course | role           |
+      | teacher1 | C1     | editingteacher |
+      | student1 | C1     | student        |
 
     # Enable REST web service
     When I am on site homepage
-    And I log in as "admin"
+    And I am logged in as "admin"
     And I follow "Site administration"
     And I follow "Advanced features"
     And I set the field "Enable web services" to "1"
@@ -30,10 +30,7 @@ Feature: Subscribe/Unsubscribe to my Open Studio
     And I click on "Enable" "link" in the "REST protocol" "table_row"
     And I press "Save changes"
 
-    And I am on site homepage
-    And I log out
-    And I log in as "teacher1"
-    And I am on "Course 1" course homepage
+    And I am on the "Course 1" "Course" page logged in as "teacher1"
     And I turn editing mode on
     And I add a "OpenStudio 2" to section "1" and I fill the form with:
       | Name                         | Test Open Studio name 1      |
@@ -43,15 +40,10 @@ Feature: Subscribe/Unsubscribe to my Open Studio
       | Abuse reports are emailed to | teacher1@asd.com             |
       | ID number                    | OS1                          |
 
-    And I am on site homepage
-    And I log out
-    And I log in as "student1"
-    And I am on "Course 1" course homepage
-
   @javascript
   Scenario: Subscribe/Unsubscribe
     # Subscribe
-    When I follow "Test Open Studio name 1"
+    When I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "student1"
     And I press "Accept"
     Then I should see "Subscribe to my studio"
 

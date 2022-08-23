@@ -1,8 +1,8 @@
 @ou @ou_vle @mod @mod_openstudio @mod_openstudio_manage_folders @mod_openstudio_myactivity @javascript
 Feature: My Activity view in Open Studio
-  When using Open Studio with other users
-  As a teacher
-  I need to create a content and upload a file
+When using Open Studio with other users
+As a teacher
+I need to create a content and upload a file
 
   Background: Setup course and studio
     Given the following "users" exist:
@@ -12,22 +12,21 @@ Feature: My Activity view in Open Studio
       | fullname | shortname | category |
       | Course 1 | C1        | 0        |
     And the following "course enrolments" exist:
-      | user     | course    | role           |
-      | teacher1 | C1        | editingteacher |
+      | user     | course | role           |
+      | teacher1 | C1     | editingteacher |
     And the following "groups" exist:
-      | name     | course    | idnumber |
-      | group1   | C1        | G1       |
+      | name   | course | idnumber |
+      | group1 | C1     | G1       |
     And the following "groupings" exist:
-      | name     | course    | idnumber |
-      | grouping1| C1        | GI1      |
+      | name      | course | idnumber |
+      | grouping1 | C1     | GI1      |
     And the following "grouping groups" exist:
       | grouping | group |
       | GI1      | G1    |
     And the following "group members" exist:
       | user     | group |
       | teacher1 | G1    |
-    And I log in as "teacher1"
-    And I am on "Course 1" course homepage
+    And I am on the "Course 1" "Course" page logged in as "teacher1"
     And I turn editing mode on
     And I add a "OpenStudio 2" to section "1" and I fill the form with:
       | Name                         | Test Open Studio name 1      |
@@ -39,7 +38,7 @@ Feature: My Activity view in Open Studio
       | Abuse reports are emailed to | teacher1@asd.com             |
       | ID number                    | OS1                          |
     And all users have accepted the plagarism statement for "OS1" openstudio
-    And I follow "Test Open Studio name 1"
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
     And I navigate to "Manage levels" in current page administration
     And I press "Add another Block"
     And I set the field "Block Name" to "Block 1"
@@ -67,7 +66,7 @@ Feature: My Activity view in Open Studio
     And I press "Add another Content"
 
   Scenario: Show My Activity Board View
-    When I follow "Test Open Studio name 1"
+    When I am on the "Test Open Studio name 1" "openstudio activity" page
     And I follow "My Content > My Activities" in the openstudio navigation
     Then I should see "Activity 1"
     Then I should see "Pre-defined activity slots set by module teams. Your shared posts will also be seen in corresponding shared content areas."
@@ -75,7 +74,7 @@ Feature: My Activity view in Open Studio
     And I should see "Activity 3"
 
   Scenario: Upload a new content without file upload
-    When I follow "Test Open Studio name 1"
+    When I am on the "Test Open Studio name 1" "openstudio activity" page
     And I follow "My Content > My Activities" in the openstudio navigation
     And I click on "a.openstudio-profile-mypaticipation" "css_element"
     And I follow "Content 1.1 Required"
@@ -91,7 +90,7 @@ Feature: My Activity view in Open Studio
 
   @_file_upload
   Scenario: Upload a new content with file upload
-    When I follow "Test Open Studio name 1"
+    When I am on the "Test Open Studio name 1" "openstudio activity" page
     And I follow "My Content > My Activities" in the openstudio navigation
     And I click on "a.openstudio-profile-mypaticipation" "css_element"
     And I follow "Content 1.1 Required"
@@ -108,7 +107,7 @@ Feature: My Activity view in Open Studio
     Then the "src" attribute of "img.openstudio-grid-item-thumbnail" "css_element" should contain "test1.jpg"
 
   Scenario: Upload a new content with Add web/embed link
-    When I follow "Test Open Studio name 1"
+    When I am on the "Test Open Studio name 1" "openstudio activity" page
     And I follow "My Content > My Activities" in the openstudio navigation
     And I click on "a.openstudio-profile-mypaticipation" "css_element"
     And I follow "Content 1.1 Required"
@@ -126,7 +125,7 @@ Feature: My Activity view in Open Studio
 
   @_file_upload
   Scenario:  Edit the setting of the new content uploaded
-    When I follow "Test Open Studio name 1"
+    When I am on the "Test Open Studio name 1" "openstudio activity" page
     And I follow "My Content > My Activities" in the openstudio navigation
     And I click on "a.openstudio-profile-mypaticipation" "css_element"
     And I follow "Content 1.1 Required"
@@ -160,7 +159,7 @@ Feature: My Activity view in Open Studio
     And I set the following fields to these values:
       | Number of additional contents allowed | 0 |
     And I press "Save Changes"
-    And I follow "Test Open Studio name 1"
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
     And I follow "My Content > My Activities" in the openstudio navigation
     And I click on "a.openstudio-profile-mypaticipation" "css_element"
     And I follow "Folder content 3.2"
@@ -171,7 +170,7 @@ Feature: My Activity view in Open Studio
 
   Scenario: Check order of blocks defined in manage levels.
     # Check if there is only 1 activity block then selected it by default.
-    When I follow "Test Open Studio name 1"
+    When I am on the "Test Open Studio name 1" "openstudio activity" page
     And I follow "My Content > My Activities" in the openstudio navigation
     Then I should see "Activity 1" in the "div.openstudio-container > div:nth-child(6)" "css_element"
     And "//div[@class='openstudio-container']/div[position()=6 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 1.1 Required')]" "xpath_element" should exist
@@ -185,7 +184,7 @@ Feature: My Activity view in Open Studio
     And I press "Add another Content"
     And I set the field "Content Name" to "Content 1.3"
     And I press "Save Changes"
-    And I follow "Test Open Studio name 1"
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
     And I follow "My Content > My Activities" in the openstudio navigation
     Then I should see "Activity 1" in the "div.openstudio-container > div:nth-child(6)" "css_element"
     And "//div[@class='openstudio-container']/div[position()=6 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 1.1 Required')]" "xpath_element" should exist
@@ -214,7 +213,7 @@ Feature: My Activity view in Open Studio
     # Move Block 2 up on Block 1 and check the order of appearance.
     When I follow "Manage levels"
     And I click on "//div[contains(@class, 'fcontainer')]//div[position()=1]//div[contains(@class, 'form-inline')]//input[contains(@title, 'Move Down')]" "xpath_element"
-    And I follow "Test Open Studio name 1"
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
     And I follow "My Content > My Activities" in the openstudio navigation
     Then I should see "Activity 1 - Block 2" in the "div.openstudio-container > div:nth-child(6)" "css_element"
     And "//div[@class='openstudio-container']/div[position()=6 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 1.1 - Block 2')]" "xpath_element" should exist
@@ -226,9 +225,9 @@ Feature: My Activity view in Open Studio
     And "//div[@class='openstudio-container']/div[position()=10 and contains(.//div[contains(@class, 'openstudio-grid-item') and position()=1], 'Content 3.1')]" "xpath_element" should exist
 
   Scenario: Set "Enable pinboard" is 0 and check order of blocks defined in manage levels.
-    When I am on "Course 1" course homepage
-    And I click on "a.dropdown-toggle" "css_element" in the "Test Open Studio name 1" "list_item"
-    And I click on "Edit settings" "link" in the "Test Open Studio name 1" "list_item"
+    When I am on the "Course 1" "Course" page
+    And I open "Test Open Studio name 1" actions menu
+    And I choose "Edit settings" in the open action menu
     And I follow "Custom features"
     And I set the field "pinboard" to "0"
     And I press "Save and display"

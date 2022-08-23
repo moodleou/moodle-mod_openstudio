@@ -27,11 +27,10 @@
 
 define([
     'jquery',
-    'amd/build/isotope.pkgd.min.js',
     'core/str',
     'core/templates',
     'core/ajax'
-], function($, Isotope, Str, Templates, Ajax) {
+], function($, Str, Templates, Ajax) {
     var t;
 
     t = {

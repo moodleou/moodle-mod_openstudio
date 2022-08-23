@@ -8,13 +8,13 @@ Feature: Lock/Unlock my Open Studio content
 
   Background: Setup course and studio
     Given the following "users" exist:
-      | username | firstname | lastname | email |
-      | teacher1 | Teacher | 1 | teacher1@asd.com |
-      | manager1 | Manager | 1 | manager1@asd.com |
-      | student1 | Student | 1 | student1@asd.com |
+      | username | firstname | lastname | email            |
+      | teacher1 | Teacher   | 1        | teacher1@asd.com |
+      | manager1 | Manager   | 1        | manager1@asd.com |
+      | student1 | Student   | 1        | student1@asd.com |
     And the following "courses" exist:
       | fullname | shortname | category |
-      | Course 1 | C1 | 0 |
+      | Course 1 | C1        | 0        |
     And the following "course enrolments" exist:
       | user     | course | role           |
       | student1 | C1     | student        |
@@ -22,7 +22,7 @@ Feature: Lock/Unlock my Open Studio content
       | teacher1 | C1     | editingteacher |
 
     # Enable REST web service
-    Then I log in as "admin"
+    Then I am logged in as "admin"
     And the following config values are set as admin:
       | enablewebservices | 1 |
     And I navigate to "Server > Manage protocols" in site administration
@@ -33,19 +33,16 @@ Feature: Lock/Unlock my Open Studio content
       | course | name           | description                | pinboard | idnumber | tutorroles |
       | C1     | Sharing Studio | Sharing Studio description | 99       | OS1      | manager    |
     And the following open studio "contents" exist:
-      | openstudio | user     | name            | description              | visibility |
-      | OS1        | student1 | Student slot 1  | Test slot 1 description  | module     |
-      | OS1        | manager1 | Manager slot 2  | Test slot 2 description  | module     |
+      | openstudio | user     | name           | description             | visibility |
+      | OS1        | student1 | Student slot 1 | Test slot 1 description | module     |
+      | OS1        | manager1 | Manager slot 2 | Test slot 2 description | module     |
     And all users have accepted the plagarism statement for "OS1" openstudio
-    And I log out
 
   @javascript
   Scenario: Lock/Unlock
 
     # Student (un)locks/ his content
-    Given I log in as "student1"
-    And I am on "Course 1" course homepage
-    And I follow "Sharing Studio"
+    Given I am on the "Sharing Studio" "openstudio activity" page logged in as "student1"
     And I follow "Student slot 1"
     And I press "Lock"
     Then "Unlock" "button" should exist
@@ -68,11 +65,7 @@ Feature: Lock/Unlock my Open Studio content
     Then "Lock" "button" should not exist
 
     # Manager can (un)lock other contents
-    And I am on site homepage
-    And I log out
-    And I log in as "manager1"
-    And I am on "Course 1" course homepage
-    And I follow "Sharing Studio"
+    And I am on the "Sharing Studio" "openstudio activity" page logged in as "manager1"
     And I follow "Student slot 1"
     And I press "Lock"
     Then "Lock" "button" should not exist
@@ -83,11 +76,7 @@ Feature: Lock/Unlock my Open Studio content
     Then "Unlock" "button" should not exist
 
     # Hide Request Feedback button on Lock Content/Folder
-    And I am on site homepage
-    And I log out
-    And I log in as "student1"
-    And I am on "Course 1" course homepage
-    And I follow "Sharing Studio"
+    And I am on the "Sharing Studio" "openstudio activity" page logged in as "student1"
     And I follow "Student slot 1"
     And I press "Request feedback"
     And I should see "Feedback requested" in the "div#openstudio_item_request_feedback" "css_element"

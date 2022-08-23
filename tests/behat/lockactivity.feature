@@ -36,9 +36,7 @@ Feature: Locking activity contents
       | OS1        | A1     | crud    | 2         | crud     | -1 day   |            |
       | OS1        | A1     | social  | 3         | social   | -1 day   |            |
       | OS1        | A1     | comment | 4         | comment  | -1 day   |            |
-    And I log in as "student1"
-    And I am on "Course 1" course homepage
-    And I follow "Sharing Studio"
+    And I am on the "Sharing Studio" "openstudio activity" page logged in as "student1"
     And I follow "My Content > My Activities" in the openstudio navigation
     Then I should see "This activity is locked" in the ".openstudio-grid-item:nth-child(1)" "css_element"
     And I should see "This activity is locked" in the ".openstudio-grid-item:nth-child(3)" "css_element"
@@ -56,8 +54,7 @@ Feature: Locking activity contents
       | OS2        | A2     | crud    | 2         | crud     | -1 day   |            |
       | OS2        | A2     | social  | 3         | social   | -1 day   |            |
       | OS2        | A2     | comment | 4         | comment  | -1 day   |            |
-    And I am on "Course 1" course homepage
-    And I follow "Sharing Studio 2"
+    And I am on the "Sharing Studio 2" "openstudio activity" page
     And I follow "My Content > My Activities" in the openstudio navigation
     Then I should see "late message" in the ".openstudio-grid-item:nth-child(1)" "css_element"
     And I should see "late message" in the ".openstudio-grid-item:nth-child(3)" "css_element"
@@ -72,9 +69,7 @@ Feature: Locking activity contents
     Given the following open studio "level3s" exist:
       | openstudio | level2 | name   | sortorder | locktype | locktime | unlocktime |
       | OS1        | A1     | locked | 1         | all      | -1 day   | +1 day     |
-    And I log in as "student1"
-    And I am on "Course 1" course homepage
-    And I follow "Sharing Studio"
+    And I am on the "Sharing Studio" "openstudio activity" page logged in as "student1"
     And I follow "My Content > My Activities" in the openstudio navigation
     Then I should see "locked" in the ".openstudio-grid-item" "css_element"
     And I should see "This activity is locked"
@@ -84,9 +79,7 @@ Feature: Locking activity contents
     Given the following open studio "level3s" exist:
       | openstudio | level2 | name         | sortorder | locktype | locktime | unlocktime |
       | OS2        | A2     | futurelocked | 1         | all      | +1 day   |            |
-    And I log in as "student1"
-    And I am on "Course 1" course homepage
-    And I follow "Sharing Studio 2"
+    And I am on the "Sharing Studio 2" "openstudio activity" page logged in as "student1"
     And I follow "My Content > My Activities" in the openstudio navigation
     Then I should see "futurelocked" in the ".openstudio-grid-item" "css_element"
     And I should see "This activity will be locked"
@@ -96,9 +89,7 @@ Feature: Locking activity contents
     Given the following open studio "level3s" exist:
       | openstudio | level2 | name     | sortorder | locktype | locktime | unlocktime |
       | OS2        | A2     | unlocked | 1         | all      | -2 days  | -1 day     |
-    And I log in as "student1"
-    And I am on "Course 1" course homepage
-    And I follow "Sharing Studio 2"
+    And I am on the "Sharing Studio 2" "openstudio activity" page logged in as "student1"
     And I follow "My Content > My Activities" in the openstudio navigation
     Then I should see "unlocked" in the ".openstudio-grid-item" "css_element"
     And I should see "This activity will be locked"

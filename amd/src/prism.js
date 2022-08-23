@@ -1,4 +1,4 @@
-define(['mod_openstudio/config', 'prism'], function(unused, prism) {
+define(['prism'], function(prism) {
         return prism;
     }
 );

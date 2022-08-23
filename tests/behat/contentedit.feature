@@ -51,11 +51,10 @@ I should not see list of file types on Add File form
       | course | name                    | description                  | idnumber | reportingemail   |
       | C1     | Test Open Studio name 1 | Test Open Studio description | OS1      | teacher1@asd.com |
     And all users have accepted the plagarism statement for "OS1" openstudio
-    And I log in as "teacher1"
+    And I am logged in as "teacher1"
 
   Scenario: Edit content without upload file
-    Given I am on "Course 1" course homepage
-    And I follow "Test Open Studio name 1"
+    Given I am on the "Test Open Studio name 1" "openstudio activity" page
     And I follow "Add new content"
     And I press "Add file"
     And I set the following fields to these values:
@@ -80,8 +79,7 @@ I should not see list of file types on Add File form
     And I should not see "Test My Group Board View 1"
 
   Scenario: Edit content with upload file
-    Given I am on "Course 1" course homepage
-    And I follow "Test Open Studio name 1"
+    Given I am on the "Test Open Studio name 1" "openstudio activity" page
     And I follow "Add new content"
     And I press "Add file"
     And I set the following fields to these values:
@@ -105,8 +103,7 @@ I should not see list of file types on Add File form
     And I should not see "Test My Group Board View 1"
 
   Scenario: Edit content with unsupported file
-    Given I am on "Course 1" course homepage
-    And I follow "Test Open Studio name 1"
+    Given I am on the "Test Open Studio name 1" "openstudio activity" page
     And I follow "Add new content"
     And I press "Add file"
     And I set the following fields to these values:
@@ -117,12 +114,11 @@ I should not see list of file types on Add File form
     And I press "Save"
     Then I should see "Some files (test.unsupported) cannot be uploaded"
 
-    When I follow "Test Open Studio name 1"
+    When I am on the "Test Open Studio name 1" "openstudio activity" page
     Then I should not see "test.unsupported"
 
   Scenario: Edit content without web link
-    Given I am on "Course 1" course homepage
-    And I follow "Test Open Studio name 1"
+    Given I am on the "Test Open Studio name 1" "openstudio activity" page
     And I follow "Add new content"
     And I press "Add web/embed link"
     And I set the following fields to these values:
@@ -147,8 +143,7 @@ I should not see list of file types on Add File form
     And I should not see "Test My Group Board View 1"
 
   Scenario: Edit content with web link
-    Given I am on "Course 1" course homepage
-    And I follow "Test Open Studio name 1"
+    Given I am on the "Test Open Studio name 1" "openstudio activity" page
     And I follow "Add new content"
     And I press "Add web/embed link"
     And I set the following fields to these values:
@@ -173,19 +168,18 @@ I should not see list of file types on Add File form
     And I should not see "Test My Group Board View 1"
 
   Scenario: Check list of file types hidden on Add File form
-    Given I am on "Course 1" course homepage
+    Given I am on the "Course 1" "Course" page
     And Open Studio test instance is configured for "Test Open Studio name 1"
-    When I follow "Test Open Studio name 1"
+    When I am on the "Test Open Studio name 1" "openstudio activity" page
     And I follow "Upload content"
     And I press "Add file"
     Then I should not see "Accepted file types:"
 
   Scenario: Edit content with upload file and description file
-    Given I follow "Manage private files..."
+    Given I follow "Private files" in the user menu
     And I upload "mod/openstudio/tests/importfiles/test2.jpg" file to "Files" filemanager
     And I click on "Save changes" "button"
-    When I am on "Course 1" course homepage
-    And I follow "Test Open Studio name 1"
+    When I am on the "Test Open Studio name 1" "openstudio activity" page
     And I follow "Add new content"
     And I press "Add file"
     And I set the following fields to these values:
@@ -195,7 +189,7 @@ I should not see list of file types on Add File form
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
     And I click on "Insert or edit image" "button"
     And I click on "Browse repositories..." "button"
-        # Because of two file pickers we have to do very specific css selectors.
+    # Because of two file pickers we have to do very specific css selectors.
     And I click on "Private files" "link" in the ".moodle-dialogue.filepicker:not(.moodle-dialogue-hidden) .fp-repo-area" "css_element"
     And I click on "test2.jpg" "link"
     And I click on ".moodle-dialogue:not(.moodle-dialogue-hidden) .file-picker.fp-select .fp-select-confirm.btn-primary" "css_element"

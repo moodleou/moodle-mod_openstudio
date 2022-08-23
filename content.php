@@ -301,6 +301,26 @@ if ($folderid) {
 
 $crumbarray[$contentdataname] = $pageurl;
 util::add_breadcrumb($PAGE, $cm->id, navigation_node::TYPE_ACTIVITY, $crumbarray);
+$config = [
+        'paths' => [
+                'ansi_up' => (new moodle_url('/mod/openstudio/js/ansi_up.min'))->out(false),
+                'marked' => (new moodle_url('/mod/openstudio/js/marked.min'))->out(false),
+                'es5-shim' => (new moodle_url('/mod/openstudio/js/es5-shim.min'))->out(false),
+                'notebook' => (new moodle_url('/mod/openstudio/js/notebook.min'))->out(false),
+                'prism' => (new moodle_url('/mod/openstudio/js/prism.min'))->out(false),
+        ],
+        'shim' => [
+                'ansi_up' => ['exports' => 'ansi_up'],
+                'marked' => ['exports' => 'marked'],
+                'es5-shim' => ['exports' => 'es5-shim'],
+                'notebook' => [
+                        'deps' => ['marked'], 'exports' => 'notebook',
+                ],
+                'prism' => ['exports' => 'Prism'],
+        ],
+];
+$requirejs = 'require.config(' . json_encode($config) . ')';
+$PAGE->requires->js_amd_inline($requirejs);
 $PAGE->requires->strings_for_js(
     array('contentactionarchivepost', 'modulejsdialogcancel', 'archivedialogheader',
         'modulejsdialogcontentarchiveconfirm', 'deletearchiveversionheader', 'deletearchiveversionheaderconfirm'),

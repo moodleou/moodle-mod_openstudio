@@ -24,8 +24,7 @@ Feature: Test for new capability 'mod/openstudio:ignoreenrolment'
       | mod/openstudio:export          | Allow      | user | Course       | C1        |
       | mod/openstudio:canlock         | Allow      | user | Course       | C1        |
       | mod/openstudio:ignoreenrolment | Allow      | user | Course       | C1        |
-    And I log in as "admin" (in the OSEP theme)
-    And I am on "Course 1" course homepage
+    And I am on the "Course 1" "Course" page logged in as "admin"
     And I turn editing mode on
     And I add a "OpenStudio 2" to section "1" and I fill the form with:
       | Name               | Guest studio             |
@@ -42,12 +41,9 @@ Feature: Test for new capability 'mod/openstudio:ignoreenrolment'
     And I set the following fields to these values:
       | Allow guest access | Yes |
     And I press "Save changes"
-    And I log out
 
   Scenario: Authenticate user without enrol to course
-    Given I log in as "student2" (in the OSEP theme)
-    And I am on "Course 1" course homepage
-    And I follow "Guest studio"
+    Given I am on the "Guest studio" "openstudio activity" page logged in as "student2"
     And I press "Accept"
     And I follow "Upload content"
     And I set the following fields to these values:

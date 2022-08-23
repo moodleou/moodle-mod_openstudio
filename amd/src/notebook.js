@@ -1,4 +1,4 @@
-define(['mod_openstudio/config', 'notebook'], function(unused, notebook) {
+define(['notebook'], function(notebook) {
         return notebook;
     }
 );

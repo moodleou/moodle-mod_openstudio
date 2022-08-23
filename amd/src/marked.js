@@ -1,4 +1,4 @@
-define(['mod_openstudio/config', 'marked'], function(unused, marked) {
+define(['marked'], function(marked) {
         return marked;
     }
 );
