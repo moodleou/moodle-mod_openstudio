@@ -28,9 +28,9 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_openstudio';
-$plugin->version = 2022032400;
-$plugin->release = 'v0.0';
-$plugin->requires = 2018120300;
+$plugin->version = 2022092300;
+$plugin->release = 'v0.1';
+$plugin->requires = 2022041900;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->cron = 0;
 $plugin->dependencies = array();
