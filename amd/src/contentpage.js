@@ -91,6 +91,8 @@ define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/modal_events', 'c
                 $(".openstudio-request-feedback-button").bind('click', function() {
                     t.doFlagContent($(this));
                 });
+
+                $(document).ready(t.showCommentBox);
         },
 
         /**
@@ -429,8 +431,44 @@ define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/modal_events', 'c
             });
 
             $(form).appendTo('body').submit();
-        }
-    };
+        },
+
+        /**
+         * Show comment box when clicking on the "Add comment" from My module page.
+         *
+         * @method showCommentBox
+         */
+
+        showCommentBox: function() {
+            // Due to the current code still using Bootstrap 4, thus Jquery can work better than Javascript.
+            const urlParams = new URLSearchParams(window.location.search);
+            const idAddComment = $('#id_addcomment');
+
+            if (urlParams.get('addcomment') == 1) {
+                const folderComment = $('#toggle_folder_view_folder_comments');
+                if (folderComment) {
+                    folderComment.click();
+
+                }
+
+                idAddComment.click();
+                if (folderComment) {
+                    $('#openstudio_folder_view_folder_comments').on("shown.bs.collapse", function() {
+                        t.scrollToEle();
+                    });
+                } else {
+                    t.scrollToEle();
+                }
+            }
+        },
+
+        scrollToEle: function() {
+            const element = $('#openstudio-comment-form-body');
+            $('html, body').animate({
+                scrollTop: $(element).offset().top
+            }, 800);
+        },
+        };
 
     return t;
 

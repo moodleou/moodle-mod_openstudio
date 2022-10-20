@@ -175,7 +175,6 @@ if (!empty($folderdata->levelid)) {
     }
 }
 
-$PAGE->requires->js_call_amd('mod_openstudio/contentpage', 'init');
 $PAGE->requires->js_call_amd('mod_openstudio/folderhelper', 'init');
 
 // Require strings for folder browse posts.
@@ -198,6 +197,8 @@ echo $renderer->folder_page($cm, $permissions, $folderdata, $cminstance);
 $PAGE->requires->js_call_amd('mod_openstudio/folderbrowseposts', 'init', [[
     'folderid' => $folderid,
     'cmid' => $cm->id]]);
+
+$PAGE->requires->js_call_amd('mod_openstudio/contentpage', 'init');
 
 // Finish the page.
 echo $OUTPUT->footer();

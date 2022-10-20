@@ -325,7 +325,6 @@ $PAGE->requires->strings_for_js(
     array('contentactionarchivepost', 'modulejsdialogcancel', 'archivedialogheader',
         'modulejsdialogcontentarchiveconfirm', 'deletearchiveversionheader', 'deletearchiveversionheaderconfirm'),
     'mod_openstudio');
-$PAGE->requires->js_call_amd('mod_openstudio/contentpage', 'init');
 $PAGE->requires->js_call_amd('mod_openstudio/previewipynb', 'init');
 
 // Update flag and tracking.
@@ -359,6 +358,8 @@ echo $OUTPUT->header(); // Header.
 echo $html;
 
 echo $renderer->content_page($cm, $permissions, $contentdata, $cminstance); // Content detail.
+
+$PAGE->requires->js_call_amd('mod_openstudio/contentpage', 'init');
 
 // Finish the page.
 echo $OUTPUT->footer();

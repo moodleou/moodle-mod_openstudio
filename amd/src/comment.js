@@ -79,6 +79,10 @@ define([
 
         },
 
+        SELECTOR: {
+            COMMENT_BOX_ID: '#id_commentext', // Comment box ID.
+        },
+
         /**
          * Initialize module.
          *
@@ -118,6 +122,17 @@ define([
         },
 
         /**
+         * Focus textarea.
+         *
+         * @param {String} textAreaId
+         */
+        focusTextArea: function(textAreaId) {
+            const atto = $(textAreaId + 'editable');
+            atto.attr('contenteditable', 'true');
+            atto.focus();
+        },
+
+        /**
          * Show comment form
          *
          * @method showCommentForm
@@ -132,11 +147,9 @@ define([
             $(t.CSS.ADD_NEW_BUTTON).hide(); // Hide add new comment button.
             $(t.CSS.COMMENT_REPLY_FORM).hide(); // Hide comment reply forms.
 
-            // Scroll to form.
-            Scrollto.scrollToEl($(t.CSS.COMMENT_FORM_CONTENT), t.HEIGHT_TO_TOP);
-
             // Set focus on comment form.
             $('#openstudio_comment_form').focus();
+            t.focusTextArea(t.SELECTOR.COMMENT_BOX_ID);
         },
 
         /**
@@ -349,9 +362,9 @@ define([
                     t.dialogue.hide();
 
                     // Set focus on comment form.
-                    t.dialogue.after('visibleChange', function () {
+                    t.dialogue.after('visibleChange', function() {
                         $('#openstudio_comment_form').focus();
-                    },  t.dialogue);
+                    }, t.dialogue);
                 })
                 .always(function() {
                     M.util.js_complete('openstudioDeleteComment');

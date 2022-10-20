@@ -88,6 +88,24 @@ I need to create a content and upload a file
     And I should see "0 Inspired"
     And I should see "0 views"
 
+  Scenario: Add comment folder from My module page
+    Given the following open studio "folders" exist:
+      | openstudio | user     | name                 | description                      | visibility | contenttype    | tags    |
+      | OS1        | teacher1 | Test Folder Overview | My Folder Overview Description 1 | module     | folder_content | testtag |
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
+    And I follow "People" in the openstudio navigation
+    And I follow "Shared Content > My Module" in the openstudio navigation
+    And I follow "Test Folder Overview"
+    And I should see "Folder Overview"
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
+    And I click on "//*[@class='openstudio-grid-item'][1]//img[contains(@src, 'comments_grey_rgb_32px')]" "xpath_element"
+    And I click on "Add comment" "link"
+    And "Folder comments" "link" should be visible
+    And "Comment" "field" should exist
+    And I set the field "Comment" to "Very iconic, also has an amazing interior."
+    And I press "Post comment"
+    And I should see "Very iconic, also has an amazing interior."
+
   @_file_upload
   Scenario: Upload content in Folder Overview
     Given the following open studio "folders" exist:
