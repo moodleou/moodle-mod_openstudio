@@ -263,6 +263,10 @@ class file_testcase extends \advanced_testcase {
         $this->generator = '';
         $this->studiolevels = '';
         $this->fs->delete_area_files($this->context->id);
+
+        if (!ob_get_level()) {
+            ob_end_flush();
+        }
     }
 
     private function get_header_array() {
