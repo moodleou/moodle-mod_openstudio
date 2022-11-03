@@ -192,18 +192,18 @@ class renderer_utils {
      * @param object $cminstance The course module instance.
      * @param object $contentdata The content records to display.
      * @param bool $donotexport Export state.
+     * @param int|null $postownerid Check whether the logged-in user is the same with the post owner.
      * @return object $contentdata
      */
-    public static function profile_bar($permissions, $cminstance, $contentdata, $donotexport = true) {
+    public static function profile_bar($permissions, $cminstance, $contentdata, $donotexport = true, $postownerid = '') {
         global $USER, $OUTPUT, $PAGE;
 
-        $vuid = optional_param('vuid', $USER->id, PARAM_INT);
         $flagscontentread = 0;
         $ismyprofile = true;
         $openstudioid = $cminstance->id;
 
-        if ($vuid && $vuid != $USER->id) {
-            $contentowner = api\user::get_user_by_id($vuid);
+        if ($postownerid && $postownerid != $USER->id) {
+            $contentowner = api\user::get_user_by_id($postownerid);
             $ismyprofile = false;
         } else {
             $contentowner = $USER;
@@ -228,7 +228,7 @@ class renderer_utils {
             $contentdata->percentcompleted = $userprogresspercentage;
         }
 
-        $contentdata->userprofileid = $vuid;
+        $contentdata->userprofileid = $contentowner->id;
         $contentdata->ismyprofile = $ismyprofile;
         $contentdata->fullusername = $contentowner->firstname.' '.$contentowner->lastname;
         $contentdata->activedate = $activedate;

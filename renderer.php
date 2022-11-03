@@ -689,7 +689,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         }
 
         if ($contentdata->profilebarenable === true) {
-            $contentdata = renderer_utils::profile_bar($permissions, $cminstance, $contentdata, $donotexport);
+            $contentdata = renderer_utils::profile_bar($permissions, $cminstance, $contentdata, $donotexport, $contentdata->userid);
         }
 
         $contentdata = renderer_utils::content_details($cmid, $permissions, $contentdata, $contentdata->iscontentversion, $donotexport);
