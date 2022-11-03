@@ -124,6 +124,11 @@ class comments {
             if ($result === false) {
                 throw new \Exception('Failed to soft delete comment.');
             }
+            // Delete child comments with parent's ID.
+            $DB->execute("UPDATE {openstudio_comments}
+                            SET deletedby = ?, deletedtime = ?
+                          WHERE inreplyto = ?
+                 ", [$userid, time(), $commentid]);
 
             return true;
         } catch (\Exception $e) {

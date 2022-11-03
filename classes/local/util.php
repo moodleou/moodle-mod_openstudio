@@ -1710,6 +1710,7 @@ EOF;
                   FROM {openstudio_comments} oc
                  WHERE oc.contentid $sql
                    AND oc.userid = :userid
+                   AND oc.deletedby IS NULL
               GROUP BY oc.contentid";
         $sqlparams['userid'] = $USER->id;
         return $DB->get_records_sql($sql, $sqlparams);

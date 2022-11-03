@@ -74,3 +74,31 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     And I follow "Delete comment"
     And I click on "Delete" "button" in the "Delete comment" "dialogue"
     Then I should not see "Comment text reply 2"
+
+  @javascript
+  Scenario: Reply comment must be delete when the parent comment deleted in comment box
+    And I am on the "Sharing Studio" "openstudio activity" page logged in as "student1"
+    # Add new comment.
+    And I follow "Student slot 1"
+    And I press "Add new comment"
+    And I set the field "Comment" to "Comment text"
+    And I wait until the page is ready
+    And I press "Post comment"
+    # Reply comment.
+    And I press "Reply"
+    And I set the field "Comment" to "Comment text reply"
+    And I press "Post comment"
+
+    And I follow "Shared Content"
+    When I click on "//*[@class='openstudio-grid-item-content-detail-info-icon'][1]" "xpath_element"
+    # Verify the parent comment and its reply are visible in comment box.
+    Then I should see "Comments on this post"
+    And I should see "Comment text"
+    And I should see "Comment text reply"
+    And I follow "Student slot 1"
+    And I follow "Delete comment"
+    And I click on "Delete" "button" in the "Delete comment" "dialogue"
+    And I follow "Shared Content"
+    When I click on "//*[@class='openstudio-grid-item-content-detail-info-icon'][1]" "xpath_element"
+    # Verify the parent comment and its reply have been deleted in comment box.
+    Then I should see "There are no comments."

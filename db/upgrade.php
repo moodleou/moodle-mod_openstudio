@@ -129,6 +129,19 @@ function xmldb_openstudio_upgrade($oldversion=0) {
         upgrade_mod_savepoint(true, 2019111300, 'openstudio');
     }
 
+    if ($oldversion < 2022111400) {
+        $DB->execute("UPDATE {openstudio_comments} as oc
+                        SET deletedby = subquery.deletedby,
+					        deletedtime = subquery.deletedtime
+                       FROM (
+						   SELECT id, deletedby, deletedtime
+						     FROM {openstudio_comments}
+						    WHERE inreplyto IS NULL AND deletedby IS NOT NULL
+						   ) as subquery
+						    WHERE oc.deletedby IS NULL 
+						      AND oc.inreplyto = subquery.id");
+        upgrade_mod_savepoint(true, 2022111400, 'openstudio');
+    }
         // Must always return true from these functions.
     return $result;
 
