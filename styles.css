@@ -20,7 +20,7 @@
     margin: 0px;
 }
 
-.path-mod-openstudio [data-toggle="collapse"] {
+.path-mod-openstudio [data-toggle="collapse"]:not(.btn) {
     position: relative;
 }
 
