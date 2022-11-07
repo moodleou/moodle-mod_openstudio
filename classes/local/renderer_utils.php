@@ -201,6 +201,10 @@ class renderer_utils {
         $flagscontentread = 0;
         $ismyprofile = true;
         $openstudioid = $cminstance->id;
+        $vuid = optional_param('vuid', '', PARAM_INT);
+        if (empty($postownerid) && !empty($vuid)) {
+            $postownerid = $vuid;
+        }
 
         if ($postownerid && $postownerid != $USER->id) {
             $contentowner = api\user::get_user_by_id($postownerid);
