@@ -579,3 +579,32 @@ I need to create a content and upload a file
     And I should see "Content 1 guidance" in the ".modal-body" "css_element"
     And I should see "Content 2" in the ".modal-body" "css_element"
     And I should see "No guidance has been given for this content" in the ".modal-body" "css_element"
+
+  Scenario: Select existing post to a folder on My Activity page
+    Given the following open studio "contents" exist:
+      | openstudio | user     | name                 | description                | file                                       | visibility | index | keyword |
+      | OS1        | teacher1 | TestContentFolders 1 | Test content 1 description | mod/openstudio/tests/importfiles/test1.jpg | private    | 1     | folder  |
+      | OS1        | teacher1 | TestContentFolders 2 | Test content 2 description | mod/openstudio/tests/importfiles/test2.jpg | module     | 2     | folder  |
+    And the following open studio "level1s" exist:
+      | openstudio | name   | sortorder |
+      | OS1        | Block1 | 1         |
+    And the following open studio "level2s" exist:
+      | level1 | name      | sortorder |
+      | Block1 | Activity1 | 1         |
+    And the following open studio "level3s" exist:
+      | level2    | name       | sortorder | contenttype |
+      | Activity1 | Content1.1 | 1         | folder      |
+    And the following open studio "folder templates" exist:
+      | level3     | additionalcontents |
+      | Content1.1 | 10                 |
+    When I am on the "Test Open Studio name 1" "openstudio activity" page
+    And I follow "My Content > My Activities" in the openstudio navigation
+    And I click on "Content1.1" "link" in the ".openstudio-grid-item" "css_element"
+    And I press "Select existing post to add to folder"
+    Then I should see "TestContentFolders 1"
+    And I should see "TestContentFolders 2"
+    And I select the existing openstudio post "TestContentFolders 1"
+    And I select the existing openstudio post "TestContentFolders 2"
+    And I click on "Save changes" "button" in the "Browse posts" "dialogue"
+    And I should see "TestContentFolders 1"
+    And I should see "TestContentFolders 2"

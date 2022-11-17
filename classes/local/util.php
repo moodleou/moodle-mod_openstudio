@@ -1789,4 +1789,41 @@ EOF;
             return get_string('timereable_secondsago', 'mod_openstudio');
         }
     }
+
+    /**
+     * Get folder ID in case of folderid = 0.
+     *
+     * @param \stdClass $openstudio
+     * @param int $userid current user ID
+     * @param int $lid Level id
+     * @return int
+     * @throws \Exception
+     */
+    public static function get_folder_id(\stdClass $openstudio, int $userid, int $lid): int {
+        $foldervialevel = content::get_record_via_levels($openstudio->id, $userid, 3, $lid);
+        if ($foldervialevel) {
+            // Folder already created.
+            $folderid = $foldervialevel->id;
+        } else {
+            // Folder has not created yet.
+            // Set showextradata to 1, then set it back to 0 when the user makes changes to the folder.
+            $data = [
+                'contenttype' => content::TYPE_FOLDER, 'showextradata' => 1,
+                'visibility' => $openstudio->defaultvisibility,
+                'embedcode' => '', 'urltitle' => '', 'weblink' => '',
+                'name' => '', 'description' => ''];
+            // Create new folder.
+            $folderid = content::create(
+                $openstudio->id,
+                $userid,
+                3,
+                $lid,
+                $data
+            );
+            if (!$folderid) {
+                throw new \coding_exception('Could not create new folder.');
+            }
+        }
+        return $folderid;
+    }
 }

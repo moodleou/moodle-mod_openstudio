@@ -24,9 +24,12 @@
 
 namespace mod_openstudio;
 
+use mod_openstudio\local\api\content;
+use mod_openstudio\local\util;
+
 defined('MOODLE_INTERNAL') || die();
 
-class content_testcase extends \advanced_testcase {
+class content_test extends \advanced_testcase {
 
     protected $users;
     protected $file;
@@ -728,5 +731,33 @@ class content_testcase extends \advanced_testcase {
 
         $this->assertEquals($errorimageinfo['width'], $rotatedimageinfo['height']);
         $this->assertEquals($errorimageinfo['height'], $rotatedimageinfo['width']);
+    }
+
+    public function test_auto_create_folder() {
+        $params = [
+            'course' => $this->course->id,
+            'idnumber' => 'OS2',
+        ];
+        // Create generic studios.
+        $studiolevels = $this->generator->create_instance($params);
+        $leveldata = $this->generator->create_mock_levels($studiolevels->id);
+
+        $level1 = reset($leveldata['contentslevels']);
+        $level2 = reset($level1);
+        $level3 = reset($level2);
+
+        $openstudio = $this->generator->get_studio_by_idnumber($params['idnumber']);
+        $foldervialevel = content::get_record_via_levels($openstudio->id, $this->users->students->one->id, 3, $level3);
+
+        // No folder is created.
+        $this->assertFalse($foldervialevel);
+
+        $folderid = util::get_folder_id($openstudio, $this->users->students->one->id, $level3);
+        $this->assertIsInt($folderid);
+
+        // Get folder via level again, and check if it has the same ID.
+        $foldervialevel = content::get_record_via_levels($openstudio->id, $this->users->students->one->id, 3, $level3);
+
+        $this->assertEquals($folderid, $foldervialevel->id);
     }
 }
