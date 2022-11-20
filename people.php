@@ -120,16 +120,12 @@ $peopledatatemp = user::get_all($cminstance->id,
 if (!empty($peopledatatemp)) {
     $peopledata->total = $peopledatatemp->total;
 
-    $personarray = [];
-    $personidsarray = [];
-    foreach ($peopledatatemp->people as $person) {
-        $personarray[] = $person;
-        $personidsarray[] = $person->id;
-    }
+    $personarray = $peopledatatemp->people;
+    $personidsarray = array_keys($personarray);
 
     $usersactivitydata = user::get_all_users_activity_status($cminstance->id, $personidsarray);
 
-    foreach ($personarray as $person) {
+    foreach ($personarray as $personid => $person) {
         $picture = new user_picture($person);
         $picture->size = 1;
         $person->userpictureurl = $picture->get_url($PAGE)->out(false);
