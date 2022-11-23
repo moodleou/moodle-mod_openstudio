@@ -1247,6 +1247,8 @@ class mod_openstudio_external extends external_api {
             $result['vid'] = content::VISIBILITY_PRIVATE;
         }
 
+        util::trigger_event($cm->id, 'content_deleted', null, "view.php?id={$cm->id}", $contentdata->name);
+
         return $result;
     }
 

@@ -61,6 +61,7 @@ $string['event:folderviewed'] = 'View folder';
 $string['event:contenthistoryviewed'] = 'View content history';
 $string['event:contentversionviewed'] = 'View content version';
 $string['event:contentcreated'] = 'Content created';
+$string['event:contentdeleted'] = 'Content deleted';
 $string['event:contentedited'] = 'Content edited';
 
 $string['openstudio:canlock'] = 'Can lock';

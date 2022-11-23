@@ -1239,6 +1239,7 @@ EOF;
             case 'content_viewed':
             case 'folder_viewed':
             case 'content_created':
+            case 'content_deleted':
             case 'content_edited':
             case 'folder_created':
             case 'folder_edited':

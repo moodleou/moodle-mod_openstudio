@@ -250,7 +250,9 @@ if ($studioid > 0) {
     if (!empty($deletecontent)) {
         // Get block to delete.
         $contentid = key($deletecontent);
+        $content = levels::get_record(3, $contentid);
         levels::delete(3, $contentid, $studioid);
+        util::trigger_event($cm->id, 'content_deleted', null, "view.php?id={$cm->id}", $content->name);
         $islevelupdated = true;
         if ($template = template::get_by_levelid($contentid)) {
             template::delete($template->id);
@@ -360,5 +362,7 @@ if ($l2id > 0) {
     $mform2->set_data($data);
     $mform2->display();
 }
+
+util::trigger_event($cm->id, 'managecontents_viewed', null, util::get_page_name_and_params(true));
 
 echo $renderer->footer(); // Footer.
