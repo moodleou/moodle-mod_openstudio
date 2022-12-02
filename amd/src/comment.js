@@ -29,8 +29,9 @@ define([
     'core/ajax',
     'core/str',
     'mod_openstudio/scrollto',
-    'require'
-], function($, Ajax, Str, Scrollto, require) {
+    'require',
+    'core/notification'
+], function($, Ajax, Str, Scrollto, require, Notification) {
     var t;
     t = {
 
@@ -276,9 +277,7 @@ define([
                 .always(function() {
                     M.util.js_complete('openstudioPostComment');
                 })
-                .fail(function(ex) {
-                    window.console.error('Log request failed ' + ex.message);
-                });
+                .fail(Notification.exception);
         },
 
         /**

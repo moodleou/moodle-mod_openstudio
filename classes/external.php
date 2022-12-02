@@ -780,7 +780,7 @@ class mod_openstudio_external extends external_api {
      */
     public static function add_comment($cmid, $cid, $commenttext = '',
             $commentattachment = 0, $inreplyto = 0) {
-        global $USER, $PAGE, $CFG;
+        global $USER, $PAGE, $CFG, $DB;
         $userid = $USER->id;
 
         // Init and check permission.
@@ -800,6 +800,14 @@ class mod_openstudio_external extends external_api {
 
         // Validate locking status.
         self::validate_locking_status($params['cid'], lock::COMMENT);
+
+        // Check parent comment is existed.
+        if ($inreplyto) {
+            $parent = $DB->get_record('openstudio_comments', ['id' => $inreplyto], 'id, deletedby');
+            if (!$parent || $parent->deletedby > 0) {
+                throw new \moodle_exception('errorcommentdeleted', 'openstudio');
+            }
+        }
 
         // Check if user has permission to add content.
         $actionallowed = $permissions->addcomment || $permissions->managecontent;
