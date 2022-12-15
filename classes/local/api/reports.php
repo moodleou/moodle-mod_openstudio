@@ -311,6 +311,8 @@ EOF;
     public static function get_total_storage($studioid) {
         global $DB;
 
+        $commenttext = comments::COMMENT_TEXT_AREA;
+
         $sql = <<<EOF
   SELECT s.mimetype,
          COUNT(s.id) AS totals,
@@ -368,7 +370,9 @@ EOF;
     FROM {openstudio_contents} s
     JOIN {openstudio_comments} c on c.contentid = s.id
     JOIN {files} f ON f.itemid = c.id AND f.component = 'mod_openstudio'
-                                      AND f.filearea = 'contentcomment'
+                                      AND f.filearea IN (
+                                                            'contentcomment', '$commenttext'
+                                                        )
    WHERE s.openstudioid = ?
 
 EOF;
@@ -397,7 +401,9 @@ EOF;
                                FROM {openstudio_comments} c
                                JOIN {openstudio_contents} sss ON sss.id = c.contentid
                               WHERE sss.openstudioid = ?) AND f.component = 'mod_openstudio'
-                                                      AND f.filearea = 'contentcomment')
+                                                      AND f.filearea IN (
+                                                                            'contentcomment', '$commenttext'
+                                                                        ))
            )
      AND f.filesize > 0
 GROUP BY f.userid,

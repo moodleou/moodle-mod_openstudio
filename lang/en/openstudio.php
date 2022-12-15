@@ -683,6 +683,7 @@ $string['nocommentpermissions'] = 'You do not have permission to modify comments
 $string['nocommentsinboxcomment'] = 'There are no comments.';
 $string['commentdoesnotexist'] = 'The comment ID you provided does not exist.';
 $string['commentdeleted'] = 'This comment has been removed by {$a}.';
+$string['commentimageplaceholder'] = ' [Image] ';
 
 $string['contentcommentsformheader'] = 'Provide feedback by posting a comment';
 $string['contentcommentsformheader2'] = 'Post an audio comment (optional)';

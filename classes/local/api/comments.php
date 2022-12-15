@@ -24,10 +24,13 @@
 namespace mod_openstudio\local\api;
 
 use mod_openstudio\local\util;
+use mod_openstudio\local\util\defaults;
 
 defined('MOODLE_INTERNAL') || die();
 
 class comments {
+
+    public const COMMENT_TEXT_AREA = 'commenttext';
 
     /**
      * Create new comment.
@@ -36,13 +39,14 @@ class comments {
      * @param int $userid Creator of the comment.
      * @param string $comment Comment text.
      * @param int $folderid The ID of the folder the content belongs to.
-     * @param object $file File upload information.
+     * @param array $file File upload information.
      * @param object $context Moodle context during slot creation.
      * @param int $inreplyto The ID of the comment being replied to
+     * @param int $commentitemid Comment text Item ID.
      * @return int Returns ID of inserted comment record.
      */
     public static function create($contentid, $userid, $comment, $folderid = null,
-            $file = null, $context = null, $inreplyto = null, $cm = null) {
+            $file = null, $context = null, $inreplyto = null, $cm = null, int $commentitemid = 0) {
         global $DB;
 
         try {
@@ -72,8 +76,17 @@ class comments {
 
             $commentid = $DB->insert_record('openstudio_comments', (object) $insertdata);
 
-            if (($file !== null) && ($context !== null) && $commentid) {
+            // Update comment text.
+            if ($context instanceof \context_module && $commentid && $commentitemid > 0) {
+                self::update_comment_text($commentid, $context->id, $insertdata['commenttext'], $commentitemid);
+            }
+
+            $isvalidattachment = is_array($file) && array_key_exists('id', $file) && $file['id'] > 0;
+            if ($isvalidattachment && ($context !== null) && $commentid) {
                 file_save_draft_area_files($file['id'], $context->id, 'mod_openstudio', 'contentcomment', $commentid);
+                // Issue happened when user requests API, it does not clear the old files.
+                // That issue causes multiple attachments, we only allow 1 audio attachment.
+                self::clear_draft_area($file['id']);
             }
 
             // Index new comments for search.
@@ -367,14 +380,15 @@ EOF;
     /**
      * Get all comments by content id.
      *
-     * @param $cmdid course module ID
-     * @param $contentid content ID
+     * @param int $cmdid course module ID
+     * @param int $contentid content ID
      * @return array
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public static function get_comments_by_contentid($cmid, $contentid) {
+    public static function get_comments_by_contentid(int $cmid, int $contentid): array {
         global $DB, $USER, $PAGE;
+        $context = \context_module::instance($cmid);
         $userfields = \core_user\fields::get_picture_fields();
         $arrayuserfield = [];
         foreach ($userfields as $userfield) {
@@ -401,6 +415,8 @@ EOF;
                 if (isset($lastestcomment[$comment->commentid])) {
                     $data->isnewcomment = true;
                 }
+                $comment->commenttext = static::filter_comment_text($comment->commenttext, $comment->id, $context);
+                $comment->commenttext = static::nice_shorten_text($comment->commenttext);
                 $data->comment = "'" . strip_tags($comment->commenttext) . "'";
                 $data->contentid = $comment->contentid;
                 $data->userid = $comment->userid;
@@ -412,5 +428,95 @@ EOF;
             }
         }
         return $result;
+    }
+
+    /**
+     * Updates the message field of a comment entry. This is necessary in some cases where
+     * the user includes images etc. in the message; these are initially included using
+     * a draft URL which has to be changed to a special relative path on convert, and we
+     * can't do that until the comment ID is known. Additionally, we don't have a comment object
+     * at that point, hence use of static function.
+     *
+     * @param int $commentid ID of comment to update.
+     * @param int $contextid ID of context.
+     * @param string|null $commenttext Content of comment.
+     * @param int $commentitemid Comment draft Item ID.
+     */
+    private static function update_comment_text(int $commentid, int $contextid, ?string $commenttext,
+            int $commentitemid = 0): void {
+        global $DB, $CFG;
+        if ($commenttext === null) {
+            return;
+        }
+        $fileoptions = [
+                'subdirs' => false,
+                'maxbytes' => $CFG->maxbytes ?? defaults::MAXBYTES,
+                'maxfiles' => EDITOR_UNLIMITED_FILES,
+        ];
+        $newtext = file_save_draft_area_files($commentitemid, $contextid, 'mod_openstudio',
+                self::COMMENT_TEXT_AREA, $commentid, $fileoptions, $commenttext);
+        if ($commenttext !== $newtext) {
+            $DB->set_field('openstudio_comments', self::COMMENT_TEXT_AREA, $newtext, [
+                    'id' => $commentid,
+            ]);
+        }
+        self::clear_draft_area($commentitemid);
+    }
+
+    /**
+     * Shorten comment text (Refer from ForumNG).
+     *
+     * @param string|null $text
+     * @param int $length Maximum length, if 0 then no need shorten.
+     * @return string|null
+     */
+    public static function nice_shorten_text(?string $text, int $length = 0): ?string {
+        $text = htmlentities($text, null, 'utf-8');
+        $text = str_replace('&nbsp;', ' ', $text);
+        $text = html_entity_decode($text);
+        $text = trim($text);
+        // Replace image tag by placeholder text.
+        $text = preg_replace('/<img.*?>/', get_string('commentimageplaceholder', 'mod_openstudio'), $text);
+        // Trim the multiple spaces to single space and multiple lines to one line.
+        $text = preg_replace('!\s+!', ' ', $text);
+        $summary = $text;
+        if ($length > 0) {
+            $summary = shorten_text($text, $length);
+        }
+        $summary = preg_replace('~\s*\.\.\.(<[^>]*>)*$~', '$1', $summary);
+        $dots = $summary != $text ? '...' : '';
+        return $summary . $dots;
+    }
+
+    /**
+     * Filter comment text.
+     *
+     * @param string $commenttext Text of comment.
+     * @param int $commentid ID of comment.
+     * @param \context_module $context context module.
+     * @param bool $isstriplink Strip link the text.
+     * @return string
+     */
+    public static function filter_comment_text(string $commenttext, int $commentid,
+            \context_module $context, bool $isstriplink = false): string {
+        $commenttext = file_rewrite_pluginfile_urls($commenttext, 'pluginfile.php', $context->id,
+                'mod_openstudio', self::COMMENT_TEXT_AREA, $commentid);
+        $commenttext = format_text($commenttext, FORMAT_HTML, $context);
+        if ($isstriplink) {
+            $commenttext = format_string($commenttext, true);
+        }
+        return $commenttext;
+    }
+
+    /**
+     * Delete all files from a particular draft file area for the current user.
+     *
+     * @param int $draftid The itemid for the draft area.
+     */
+    private static function clear_draft_area(int $draftid): void {
+        global $USER;
+        $fs = get_file_storage();
+        $usercontext = \context_user::instance($USER->id);
+        $fs->delete_area_files($usercontext->id, 'user', 'draft', $draftid);
     }
 }

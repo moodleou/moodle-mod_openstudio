@@ -39,6 +39,10 @@ use \core_privacy\local\request\transform;
 use \mod_openstudio\local\api\subscription;
 use \mod_openstudio\local\api\tags;
 use \mod_openstudio\local\api\comments;
+use mod_openstudio\test_utils;
+
+global $CFG;
+require_once($CFG->dirroot . '/mod/openstudio/tests/test_utils.php');
 
 /**
  * Data provider testcase class.
@@ -208,12 +212,17 @@ class privacy_provider_test extends provider_testcase {
         tags::set($this->posts->one, ['aaa', 'bbb', 'ccc']);
         $this->commentspost1 = new \stdClass();
         // Comment post 1 by user 1.
+        $this->setUser($this->users->students->one);
+        $filename = 'test1.jpg';
+        [$itemid, $link] = test_utils::create_draft_file($filename);
+        $commenttext = '<p>Test image link: <img src="' . $link .'"  alt="image"/></p>';
         $this->commentspost1->one = $this->generator->create_comment([
                 'contentid' => $this->posts->one,
                 'userid' => $this->users->students->one->id,
-                'comment' => random_string(),
+                'comment' => $commenttext,
                 'filepath' => 'mod/studio/tests/importfiles/test.mp3',
-                'filecontext' => $this->contextstudio
+                'filecontext' => $this->contextstudio,
+                'commenttextitemid' => $itemid,
         ]);
 
         // Comment post one by user 2.
@@ -630,8 +639,22 @@ class privacy_provider_test extends provider_testcase {
      * @throws dml_exception
      */
     public function test_delete_data_for_all_users_in_context() {
+        global $DB;
+
+        // Check comment text files of OS 1 exists in system.
+        $this->assertTrue($DB->record_exists('files', [
+                'filearea' => comments::COMMENT_TEXT_AREA,
+                'contextid' => $this->contextstudio->id,
+        ]));
+
         // Delete data in course 1.
         provider::delete_data_for_all_users_in_context($this->contextstudio);
+
+        // Verify that all comment text files are cleared.
+        $this->assertFalse($DB->record_exists('files', [
+                'filearea' => comments::COMMENT_TEXT_AREA,
+                'contextid' => $this->contextstudio->id,
+        ]));
 
         $appctx = new approved_contextlist($this->users->students->one, 'mod_openstudio', [
                         $this->contextstudio->id,
@@ -707,6 +730,13 @@ class privacy_provider_test extends provider_testcase {
                 get_string('privacy:subcontext:content', 'mod_openstudio', $this->posts->four)]);
         $this->assertNotEmpty($content1b);
 
+        // Check comment text files of student 1 exists in system.
+        $this->assertTrue($DB->record_exists('files', [
+                'filearea' => comments::COMMENT_TEXT_AREA,
+                'contextid' => $this->contextstudio->id,
+                'userid' => $this->users->students->one->id,
+        ]));
+
         writer::reset();
         // Test case Student one request delete data in OS1, but not data in OS2 won be affected.
         // Delete data from student one in OS1.
@@ -746,6 +776,13 @@ class privacy_provider_test extends provider_testcase {
                 get_string('privacy:subcontext:content', 'mod_openstudio', $this->posts->one)]);
         // Post of students one is deleted.
         $this->assertEmpty($content1);
+
+        // Comment text files of student one are deleted.
+        $this->assertFalse($DB->record_exists('files', [
+                'filearea' => comments::COMMENT_TEXT_AREA,
+                'contextid' => $this->contextstudio->id,
+                'userid' => $this->users->students->one->id,
+        ]));
 
         // Content student two.
         $contextdata2 = writer::with_context($this->contextstudio2);

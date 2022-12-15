@@ -1460,6 +1460,10 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
     padding-bottom: 5px;
 }
 
+.openstudio-comment-text video {
+    max-width: 100%;
+}
+
 .openstudio-comment-thread-original-item .openstudio-comment-text {
     min-height: 89px;
 }

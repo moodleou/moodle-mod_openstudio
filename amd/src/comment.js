@@ -226,6 +226,7 @@ define([
                     cid: formdata.cid,
                     inreplyto: parseInt(formdata.inreplyto.trim()),
                     commenttext: formdata['commentext[text]'],
+                    commenttextitemid: formdata['commentext[itemid]'],
                     commentattachment: hasAttachment ? formdata.commentattachment : 0
                 }
             }]);

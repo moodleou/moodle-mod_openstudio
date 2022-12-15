@@ -43,7 +43,8 @@ class comments extends \core_search\base_mod {
      * File area relate to Moodle file table.
      */
     const FILEAREA = [
-        'COMMENT' => 'contentcomment'
+        'COMMENT' => 'contentcomment',
+        'COMMENTTEXT' => \mod_openstudio\local\api\comments::COMMENT_TEXT_AREA,
     ];
 
     /** @var array Relevant context levels (module context) */
@@ -244,6 +245,9 @@ class comments extends \core_search\base_mod {
 
         $files = array_merge($files, $fs->get_area_files($document->get('contextid'), $this->componentname,
             self::FILEAREA['COMMENT'], $document->get('itemid'), 'itemid, filepath, filename', false));
+
+        $files = array_merge($files, $fs->get_area_files($document->get('contextid'), $this->componentname,
+                self::FILEAREA['COMMENTTEXT'], $document->get('itemid'), 'itemid, filepath, filename', false));
 
         foreach ($files as $file) {
             $document->add_stored_file($file);

@@ -22,6 +22,7 @@
 
 namespace mod_openstudio\local;
 
+use context_module;
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\stream;
 use mod_openstudio\local\api\flags;
@@ -1647,6 +1648,7 @@ class renderer_utils {
             $pageurl = util::get_current_url();
 
             if ($commenttemp) {
+                $context = context_module::instance($cmid);
                 foreach ($commenttemp as $key => $comment) {
 
                     // Check comment attachment.
@@ -1659,7 +1661,7 @@ class renderer_utils {
                     }
 
                     // Filter comment text.
-                    $comment->commenttext = format_text($comment->commenttext);
+                    $comment->commenttext = comments::filter_comment_text($comment->commenttext, $comment->id, $context);
 
                     $user = user::get_user_by_id($comment->userid);
                     $comment->fullname = fullname($user);

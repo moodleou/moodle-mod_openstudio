@@ -74,4 +74,43 @@ class test_utils {
             $DB->update_record($table, $data);
         }
     }
+
+    /**
+     * Creates a user draft file in the provided draft area.
+     *
+     * @param string $filename The name of the file in the importfiles folder to copy.
+     * @param int $itemid The draft Item Id to upload.
+     * @param string $storefilename To store the file name under.
+     */
+    public static function create_draft_file(string $filename, int $itemid = 0, string $storefilename = null) {
+        global $USER, $CFG;
+
+        if ($itemid === 0) {
+            $itemid = file_get_unused_draft_itemid();
+        }
+
+        $fs = get_file_storage();
+        $context = \context_user::instance($USER->id);
+
+        if ($storefilename === null) {
+            $storefilename = $filename;
+        }
+
+        $fileinfo = (object) [
+                'contextid' => $context->id,
+                'component' => 'user',
+                'filearea' => 'draft',
+                'itemid' => $itemid,
+                'filepath' => '/',
+                'filename' => $storefilename,
+                'author' => fullname($USER),
+                'userid' => $USER->id,
+        ];
+        $path = __DIR__ . DIRECTORY_SEPARATOR . 'importfiles' . DIRECTORY_SEPARATOR . $filename;
+        $fs->create_file_from_pathname($fileinfo, $path);
+
+        $filepath = $CFG->wwwroot . '/draftfile.php/' . $context->id . '/user/draft/' .
+                $itemid . '/' . $storefilename;
+        return [$itemid, $filepath];
+    }
 }
