@@ -408,7 +408,6 @@ EOF;
             foreach ($comments as $comment) {
                 $commenturl = new \moodle_url('/mod/openstudio/content.php',
                     ['id' => $cmid, 'sid' => $contentid, 'vuid' => $comment->userid]);
-                $picture = new \user_picture($comment);
                 $data = new \stdClass();
                 $data->id = $comment->commentid;
                 $data->isnewcomment = false;
@@ -420,10 +419,15 @@ EOF;
                 $data->comment = "'" . strip_tags($comment->commenttext) . "'";
                 $data->contentid = $comment->contentid;
                 $data->userid = $comment->userid;
-                $data->userpicture = $picture->get_url($PAGE)->out(false);
                 $data->fullname = fullname($comment);
                 $data->commenturl = $commenturl . "#openstudio-comment-" . $comment->commentid;
                 $data->timemodified = util::get_time_since_readable($USER->id, $comment->timemodified);
+
+                // User picture.
+                $picture = new \user_picture($comment);
+                $picture->size = 1;
+                $data->userpicture = $picture->get_url($PAGE)->out(false);
+
                 $result[] = $data;
             }
         }

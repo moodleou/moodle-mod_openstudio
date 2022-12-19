@@ -729,6 +729,7 @@ if ($finalviewpermissioncheck) {
             if ($content->userid) {
                 $user = user::get_user_by_id($content->userid);
                 $picture = new user_picture($user);
+                $picture->size = 1;
                 $content->userpictureurl = $picture->get_url($PAGE)->out(false);
             }
 

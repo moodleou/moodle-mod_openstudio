@@ -300,6 +300,7 @@ if (trim($searchtext) == '') {
                 // User picture.
                 $user = user::get_user_by_id($content->userid);
                 $picture = new user_picture($user);
+                $picture->size = 1;
                 $content->userpictureurl = $picture->get_url($PAGE)->out(false);
 
                 // View other user's work.

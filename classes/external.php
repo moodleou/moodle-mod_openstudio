@@ -868,6 +868,7 @@ class mod_openstudio_external extends external_api {
 
                     // User picture.
                     $picture = new user_picture($user);
+                    $picture->size = 1;
                     $commentdata->userpictureurl = $picture->get_url($PAGE)->out(false);
 
                     $renderer = $PAGE->get_renderer('mod_openstudio');

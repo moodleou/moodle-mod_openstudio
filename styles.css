@@ -1509,10 +1509,9 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
 }
 
 .openstudio-comment-owner img {
-    max-width: 48px;
-    max-height: 48px;
-    border-radius: 50%;
     width: 48px;
+    height: 48px;
+    border-radius: 50%;
 }
 
 .openstudio-comment-flag {

@@ -233,13 +233,17 @@ class renderer_utils {
             $contentdata->percentcompleted = $userprogresspercentage;
         }
 
+        // User picture.
+        $picture = new \user_picture($contentowner);
+        $picture->size = 1;
+        $contentdata->userpictureurl = $picture->get_url($PAGE)->out(false);
+
         $contentdata->userprofileid = $contentowner->id;
         $contentdata->ismyprofile = $ismyprofile;
         $contentdata->fullusername = $contentowner->firstname.' '.$contentowner->lastname;
         $contentdata->activedate = $activedate;
         $contentdata->flagscontentread = $flagscontentread;
         $contentdata->totalpostedcomments = $userprogressdata['totalpostedcomments'];
-        $contentdata->userpictureurl = new \moodle_url('/user/pix.php/'.$contentowner->id.'/f1.jpg');
         $contentdata->viewuserworkurl = new \moodle_url('/mod/openstudio/view.php',
                     array('id' => $openstudioid, 'vuid' => $contentowner->id, 'vid' => content::VISIBILITY_PRIVATE));
         $contentdata->viewedicon = $OUTPUT->image_url('viewed_rgb_32px', 'openstudio');
@@ -1668,6 +1672,7 @@ class renderer_utils {
 
                     // User picture.
                     $picture = new \user_picture($user);
+                    $picture->size = 1;
                     $comment->userpictureurl = $picture->get_url($PAGE)->out(false);
 
                     // Check delete capability.
