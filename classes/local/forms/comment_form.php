@@ -65,7 +65,8 @@ class comment_form extends \moodleform {
         ];
         $mform->addElement('editor', 'commentext',
                 get_string('contentcommentsformlabelcomment', 'openstudio'),
-        null, $editoroptions);
+                null, $editoroptions);
+        $mform->setType('commentext', PARAM_RAW);
 
         // Comment attachment.
         if ($this->_customdata['attachmentenable'] === true) {

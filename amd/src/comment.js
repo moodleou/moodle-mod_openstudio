@@ -269,6 +269,7 @@ define([
 
                     // Set focus on comment form.
                     $('#openstudio_comment_form').focus();
+                    t.focusTextArea(t.SELECTOR.COMMENT_BOX_ID);
 
                     // Trigger oumedia plugin to render audio attachment.
                     if (window.oump) {
