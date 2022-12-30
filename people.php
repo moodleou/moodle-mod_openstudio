@@ -110,6 +110,7 @@ $pagetitle = $pageheading = get_string('pageheader', 'openstudio',
 
 // Render page header and crumb trail.
 util::page_setup($PAGE, $pagetitle, $pageheading, $pageurl, $course, $cm);
+$renderer = util::get_renderer();
 
 $peopledata = (object) array('people' => array(), 'total' => 0);
 
@@ -126,9 +127,7 @@ if (!empty($peopledatatemp)) {
     $usersactivitydata = user::get_all_users_activity_status($cminstance->id, $personidsarray);
 
     foreach ($personarray as $personid => $person) {
-        $picture = new user_picture($person);
-        $picture->size = 1;
-        $person->userpictureurl = $picture->get_url($PAGE)->out(false);
+        $person->userpicturehtml = util::render_user_avatar($renderer, $person);
         $person->userprogressdata = $usersactivitydata[$person->id];
         $person->userprogressdata['lastactivedate'] = userdate($person->userprogressdata['lastactivedate'],
                 get_string('formattimedatetime', 'openstudio'));
@@ -189,7 +188,6 @@ util::add_breadcrumb($PAGE, $cm->id, navigation_node::TYPE_ACTIVITY, $crumbarray
 $PAGE->requires->js_call_amd('mod_openstudio/peoplepage', 'init');
 
 // Generate stream html.
-$renderer = $PAGE->get_renderer('mod_openstudio');
 $PAGE->set_button($renderer->searchform($theme, $vid, $id));
 
 $html = $renderer->siteheader(

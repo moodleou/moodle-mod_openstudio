@@ -411,13 +411,27 @@ class util {
      */
     public static function render_user_avatar(
             \mod_openstudio_renderer $renderer, $user, $size = 16, $classname = '') {
-        $context = \context_user::instance($user->userid, IGNORE_MISSING);
+        $context = \context_user::instance($user->id, IGNORE_MISSING);
         if ($context) {
             $user->contextid = $context->id;
         }
 
         return $renderer->user_picture($user,
                 array('class' => $classname, 'size' => (int) $size, 'link' => false));
+    }
+
+    /**
+     * Obtains the openstudio renderer.
+     * @return \mod_openstudio_renderer Singleton renderer
+     */
+    public static function get_renderer(): \mod_openstudio_renderer {
+        // It probably doesn't take very long to construct one, but let's cache it anyhow
+        static $out;
+        if (!$out) {
+            global $PAGE;
+            $out = $PAGE->get_renderer('mod_openstudio');
+        }
+        return $out;
     }
 
     /**

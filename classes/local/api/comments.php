@@ -424,9 +424,8 @@ EOF;
                 $data->timemodified = util::get_time_since_readable($USER->id, $comment->timemodified);
 
                 // User picture.
-                $picture = new \user_picture($comment);
-                $picture->size = 1;
-                $data->userpicture = $picture->get_url($PAGE)->out(false);
+                $renderer = util::get_renderer();
+                $data->userpicturehtml = util::render_user_avatar($renderer, $comment);
 
                 $result[] = $data;
             }

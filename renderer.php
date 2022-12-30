@@ -1062,8 +1062,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
         if ($folderdata->userid) {
             $user = user::get_user_by_id($folderdata->userid);
-            $picture = new user_picture($user);
-            $folderdata->userpicturehtml = $OUTPUT->render($picture);
+            $renderer = util::get_renderer();
+            $folderdata->userpicturehtml = util::render_user_avatar($renderer, $user);
         }
 
         if ($folderdata->description) {

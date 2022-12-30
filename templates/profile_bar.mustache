@@ -27,7 +27,7 @@
 
     Example context (json):
     {
-        "userpictureurl" : "../../../mod/openstudio/pix/people_rgb_32px.svg",
+        "userpicturehtml" : "<span class="userinitials size-16">AU</span>",
         "commentsicon" : "../../../mod/openstudio/pix/comments_rgb_32px.svg",
         "viewedicon" : "../../../mod/openstudio/pix/viewed_rgb_32px.svg",
         "fullusername" : "Admin User",
@@ -40,7 +40,7 @@
 
 <div class="openstudio-profile-bar clearfix">
     <div class="openstudio-profile-user-picture">
-        <img class="defaultuserpic" src="{{{userpictureurl}}}">
+        {{{userpicturehtml}}}
     </div>
     <div class="openstudio-profile-head {{^activedate}}openstudio-profile-without-own-date{{/activedate}} clearfix">
         <div class="openstudio-profile-mypaticipation-content">

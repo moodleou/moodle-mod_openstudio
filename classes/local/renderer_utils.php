@@ -234,10 +234,8 @@ class renderer_utils {
         }
 
         // User picture.
-        $picture = new \user_picture($contentowner);
-        $picture->size = 1;
-        $contentdata->userpictureurl = $picture->get_url($PAGE)->out(false);
-
+        $renderer = util::get_renderer();
+        $contentdata->userpicturehtml = util::render_user_avatar($renderer, $contentowner);
         $contentdata->userprofileid = $contentowner->id;
         $contentdata->ismyprofile = $ismyprofile;
         $contentdata->fullusername = $contentowner->firstname.' '.$contentowner->lastname;
@@ -1671,9 +1669,8 @@ class renderer_utils {
                     $comment->fullname = fullname($user);
 
                     // User picture.
-                    $picture = new \user_picture($user);
-                    $picture->size = 1;
-                    $comment->userpictureurl = $picture->get_url($PAGE)->out(false);
+                    $renderer = util::get_renderer();
+                    $comment->userpicturehtml = util::render_user_avatar($renderer, $user);
 
                     // Check delete capability.
                     $comment->deleteenable = ($permissions->activeuserid == $comment->userid && $permissions->addcomment) ||

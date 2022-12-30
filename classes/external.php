@@ -867,11 +867,9 @@ class mod_openstudio_external extends external_api {
                     $commentdata->fullname = fullname($user);
 
                     // User picture.
-                    $picture = new user_picture($user);
-                    $picture->size = 1;
-                    $commentdata->userpictureurl = $picture->get_url($PAGE)->out(false);
+                    $renderer = util::get_renderer();
+                    $commentdata->userpicturhtml = util::render_user_avatar($renderer, $user);
 
-                    $renderer = $PAGE->get_renderer('mod_openstudio');
                     // Check comment attachment.
                     if ($file = comments::get_attachment($commentdata->id)) {
                         $commentdata->commenttext .= renderer_utils::get_media_filter_markup($file);
@@ -954,7 +952,7 @@ class mod_openstudio_external extends external_api {
                             'comment' => new external_value(PARAM_RAW, 'The comment of content'),
                             'contentid' => new external_value(PARAM_INT, 'The contentid of content'),
                             'userid' => new external_value(PARAM_INT, 'The userid of user'),
-                            'userpicture' => new external_value(PARAM_RAW, 'The userpicture of user'),
+                            'userpicturehtml' => new external_value(PARAM_RAW, 'The userpicture of user'),
                             'fullname' => new external_value(PARAM_RAW, 'The fullname of user'),
                             'isnewcomment' => new external_value(PARAM_BOOL, 'The flag to check comment is new'),
                             'commenturl' => new external_value(PARAM_RAW, 'The comment url of user'),

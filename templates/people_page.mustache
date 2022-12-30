@@ -25,7 +25,7 @@
     Data attributes required for JS:
     * none
 
-    
+
     Example context (json):
     {
         "people": [
@@ -33,7 +33,7 @@
                 "firstname" : "User",
                 "lastname" : "A",
                 "viewuserworkurl" : "http://example.com/mod/openstudio/view.php?id=3",
-                "userpictureurl" : "../../../mod/openstudio/pix/people_rgb_32px.svg",
+                "userpicturehtml" : "<span class="userinitials size-16">UA</span>",
                 "viewuserworkurl" : "http://example.com/mod/openstudio/view.php?id=3&sid=9",
                 "commentsicon" : "../../../mod/openstudio/pix/comments_rgb_32px.svg",
                 "viewedicon": "../../../mod/openstudio/pix/viewed_rgb_32px.svg",
@@ -48,7 +48,7 @@
                 "firstname" : "User",
                 "lastname" : "B",
                 "viewuserworkurl" : "http://example.com/mod/openstudio/view.php?id=3",
-                "userpictureurl" : "../../../mod/openstudio/pix/people_rgb_32px.svg",
+                "userpicturehtml" : "<span class="userinitials size-16">UB</span>",
                 "viewuserworkurl" : "http://example.com/mod/openstudio/view.php?id=3&sid=9",
                 "commentsicon" : "../../../mod/openstudio/pix/comments_rgb_32px.svg",
                 "viewedicon": "../../../mod/openstudio/pix/viewed_rgb_32px.svg",
@@ -63,7 +63,7 @@
                 "firstname" : "User",
                 "lastname" : "C",
                 "viewuserworkurl" : "http://example.com/mod/openstudio/view.php?id=3",
-                "userpictureurl" : "../../../mod/openstudio/pix/people_rgb_32px.svg",
+                "userpicturehtml" : "<span class="userinitials size-16">UC</span>",
                 "viewuserworkurl" : "http://example.com/mod/openstudio/view.php?id=3&sid=9",
                 "commentsicon" : "../../../mod/openstudio/pix/comments_rgb_32px.svg",
                 "viewedicon": "../../../mod/openstudio/pix/viewed_rgb_32px.svg",
@@ -100,7 +100,7 @@
         ]
     }
 }}
-                                                    
+
 <div class="openstudio-container openstudio-people-page">
     <div class="openstudio-module-title">
         <h1>{{#str}} menupeople, mod_openstudio {{/str}}</h1>
@@ -118,9 +118,7 @@
         <div class="openstudio-profile-row clearfix">
             <div class="openstudio-profile-info">
                 <div class="openstudio-profile-img">
-                    <img class="defaultuserpic" src="{{{userpictureurl}}}"
-                         alt="{{#str}} contentitempicture, mod_openstudio {{/str}} {{{firstname}}} {{{lastname}}}"
-                         title="{{#str}} contentitempicture, mod_openstudio {{/str}} {{{firstname}}} {{{lastname}}}">
+                    {{{userpicturehtml}}}
                 </div>
                 <div class="openstudio-profile-description">
                     <h4 class="openstudio-profile-name">{{{firstname}}} {{{lastname}}}</h4>

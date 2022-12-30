@@ -39,7 +39,7 @@
                 "contentid": 2,
                 "commenttext": "Something went right",
                 "userid": 1,
-                "userpicture": "<img src=\"http://placehold.it/48/48\" width=\"48\" height=\"48\" alt=\"Image of User 1\" />",
+                "userpicturehtml": "<span class="userinitials size-16">LI</span>",
                 "fullname": "Lorem ipsum",
                 "timemodified": "3 hours ago"
             },
@@ -49,7 +49,7 @@
                 "contentid": 2,
                 "commenttext": "Something went right",
                 "userid": 1,
-                "userpicture": "<img src=\"http://placehold.it/48/48\" width=\"48\" height=\"48\" alt=\"Image of User 1\" />",
+                "userpicturehtml" : "<span class="userinitials size-16">LI</span>",
                 "fullname": "Lorem ipsum",
                 "timemodified": "3 hours ago"
             },
@@ -58,7 +58,7 @@
 }}
 {{#commentlist}}
     <li class="openstudio-notification openstudio-notification-{{#isnewcomment}}unread{{/isnewcomment}}{{^isnewcomment}}read{{/isnewcomment}}">
-        <img class="defaultuserpic" src="{{{userpicture}}}" alt="{{{fullname}}}"/>
+        {{{userpicturehtml}}}
         <div class="openstudio-notification-body">
             <p class="comment-title">{{#str}}commentuserboxcontentblock, mod_openstudio, {{fullname}}{{/str}}</p>
             <a href="{{{commenturl}}}" class="comment-text-link">{{{comment}}}</a>
