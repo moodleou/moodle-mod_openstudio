@@ -665,7 +665,7 @@ class content_test extends \advanced_testcase {
 
         // Check we've extracted the known GPS data from the image.
         $this->assertEquals(32.211898833055557, $info['GPSData']['lat']);
-        $this->assertEquals(-110.72466283333, $info['GPSData']['lng']);
+        $this->assertEquals((string) -110.72466283333, (string) $info['GPSData']['lng']);
 
     }
 
