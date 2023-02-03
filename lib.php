@@ -66,10 +66,10 @@ function openstudio_supports($feature) {
             return true;
 
         case FEATURE_COMPLETION_TRACKS_VIEWS:
-            return false;
+            return true;
 
         case FEATURE_COMPLETION_HAS_RULES:
-            return false;
+            return true;
 
         case FEATURE_GRADE_HAS_GRADE:
             return false;
@@ -1269,4 +1269,40 @@ function openstudio_extract_blocks_activities(?array $activities = null, string 
     }
 
     return [$blockids, $activityids];
+}
+
+/**
+ * Add a get_coursemodule_info function in case any openstudio type wants to add 'extra' information
+ * for the course (see resource).
+ *
+ * Given a course_module object, this function returns any "extra" information that may be needed
+ * when printing this activity in a course listing. See get_array_of_activities() in course/lib.php.
+ *
+ * @param stdClass $coursemodule The coursemodule object (record).
+ * @return cached_cm_info An object on information that the courses
+ *                        will know about (most noticeably, an icon).
+ */
+function openstudio_get_coursemodule_info($coursemodule) {
+    global $DB;
+
+    $completioncustomrules = \mod_openstudio\completion\custom_completion::get_defined_custom_rules();
+    $completionfields = implode(', ', $completioncustomrules);
+    $dbparams = ['id' => $coursemodule->instance];
+    $fields = 'id, name, intro, introformat, ' . $completionfields;
+    if (!$openstudio = $DB->get_record('openstudio', $dbparams, $fields)) {
+        return false;
+    }
+
+    $info = new cached_cm_info();
+    $info->customdata = (object) [];
+    $info->customdata->customcompletionrules = [];
+
+    // Populate the custom completion rules as key => value pairs, but only if the completion mode is 'automatic'.
+    if ($coursemodule->completion == COMPLETION_TRACKING_AUTOMATIC) {
+        foreach ($completioncustomrules as $rule) {
+            $info->customdata->customcompletionrules[$rule] = $openstudio->{$rule};
+        }
+    }
+
+    return $info;
 }

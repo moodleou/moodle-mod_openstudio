@@ -25,6 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+use mod_openstudio\completion\custom_completion;
 use mod_openstudio\local\util\defaults;
 use mod_openstudio\local\api\search;
 use mod_openstudio\local\api\stream;
@@ -817,6 +818,7 @@ class mod_openstudio_external extends external_api {
         // Check if user has permission to add content.
         $actionallowed = $permissions->addcomment || $permissions->managecontent;
         $flagsenabled = explode(',', $permissions->flags);
+        $successcreated = false;
 
         if ($actionallowed) {
             $transaction = $DB->start_delegated_transaction();
@@ -887,6 +889,8 @@ class mod_openstudio_external extends external_api {
                     $commenthtml = $renderer->content_comment($commentdata);
 
                     $transaction->allow_commit();
+
+                    $successcreated = true;
                 } else {
                     // Comment empty error.
                     $transaction->rollback(new \moodle_exception('emptycomment', 'openstudio'));
@@ -898,6 +902,11 @@ class mod_openstudio_external extends external_api {
         } else {
             // No permision.
             throw new \moodle_exception('nocommentpermissions', 'openstudio');
+        }
+
+        // The lib/completionlib.php - internal_set_data used its own transaction.
+        if ($successcreated) {
+            custom_completion::update_completion($cm, $userid, COMPLETION_COMPLETE);
         }
 
         return [
@@ -1098,7 +1107,7 @@ class mod_openstudio_external extends external_api {
      * @throws moodle_exception
      */
     public static function delete_comment($cmid, $commentid) {
-        global $USER;
+        global $USER, $DB;
         $userid = $USER->id;
 
         // Validate input parameters.
@@ -1108,6 +1117,7 @@ class mod_openstudio_external extends external_api {
 
         // Init and check permission.
         $coursedata = util::render_page_init($params['cmid'], array('mod/openstudio:addcomment'));
+        $cm = $coursedata->cm;
         $permissions = $coursedata->permissions;
 
         $comment = comments::get($params['commentid']);
@@ -1120,11 +1130,15 @@ class mod_openstudio_external extends external_api {
         if ($actionallowed) {
             try {
                 if ($comment) {
+                    $allreplyusers = !$comment->inreplyto
+                            ? comments::get_all_users_from_root_comment_id($params['commentid'], COMPLETION_UNKNOWN)
+                            : [];
                     $success = comments::delete($params['commentid'], $userid);
                     notifications::delete_unread_for_comment($params['commentid']);
                     if (!$success) {
                         throw new \moodle_exception('commenterror', 'openstudio');
                     }
+                    custom_completion::update_completion($cm, $comment->userid, COMPLETION_INCOMPLETE, $allreplyusers);
                 } else {
                     throw new \moodle_exception('errorinvalidcomment', 'openstudio');
                 }

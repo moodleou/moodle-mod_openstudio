@@ -24,6 +24,7 @@
 
 namespace mod_openstudio\local\api;
 
+use mod_openstudio\completion\custom_completion;
 use mod_openstudio\local\util\defaults;
 use mod_openstudio\local\api\levels;
 use mod_openstudio\local\api\tracking;
@@ -372,6 +373,12 @@ EOF;
 
             // Log content hash for slot.
             item::log($contentid);
+
+            if ($cm == null) {
+                $cm = get_coursemodule_from_instance('openstudio', $studioid);
+            }
+            // May result in user changes.
+            custom_completion::update_completion($cm, $userid, COMPLETION_COMPLETE);
         }
 
         return $contentid;
@@ -401,6 +408,8 @@ EOF;
 
         // Init provenance data.
         $provenanceupdate = null;
+
+        $success = false;
 
         try {
             $transaction = $DB->start_delegated_transaction();
@@ -689,12 +698,23 @@ EOF;
                 search::update($cm, $contentdata);
             }
 
-            return $contentdata->id;
+            $success = $contentdata->id;
         } catch (\Exception $e) {
             $transaction->rollback($e);
         }
 
-        return false;
+        // Moodle core uses their own transaction for update_completion.
+        // Have to do with this flag success to prevent multiple transaction calls.
+        if ($success) {
+            $cmcompletion = $cm;
+            if ($cmcompletion == null) {
+                $cmcompletion = get_coursemodule_from_instance('openstudio', $contentdata->openstudioid);
+            }
+            // May result in user changes.
+            custom_completion::update_completion($cmcompletion, $contentdata->userid, COMPLETION_UNKNOWN);
+        }
+
+        return $success;
     }
 
     /**
@@ -757,12 +777,16 @@ EOF;
      */
     public static function empty_content($userid, $contentid, $deleteversions = true, $versioncount = 0, $cm = null) {
         global $DB;
+        $success = false;
 
         try {
             $transaction = $DB->start_delegated_transaction();
 
             $contentdata = $DB->get_record('openstudio_contents',
                     array('id' => $contentid), '*', MUST_EXIST);
+
+            // Prepare for custom completion.
+            $userinvolved = comments::get_all_users_from_content_id($contentdata->id, COMPLETION_UNKNOWN);
 
             // Delete search index for old record.
             if (($cm != null) && ($contentdata != false)) {
@@ -888,12 +912,22 @@ EOF;
 
             $transaction->allow_commit();
 
-            return true;
+            $success = true;
         } catch (\Exception $e) {
             $transaction->rollback($e);
         }
 
-        return false;
+        // Moodle core uses their own transaction for update_completion.
+        // Have to do with this flag success to prevent multiple transaction calls.
+        if ($success === true) {
+            if ($cm == null) {
+                $cm = get_coursemodule_from_instance('openstudio', $contentdata->openstudioid);
+            }
+            // May result in user changes.
+            custom_completion::update_completion($cm, $userid, COMPLETION_INCOMPLETE, $userinvolved);
+        }
+
+        return $success;
     }
 
     /**

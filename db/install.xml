@@ -38,6 +38,9 @@
         <FIELD NAME="themehelpname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Currently not being used"/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Time (in seconds since epoch)."/>
         <FIELD NAME="latesubmissionmessage" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Warning message displayed for late submissions"/>
+        <FIELD NAME="completionposts" TYPE="int" LENGTH="9" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Nonzero if a certain number of contents are required to mark this openstudio completed for a user."/>
+        <FIELD NAME="completioncomments" TYPE="int" LENGTH="9" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Nonzero if a certain number of comments are required to mark this openstudio complete for a user."/>
+        <FIELD NAME="completionpostscomments" TYPE="int" LENGTH="9" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Nonzero if a certain number of contents or comments (total) are required to mark this openstudio complete for a user."/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

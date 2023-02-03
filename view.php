@@ -994,6 +994,10 @@ $contentdata->quickselectlist = filter::build_quick_select_filter($vid, $quickse
 // Set params used for preferences filter.
 $contentdata->quickselect = $quickselect;
 
+// Update completion 'viewed' flag if in use.
+$completion = new completion_info($course);
+$completion->set_module_viewed($cm);
+
 echo $OUTPUT->header(); // Header.
 
 echo $html;

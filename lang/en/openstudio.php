@@ -56,6 +56,23 @@ $string['openstudio:viewparticipation'] = 'View user progress';
 $string['lastmodified'] = 'Last upload: {$a}';
 $string['strftimerecent'] = '%d %B %y, %H:%M';
 
+$string['completionposts'] = 'User must upload content:';
+$string['completionpostsgroup'] = 'Require posts';
+$string['completionpostsgroup_help'] = 'If ticked, OpenStudio will be marked complete for a student once they have created the required number of posts (and met any other conditions).';
+
+$string['completioncomments'] = 'User must comment on uploaded content:';
+$string['completioncommentsgroup'] = 'Require comments';
+$string['completioncommentsgroup_help'] = 'If ticked, OpenStudio will be marked complete for a student once they have met the required number of new comments on uploaded content (and met any other conditions).';
+
+$string['completionpostscomments'] = 'User must post content and add comments to the combined total specified:';
+$string['completionpostscommentsgroup'] = 'Require both posts and comments';
+$string['completionpostscommentsgroup_help'] = 'If ticked, OpenStudio will be marked complete for a student once they have met the total specified here, through any combination of posts and comments (and met any other conditions).';
+
+$string['completiondetail:posts'] = 'Make contents: {$a}';
+$string['completiondetail:comments'] = 'Make comments: {$a}';
+$string['completiondetail:postscomments'] = 'Make contents and comments: {$a}';
+
+
 $string['event:contentviewed'] = 'View content';
 $string['event:folderviewed'] = 'View folder';
 $string['event:contenthistoryviewed'] = 'View content history';

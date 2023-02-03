@@ -29,6 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
 
+use mod_openstudio\completion\custom_completion;
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\flags;
 use mod_openstudio\local\util\defaults;
@@ -380,6 +381,26 @@ class mod_openstudio_mod_form extends moodleform_mod {
             $defaultvalues['enableparticipationsmiley'] = 0;
             $defaultvalues['allowlatesubmissions'] = 0;
         }
+
+        // Set up the completion checkboxes which aren't part of standard data.
+        // We also make the default value (if you turn on the checkbox) for those
+        // numbers to be 1, this will not apply unless checkbox is ticked.
+        $defaultvalues[custom_completion::COMPLETION_POSTS_ENABLED] =
+                !empty($defaultvalues[custom_completion::COMPLETION_POSTS]) ? 1 : 0;
+        if (empty($defaultvalues[custom_completion::COMPLETION_POSTS])) {
+            $defaultvalues[custom_completion::COMPLETION_POSTS] = 1;
+        }
+        $defaultvalues[custom_completion::COMPLETION_COMMENTS_ENABLED] =
+                !empty($defaultvalues[custom_completion::COMPLETION_COMMENTS]) ? 1 : 0;
+        if (empty($defaultvalues[custom_completion::COMPLETION_COMMENTS])) {
+            $defaultvalues[custom_completion::COMPLETION_COMMENTS] = 1;
+        }
+
+        $defaultvalues[custom_completion::COMPLETION_POSTS_COMMENTS_ENABLED] =
+                !empty($defaultvalues[custom_completion::COMPLETION_POSTS_COMMENTS]) ? 1 : 0;
+        if (empty($defaultvalues[custom_completion::COMPLETION_POSTS_COMMENTS])) {
+            $defaultvalues[custom_completion::COMPLETION_POSTS_COMMENTS] = 1;
+        }
     }
 
     /**
@@ -396,5 +417,62 @@ class mod_openstudio_mod_form extends moodleform_mod {
             $errors['enablemodule'] = get_string('errorsharinglevel', 'openstudio');
         }
         return $errors;
+    }
+
+    public function add_completion_rules(): array {
+        $mform = $this->_form;
+
+        $rules = [];
+
+        foreach (custom_completion::get_defined_custom_rules() as $name) {
+            $groupname = $name . 'group';
+            $checkboxname = $name . 'enabled';
+            $group = [];
+            $group[] =& $mform->createElement('checkbox', $checkboxname, '',
+                    get_string($name, 'openstudio'));
+            $group[] =& $mform->createElement('text', $name, '', ['size' => 3]);
+            $mform->setType($name, PARAM_INT);
+            $mform->addGroup($group, $groupname,
+                    get_string($groupname, 'openstudio'), [' '], false);
+            $mform->addHelpButton($groupname, $groupname, 'openstudio');
+            $mform->disabledIf($name, $checkboxname, 'notchecked');
+
+            $rules[] = $name . 'group';
+        }
+
+        return $rules;
+    }
+
+    public function completion_rule_enabled($data): bool {
+        return (!empty($data[custom_completion::COMPLETION_POSTS_ENABLED])
+                        && $data[custom_completion::COMPLETION_POSTS] != 0)
+                || (!empty($data[custom_completion::COMPLETION_COMMENTS_ENABLED])
+                        && $data[custom_completion::COMPLETION_COMMENTS] != 0)
+                || (!empty($data[custom_completion::COMPLETION_POSTS_COMMENTS_ENABLED])
+                        && $data[custom_completion::COMPLETION_POSTS_COMMENTS] != 0);
+    }
+
+    public function get_data() {
+        $data = parent::get_data();
+        if (!$data) {
+            return false;
+        }
+
+        // Turn off completion settings if the checkboxes aren't ticked.
+        if (!empty($data->completionunlocked)) {
+            $autocompletion = !empty($data->completion) &&
+                    $data->completion == COMPLETION_TRACKING_AUTOMATIC;
+            if (empty($data->{custom_completion::COMPLETION_POSTS_ENABLED}) || !$autocompletion) {
+                $data->{custom_completion::COMPLETION_POSTS} = 0;
+            }
+            if (empty($data->{custom_completion::COMPLETION_COMMENTS_ENABLED}) || !$autocompletion) {
+                $data->{custom_completion::COMPLETION_COMMENTS} = 0;
+            }
+            if (empty($data->{custom_completion::COMPLETION_POSTS_COMMENTS_ENABLED}) || !$autocompletion) {
+                $data->{custom_completion::COMPLETION_POSTS_COMMENTS} = 0;
+            }
+        }
+
+        return $data;
     }
 }

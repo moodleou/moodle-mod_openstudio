@@ -143,6 +143,21 @@ function xmldb_openstudio_upgrade($oldversion=0) {
         upgrade_mod_savepoint(true, 2022111400, 'openstudio');
     }
 
+    if ($oldversion < 2023010500) {
+        $fields = \mod_openstudio\completion\custom_completion::get_defined_custom_rules();
+
+        foreach ($fields as $namefield) {
+            $table = new xmldb_table('openstudio');
+            $field = new xmldb_field($namefield, XMLDB_TYPE_INTEGER, '9', null, XMLDB_NOTNULL, null, 0);
+
+            // Conditionally launch add field.
+            if (!$dbman->field_exists($table, $field)) {
+                $dbman->add_field($table, $field);
+            }
+        }
+        upgrade_mod_savepoint(true, 2023010500, 'openstudio');
+    }
+
     // Must always return true from these functions.
     return $result;
 }

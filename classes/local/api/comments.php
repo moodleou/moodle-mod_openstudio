@@ -522,4 +522,68 @@ EOF;
         $usercontext = \context_user::instance($USER->id);
         $fs->delete_area_files($usercontext->id, 'user', 'draft', $draftid);
     }
+
+    /**
+     * Get all users commented on a content.
+     *
+     * @param int $contentid
+     * @param int $defaultvalue
+     * @return array
+     */
+    public static function get_all_users_from_content_id(int $contentid, int $defaultvalue): array {
+        global $DB;
+
+        $sql = "
+                SELECT DISTINCT oc.userid
+                  FROM {openstudio_comments} oc
+                 WHERE oc.contentid = ?
+            ";
+
+        $users = $DB->get_records_sql($sql, [$contentid]);
+
+        $result = [];
+
+        if (!empty($users)) {
+            foreach ($users as $user) {
+                if (isset($result[$user->userid])) {
+                    continue;
+                }
+                $result[$user->userid] = $defaultvalue;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get all users replied on a root comment.
+     *
+     * @param int $commentid
+     * @param int $defaultvalue
+     * @return array
+     */
+    public static function get_all_users_from_root_comment_id(int $commentid, int $defaultvalue): array {
+        global $DB;
+
+        $sql = "
+                SELECT DISTINCT oc.userid
+                  FROM {openstudio_comments} oc
+                 WHERE oc.inreplyto = ?
+            ";
+
+        $users = $DB->get_records_sql($sql, [$commentid]);
+
+        $result = [];
+
+        if (!empty($users)) {
+            foreach ($users as $user) {
+                if (isset($result[$user->userid])) {
+                    continue;
+                }
+                $result[$user->userid] = $defaultvalue;
+            }
+        }
+
+        return $result;
+    }
 }

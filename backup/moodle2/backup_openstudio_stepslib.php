@@ -42,14 +42,17 @@ class backup_openstudio_activity_structure_step extends backup_activity_structur
      */
     protected function define_structure() {
         // Define each element separated.
-        $studio = new backup_nested_element('openstudio', array('id'),
-            array('course', 'name', 'intro', 'introformat', 'contentmaxbytes',
+        $studiofields = [
+                'course', 'name', 'intro', 'introformat', 'contentmaxbytes',
                 'reportingemail', 'defaultvisibility', 'allowedvisibility',
                 'versioning', 'copying', 'flags', 'filetypes', 'sitename', 'pinboard',
                 'pinboardname', 'level1name', 'level2name', 'level3name',
                 'thememodulename', 'themegroupname', 'themestudioname', 'themepinboardname',
                 'themefeatures', 'themehomedefault', 'themehelplink', 'themehelpname',
-                'locking', 'pinboardsetlimit', 'tutorroles', 'timemodified', 'latesubmissionmessage'));
+                'locking', 'pinboardsetlimit', 'tutorroles', 'timemodified', 'latesubmissionmessage',
+        ];
+        $studiofields = array_merge($studiofields, \mod_openstudio\completion\custom_completion::get_defined_custom_rules());
+        $studio = new backup_nested_element('openstudio', ['id'], $studiofields);
 
         $level1 = new backup_nested_element('openstudio_level1', array('id'),
             array('openstudioid', 'name', 'required', 'status', 'sortorder'));

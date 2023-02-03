@@ -143,6 +143,49 @@ class comments_test extends \advanced_testcase {
     }
 
     /**
+     * @depends test_comments_api_create
+     */
+    public function test_get_userids_commented_on_content(): void {
+        $this->resetAfterTest(true);
+        $this->singleentrydata = $this->generator->generate_single_data_array($this->users->students->one);
+        $this->contentdata = $this->generator->generate_content_data(
+                $this->studiolevels, $this->users->students->one->id, $this->singleentrydata);
+
+        comments::create($this->contentdata->id, $this->users->students->four->id, 'Fire and Blood');
+        comments::create($this->contentdata->id, $this->users->students->three->id, 'Fire and Blood');
+
+        $results = comments::get_all_users_from_content_id($this->contentdata->id, 1);
+
+        $this->assertArrayHasKey($this->users->students->four->id, $results);
+        $this->assertSame(1, $results[$this->users->students->four->id]);
+        $this->assertArrayHasKey($this->users->students->three->id, $results);
+        $this->assertSame(1, $results[$this->users->students->three->id]);
+    }
+
+    /**
+     * @depends test_comments_api_create
+     */
+    public function test_get_userids_replied_on_comment(): void {
+        $this->resetAfterTest(true);
+        $this->singleentrydata = $this->generator->generate_single_data_array($this->users->students->one);
+        $this->contentdata = $this->generator->generate_content_data(
+                $this->studiolevels, $this->users->students->one->id, $this->singleentrydata);
+
+        $commentid = comments::create($this->contentdata->id, $this->users->students->four->id, 'Fire and Blood');
+        comments::create($this->contentdata->id, $this->users->students->two->id, 'Fire and Blood',
+                null, null, null, $commentid);
+        comments::create($this->contentdata->id, $this->users->students->three->id, 'Fire and Blood',
+                null, null, null, $commentid);
+
+        $results = comments::get_all_users_from_root_comment_id($commentid, 1);
+
+        $this->assertArrayHasKey($this->users->students->two->id, $results);
+        $this->assertSame(1, $results[$this->users->students->two->id]);
+        $this->assertArrayHasKey($this->users->students->three->id, $results);
+        $this->assertSame(1, $results[$this->users->students->three->id]);
+    }
+
+    /**
      * Tests the mod_openstudio\local\api\comments::delete() and mod_openstudio\local\api\comments::delete_all() functions
      */
     public function test_comments_api_delete() {
