@@ -410,7 +410,7 @@ class util {
      * @return string Return HTML that renders user avatar.
      */
     public static function render_user_avatar(
-            \mod_openstudio_renderer $renderer, $user, $size = 16, $classname = '') {
+            \mod_openstudio_renderer $renderer, $user, $size = 1, $classname = '') {
         $context = \context_user::instance($user->id, IGNORE_MISSING);
         if ($context) {
             $user->contextid = $context->id;
