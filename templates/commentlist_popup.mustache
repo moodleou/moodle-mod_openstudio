@@ -58,7 +58,9 @@
 }}
 {{#commentlist}}
     <li class="openstudio-notification openstudio-notification-{{#isnewcomment}}unread{{/isnewcomment}}{{^isnewcomment}}read{{/isnewcomment}}">
-        {{{userpicturehtml}}}
+        <div class="openstudio-notification-body-owner-img">
+            {{{userpicturehtml}}}
+        </div>
         <div class="openstudio-notification-body">
             <p class="comment-title">{{#str}}commentuserboxcontentblock, mod_openstudio, {{fullname}}{{/str}}</p>
             <a href="{{{commenturl}}}" class="comment-text-link">{{{comment}}}</a>
