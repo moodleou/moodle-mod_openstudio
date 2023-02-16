@@ -527,7 +527,16 @@
 }
 
 .openstudio-notification {
+    display: flex;
     padding: 15px;
+}
+
+.openstudio-notification .openstudio-notification-body-img img,
+.openstudio-notification .openstudio-notification-body-img span.userinitials {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin-right: 5px;
 }
 
 .openstudio-notification-none {
@@ -539,10 +548,6 @@
 .openstudio-notification-body {
     display: inline-block;
     vertical-align: top;
-}
-
-.openstudio-notification .userpicture {
-    margin-right: 5px;
 }
 
 .openstudio-notification-body {
@@ -2982,7 +2987,8 @@ body .openstudio-grid-item-content-title a:focus {
 
 .openstudio-grid-item-content-detail-owner-img img,
 .openstudio-grid-item-content-detail-owner-img span.userinitials,
-.openstudio-notification-body-owner-img img {
+.openstudio-notification-body-owner-img img,
+.openstudio-notification-body-owner-img span.userinitials {
     width: 30px;
     height: 30px;
     border-radius: 50%;
@@ -6440,7 +6446,8 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-grid-item-content-detail-owner-img img,
     .openstudio-grid-item-content-detail-owner-img span.userinitials,
-    .openstudio-notification-body-owner-img img {
+    .openstudio-notification-body-owner-img img,
+    .openstudio-notification-body-owner-img span.userinitials {
         width: 46px;
         height: 46px;
     }

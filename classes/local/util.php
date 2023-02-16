@@ -410,10 +410,15 @@ class util {
      * @return string Return HTML that renders user avatar.
      */
     public static function render_user_avatar(
-            \mod_openstudio_renderer $renderer, $user, $size = 1, $classname = '') {
+            \mod_openstudio_renderer $renderer, $user, $size = 35, $classname = '') {
         $context = \context_user::instance($user->id, IGNORE_MISSING);
         if ($context) {
             $user->contextid = $context->id;
+        }
+
+        // When the user image is set, we should set the size to 1 so that the image is not blurred on the content page.
+        if ($user->picture != 0) {
+            $size = 1;
         }
 
         return $renderer->user_picture($user,
@@ -425,7 +430,7 @@ class util {
      * @return \mod_openstudio_renderer Singleton renderer
      */
     public static function get_renderer(): \mod_openstudio_renderer {
-        // It probably doesn't take very long to construct one, but let's cache it anyhow
+        // It probably doesn't take very long to construct one, but let's cache it anyhow.
         static $out;
         if (!$out) {
             global $PAGE;
