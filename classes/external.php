@@ -868,7 +868,7 @@ class mod_openstudio_external extends external_api {
 
                     // User picture.
                     $renderer = util::get_renderer();
-                    $commentdata->userpicturhtml = util::render_user_avatar($renderer, $user);
+                    $commentdata->userpicturehtml = util::render_user_avatar($renderer, $user);
 
                     // Check comment attachment.
                     if ($file = comments::get_attachment($commentdata->id)) {

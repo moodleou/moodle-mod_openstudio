@@ -88,6 +88,7 @@ class external_test extends \advanced_testcase {
      * Tests mod_openstudio_external::add_comment success.
      */
     public function test_add_comment_success(): void {
+        global $OUTPUT;
         $this->resetAfterTest(true);
         $this->singleentrydata = $this->generator->generate_single_data_array();
         $this->contentdata = $this->generator->generate_content_data(
@@ -99,13 +100,16 @@ class external_test extends \advanced_testcase {
                 'Test');
         $this->assertArrayHasKey('commentid', $comment);
         $this->assertIsInt($comment['commentid']);
-
+        $this->assertStringContainsString($OUTPUT->user_picture($this->users->students->one,
+                ['size' => 100, 'link' => false]), $comment['commenthtml']);
         // User 2 login and tries to reply to comment of user 1.
         $this->setUser($this->users->students->two);
         $reply = mod_openstudio_external::add_comment($this->studiolevels->cmid, $this->contentdata->id,
                 'Test', 0, $comment['commentid']);
         $this->assertArrayHasKey('commentid', $reply);
         $this->assertIsInt($reply['commentid']);
+        $this->assertStringContainsString($OUTPUT->user_picture($this->users->students->two,
+                ['size' => 100, 'link' => false]), $reply['commenthtml']);
     }
 
     /**
