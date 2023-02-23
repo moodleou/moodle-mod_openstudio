@@ -101,7 +101,7 @@ class external_test extends \advanced_testcase {
         $this->assertArrayHasKey('commentid', $comment);
         $this->assertIsInt($comment['commentid']);
         $this->assertStringContainsString($OUTPUT->user_picture($this->users->students->one,
-                ['size' => 100, 'link' => false]), $comment['commenthtml']);
+                ['size' => 35, 'link' => false]), $comment['commenthtml']);
         // User 2 login and tries to reply to comment of user 1.
         $this->setUser($this->users->students->two);
         $reply = mod_openstudio_external::add_comment($this->studiolevels->cmid, $this->contentdata->id,
@@ -109,7 +109,7 @@ class external_test extends \advanced_testcase {
         $this->assertArrayHasKey('commentid', $reply);
         $this->assertIsInt($reply['commentid']);
         $this->assertStringContainsString($OUTPUT->user_picture($this->users->students->two,
-                ['size' => 100, 'link' => false]), $reply['commenthtml']);
+                ['size' => 35, 'link' => false]), $reply['commenthtml']);
     }
 
     /**
