@@ -30,8 +30,9 @@ define([
     'core/str',
     'mod_openstudio/scrollto',
     'require',
-    'core/notification'
-], function($, Ajax, Str, Scrollto, require, Notification) {
+    'core/notification',
+    'core_form/changechecker'
+], function($, Ajax, Str, Scrollto, require, Notification, FormChangeChecker) {
     var t;
     t = {
 
@@ -65,6 +66,7 @@ define([
             COMMENT_FORM: '.openstudio-comment-form', // Comment form wrapper.
             COMMENT_REPLY_FORM: '.openstudio-comment-reply-form', // Reply form wrapper.
             COMMENT_ATTACHMENT: '.openstudio-comment-form-content .filepicker-filename > a', // Attachment.
+            COMMENT_POST_BUTTON: '#id_postcomment',
 
             // Stream.
             COMMENT_THREAD: '.openstudio-comment-thread', // Comment thread wrapper.
@@ -275,6 +277,8 @@ define([
                     if (window.oump) {
                         window.oump.harvest();
                     }
+                    // Reset the 'dirty' flag of the comment form.
+                    FormChangeChecker.resetFormDirtyState($(t.CSS.COMMENT_POST_BUTTON)[0]);
                 })
                 .always(function() {
                     M.util.js_complete('openstudioPostComment');
