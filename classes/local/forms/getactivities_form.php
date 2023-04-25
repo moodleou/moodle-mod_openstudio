@@ -44,7 +44,7 @@ class getactivities_form extends \moodleform {
 
         $blocksobj = levels::get_records(1, $studioid);
         if ($blocksobj == false) {
-            print_error(get_string('errornoblocks', 'openstudio'));
+            throw new \moodle_exception('errornoblocks', 'openstudio');
         }
         $blocksarr = array();
         foreach ($blocksobj as $block) {

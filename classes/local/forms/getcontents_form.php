@@ -45,7 +45,7 @@ class getcontents_form extends \moodleform {
         if ($this->_customdata['l1id'] < 1) {
             $blocksobj = levels::get_records(1, $studioid);
             if ($blocksobj == false) {
-                print_error(get_string('errornoblocks', 'openstudio'));
+                throw new \moodle_exception('errornoblocks', 'openstudio');
             }
 
             $blocksarr = array();
@@ -71,7 +71,7 @@ class getcontents_form extends \moodleform {
 
             $activitiesobj = levels::get_records(2, $this->_customdata['l1id']);
             if ($activitiesobj == false) {
-                print_error(get_string('errornoactivities', 'openstudio'));
+                throw new \moodle_exception('errornoactivities', 'openstudio');
             }
 
             $activitiesarr = array();

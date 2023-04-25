@@ -111,7 +111,7 @@ class import {
 
         // Before we proceed, let's check if we can import all of these files.
         if (!self::check_import_limit($cm->instance, $userid, $files['files'])) {
-            print_error(get_string('import_limit_hit', 'openstudio'));
+            throw new \moodle_exception('import_limit_hit', 'openstudio');
         }
 
         // Get the empty contents.

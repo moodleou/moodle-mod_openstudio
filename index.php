@@ -31,7 +31,7 @@ require_once($CFG->dirroot . '/mod/openstudio/lib.php');
 $id = required_param('id', PARAM_INT); // Course id.
 
 if (! ($course = $DB->get_record('course', array('id' => $id)))) {
-    print_error('invalidcourseid');
+    throw new \moodle_exception('invalidcourseid');
 }
 
 require_login($course);

@@ -87,7 +87,7 @@ if ($sid == 0) {
         if (($sid == 0) && ($lid == 0)) {
             $returnurl = new moodle_url('/mod/openstudio/view.php',
                     array('id' => $cm->id, 'vid' => content::VISIBILITY_PRIVATE_PINBOARD));
-            print_error('errornopermissiontoaddcontent', 'openstudio', $returnurl->out(false));
+            throw new \moodle_exception('errornopermissiontoaddcontent', 'openstudio', $returnurl->out(false));
         }
     }
 }
@@ -125,7 +125,7 @@ $contenttype = content::TYPE_NONE;
 if ($sid > 0) {
     $contentdata = content::get_record($userid, $sid);
     if ($contentdata === false) {
-        print_error('errorinvalidcontent', 'openstudio', $returnurl->out(false));
+        throw new \moodle_exception('errorinvalidcontent', 'openstudio', $returnurl->out(false));
     }
     $lid = $contentdata->levelid;
     $contenttype = $contentdata->contenttype;
@@ -137,7 +137,7 @@ $contentisinpinboard = false;
 if ($lid > 0) {
     $level3data = levels::get_record(defaults::CONTENTLEVELCONTAINER, $lid);
     if ($level3data === false) {
-        print_error('errorinvalidcontent', 'openstudio', $returnurl->out(false));
+        throw new \moodle_exception('errorinvalidcontent', 'openstudio', $returnurl->out(false));
     }
     if ($type == content::TYPE_FOLDER_CONTENT) {
         $contentdata->contenttype = $type;
@@ -162,7 +162,7 @@ $permissions->pinboardfolderlimit = 100;
 // Check if its a new folder content.
 if (($type == content::TYPE_FOLDER_CONTENT) && ($sid == 0)) {
     if ($folderid === null) {
-        print_error('errornofolder', 'openstudio', $returnurl->out(false));
+        throw new \moodle_exception('errornofolder', 'openstudio', $returnurl->out(false));
     }
     $foldertemplatecontentid = optional_param('sstsid', 0, PARAM_INT);
     if ($folderid > 0) {
@@ -202,17 +202,17 @@ if (($lid > 0) || ($folderlid > 0)) {
     $lidtemp = ($lid > 0) ? $lid : $folderlid;
     $level3data = levels::get_record(defaults::CONTENTLEVELCONTAINER, $lidtemp);
     if ($level3data === false) {
-        print_error('errorinvalidcontent', 'openstudio', $returnurl->out(false));
+        throw new \moodle_exception('errorinvalidcontent', 'openstudio', $returnurl->out(false));
     }
     $level2data = levels::get_record(
         defaults::ACTIVITYLEVELCONTAINER, $level3data->level2id);
     if ($level2data === false) {
-        print_error('errorinvalidcontent', 'openstudio', $returnurl->out(false));
+        throw new \moodle_exception('errorinvalidcontent', 'openstudio', $returnurl->out(false));
     }
     $level1data = levels::get_record(
         defaults::BLOCKLEVELCONTAINER, $level2data->level1id);
     if ($level1data === false) {
-        print_error('errorinvalidcontent', 'openstudio', $returnurl->out(false));
+        throw new \moodle_exception('errorinvalidcontent', 'openstudio', $returnurl->out(false));
     }
 
     $contentdataname = trim($level1data->name);
@@ -232,7 +232,7 @@ if (($lid > 0) || ($folderlid > 0)) {
 if ($sid > 0) {
     $contentdata = content::get_record($userid, $sid);
     if ($contentdata === false) {
-        print_error('errorinvalidcontent', 'openstudio', $returnurl->out(false));
+        throw new \moodle_exception('errorinvalidcontent', 'openstudio', $returnurl->out(false));
     }
 
     if ($permissions->feature_enablelock) {
@@ -241,7 +241,7 @@ if ($sid > 0) {
                  ($contentdata->locktype == lock::CRUD) ||
                  ($contentdata->locktype == lock::SOCIAL_CRUD) ||
                  ($contentdata->locktype == lock::COMMENT_CRUD))) {
-            print_error('contentislocked', 'openstudio', $returnurl->out(false));
+            throw new \moodle_exception('contentislocked', 'openstudio', $returnurl->out(false));
         }
     }
 
@@ -261,7 +261,7 @@ if ($sid > 0) {
     // If content is not mine, and I dont have managecontent capability, then error.
     if (!$permissions->managecontent) {
         if (!$permissions->contentismine) {
-            print_error('errornopermissiontoaddcontent', 'openstudio', $returnurl->out(false));
+            throw new \moodle_exception('errornopermissiontoaddcontent', 'openstudio', $returnurl->out(false));
         }
     }
 
@@ -315,9 +315,9 @@ if ($sid > 0) {
             if ($contentislock) {
                 if ($contentleveldata->unlocktime > 0) {
                     $dtm = userdate($contentleveldata->unlocktime);
-                    print_error(get_string('erroractivitynotavailable', 'openstudio', $dtm), 'openstudio', $returnurl->out(false));
+                    throw new \moodle_exception('erroractivitynotavailable', 'openstudio', $returnurl->out(false), $dtm);
                 } else {
-                    print_error(get_string('contentislocked', 'openstudio'), 'openstudio', $returnurl->out(false));
+                    throw new \moodle_exception('contentislocked', 'openstudio', $returnurl->out(false));
                 }
             }
         }
@@ -357,7 +357,7 @@ if (($folderdatalevelid == 0) && ($contentdata->sid == 0) && ($contentdata->leve
     $returnurl = new moodle_url('/mod/openstudio/view.php',
             array('id' => $cm->id, 'vid' => content::VISIBILITY_MODULE));
     if (!$permissions->feature_pinboard) {
-        print_error('errorpinboardisdisabled', 'openstudio', $returnurl->out(false));
+        throw new \moodle_exception('errorpinboardisdisabled', 'openstudio', $returnurl->out(false));
     }
 
     $returnurl = new moodle_url('/mod/openstudio/view.php',
@@ -365,11 +365,11 @@ if (($folderdatalevelid == 0) && ($contentdata->sid == 0) && ($contentdata->leve
     if ($type === content::TYPE_FOLDER_CONTENT && $folderid > 0) {
         if ($sid == 0 && empty($foldertemplatecontentid)
                 && folder::get_addition_limit($permissions->pinboardfolderlimit, $folderid, $lid) < 1) {
-            print_error('errorpinboardfolderexceedlimit', 'openstudio', $returnurl->out(false));
+            throw new \moodle_exception('errorpinboardfolderexceedlimit', 'openstudio', $returnurl->out(false));
         }
     } else {
         if ($permissions->feature_pinboard && ($permissions->pinboarddata->available <= 0)) {
-            print_error('errorpinboardexceedlimit', 'openstudio', $returnurl->out(false));
+            throw new \moodle_exception('errorpinboardexceedlimit', 'openstudio', $returnurl->out(false));
         }
     }
 }
@@ -379,7 +379,7 @@ if (($folderdatalevelid > 0) && ($contentdata->sid == 0) && ($contentdata->level
     if ($type === content::TYPE_FOLDER_CONTENT && $folderid > 0) {
         if ($sid == 0 && empty($foldertemplatecontentid)
                 && folder::get_addition_limit($permissions->pinboardfolderlimit, $folderid, $lid) < 1) {
-            print_error('errorpinboardfolderexceedlimit', 'openstudio', $returnurl->out(false));
+            throw new \moodle_exception('errorpinboardfolderexceedlimit', 'openstudio', $returnurl->out(false));
         }
     }
 }
@@ -690,7 +690,7 @@ if ($contentform->is_cancelled()) {
             if ($folderid && !folder::add_content($folderid, $contentid, $userid, $foldercontenttemplate)) {
                 $returnurl = new moodle_url('/mod/openstudio/view.php',
                         array('id' => $cm->id, 'vid' => content::VISIBILITY_PRIVATE_PINBOARD));
-                print_error('errornopermissiontoaddcontent', 'openstudio', $returnurl->out(false));
+                throw new \moodle_exception('errornopermissiontoaddcontent', 'openstudio', $returnurl->out(false));
             }
         }
     }

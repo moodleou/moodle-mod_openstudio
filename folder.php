@@ -95,7 +95,7 @@ $folderdata = lock::determine_lock_status($contentandversions->contentdata);
 
 // Check the viewing user has permission to view content.
 if (!util::can_read_content($cminstance, $permissions, $folderdata)) {
-    print_error('errornopermissiontoviewcontent', 'openstudio', $returnurliferror->out(false));
+    throw new \moodle_exception('errornopermissiontoviewcontent', 'openstudio', $returnurliferror->out(false));
 }
 
 // Get page url.

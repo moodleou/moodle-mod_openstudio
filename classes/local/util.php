@@ -76,7 +76,7 @@ class util {
         global $DB;
 
         if (! ($cm = get_coursemodule_from_id('openstudio', $id))) {
-            \print_error('invalidcoursemodule');
+            throw new \moodle_exception('invalidcoursemodule');
         }
         // Get course instance.
         $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
@@ -1462,7 +1462,7 @@ EOF;
             return $studiocache[$key];
         }
 
-        print_error("Studio: developer error: cache key does not exists: $key");
+        throw new \moodle_exception("Studio: developer error: cache key does not exists: $key");
     }
 
     /**
