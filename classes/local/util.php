@@ -28,6 +28,7 @@ use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\contentversion;
 use mod_openstudio\local\api\comments;
 use mod_openstudio\local\api\folder;
+use mod_openstudio\local\api\group;
 use mod_openstudio\local\api\item;
 use mod_openstudio\local\api\tags;
 use mod_openstudio\local\util\defaults;
@@ -1811,6 +1812,89 @@ EOF;
     }
 
     /**
+     * Get the lowest sharing level.
+     *
+     * @param array $sharinglevelarray
+     * @return int
+     */
+    public static function get_lowest_mode(array $sharinglevelarray): int {
+        // Define an array that specifies the order in which to check the options.
+        $levelorder = [
+            content::VISIBILITY_PRIVATE,
+            content::VISIBILITY_TUTOR,
+            content::VISIBILITY_GROUP,
+            content::VISIBILITY_MODULE,
+        ];
+
+        foreach ($levelorder as $levelid) {
+            if (in_array($levelid, $sharinglevelarray)) {
+                return $levelid;
+            }
+        }
+
+        return content::VISIBILITY_PRIVATE;
+    }
+
+    /**
+     * Get folder visibility.
+     *
+     * @param int $openstudioid
+     * @param int $userid
+     * @return int
+     */
+    public static function get_visibility(int $openstudioid, int $userid): int {
+        global $DB;
+
+        // Get sharing level.
+        $sharinglevel = $DB->get_record('openstudio', ['id' => $openstudioid], 'allowedvisibility');
+        $sharinglevelarray = explode(',', $sharinglevel->allowedvisibility);
+        $lowestlevel = self::get_lowest_mode($sharinglevelarray);
+
+        $cm = self::get_coursemodule_from_studioid($openstudioid);
+
+        if ($cm->groupmode > NOGROUPS && $cm->groupingid > 0) {
+            $grouplist = group::group_list($cm->course, $cm->groupingid, $userid);
+            if ($grouplist) {
+                if ($lowestlevel == content::VISIBILITY_GROUP) {
+                    // Share the content(s) to the first group when user has many groups.
+                    foreach ($grouplist as $group) {
+                        $firstgroupid = 0 - $group->groupid;
+                        return $firstgroupid;
+                    }
+                }
+                return $lowestlevel;
+            } else {
+                switch ($sharinglevelarray) {
+                    case [content::VISIBILITY_MODULE]:
+                    case [content::VISIBILITY_GROUP, content::VISIBILITY_MODULE]:
+                        return content::VISIBILITY_MODULE;
+                    case [content::VISIBILITY_TUTOR, content::VISIBILITY_GROUP, content::VISIBILITY_MODULE]:
+                    case [content::VISIBILITY_TUTOR, content::VISIBILITY_GROUP]:
+                    case [content::VISIBILITY_TUTOR, content::VISIBILITY_MODULE]:
+                    case [content::VISIBILITY_TUTOR]:
+                        return content::VISIBILITY_TUTOR;
+                    default:
+                        return content::VISIBILITY_PRIVATE;
+                }
+            }
+        } else {
+            switch ($sharinglevelarray) {
+                case [content::VISIBILITY_TUTOR, content::VISIBILITY_GROUP]:
+                case [content::VISIBILITY_TUTOR]:
+                case [content::VISIBILITY_GROUP]:
+                    return content::VISIBILITY_PRIVATE;
+                case [content::VISIBILITY_TUTOR, content::VISIBILITY_MODULE]:
+                case [content::VISIBILITY_GROUP, content::VISIBILITY_MODULE]:
+                case [content::VISIBILITY_TUTOR, content::VISIBILITY_GROUP, content::VISIBILITY_MODULE]:
+                    return content::VISIBILITY_MODULE;
+                default:
+                    return $lowestlevel;
+            }
+        }
+        return content::VISIBILITY_PRIVATE;
+    }
+
+    /**
      * Get folder ID in case of folderid = 0.
      *
      * @param \stdClass $openstudio
@@ -1829,7 +1913,7 @@ EOF;
             // Set showextradata to 1, then set it back to 0 when the user makes changes to the folder.
             $data = [
                 'contenttype' => content::TYPE_FOLDER, 'showextradata' => 1,
-                'visibility' => $openstudio->defaultvisibility,
+                'visibility' => self::get_visibility($openstudio->id, $userid),
                 'embedcode' => '', 'urltitle' => '', 'weblink' => '',
                 'name' => '', 'description' => ''];
             // Create new folder.

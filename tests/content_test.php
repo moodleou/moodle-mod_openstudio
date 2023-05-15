@@ -760,4 +760,338 @@ class content_test extends \advanced_testcase {
 
         $this->assertEquals($folderid, $foldervialevel->id);
     }
+
+    /**
+     * @return array[]
+     */
+    public function get_lowest_sharing_level_provider(): array {
+        return [
+            [
+                [content::VISIBILITY_PRIVATE,
+                    content::VISIBILITY_TUTOR,
+                    content::VISIBILITY_GROUP,
+                    content::VISIBILITY_MODULE],
+                1
+            ],
+            [
+                [content::VISIBILITY_TUTOR,
+                    content::VISIBILITY_GROUP,
+                    content::VISIBILITY_MODULE],
+                7
+            ],
+            [
+                [content::VISIBILITY_GROUP,
+                    content::VISIBILITY_MODULE],
+                2
+            ],
+            [
+                [content::VISIBILITY_MODULE],
+                3
+            ],
+            [
+                [6, 5, 4],
+                content::VISIBILITY_PRIVATE
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider get_lowest_sharing_level_provider
+     * @param array $visibilityarray An array of sharing levels.
+     * @param int $expectedlowestmode The expected lowest sharing level.
+     * @return void
+     */
+    public function test_get_lowest_sharing_level($visibilityarray, $expectedlowestmode): void {
+        $this->assertEquals($expectedlowestmode, util::get_lowest_mode($visibilityarray));
+    }
+
+    public function test_get_visibility(): void {
+        global $DB;
+        // Create course.
+        $this->course = $this->getDataGenerator()->create_course();
+
+        // Create course groups.
+        $this->groups = new \stdClass();
+        $this->groupings = new \stdClass();
+        $this->groupings->a  = $this->getDataGenerator()->create_grouping(
+            ['name' => 'Grouping A', 'courseid' => $this->course->id]);
+        $this->groups->one = $this->getDataGenerator()->create_group([
+            'courseid' => $this->course->id, 'name' => 'Group 1']);
+        $this->groups->two = $this->getDataGenerator()->create_group([
+            'courseid' => $this->course->id, 'name' => 'Group 2']);
+
+        // Add groups to our groupings.
+        $insert = new \stdClass();
+        $DB->insert_record('groupings_groups', (object)[
+            'groupingid' => $this->groupings->a->id,
+            'groupid' => $this->groups->one->id,
+        ]);
+        $insert->groupingid = $this->groupings->a->id;
+        $insert->groupid = $this->groups->two->id;
+
+        // Add user one to group one and group two.
+        $this->generator->add_users_to_groups([
+            $this->groups->one->id => [
+                $this->users->students->one->id,
+            ]
+        ]);
+        $this->generator->add_users_to_groups([
+            $this->groups->two->id => [
+                $this->users->students->one->id,
+            ]
+        ]);
+
+        // Create generic studios.
+        $this->studio1 = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS1',
+            'groupingid' => $this->groupings->a->id,
+            'groupmode' => content::VISIBILITY_GROUP,
+            'allowedvisibility' => implode(',', [
+                content::VISIBILITY_PRIVATE,
+                content::VISIBILITY_TUTOR,
+                content::VISIBILITY_GROUP,
+                content::VISIBILITY_MODULE,
+            ]),
+        ]);
+
+        // Private is the lowest sharing level.
+        $visibility = util::get_visibility($this->studio1->id, $this->users->students->one->id);
+        $this->assertEquals(content::VISIBILITY_PRIVATE, $visibility);
+
+        $this->studio2 = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS3',
+            'groupingid' => $this->groupings->a->id,
+            'groupmode' => content::VISIBILITY_GROUP,
+            'allowedvisibility' => implode(',', [
+                content::VISIBILITY_TUTOR,
+                content::VISIBILITY_GROUP,
+            ]),
+        ]);
+        // Tutor is the lowest sharing level.
+        $visibility = util::get_visibility($this->studio2->id, $this->users->students->one->id);
+        $this->assertEquals(content::VISIBILITY_TUTOR, $visibility);
+
+        $this->studio3 = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS3',
+            'groupingid' => $this->groupings->a->id,
+            'groupmode' => content::VISIBILITY_GROUP,
+            'allowedvisibility' => implode(',', [
+                content::VISIBILITY_GROUP,
+                content::VISIBILITY_MODULE,
+            ]),
+        ]);
+        // Content is shared to the first group when user has many groups.
+        $visibility = util::get_visibility($this->studio3->id, $this->users->students->one->id);
+        // The groupid should be the first group.
+        $this->assertEquals(-$this->groups->one->id, $visibility);
+
+        $this->studio4 = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS3',
+            'groupingid' => $this->groupings->a->id,
+            'groupmode' => content::VISIBILITY_GROUP,
+            'allowedvisibility' => content::VISIBILITY_MODULE,
+        ]);
+        // Module is the lowest sharing level.
+        $visibility = util::get_visibility($this->studio4->id, $this->users->students->one->id);
+        $this->assertEquals(content::VISIBILITY_MODULE, $visibility);
+
+        $this->studio5 = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS3',
+            'groupingid' => $this->groupings->a->id,
+            'groupmode' => content::VISIBILITY_GROUP,
+            'allowedvisibility' => implode(',', [
+                content::VISIBILITY_GROUP,
+                content::VISIBILITY_MODULE,
+            ]),
+        ]);
+        // Group is the lowest sharing level but user two isn't added to any group.
+        $visibility = util::get_visibility($this->studio5->id, $this->users->students->two->id);
+        $this->assertEquals(content::VISIBILITY_MODULE, $visibility);
+
+        $this->studio6 = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS3',
+            'groupingid' => $this->groupings->a->id,
+            'groupmode' => content::VISIBILITY_GROUP,
+            'allowedvisibility' => content::VISIBILITY_GROUP,
+        ]);
+        // Group is the only sharing level but user two isn't added to any group.
+        $visibility = util::get_visibility($this->studio6->id, $this->users->students->two->id);
+        $this->assertEquals(content::VISIBILITY_PRIVATE, $visibility);
+
+        $this->studio7 = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS3',
+            'groupingid' => $this->groupings->a->id,
+            'groupmode' => content::VISIBILITY_GROUP,
+            'allowedvisibility' => implode(',', [
+                content::VISIBILITY_TUTOR,
+                content::VISIBILITY_GROUP,
+                content::VISIBILITY_MODULE,
+            ]),
+        ]);
+        // Tutor is the lowest sharing level but user two isn't added to any group.
+        $visibility = util::get_visibility($this->studio7->id, $this->users->students->two->id);
+        $this->assertEquals(content::VISIBILITY_TUTOR, $visibility);
+
+        $this->studio8 = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS3',
+            'groupingid' => $this->groupings->a->id,
+            'groupmode' => content::VISIBILITY_GROUP,
+            'allowedvisibility' => implode(',', [
+                content::VISIBILITY_TUTOR,
+                content::VISIBILITY_GROUP,
+            ]),
+        ]);
+        // Tutor is the lowest sharing level but user two isn't added to any group.
+        $visibility = util::get_visibility($this->studio8->id, $this->users->students->two->id);
+        $this->assertEquals(content::VISIBILITY_TUTOR, $visibility);
+
+        $this->studio9 = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS3',
+            'groupingid' => $this->groupings->a->id,
+            'groupmode' => content::VISIBILITY_GROUP,
+            'allowedvisibility' => implode(',', [
+                content::VISIBILITY_TUTOR,
+                content::VISIBILITY_MODULE,
+            ]),
+        ]);
+        // Tutor is the lowest sharing level but user two isn't added to any group.
+        $visibility = util::get_visibility($this->studio9->id, $this->users->students->two->id);
+        $this->assertEquals(content::VISIBILITY_TUTOR, $visibility);
+
+        $this->studio10 = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS3',
+            'groupingid' => $this->groupings->a->id,
+            'groupmode' => content::VISIBILITY_GROUP,
+            'allowedvisibility' => content::VISIBILITY_MODULE,
+        ]);
+        // Module is the only sharing level but user two isn't added to any group.
+        $visibility = util::get_visibility($this->studio10->id, $this->users->students->two->id);
+        $this->assertEquals(content::VISIBILITY_MODULE, $visibility);
+
+        // Studio setting No group.
+        $this->studio11 = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS2',
+            'groupingid' => $this->groupings->a->id,
+            'groupmode' => NOGROUPS,
+            'allowedvisibility' => implode(',', [
+                content::VISIBILITY_TUTOR,
+                content::VISIBILITY_GROUP,
+            ]), // Sharing level include tutor and group.
+        ]);
+        $visibility = util::get_visibility($this->studio11->id, $this->users->students->one->id);
+        $this->assertEquals(content::VISIBILITY_PRIVATE, $visibility);
+
+        $this->studio12 = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS2',
+            'groupingid' => $this->groupings->a->id,
+            'groupmode' => NOGROUPS,
+            'allowedvisibility' => content::VISIBILITY_TUTOR, // Sharing level include tutor.
+        ]);
+        $visibility = util::get_visibility($this->studio12->id, $this->users->students->one->id);
+        $this->assertEquals(content::VISIBILITY_PRIVATE, $visibility);
+
+        $this->studio13 = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS2',
+            'groupingid' => $this->groupings->a->id,
+            'groupmode' => NOGROUPS,
+            'allowedvisibility' => content::VISIBILITY_GROUP, // Sharing level include group.
+        ]);
+        $visibility = util::get_visibility($this->studio13->id, $this->users->students->one->id);
+        $this->assertEquals(content::VISIBILITY_PRIVATE, $visibility);
+
+        $this->studio14 = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS2',
+            'groupingid' => $this->groupings->a->id,
+            'groupmode' => NOGROUPS,
+            'allowedvisibility' => implode(',', [
+                content::VISIBILITY_TUTOR,
+                content::VISIBILITY_MODULE,
+            ]), // Sharing level include tutor and module.
+        ]);
+        $visibility = util::get_visibility($this->studio14->id, $this->users->students->one->id);
+        $this->assertEquals(content::VISIBILITY_MODULE, $visibility);
+
+        $this->studio15 = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS2',
+            'groupingid' => $this->groupings->a->id,
+            'groupmode' => NOGROUPS,
+            'allowedvisibility' => implode(',', [
+                content::VISIBILITY_GROUP,
+                content::VISIBILITY_MODULE,
+            ]), // Sharing level include group and module.
+        ]);
+        $visibility = util::get_visibility($this->studio15->id, $this->users->students->one->id);
+        $this->assertEquals(content::VISIBILITY_MODULE, $visibility);
+
+        $this->studio16 = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS2',
+            'groupingid' => $this->groupings->a->id,
+            'groupmode' => NOGROUPS,
+            'allowedvisibility' => implode(',', [
+                content::VISIBILITY_TUTOR,
+                content::VISIBILITY_GROUP,
+                content::VISIBILITY_MODULE,
+            ]), // Sharing level include tutor, group and module.
+        ]);
+        $visibility = util::get_visibility($this->studio16->id, $this->users->students->one->id);
+        $this->assertEquals(content::VISIBILITY_MODULE, $visibility);
+
+        $this->studio17 = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS2',
+            'groupingid' => $this->groupings->a->id,
+            'groupmode' => NOGROUPS,
+            'allowedvisibility' => implode(',', [
+                content::VISIBILITY_PRIVATE,
+                content::VISIBILITY_TUTOR,
+                content::VISIBILITY_GROUP,
+                content::VISIBILITY_MODULE,
+            ]), // Sharing level include private, tutor, group and module.
+        ]);
+        $visibility = util::get_visibility($this->studio17->id, $this->users->students->one->id);
+        $this->assertEquals(content::VISIBILITY_PRIVATE, $visibility);
+
+        // Sharing level include group and setting group mode but no grouping.
+        $this->studio18 = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS2',
+            'groupingid' => NOGROUPS,
+            'groupmode' => content::VISIBILITY_GROUP,
+            'allowedvisibility' => content::VISIBILITY_GROUP,
+        ]);
+        $visibility = util::get_visibility($this->studio18->id, $this->users->students->one->id);
+        $this->assertEquals(content::VISIBILITY_PRIVATE, $visibility);
+
+        // Sharing level include tutor, group, module and setting group mode but no grouping.
+        $this->studio19 = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS2',
+            'groupingid' => NOGROUPS,
+            'groupmode' => content::VISIBILITY_GROUP,
+            'allowedvisibility' => implode(',', [
+                content::VISIBILITY_TUTOR,
+                content::VISIBILITY_GROUP,
+                content::VISIBILITY_MODULE,
+            ]),
+        ]);
+        $visibility = util::get_visibility($this->studio19->id, $this->users->students->one->id);
+        $this->assertEquals(content::VISIBILITY_MODULE, $visibility);
+
+    }
 }
