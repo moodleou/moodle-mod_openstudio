@@ -215,7 +215,7 @@ EOF;
                 }
 
                 if ($x === false) {
-                    print_error (get_string('contentimportfailed', 'openstudio'));
+                    throw new \moodle_exception(get_string('contentimportfailed', 'openstudio'));
                 }
             }
         }
