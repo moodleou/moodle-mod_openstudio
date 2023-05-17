@@ -470,7 +470,7 @@ class util {
             return true;
         }
         // If the slot is deleted, then neeed viewdeleted capability.
-        if (trim($content->deletedby) != '') {
+        if (trim($content->deletedby ?? '') != '') {
             if (!$permissions->viewdeleted) {
                 return false;
             }
@@ -491,7 +491,7 @@ class util {
             }
         }
         // If the slot is deleted, then neeed viewdeleted capability.
-        if (trim($content->deletedby) != '') {
+        if (trim($content->deletedby ?? '') != '') {
             if (!$permissions->viewdeleted) {
                 return false;
             }

@@ -1126,7 +1126,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $contentguidances = [];
         $folderguidance = get_string('foldernoguidance', 'openstudio');
         if ($foldertemplate) {
-            $trimmedguidance = trim($foldertemplate->guidance);
+            $trimmedguidance = trim($foldertemplate->guidance ?? '');
             if (!empty($trimmedguidance)) {
                 $hasguidance = true;
                 $folderguidance = format_text($trimmedguidance, FORMAT_HTML);
@@ -1140,7 +1140,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
                     $contentnumber = sprintf('%02d', $contenttemplate->contentorder);
                     $contenttitle = $contenttemplate->name;
 
-                    $trimmedcontentguidance = trim($contenttemplate->guidance);
+                    $trimmedcontentguidance = trim($contenttemplate->guidance ?? '');
                     if (!empty($trimmedcontentguidance)) {
                         $hasguidance = true;
                         $contentguidance = $trimmedcontentguidance;
@@ -1254,7 +1254,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $output .= get_string('page') . ':';
             // If first link is text for mobile.
             // If first link is nummber for desktop.
-            $firstlinktype = strip_tags($pagingbar->firstlink);
+            $firstlinktype = strip_tags($pagingbar->firstlink ?? '');
             if (!empty($firstlinktype) && is_numeric($firstlinktype)) {
                 $output .= ' ' . $pagingbar->firstlink . ' ...';
             }

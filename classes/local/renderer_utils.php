@@ -542,7 +542,7 @@ class renderer_utils {
         }
 
         // Get content type icon.
-        if (trim($contentdata->thumbnail) != '') {
+        if (trim($contentdata->thumbnail ?? '') != '') {
             $contenttypeiconurl = $contentdata->thumbnail;
         } else {
             switch ($contentdata->contenttype) {
@@ -609,7 +609,7 @@ class renderer_utils {
                 case content::TYPE_URL:
                 case content::TYPE_URL_VIDEO:
                 case content::TYPE_URL_AUDIO:
-                    if ((trim($contentdata->content) == '') &&
+                    if ((trim($contentdata->content ?? '') == '') &&
                             isset($contentdata->description) && (trim($contentdata->description) != '')) {
                         $contenttypeiconurl = $OUTPUT->image_url('text_doc_rgb_32px', 'openstudio');
                     } else {

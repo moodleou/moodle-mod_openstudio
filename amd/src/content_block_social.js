@@ -106,7 +106,7 @@ define([
                                 .catch(err => displayException(err));
                         }
                     })
-                    .fail();
+                    .fail(displayException.exception);
             }
         },
 
@@ -136,7 +136,7 @@ define([
                         $(e).find(t.CSS.FLAG_CONTENT_ICON_IMAGE).attr('src', res.flagiconimage);
                     }
                 })
-                .fail();
+                .fail(displayException.exception);
         },
 
         /**

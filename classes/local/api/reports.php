@@ -51,7 +51,7 @@ SELECT COUNT(DISTINCT ue.userid)
 
 EOF;
 
-        $registeredusers = $DB->get_field_sql($sql, array($courseid));
+        $registeredusers = $DB->get_field_sql($sql, [$courseid]);
 
         $sql = <<<EOF
 SELECT COUNT(DISTINCT s.userid)
@@ -60,7 +60,7 @@ SELECT COUNT(DISTINCT s.userid)
 
 EOF;
 
-        $activeusers = $DB->get_field_sql($sql, array($studioid));
+        $activeusers = $DB->get_field_sql($sql, [$studioid]);
 
         $sql = <<<EOF
 SELECT AVG(usertotals.total)
@@ -72,7 +72,7 @@ SELECT AVG(usertotals.total)
 
 EOF;
 
-        $averagecontentperuser = round($DB->get_field_sql($sql, array($studioid)));
+        $averagecontentperuser = $DB->get_field_sql($sql, [$studioid]);
 
         $sql = <<<EOF
 SELECT AVG(usertotals.total)
@@ -85,7 +85,7 @@ SELECT AVG(usertotals.total)
 
 EOF;
 
-        $averagepinboardcontentperuser = round($DB->get_field_sql($sql, array($studioid)));
+        $averagepinboardcontentperuser = $DB->get_field_sql($sql, [$studioid]);
 
         $sql = <<<EOF
 SELECT AVG(usertotals.total)
@@ -97,7 +97,7 @@ SELECT AVG(usertotals.total)
 
 EOF;
 
-        $averageactivitycontentperuser = round($DB->get_field_sql($sql, array($studioid)));
+        $averageactivitycontentperuser = $DB->get_field_sql($sql, [$studioid]);
 
         $sql = <<<EOF
 SELECT COUNT(s.id) as slots,
@@ -107,7 +107,7 @@ SELECT COUNT(s.id) as slots,
 
 EOF;
 
-        $slots = $DB->get_record_sql($sql, array($studioid));
+        $slots = $DB->get_record_sql($sql, [$studioid]);
 
         $sql = <<<EOF
 SELECT COUNT(DISTINCT sv.id) as slotversions,
@@ -119,7 +119,7 @@ SELECT COUNT(DISTINCT sv.id) as slotversions,
 
 EOF;
 
-        $slotversions = $DB->get_record_sql($sql, array($studioid));
+        $slotversions = $DB->get_record_sql($sql, [$studioid]);
 
         $sql = <<<EOF
 SELECT COUNT(DISTINCT sc.id) as slotcomments,
@@ -131,7 +131,7 @@ SELECT COUNT(DISTINCT sc.id) as slotcomments,
 
 EOF;
 
-        $result = $DB->get_record_sql($sql, array($studioid));
+        $result = $DB->get_record_sql($sql, [$studioid]);
         $slotcomments = 0;
         $slotcommentsdeleted = 0;
         if ($result) {
@@ -149,27 +149,28 @@ SELECT COUNT(DISTINCT sc.id) as slotaudiocomments
 
 EOF;
 
-        $result = $DB->get_record_sql($sql, array($studioid));
+        $result = $DB->get_record_sql($sql, [$studioid]);
         $slotaudiocomments = 0;
         if ($result) {
             $slotaudiocomments = $result->slotaudiocomments;
         }
 
-        $slotcomments = (object) array(
+        $slotcomments = (object) [
                 'slotcomments' => $slotcomments,
                 'slotcommentsdeleted' => $slotcommentsdeleted,
-                'slotaudiocomments' => $slotaudiocomments
-        );
+                'slotaudiocomments' => $slotaudiocomments,
+        ];
 
-        return (object) array(
+        return (object) [
                 'registeredusers' => $registeredusers,
                 'activeusers' => $activeusers,
-                'averagecontentperuser' => $averagecontentperuser,
-                'averagepinboardcontentperuser' => $averagepinboardcontentperuser,
-                'averageactivitycontentperuser' => $averageactivitycontentperuser,
+                'averagecontentperuser' => $averagecontentperuser ? round($averagecontentperuser) : 0,
+                'averagepinboardcontentperuser' => $averagepinboardcontentperuser ? round($averagepinboardcontentperuser) : 0,
+                'averageactivitycontentperuser' => $averageactivitycontentperuser ? round($averageactivitycontentperuser) : 0,
                 'slots' => $slots,
                 'slotversions' => $slotversions,
-                'slotcomments' => $slotcomments);
+                'slotcomments' => $slotcomments,
+        ];
     }
 
     /*

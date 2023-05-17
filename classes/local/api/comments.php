@@ -474,7 +474,7 @@ EOF;
      * @return string|null
      */
     public static function nice_shorten_text(?string $text, int $length = 0): ?string {
-        $text = htmlentities($text, null, 'utf-8');
+        $text = htmlentities($text, ENT_QUOTES, 'utf-8');
         $text = str_replace('&nbsp;', ' ', $text);
         $text = html_entity_decode($text);
         $text = trim($text);

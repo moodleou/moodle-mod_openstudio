@@ -685,7 +685,10 @@ EOF;
         // Filter by slot content type.
         $sql = '';
         $params = [];
-        $filtertypearray = explode(',', $filtertype);
+        $filtertypearray = [];
+        if (!is_null($filtertype)) {
+            $filtertypearray = explode(',', $filtertype);
+        }
         $subtypes = [];
         foreach ($filtertypearray as $filtertypearrayitem) {
             $filtertypearrayitem = trim($filtertypearrayitem);
@@ -779,11 +782,12 @@ EOF;
         $sql = '';
         $params = [];
         // Filter by tags.
-        $cleanedtags = \core_tag_tag::normalize(explode(',', $filtertags));
-        if (count($cleanedtags) > 0) {
-            list($insql, $params) = $DB->get_in_or_equal($cleanedtags);
-            $subsql = "SELECT id FROM {tag} WHERE name {$insql} ";
-            $sql = <<<EOF
+        if (!is_null($filtertags)) {
+            $cleanedtags = \core_tag_tag::normalize(explode(',', $filtertags));
+            if (count($cleanedtags) > 0) {
+                list($insql, $params) = $DB->get_in_or_equal($cleanedtags);
+                $subsql = "SELECT id FROM {tag} WHERE name {$insql} ";
+                $sql = <<<EOF
                 AND EXISTS (SELECT 1
                               FROM {tag_instance}
                              WHERE tagid IN ({$subsql})
@@ -791,6 +795,7 @@ EOF;
                 )
 EOF;
 
+            }
         }
 
         return [$sql, $params];
@@ -814,7 +819,10 @@ EOF;
         $sql = '';
         $params = [];
         $flags = [];
-        $filterflags = explode(',', $filterparticipation);
+        $filterflags = [];
+        if (!is_null($filterparticipation)) {
+            $filterflags = explode(',', $filterparticipation);
+        }
         foreach ($filterflags as $filterflag) {
             $filterflag = (int) trim($filterflag);
             if ($filterflag !== '') {

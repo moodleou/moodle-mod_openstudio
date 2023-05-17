@@ -747,7 +747,7 @@ if ($finalviewpermissioncheck) {
                 $activityid = $content->l2id;
 
                 // Should only display a maximum of two lines for the activity title.
-                if (strlen($content->name) > 55) {
+                if (strlen($content->name ?? '') > 55) {
                     $content->name = substr($content->name, 0, 55) . '...';
                 }
 
