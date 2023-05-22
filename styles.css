@@ -2831,6 +2831,8 @@ body .openstudio-grid-item-content-title a:focus {
 .openstudio-grid-item-content-preview img {
     height: auto;
     width: 100%;
+    object-fit: contain;
+    background-color: #fff;
     min-height: 137px;
 }
 

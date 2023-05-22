@@ -1094,4 +1094,37 @@ class content_test extends \advanced_testcase {
         $this->assertEquals(content::VISIBILITY_MODULE, $visibility);
 
     }
+
+    public function test_resize_image_using_imagick(): void {
+        global $CFG;
+        if (!extension_loaded('imagick') || !class_exists('Imagick')) {
+            $this->markTestSkipped('Imagick not enabled');
+        }
+        $this->resetAfterTest(true);
+
+        $context = \context_module::instance($this->studiolevels->cmid);
+
+        // Path to the original image.
+        $filepath = $CFG->dirroot . '/mod/openstudio/tests/importfiles/picture_big_size.jpg';
+        $fs = get_file_storage();
+        $contenttumbnailfile = (object) [
+                'contextid' => $context->id,
+                'component' => 'mod_openstudio',
+                'filearea' => 'content',
+                'itemid' => 1,
+                'filepath' => '/',
+                'filename' => 'picture_big_size.jpg',
+        ];
+        $contentfile = $fs->create_file_from_pathname($contenttumbnailfile, $filepath);
+
+        $thumbnailwidth = \mod_openstudio\local\util\defaults::CONTENTTHUMBNAIL_WIDTH;
+        $contenttumbnailfile->filearea = 'contentthumbnail';
+        $thumbnail = \mod_openstudio\local\api\content::resize_image_imagick($contenttumbnailfile, $contentfile, $thumbnailwidth);
+        $this->assertInstanceOf(\stored_file::class, $thumbnail);
+        $thumbnailinfo = $thumbnail->get_imageinfo();
+
+        // Check new width/height after resize.
+        $this->assertEquals($thumbnailinfo['width'], $thumbnailwidth);
+        $this->assertEquals($thumbnailinfo['height'], $thumbnailwidth);
+    }
 }

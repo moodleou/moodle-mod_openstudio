@@ -1350,17 +1350,8 @@ EOF;
                     // and if so, we will resize it.
                     $contentimageinfo = $contentfile->get_imageinfo();
                     if ($contentimageinfo['width'] > defaults::CONTENTTHUMBNAIL_WIDTH) {
-
-                        // Note: when using File Storage API to resize images, it produces
-                        // a grainy resized image.  The problem is because it uses the function
-                        // imagecopyresized() rather than imagecopyresampled().  The latter
-                        // produces better quality image, but takes longer to process.
-                        //
-                        // May need to post request to Moodle HQ to change this? For more details, see:
-                        // http://www.sitepoint.com/forums/showthread.php?627228-Grainy-images-using-GD.
-
                         // Now create new thumbnail file.
-                        $contenttumbnailfile = array(
+                        $contenttumbnailfile = [
                                 'contextid' => $contentfile->get_contextid(),
                                 'component' => $contentfile->get_component(),
                                 'filearea'  => $newfilearea,
@@ -1368,13 +1359,25 @@ EOF;
                                 'filepath'  => $contentfile->get_filepath(),
                                 'filename'  => $contentfile->get_filename(),
                                 'userid'    => $contentfile->get_userid()
-                        );
-                        $thumbnail = @$fs->convert_image(
-                                $contenttumbnailfile, $contentfile, defaults::CONTENTTHUMBNAIL_WIDTH, null, true, null);
+                        ];
+                        if (!(!extension_loaded('imagick') || !class_exists('Imagick'))) {
+                            $thumbnail = self::resize_image_imagick($contenttumbnailfile, $contentfile,
+                                    defaults::CONTENTTHUMBNAIL_WIDTH);
+                        } else {
+                            // Note: when using File Storage API to resize images, it produces
+                            // a grainy resized image.  The problem is because it uses the function
+                            // imagecopyresized() rather than imagecopyresampled().  The latter
+                            // produces better quality image, but takes longer to process.
+                            //
+                            // May need to post request to Moodle HQ to change this? For more details, see:
+                            // http://www.sitepoint.com/forums/showthread.php?627228-Grainy-images-using-GD.
+                            $thumbnail = @$fs->convert_image($contenttumbnailfile, $contentfile,
+                                    defaults::CONTENTTHUMBNAIL_WIDTH, null, true, null);
+                        }
                         self::rotate_thumbnail_to_original($contentfile->get_id(), $thumbnail, $contenttumbnailfile);
                     } else {
-                        $contenttumbnailfile = array(
-                                'filearea' => $newfilearea, 'itemid' => $contentfile->get_itemid());
+                        $contenttumbnailfile = [
+                                'filearea' => $newfilearea, 'itemid' => $contentfile->get_itemid()];
                         $fs->create_file_from_storedfile($contenttumbnailfile, $contentfile);
                     }
 
@@ -1825,5 +1828,80 @@ EOF;
         } catch (\Exception $ex) {
             return false;
         }
+    }
+
+    /**
+     * Creates new and resize image file from existing.
+     * Do not call this directly without installing ext-imagick.
+     *
+     * @param \stdClass|array $filerecord object or array describing new file
+     * @param int|\stored_file $fid file id or stored file object
+     * @param int|null $newwidth in pixels
+     * @param int|null $newheight in pixels
+     * @param int $filtertype Refer to the imagick.constants.filters link below
+     * @param float $blur The blur factor where > 1 is blurry, < 1 is sharp.
+     * @param bool $bestfit Optional fit parameter
+     * @return \stored_file
+     * @throws \moodle_exception
+     * @link https://www.php.net/manual/en/imagick.constants.php#imagick.constants.filters
+     */
+    public static function resize_image_imagick(\stdClass|array $filerecord, int|\stored_file $fid, ?int $newwidth = null,
+            ?int $newheight = null, int $filtertype = \imagick::FILTER_LANCZOS, float $blur = 1, bool $bestfit = false): \stored_file {
+        global $PAGE;
+
+        if ($fid instanceof \stored_file) {
+            $fid = $fid->get_id();
+        }
+
+        $filerecord = (array) $filerecord;
+        $fs = get_file_storage();
+        if (!$file = $fs->get_file_by_id($fid)) { // Make sure file really exists and we we correct data.
+            throw new \file_exception('storedfileproblem', 'File does not exist');
+        }
+
+        if (!$imageinfo = $file->get_imageinfo()) {
+            throw new \file_exception('storedfileproblem', 'File is not an image');
+        }
+
+        $width = $imageinfo['width'];
+        $height = $imageinfo['height'];
+        if (0 >= $newwidth && 0 >= $newheight) {
+            // No sizes specified.
+            $newwidth = $width;
+            $newheight = $height;
+        } else if (0 < $newwidth && 0 < $newheight) {
+            $xheight = ($newwidth * ($height / $width));
+            if ($xheight < $newheight) {
+                $newheight = (int) $xheight;
+            } else {
+                $newwidth = (int) ($newheight * ($width / $height));
+            }
+
+        } else if (0 < $newwidth) {
+            $newheight = (int) ($newwidth * ($height / $width));
+
+        } else {
+            //0 < $newheight.
+            $newwidth = (int) ($newheight * ($width / $height));
+        }
+
+        $tmproot = make_temp_directory('tempimage');
+        $tmpfilepath = $tmproot . '/' . $file->get_contenthash();
+        $file->copy_content_to($tmpfilepath);
+        try {
+            $img = new \Imagick($tmpfilepath);
+            $img->resizeImage($newwidth, $newheight, $filtertype, $blur, $bestfit);
+            $img->writeImage($tmpfilepath);
+            $img->clear();
+        } catch (\ImagickException $e) {
+            // Throw a more helpful error if processing image fails.
+            throw new \moodle_exception('errorimageprocess', 'openstudio', $PAGE->url, $e->getMessage());
+        }
+
+        // Create files.
+        $newfile = $fs->create_file_from_pathname($filerecord, $tmpfilepath);
+        // Delete the temp file.
+        unlink($tmpfilepath);
+        return $newfile;
     }
 }
