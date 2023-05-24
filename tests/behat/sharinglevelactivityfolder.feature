@@ -54,7 +54,6 @@ Feature: Sharing level setting in activity folder
     And all users have accepted the plagarism statement for "OS1" openstudio
 
   Scenario: Test the activity folder when the lowest sharing level is Private.
-    And I pause
     Given I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "admin"
     And I navigate to "Settings" in current page administration
     And I set the following fields to these values:
