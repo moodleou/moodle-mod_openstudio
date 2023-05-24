@@ -1235,6 +1235,7 @@ EOF;
                             'lng' => $lng
                     );
                 } else {
+                    $info = [];
                     $info['GPSData'] = array();
                 }
             }
