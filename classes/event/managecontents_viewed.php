@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * The mod_openstudio manage content slots view event.
+ * The mod_openstudio manage contents view event.
  *
  * @package    mod_openstudio
  * @copyright  2014 The Open University
@@ -27,7 +27,7 @@ namespace mod_openstudio\event;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * The mod_openstudio manage contents page view event class.
+ * The mod_openstudio manage contents view event class.
  *
  * @package    mod_openstudio
  * @since      Moodle 2.7

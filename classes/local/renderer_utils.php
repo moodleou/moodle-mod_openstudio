@@ -22,6 +22,7 @@
 
 namespace mod_openstudio\local;
 
+use context_module;
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\stream;
 use mod_openstudio\local\api\flags;
@@ -232,13 +233,15 @@ class renderer_utils {
             $contentdata->percentcompleted = $userprogresspercentage;
         }
 
+        // User picture.
+        $renderer = util::get_renderer();
+        $contentdata->userpicturehtml = util::render_user_avatar($renderer, $contentowner);
         $contentdata->userprofileid = $contentowner->id;
         $contentdata->ismyprofile = $ismyprofile;
         $contentdata->fullusername = $contentowner->firstname.' '.$contentowner->lastname;
         $contentdata->activedate = $activedate;
         $contentdata->flagscontentread = $flagscontentread;
         $contentdata->totalpostedcomments = $userprogressdata['totalpostedcomments'];
-        $contentdata->userpictureurl = new \moodle_url('/user/pix.php/'.$contentowner->id.'/f1.jpg');
         $contentdata->viewuserworkurl = new \moodle_url('/mod/openstudio/view.php',
                     array('id' => $openstudioid, 'vuid' => $contentowner->id, 'vid' => content::VISIBILITY_PRIVATE));
         $contentdata->viewedicon = $OUTPUT->image_url('viewed_rgb_32px', 'openstudio');
@@ -1647,6 +1650,7 @@ class renderer_utils {
             $pageurl = util::get_current_url();
 
             if ($commenttemp) {
+                $context = context_module::instance($cmid);
                 foreach ($commenttemp as $key => $comment) {
 
                     // Check comment attachment.
@@ -1659,14 +1663,14 @@ class renderer_utils {
                     }
 
                     // Filter comment text.
-                    $comment->commenttext = format_text($comment->commenttext);
+                    $comment->commenttext = comments::filter_comment_text($comment->commenttext, $comment->id, $context);
 
                     $user = user::get_user_by_id($comment->userid);
                     $comment->fullname = fullname($user);
 
                     // User picture.
-                    $picture = new \user_picture($user);
-                    $comment->userpictureurl = $picture->get_url($PAGE)->out(false);
+                    $renderer = util::get_renderer();
+                    $comment->userpicturehtml = util::render_user_avatar($renderer, $user);
 
                     // Check delete capability.
                     $comment->deleteenable = ($permissions->activeuserid == $comment->userid && $permissions->addcomment) ||
@@ -1817,7 +1821,7 @@ class renderer_utils {
      * @return $content Object
      */
     public static function get_folder_data($id, $content, $vid) {
-        global $OUTPUT;
+        global $OUTPUT, $USER, $DB;
         $content->isfolder = false;
                 // Check content is folder.
         if ($content->contenttype == content::TYPE_FOLDER || $content->l3contenttype == content::TYPE_FOLDER) {
@@ -1843,12 +1847,15 @@ class renderer_utils {
             }
             $content->folderthumbnail = $folderthumbnailfileurl;
             $content->folderdefaultthumbnail = $OUTPUT->image_url('openstudio_sets_preview_box', 'openstudio');
-            $content->folderlink = new \moodle_url('/mod/openstudio/folder.php',
-                    array('id' => $id, 'lid' => $content->l3id, 'vid' => content::VISIBILITY_PRIVATE, 'sid' => $content->id));
             if (!$content->id) {
-                $content->folderlink = new \moodle_url('/mod/openstudio/folder.php',
-                        ['id' => $id, 'lid' => $content->l3id, 'vid' => content::VISIBILITY_PRIVATE, 'sid' => 0]);
+                $cm = get_coursemodule_from_id('openstudio', $id);
+                $openstudio = $DB->get_record('openstudio', ['id' => $cm->instance], 'id, defaultvisibility', MUST_EXIST);
+                $sid = util::get_folder_id($openstudio, $USER->id, $content->l3id);
+            } else {
+                $sid = $content->id;
             }
+            $content->folderlink = new \moodle_url('/mod/openstudio/folder.php',
+                ['id' => $id, 'lid' => $content->l3id, 'vid' => content::VISIBILITY_PRIVATE, 'sid' => $sid]);
         }
         return $content;
     }

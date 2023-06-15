@@ -355,7 +355,8 @@ function openstudio_pluginfile($course, $cm, $context, $filearea, array $args, $
 
     if (! in_array($filearea,
             array('content', 'contentthumbnail', 'contentversion', 'contentthumbnailversion',
-                    'contentcomment', 'notebook', 'notebookversion', 'description', 'descriptionversion'))) {
+                    'contentcomment', comments::COMMENT_TEXT_AREA,
+                    'notebook', 'notebookversion', 'description', 'descriptionversion'))) {
         return false;
     }
 
@@ -363,7 +364,7 @@ function openstudio_pluginfile($course, $cm, $context, $filearea, array $args, $
     $itemid = (int) array_shift($args);
     if (in_array($filearea, ['content', 'contentthumbnail', 'notebook', 'description'])) {
         $record = $contentdata = $DB->get_record('openstudio_contents', array('id' => $itemid), '*', MUST_EXIST);
-    } else if ($filearea === 'contentcomment') {
+    } else if ($filearea === 'contentcomment' || $filearea === comments::COMMENT_TEXT_AREA) {
         $sql = <<<EOF
 SELECT s.*
   FROM {openstudio_contents} s
@@ -489,7 +490,7 @@ EOF;
         }
     }
 
-    if (in_array($filearea, ['contentcomment', 'description', 'descriptionversion'])) {
+    if (in_array($filearea, ['contentcomment', comments::COMMENT_TEXT_AREA, 'description', 'descriptionversion'])) {
         $relativepath = array_pop($args);
         $fullpath = "/{$context->id}/mod_openstudio/$filearea/{$itemid}/$relativepath";
     } else {
@@ -855,6 +856,7 @@ function openstudio_oualerts_additional_recipients($itemtype, $itemid) {
             break;
 
         case 'contentcomment':
+        case comments::COMMENT_TEXT_AREA:
             $contentid = $DB->get_field('openstudio_comments', 'contentid', ['id' => $itemid]);
             if ($contentid != false) {
                 $contentdata = content::get_record($USER->id, $contentid);
@@ -899,6 +901,7 @@ function openstudio_oualerts_custom_info($itemtype, $itemid) {
             break;
 
         case 'contentcomment':
+        case comments::COMMENT_TEXT_AREA:
             $contentid = $DB->get_field('openstudio_comments', 'contentid', ['id' => $itemid]);
             if ($contentid != false) {
                 $contentdata = content::get_record($USER->id, $contentid);

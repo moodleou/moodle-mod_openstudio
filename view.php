@@ -63,6 +63,7 @@ $mcontext = $coursedata->mcontext;
 $permissions = $coursedata->permissions;
 $theme = $coursedata->theme;
 $placeholdertext = '';
+$renderer = util::get_renderer();
 
 require_login($course, true, $cm);
 
@@ -728,8 +729,7 @@ if ($finalviewpermissioncheck) {
 
             if ($content->userid) {
                 $user = user::get_user_by_id($content->userid);
-                $picture = new user_picture($user);
-                $content->userpictureurl = $picture->get_url($PAGE)->out(false);
+                $content->userpicturehtml = util::render_user_avatar($renderer, $user);
             }
 
             if (!$content->timemodified) {
@@ -891,8 +891,6 @@ $viewpageurl = new moodle_url('/mod/openstudio/view.php',
         array('id' => $cm->id, 'vid' => $vid));
 $crumbarray[$placeholdertext] = $viewpageurl;
 util::add_breadcrumb($PAGE, $cm->id, navigation_node::TYPE_ACTIVITY, $crumbarray);
-
-$renderer = $PAGE->get_renderer('mod_openstudio');
 
 // Only content owner can import.
 $importenable = $importenable && ($vuid == $USER->id) && has_capability('mod/openstudio:import', $mcontext);

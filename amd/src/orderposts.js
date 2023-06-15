@@ -41,7 +41,7 @@ define([
          *         {
          *             fullname: string,
          *             date: string,
-         *             userpictureurl: string,
+         *             userpicturehtml: string,
          *             order: int,
          *             orderstring: string,
          *             locked: bool

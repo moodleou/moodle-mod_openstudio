@@ -40,7 +40,7 @@ require_once($CFG->dirroot . '/mod/openstudio/tests/fixtures/testable_openstudio
  * @copyright The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class search_comments_testcase extends \advanced_testcase {
+class search_comments_test extends \advanced_testcase {
 
     protected $user;
     protected $course;
@@ -245,11 +245,13 @@ class search_comments_testcase extends \advanced_testcase {
     public function test_check_file_index() {
         $comments = new comments();
 
+        $commenttext = '<p>Test image link: <img src="@@PLUGINFILE@@/test.img"  alt="image"/></p>';
+
         $doc = $comments->get_document((object)[
             'id' => $this->urlcontentcomment,
             'name' => 'Sample name 1',
             'openstudioid' => $this->cm->instance,
-            'commenttext' => 'Comment belong to URL content',
+            'commenttext' => $commenttext,
             'commentuser' => $this->user->id,
             'timemodified' => 0,
             'course' => $this->course->id
@@ -276,6 +278,19 @@ class search_comments_testcase extends \advanced_testcase {
         $files = $doc->get_files();
         $this->assertCount(1, $files);
 
+        $filerecord2 = [
+                'contextid' => $context->id,
+                'component' => 'mod_openstudio',
+                'filearea' => comments::FILEAREA['COMMENTTEXT'],
+                'itemid' => $this->urlcontentcomment,
+                'filepath' => '/',
+                'filename' => 'test.png'
+        ];
+        $file2 = $fs->create_file_from_string($filerecord2, 'File 2 comment text');
+        $searcharea->attach_files($doc);
+        $files = $doc->get_files();
+        $this->assertCount(2, $files);
+
         foreach ($files as $file) {
             if ($file->is_directory()) {
                 continue;
@@ -284,6 +299,10 @@ class search_comments_testcase extends \advanced_testcase {
             switch ($file->get_filearea()) {
                 case comments::FILEAREA['COMMENT']:
                     $this->assertEquals('audio.mp3', $file->get_filename());
+                    break;
+
+                case comments::FILEAREA['COMMENTTEXT']:
+                    $this->assertEquals('test.png', $file->get_filename());
                     break;
 
                 default:

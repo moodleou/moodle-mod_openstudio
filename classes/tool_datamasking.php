@@ -16,6 +16,8 @@
 
 namespace mod_openstudio;
 
+use mod_openstudio\local\api\comments;
+
 /**
  * Implementation of data masking for this plugin.
  *
@@ -32,6 +34,8 @@ class tool_datamasking implements \tool_datamasking\plugin {
                 new \tool_datamasking\files_mask('mod_openstudio', 'content'));
         $plan->table('files')->add(
                 new \tool_datamasking\files_mask('mod_openstudio', 'contentcomment'));
+        $plan->table('files')->add(
+                new \tool_datamasking\files_mask('mod_openstudio', comments::COMMENT_TEXT_AREA));
         $plan->table('files')->add(
                 new \tool_datamasking\files_mask('mod_openstudio', 'contenttemp'));
         $plan->table('files')->add(

@@ -37,6 +37,12 @@ class comment_form extends \moodleform {
         global $CFG;
         $mform = $this->_form;
 
+        if ($this->_customdata['max_bytes']) {
+            $maxbytes = $this->_customdata['max_bytes'];
+        } else {
+            $maxbytes = $CFG->maxbytes ?? defaults::MAXBYTES;
+        }
+
         // Course module ID.
         $mform->addElement('hidden', 'cmid');
         $mform->setType('cmid', PARAM_INT);
@@ -53,8 +59,14 @@ class comment_form extends \moodleform {
         $mform->setDefault('inreplyto', 0);
 
         // Comment text.
+        $editoroptions = [
+                'maxfiles' => EDITOR_UNLIMITED_FILES,
+                'maxbytes' => $maxbytes,
+        ];
         $mform->addElement('editor', 'commentext',
-                get_string('contentcommentsformlabelcomment', 'openstudio'));
+                get_string('contentcommentsformlabelcomment', 'openstudio'),
+                null, $editoroptions);
+        $mform->setType('commentext', PARAM_RAW);
 
         // Comment attachment.
         if ($this->_customdata['attachmentenable'] === true) {
@@ -62,13 +74,6 @@ class comment_form extends \moodleform {
             // Static text for comment attachment.
             $mform->addElement('static', 'commentheader', null,
                 get_string('contentcommentsformheader2', 'mod_openstudio'));
-
-            // Filepicker for comment attachment.
-            if ($this->_customdata['max_bytes']) {
-                $maxbytes = $this->_customdata['max_bytes'];
-            } else {
-                $maxbytes = (isset($CFG->maxbytes) ? $CFG->maxbytes : defaults::MAXBYTES);
-            }
 
             $mform->addElement('filepicker', 'commentattachment',
                 get_string('contentcommentsformattachment', 'mod_openstudio'), null,

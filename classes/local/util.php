@@ -410,14 +410,33 @@ class util {
      * @return string Return HTML that renders user avatar.
      */
     public static function render_user_avatar(
-            \mod_openstudio_renderer $renderer, $user, $size = 16, $classname = '') {
-        $context = \context_user::instance($user->userid, IGNORE_MISSING);
+            \mod_openstudio_renderer $renderer, $user, $size = 35, $classname = '') {
+        $context = \context_user::instance($user->id, IGNORE_MISSING);
         if ($context) {
             $user->contextid = $context->id;
         }
 
+        // When the user image is set, we should set the size to 1 so that the image is not blurred on the content page.
+        if ($user->picture != 0) {
+            $size = 1;
+        }
+
         return $renderer->user_picture($user,
                 array('class' => $classname, 'size' => (int) $size, 'link' => false));
+    }
+
+    /**
+     * Obtains the openstudio renderer.
+     * @return \mod_openstudio_renderer Singleton renderer
+     */
+    public static function get_renderer(): \mod_openstudio_renderer {
+        // It probably doesn't take very long to construct one, but let's cache it anyhow.
+        static $out;
+        if (!$out) {
+            global $PAGE;
+            $out = $PAGE->get_renderer('mod_openstudio');
+        }
+        return $out;
     }
 
     /**
@@ -1239,6 +1258,7 @@ EOF;
             case 'content_viewed':
             case 'folder_viewed':
             case 'content_created':
+            case 'content_deleted':
             case 'content_edited':
             case 'folder_created':
             case 'folder_edited':
@@ -1788,5 +1808,42 @@ EOF;
         } else {
             return get_string('timereable_secondsago', 'mod_openstudio');
         }
+    }
+
+    /**
+     * Get folder ID in case of folderid = 0.
+     *
+     * @param \stdClass $openstudio
+     * @param int $userid current user ID
+     * @param int $lid Level id
+     * @return int
+     * @throws \Exception
+     */
+    public static function get_folder_id(\stdClass $openstudio, int $userid, int $lid): int {
+        $foldervialevel = content::get_record_via_levels($openstudio->id, $userid, 3, $lid);
+        if ($foldervialevel) {
+            // Folder already created.
+            $folderid = $foldervialevel->id;
+        } else {
+            // Folder has not created yet.
+            // Set showextradata to 1, then set it back to 0 when the user makes changes to the folder.
+            $data = [
+                'contenttype' => content::TYPE_FOLDER, 'showextradata' => 1,
+                'visibility' => $openstudio->defaultvisibility,
+                'embedcode' => '', 'urltitle' => '', 'weblink' => '',
+                'name' => '', 'description' => ''];
+            // Create new folder.
+            $folderid = content::create(
+                $openstudio->id,
+                $userid,
+                3,
+                $lid,
+                $data
+            );
+            if (!$folderid) {
+                throw new \coding_exception('Could not create new folder.');
+            }
+        }
+        return $folderid;
     }
 }

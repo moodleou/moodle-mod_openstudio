@@ -86,29 +86,7 @@ if ($permissions->viewdeleted || $permissions->managecontent) {
 }
 
 if ($folderid == 0) {
-    $foldervialevel = content::get_record_via_levels($cminstance->id, $userid, 3, $lid);
-    if ($foldervialevel) {
-        // Folder allready created.
-        $folderid = $foldervialevel->id;
-    } else {
-        // Folder has not created yet.
-        // Set showextradata to 1, then set it back to 0 when the user makes changes to the folder.
-        $data = ['contenttype' => content::TYPE_FOLDER, 'showextradata' => 1,
-            'visibility' => $cminstance->defaultvisibility,
-            'embedcode' => '', 'urltitle' => '', 'weblink' => '',
-            'name' => '', 'description' => ''];
-        // Create new folder.
-        $folderid = content::create(
-            $cminstance->id,
-            $USER->id,
-            3,
-            $lid,
-            $data
-        );
-        if (!$folderid) {
-            throw new \Exception('Could not create new folder.');
-        }
-    }
+    $folderid = util::get_folder_id($cminstance, $userid, $lid);
 }
 
 // Get folder data.
@@ -197,7 +175,6 @@ if (!empty($folderdata->levelid)) {
     }
 }
 
-$PAGE->requires->js_call_amd('mod_openstudio/contentpage', 'init');
 $PAGE->requires->js_call_amd('mod_openstudio/folderhelper', 'init');
 
 // Require strings for folder browse posts.
@@ -220,6 +197,8 @@ echo $renderer->folder_page($cm, $permissions, $folderdata, $cminstance);
 $PAGE->requires->js_call_amd('mod_openstudio/folderbrowseposts', 'init', [[
     'folderid' => $folderid,
     'cmid' => $cm->id]]);
+
+$PAGE->requires->js_call_amd('mod_openstudio/contentpage', 'init');
 
 // Finish the page.
 echo $OUTPUT->footer();

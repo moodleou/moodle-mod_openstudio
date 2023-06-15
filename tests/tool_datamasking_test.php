@@ -16,6 +16,8 @@
 
 namespace mod_openstudio;
 
+use mod_openstudio\local\api\comments;
+
 /**
  * Tests the tool_datamasking class for this plugin.
  *
@@ -74,6 +76,8 @@ class tool_datamasking_test extends \advanced_testcase {
                 'e.txt', 'eeeee');
         $fileids[] = \tool_datamasking\testing_utils::add_file('mod_openstudio', 'intro',
                 'f.txt', 'ffffff');
+        $fileids[] = \tool_datamasking\testing_utils::add_file('mod_openstudio', comments::COMMENT_TEXT_AREA,
+                'test.png', 'hhhhhhh');
 
         // Before checks.
         $openstudiosql = 'SELECT reportingemail FROM {openstudio} ORDER BY id';
@@ -91,6 +95,7 @@ class tool_datamasking_test extends \advanced_testcase {
         \tool_datamasking\testing_utils::check_file($this, $fileids[3], 'd.txt', 4);
         \tool_datamasking\testing_utils::check_file($this, $fileids[4], 'e.txt', 5);
         \tool_datamasking\testing_utils::check_file($this, $fileids[5], 'f.txt', 6);
+        \tool_datamasking\testing_utils::check_file($this, $fileids[6], 'test.png', 7);
 
         // Run the full masking plan including this plugin, but without requiring mapping tables.
         \tool_datamasking\api::get_plan()->execute([], [\tool_datamasking\tool_datamasking::TAG_SKIP_ID_MAPPING]);
@@ -103,6 +108,7 @@ class tool_datamasking_test extends \advanced_testcase {
         $this->assertEquals(['X.', ''], $DB->get_fieldset_sql($openstudiocommentscommenttextsql));
         $this->assertEquals(['Masked content', ''], $DB->get_fieldset_sql($openstudiocontentssql));
         $maskedlength = strlen(file_get_contents($CFG->dirroot . '/admin/tool/datamasking/placeholders/text_plain.txt'));
+        $maskedpng = strlen(file_get_contents($CFG->dirroot . '/admin/tool/datamasking/placeholders/image_png.png'));
 
         \tool_datamasking\testing_utils::check_file($this, $fileids[0], 'masked.txt', $maskedlength);
         \tool_datamasking\testing_utils::check_file($this, $fileids[1], 'masked.txt', $maskedlength);
@@ -110,5 +116,6 @@ class tool_datamasking_test extends \advanced_testcase {
         \tool_datamasking\testing_utils::check_file($this, $fileids[3], 'masked.txt', $maskedlength);
         \tool_datamasking\testing_utils::check_file($this, $fileids[4], 'masked.txt', $maskedlength);
         \tool_datamasking\testing_utils::check_file($this, $fileids[5], 'f.txt', 6);
+        \tool_datamasking\testing_utils::check_file($this, $fileids[6], 'masked.png', $maskedpng);
     }
 }

@@ -629,6 +629,7 @@ class mod_openstudio_generator extends testing_module_generator {
         $replyid = array_key_exists('inreplyto', $commentdata) ? $commentdata['inreplyto'] : null;
         $context = null;
         $file = null;
+        $commenttextitemid = 0;
         if (array_key_exists('filepath', $commentdata) && array_key_exists('filecontext', $commentdata)) {
             // Switch $USER for file creation.
             $USER = $DB->get_record('user', array('id' => $commentdata['userid']));
@@ -647,8 +648,14 @@ class mod_openstudio_generator extends testing_module_generator {
             $file = ['id' => $storedfile->get_itemid()];
             $context = $commentdata['filecontext'];
         }
+        // Support files inside comment text, we don't need filepath.
+        if (array_key_exists('filecontext', $commentdata) && array_key_exists('commenttextitemid', $commentdata)) {
+            $context = $commentdata['filecontext'];
+            // But we need itemid for comment text area.
+            $commenttextitemid = $commentdata['commenttextitemid'];
+        }
         $id = comments::create($commentdata['contentid'], $commentdata['userid'], $commentdata['comment'],
-                null, $file, $context, $replyid);
+                null, $file, $context, $replyid, null, $commenttextitemid);
         if (!empty($commentdata['deleted'])) {
             comments::delete($id, $commentdata['userid']);
         }

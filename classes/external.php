@@ -44,6 +44,7 @@ use mod_openstudio\local\api\levels;
 use mod_openstudio\local\api\tracking;
 
 require_once($CFG->libdir . '/externallib.php');
+require_once($CFG->libdir . '/formslib.php');
 
 /**
  * OpenStudio external functions
@@ -742,13 +743,14 @@ class mod_openstudio_external extends external_api {
      * @return external_function_parameters
      */
     public static function add_comment_parameters() {
-        return new external_function_parameters(array(
+        return new external_function_parameters([
                 'cmid' => new external_value(PARAM_INT, 'Course module ID'),
                 'cid' => new external_value(PARAM_INT, 'Content ID'),
                 'commenttext' => new external_value(PARAM_RAW, 'Comment text'),
                 'commentattachment' => new external_value(PARAM_INT, 'Comment attachment'),
-                'inreplyto' => new external_value(PARAM_INT, 'Parent comment ID'))
-        );
+                'inreplyto' => new external_value(PARAM_INT, 'Parent comment ID'),
+                'commenttextitemid' => new external_value(PARAM_INT, 'Comment text item ID'),
+        ]);
     }
 
     /**
@@ -771,6 +773,7 @@ class mod_openstudio_external extends external_api {
      * @param string $commentext Comment text
      * @param string $commentattachment Comment attachment
      * @param int $inreplyto Parent comment ID
+     * @param int $commenttextitemid Comment text item ID.
      * @return array
      *  [
      *      commentid: int
@@ -779,8 +782,8 @@ class mod_openstudio_external extends external_api {
      * @throws moodle_exception
      */
     public static function add_comment($cmid, $cid, $commenttext = '',
-            $commentattachment = 0, $inreplyto = 0) {
-        global $USER, $PAGE, $CFG;
+            $commentattachment = 0, $inreplyto = 0, $commenttextitemid = 0) {
+        global $USER, $PAGE, $CFG, $DB;
         $userid = $USER->id;
 
         // Init and check permission.
@@ -791,21 +794,32 @@ class mod_openstudio_external extends external_api {
 
         // Validate input parameters and context.
         self::validate_context($mcontext);
-        $params = self::validate_parameters(self::add_comment_parameters(), array(
+        $params = self::validate_parameters(self::add_comment_parameters(), [
                 'cmid' => $cmid,
                 'cid' => $cid,
                 'commenttext' => $commenttext,
                 'commentattachment' => $commentattachment,
-                'inreplyto' => $inreplyto));
+                'inreplyto' => $inreplyto,
+                'commenttextitemid' => $commenttextitemid,
+        ]);
 
         // Validate locking status.
         self::validate_locking_status($params['cid'], lock::COMMENT);
+
+        // Check parent comment is existed.
+        if ($inreplyto) {
+            $parent = $DB->get_record('openstudio_comments', ['id' => $inreplyto], 'id, deletedby');
+            if (!$parent || $parent->deletedby > 0) {
+                throw new \moodle_exception('errorcommentdeleted', 'openstudio');
+            }
+        }
 
         // Check if user has permission to add content.
         $actionallowed = $permissions->addcomment || $permissions->managecontent;
         $flagsenabled = explode(',', $permissions->flags);
 
         if ($actionallowed) {
+            $transaction = $DB->start_delegated_transaction();
             try {
                 // Standardize comment text.
                 $commenttext = trim($params['commenttext']);
@@ -827,7 +841,7 @@ class mod_openstudio_external extends external_api {
                     }
                     $context = context_module::instance($cm->id);
                     $commentid = comments::create($params['cid'], $userid, $commenttext, $folderid,
-                        ['id' => $params['commentattachment']], $context, $inreplyto, $cm);
+                        ['id' => $params['commentattachment']], $context, $inreplyto, $cm, $params['commenttextitemid']);
                     $eventurl = new moodle_url('/mod/openstudio/content.php', ['id' => $params['cmid'], 'sid' => $params['cid']]);
                     if ($inreplyto) {
                         util::trigger_event(
@@ -853,16 +867,16 @@ class mod_openstudio_external extends external_api {
                     $commentdata->fullname = fullname($user);
 
                     // User picture.
-                    $picture = new user_picture($user);
-                    $commentdata->userpictureurl = $picture->get_url($PAGE)->out(false);
+                    $renderer = util::get_renderer();
+                    $commentdata->userpicturehtml = util::render_user_avatar($renderer, $user);
 
-                    $renderer = $PAGE->get_renderer('mod_openstudio');
                     // Check comment attachment.
                     if ($file = comments::get_attachment($commentdata->id)) {
                         $commentdata->commenttext .= renderer_utils::get_media_filter_markup($file);
                     }
 
-                    $commentdata->commenttext = format_text($commentdata->commenttext);
+                    // Filter comment text.
+                    $commentdata->commenttext = comments::filter_comment_text($commentdata->commenttext, $commentid, $context);
 
                     $commentdata->deleteenable = true;
                     $commentdata->reportenable = false;
@@ -872,13 +886,14 @@ class mod_openstudio_external extends external_api {
 
                     $commenthtml = $renderer->content_comment($commentdata);
 
+                    $transaction->allow_commit();
                 } else {
                     // Comment empty error.
-                    throw new \moodle_exception('emptycomment', 'openstudio');
+                    $transaction->rollback(new \moodle_exception('emptycomment', 'openstudio'));
                 }
             } catch (Exception $e) {
                 // Database error.
-                throw new \moodle_exception('commenterror', 'openstudio');
+                $transaction->rollback($e);
             }
         } else {
             // No permision.
@@ -937,7 +952,7 @@ class mod_openstudio_external extends external_api {
                             'comment' => new external_value(PARAM_RAW, 'The comment of content'),
                             'contentid' => new external_value(PARAM_INT, 'The contentid of content'),
                             'userid' => new external_value(PARAM_INT, 'The userid of user'),
-                            'userpicture' => new external_value(PARAM_RAW, 'The userpicture of user'),
+                            'userpicturehtml' => new external_value(PARAM_RAW, 'The userpicture of user'),
                             'fullname' => new external_value(PARAM_RAW, 'The fullname of user'),
                             'isnewcomment' => new external_value(PARAM_BOOL, 'The flag to check comment is new'),
                             'commenturl' => new external_value(PARAM_RAW, 'The comment url of user'),
@@ -1246,6 +1261,8 @@ class mod_openstudio_external extends external_api {
         } else {
             $result['vid'] = content::VISIBILITY_PRIVATE;
         }
+
+        util::trigger_event($cm->id, 'content_deleted', null, "view.php?id={$cm->id}", $contentdata->name);
 
         return $result;
     }

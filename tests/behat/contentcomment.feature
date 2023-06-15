@@ -102,3 +102,26 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     When I click on "//*[@class='openstudio-grid-item-content-detail-info-icon'][1]" "xpath_element"
     # Verify the parent comment and its reply have been deleted in comment box.
     Then I should see "There are no comments."
+
+  @javascript
+  Scenario: Comment editor should have browse repositories.
+    When I log in as "student1"
+    And I follow "Private files" in the user menu
+    And I upload "mod/openstudio/tests/importfiles/test2.jpg" file to "Files" filemanager
+    And I click on "Save changes" "button"
+    And I am on the "Sharing Studio" "openstudio activity" page
+    # Add new comment.
+    And I follow "Student slot 1"
+    And I press "Add new comment"
+    And I select the text in the "Comment" Atto editor
+    # Upload an image.
+    And I click on "Insert or edit image" "button"
+    And I click on "Browse repositories..." "button"
+    And I click on "Private files" "link" in the ".fp-repo-area" "css_element"
+    And I click on "test2.jpg" "link"
+    And I click on "Select this file" "button"
+    And I set the field "Describe this image for someone who cannot see it" to "An image"
+    And I click on "Save image" "button"
+    # Post comment.
+    And I press "Post comment"
+    Then "//img[contains(@src, '/test2.jpg') and @alt='An image']" "xpath_element" should exist

@@ -61,6 +61,7 @@ $string['event:folderviewed'] = 'View folder';
 $string['event:contenthistoryviewed'] = 'View content history';
 $string['event:contentversionviewed'] = 'View content version';
 $string['event:contentcreated'] = 'Content created';
+$string['event:contentdeleted'] = 'Content deleted';
 $string['event:contentedited'] = 'Content edited';
 
 $string['openstudio:canlock'] = 'Can lock';
@@ -682,6 +683,7 @@ $string['nocommentpermissions'] = 'You do not have permission to modify comments
 $string['nocommentsinboxcomment'] = 'There are no comments.';
 $string['commentdoesnotexist'] = 'The comment ID you provided does not exist.';
 $string['commentdeleted'] = 'This comment has been removed by {$a}.';
+$string['commentimageplaceholder'] = ' [Image] ';
 
 $string['contentcommentsformheader'] = 'Provide feedback by posting a comment';
 $string['contentcommentsformheader2'] = 'Post an audio comment (optional)';
@@ -881,6 +883,7 @@ $string['errorcommentnotdeleted'] = 'The comment could not be deleted due to an 
 $string['errorcontentnotdeleted'] = 'Delete content error!';
 $string['errorsharinglevel'] = 'Enable \'My Module\' must be chosen when option \'Module - visible all module members\' in Sharing level is selected';
 $string['errorimageprocess'] = 'There was an error when processing your image. Please check the image file before uploading again. Error reported: "{$a}"';
+$string['errorcommentdeleted'] = 'You cannot reply to deleted comments or previous comment versions.';
 
 $string['modulejsdialogreturntostudio'] = 'Return to Studio';
 $string['modulejsdialogyes'] = 'Yes';

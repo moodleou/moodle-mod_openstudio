@@ -106,8 +106,6 @@ Feature: Open Studio notifications
     And I wait until the page is ready
     # Add comment by press button "Add comment" inside the popup list of comment.
     And I click on "Add comment" "link"
-    And I reload the page
-    And I press "Add new comment"
     And I set the field "Comment" to "Very iconic, also has an amazing interior."
     And I press "Post comment"
     And I am on the "Demo Open Studio" "openstudio activity" page
@@ -154,3 +152,64 @@ Feature: Open Studio notifications
     Then "//div[@class='openstudio-grid-item'][1]//span[@id='content_view_icon_5']//span[contains(., '2')]" "xpath_element" should exist
     And "//div[@class='openstudio-grid-item'][1]//span[@id='content_view_icon_4']//span[contains(., '2')]" "xpath_element" should exist
     And "//div[@class='openstudio-grid-item'][1]//span[@id='content_view_icon_2']//span[contains(., '2')]" "xpath_element" should exist
+
+  Scenario: Add comment individual upload from My module page
+    When I am on the "Demo Open Studio" "openstudio activity" page logged in as "teacher1"
+    And I wait until the page is ready
+    Then "//*[@class='openstudio-grid-item'][1]//img[contains(@src, 'comments_grey_rgb_32px')]" "xpath_element" should exist
+    And I click on "//*[@class='openstudio-grid-item'][1]//img[contains(@src, 'comments_grey_rgb_32px')]" "xpath_element"
+    And I click on "Add comment" "link"
+    And "Comment" "field" should exist
+    And I should not see "Add new comment"
+    And I set the field "Comment" to "Very iconic, also has an amazing interior."
+    And I press "Post comment"
+    And I should see "Very iconic, also has an amazing interior."
+
+  @_file_upload
+  Scenario: Pop-up comments in content block social with image in comment text.
+    When I log in as "student1"
+    And I follow "Private files" in the user menu
+    And I upload "mod/openstudio/tests/importfiles/test2.jpg" file to "Files" filemanager
+    And I click on "Save changes" "button"
+    And I am on the "Demo Open Studio" "openstudio activity" page
+    # Add new comment.
+    And I follow "Module post 1"
+    And I press "Add new comment"
+    And I select the text in the "Comment" Atto editor
+    # Upload an image.
+    And I click on "Insert or edit image" "button"
+    And I click on "Browse repositories..." "button"
+    And I click on "Private files" "link" in the ".fp-repo-area" "css_element"
+    And I click on "test2.jpg" "link"
+    And I click on "Select this file" "button"
+    And I set the field "Describe this image for someone who cannot see it" to "An image"
+    And I click on "Save image" "button"
+    # Post comment.
+    And I press "Post comment"
+    And I am on the "Demo Open Studio" "openstudio activity" page
+    And I click on "//*[@class='openstudio-grid-item-content-detail-info-icon'][1]" "xpath_element"
+    Then I should see " [Image] "
+
+  @_file_upload
+  Scenario: Pop-up comments in content block social with video in comment text.
+    When I log in as "student1"
+    And I follow "Private files" in the user menu
+    And I upload "mod/openstudio/tests/importfiles/test.mp4" file to "Files" filemanager
+    And I click on "Save changes" "button"
+    And I am on the "Demo Open Studio" "openstudio activity" page
+    # Add new comment.
+    And I follow "Module post 1"
+    And I press "Add new comment"
+    And I select the text in the "Comment" Atto editor
+    # Upload a video.
+    And I click on "Insert or edit an audio/video file" "button"
+    And I click on "Browse repositories..." "button"
+    And I click on "Private files" "link" in the ".fp-repo-area" "css_element"
+    And I click on "test.mp4" "link"
+    And I click on "Select this file" "button"
+    And I click on "Insert media" "button"
+    # Post comment.
+    And I press "Post comment"
+    And I am on the "Demo Open Studio" "openstudio activity" page
+    And I click on "//*[@class='openstudio-grid-item-content-detail-info-icon'][1]" "xpath_element"
+    Then I should see "test.mp4"

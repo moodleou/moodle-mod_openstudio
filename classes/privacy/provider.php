@@ -34,6 +34,7 @@ use core_privacy\local\request\helper as request_helper;
 use core_privacy\local\request\transform;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
+use mod_openstudio\local\api\comments;
 use mod_openstudio\local\api\flags;
 use mod_openstudio\local\api\tracking;
 use mod_openstudio\local\api\content;
@@ -478,6 +479,9 @@ class provider implements
                     get_string('privacy:subcontext:file', 'openstudio')]);
             writer::with_context($context)->export_area_files($contentpath, 'mod_openstudio',
                     'contentcomment', $data->commentsid);
+            // Export comment files in comment text.
+            writer::with_context($context)->export_area_files($contentpath, 'mod_openstudio',
+                    comments::COMMENT_TEXT_AREA, $data->commentsid);
         } else {
             // Define path of file if this is in old version or current version.
             if (!$oldversion) {
@@ -817,7 +821,7 @@ class provider implements
                     'user' => static::you_or_somebody_else($comment->commentsuserid, $user),
                     'title' => format_string($comment->title, true),
                     'namecontent' => format_string($comment->namecontent, true),
-                    'commenttext' => format_text($comment->commenttext, FORMAT_HTML, $context),
+                    'commenttext' => comments::filter_comment_text($comment->commenttext, $comment->commentsid, $context, true),
                     'timemodified' => transform::datetime($comment->timemodified),
                     'deletedby' => $deletedby,
                     'deletedtime' => $deletedtime,
@@ -1023,7 +1027,7 @@ class provider implements
         // Delete all files from the posts.
         $fs = get_file_storage();
         $fileareas = ['content', 'contentthumbnail', 'contentversion', 'contentthumbnailversion',
-                'contentcomment', 'notebook', 'notebookversion'];
+                'contentcomment', comments::COMMENT_TEXT_AREA, 'notebook', 'notebookversion'];
 
         foreach ($fileareas as $filearea) {
             $fs->delete_area_files($context->id, 'mod_openstudio', $filearea);
@@ -1116,6 +1120,7 @@ class provider implements
             foreach ($comments as $comment) {
                 // Update comments to empty if has reply.
                 $fs->delete_area_files($context->id, 'mod_openstudio', 'contentcomment', $comment->id);
+                $fs->delete_area_files($context->id, 'mod_openstudio', comments::COMMENT_TEXT_AREA, $comment->id);
 
                 if (in_array($comment->id, $inreplytos)) {
                     $defaultcomments = new \stdClass();
@@ -1222,6 +1227,7 @@ class provider implements
                 foreach ($comments as $comment) {
                     // Delete file of this comment.
                     $fs->delete_area_files($context->id, 'mod_openstudio', 'contentcomment', $comment->id);
+                    $fs->delete_area_files($context->id, 'mod_openstudio', comments::COMMENT_TEXT_AREA, $comment->id);
                 }
                 // Delete comments.
                 $DB->delete_records_select(
@@ -1534,6 +1540,7 @@ class provider implements
                 $defaultcomments->commenttext = $commenttext;
                 $DB->update_record('openstudio_comments', $defaultcomments);
                 $fs->delete_area_files($context->id, 'mod_openstudio', 'contentcomment', $c);
+                $fs->delete_area_files($context->id, 'mod_openstudio', comments::COMMENT_TEXT_AREA, $c);
             }
         }
         $commentidsnothasreply = array_merge($commentidsnothasreply, $commentidshasselfreply);
@@ -1541,6 +1548,7 @@ class provider implements
             list($commentinsql, $commentinparams) = $DB->get_in_or_equal($commentidsnothasreply, SQL_PARAMS_NAMED);
             foreach ($commentidsnothasreply as $c) {
                 $fs->delete_area_files($context->id, 'mod_openstudio', 'contentcomment', $c);
+                $fs->delete_area_files($context->id, 'mod_openstudio', comments::COMMENT_TEXT_AREA, $c);
             }
             $DB->delete_records_select('openstudio_comments', "id $commentinsql", $commentinparams);
         }
@@ -1661,6 +1669,7 @@ class provider implements
             foreach ($comments as $comment) {
                 // Delete file of this comment.
                 $fs->delete_area_files($context->id, 'mod_openstudio', 'contentcomment', $comment->id);
+                $fs->delete_area_files($context->id, 'mod_openstudio', comments::COMMENT_TEXT_AREA, $comment->id);
             }
             // Delete comments.
             $DB->delete_records_select(

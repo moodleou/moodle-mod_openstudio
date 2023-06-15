@@ -121,8 +121,7 @@ class notification implements \templatable {
         global $DB, $OUTPUT;
         $userfrom = $DB->get_record('user', ['id' => $this->userfrom]);
         $userfrom->contextid = \context_user::instance($this->userfrom)->id;
-        $picture = new \user_picture($userfrom);
-        $picture->size = 48;
+        $renderer = util::get_renderer();
         // Action type icon, no alt text as it's supplementary to the message.
         $icon = new \pix_icon($this->icon . '_rgb_32px', '', 'mod_openstudio');
         $timesince = util::get_time_since_readable($this->userid, $this->timecreated);
@@ -135,7 +134,7 @@ class notification implements \templatable {
             'id' => $this->id,
             'contentid' => $this->contentid,
             'commentid' => empty($this->commentid) ? null : $this->commentid,
-            'picture' => $OUTPUT->render($picture),
+            'picture' => util::render_user_avatar($renderer, $userfrom),
             'message' => $this->message,
             'messageplain' => strip_tags($this->message),
             'icon' => $icon->export_for_template($output),

@@ -29,8 +29,10 @@ define([
     'core/ajax',
     'core/str',
     'mod_openstudio/scrollto',
-    'require'
-], function($, Ajax, Str, Scrollto, require) {
+    'require',
+    'core/notification',
+    'core_form/changechecker'
+], function($, Ajax, Str, Scrollto, require, Notification, FormChangeChecker) {
     var t;
     t = {
 
@@ -64,6 +66,7 @@ define([
             COMMENT_FORM: '.openstudio-comment-form', // Comment form wrapper.
             COMMENT_REPLY_FORM: '.openstudio-comment-reply-form', // Reply form wrapper.
             COMMENT_ATTACHMENT: '.openstudio-comment-form-content .filepicker-filename > a', // Attachment.
+            COMMENT_POST_BUTTON: '#id_postcomment',
 
             // Stream.
             COMMENT_THREAD: '.openstudio-comment-thread', // Comment thread wrapper.
@@ -77,6 +80,10 @@ define([
             DIALOG_HEADER: '.openstudio-comment-delete-header',
             BOUNDING_BOX: '.openstudio-comment-dialogue-container' // Dialogue wrapper.
 
+        },
+
+        SELECTOR: {
+            COMMENT_BOX_ID: '#id_commentext', // Comment box ID.
         },
 
         /**
@@ -118,6 +125,17 @@ define([
         },
 
         /**
+         * Focus textarea.
+         *
+         * @param {String} textAreaId
+         */
+        focusTextArea: function(textAreaId) {
+            const atto = $(textAreaId + 'editable');
+            atto.attr('contenteditable', 'true');
+            atto.focus();
+        },
+
+        /**
          * Show comment form
          *
          * @method showCommentForm
@@ -132,11 +150,9 @@ define([
             $(t.CSS.ADD_NEW_BUTTON).hide(); // Hide add new comment button.
             $(t.CSS.COMMENT_REPLY_FORM).hide(); // Hide comment reply forms.
 
-            // Scroll to form.
-            Scrollto.scrollToEl($(t.CSS.COMMENT_FORM_CONTENT), t.HEIGHT_TO_TOP);
-
             // Set focus on comment form.
             $('#openstudio_comment_form').focus();
+            t.focusTextArea(t.SELECTOR.COMMENT_BOX_ID);
         },
 
         /**
@@ -212,6 +228,7 @@ define([
                     cid: formdata.cid,
                     inreplyto: parseInt(formdata.inreplyto.trim()),
                     commenttext: formdata['commentext[text]'],
+                    commenttextitemid: formdata['commentext[itemid]'],
                     commentattachment: hasAttachment ? formdata.commentattachment : 0
                 }
             }]);
@@ -254,18 +271,19 @@ define([
 
                     // Set focus on comment form.
                     $('#openstudio_comment_form').focus();
+                    t.focusTextArea(t.SELECTOR.COMMENT_BOX_ID);
 
                     // Trigger oumedia plugin to render audio attachment.
                     if (window.oump) {
                         window.oump.harvest();
                     }
+                    // Reset the 'dirty' flag of the comment form.
+                    FormChangeChecker.resetFormDirtyState($(t.CSS.COMMENT_POST_BUTTON)[0]);
                 })
                 .always(function() {
                     M.util.js_complete('openstudioPostComment');
                 })
-                .fail(function(ex) {
-                    window.console.error('Log request failed ' + ex.message);
-                });
+                .fail(Notification.exception);
         },
 
         /**
@@ -349,9 +367,9 @@ define([
                     t.dialogue.hide();
 
                     // Set focus on comment form.
-                    t.dialogue.after('visibleChange', function () {
+                    t.dialogue.after('visibleChange', function() {
                         $('#openstudio_comment_form').focus();
-                    },  t.dialogue);
+                    }, t.dialogue);
                 })
                 .always(function() {
                     M.util.js_complete('openstudioDeleteComment');

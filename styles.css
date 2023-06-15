@@ -527,7 +527,16 @@
 }
 
 .openstudio-notification {
+    display: flex;
     padding: 15px;
+}
+
+.openstudio-notification .openstudio-notification-body-img img,
+.openstudio-notification .openstudio-notification-body-img span.userinitials {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin-right: 5px;
 }
 
 .openstudio-notification-none {
@@ -539,10 +548,6 @@
 .openstudio-notification-body {
     display: inline-block;
     vertical-align: top;
-}
-
-.openstudio-notification .userpicture {
-    margin-right: 5px;
 }
 
 .openstudio-notification-body {
@@ -601,7 +606,8 @@ button.openstudio-notification-stopbutton:focus {
     width: 16px;
 }
 
-.path-mod-openstudio .comments-content-popup img.defaultuserpic {
+.path-mod-openstudio .comments-content-popup img,
+.path-mod-openstudio .comments-content-popup span.userinitials {
     height: 30px;
     border-radius: 50%;
     margin-right: 10px;
@@ -775,7 +781,8 @@ button.openstudio-notification-stopbutton:focus {
         padding-right: 4px;
     }
 
-    .path-mod-openstudio .comments-content-popup img.defaultuserpic {
+    .path-mod-openstudio .comments-content-popup img,
+    .path-mod-openstudio .comments-content-popup span.userinitials {
         width: 46px;
         height: 46px;
         margin-left: 20px !important;
@@ -1460,6 +1467,10 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
     padding-bottom: 5px;
 }
 
+.openstudio-comment-text video {
+    max-width: 100%;
+}
+
 .openstudio-comment-thread-original-item .openstudio-comment-text {
     min-height: 89px;
 }
@@ -1504,11 +1515,11 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
     margin-top: 13px;
 }
 
-.openstudio-comment-owner img {
-    max-width: 48px;
-    max-height: 48px;
-    border-radius: 50%;
+.openstudio-comment-owner img,
+.openstudio-comment-owner span.userinitials {
     width: 48px;
+    height: 48px;
+    border-radius: 50%;
 }
 
 .openstudio-comment-flag {
@@ -1633,7 +1644,8 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
     display: flex;
 }
 
-.openstudio-folder-view-comments .openstudio-comment-owner img {
+.openstudio-folder-view-comments .openstudio-comment-owner img,
+.openstudio-folder-view-comments .openstudio-comment-owner span.userinitials {
     float: left;
     width: 100%;
 }
@@ -2973,13 +2985,17 @@ body .openstudio-grid-item-content-title a:focus {
     margin-right: 8px;
 }
 
-.openstudio-grid-item-content-detail-owner-img img {
+.openstudio-grid-item-content-detail-owner-img img,
+.openstudio-grid-item-content-detail-owner-img span.userinitials,
+.openstudio-notification-body-owner-img img,
+.openstudio-notification-body-owner-img span.userinitials {
     width: 30px;
     height: 30px;
     border-radius: 50%;
 }
 
 .openstudio-grid-item-content-detail-owner {
+    display: flex;
     margin-bottom: 15px;
     min-height: 35px;
 }
@@ -3592,6 +3608,11 @@ body:not(.ios):not(.android) .openstudio-content-view-flag-icon.has-hover:hover 
 
 }
 
+#page-mod-openstudio-content #openstudio_content_view_post_owner.openstudio-content-view-block-content,
+#page-mod-openstudio-folder #openstudio_folder_view_post_owner.openstudio-content-view-block-content {
+    display: flex;
+}
+
 .openstudio-content-view-block-content {
     margin-bottom: 27px;
 }
@@ -3634,9 +3655,10 @@ body:not(.ios):not(.android) .openstudio-content-view-flag-icon.has-hover:hover 
     text-decoration: none;
 }
 
-.openstudio-content-view-user-picture img {
+.openstudio-content-view-user-picture img,
+.openstudio-content-view-user-picture span.userinitials {
     width: 64px;
-    height: auto;
+    height: 64px;
     border-radius: 50%;
 }
 
@@ -4250,7 +4272,8 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     margin-right: 10px;
 }
 
-.openstudio-profile-img img {
+.openstudio-profile-img img,
+.openstudio-profile-img span.userinitials {
     width: 48px;
     height: 48px;
     border-radius: 50%;
@@ -4385,9 +4408,9 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     margin-left: 15px;
 }
 
-.openstudio-profile-bar .openstudio-profile-user-picture img{
+.openstudio-profile-bar .openstudio-profile-user-picture img,
+.openstudio-profile-bar .openstudio-profile-user-picture span.userinitials {
     float: left;
-    display: inline-block;
     width: 48px;
     height: 48px;
     box-sizing: content-box;
@@ -5012,8 +5035,10 @@ a.openstudio-add-new-content-link:hover  {
     margin-bottom: 25px;
 }
 
-.openstudio-folder-global-background .openstudio-comment-owner img {
+.openstudio-folder-global-background .openstudio-comment-owner img,
+.openstudio-folder-global-background .openstudio-comment-owner span.userinitials {
     width: 36px;
+    height: 36px;
 }
 
 .openstudio-folder-global-background .openstudio-comment-flag-status img {
@@ -5375,9 +5400,10 @@ a.openstudio-add-new-content-link:hover  {
         padding: 10px;
     }
 
-    .openstudio-comment-owner img {
-        float: left;
+    .openstudio-comment-owner img,
+    .openstudio-comment-owner span.userinitials {
         width: 53px;
+        height: 53px;
     }
 
     .openstudio-comment-owner-name {
@@ -5402,6 +5428,10 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-comment-thread-item .openstudio-comment-leftcolumn {
         width: 100%;
+    }
+
+    .openstudio-comment-leftcolumn.openstudio-comment-owner {
+        display: flex;
     }
 
     .openstudio-comment-thread-item .openstudio-comment-text {
@@ -5782,7 +5812,8 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-grid-item-content-preview-default {
         margin-top: 1px;
     }
-    .openstudio-profile-bar .openstudio-profile-user-picture img {
+    .openstudio-profile-bar .openstudio-profile-user-picture img,
+    .openstudio-profile-bar .openstudio-profile-user-picture span.userinitials {
         margin-top: 9px;
     }
     .openstudio-grid-item-content-detail-owner-img {
@@ -6413,7 +6444,10 @@ a.openstudio-add-new-content-link:hover  {
         padding-top: 9px;
     }
 
-    .openstudio-grid-item-content-detail-owner-img img {
+    .openstudio-grid-item-content-detail-owner-img img,
+    .openstudio-grid-item-content-detail-owner-img span.userinitials,
+    .openstudio-notification-body-owner-img img,
+    .openstudio-notification-body-owner-img span.userinitials {
         width: 46px;
         height: 46px;
     }
@@ -7136,9 +7170,14 @@ a.openstudio-add-new-content-link:hover  {
         font-size: 1.14285em;
     }
 
-    .openstudio-content-view-user-picture img,
     .openstudio-content-view-version-img img {
         width: 48px;
+    }
+
+    .openstudio-content-view-user-picture img,
+    .openstudio-content-view-user-picture span.userinitials {
+        width: 48px;
+        height: 48px;
     }
 
     .openstudio-content-view-version-info-name {
@@ -8111,9 +8150,10 @@ a.openstudio-add-new-content-link:hover  {
         font-size: 1.428em;
     }
 
-    .openstudio-comment-owner img {
-        float: left;
+    .openstudio-comment-owner img,
+    .openstudio-comment-owner span.userinitials {
         width: 53px;
+        height: 53px;
     }
 
     .openstudio-comment-owner-name {
@@ -8252,15 +8292,8 @@ a.openstudio-add-new-content-link:hover  {
         width: 200px;
     }
 
-    .openstudio-folder-preview-default img  {
+    .openstudio-folder-preview-default img {
         width: 72px;
-    }
-
-    .openstudio-comment-owner img {
-        min-width: 48px;
-    }
-    .openstudio-comment-leftcolumn.openstudio-comment-owner {
-        display: flex;
     }
 }
 

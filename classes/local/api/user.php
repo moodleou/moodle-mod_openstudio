@@ -65,7 +65,6 @@ SELECT max(f.timemodified) AS fmodified
 
 EOF;
         $fmodified = $DB->get_field_sql($sql, array($userid));
-        $fmodified = false;
 
         $sql = <<<EOF
 SELECT max(t.timemodified) AS tmodified
@@ -208,7 +207,7 @@ EOF;
      * @param int $pagestart Result pagination start position
      * @param int $pagesize Result page size.
      * @param int $includecount True to include result count for the request.
-     * @return object return SQL recordset or false if error encounterd.
+     * @return object/array with users or false if error encounterd.
      */
     public static function get_all(
             $studioid,
@@ -238,16 +237,22 @@ EOF;
 SELECT DISTINCT u.id, u.username, u.firstname, u.lastname, u.email,
                 u.picture, u.description, u.imagealt,
                 u.firstnamephonetic, u.lastnamephonetic, u.middlename, u.alternatename,
-                max(s.timemodified) AS slottimemodified,
-                max(f.timemodified) AS flagtimemodified
+                (SELECT max(f.timemodified)
+                FROM {openstudio_flags} f 
+            	JOIN {openstudio_contents} fc ON fc.id = f.contentid AND fc.openstudioid = ?
+                WHERE f.userid = u.id) flagtimemodified,
+                (SELECT max(sc.timemodified)
+                FROM {openstudio_contents} sc 
+                WHERE sc.userid = u.id
+                AND sc.openstudioid = ?) slottimemodified
            FROM {openstudio_contents} s
      INNER JOIN {user} u ON u.id = s.userid
-LEFT OUTER JOIN {openstudio_flags} f ON f.userid = u.id AND f.contentid = s.id
           WHERE s.openstudioid = ?
             AND u.id != ?
-
 EOF;
 
+        $sqlparams[] = $studioid;
+        $sqlparams[] = $studioid;
         $sqlparams[] = $studioid;
         $sqlparams[] = $USER->id;
 
@@ -363,12 +368,12 @@ EOF;
             $resultcount = $DB->count_records_sql($sqlcount, $sqlparams);
         }
 
-        $userdata = $DB->get_recordset_sql($sql, $sqlparams, $limitfrom, $limitnum);
-        if ($userdata->valid()) {
+        $users = $DB->get_records_sql($sql, $sqlparams, $limitfrom, $limitnum);
+        if (!empty($users)) {
             if ($includecount) {
-                return (object) array('people' => $userdata, 'total' => $resultcount);
+                return (object) array('people' => $users, 'total' => $resultcount);
             } else {
-                return $userdata;
+                return $users;
             }
         }
 
@@ -398,25 +403,31 @@ EOF;
         // in the studio_flags or studio_tracking table.
         // Count of all comments posted by a user for a given studio.
         $sql = <<<EOF
-  SELECT t.userid, max(t.timemodified) as tmodified,
+  SELECT s.userid,
          (SELECT max(f.timemodified) 
             FROM {openstudio_flags} f
-           WHERE f.userid = t.userid) AS fmodified,
+            JOIN {openstudio_contents} fc ON fc.id = f.contentid AND fc.openstudioid = ?
+           WHERE f.userid = s.userid) fmodified,
+         (SELECT max(t.timemodified) 
+            FROM {openstudio_tracking} t
+            JOIN {openstudio_contents} tc ON tc.id = t.contentid AND tc.openstudioid = ?
+           WHERE t.userid = s.userid) tmodified,
          (SELECT count(c.id) 
             FROM {openstudio_comments} c
-            JOIN {openstudio_contents} s ON s.id = c.contentid AND s.openstudioid = ?
-           WHERE c.userid = t.userid AND c.deletedby IS NULL) AS totalpostedcomments,
-         (SELECT count(c.id) 
-            FROM {openstudio_comments} c
-            JOIN {openstudio_contents} s ON s.id = c.contentid AND s.openstudioid = ?
-           WHERE c.userid = t.userid AND s.userid != t.userid AND c.deletedby IS NULL) AS totalpostedcommentsexcludeown
-    FROM {openstudio_tracking} t
-   WHERE t.userid {$useridsql}
-GROUP BY t.userid
-
+            JOIN {openstudio_contents} cc ON cc.id = c.contentid AND cc.openstudioid = ?
+           WHERE c.userid = s.userid AND c.deletedby IS NULL) AS totalpostedcomments,
+         (SELECT count(oc.id) 
+            FROM {openstudio_comments} oc
+            JOIN {openstudio_contents} occ ON occ.id = oc.contentid AND occ.openstudioid = ?
+           WHERE oc.userid != s.userid AND oc.deletedby IS NULL) AS totalpostedcommentsexcludeown
+    FROM {openstudio_contents} s
+   WHERE s.openstudioid = ?
+     AND s.userid {$useridsql}
+GROUP BY s.userid
 EOF;
 
-        $results = $DB->get_recordset_sql($sql, array_merge([$studioid, $studioid], $useridparams));
+        $results = $DB->get_recordset_sql($sql,
+                array_merge([$studioid, $studioid, $studioid, $studioid, $studioid], $useridparams));
         foreach ($results as $result) {
             $lastactivedate = false;
 

@@ -142,8 +142,7 @@ function xmldb_openstudio_upgrade($oldversion=0) {
 						      AND oc.inreplyto = subquery.id");
         upgrade_mod_savepoint(true, 2022111400, 'openstudio');
     }
-        // Must always return true from these functions.
+
+    // Must always return true from these functions.
     return $result;
-
-
 }

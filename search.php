@@ -101,7 +101,7 @@ $vidcrumbarray[$placeholdertext2] = new moodle_url('/mod/openstudio/search.php',
 
 util::page_setup($PAGE, $pagetitle, $pageheading, $strpageurl, $course, $cm);
 util::add_breadcrumb($PAGE, $cm->id, navigation_node::TYPE_ACTIVITY, $vidcrumbarray);
-
+$renderer = $PAGE->get_renderer('mod_openstudio');
 // Set view mode.
 if (! in_array($vid, array(
         content::VISIBILITY_PRIVATE,
@@ -299,8 +299,7 @@ if (trim($searchtext) == '') {
 
                 // User picture.
                 $user = user::get_user_by_id($content->userid);
-                $picture = new user_picture($user);
-                $content->userpictureurl = $picture->get_url($PAGE)->out(false);
+                $content->userpicturehtml = util::render_user_avatar($renderer, $user);
 
                 // View other user's work.
                 if ($content->userid != $viewuser->id) {
@@ -386,7 +385,6 @@ if ($contentdata->total == 0) {
 }
 
 // Generate stream html.
-$renderer = $PAGE->get_renderer('mod_openstudio');
 $PAGE->set_button($renderer->searchform($theme, $vid, $id, $groupid));
 
 // Output stream html with wrapper for theme header and footer.

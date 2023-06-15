@@ -22,15 +22,21 @@
 
 namespace mod_openstudio;
 
+use mod_openstudio\local\api\comments;
+
 defined('MOODLE_INTERNAL') || die();
 
-class comments_testcase extends \advanced_testcase {
+global $CFG;
+require_once($CFG->dirroot . '/mod/openstudio/tests/test_utils.php');
+
+class comments_test extends \advanced_testcase {
 
     protected $users;
     protected $file;
     protected $course;
     protected $generator; // Contains mod_openstudio specific data generator functions.
     protected $studiolevels; // Generic studio instance with no levels or slots.
+    protected $studiolevelscontext; // Context of generic studio instance with no levels or slots.
     protected $singleentrydata;
     protected $contentdata;
     protected $teacherroleid;
@@ -110,6 +116,7 @@ class comments_testcase extends \advanced_testcase {
         // Create generic studios.
         $this->studiolevels = $this->generator->create_instance(array('course' => $this->course->id, 'idnumber' => 'OS1'));
         $this->studiolevels->leveldata = $this->generator->create_mock_levels($this->studiolevels->id);
+        $this->studiolevelscontext = \context_module::instance($this->studiolevels->cmid);
     }
 
     protected function tearDown(): void {
@@ -389,4 +396,109 @@ class comments_testcase extends \advanced_testcase {
         $this->assertFalse(\mod_openstudio\local\api\comments::get_attachment($comment2->id));
     }
 
+    /**
+     * Comment text dataset.
+     *
+     * @return array
+     */
+    public function comment_text_provider(): array {
+        return [
+                [
+                        '<img src="@@PLUGINFILE@@/6pqtmvdwmcr91.jpg" class="img-fluid atto_image_button_text-bottom">',
+                        ' [Image] ',
+                ],
+                [
+                        '',
+                        '',
+                ],
+                [
+                        '<img src="@@PLUGINFILE@@/6pqtmvdwmcr91.jpg" /> Some text.',
+                        ' [Image] Some text.',
+                ],
+                [
+                        'Before text <img src="@@PLUGINFILE@@/6pqtmvdwmcr91.jpg" /> After text.',
+                        'Before text [Image] After text.',
+                ],
+                [
+                        '<img src="@@PLUGINFILE@@/6pqtmvdwmcr91.jpg" /> <b>Some text</b>.',
+                        ' [Image] <b>Some text</b>.',
+                ],
+        ];
+    }
+
+    /**
+     * Test shorten comment text with placeholder.
+     *
+     * @dataProvider comment_text_provider
+     */
+    public function test_nice_shorten_text(string $commenttext, string $expectedresult): void {
+        $result = \mod_openstudio\local\api\comments::nice_shorten_text($commenttext);
+        $this->assertSame($expectedresult, $result);
+    }
+
+    /**
+     * Test create comment API with comment text has images.
+     *
+     * @depends test_comments_api_create
+     * @return array
+     */
+    public function test_comments_api_create_comment_text_with_images(): array {
+        global $DB;
+        $this->resetAfterTest(true);
+        $user = $this->users->students->one;
+
+        $contentid1 = $this->generator->create_contents([
+                'openstudio' => 'OS1',
+                'userid' => $user->id,
+                'name' => 'Slot1',
+                'description' => random_string(),
+        ]);
+
+        // The function file_save_draft_area_files still uses $USER.
+        $this->setUser($user);
+        $filename = 'test1.jpg';
+        [$itemid, $link] = test_utils::create_draft_file($filename);
+        $commenttext = '<p>Test image link: <img src="' . $link .'"  alt="image"/></p>';
+
+        $commentid = $this->generator->create_comment([
+                'contentid' => $contentid1,
+                'userid' => $user->id,
+                'comment' => $commenttext,
+                'filecontext' => $this->studiolevelscontext,
+                'commenttextitemid' => $itemid,
+        ]);
+        $this->assertIsInt($commentid);
+
+        $comment = $DB->get_record('openstudio_comments', ['id' => $commentid],
+                'id, commenttext', MUST_EXIST);
+        // Verify that comment text is created with files inside.
+        $this->assertStringContainsString('@@PLUGINFILE@@', $comment->commenttext);
+
+        // Verify that comment file also stored in files table.
+        $this->assertTrue($DB->record_exists('files', [
+                'itemid' => $commentid,
+                'filearea' => comments::COMMENT_TEXT_AREA,
+                'filename' => $filename,
+                'userid' => $user->id,
+        ]));
+
+        return [$comment, $filename];
+    }
+
+    /**
+     * Test filter comment text.
+     *
+     * @depends test_comments_api_create_comment_text_with_images
+     * @param array $params [$comment, $filename] Contains comment data
+     * and file name of uploaded file included in comment text.
+     */
+    public function test_filter_comment_text(array $params): void {
+        [$comment, $filename] = $params;
+        $commentstring = \mod_openstudio\local\api\comments::filter_comment_text(
+                $comment->commenttext, $comment->id, $this->studiolevelscontext);
+        $this->assertStringNotContainsString('@@PLUGINFILE@@', $commentstring);
+        $expectstring = '/pluginfile.php/' . $this->studiolevelscontext->id .
+                '/mod_openstudio/commenttext/' . $comment->id .'/'. $filename . '" alt="image" /></p>';
+        $this->assertStringContainsString($expectstring, $commentstring);
+    }
 }
