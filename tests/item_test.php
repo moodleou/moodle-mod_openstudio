@@ -25,7 +25,7 @@ namespace mod_openstudio;
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
-class item_testcase extends \advanced_testcase  {
+class item_test extends \advanced_testcase  {
 
     private $course;
     private $generator; // Contains mod_openstudio specific data generator functions.
@@ -471,34 +471,30 @@ class item_testcase extends \advanced_testcase  {
 
     }
 
-    public function test_studio_api_item_get_occurrences() {
+    public function test_studio_api_item_get_occurrences(): void {
         $hash = sha1(\mod_openstudio\local\api\content::TYPE_URL . ':' . $this->contents->web5->content);
         $occurences = \mod_openstudio\local\api\item::get_occurences($hash);
-
-        // NOTE: we use base64_encode as the hash value may contain funny characters which
-        // causes PHPUnit to complain when running which results in a false error report.
-
         $this->assertEquals(2, count($occurences));
-        $foundusernames = array();
+        $occurenceusers = [];
         foreach ($occurences as $occurence) {
-            $foundusernames[] = base64_encode(fullname($occurence));
+            $occurenceusers[$occurence->userid] = $occurence;
         }
-        $this->assertContains(base64_encode(fullname($this->users->students->one)), $foundusernames);
-        $this->assertContains(base64_encode(fullname($this->users->students->two)), $foundusernames);
-        $this->assertNotContains(base64_encode(fullname($this->users->students->three)), $foundusernames);
+        $this->assertArrayHasKey($this->users->students->one->id, $occurenceusers);
+        $this->assertArrayHasKey($this->users->students->two->id, $occurenceusers);
+        $this->assertArrayNotHasKey($this->users->students->three->id, $occurenceusers);
         $firstoccurence = reset($occurences);
         $this->assertEquals($firstoccurence->containertype, \mod_openstudio\local\api\item::CONTENT);
         $this->assertEquals($firstoccurence->containerid, $this->contents->web5->id);
 
         $occurences = \mod_openstudio\local\api\item::get_occurences($hash, false);
         $this->assertEquals(3, count($occurences));
-        $foundusernames = array();
+        $occurenceusers = [];
         foreach ($occurences as $occurence) {
-            $foundusernames[] = base64_encode(fullname($occurence));
+            $occurenceusers[$occurence->userid] = $occurence;
         }
-        $this->assertContains(base64_encode(fullname($this->users->students->one)), $foundusernames);
-        $this->assertContains(base64_encode(fullname($this->users->students->two)), $foundusernames);
-        $this->assertContains(base64_encode(fullname($this->users->students->three)), $foundusernames);
+        $this->assertArrayHasKey($this->users->students->one->id, $occurenceusers);
+        $this->assertArrayHasKey($this->users->students->two->id, $occurenceusers);
+        $this->assertArrayHasKey($this->users->students->three->id, $occurenceusers);
 
         $firstoccurence = reset($occurences);
         $this->assertEquals($firstoccurence->containertype, \mod_openstudio\local\api\item::VERSION);
