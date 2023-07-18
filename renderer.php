@@ -1081,6 +1081,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $folderdata = renderer_utils::content_flags($cmid, $permissions, $folderdata);
 
         $folderdata->visibilityicon = renderer_utils::content_visibility_icon($folderdata);
+        $folderdata->itemsharewith = renderer_utils::get_content_visibility_name($folderdata);
         $folderdata->folderrequestfeedbackenable = $folderdata->isownedbyviewer;
         $folderdata->addcontent = $folderaddcontent->out(false);
         $folderdata->contentdatadate = userdate($folderdata->timemodified, get_string('formattimedatetime', 'openstudio'));

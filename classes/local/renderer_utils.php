@@ -24,6 +24,7 @@ namespace mod_openstudio\local;
 
 use context_module;
 use mod_openstudio\local\api\content;
+use mod_openstudio\local\api\group;
 use mod_openstudio\local\api\stream;
 use mod_openstudio\local\api\flags;
 use mod_openstudio\local\api\levels;
@@ -656,6 +657,7 @@ class renderer_utils {
             $contentdata->visibility = $folder->visibility;
         }
         $contentdata->contentvisibilityicon = self::content_visibility_icon($contentdata);
+        $contentdata->itemsharewith = self::get_content_visibility_name($contentdata);
 
         if (property_exists($contentdata, 'folderid')) {
             $foldercontent = folder::get_content($contentdata->folderid, $contentdata->id);
@@ -685,13 +687,7 @@ class renderer_utils {
     public static function content_visibility_icon($contentdata) {
         global $OUTPUT;
 
-        $visibility = content::VISIBILITY_PRIVATE_PINBOARD;
-        if (isset($contentdata->visibility)) {
-            $visibility = (int)$contentdata->visibility;
-            if ($visibility < 0) {
-                $visibility = content::VISIBILITY_GROUP;
-            }
-        }
+        $visibility = self::get_content_visibility($contentdata);
 
         switch ($visibility) {
             case content::VISIBILITY_MODULE:
@@ -714,6 +710,51 @@ class renderer_utils {
         }
 
         return $contentvisibilityicon;
+    }
+
+    /**
+     * This function get content visibility of a content.
+     *
+     * @param \stdClass $contentdata The content records to display.
+     * @return int
+     */
+    public static function get_content_visibility(\stdClass $contentdata): int {
+        $visibility = content::VISIBILITY_PRIVATE_PINBOARD;
+        if (isset($contentdata->visibility)) {
+            $visibility = (int)$contentdata->visibility;
+            if ($visibility < 0) {
+                $visibility = content::VISIBILITY_GROUP;
+            }
+        }
+        return $visibility;
+    }
+
+    /**
+     * This function generate visibility name for a content.
+     *
+     * @param \stdClass $contentdata The content records to display.
+     * @return string
+     */
+    public static function get_content_visibility_name(\stdClass $contentdata): string {
+
+        $visibility = self::get_content_visibility($contentdata);
+
+        switch ($visibility) {
+            case content::VISIBILITY_MODULE:
+                return get_string('contentitemsharewithmymodule', 'openstudio');
+            case content::VISIBILITY_GROUP:
+                return get_string('contentitemsharewithgroup', 'openstudio',
+                    group::get_name(abs($contentdata->visibility)));
+            case content::VISIBILITY_WORKSPACE:
+            case content::VISIBILITY_PRIVATE:
+            case content::VISIBILITY_PRIVATE_PINBOARD:
+                return get_string('contentitemsharewithonlyme', 'openstudio');
+            case content::VISIBILITY_TUTOR:
+                return get_string('contentitemsharewithmytutor', 'openstudio');
+            default:
+                // Fallback to share with only me.
+                return get_string('contentitemsharewithonlyme', 'openstudio');
+        }
     }
 
     /**
