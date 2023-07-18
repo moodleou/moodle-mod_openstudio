@@ -51,16 +51,17 @@
                                 {{#comments}}{{comments}}{{/comments}}
                                 {{^comments}}{{totalcomments}}{{/comments}}
                             </span>
-                            <span>
+                            <span class="openstudio-tooltip">
                                 <img src="{{#iscurrentusercomment}}{{commentsicon}}{{/iscurrentusercomment}}
                                           {{^iscurrentusercomment}}{{commentsgreyicon}}{{/iscurrentusercomment}}"
                                     class="openstudio-grid-item-content-detail-info-icon" alt="{{#str}} commentslabel, openstudio {{/str}}"/>
+                                <span class="openstudio-tooltiptext interaction-icon">{{#str}} commentslabel, openstudio {{/str}}</span>
                             </span>
                         </span>
                         {{>mod_openstudio/commentlist_content_block}}
                     </div>
                 </span>
-                <span id="content_view_icon_{{contentflaginspire}}" class="openstudio-grid-item-content-detail-info-box flag_content_block"
+                <span id="content_view_icon_{{contentflaginspire}}" class="openstudio-grid-item-content-detail-info-box flag_content_block inspired"
                       data-cmid="{{cmid}}" data-contentid="{{contentid}}" data-fid="{{contentflaginspire}}" tabindex="0"
                       {{#contentflaginspireactive}}data-mode="off"{{/contentflaginspireactive}}
                       {{^contentflaginspireactive}}data-mode="on"{{/contentflaginspireactive}}
@@ -70,13 +71,14 @@
                         {{#inspired}}{{inspired}}{{/inspired}}
                         {{^inspired}}{{totalinspired}}{{/inspired}}
                     </span>
-                    <span>
+                    <span class="openstudio-tooltip">
                         <img src="{{#contentflaginspireactive}}{{inspirationicon}}{{/contentflaginspireactive}}
                             {{^contentflaginspireactive}}{{inspirationgreyicon}}{{/contentflaginspireactive}}"
-                            class="openstudio-grid-item-content-detail-info-icon" alt="{{#str}} inspirationlabel, openstudio {{/str}}" />
+                             class="openstudio-grid-item-content-detail-info-icon" alt="{{#str}} inspiredlabel, openstudio {{/str}}" />
+                        <span class="openstudio-tooltiptext interaction-icon">{{#str}} inspiredlabel, openstudio {{/str}}</span>
                     </span>
                 </span>
-                <span id="content_view_icon_{{contentflagsmile}}" class="openstudio-grid-item-content-detail-info-box flag_content_block"
+                <span id="content_view_icon_{{contentflagsmile}}" class="openstudio-grid-item-content-detail-info-box flag_content_block smiles"
                       data-cmid="{{cmid}}" data-contentid="{{contentid}}" data-fid="{{contentflagsmile}}" tabindex="0"
                       {{#contentflagsmileactive}}data-mode="off"{{/contentflagsmileactive}}
                       {{^contentflagsmileactive}}data-mode="on"{{/contentflagsmileactive}}
@@ -85,13 +87,14 @@
                         {{#mademelaugh}}{{mademelaugh}}{{/mademelaugh}}
                         {{^mademelaugh}}{{totalmademelaugh}}{{/mademelaugh}}
                     </span>
-                    <span>
+                    <span class="openstudio-tooltip">
                         <img src="{{#contentflagsmileactive}}{{participationicon}}{{/contentflagsmileactive}}
                             {{^contentflagsmileactive}}{{participationgreyicon}}{{/contentflagsmileactive}}"
-                            class="openstudio-grid-item-content-detail-info-icon" alt="{{#str}} participationlabel, openstudio {{/str}}" />
+                             class="openstudio-grid-item-content-detail-info-icon" alt="{{#str}} smilelabel, openstudio {{/str}}" />
+                        <span class="openstudio-tooltiptext interaction-icon">{{#str}} smilelabel, openstudio {{/str}}</span>
                     </span>
                 </span>
-                <span id="content_view_icon_{{contentflagfavourite}}" class="openstudio-grid-item-content-detail-info-box flag_content_block"
+                <span id="content_view_icon_{{contentflagfavourite}}" class="openstudio-grid-item-content-detail-info-box flag_content_block favourites"
                       data-cmid="{{cmid}}" data-contentid="{{contentid}}" data-fid="{{contentflagfavourite}}" tabindex="0"
                       {{#contentflagfavouriteactive}}data-mode="off"{{/contentflagfavouriteactive}}
                       {{^contentflagfavouriteactive}}data-mode="on"{{/contentflagfavouriteactive}}
@@ -100,10 +103,11 @@
                         {{#favourite}}{{favourite}}{{/favourite}}
                         {{^favourite}}{{totalfavourite}}{{/favourite}}
                     </span>
-                    <span>
+                    <span class="openstudio-tooltip">
                         <img src="{{#contentflagfavouriteactive}}{{favouriteicon}}{{/contentflagfavouriteactive}}
                             {{^contentflagfavouriteactive}}{{favouritegreyicon}}{{/contentflagfavouriteactive}}"
-                            class="openstudio-grid-item-content-detail-info-icon" alt="{{#str}} favouritelabel, openstudio {{/str}}" />
+                             class="openstudio-grid-item-content-detail-info-icon" alt="{{#str}} favouritelabel, openstudio {{/str}}" />
+                        <span class="openstudio-tooltiptext interaction-icon">{{#str}} favouritelabel, openstudio {{/str}}</span>
                     </span>
                 </span>
             </div>

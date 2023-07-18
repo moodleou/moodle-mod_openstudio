@@ -2886,6 +2886,11 @@ body .openstudio-grid-item-content-title a:focus {
     padding-left: 15px;
 }
 
+.openstudio-grid-item-content .openstudio-tooltip .openstudio-tooltiptext.interaction-icon {
+    width: auto;
+    padding: 5px;
+}
+
 .openstudio-tooltip .openstudio-tooltiptext {
     visibility: hidden;
     background-color: #ffffff;
@@ -2924,7 +2929,8 @@ body .openstudio-grid-item-content-title a:focus {
 }
 
 .openstudio-tooltip:hover .openstudio-tooltiptext,
-.openstudio-grid-item-content-icon:focus ~ .openstudio-tooltiptext {
+.openstudio-grid-item-content-icon:focus ~ .openstudio-tooltiptext,
+.openstudio-grid-item-content-detail-info-box:focus .openstudio-grid-item-content-detail-info-icon ~ .openstudio-tooltiptext {
     visibility: visible;
     opacity: 1;
 }
@@ -3066,6 +3072,27 @@ body .openstudio-grid-item-content-title a:focus {
     position: absolute;
     margin-left: 26px;
     text-align: center;
+    z-index: 1;
+}
+
+.openstudio-grid-item-content-detail-info .notifications .openstudio-tooltip .openstudio-tooltiptext {
+    margin-left: -47px;
+}
+
+.openstudio-grid-item-content-detail-info .inspired .openstudio-tooltip .openstudio-tooltiptext {
+    margin-left: -38px;
+}
+
+.openstudio-grid-item-content-detail-info .smiles .openstudio-tooltip .openstudio-tooltiptext {
+    margin-left: -35px;
+}
+
+.openstudio-grid-item-content-detail-info .favourites .openstudio-tooltip .openstudio-tooltiptext {
+    margin-left: -46px;
+}
+
+.openstudio-grid-item-content-detail-info-group .openstudio-tooltip {
+    padding: 0;
 }
 
 .openstudio-grid-item-content-detail-info .double-digit {
@@ -7220,11 +7247,40 @@ a.openstudio-add-new-content-link:hover  {
         bottom: 75%;
         margin-left: -110px;
     }
+
+    .openstudio-grid-item-content .openstudio-grid-item-content-detail-info-group .openstudio-tooltip .openstudio-tooltiptext {
+        bottom: 135%;
+    }
+
     .openstudio-grid-item-content .openstudio-tooltip {
         float: right;
     }
+
+    .openstudio-grid-item-content .openstudio-grid-item-content-detail-info-group .openstudio-tooltip {
+        float: unset;
+    }
+
     .openstudio-tooltip .openstudio-tooltiptext::after {
         left: 87%;
+    }
+    .openstudio-grid-item-content .openstudio-grid-item-content-detail-info-group .openstudio-tooltip .openstudio-tooltiptext::after {
+        left: 50%;
+    }
+
+    .openstudio-grid-item-content-detail-info .notifications .openstudio-tooltip .openstudio-tooltiptext {
+        margin-left: -52px;
+    }
+
+    .openstudio-grid-item-content-detail-info .inspired .openstudio-tooltip .openstudio-tooltiptext {
+        margin-left: -43px;
+    }
+
+    .openstudio-grid-item-content-detail-info .smiles .openstudio-tooltip .openstudio-tooltiptext {
+        margin-left: -39px;
+    }
+
+    .openstudio-grid-item-content-detail-info .favourites .openstudio-tooltip .openstudio-tooltiptext {
+        margin-left: -51px;
     }
 
     .openstudio-content-view-version-title-box .openstudio-content-view-title {
