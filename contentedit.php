@@ -133,6 +133,7 @@ if ($sid > 0) {
 
 $contentdataname = '';
 $contentisinpinboard = false;
+$level3data = false;
 
 if ($lid > 0) {
     $level3data = levels::get_record(defaults::CONTENTLEVELCONTAINER, $lid);
@@ -837,7 +838,9 @@ if ($contentform->is_cancelled()) {
         $contentupdatemode .= content::UPDATEMODE_FOLDER;
         $contentdata->name = empty($contentdata->name) ? $contentdata->l3name : $contentdata->name;
     } else if ($vid === content::VISIBILITY_PRIVATE) {
-        $contentdata->name = $contentdata->name ?? $level3data->name;
+        if ($level3data !== false) {
+            $contentdata->name = $contentdata->name ?? $level3data->name;
+        }
     }
 
     $contentform->set_data($contentdata);
