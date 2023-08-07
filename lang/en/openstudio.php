@@ -72,6 +72,7 @@ $string['completiondetail:posts'] = 'Make contents: {$a}';
 $string['completiondetail:comments'] = 'Make comments: {$a}';
 $string['completiondetail:postscomments'] = 'Make contents and comments: {$a}';
 
+$string['contentthumbnailalt'] = 'Add content for {$a}';
 
 $string['event:contentviewed'] = 'View content';
 $string['event:folderviewed'] = 'View folder';

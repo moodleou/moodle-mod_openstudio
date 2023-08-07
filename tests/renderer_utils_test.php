@@ -27,6 +27,7 @@ namespace mod_openstudio;
 
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\renderer_utils;
+use mod_openstudio\local\util\defaults;
 
 /**
  * Unit tests for mod/openstudio/classes/local/renderer_utils.php.
@@ -124,5 +125,40 @@ class renderer_utils_test extends \advanced_testcase {
         $contentdata->visibility = -$group->id;
         $expectname = get_string('contentitemsharewithgroup', 'openstudio', $group->name);
         $this->assertEquals($expectname, renderer_utils::get_content_visibility_name($contentdata));
+    }
+
+    /**
+     * Test get alt text for "add content" based on content type and visibility.
+     */
+    public function test_get_content_thumbnail_alt(): void {
+        // Test folder content on slot in 'My Activities'.
+        $this->assertEquals('content 1', renderer_utils::get_content_thumbnail_alt((object) [
+            'name' => 'content 1',
+            'l3name' => 'slot 1',
+        ], content::VISIBILITY_PRIVATE));
+
+        // Test empty folder on slot in 'My Activities'.
+        $this->assertEquals('slot 2', renderer_utils::get_content_thumbnail_alt((object) [
+            'name' => '',
+            'l3name' => 'slot 2',
+        ], content::VISIBILITY_PRIVATE));
+
+        // Test slot in 'My Activities'.
+        $this->assertEquals('slot 3', renderer_utils::get_content_thumbnail_alt((object) [
+            'name' => 'slot 3',
+        ], content::VISIBILITY_PRIVATE));
+
+        // Test folder content on slot in 'My Module'.
+        $this->assertEquals('slot 4', renderer_utils::get_content_thumbnail_alt((object) [
+            'name' => '',
+            'l3name' => 'slot 4',
+            'levelid' => 1,
+            'levelcontainer' => defaults::CONTENTLEVELCONTAINER,
+        ], content::VISIBILITY_MODULE));
+
+        // Test content in 'My Module'.
+        $this->assertEquals('content 2', renderer_utils::get_content_thumbnail_alt((object) [
+            'name' => 'content 2',
+        ], content::VISIBILITY_MODULE));
     }
 }

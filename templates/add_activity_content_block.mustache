@@ -31,7 +31,8 @@
         "l3name": "Content A",
         "isfolder" : false,
         "folderlink" : "http://example.com/mod/openstudio/folder.php?id=3&sid=9",
-        "createcontentthumbnail" : "../../../mod/openstudio/pix/uploads_rgb_32px.svg"
+        "createcontentthumbnail" : "../../../mod/openstudio/pix/uploads_rgb_32px.svg",
+        "contentthumbnailalt" : "Add content for Content 1"
     }
 
 }}
@@ -58,7 +59,7 @@
                     <img class="openstudio-folder-tab" src="{{{folderdefaultthumbnail}}}" alt="{{{name}}}">
                     <div class="openstudio-folder-background">
                         <div class="openstudio-default-folder-background">
-                            <img class="openstudio-default-folder-img openstudio-default-folder-empty-img" src="{{{defaultfolderimg}}}" alt="{{{name}}}">
+                            <img class="openstudio-default-folder-img openstudio-default-folder-empty-img" src="{{{defaultfolderimg}}}" alt="{{{contentthumbnailalt}}}">
                         </div>
                     </div>
                 </div>
@@ -71,7 +72,7 @@
                 </a>
             </div>
             <a href="{{{contentediturl}}}"><div class="openstudio-upload-container">
-                <img src="{{{createcontentthumbnail}}}" alt="{{{name}}}">
+                <img src="{{{createcontentthumbnail}}}" alt="{{{contentthumbnailalt}}}">
             </div></a>
         {{/isfolder}}
         {{#contentislockmessage}}

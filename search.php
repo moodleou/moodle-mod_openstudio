@@ -314,6 +314,8 @@ if (trim($searchtext) == '') {
                 $content->contenticon = $contenticon;
                 $content->itemsharewith = $itemsharewith;
                 $content->contentthumbnailurl = $contentthumbnailfileurl;
+                $content->contentthumbnailalt = get_string('contentthumbnailalt', 'mod_openstudio',
+                    renderer_utils::get_content_thumbnail_alt($content, $vid));
                 $content->datetimeupdated = $content->timemodified ? userdate($content->timemodified, get_string('formattimedatetime', 'openstudio')) : null;
 
                 $urlarray = ['id' => $id, 'sid' => $content->id, 'vuid' => $content->userid];

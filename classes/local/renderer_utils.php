@@ -1912,4 +1912,24 @@ class renderer_utils {
         }
         return $params;
     }
+
+    /**
+     * Get alt text for "add content" based on content type and visibility.
+     *
+     * @param \stdClass $content
+     * @param int $visibility
+     * @return ?string
+     */
+    public static function get_content_thumbnail_alt(\stdClass $content, int $visibility): ?string {
+        if (!$content->name) {
+            // If the content has no name, use level3 name under certain conditions.
+            // Case 1: Inside 'My Activity' page, only need to return level3 name (content + folder).
+            // Case 2: Outside 'My Activity', verify the folder content from Block > Activity > Content/Slot (Level 3).
+            if ($visibility == content::VISIBILITY_PRIVATE
+                || $content->levelid && $content->levelcontainer == defaults::CONTENTLEVELCONTAINER) {
+                return $content->l3name;
+            }
+        }
+        return $content->name;
+    }
 }

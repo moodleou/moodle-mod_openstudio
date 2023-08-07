@@ -716,6 +716,8 @@ if ($finalviewpermissioncheck) {
             $content->itemsharewith = $itemsharewith;
             $content->isonlyme = $isonlyme;
             $content->contentthumbnailurl = $contentthumbnailfileurl;
+            $content->contentthumbnailalt = get_string('contentthumbnailalt', 'mod_openstudio',
+                renderer_utils::get_content_thumbnail_alt($content, $vid));
 
             $content->datetimeupdated = null;
             if ($content->timemodified) {
