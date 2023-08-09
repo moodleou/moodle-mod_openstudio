@@ -606,8 +606,8 @@ button.openstudio-notification-stopbutton:focus {
     width: 16px;
 }
 
-.path-mod-openstudio .comments-content-popup img,
-.path-mod-openstudio .comments-content-popup span.userinitials {
+.path-mod-openstudio .comments-content-popup .openstudio-notifications-list img,
+.path-mod-openstudio .comments-content-popup .openstudio-notifications-list span.userinitials {
     height: 30px;
     border-radius: 50%;
     margin-right: 10px;
@@ -781,8 +781,8 @@ button.openstudio-notification-stopbutton:focus {
         padding-right: 4px;
     }
 
-    .path-mod-openstudio .comments-content-popup img,
-    .path-mod-openstudio .comments-content-popup span.userinitials {
+    .path-mod-openstudio .comments-content-popup .openstudio-notifications-list img,
+    .path-mod-openstudio .comments-content-popup .openstudio-notifications-list span.userinitials {
         width: 46px;
         height: 46px;
         margin-left: 20px !important;
@@ -2930,7 +2930,8 @@ body .openstudio-grid-item-content-title a:focus {
 
 .openstudio-tooltip:hover .openstudio-tooltiptext,
 .openstudio-grid-item-content-icon:focus ~ .openstudio-tooltiptext,
-.openstudio-grid-item-content-detail-info-box:focus .openstudio-grid-item-content-detail-info-icon ~ .openstudio-tooltiptext {
+.openstudio-grid-item-content-detail-info-box:focus .openstudio-grid-item-content-detail-info-icon ~ .openstudio-tooltiptext,
+.openstudio-grid-item-content-detail-info-box .show-popup-comment:focus .openstudio-grid-item-content-detail-info-icon ~ .openstudio-tooltiptext {
     visibility: visible;
     opacity: 1;
 }
@@ -3611,7 +3612,8 @@ body:not(.ios):not(.android) .openstudio-content-view-flag-icon.has-hover:hover 
 }
 
 .path-mod-openstudio .openstudio-content-view-edit-button-link:hover,
-.path-mod-openstudio .openstudio-content-view-version-button-link:hover {
+.path-mod-openstudio .openstudio-content-view-version-button-link:hover,
+.path-mod-openstudio .show-popup-comment:hover {
     text-decoration: none;
     outline: none;
 }
@@ -6019,6 +6021,9 @@ a.openstudio-add-new-content-link:hover  {
     }
     .openstudio-tooltip {
         margin-bottom: 23px;
+    }
+    .openstudio-grid-item-content-detail-info-box .show-popup-comment .openstudio-tooltip {
+        margin-bottom: 15px;
     }
     .openstudio-grid-item-content > a {
         display: flex;

@@ -73,15 +73,10 @@ define([
          * Get list comment.
          *
          * @param {Object} e DomEvent
-         * @param {Boolean} isUserPress flag to check user press the key instead click by mouse.
          * @method getListComment
          */
-        getListComment: function(e, isUserPress = false) {
+        getListComment: function(e) {
             let element = e;
-            if (isUserPress) {
-                element = $(e).find(t.CSS.POPUP_COMMENT_CONTENT).first();
-                $(e).find(t.CSS.POPUP_COMMENT_TOGGLE).first().toggleClass('show');
-            }
             let contentid = element.attr('data-contentid');
             let cmid = element.attr('data-cmid');
             if (contentid && cmid) {
@@ -144,7 +139,6 @@ define([
          *
          * @param {Object} e DomEvent
          * @method userOnPressFlagContent
-         * @return {Function} react to content.
          */
         userOnPressFlagContent: function(e) {
             const cid = e.attr('data-contentid');
@@ -152,9 +146,8 @@ define([
             const fid = e.attr('data-fid');
             const mode = e.attr('data-mode');
             if (cid && cmid && fid && mode) {
-               return t.flagContent(e);
+                t.flagContent(e);
             }
-            return t.getListComment(e, true);
         }
     };
 
