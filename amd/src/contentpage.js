@@ -197,7 +197,7 @@ define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/modal_events', 'c
                 .done(function(res) {
                     if (res.success) {
                         // Update new flag content.
-                        var flagcontainer = $('#content_view_icon_' + res.fid);
+                        var flagcontainer = $('#content_view_icon_' + event.attr('data-cid') + '_' + res.fid);
                         flagcontainer.attr('data-mode', res.mode);
 
                         // Check if flag a request feedback.

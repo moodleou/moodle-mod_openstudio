@@ -35,25 +35,25 @@
 <div class="openstudio-work-progress-container">
     <div class="openstudio-progressbar">
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:mydata="http://ns.open.ac.uk/it/vle/osep"
-             width="80%" height="22px" id="openstudio-progressbar" preserveAspectRatio="none"
+             width="80%" height="22px" id="{{$progressbarid}}openstudio-progressbar{{/progressbarid}}-{{id}}" preserveAspectRatio="none"
              aria-labelledby="openstudio-progressbar-title" role="img">
             <defs>
-                <clipPath id="{{$clipid}}openstudio-progressbar-clip{{/clipid}}">
+                <clipPath id="{{$clipid}}openstudio-progressbar-clip{{/clipid}}-{{id}}">
                     <rect x="3" y="3" width="100%" height="16" rx="5" ry="5" stroke="blue"
                           style="stroke-width:1;stroke:#d4d2d2"></rect>
                 </clipPath>
-                <linearGradient id="{{$completeid}}openstudio-progressbar-complete{{/completeid}}" x1="0" y1="0" x2="0" y2="1">
+                <linearGradient id="{{$completeid}}openstudio-progressbar-complete{{/completeid}}-{{id}}" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" class="openstudio-greycolour"></stop>
                     <stop offset="60%" class="openstudio-completecolour"></stop>
                 </linearGradient>
             </defs>
-            <g clip-path="url(#{{$clipid}}openstudio-progressbar-clip{{/clipid}})" class="openstudio-incompletefill">
+            <g clip-path="url(#{{$clipid}}openstudio-progressbar-clip{{/clipid}}-{{id}})" class="openstudio-incompletefill">
                 <g>
                     <rect class="openstudio-incompletefill" x="3" y="3" width="100%" height="16"></rect>
                 </g>
                 <g>
-                    <rect x="3" y="3" width="{{percentcompleted}}%" height="16" id="{{$completeid}}openstudio-progressbar-complete{{/completeid}}"
-                          fill="url(#{{$completeid}}openstudio-progressbar-complete{{/completeid}})"></rect>
+                    <rect x="3" y="3" width="{{percentcompleted}}%" height="16" id="{{$completeid}}openstudio-progressbar-complete-rect{{/completeid}}-{{id}}"
+                          fill="url(#{{$completeid}}openstudio-progressbar-complete{{/completeid}}-{{id}})"></rect>
                 </g>
             </g>
         </svg>

@@ -93,7 +93,9 @@
     </div>
     {{^myactivities}}
         <div class="openstudio-preference-item">
-            {{>mod_openstudio/filter_by_pagesizes}}
+            {{<mod_openstudio/filter_by_pagesizes}}
+                {{$filterpagesizeid}}filter_pagesize_mobile{{/filterpagesizeid}}
+            {{/mod_openstudio/filter_by_pagesizes}}
         </div>
     {{/myactivities}}
 

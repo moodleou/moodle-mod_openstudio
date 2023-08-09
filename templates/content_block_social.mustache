@@ -45,7 +45,7 @@
             <div class="openstudio-grid-item-content-detail-info-group content-block-social-group">
                 <span class="openstudio-grid-item-content-detail-info-box" tabindex="0">
                     <div role="presentation" class="dropdown notifications ">
-                        <span id="openstudio_navigation_notification" class="show-popup-comment" data-toggle="dropdown" data-boundary="viewport" role="button"
+                        <span id="openstudio_navigation_notification_{{contentid}}" class="show-popup-comment" data-toggle="dropdown" data-boundary="viewport" role="button"
                               aria-haspopup="true" aria-expanded="false" data-cmid="{{cmid}}" data-contentid="{{contentid}}">
                             <span class="openstudio-grid-item-content-detail-info-text{{#commentsnew}}-new{{/commentsnew}} {{#isdoubledigitcomments}}double-digit{{/isdoubledigitcomments}}">
                                 {{#comments}}{{comments}}{{/comments}}
@@ -61,7 +61,7 @@
                         {{>mod_openstudio/commentlist_content_block}}
                     </div>
                 </span>
-                <span id="content_view_icon_{{contentflaginspire}}" class="openstudio-grid-item-content-detail-info-box flag_content_block inspired"
+                <span id="content_view_icon_{{contentid}}_{{contentflaginspire}}" class="openstudio-grid-item-content-detail-info-box flag_content_block inspired"
                       data-cmid="{{cmid}}" data-contentid="{{contentid}}" data-fid="{{contentflaginspire}}" tabindex="0"
                       {{#contentflaginspireactive}}data-mode="off"{{/contentflaginspireactive}}
                       {{^contentflaginspireactive}}data-mode="on"{{/contentflaginspireactive}}
@@ -78,7 +78,7 @@
                         <span class="openstudio-tooltiptext interaction-icon">{{#str}} inspiredlabel, openstudio {{/str}}</span>
                     </span>
                 </span>
-                <span id="content_view_icon_{{contentflagsmile}}" class="openstudio-grid-item-content-detail-info-box flag_content_block smiles"
+                <span id="content_view_icon_{{contentid}}_{{contentflagsmile}}" class="openstudio-grid-item-content-detail-info-box flag_content_block smiles"
                       data-cmid="{{cmid}}" data-contentid="{{contentid}}" data-fid="{{contentflagsmile}}" tabindex="0"
                       {{#contentflagsmileactive}}data-mode="off"{{/contentflagsmileactive}}
                       {{^contentflagsmileactive}}data-mode="on"{{/contentflagsmileactive}}
@@ -94,7 +94,7 @@
                         <span class="openstudio-tooltiptext interaction-icon">{{#str}} smilelabel, openstudio {{/str}}</span>
                     </span>
                 </span>
-                <span id="content_view_icon_{{contentflagfavourite}}" class="openstudio-grid-item-content-detail-info-box flag_content_block favourites"
+                <span id="content_view_icon_{{contentid}}_{{contentflagfavourite}}" class="openstudio-grid-item-content-detail-info-box flag_content_block favourites"
                       data-cmid="{{cmid}}" data-contentid="{{contentid}}" data-fid="{{contentflagfavourite}}" tabindex="0"
                       {{#contentflagfavouriteactive}}data-mode="off"{{/contentflagfavouriteactive}}
                       {{^contentflagfavouriteactive}}data-mode="on"{{/contentflagfavouriteactive}}

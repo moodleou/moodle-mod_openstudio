@@ -38,7 +38,7 @@
     }
 }}
 
-<div class="openstudio-profile-active-date" id="openstudio_profile_active_date">
+<div class="openstudio-profile-active-date" id="openstudio_profile_active_date_mobile">
     <div class="openstudio-profile-last-active-date">
         {{#str}} profilebarlastactivedate, mod_openstudio {{/str}}
     </div>
@@ -75,6 +75,7 @@
             </div>
             <div class="openstudio-profile-progress-bar">
                 {{<mod_openstudio/work_progress}}
+                    {{$progressbarid}}openstudio-progressbar-mobile{{/progressbarid}}
                     {{$clipid}}openstudio-progressbar-mobile-clip{{/clipid}}
                     {{$completeid}}openstudio-progressbar-mobile-complete{{/completeid}}
                 {{/mod_openstudio/work_progress}}

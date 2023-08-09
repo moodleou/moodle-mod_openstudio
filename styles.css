@@ -4527,6 +4527,7 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 }
 
 #openstudio_profile_active_date,
+#openstudio_profile_active_date_mobile,
 #openstudio_profile_fullusername_mobile {
     display: none;
 }
@@ -6573,7 +6574,8 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     #openstudio_profile_fullusername_mobile,
-    #openstudio_profile_active_date {
+    #openstudio_profile_active_date,
+    #openstudio_profile_active_date_mobile {
         width: 100%;
         display: block;
     }

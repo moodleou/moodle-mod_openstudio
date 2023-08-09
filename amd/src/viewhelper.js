@@ -201,8 +201,11 @@ define(['jquery', 'js/isotope.pkgd.min.js'], function($, Isotope) {
          * @method handleViewSizeSwitcher
          */
         handleViewSizeSwitcher: function() {
-            // This should work for mobile also.
             $(document).on('change', '#filter_pagesize', function() {
+                t.redirectURL();
+            });
+            // This should work for mobile.
+            $(document).on('change', '#filter_pagesize_mobile', function() {
                 t.redirectURL();
             });
         },

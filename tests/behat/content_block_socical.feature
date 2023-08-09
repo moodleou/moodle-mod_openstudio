@@ -118,12 +118,12 @@ Feature: Open Studio notifications
     When I am on the "Demo Open Studio" "openstudio activity" page logged in as "teacher1"
     And I wait until the page is ready
     # The emoticons should be the gray icon when user doesn't react it.
-    Then "//div[@class='openstudio-grid-item'][1]//span[@id='content_view_icon_5']//span[contains(., '')]" "xpath_element" should exist
-    Then "//div[@class='openstudio-grid-item'][1]//span[@id='content_view_icon_5']//img[contains(@src, 'inspiration_grey_rgb_32px')]" "xpath_element" should exist
-    Then "//div[@class='openstudio-grid-item'][1]//span[@id='content_view_icon_4']//span[contains(., '')]" "xpath_element" should exist
-    Then "//div[@class='openstudio-grid-item'][1]//span[@id='content_view_icon_4']//img[contains(@src, 'participation_grey_rgb_32px')]" "xpath_element" should exist
-    Then "//div[@class='openstudio-grid-item'][1]//span[@id='content_view_icon_2']//span[contains(., '')]" "xpath_element" should exist
-    Then "//div[@class='openstudio-grid-item'][1]//span[@id='content_view_icon_2']//img[contains(@src, 'favourite_grey_rgb_32px')]" "xpath_element" should exist
+    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'flag_content_inspire')]//span[contains(., '')]" "xpath_element" should exist
+    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'flag_content_inspire')]//img[contains(@src, 'inspiration_grey_rgb_32px')]" "xpath_element" should exist
+    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'flag_content_smile')]//span[contains(., '')]" "xpath_element" should exist
+    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'flag_content_smile')]//img[contains(@src, 'participation_grey_rgb_32px')]" "xpath_element" should exist
+    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'flag_content_favorite')]//span[contains(., '')]" "xpath_element" should exist
+    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'flag_content_favorite')]//img[contains(@src, 'favourite_grey_rgb_32px')]" "xpath_element" should exist
     Then I click on "Module post 1" "link"
     And I wait until the page is ready
     And I click on "0 Favourites" "link"
@@ -132,16 +132,16 @@ Feature: Open Studio notifications
     And I wait until the page is ready
     And I am on the "Demo Open Studio" "openstudio activity" page
     # The emoticons should be the blue icon when user reacts it.
-    Then "//div[@class='openstudio-grid-item'][1]//span[@id='content_view_icon_5']//span[contains(., '1')]" "xpath_element" should exist
-    Then "//div[@class='openstudio-grid-item'][1]//span[@id='content_view_icon_5']//img[contains(@src, 'inspiration_rgb_32px')]" "xpath_element" should exist
-    Then "//div[@class='openstudio-grid-item'][1]//span[@id='content_view_icon_4']//span[contains(., '1')]" "xpath_element" should exist
-    Then "//div[@class='openstudio-grid-item'][1]//span[@id='content_view_icon_4']//img[contains(@src, 'participation_rgb_32px')]" "xpath_element" should exist
-    Then "//div[@class='openstudio-grid-item'][1]//span[@id='content_view_icon_2']//span[contains(., '1')]" "xpath_element" should exist
-    Then "//div[@class='openstudio-grid-item'][1]//span[@id='content_view_icon_2']//img[contains(@src, 'favourite_rgb_32px')]" "xpath_element" should exist
+    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'flag_content_inspire')]//span[contains(., '1')]" "xpath_element" should exist
+    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'flag_content_inspire')]//img[contains(@src, 'inspiration_rgb_32px')]" "xpath_element" should exist
+    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'flag_content_smile')]//span[contains(., '1')]" "xpath_element" should exist
+    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'flag_content_smile')]//img[contains(@src, 'participation_rgb_32px')]" "xpath_element" should exist
+    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'flag_content_favorite')]//span[contains(., '1')]" "xpath_element" should exist
+    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'flag_content_favorite')]//img[contains(@src, 'favourite_rgb_32px')]" "xpath_element" should exist
     Then I am on the "Demo Open Studio" "openstudio activity" page logged in as "student1"
-    And I click on "//div[@class='openstudio-grid-item'][1]//span[@id='content_view_icon_5']//span[contains(., '1')]" "xpath_element"
-    And I click on "//div[@class='openstudio-grid-item'][1]//span[@id='content_view_icon_4']//span[contains(., '1')]" "xpath_element"
-    And I click on "//div[@class='openstudio-grid-item'][1]//span[@id='content_view_icon_2']//span[contains(., '1')]" "xpath_element"
+    And I click on "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'flag_content_inspire')]//span[contains(., '1')]" "xpath_element"
+    And I click on "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'flag_content_smile')]//span[contains(., '1')]" "xpath_element"
+    And I click on "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'flag_content_favorite')]//span[contains(., '1')]" "xpath_element"
     Then I am on the "Demo Open Studio" "openstudio activity" page logged in as "teacher1"
     And I click on "Module post 1" "link"
     And I should see "2 Favourites"
@@ -149,9 +149,9 @@ Feature: Open Studio notifications
     And I should see "2 Inspired"
     And I am on the "Demo Open Studio" "openstudio activity" page
     And I wait until the page is ready
-    Then "//div[@class='openstudio-grid-item'][1]//span[@id='content_view_icon_5']//span[contains(., '2')]" "xpath_element" should exist
-    And "//div[@class='openstudio-grid-item'][1]//span[@id='content_view_icon_4']//span[contains(., '2')]" "xpath_element" should exist
-    And "//div[@class='openstudio-grid-item'][1]//span[@id='content_view_icon_2']//span[contains(., '2')]" "xpath_element" should exist
+    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'flag_content_inspire')]//span[contains(., '2')]" "xpath_element" should exist
+    And "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'flag_content_smile')]//span[contains(., '2')]" "xpath_element" should exist
+    And "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'flag_content_favorite')]//span[contains(., '2')]" "xpath_element" should exist
 
   Scenario: Add comment individual upload from My module page
     When I am on the "Demo Open Studio" "openstudio activity" page logged in as "teacher1"
