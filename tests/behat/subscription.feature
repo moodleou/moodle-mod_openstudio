@@ -39,6 +39,7 @@ Feature: Subscribe/Unsubscribe to my Open Studio
       | Enable folders               | 1                            |
       | Abuse reports are emailed to | teacher1@asd.com             |
       | ID number                    | OS1                          |
+      | id_tutorrolesgroup_1         | 1                            |
 
   @javascript
   Scenario: Subscribe/Unsubscribe

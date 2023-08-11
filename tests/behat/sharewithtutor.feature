@@ -34,12 +34,13 @@ And Apply the filter
     And I am on the "Course 1" "Course" page logged in as "teacher1"
     And I turn editing mode on
     And I add a "OpenStudio 2" to section "1" and I fill the form with:
-      | Name        | Test Open Studio name 1      |
-      | Description | Test Open Studio description |
-      | Group mode  | Visible groups               |
-      | Grouping    | grouping1                    |
-      | ID number   | OS2                          |
-      | Teacher     | 1                            |
+      | Name                 | Test Open Studio name 1      |
+      | Description          | Test Open Studio description |
+      | Group mode           | Visible groups               |
+      | Grouping             | grouping1                    |
+      | ID number            | OS2                          |
+      | Teacher              | 1                            |
+      | id_tutorrolesgroup_1 | 1                            |
     And I turn editing mode off
     And all users have accepted the plagarism statement for "OS2" openstudio
 

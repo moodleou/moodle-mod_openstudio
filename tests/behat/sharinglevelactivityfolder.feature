@@ -39,6 +39,7 @@ Feature: Sharing level setting in activity folder
       | Enable folders               | 1                            |
       | Abuse reports are emailed to | teacher1@asd.com             |
       | ID number                    | OS1                          |
+      | id_tutorrolesgroup_1         | 1                            |
     And the following open studio "level1s" exist:
       | openstudio | name   | sortorder |
       | OS1        | Block1 | 1         |

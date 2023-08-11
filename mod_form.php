@@ -412,9 +412,16 @@ class mod_openstudio_mod_form extends moodleform_mod {
      */
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);
-        if (!empty($data['enabledvisibility']) && in_array(content::VISIBILITY_MODULE, $data['enabledvisibility'])
-                && empty($data['enablemodule'])) {
-            $errors['enablemodule'] = get_string('errorsharinglevel', 'openstudio');
+        if (!empty($visibility = $data['enabledvisibility'])) {
+            if (in_array(content::VISIBILITY_MODULE, $visibility) && empty($data['enablemodule'])) {
+                $errors['enablemodule'] = get_string('errorsharinglevel', 'openstudio');
+            }
+            if (in_array(content::VISIBILITY_TUTOR, $visibility)) {
+                $tutorroles = array_keys(array_filter($data['tutorrolesgroup']));
+                if (empty($tutorroles)) {
+                    $errors['tutorrolesgroup'] = get_string('errorsharingleveltutor', 'openstudio');
+                }
+            }
         }
         return $errors;
     }

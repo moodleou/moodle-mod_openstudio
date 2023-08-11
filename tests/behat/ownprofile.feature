@@ -51,6 +51,7 @@ I need to create a content and upload a file
       | Enable folders               | 1                            |
       | Abuse reports are emailed to | teacher1@asd.com             |
       | ID number                    | OS1                          |
+      | id_tutorrolesgroup_1         | 1                            |
     And I add a "OpenStudio 2" to section "1" and I fill the form with:
       | Name                         | Test Open Studio name 2      |
       | Description                  | Test Open Studio description |
@@ -60,6 +61,7 @@ I need to create a content and upload a file
       | Enable folders               | 1                            |
       | Abuse reports are emailed to | teacher1@asd.com             |
       | ID number                    | OS2                          |
+      | id_tutorrolesgroup_1         | 1                            |
     And all users have accepted the plagarism statement for "OS1" openstudio
     And all users have accepted the plagarism statement for "OS2" openstudio
     And I am on the "Test Open Studio name 1" "openstudio activity" page

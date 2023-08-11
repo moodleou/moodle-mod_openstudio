@@ -57,6 +57,7 @@ Feature: Open Studio people view
       | Sharing level                | 1,7,2                        |
       | Abuse reports are emailed to | teacher1@asd.com             |
       | ID number                    | OS1                          |
+      | id_tutorrolesgroup_1         | 1                            |
 
     And I add a "OpenStudio 2" to section "1" and I fill the form with:
       | Name                          | Test Open Studio name 2        |
@@ -71,6 +72,7 @@ Feature: Open Studio people view
       | Enable folders                | 1                              |
       | Abuse reports are emailed to  | teacher1@asd.com               |
       | ID number                     | OS2                            |
+      | id_tutorrolesgroup_1          | 1                              |
     And all users have accepted the plagarism statement for "OS1" openstudio
     And all users have accepted the plagarism statement for "OS2" openstudio
     And I am on the "Test Open Studio name 1" "openstudio activity" page
@@ -94,6 +96,7 @@ Feature: Open Studio people view
       | Enable folders                | 1                              |
       | Abuse reports are emailed to  | teacher1@asd.com               |
       | ID number                     | OS1                            |
+      | id_tutorrolesgroup_1          | 1                              |
     And all users have accepted the plagarism statement for "OS1" openstudio
     And I am on the "Test Open Studio name 1" "openstudio activity" page
     And I follow "Upload content"
@@ -171,6 +174,7 @@ Feature: Open Studio people view
       | Enable folders                | 1                              |
       | Abuse reports are emailed to  | teacher1@asd.com               |
       | ID number                     | OS1                            |
+      | id_tutorrolesgroup_1          | 1                              |
     And all users have accepted the plagarism statement for "OS1" openstudio
     And I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "student2"
     And I follow "Upload content"

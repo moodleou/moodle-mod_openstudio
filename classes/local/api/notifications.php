@@ -322,11 +322,12 @@ EOF;
             if ($content->visibility == content::VISIBILITY_TUTOR) {
                 // If the content was shared with tutor, notify the tutors.
                 $tutorroles = explode(',', $DB->get_field('openstudio', 'tutorroles', ['id' => $content->openstudioid]));
-                list($tutorsql, $tutorparams) = $DB->get_in_or_equal($tutorroles);
-                // Select all users who have the tutor role assigned at course level, in the course contaning the studio,
-                // that contains the content post that triggered this event, and who are in a group with the user, in a grouping
-                // assigned to this studio instance.
-                $sql = "SELECT ra.userid
+                if (!empty($tutorroles)) {
+                    list($tutorsql, $tutorparams) = $DB->get_in_or_equal($tutorroles);
+                    // Select all users who have the tutor role assigned at course level, in the course contaning the studio,
+                    // that contains the content post that triggered this event, and who are in a group with the user, in a grouping
+                    // assigned to this studio instance.
+                    $sql = "SELECT ra.userid
                           FROM {role_assignments} ra
                           JOIN {context} ctx ON ctx.id = ra.contextid AND ctx.contextlevel = 50
                           JOIN {course} c ON c.id = ctx.instanceid
@@ -341,12 +342,15 @@ EOF;
                          WHERE ra.roleid $tutorsql
                            AND osc.id = ?
                            AND tgm1.userid = ?";
-                $params = array_merge($tutorparams, [$skeleton->contentid, $event->userid]);
-                $tutors = $DB->get_recordset_sql($sql, $params);
-                $userids = self::get_notified_users($tutors, $cm, $instance, $cminfo->get_course(), $content);
+                    $params = array_merge($tutorparams, [$skeleton->contentid, $event->userid]);
+                    $tutors = $DB->get_recordset_sql($sql, $params);
+                    $userids = self::get_notified_users($tutors, $cm, $instance, $cminfo->get_course(), $content);
+                }
             }
         }
-        self::create($skeleton, array_unique($userids));
+        if (!empty($userids)) {
+            self::create($skeleton, array_unique($userids));
+        }
     }
 
     /**

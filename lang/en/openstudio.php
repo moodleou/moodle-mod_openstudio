@@ -902,6 +902,7 @@ $string['errorcontentnotdeleted'] = 'Delete content error!';
 $string['errorsharinglevel'] = 'Enable \'My Module\' must be chosen when option \'Module - visible all module members\' in Sharing level is selected';
 $string['errorimageprocess'] = 'There was an error when processing your image. Please check the image file before uploading again. Error reported: "{$a}"';
 $string['errorcommentdeleted'] = 'You cannot reply to deleted comments or previous comment versions.';
+$string['errorsharingleveltutor'] = 'You must select one or more tutor roles when visible to tutors is selected.';
 
 $string['modulejsdialogreturntostudio'] = 'Return to Studio';
 $string['modulejsdialogyes'] = 'Yes';

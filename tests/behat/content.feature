@@ -368,6 +368,7 @@ I need to create a content and upload a file
       | Abuse reports are emailed to | teacher1@asd.com             |
       | ID number                    | OS2                          |
       | Enable folders               | 1                            |
+      | id_tutorrolesgroup_1         | 1                            |
     And all users have accepted the plagarism statement for "OS2" openstudio
     When I am on the "Test Open Studio name 2" "openstudio activity" page
     And I navigate to "Manage levels" in current page administration

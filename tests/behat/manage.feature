@@ -38,6 +38,7 @@ Feature: Manage open studio folders
       | Enable folders               | 1                            |
       | Abuse reports are emailed to | teacher1@asd.com             |
       | ID number                    | OS1                          |
+      | id_tutorrolesgroup_1         | 1                            |
     And all users have accepted the plagarism statement for "OS1" openstudio
 
   @javascript

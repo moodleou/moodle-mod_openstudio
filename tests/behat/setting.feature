@@ -68,6 +68,7 @@ Feature: Edit Open Studio settings
       | Sharing level                | 1,7,2                        |
       | Abuse reports are emailed to | teacher1@asd.com             |
       | ID number                    | OS1                          |
+      | id_tutorrolesgroup_1         | 1                            |
 
     And I add a "OpenStudio 2" to section "1" and I fill the form with:
       | Name                          | Test Open Studio name 2        |
@@ -82,6 +83,7 @@ Feature: Edit Open Studio settings
       | Enable folders                | 1                              |
       | Abuse reports are emailed to  | teacher1@asd.com               |
       | ID number                     | OS2                            |
+      | id_tutorrolesgroup_1          | 1                              |
     And all users have accepted the plagarism statement for "OS1" openstudio
     And all users have accepted the plagarism statement for "OS2" openstudio
     And I am on the "Test Open Studio name 1" "openstudio activity" page
@@ -108,12 +110,14 @@ Feature: Edit Open Studio settings
       | Enable folders                | 1                              |
       | Abuse reports are emailed to  | teacher1@asd.com               |
       | ID number                     | OS1                            |
+      | id_tutorrolesgroup_1          | 1                              |
 
     And I add a "OpenStudio 2" to section "1" and I fill the form with:
       | Name                         | Test Open Studio name 2      |
       | Description                  | Test Open Studio description |
       | Abuse reports are emailed to | teacher1@asd.com             |
       | ID number                    | OS2                          |
+      | id_tutorrolesgroup_1         | 1                            |
 
     And I add a "OpenStudio 2" to section "1" and I fill the form with:
       | Name                          | Test Open Studio name 3        |
@@ -128,6 +132,7 @@ Feature: Edit Open Studio settings
       | Enable folders                | 1                              |
       | Abuse reports are emailed to  | teacher1@asd.com               |
       | ID number                     | OS3                            |
+      | id_tutorrolesgroup_1          | 1                              |
     And all users have accepted the plagarism statement for "OS1" openstudio
     And all users have accepted the plagarism statement for "OS2" openstudio
     And all users have accepted the plagarism statement for "OS3" openstudio
@@ -166,6 +171,7 @@ Feature: Edit Open Studio settings
       | Enable folders               | 1                            |
       | Abuse reports are emailed to | teacher1@asd.com             |
       | ID number                    | OS1                          |
+      | id_tutorrolesgroup_1         | 1                            |
     And all users have accepted the plagarism statement for "OS1" openstudio
     And I am on the "Test Open Studio name 1" "openstudio activity" page
     And I navigate to "Manage levels" in current page administration
@@ -198,6 +204,7 @@ Feature: Edit Open Studio settings
       | Enable folders               | 1                            |
       | Abuse reports are emailed to | teacher1@asd.com             |
       | ID number                    | OS1                          |
+      | id_tutorrolesgroup_1         | 1                            |
     And all users have accepted the plagarism statement for "OS1" openstudio
     And I am on the "Test Open Studio name 1" "openstudio activity" page
     And I follow "My Content"
@@ -220,6 +227,7 @@ Feature: Edit Open Studio settings
       | Enable folders                | 1                            |
       | Abuse reports are emailed to  | teacher1@asd.com             |
       | ID number                     | OS1                          |
+      | id_tutorrolesgroup_1          | 1                            |
 
     And the following open studio "level1s" exist:
       | openstudio | name | sortorder |
@@ -278,6 +286,7 @@ Feature: Edit Open Studio settings
       | Enable folders               | 1                            |
       | Abuse reports are emailed to | teacher1@asd.com             |
       | ID number                    | OS1                          |
+      | id_tutorrolesgroup_1         | 1                            |
     And all users have accepted the plagarism statement for "OS1" openstudio
     And I am on the "Test Open Studio name 1" "openstudio activity" page
     And I should see "My Module"
@@ -298,6 +307,7 @@ Feature: Edit Open Studio settings
       | Enable folders               | 1                            |
       | Abuse reports are emailed to | teacher1@asd.com             |
       | ID number                    | OS1                          |
+      | id_tutorrolesgroup_1         | 1                            |
     And all users have accepted the plagarism statement for "OS1" openstudio
     And the following open studio "contents" exist:
       | openstudio | user     | name           | description                | visibility |
@@ -314,7 +324,7 @@ Feature: Edit Open Studio settings
     And I should not see "Add new content"
     And I should not see "My Content"
 
-  Scenario: Behavior handling content when we don't choose module sharing level:
+  Scenario: Behavior handling mandatory fields
     When I am on the "Course 1" "Course" page
     And I turn editing mode on
     And I add a "OpenStudio 2" to section "1" and I fill the form with:
@@ -324,16 +334,21 @@ Feature: Edit Open Studio settings
       | Sharing level                | 1,7,2                        |
       | Abuse reports are emailed to | teacher1@asd.com             |
       | ID number                    | OS1                          |
+      | id_tutorrolesgroup_1         | 1                            |
     And all users have accepted the plagarism statement for "OS1" openstudio
     And I am on the "Test Open Studio name 1" "openstudio activity" page
     And I navigate to "Settings" in current page administration
+    And I follow "Expand all"
     And I set the following fields to these values:
-      | Enable 'My Module' | 0       |
-      | Sharing level      | 1,7,2,3 |
+      | Enable 'My Module'   | 0       |
+      | Sharing level        | 1,7,2,3 |
+      | id_tutorrolesgroup_1 | 0       |
     And I press "Save and display"
     And I should see "Enable 'My Module' must be chosen when option 'Module - visible all module members' in Sharing level is selected"
+    And I should see "You must select one or more tutor roles when visible to tutors is selected"
     And I set the following fields to these values:
-      | Enable 'My Module' | 1 |
+      | Enable 'My Module'   | 1 |
+      | id_tutorrolesgroup_1 | 1 |
     And I press "Save and display"
     Then I should see "Shared Content"
     And I follow "Add new content"

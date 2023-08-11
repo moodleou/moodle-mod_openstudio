@@ -25,6 +25,7 @@ Feature: Open Studio share to view setting is enable
       | Description          | Test Open Studio description |
       | ID number            | OS1                          |
       | Enable share to view | 1                            |
+      | id_tutorrolesgroup_1 | 1                            |
     And all users have accepted the plagarism statement for "OS1" openstudio
     And I am on the "Test Open Studio name 1" "openstudio activity" page
     And I navigate to "Manage levels" in current page administration

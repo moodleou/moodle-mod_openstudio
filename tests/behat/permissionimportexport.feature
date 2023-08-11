@@ -20,9 +20,10 @@ I stopped granting the rights to import and export for student
     Given I am on the "Course 1" "Course" page logged in as "admin"
     And I turn editing mode on
     And I add a "OpenStudio 2" to section "1" and I fill the form with:
-      | Name        | Test Open Studio name 1      |
-      | Description | Test Open Studio description |
-      | ID number   | OS1                          |
+      | Name                 | Test Open Studio name 1      |
+      | Description          | Test Open Studio description |
+      | ID number            | OS1                          |
+      | id_tutorrolesgroup_1 | 1                            |
     And all users have accepted the plagarism statement for "OS1" openstudio
     And I set the following system permissions of "Student" role:
       | capability            | permission |

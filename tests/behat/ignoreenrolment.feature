@@ -27,12 +27,13 @@ Feature: Test for new capability 'mod/openstudio:ignoreenrolment'
     And I am on the "Course 1" "Course" page logged in as "admin"
     And I turn editing mode on
     And I add a "OpenStudio 2" to section "1" and I fill the form with:
-      | Name               | Guest studio             |
-      | Description        | Guest studio description |
-      | Enable 'My Module' | 1                        |
-      | Enable pinboard    | 99                       |
-      | Enable folders     | 1                        |
-      | ID number          | OS1                      |
+      | Name                 | Guest studio             |
+      | Description          | Guest studio description |
+      | Enable 'My Module'   | 1                        |
+      | Enable pinboard      | 99                       |
+      | Enable folders       | 1                        |
+      | ID number            | OS1                      |
+      | id_tutorrolesgroup_1 | 1                        |
     And the following open studio "contents" exist:
       | openstudio | user     | name            | description             | visibility |
       | OS1        | student1 | Student1 slot 1 | Test slot 1 description | module     |
