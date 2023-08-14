@@ -2095,7 +2095,7 @@ label.openstudio-export-item-name {
     height: 28px;
 }
 
-.path-mod-openstudio .dropdown-menu > li > a {
+.path-mod-openstudio li .dropdown-menu > li > a {
     padding: 0px 0px 0px 15px;
     height: 33px;
     line-height: 33px;
