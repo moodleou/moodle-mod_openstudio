@@ -25,7 +25,7 @@ namespace mod_openstudio;
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
-class stream_testcase extends \advanced_testcase {
+class stream_test extends \advanced_testcase {
 
     private $course;
     private $users;
@@ -67,10 +67,14 @@ class stream_testcase extends \advanced_testcase {
         $this->groupings = new \stdClass();
         $this->groupings->a  = $this->getDataGenerator()->create_grouping(
                 array('name' => 'Grouping A', 'courseid' => $this->course->id));
+        $this->groupings->b  = $this->getDataGenerator()->create_grouping(
+            ['name' => 'Grouping B', 'courseid' => $this->course->id]);
         $this->groups->one = $this->getDataGenerator()->create_group(
                 array('courseid' => $this->course->id, 'name' => 'The Starks'));
         $this->groups->two = $this->getDataGenerator()->create_group(
                 array('courseid' => $this->course->id, 'name' => 'The Lannisters'));
+        $this->groups->three = $this->getDataGenerator()->create_group(
+            ['courseid' => $this->course->id, 'name' => 'The Targaryens']);
 
         // Add groups to our groupings.
         $insert = new \stdClass();
@@ -81,6 +85,11 @@ class stream_testcase extends \advanced_testcase {
         $insert->groupingid = $this->groupings->a->id;
         $insert->groupid = $this->groups->two->id;
         $DB->insert_record('groupings_groups', $insert);
+
+        $DB->insert_record('groupings_groups', (object) [
+            'groupingid' => $this->groupings->b->id,
+            'groupid' => $this->groups->three->id,
+        ]);
 
         // Create Users.
         $this->users = new \stdClass();
@@ -105,6 +114,8 @@ class stream_testcase extends \advanced_testcase {
                 array('email' => 'student9@ouunittest.com', 'username' => 'student9'));
         $this->users->students->ten = $this->getDataGenerator()->create_user(
                 array('email' => 'student10@ouunittest.com', 'username' => 'student10'));
+        $this->users->students->eleven = $this->getDataGenerator()->create_user(
+            ['email' => 'student11@ouunittest.com', 'username' => 'student11']);
         $this->users->teachers = new \stdClass();
         $this->users->teachers->one = $this->getDataGenerator()->create_user(
                 array('email' => 'teacher1@ouunittest.com', 'username' => 'teacher1'));
@@ -131,6 +142,8 @@ class stream_testcase extends \advanced_testcase {
         $this->getDataGenerator()->enrol_user(
                 $this->users->students->ten->id, $this->course->id, $this->studentroleid, 'manual');
         $this->getDataGenerator()->enrol_user(
+            $this->users->students->eleven->id, $this->course->id, $this->studentroleid, 'manual');
+        $this->getDataGenerator()->enrol_user(
                 $this->users->teachers->one->id, $this->course->id, $this->teacherroleid, 'manual');
         $this->getDataGenerator()->enrol_user(
                 $this->users->teachers->two->id, $this->course->id, $this->teacherroleid, 'manual');
@@ -155,7 +168,10 @@ class stream_testcase extends \advanced_testcase {
                                 $this->users->students->nine->id,
                                 $this->users->students->ten->id,
                                 $this->users->teachers->two->id
-                        )
+                        ),
+                $this->groups->three->id => [
+                    $this->users->students->eleven->id,
+                ],
         ));
 
         $this->studioprivate = $this->generator->create_instance(array('course' => $this->course->id));
@@ -926,4 +942,123 @@ class stream_testcase extends \advanced_testcase {
         $this->assertFalse($levelcontents);
     }
 
+    /**
+     * Feature test for stream APIs for showing auto-generated folders.
+     * Only 'My Activities' page will show auto-generated folders.
+     * All other pages will follow the normal behaviors.
+     */
+    public function test_show_auto_generated_folder_using_module_visibility(): void {
+        global $DB;
+        $this->resetAfterTest(true);
+
+        $this->setUser($this->users->students->eleven);
+
+        $studio = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'groupingid' => $this->groupings->b->id,
+            'groupmode' => SEPARATEGROUPS,
+            'allowedvisibility' => \mod_openstudio\local\api\content::VISIBILITY_MODULE,
+            'idnumber' => 'OSF',
+        ]);
+
+        $studiolevels = $this->generator->create_mock_levels_with_folders($studio->id);
+        $blockid = $studiolevels['blockslevels'][0];
+        $activityid = $studiolevels['activitieslevels'][$blockid][0];
+        $levelid = $studiolevels['contentslevels'][$blockid][$activityid][0];
+
+        $folder1id = $this->generator->create_folders([
+            'openstudio' => 'OSF',
+            'name' => 'TestSet',
+            'description' => 'foo',
+            'userid' => $this->users->students->eleven->id,
+            'levelid' => $levelid,
+            'levelcontainer' => \mod_openstudio\local\util\defaults::CONTENTLEVELCONTAINER,
+            'visibility' => \mod_openstudio\local\api\content::VISIBILITY_MODULE,
+            'showextradata' => \mod_openstudio\local\util\defaults::FOLDER_AUTO_GENERATE,
+        ]);
+
+        // Test on 'My Activities': auto-generated folders can be shown.
+        $result = \mod_openstudio\local\api\stream::get_contents(
+            $studio->id, $this->groupings->b->id,
+            $this->users->students->eleven->id,
+            $this->users->students->eleven->id,
+            \mod_openstudio\local\api\content::VISIBILITY_PRIVATE);
+        $this->assertNotFalse($result);
+        $this->assertTrue($this->check_content_existence($folder1id, $result, $this->users->students->eleven->id));
+        $this->assertEquals(1, iterator_count($result));
+
+        // Pinboard tested here.
+        // 2 cases:
+        // 1. visibility = VISIBILITY_PRIVATE + pinboardonly = true (legacy on previous testcases).
+        // 2. visibility = VISIBILITY_PRIVATE_PINBOARD.
+        $this->assertFalse(\mod_openstudio\local\api\stream::get_contents(
+            $studio->id, $this->groupings->b->id,
+            $this->users->students->eleven->id,
+            $this->users->students->eleven->id,
+            \mod_openstudio\local\api\content::VISIBILITY_PRIVATE, null, null, null, null, null, null,
+            ['id' => \mod_openstudio\local\api\stream::SORT_BY_DATE, 'asc' => 0], 0, 0, true));
+        $this->assertFalse(\mod_openstudio\local\api\stream::get_contents(
+            $studio->id, $this->groupings->b->id,
+            $this->users->students->eleven->id,
+            $this->users->students->eleven->id,
+            \mod_openstudio\local\api\content::VISIBILITY_PRIVATE_PINBOARD));
+
+        // Other visibilities: auto-generated should not be shown.
+        // Could use providers, but it's better to be here for combined feature test.
+        $visibilities = [
+            \mod_openstudio\local\api\content::VISIBILITY_GROUP,
+            \mod_openstudio\local\api\content::VISIBILITY_MODULE,
+            \mod_openstudio\local\api\content::VISIBILITY_PRIVATE_PINBOARD,
+        ];
+        foreach ($visibilities as $visibility) {
+            $this->assertFalse(\mod_openstudio\local\api\stream::get_contents(
+                $studio->id, $this->groupings->b->id,
+                $this->users->students->eleven->id,
+                $this->users->students->eleven->id,
+                $visibility));
+        }
+
+        // Update auto-generated folder to normal folder.
+        $DB->set_field('openstudio_contents', 'showextradata', 0, ['id' => $folder1id]);
+
+        // Pinboard still won't show this folder because it does not get data from 'My Activities'.
+        $this->assertFalse(\mod_openstudio\local\api\stream::get_contents(
+            $studio->id, $this->groupings->b->id,
+            $this->users->students->eleven->id,
+            $this->users->students->eleven->id,
+            \mod_openstudio\local\api\content::VISIBILITY_PRIVATE, null, null, null, null, null, null,
+            ['id' => \mod_openstudio\local\api\stream::SORT_BY_DATE, 'asc' => 0], 0, 0, true));
+
+        foreach ($visibilities as $visibility) {
+            $result = \mod_openstudio\local\api\stream::get_contents(
+                $studio->id, $this->groupings->b->id,
+                $this->users->students->eleven->id,
+                $this->users->students->eleven->id,
+                $visibility);
+            $this->assertNotFalse($result);
+            $this->assertTrue($this->check_content_existence($folder1id, $result, $this->users->students->eleven->id));
+            $this->assertEquals(1, iterator_count($result));
+        }
+    }
+
+    /**
+     * Verify the existence of a content ID within the content list.
+     * If userid is provided, all contents must belong to that user.
+     *
+     * @param int $contentid
+     * @param array $contents
+     * @param int|null $userid
+     * @return bool
+     */
+    private function check_content_existence(int $contentid, $contents, ?int $userid = null): bool {
+        foreach ($contents as $content) {
+            if ($userid !== null && $userid != $content->userid) {
+                return false;
+            }
+            if ($content->id == $contentid) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
