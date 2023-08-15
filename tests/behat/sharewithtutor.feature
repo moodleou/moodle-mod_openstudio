@@ -47,7 +47,8 @@ And Apply the filter
     Given I am on the "Test Open Studio name 1" "openstudio activity" page
     And I follow "Shared Content"
     And I click on "My Group" "link"
-    And I click on "filter" "link"
+    # Clicking on id='filter' (empty content, not visible) no longer works because the icon no longer has alt.
+    And I click on "//a[@data-target='#filter_container']" "xpath_element"
     Then I should see "Shared with tutor"
 
   Scenario: "Shared with tutor" functionality
@@ -60,7 +61,7 @@ And Apply the filter
     And I press "Save"
     When I follow "Shared Content"
     And I click on "My Group" "link"
-    And I click on "filter" "link"
+    And I click on "//a[@data-target='#filter_container']" "xpath_element"
     And I set the following fields to these values:
       | Smile | 1 |
     And I press "Apply"
