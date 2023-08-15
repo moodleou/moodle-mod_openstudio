@@ -1588,3 +1588,4 @@ $string['preventiframedescription'] = 'List of addresses (one per line, partial 
 $string['unittestcodingexception'] = 'Cannot be called except in unit test';
 $string['smilelabel'] = 'Smiles';
 $string['inspiredlabel'] = 'Inspired';
+$string['upgrade:log:emptyfoldersrenamed'] = 'Course ID: {$a->courseid} OS name: {$a->activityname} Empty folders renamed: {$a->total}.';

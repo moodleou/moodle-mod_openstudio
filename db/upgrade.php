@@ -158,6 +158,80 @@ function xmldb_openstudio_upgrade($oldversion=0) {
         upgrade_mod_savepoint(true, 2023010500, 'openstudio');
     }
 
+    if ($oldversion < 2023081600) {
+        // Fix issue with normal folders have empty name.
+        openstudio_rename_empty_folders();
+        upgrade_mod_savepoint(true, 2023081600, 'openstudio');
+    }
+
     // Must always return true from these functions.
     return $result;
+}
+
+/**
+ * Renaming empty folder name with specific name.
+ * When showextradata is set to 0, auto-generated folder will become normal folder.
+ * But they still have empty name. We will use level3 name for folder name.
+ */
+function openstudio_rename_empty_folders(): void {
+    global $DB;
+    $sql = 'SELECT oc.id, oc.name, oc.levelid, oc.levelcontainer,
+                   s.id as activityid, s.name as activityname,
+                   c.id as courseid
+              FROM {openstudio_contents} oc
+              JOIN {openstudio} s ON s.id = oc.openstudioid
+              JOIN {course} c ON c.id = s.course
+             WHERE oc.showextradata = ?
+                   AND oc.levelcontainer = ?
+                   AND oc.contenttype = ?
+                   AND (oc.name IS NULL OR oc.name = ?)';
+    $params = [
+        0, // Normal folder.
+        \mod_openstudio\local\util\defaults::CONTENTLEVELCONTAINER,
+        \mod_openstudio\local\api\content::TYPE_FOLDER,
+        '',
+    ];
+    $rs = $DB->get_recordset_sql($sql, $params);
+    if (!$rs->valid()) {
+        return;
+    }
+
+    $levels = [];
+    $results = [];
+
+    foreach ($rs as $rec) {
+        if (!array_key_exists($rec->levelid, $levels)) {
+            $level = mod_openstudio\local\api\levels::get_record($rec->levelcontainer, $rec->levelid);
+            if ($level === false) {
+                continue;
+            }
+            $levels[$rec->levelid] = $level;
+        }
+        // If still not has leveldata.
+        if (!array_key_exists($rec->levelid, $levels)) {
+            continue;
+        }
+
+        // Update name.
+        $leveldata = $levels[$rec->levelid];
+        $DB->set_field('openstudio_contents', 'name', $leveldata->name, ['id' => $rec->id]);
+
+        if (!array_key_exists($rec->activityid, $results)) {
+            $results[$rec->activityid] = (object) [
+                'courseid' => $rec->courseid,
+                'activityname' => $rec->activityname,
+                'total' => 1,
+            ];
+            continue;
+        }
+        $results[$rec->activityid]->total += 1;
+    }
+
+    if (empty($results)) {
+        return;
+    }
+
+    foreach ($results as $item) {
+        mtrace(get_string('upgrade:log:emptyfoldersrenamed', 'openstudio', $item));
+    }
 }
