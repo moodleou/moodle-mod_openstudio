@@ -85,25 +85,4 @@ EOF;
     public function get_url() {
         return new \moodle_url('/mod/openstudio/' . $this->other['url']);
     }
-
-    public static function get_legacy_eventname() {
-        return 'view stream';
-    }
-
-    /**
-     * Return the legacy event log data.
-     *
-     * @return array|null
-     */
-    protected function get_legacy_logdata() {
-        return array(
-                $this->courseid,
-                $this->other['module'],
-                $this->other['info'],
-                $this->other['url'],
-                '',
-                $this->contextinstanceid
-        );
-    }
-
 }

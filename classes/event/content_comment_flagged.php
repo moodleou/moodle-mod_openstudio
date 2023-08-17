@@ -81,26 +81,6 @@ EOF;
         return new \moodle_url('/mod/openstudio/' . $this->other['url']);
     }
 
-    public static function get_legacy_eventname() {
-        return 'content commented';
-    }
-
-    /**
-     * Return the legacy event log data.
-     *
-     * @return array|null
-     */
-    protected function get_legacy_logdata() {
-        return array(
-                $this->courseid,
-                $this->other['module'],
-                self::get_legacy_eventname(),
-                $this->other['url'],
-                $this->other['info'],
-                $this->contextinstanceid
-        );
-    }
-
     public function get_notification_type() {
         return notifiable::COMMENT;
     }
