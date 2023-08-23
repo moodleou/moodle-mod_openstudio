@@ -7268,7 +7268,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-tooltip .openstudio-tooltiptext::after {
-        left: 87%;
+        left: 78%;
     }
     .openstudio-grid-item-content .openstudio-grid-item-content-detail-info-group .openstudio-tooltip .openstudio-tooltiptext::after {
         left: 50%;
