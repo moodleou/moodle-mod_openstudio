@@ -219,7 +219,9 @@ I need to create a content and upload a file
     And I am on the "Test Open Studio name 1" "openstudio activity" page
     And I navigate to "Settings" in current page administration
     And I follow "Expand all"
-    And I set the field "Add any contents to folders" to "1"
+    And I set the following fields to these values:
+      | Add any contents to folders | 1 |
+      | id_tutorrolesgroup_1        | 1 |
     And I press "Save and display"
 
     # Go to folder overview

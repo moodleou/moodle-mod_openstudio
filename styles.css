@@ -1391,7 +1391,7 @@ div.openstudio-activity-guidance-item:nth-of-type(odd) {
     display: none;
 }
 
-body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commentext .fitemtitle label {
+body.path-mod-openstudio #region-main .mform:not(.unresponsive) .openstudio-comment-form-body div[id^="fitem_id_commentext"] .fitemtitle label {
     display: none;
 }
 
@@ -1589,6 +1589,13 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) #fitem_id_commen
 .openstudio-comment-time {
     font-size: 0.85714em;
     display: block;
+}
+
+.openstudio-comment-loading {
+    display: block;
+    text-align: center;
+    margin-top: 60px;
+    margin-bottom: 60px;
 }
 
 /**

@@ -463,7 +463,7 @@ define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/modal_events', 'c
         },
 
         scrollToEle: function() {
-            const element = $('#openstudio-comment-form-body');
+            const element = $('.openstudio-comment-form-body');
             $('html, body').animate({
                 scrollTop: $(element).offset().top
             }, 800);

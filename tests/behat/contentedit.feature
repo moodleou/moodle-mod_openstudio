@@ -175,6 +175,7 @@ I should not see list of file types on Add File form
     And I press "Add file"
     Then I should not see "Accepted file types:"
 
+  @editor_tiny
   Scenario: Edit content with upload file and description file
     Given I follow "Private files" in the user menu
     And I upload "mod/openstudio/tests/importfiles/test2.jpg" file to "Files" filemanager
@@ -187,7 +188,7 @@ I should not see list of file types on Add File form
       | Title       | Test My Group Board View 1                 |
       | Description | My Group Board View Description 1          |
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
-    And I click on "Insert or edit image" "button"
+    And I click on the "Image" button for the "Description" TinyMCE editor
     And I click on "Browse repositories..." "button"
     # Because of two file pickers we have to do very specific css selectors.
     And I click on "Private files" "link" in the ".moodle-dialogue.filepicker:not(.moodle-dialogue-hidden) .fp-repo-area" "css_element"
@@ -202,7 +203,9 @@ I should not see list of file types on Add File form
     Then I should see "Test Open Studio name 1"
     And I should see "Upload content"
     And I should see "test1.jpg"
+    And I switch to the "Description" TinyMCE editor iframe
     And "//img[contains(@src, 'user/draft') and contains(@src, '/test2.jpg') and @alt='An image']" "xpath_element" should exist
+    And I switch to the main frame
     And I set the following fields to these values:
       | My Module | 1                                 |
       | Title     | Test My Group Board View modify 1 |

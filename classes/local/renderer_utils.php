@@ -1760,7 +1760,11 @@ class renderer_utils {
             $PAGE->requires->js_call_amd('mod_openstudio/comment', 'init', [[
                 'cmid' => $cmid,
                 'cid' => $contentdata->id,
-                'folder' => $folder]]);
+                'folder' => $folder,
+                'max_bytes' => $cminstance->contentmaxbytes,
+                'attachmentenable' => $permissions->feature_contentcommentusesaudio,
+                'contextid' => \context_module::instance($cmid)->id,
+            ]]);
 
             // Init OUMP module (Media player).
             // We need to init oump here to make sure that oump is always loaded even when no comment loaded.

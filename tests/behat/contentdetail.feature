@@ -540,7 +540,7 @@ I need to navigate to content pages
     And I should see "Test My Content Details View"
 
     # View content Archive post
-    And I press "View"
+    And I click on "viewversionbutton" "button"
     And I should see "Version 1 of 1"
     And "Current version" "button" should exist
 
@@ -569,7 +569,7 @@ I need to navigate to content pages
     And I press "Post archive"
     And I should see "Test My Content Details View Archive"
     And I should see "Test My Content Details View Archive 1"
-    And I press "View"
+    And I click on "viewversionbutton" "button"
     And I press "Restore this version"
     And I should see "Test My Content Details View Archive 1"
     And I follow "People" in the openstudio navigation
@@ -581,7 +581,7 @@ I need to navigate to content pages
     And I follow "Test My Content Details View Archive 1"
     And I should not see "Archive post"
     And I press "Post archive"
-    And I press "View"
+    And I click on "viewversionbutton" "button"
     And "Delete" "button" should exist
 
     # switch to student1, delete button will be hide
@@ -589,7 +589,7 @@ I need to navigate to content pages
     And I follow "Test My Content Details View Archive 1"
     And I should not see "Archive post"
     And I press "Post archive"
-    And I press "View"
+    And I click on "viewversionbutton" "button"
     And I should not see "Delete"
 
     # switch to student2, delete button will be hide
@@ -597,7 +597,7 @@ I need to navigate to content pages
     And I follow "Test My Content Details View Archive 1"
     And I should not see "Archive post"
     And I press "Post archive"
-    And I press "View"
+    And I click on "viewversionbutton" "button"
     And I should not see "Delete"
 
     # Delete Archive post

@@ -31,8 +31,10 @@ define([
     'mod_openstudio/scrollto',
     'require',
     'core/notification',
-    'core_form/changechecker'
-], function($, Ajax, Str, Scrollto, require, Notification, FormChangeChecker) {
+    'core_form/changechecker',
+    'core/fragment',
+    'core/templates',
+], function($, Ajax, Str, Scrollto, require, Notification, FormChangeChecker, Fragment, Templates) {
     var t;
     t = {
 
@@ -66,7 +68,9 @@ define([
             COMMENT_FORM: '.openstudio-comment-form', // Comment form wrapper.
             COMMENT_REPLY_FORM: '.openstudio-comment-reply-form', // Reply form wrapper.
             COMMENT_ATTACHMENT: '.openstudio-comment-form-content .filepicker-filename > a', // Attachment.
+            COMMENT_FORM_BODY: '.openstudio-comment-form-body',
             COMMENT_POST_BUTTON: '#id_postcomment',
+            COMMENT_LOADING: '.openstudio-comment-loading',
 
             // Stream.
             COMMENT_THREAD: '.openstudio-comment-thread', // Comment thread wrapper.
@@ -141,9 +145,6 @@ define([
          * @method showCommentForm
          */
         showCommentForm: function() {
-            // Append form to comment form wrapper.
-            $(t.CSS.COMMENT_FORM_CONTENT).appendTo(t.CSS.COMMENT_FORM);
-
             // Adjust form state.
             $(t.CSS.COMMENT_FORM_CONTENT).show(); // Show form content.
             t.resetForm(); // Reset form.
@@ -161,6 +162,11 @@ define([
          * @method showReplyForm
          */
         showReplyForm: function() {
+            // Hide all comment reply forms.
+            $(t.CSS.COMMENT_REPLY_FORM).hide();
+            $(t.CSS.COMMENT_FORM).find(t.CSS.COMMENT_FORM_CONTENT).hide();
+            // Show add new comment button.
+            $(t.CSS.ADD_NEW_BUTTON).show();
             // Append form to reply form wrapper.
             var commentid = $(this).data('comment-parent').trim();
             var replyform = $(t.CSS.COMMENT_THREAD)
@@ -168,18 +174,64 @@ define([
                     return $(this).data('thread-items') == commentid;
                 })
                 .find(t.CSS.COMMENT_REPLY_FORM);
-            $(t.CSS.COMMENT_FORM_CONTENT).appendTo(replyform);
             replyform.show();
+            if (!replyform.find('form').length) {
+                var loading = $(t.CSS.COMMENT_LOADING).clone().show();
+                replyform.append(loading); // Show loading.
+                // Load fragment form.
+                M.util.js_pending('openstudioloadfragmentform');
+                var appendselector = replyform.find(t.CSS.COMMENT_FORM_BODY);
+                t.loadFragmentForm(commentid).then(function(html, js) {
+                    Templates.replaceNodeContents(appendselector, html, js);
+                    appendselector.find('form').submit(function(e) {
+                        e.preventDefault();
+                    });
+                    appendselector.find('form').on('submit', t.postComment);
+                    // Remove loading.
+                    replyform.find(t.CSS.COMMENT_LOADING).remove();
+                    M.util.js_complete('openstudioloadfragmentform');
+                }).then(function(){
+                    t.showReplyFormPostProcess(replyform, commentid);
+                }.bind(t)).fail(Notification.exception);
+            } else {
+                t.showReplyFormPostProcess(replyform, commentid);
+            }
+        },
 
+        /**
+         * Show reply form post process.
+         *
+         * @param {object} replyForm
+         * @param {string} commentId
+         * @method showReplyFormPostProcess
+         */
+        showReplyFormPostProcess: function(replyForm, commentId) {
             // Adjust form state.
-            $(t.CSS.COMMENT_FORM_CONTENT).show(); // Show form content.
-            t.resetForm(); // Reset form.
-            $(t.CSS.ADD_NEW_BUTTON).show(); // Show add new comment button.
+            replyForm.find(t.CSS.COMMENT_FORM_CONTENT).show();
+            // Reset form.
+            t.resetForm();
             // Assign comment id to inreplyto field.
-            $(t.CSS.COMMENT_FORM_CONTENT).find('form input[name="inreplyto"]').val(parseInt(commentid));
-
+            replyForm.find('form input[name="inreplyto"]').val(parseInt(commentId));
             // Scroll to form.
-            Scrollto.scrollToEl(replyform, t.HEIGHT_TO_TOP);
+            Scrollto.scrollToEl(replyForm, t.HEIGHT_TO_TOP);
+        },
+
+        /**
+         * Call web services to get the fragment form, append to the DOM then bind event.
+         * @param {string} commentId
+         * @return {Promise}
+         * @method loadFragmentForm
+         */
+        loadFragmentForm: function(commentId) {
+            var params = [];
+            params.id = t.mconfig.cmid;
+            params.cid = t.mconfig.cid;
+            params.max_bytes = t.mconfig.max_bytes;
+            params.attachmentenable = t.mconfig.attachmentenable;
+            if (commentId) {
+                params.replyid = commentId;
+            }
+            return Fragment.loadFragment('mod_openstudio', 'commentform', t.mconfig.contextid, params);
         },
 
         /**
@@ -192,7 +244,12 @@ define([
             $(t.CSS.COMMENT_FORM_CONTENT).find('.editor_atto_content').html('');
             // Reset inreplyto field.
             $(t.CSS.COMMENT_FORM_CONTENT).find('form input[name="inreplyto"]').val(0);
-            $(t.CSS.COMMENT_FORM_CONTENT).find('form').get(0).reset();
+            setTimeout(function() {
+                if (window.tinyMCE && window.tinyMCE.activeEditor) {
+                    window.tinyMCE.activeEditor.setContent('');
+                }
+                $(t.CSS.COMMENT_FORM_CONTENT + ':visible').find('form').get(0).reset();
+            }, 0);
             // Reset attachment field. Just a hack on UI.
             $(t.CSS.COMMENT_ATTACHMENT).remove();
         },
@@ -343,9 +400,6 @@ define([
 
             promises[0]
                 .done(function() {
-                    // Move comment form to another place to avoid form removed.
-                    $(t.CSS.COMMENT_FORM_CONTENT).appendTo(t.CSS.COMMENT_FORM);
-
                     var commenttream = $('[data-thread-items="' + commentid + '"]');
                     var replyitem = $('[data-thread-item="' + commentid + '"]');
 

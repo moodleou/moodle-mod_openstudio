@@ -66,6 +66,24 @@
         {{/replies}}
 
         <div class="openstudio-comment-thread-item openstudio-comment-reply-form">
+            <div class="openstudio-comment-form-content">
+                <div class="openstudio-comment-form-header" data-toggle="collapse"
+                     data-target="#openstudio-reply-comment-form-body">
+                    <span>{{#str}} contentcommentsformheader, mod_openstudio {{/str}}</span>
+                    <div class="openstudio-expand-image">
+                        {{#pix}}
+                            t/expanded, core, {{#str}} commentformcollapse, openstudio {{/str}}
+                        {{/pix}}
+                    </div>
+                    <div class="openstudio-collapse-image">
+                        {{#pix}}
+                            t/collapsed, core, {{#str}} commentformexpand, openstudio {{/str}}
+                        {{/pix}}
+                    </div>
+                </div>
+                <div class="openstudio-comment-form-body show" id="openstudio-reply-comment-form-body">
+                </div>
+            </div>
         </div>
     </div>
 </div>

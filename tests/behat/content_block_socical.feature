@@ -165,7 +165,7 @@ Feature: Open Studio notifications
     And I press "Post comment"
     And I should see "Very iconic, also has an amazing interior."
 
-  @_file_upload
+  @_file_upload @editor_tiny
   Scenario: Pop-up comments in content block social with image in comment text.
     When I log in as "student1"
     And I follow "Private files" in the user menu
@@ -175,9 +175,9 @@ Feature: Open Studio notifications
     # Add new comment.
     And I follow "Module post 1"
     And I press "Add new comment"
-    And I select the text in the "Comment" Atto editor
     # Upload an image.
-    And I click on "Insert or edit image" "button"
+    And I expand all toolbars for the "Comment" TinyMCE editor
+    And I click on the "Image" button for the "Comment" TinyMCE editor
     And I click on "Browse repositories..." "button"
     And I click on "Private files" "link" in the ".fp-repo-area" "css_element"
     And I click on "test2.jpg" "link"
@@ -190,7 +190,7 @@ Feature: Open Studio notifications
     And I click on "//*[@class='openstudio-grid-item-content-detail-info-icon'][1]" "xpath_element"
     Then I should see " [Image] "
 
-  @_file_upload
+  @_file_upload @editor_tiny
   Scenario: Pop-up comments in content block social with video in comment text.
     When I log in as "student1"
     And I follow "Private files" in the user menu
@@ -200,9 +200,9 @@ Feature: Open Studio notifications
     # Add new comment.
     And I follow "Module post 1"
     And I press "Add new comment"
-    And I select the text in the "Comment" Atto editor
     # Upload a video.
-    And I click on "Insert or edit an audio/video file" "button"
+    And I expand all toolbars for the "Comment" TinyMCE editor
+    And I click on the "Multimedia" button for the "Comment" TinyMCE editor
     And I click on "Browse repositories..." "button"
     And I click on "Private files" "link" in the ".fp-repo-area" "css_element"
     And I click on "test.mp4" "link"

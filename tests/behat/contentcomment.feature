@@ -103,7 +103,7 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     # Verify the parent comment and its reply have been deleted in comment box.
     Then I should see "There are no comments."
 
-  @javascript
+  @javascript @editor_tiny
   Scenario: Comment editor should have browse repositories.
     When I log in as "student1"
     And I follow "Private files" in the user menu
@@ -113,9 +113,9 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     # Add new comment.
     And I follow "Student slot 1"
     And I press "Add new comment"
-    And I select the text in the "Comment" Atto editor
     # Upload an image.
-    And I click on "Insert or edit image" "button"
+    And I expand all toolbars for the "Comment" TinyMCE editor
+    And I click on the "Image" button for the "Comment" TinyMCE editor
     And I click on "Browse repositories..." "button"
     And I click on "Private files" "link" in the ".fp-repo-area" "css_element"
     And I click on "test2.jpg" "link"

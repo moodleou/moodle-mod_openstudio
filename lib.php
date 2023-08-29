@@ -37,6 +37,7 @@ use mod_openstudio\local\util\defaults;
 use mod_openstudio\local\api\comments;
 use mod_openstudio\local\api\levels;
 use mod_openstudio\local\api\search;
+use mod_openstudio\local\forms\comment_form;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -1305,4 +1306,21 @@ function openstudio_get_coursemodule_info($coursemodule) {
     }
 
     return $info;
+}
+
+/**
+ * Function to get comment form fragment.
+ *
+ * @param array $args
+ * @return string
+ */
+function mod_openstudio_output_fragment_commentform(array $args): string {
+    $mform = new comment_form(null, [
+            'id' => $args['id'],
+            'cid' => $args['cid'],
+            'max_bytes' => $args['max_bytes'],
+            'attachmentenable' => $args['attachmentenable'],
+            'replyid' => $args['replyid'] ?? '',
+    ]);
+    return $mform->render();
 }

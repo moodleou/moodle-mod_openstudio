@@ -36,7 +36,7 @@ class comment_form extends \moodleform {
     protected function definition() {
         global $CFG;
         $mform = $this->_form;
-
+        $replyid = $this->_customdata['replyid'] ?? '';
         if ($this->_customdata['max_bytes']) {
             $maxbytes = $this->_customdata['max_bytes'];
         } else {
@@ -65,7 +65,7 @@ class comment_form extends \moodleform {
         ];
         $mform->addElement('editor', 'commentext',
                 get_string('contentcommentsformlabelcomment', 'openstudio'),
-                null, $editoroptions);
+                ['id' => 'id_commentext' . $replyid], $editoroptions);
         $mform->setType('commentext', PARAM_RAW);
 
         // Comment attachment.

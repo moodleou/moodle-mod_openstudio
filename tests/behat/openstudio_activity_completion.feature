@@ -51,7 +51,8 @@ Feature: View activity completion information in the openstudio activity
     And all users have accepted the plagarism statement for "OS1" openstudio
     And I am on the "Test Open Studio name 1" "openstudio activity editing" page logged in as teacher1
     And I set the following fields to these values:
-      | Completion tracking | Students can manually mark the activity as completed |
+      | Completion tracking  | Students can manually mark the activity as completed |
+      | id_tutorrolesgroup_1 | 1                                                    |
     And I press "Save and display"
     And I am on the "Test Open Studio name 1" "openstudio activity" page
     # Teacher view.
@@ -233,4 +234,3 @@ Feature: View activity completion information in the openstudio activity
     # Check student has completed completion.
     And I am on the "Test Open Studio name 1" "openstudio activity" page logged in as student1
     And the "Make contents and comments: 3" completion condition of "Test Open Studio name 1" is displayed as "done"
-    

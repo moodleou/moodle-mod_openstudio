@@ -86,11 +86,11 @@
            {{#contentcommentlocked}} locked {{/contentcommentlocked}}
            osep-smallbutton btn btn-secondary">{{#str}} contentcommentsaddnewcomment, mod_openstudio {{/str}}
     </button>
-
+    <span class="openstudio-comment-loading" style="display: none">{{#pix}} y/loading, core, {{#str}} loading {{/str}} {{/pix}}</span>
     <div class="openstudio-comment-form openstudio-content-actions">
         <div class="openstudio-comment-form-content">
             <div class="openstudio-comment-form-header" data-toggle="collapse"
-                data-target="#openstudio-comment-form-body">
+                data-target="#openstudio-add-comment-form-body">
                 <span>{{#str}} contentcommentsformheader, mod_openstudio {{/str}}</span>
                 <div class="openstudio-expand-image">
                     {{#pix}}
@@ -103,7 +103,7 @@
                     {{/pix}}
                 </div>
             </div>
-            <div class="openstudio-comment-form-body show" id="openstudio-comment-form-body">
+            <div class="openstudio-comment-form-body show" id="openstudio-add-comment-form-body">
                 {{{commentform}}}
             </div>
         </div>
