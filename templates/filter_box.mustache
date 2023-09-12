@@ -109,7 +109,7 @@
     <input name="filteropen" value="1" type="hidden">
     <input type="hidden" id="filter_area_activity_value" value="{{filter_area_activity_value}}">
 
-    <div id="filter_container" class="{{#filteropen}}in show{{/filteropen}} collapse clearfix" >
+    <div id="filter_container" class="{{#filteropen}}in show{{/filteropen}} collapse clearfix">
         <div class="openstudio-filter-arrow-box {{#ismypinboard}}openstudio-filter-box-pinboard{{/ismypinboard}} clearfix">
             {{^ismypinboard}}
                 <div class="openstudio-filter-box clearfix">
@@ -125,56 +125,72 @@
                 </div>
             {{/ismypinboard}}
             <div class="openstudio-filter-box clearfix">
-                <span class="openstudio-filter-header">{{#str}} filterbyposttypes, mod_openstudio {{/str}}</span>
-                <div class="openstudio-filter-all"></div>
-                {{#posttypes}}
-                    <div class="openstudio-filter-types">
-                        <input type="checkbox" name="ftypearray[]" id="openstudio_filter_types_{{value}}"
-                               class="openstudio-filter-types-checkbox" value="{{value}}" {{#checked}}checked="checked"{{/checked}} />
-                        {{#icon}}<img src="{{icon}}" alt="{{{label}}}">{{/icon}}
-                        <label name="{{{label}}}" for="openstudio_filter_types_{{value}}">{{{label}}}</label>
-                    </div>
-                {{/posttypes}}
+                <fieldset>
+                    <legend class="openstudio-filter-header">{{#str}}
+                        filterbyposttypes, mod_openstudio {{/str}}</legend>
+                    <div class="openstudio-filter-all"></div>
+                    {{#posttypes}}
+                        <div class="openstudio-filter-types">
+                            <input type="checkbox" name="ftypearray[]" id="openstudio_filter_types_{{value}}"
+                                   class="openstudio-filter-types-checkbox" value="{{value}}"
+                                   {{#checked}}checked="checked"{{/checked}} />
+                            {{#icon}}<img src="{{icon}}" alt="{{{label}}}">{{/icon}}
+                            <label name="{{{label}}}" for="openstudio_filter_types_{{value}}">{{{label}}}</label>
+                        </div>
+                    {{/posttypes}}
+                </fieldset>
             </div>
             <div class="openstudio-filter-box clearfix">
-                <span class="openstudio-filter-header">{{#str}} filterbyuserflags, mod_openstudio {{/str}}</span>
-                <div class="openstudio-filter-all"></div>
-                {{#userflags}}
-                    <div class="openstudio-filter-user-flags">
-                        <input type="checkbox" name="fflagarray[]" id="openstudio_filter_user_flags_{{value}}"
-                               class="openstudio-filter-user-flags-checkbox" value="{{value}}" {{#checked}}checked="checked"{{/checked}} />
-                        {{#icon}}<img src="{{icon}}" alt="{{{label}}}">{{/icon}}
-                        <label name="{{{label}}}" for="openstudio_filter_user_flags_{{value}}">{{{label}}}</label>
-                    </div>
-                {{/userflags}}
+                <fieldset>
+                    <legend class="openstudio-filter-header">{{#str}}
+                        filterbyuserflags, mod_openstudio {{/str}}</legend>
+                    <div class="openstudio-filter-all"></div>
+                    {{#userflags}}
+                        <div class="openstudio-filter-user-flags">
+                            <input type="checkbox" name="fflagarray[]" id="openstudio_filter_user_flags_{{value}}"
+                                   class="openstudio-filter-user-flags-checkbox" value="{{value}}"
+                                   {{#checked}}checked="checked"{{/checked}} />
+                            {{#icon}}<img src="{{icon}}" alt="{{{label}}}">{{/icon}}
+                            <label name="{{{label}}}" for="openstudio_filter_user_flags_{{value}}">{{{label}}}</label>
+                        </div>
+                    {{/userflags}}
+                </fieldset>
             </div>
             <div class="openstudio-filter-box clearfix">
-                <span class="openstudio-filter-header">{{#str}} filterselectstatus, mod_openstudio {{/str}}</span>
-                <div class="openstudio-filter-all"></div>
-                {{#selectstatus}}
-                    <div class="openstudio-filter-status">
-                        <input type="radio" name="fstatus" class="openstudio-filter-status" id="openstudio_filter_status_{{value}}"
-                               value="{{value}}" {{#checked}}checked="checked"{{/checked}} />
-                        {{#icon}}<img src="{{icon}}" alt="{{{label}}}">{{/icon}}
-                        <label name="{{{label}}}" for="openstudio_filter_status_{{value}}">{{{label}}}</label>
-                    </div>
-                {{/selectstatus}}
+                <fieldset>
+                    <legend class="openstudio-filter-header">{{#str}}
+                        filterselectstatus, mod_openstudio {{/str}}</legend>
+                    <div class="openstudio-filter-all"></div>
+                    {{#selectstatus}}
+                        <div class="openstudio-filter-status">
+                            <input type="radio" name="fstatus" class="openstudio-filter-status"
+                                   id="openstudio_filter_status_{{value}}"
+                                   value="{{value}}" {{#checked}}checked="checked"{{/checked}} />
+                            {{#icon}}<img src="{{icon}}" alt="{{{label}}}">{{/icon}}
+                            <label name="{{{label}}}" for="openstudio_filter_status_{{value}}">{{{label}}}</label>
+                        </div>
+                    {{/selectstatus}}
+                </fieldset>
             </div>
             <div class="openstudio-filter-box openstudio-filter-box-last clearfix">
-                <span class="openstudio-filter-header">{{#str}} filterbyauthor, mod_openstudio {{/str}}</span>
-                <div class="openstudio-filter-all"></div>
-                {{#selectfrom}}
-                    <div class="openstudio-filter-from">
-                        <input type="radio" name="fscope" class="openstudio-filter-scope" id="openstudio_filter_from_{{value}}"
-                               value="{{value}}" {{#checked}}checked="checked"{{/checked}} />
-                        <label name="{{{label}}}" for="openstudio_filter_from_{{value}}">{{{label}}}</label>
-                    </div>
-                {{/selectfrom}}
+                <fieldset>
+                    <legend class="openstudio-filter-header">{{#str}} filterbyauthor, mod_openstudio {{/str}}</legend>
+                    <div class="openstudio-filter-all"></div>
+                    {{#selectfrom}}
+                        <div class="openstudio-filter-from">
+                            <input type="radio" name="fscope" class="openstudio-filter-scope"
+                                   id="openstudio_filter_from_{{value}}"
+                                   value="{{value}}" {{#checked}}checked="checked"{{/checked}} />
+                            <label name="{{{label}}}" for="openstudio_filter_from_{{value}}">{{{label}}}</label>
+                        </div>
+                    {{/selectfrom}}
+                </fieldset>
             </div>
         </div>
         <div class="openstudio-filter-buttons {{#ismypinboard}}openstudio-filter-buttons-pinboard{{/ismypinboard}}">
             <input type="submit" class="btn btn-secondary" value="{{#str}} filterapplybutton, mod_openstudio {{/str}}">
-            <input type="button" class="btn btn-secondary" id="reset_filter_btn" value="{{#str}} filterresetbutton, mod_openstudio {{/str}}">
+            <input type="button" class="btn btn-secondary" id="reset_filter_btn"
+                   value="{{#str}} filterresetbutton, mod_openstudio {{/str}}">
         </div>
     </div>
 </form>
