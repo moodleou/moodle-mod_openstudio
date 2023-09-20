@@ -1004,7 +1004,7 @@ class mod_openstudio_external extends external_api {
                 'cmid' => new external_value(PARAM_INT, 'Course module ID'),
                 'cid' => new external_value(PARAM_INT, 'Content ID'),
                 'commentid' => new external_value(PARAM_INT, 'Comment ID'),
-                'fid' => new external_value(PARAM_INT, 'Flag ID', flags::COMMENT_LIKE)
+                'fid' => new external_value(PARAM_INT, 'Flag ID')
         ));
     }
 
