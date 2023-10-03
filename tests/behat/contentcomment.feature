@@ -35,7 +35,7 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     And all users have accepted the plagarism statement for "OS1" openstudio
 
   @javascript
-  Scenario: Add/Reply/Flag/Delete
+  Scenario: Add/Reply/Flag/Delete comment
 
     # Add new comment
     And I am on the "Sharing Studio" "openstudio activity" page logged in as "student1"
@@ -103,7 +103,7 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     # Verify the parent comment and its reply have been deleted in comment box.
     Then I should see "There are no comments."
 
-  @javascript @editor_tiny
+  @_file_upload @javascript @editor_tiny
   Scenario: Comment editor should have browse repositories.
     When I log in as "student1"
     And I follow "Private files" in the user menu
@@ -121,6 +121,7 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     And I click on "test2.jpg" "link"
     And I click on "Select this file" "button"
     And I set the field "Describe this image for someone who cannot see it" to "An image"
+    And I wait until the page is ready
     And I click on "Save image" "button"
     # Post comment.
     And I press "Post comment"

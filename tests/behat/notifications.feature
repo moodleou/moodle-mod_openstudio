@@ -35,8 +35,8 @@ Feature: Open Studio notifications
       | student1 | G1    |
       | student2 | G1    |
     And the following open studio "instances" exist:
-      | course | name                | description                | grouping | groupmode | pinboard | idnumber | tutorroles     |
-      | C1     | Notification Studio | Notifification description | GI1      | 1         | 99       | OS1      | editingteacher |
+      | course | name                | description                | grouping | groupmode | pinboard | idnumber | tutorroles     | id_tutorrolesgroup_5 |
+      | C1     | Notification Studio | Notifification description | GI1      | 1         | 99       | OS1      | editingteacher | 1                    |
     And all users have accepted the plagarism statement for "OS1" openstudio
 
   Scenario: Notify tutor when a post is shared with them

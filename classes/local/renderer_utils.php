@@ -1764,6 +1764,7 @@ class renderer_utils {
                 'max_bytes' => $cminstance->contentmaxbytes,
                 'attachmentenable' => $permissions->feature_contentcommentusesaudio,
                 'contextid' => \context_module::instance($cmid)->id,
+                'fid' => flags::COMMENT_LIKE
             ]]);
 
             // Init OUMP module (Media player).

@@ -359,7 +359,8 @@ define([
                 args: {
                     cmid: t.mconfig.cmid,
                     cid: t.mconfig.cid,
-                    commentid: likebtn.data('comment-id')
+                    commentid: likebtn.data('comment-id'),
+                    fid: t.mconfig.fid
                 }
             }]);
 

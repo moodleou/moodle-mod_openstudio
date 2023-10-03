@@ -266,7 +266,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
             $data->notificationnumber = array_reduce($notifications, function($carry, notification $notification) {
                 $carry += $notification->timeread ? 0 : 1;
                 return $carry;
-            });
+            }, 0);
             $stopstring = get_string('stopnotificationsforcontent', 'mod_openstudio');
             $stopicon = new \pix_icon('stop_notification', $stopstring, 'mod_openstudio', [
                     'width' => 16,
