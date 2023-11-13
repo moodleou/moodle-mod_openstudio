@@ -1568,12 +1568,19 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) .openstudio-comm
 }
 
 .openstudio-comment-flag-link .openstudio-comment-like-long-link,
+.openstudio-comment-flag-link .openstudio-comment-unlike-long-link,
 .openstudio-comment-delete-link .openstudio-comment-delete-long-link,
 .openstudio-comment-report-link .openstudio-comment-report-long-link {
     display: inline;
 }
 
+.openstudio-comment-flag-link .openstudio-comment-like-long-link.openstudio-hidden,
+.openstudio-comment-flag-link .openstudio-comment-unlike-long-link.openstudio-hidden {
+    display: none;
+}
+
 .openstudio-comment-flag-link .openstudio-comment-like-short-link,
+.openstudio-comment-flag-link .openstudio-comment-unlike-short-link,
 .openstudio-comment-delete-link .openstudio-comment-delete-short-link,
 .openstudio-comment-report-link .openstudio-comment-report-short-link {
     display: none;
@@ -1685,12 +1692,14 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) .openstudio-comm
 }
 
 .openstudio-folder-view-comments .openstudio-comment-flag-link .openstudio-comment-like-long-link,
+.openstudio-folder-view-comments .openstudio-comment-flag-link .openstudio-comment-unlike-long-link,
 .openstudio-folder-view-comments .openstudio-comment-delete-link .openstudio-comment-delete-long-link,
 .openstudio-folder-view-comments .openstudio-comment-report-link .openstudio-comment-report-long-link {
     display: none;
 }
 
 .openstudio-folder-view-comments .openstudio-comment-flag-link .openstudio-comment-like-short-link,
+.openstudio-folder-view-comments .openstudio-comment-flag-link .openstudio-comment-unlike-short-link,
 .openstudio-folder-view-comments .openstudio-comment-delete-link .openstudio-comment-delete-short-link,
 .openstudio-folder-view-comments .openstudio-comment-report-link .openstudio-comment-report-short-link {
     display: inline;
@@ -5104,15 +5113,22 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-comment-flag-link .openstudio-comment-like-long-link,
+    .openstudio-comment-flag-link .openstudio-comment-unlike-long-link,
     .openstudio-comment-delete-link .openstudio-comment-delete-long-link,
     .openstudio-comment-report-link .openstudio-comment-report-long-link {
         display: none;
     }
 
     .openstudio-comment-flag-link .openstudio-comment-like-short-link,
+    .openstudio-comment-flag-link .openstudio-comment-unlike-short-link,
     .openstudio-comment-delete-link .openstudio-comment-delete-short-link,
     .openstudio-comment-report-link .openstudio-comment-report-short-link {
         display: inline;
+    }
+
+    .openstudio-comment-flag-link .openstudio-comment-like-short-link.openstudio-hidden,
+    .openstudio-comment-flag-link .openstudio-comment-unlike-short-link.openstudio-hidden {
+        display: none;
     }
 
     .openstudio-comment-form .openstudio-expand-image .icon,

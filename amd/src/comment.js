@@ -367,12 +367,26 @@ define([
             promises[0]
                 .done(function(res) {
                     likebtn
-                        .hide()
                         // Update flag count.
                         .siblings(t.CSS.FLAG_STATUS + '.flagged').children(t.CSS.FLAG_COUNT).addClass('flagged').text(res.count)
                         // Update flag status.
                         .parent().removeClass('openstudio-hidden')
                         .siblings(t.CSS.FLAG_STATUS + '.unflagged').addClass('openstudio-hidden');
+
+                    // Show/hide opposite like/unlike links.
+                    likebtn.children().each(function() {
+                        var elem = $(this);
+                        if (elem.hasClass('openstudio-comment-like-long-link') ||
+                            elem.hasClass('openstudio-comment-like-short-link') ||
+                            elem.hasClass('openstudio-comment-unlike-long-link') ||
+                            elem.hasClass('openstudio-comment-unlike-short-link')) {
+                            if (elem.hasClass('openstudio-hidden')) {
+                                elem.removeClass('openstudio-hidden');
+                            } else {
+                                elem.addClass('openstudio-hidden');
+                            }
+                        }
+                    }, this);
                 })
                 .always(function() {
                     M.util.js_complete('openstudioLikeComment');

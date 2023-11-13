@@ -1,4 +1,4 @@
-@ou @ou_vle @mod @mod_openstudio @_file_upload
+@ou @ou_vle @mod @mod_openstudio @_file_upload @javascript
 Feature: Add/Reply/Flag/Delete Open Studio comment
   In order to Add/Reply/Flag/Delete comment
   As a student
@@ -51,6 +51,13 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     And I follow "Like comment"
     Then I should see "1" in the ".openstudio-comment-flag-count" "css_element"
     Then I should not see "Like comment"
+    And I should see "Unlike comment"
+
+    # Unflag comment
+    And I follow "Unlike comment"
+    Then I should see "0" in the ".openstudio-comment-flag-count" "css_element"
+    Then I should not see "Unlike comment"
+    And I should see "Like comment"
 
     # Reply comment
     And I press "Reply"
