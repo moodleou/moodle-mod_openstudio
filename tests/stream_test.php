@@ -258,7 +258,6 @@ class stream_test extends \advanced_testcase {
         $this->studiolevels = '';
         $this->totalcontents = '';
         $this->pinboardcontents = '';
-        $this->workspace = '';
     }
     /**
      * Test to key internal functions which are used to clean URL and URL query parameters

@@ -32,6 +32,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class restore_openstudio_activity_structure_step extends restore_activity_structure_step {
+    public $openstudioid;
 
     /**
      * Defines structure of path elements to be processed during the restore

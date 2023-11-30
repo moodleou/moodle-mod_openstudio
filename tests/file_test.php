@@ -38,6 +38,7 @@ class file_testcase extends \advanced_testcase {
     protected $filenames;
     protected $files;
     protected $users;
+    protected $contexts;
 
     /**
      * Prepares things before this test case is initialised.

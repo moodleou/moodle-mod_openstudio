@@ -50,6 +50,7 @@ class search_posts_test extends \advanced_testcase {
     private $sharedcontent;
     private $privatecontent;
     private $foldercontent;
+    private $file;
 
     /**
      * Sets up our fixtures.

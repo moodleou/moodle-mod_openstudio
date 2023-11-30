@@ -40,6 +40,10 @@ class content_test extends \advanced_testcase {
     protected $pinboardslots;
     protected $singleentrydata;
     protected $contentdata;
+    protected $groups;
+    protected $groupings;
+    protected $studio1, $studio2, $studio3, $studio4, $studio5, $studio6, $studio7, $studio8, $studio9, $studio10, $studio11,
+            $studio12, $studio13, $studio14, $studio15, $studio16, $studio17, $studio18, $studio19;
 
     /**
      * Sets up our fixtures.
