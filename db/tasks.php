@@ -53,5 +53,14 @@ $tasks = [
         'day' => '*',
         'month' => '*',
         'dayofweek' => '*'
-    ]
+    ],
+    [
+        'classname' => 'mod_openstudio\task\updated_group_moving_contents',
+        'blocking' => 0,
+        'minute' => 0,
+        'hour' => 4,
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*'
+    ],
 ];

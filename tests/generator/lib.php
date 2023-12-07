@@ -139,6 +139,43 @@ class mod_openstudio_generator extends testing_module_generator {
         return $leveldata;
     }
 
+    /**
+     * Create mock levels with folder contents only.
+     * 1 block, 1 activity, 1 folder content.
+     *
+     * @param int $studioid
+     * @return array
+     */
+    public function create_mock_levels_with_folders(int $studioid): array {
+        global $DB;
+        $blocks = [];
+        $blocks[] = $DB->insert_record('openstudio_level1',
+            (object) ['openstudioid' => $studioid, 'name' => 'Block 1', 'sortorder' => 1]);
+
+        $activities = [];
+        foreach ($blocks as $block) {
+            $activities[$block][] = $DB->insert_record('openstudio_level2',
+                (object) ['level1id' => $block, 'name' => 'Activity 1', 'sortorder' => 1]);
+        }
+
+        $contents = [];
+        foreach ($blocks as $block) {
+            foreach ($activities[$block] as $activity) {
+                $contents[$block][$activity][] = $DB->insert_record('openstudio_level3',
+                    (object) [
+                        'level2id' => $activity, 'name' => 'Slot 1', 'sortorder' => 1,
+                        'contenttype' => content::TYPE_FOLDER,
+                    ]);
+            }
+        }
+
+        return [
+            'blockslevels' => $blocks,
+            'activitieslevels' => $activities,
+            'contentslevels' => $contents,
+        ];
+    }
+
     public function create_mock_contents($studioid, $leveldata, $userid, $visibility) {
         $pinboardcontents = array();
         $contents = array();

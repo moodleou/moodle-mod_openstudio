@@ -30,6 +30,7 @@ use mod_openstudio\local\api\comments;
 use mod_openstudio\local\api\folder;
 use mod_openstudio\local\api\group;
 use mod_openstudio\local\api\item;
+use mod_openstudio\local\api\levels;
 use mod_openstudio\local\api\tags;
 use mod_openstudio\local\util\defaults;
 
@@ -1895,16 +1896,18 @@ EOF;
     }
 
     /**
-     * Get folder ID in case of folderid = 0.
+     * Get folder ID on content level container (My Activities).
+     * In case of folderid = 0, we will create auto-generated folder with showextradata = 1.
      *
-     * @param \stdClass $openstudio
+     * @param \stdClass $openstudio OS2 instance
      * @param int $userid current user ID
-     * @param int $lid Level id
+     * @param int $levelid Level id
      * @return int
      * @throws \Exception
      */
-    public static function get_folder_id(\stdClass $openstudio, int $userid, int $lid): int {
-        $foldervialevel = content::get_record_via_levels($openstudio->id, $userid, 3, $lid);
+    public static function get_folder_id(\stdClass $openstudio, int $userid, int $levelid): int {
+        $foldervialevel = content::get_record_via_levels($openstudio->id, $userid,
+            defaults::CONTENTLEVELCONTAINER, $levelid);
         if ($foldervialevel) {
             // Folder already created.
             $folderid = $foldervialevel->id;
@@ -1912,7 +1915,7 @@ EOF;
             // Folder has not created yet.
             // Set showextradata to 1, then set it back to 0 when the user makes changes to the folder.
             $data = [
-                'contenttype' => content::TYPE_FOLDER, 'showextradata' => 1,
+                'contenttype' => content::TYPE_FOLDER, 'showextradata' => defaults::FOLDER_AUTO_GENERATE,
                 'visibility' => self::get_visibility($openstudio->id, $userid),
                 'embedcode' => '', 'urltitle' => '', 'weblink' => '',
                 'name' => '', 'description' => ''];
@@ -1920,12 +1923,12 @@ EOF;
             $folderid = content::create(
                 $openstudio->id,
                 $userid,
-                3,
-                $lid,
+                defaults::CONTENTLEVELCONTAINER,
+                $levelid,
                 $data
             );
             if (!$folderid) {
-                throw new \coding_exception('Could not create new folder.');
+                throw new \coding_exception(get_string('errorcreatefolder', 'mod_openstudio'));
             }
         }
         return $folderid;

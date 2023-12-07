@@ -114,8 +114,15 @@ class folder {
                 // Update folder content last modified time and showextradata.
                 $updatedata = new \stdClass();
                 $updatedata->timemodified = time();
-                $updatedata->showextradata = 0;
+                $updatedata->showextradata = defaults::FOLDER_NORMAL;
                 $updatedata->id = $folderid;
+                // Auto-generated folder on My Activity (level3) has no name.
+                // But when the folder create/insert a content then folder must have name.
+                // So we use level3 name as its default name.
+                if (!$folder->name && $folder->levelcontainer == defaults::CONTENTLEVELCONTAINER) {
+                    $level3 = levels::get_record(defaults::CONTENTLEVELCONTAINER, $folder->levelid);
+                    $updatedata->name = $level3->name;
+                }
 
                 $DB->update_record('openstudio_contents', $updatedata);
                 tracking::log_action($folderid, tracking::MODIFY_FOLDER, $userid);

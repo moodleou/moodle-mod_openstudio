@@ -24,7 +24,7 @@ namespace mod_openstudio;
 
 defined('MOODLE_INTERNAL') || die();
 
-class folder_testcase extends \advanced_testcase {
+class folder_test extends \advanced_testcase {
 
     private $users;
     private $permissions;
@@ -1732,4 +1732,65 @@ class folder_testcase extends \advanced_testcase {
         $this->assertEquals($expectedtemplatecount, $templatecount);
     }
 
+    /**
+     * Test empty named folder will have level3's name after adding content.
+     */
+    public function test_collect_content_with_auto_generated_folder(): void {
+        global $DB;
+        $this->resetAfterTest(true);
+
+        $userid = $this->users->students->one->id;
+
+        $studio = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OSF',
+        ]);
+
+        $studiolevels = $this->generator->create_mock_levels_with_folders($studio->id);
+        $blockid = $studiolevels['blockslevels'][0];
+        $activityid = $studiolevels['activitieslevels'][$blockid][0];
+        $levelid = $studiolevels['contentslevels'][$blockid][$activityid][0];
+
+        $leveldata = \mod_openstudio\local\api\levels::get_record(
+            \mod_openstudio\local\util\defaults::CONTENTLEVELCONTAINER, $levelid);
+
+        $emptyname = '';
+        $folderid = $this->generator->create_folders([
+            'openstudio' => 'OSF',
+            'name' => $emptyname,
+            'description' => 'foo',
+            'userid' => $userid,
+            'levelid' => $levelid,
+            'levelcontainer' => \mod_openstudio\local\util\defaults::CONTENTLEVELCONTAINER,
+            'visibility' => \mod_openstudio\local\api\content::VISIBILITY_MODULE,
+            'showextradata' => \mod_openstudio\local\util\defaults::FOLDER_AUTO_GENERATE,
+        ]);
+        $getfolder = \mod_openstudio\local\api\folder::get($folderid);
+        $this->assertEquals(\mod_openstudio\local\util\defaults::FOLDER_AUTO_GENERATE,
+            $getfolder->showextradata);
+        $this->assertEquals($emptyname, $getfolder->name);
+        // Verify folder's name is not level3's name.
+        $this->assertNotEquals($leveldata->name, $getfolder->name);
+
+        // Create content.
+        $contentid = \mod_openstudio\local\api\content::create($studio->id, $userid,
+            0, 0, (array) $this->generate_slot_data());
+
+        // We add a content.
+        $foldercontentid = \mod_openstudio\local\api\folder::add_content($folderid, $contentid, $userid);
+        $this->assertIsInt($foldercontentid);
+
+        $params = ['folderid' => $folderid, 'contentid' => $contentid];
+        $foldercontent = $DB->get_record('openstudio_folder_contents', $params);
+        $this->assertNotEquals(false, $foldercontent);
+        $this->assertEquals($foldercontentid, $foldercontent->id);
+
+        $getupdatedfolder = \mod_openstudio\local\api\folder::get($folderid);
+        $this->assertEquals(\mod_openstudio\local\util\defaults::FOLDER_NORMAL,
+            $getupdatedfolder->showextradata);
+        // Verify folder's name is no longer empty.
+        $this->assertNotEquals($emptyname, $getupdatedfolder->name);
+        // Verify folder's name is level3's name.
+        $this->assertEquals($leveldata->name, $getupdatedfolder->name);
+    }
 }

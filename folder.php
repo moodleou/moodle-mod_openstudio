@@ -59,6 +59,13 @@ util::honesty_check($id);
 
 $returnurliferror = new moodle_url('/mod/openstudio/view.php', array('id' => $cm->id));
 
+// Must prioritize folder ID from server rather than from GET, both for GET and POST method.
+// When we submit this page again using method POST, we should get folder ID from this method.
+// So the logic with $selectedposts below can have correct folder ID.
+if ($folderid == 0) {
+    $folderid = util::get_folder_id($cminstance, $userid, $lid);
+}
+
 // Save selected post to folder.
 $selectedposts = optional_param('selectedposts', '', PARAM_RAW_TRIMMED);
 if ($selectedposts && $folderid) {
@@ -83,10 +90,6 @@ if ($selectedposts && $folderid) {
 $showdeletedcontentversions = false;
 if ($permissions->viewdeleted || $permissions->managecontent) {
     $showdeletedcontentversions = true;
-}
-
-if ($folderid == 0) {
-    $folderid = util::get_folder_id($cminstance, $userid, $lid);
 }
 
 // Get folder data.

@@ -1186,6 +1186,26 @@ EOF;
             $params[] = $userid;
         }
 
+        $excludeautogeneratefolder = '';
+        // Auto-generated folders only appear on 'My Activities' page (as required for them to function).
+        // All other pages will not display auto-generated folders.
+        // Note: Auto-generated folders are folders without names, showextradata = 1, levelcontainer set to 3.
+        // levelcontainer = 3 is content level 3 from 'My Actitivies': Block (1) => Activity (2) => Content (3).
+        if ($visibility != content::VISIBILITY_PRIVATE || $pinboardonly === true) {
+            $excludeautogeneratefolder = ' AND s.id NOT IN (
+            SELECT subc.id
+              FROM {openstudio_contents} subc
+             WHERE subc.levelcontainer = ?
+                   AND subc.contenttype = ?
+                   AND subc.showextradata = ?
+                   AND subc.openstudioid = ?
+        ) ';
+            $params[] = util\defaults::CONTENTLEVELCONTAINER;
+            $params[] = content::TYPE_FOLDER;
+            $params[] = util\defaults::FOLDER_AUTO_GENERATE;
+            $params[] = $studioid;
+        }
+
         // Apply sort ordering.
         $sortordersql = '';
         if (is_array($sortorder)) {
@@ -1289,6 +1309,8 @@ EOF;
 {$reciprocalaccesssql}
 
 {$ownersql}
+
+{$excludeautogeneratefolder}
 
 AND (s.visibility IS NULL OR s.visibility != ?)
 

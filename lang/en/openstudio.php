@@ -1235,6 +1235,8 @@ $string['contentwillbelockedfromtill'] = 'This activity will be locked and canno
 $string['cron_subscriptions'] = 'Studio process subscriptions job';
 $string['cron_cleanup'] = 'Studio cleanup files job';
 $string['cron_deletenotifications'] = 'Delete notification job';
+$string['cron_updategroupcontent'] = 'Update contents to user\'s newest group';
+$string['cron_updategroupcontent:movedlog'] = 'Moved content {$a->contentid} from group {$a->fromgroupid} to group {$a->togroupid} - user {$a->userid} in studio {$a->studioid} in course {$a->courseid}.';
 
 $string['accesscurrentpage'] = 'Current Page';
 $string['accesscurrentcontent'] = 'Current Content';
@@ -1581,3 +1583,4 @@ $string['sharetoviewbanner_help'] = 'You will not see any other student\'s work 
 $string['iplayererrormessage'] = 'This website doesn\'t allow display of embedded content. Please select \'web link\' to view the content.';
 $string['preventiframe'] = 'List of unsupported addresses';
 $string['preventiframedescription'] = 'List of addresses (one per line, partial match supported) that will not output an iframe.';
+$string['unittestcodingexception'] = 'Cannot be called except in unit test';
