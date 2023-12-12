@@ -6285,7 +6285,7 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-header {
         margin-top: 12px;
     }
-    #region-main > div[role="main"] h2.openstudio-nav-logo.osep-moduleheading {
+    #region-main > div[role="main"] h1.openstudio-nav-logo.osep-moduleheading {
         min-height: unset;
         padding-top: 0;
         margin-bottom: 9px;
