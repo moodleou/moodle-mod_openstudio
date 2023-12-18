@@ -40,7 +40,7 @@ class mod_openstudio_content_form extends moodleform {
 
     const ACCEPT_TYPE = array(
             '.jpg', '.jpe', '.jpeg', '.gif', '.png', // Image.
-            '.avi', '.m4v', '.mpg', '.mpeg', '.mov', '.mp4', '.mv4', '.flv', '.gif', // Video.
+            '.avi', '.m4v', '.mpg', '.mpeg', '.mov', '.mp4', '.mv4', '.flv', '.gif', '.webm', // Video.
             '.aiff', '.wav', '.mp3', '.m4a', // Audio.
             '.doc', '.docx', '.rtf', '.pdf', '.odt', '.fdf', '.nbk', '.txt', // Document.
             '.ppt', '.pptx', '.odp', // Presentation.

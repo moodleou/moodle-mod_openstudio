@@ -410,3 +410,23 @@ I need to create a content and upload a file
       | Description | https://learn2.open.ac.uk |
     And I press "Save"
     Then "//a[@href='https://learn2.open.ac.uk']" "xpath_element" should exist
+
+  Scenario: Add new content just a title and description with a webm file
+    When I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "teacher1"
+    And I follow "Add new content"
+    And I press "Add file"
+    And I set the following fields to these values:
+      | My Module   | 1                                         |
+      | Title       | Test My Group Board View 7 Tags           |
+      | Description | My Group Board View Description 7 Tags    |
+      | Files       | mod/openstudio/tests/importfiles/test.webm |
+      | Tags        | Tests Add New Tags add file webm           |
+    And I wait "2" seconds
+    And I should see "Tests Add New Tags add file webm"
+    And I press "Save"
+    And I follow "Shared content > My Module" in the openstudio navigation
+    And I should see "Test My Group Board View 7 Tags"
+    And I click on "//div[@class='openstudio-grid-item-content-box'][1]//a" "xpath_element"
+    And I should see "Tests Add New Tags add file webm"
+    Then the "href" attribute of "div.openstudio-content-view-primary a" "css_element" should contain "test.webm"
+    And I should see "Test My Group Board View 7 Tags"
