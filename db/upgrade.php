@@ -164,6 +164,20 @@ function xmldb_openstudio_upgrade($oldversion=0) {
         upgrade_mod_savepoint(true, 2023081600, 'openstudio');
     }
 
+    if ($oldversion < 2023122100) {
+        // Add enteralt field setting.
+        $table = new xmldb_table('openstudio_contents');
+        $field = new xmldb_field('enteralt', XMLDB_TYPE_CHAR, '125', null, XMLDB_NOTNULL, null, null);
+
+        // Conditionally launch add field enteralt.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Openstudio savepoint reached.
+        upgrade_mod_savepoint(true, 2023122100, 'openstudio');
+    }
+
     // Must always return true from these functions.
     return $result;
 }

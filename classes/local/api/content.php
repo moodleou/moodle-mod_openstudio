@@ -339,6 +339,9 @@ EOF;
         if (array_key_exists('visibility', $data)) {
             $insertdata['visibility'] = $data['visibility'];
         }
+        if (array_key_exists('enteralt', $data)) {
+            $insertdata['enteralt'] = $data['enteralt'];
+        }
 
         $insertdata['userid'] = $userid;
         $insertdata['timemodified'] = time();
@@ -641,6 +644,7 @@ EOF;
             array_key_exists('ownership', $data) ? ($contentdata->ownership = $data['ownership']) : null;
             array_key_exists('ownershipdetail', $data) ? ($contentdata->ownershipdetail = $data['ownershipdetail']) : null;
             array_key_exists('visibility', $data) ? ($contentdata->visibility = $data['visibility']) : null;
+            array_key_exists('enteralt', $data) ? ($contentdata->enteralt = $data['enteralt']) : null;
             $contentdata->timemodified = time();
 
             $result = $DB->update_record('openstudio_contents', $contentdata);
@@ -862,6 +866,7 @@ EOF;
             $contentdata->description = '';
             $contentdata->ownership = 0;
             $contentdata->ownershipdetail = '';
+            $contentdata->enteralt = '';
             $contentdata->deletedby = null;
             $contentdata->deletedtime = null;
             $contentdata->timemodified = time();

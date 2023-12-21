@@ -406,7 +406,9 @@ class renderer_utils {
                 // A post with visibility is Only me, thmbnail doesn't load although folder shared.
                 $contentfileurl = self::make_plugin_file($context->id, $contentarea, $contentdata->id,
                         $contentdata->content, $folderid);
-
+                if ($contentdatatitle == '' && !empty($contentdata->enteralt)) {
+                    $contentdatatitle = $contentdata->enteralt;
+                }
                 break;
 
             case content::TYPE_VIDEO:

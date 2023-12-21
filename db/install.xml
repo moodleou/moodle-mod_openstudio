@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="mod/openstudio/db" VERSION="20170404" COMMENT="OpenStudio plugin tables"
+<XMLDB PATH="mod/openstudio/db" VERSION="20231221" COMMENT="OpenStudio plugin tables"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -152,6 +152,7 @@
         <FIELD NAME="lockedtime" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Time lock applied for instance"/>
         <FIELD NAME="lockprocessed" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Time lock processed for instance"/>
         <FIELD NAME="retainimagemetadata" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Retain image metadata"/>
+        <FIELD NAME="enteralt" TYPE="char" LENGTH="125" NOTNULL="false" SEQUENCE="false" COMMENT="Describe the image for someone who cannot see it"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

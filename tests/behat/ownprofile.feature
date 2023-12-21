@@ -174,6 +174,7 @@ I need to create a content and upload a file
       | Title       | Test My Ownprofile View                    |
       | Description | My Ownprofile View Description             |
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "My content > My Activities" in the openstudio navigation
     Then I should see "Test My Ownprofile View"
@@ -193,6 +194,7 @@ I need to create a content and upload a file
       | Title       | Test My Ownprofile View Student            |
       | Description | Test My Ownprofile View Description        |
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "My content > My Activities" in the openstudio navigation
     Then I should see "Test My Ownprofile View Student"

@@ -504,7 +504,7 @@ EOF;
             \context_module $context, bool $isstriplink = false): string {
         $commenttext = file_rewrite_pluginfile_urls($commenttext, 'pluginfile.php', $context->id,
                 'mod_openstudio', self::COMMENT_TEXT_AREA, $commentid);
-        $commenttext = format_text($commenttext, FORMAT_HTML, $context);
+        $commenttext = format_text($commenttext, FORMAT_HTML, ['context' => $context->id]);
         if ($isstriplink) {
             $commenttext = format_string($commenttext, true);
         }

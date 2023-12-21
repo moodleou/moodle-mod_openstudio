@@ -70,6 +70,7 @@ define(['jquery', 'mod_openstudio/scrollto'], function ($, Scrollto) {
             }
 
             if ($('#openstudio_upload_content_add_file').is(':visible')) {
+                $('#openstudio_upload_content_add_alt').show();
                 $('#contentformoptionalmetadata').show();
                 $('input[name="contentuploadtype"]').val('addfile');
 
@@ -96,6 +97,7 @@ define(['jquery', 'mod_openstudio/scrollto'], function ($, Scrollto) {
 
             $('#openstudio_upload_content_add_link').toggle(function () {
                 $('#openstudio_upload_content_add_file').hide();
+                $('#openstudio_upload_content_add_alt').hide();
 
                 if ($(this).is(':visible')) {
                     $('#contentformoptionalmetadata').show();

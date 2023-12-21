@@ -375,7 +375,15 @@ class mod_openstudio_content_form extends moodleform {
             array('class' => 'openstudio_contentform_tag')
         );
         $mform->addHelpButton('tags', 'tags', 'openstudio');
+        $mform->addElement('html', html_writer::start_tag('div',
+            ['id' => 'openstudio_upload_content_add_alt', 'class' => $defaultcontentuploadtype &&
+                $defaultcontentuploadtype == 'addfile' ? '' : 'openstudio-hidden']));
+        if (!$this->_customdata['iscreatefolder'] && $this->_customdata['feature_contentusesfileupload']) {
 
+            $mform->addElement('textarea', 'enteralt', get_string('contenformenteralt', 'openstudio'),
+                ['rows' => 3, 'maxlength' => 125, 'class' => 'images-only']);
+        }
+        $mform->addElement('html', html_writer::end_tag('div'));
         $mform->addElement('html', html_writer::end_tag('div'));
 
         $mform->addElement('hidden', 'sid');
@@ -410,10 +418,13 @@ class mod_openstudio_content_form extends moodleform {
         && $this->_customdata['feature_contentusesfileupload']) {
             // Check attachments field for errors.
             $element =& $mform->getElement('attachments');
-            if ($element) {
+            // Check alt field for errors.
+            $elementalt =& $mform->getElement('enteralt');
+            if ($element || $elementalt) {
                 $value = $mform->getSubmitValue('attachments');
+                $valuealt = $mform->getSubmitValue('enteralt');
                 $result = $element->validateSubmitValue($value);
-                if (!empty($result) && is_string($result)) {
+                if (!empty($result) && is_string($result) || $valuealt === "") {
                     // Show Add File so that the error is visible.
                     $PAGE->requires->js_call_amd('mod_openstudio/contentedit', 'showAddFile', [true]);
                 }
@@ -438,7 +449,8 @@ class mod_openstudio_content_form extends moodleform {
             if ($draftfiles) {
                 // The form only lets us upload 1 file, so there will only be 1 file in the array.
                 $file = array_pop($draftfiles);
-                if ($file->get_mimetype() == 'application/x-smarttech-notebook') {
+                $mimetype = $file->get_mimetype();
+                if ($mimetype == 'application/x-smarttech-notebook') {
                     $packer = new zip_packer();
                     if ($file) {
                         $itemid = $file->get_itemid();
@@ -556,6 +568,10 @@ class mod_openstudio_content_form extends moodleform {
                         }
                     } else {
                         $errors['attachments'] = get_string('errorcontentinvalidnotebook', 'openstudio');
+                    }
+                } else if (preg_match('|^image/|', $mimetype)) {
+                    if (empty($data['enteralt'])) {
+                        $errors['enteralt'] = get_string('presentationoraltrequired', 'openstudio');
                     }
                 }
 

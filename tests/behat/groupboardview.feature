@@ -68,6 +68,7 @@ Feature: Open Studio group stream
       | Title          | Test My Group Board View 1                 |
       | Description    | My Group Board View Description 1          |
       | Files          | mod/openstudio/tests/importfiles/test1.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "Shared content > My Group" in the openstudio navigation
     And I should see "View all work that’s been shared with your group cohort, including your own."

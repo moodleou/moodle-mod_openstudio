@@ -106,6 +106,7 @@ Feature: Open Studio people view
       | Title       | Test My Pinboard View                      |
       | Description | My Pinboard View Description               |
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "People" in the openstudio navigation
 
@@ -118,6 +119,7 @@ Feature: Open Studio people view
       | Title       | Test My Pinboard View Student 1            |
       | Description | My Pinboard View Description 1             |
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "People" in the openstudio navigation
     Then I should see "Teacher 1"
@@ -131,6 +133,7 @@ Feature: Open Studio people view
       | Title       | Test My Pinboard View Student 2            |
       | Description | My Pinboard View Description 2             |
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "People" in the openstudio navigation
     Then I should see "Teacher 1"
@@ -145,6 +148,7 @@ Feature: Open Studio people view
       | Title       | Test My Pinboard View Student 5            |
       | Description | My Pinboard View Description 5             |
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "People" in the openstudio navigation
     Then I should see "Teacher 1"
@@ -184,6 +188,7 @@ Feature: Open Studio people view
       | Title       | Test My Pinboard View 1                    |
       | Description | My Pinboard View Description 1             |
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "student3"
     And I follow "My content" in the openstudio navigation
@@ -194,6 +199,7 @@ Feature: Open Studio people view
       | Title       | Test My Pinboard View 1                    |
       | Description | My Pinboard View Description 1             |
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
 
     # GIVEN Group Name selected, THEN show all members of the selected group

@@ -80,6 +80,7 @@ I need to create a content and upload a file
       | Title       | Test My Group Board View 2                 |
       | Description | My Group Board View Description 2          |
       | Files       | mod/openstudio/tests/importfiles/test2.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "Shared content > My Module" in the openstudio navigation
     Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test2.jpg"
@@ -97,6 +98,7 @@ I need to create a content and upload a file
       | Show GPS data    | 1                                          |
       | Show image data  | 1                                          |
       | Retain EXIF data | 1                                          |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "Shared content > My Module" in the openstudio navigation
     Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test3.jpg"
@@ -112,6 +114,7 @@ I need to create a content and upload a file
       | Description | My Group Board View Description 4 ownership          |
       | Files       | mod/openstudio/tests/importfiles/test3.jpg           |
     Then "//input[@id='id_ownershipdetail' and @disabled='disabled']" "xpath_element" should exist
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "Shared content > My Module" in the openstudio navigation
     Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test3.jpg"
@@ -126,6 +129,7 @@ I need to create a content and upload a file
       | Files           | mod/openstudio/tests/importfiles/test3.jpg           |
       | Found elsewhere | 1                                                    |
       | Details         | Test 4                                               |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "Shared content > My Module" in the openstudio navigation
     Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test3.jpg"
@@ -143,6 +147,7 @@ I need to create a content and upload a file
       | Tags        | Tests Add New Tags                         |
     And I wait "2" seconds
     And I should see "Tests Add New Tags"
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "Shared content > My Module" in the openstudio navigation
     Then the "src" attribute of "div.openstudio-grid-item-content-preview img" "css_element" should contain "test4.jpg"
@@ -430,3 +435,18 @@ I need to create a content and upload a file
     And I should see "Tests Add New Tags add file webm"
     Then the "href" attribute of "div.openstudio-content-view-primary a" "css_element" should contain "test.webm"
     And I should see "Test My Group Board View 7 Tags"
+
+  Scenario: Add new content with an image file with its alt text
+    Given I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "teacher1"
+    And I follow "Add new content"
+    And I press "Add file"
+    And I set the following fields to these values:
+      | My Module   | 1                                          |
+      | Title       | Test My Group Board View 2                 |
+      | Description | My Group Board View Description 2          |
+      | Files       | mod/openstudio/tests/importfiles/test2.jpg |
+    And I press "Save"
+    And I should see "An image must have a description, unless it is marked as decorative only."
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
+    When I press "Save"
+    Then "//img[contains(@src, '/test2.jpg') and @alt='This is image alt']" "xpath_element" should exist

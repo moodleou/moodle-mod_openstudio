@@ -395,9 +395,9 @@ class privacy_provider_test extends provider_testcase {
                 'user' => get_string('privacy_you', 'mod_openstudio'),
                 'name' => format_string($recordcontentuser1->name),
                 'contenttype' => get_string('privacy:contenttype:' . $recordcontentuser1->contenttype, 'mod_openstudio'),
-                'content' => format_text($recordcontentuser1->content, $recordcontentuser1->textformat, $context),
+                'content' => format_text($recordcontentuser1->content, $recordcontentuser1->textformat, ['context' => $context->id]),
                 'description' => format_text($recordcontentuser1->description,
-                        $recordcontentuser1->textformat, $context),
+                        $recordcontentuser1->textformat, ['context' => $context->id]),
                 'visibility' => get_string('privacy:visibility:' . $recordcontentuser1->visibility, 'mod_openstudio'),
                 'deletedtime' => '',
                 'deletedby' => '',
@@ -406,7 +406,8 @@ class privacy_provider_test extends provider_testcase {
                 'lockedby' => '',
                 'timeflagged' => transform::datetime($recordcontentuser1->timeflagged),
                 'lockprocessed' => transform::datetime($recordcontentuser1->lockprocessed),
-                'retainimagemetadata' => transform::yesno($recordcontentuser1->retainimagemetadata)
+                'retainimagemetadata' => transform::yesno($recordcontentuser1->retainimagemetadata),
+                'enteralt' => $recordcontentuser1->enteralt,
         ], $content1);
         // File system.
         $this->assertNotEmpty($fs->get_area_files($this->contextstudio->id,
@@ -510,7 +511,8 @@ class privacy_provider_test extends provider_testcase {
                 'lockedby' => '',
                 'timeflagged' => transform::datetime($foldercontent['timeflagged']),
                 'lockprocessed' => transform::datetime($foldercontent['lockprocessed']),
-                'retainimagemetadata' => transform::yesno($foldercontent['retainimagemetadata'])
+                'retainimagemetadata' => transform::yesno($foldercontent['retainimagemetadata']),
+                'enteralt' => $foldercontent['enteralt'],
         ], $contentinfolder);
 
         // Get comments of student one. Student one commented in post of Student two.
@@ -555,9 +557,9 @@ class privacy_provider_test extends provider_testcase {
                 'user' => get_string('privacy_you', 'mod_openstudio'),
                 'name' => format_string($getrecordscontentsuser2[0]->name),
                 'contenttype' => get_string('privacy:contenttype:' . $getrecordscontentsuser2[0]->contenttype, 'mod_openstudio'),
-                'content' => format_text($getrecordscontentsuser2[0]->content, $getrecordscontentsuser2[0]->textformat, $context2),
+                'content' => format_text($getrecordscontentsuser2[0]->content, $getrecordscontentsuser2[0]->textformat, ['context' => $context2->id]),
                 'description' => format_text($getrecordscontentsuser2[0]->description,
-                        $getrecordscontentsuser2[0]->textformat, $context2),
+                        $getrecordscontentsuser2[0]->textformat, ['context' => $context2->id]),
                 'visibility' => get_string('privacy:visibility:group', 'mod_openstudio', $this->group->name),
                 'deletedtime' => '',
                 'deletedby' => '',
@@ -566,7 +568,8 @@ class privacy_provider_test extends provider_testcase {
                 'lockedby' => '',
                 'timeflagged' => transform::datetime($getrecordscontentsuser2[0]->timeflagged),
                 'lockprocessed' => transform::datetime($getrecordscontentsuser2[0]->lockprocessed),
-                'retainimagemetadata' => transform::yesno($getrecordscontentsuser2[0]->retainimagemetadata)
+                'retainimagemetadata' => transform::yesno($getrecordscontentsuser2[0]->retainimagemetadata),
+                'enteralt' => $getrecordscontentsuser2[0]->enteralt,
         ], $content2);
 
         $commentsuser2 = (array) $contextdata2->get_data([get_string('privacy:subcontext:contents', 'mod_openstudio'),

@@ -101,6 +101,7 @@ I need to create a content and upload a file
       | Title       | Test My Activities View 2                  |
       | Description | My Activities Description 2                |
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "My Content > My Activities" in the openstudio navigation
     And I should see "Test My Activities View 2"
@@ -136,6 +137,7 @@ I need to create a content and upload a file
       | Title       | Test My Activities View 4                  |
       | Description | My Activities Description 4                |
       | Files       | mod/openstudio/tests/importfiles/test2.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "My Content > My Activities" in the openstudio navigation
     And I click on "div.openstudio-grid-item-content-preview" "css_element"

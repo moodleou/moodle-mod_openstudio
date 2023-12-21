@@ -76,7 +76,8 @@ class provider implements
                 'locktype' => 'privacy:metadata:openstudio_contents:locktype',
                 'lockedtime' => 'privacy:metadata:openstudio_contents:lockedtime',
                 'lockprocessed' => 'privacy:metadata:openstudio_contents:lockprocessed',
-                'retainimagemetadata' => 'privacy:metadata:openstudio_contents:retainimagemetadata'
+                'retainimagemetadata' => 'privacy:metadata:openstudio_contents:retainimagemetadata',
+                'enteralt' => 'privacy:metadata:openstudio_contents:enteralt',
         ], 'privacy:metadata:openstudio_contents');
 
         // The 'openstudio_flags' table, Flags assocaited with contents, people or comments.
@@ -384,7 +385,8 @@ class provider implements
         $sql = "SELECT oc.id AS contentsid, oc.userid AS contentsuserid,
                        oc.deletedby, oc.deletedtime, oc.timemodified, oc.timeflagged, oc.lockedby,
                        oc.lockedtime, oc.lockprocessed, oc.openstudioid, oc.fileid, oc.visibility, oc.contenttype,
-                       oc.description, oc.locktype, oc.lockedtime, oc.content, oc.textformat, oc.name, oc.retainimagemetadata
+                       oc.description, oc.locktype, oc.lockedtime, oc.content, oc.textformat, oc.name, oc.retainimagemetadata,
+                       oc.enteralt
                   FROM {openstudio} o
                   JOIN {openstudio_contents} oc ON o.id = oc.openstudioid
                  WHERE o.id {$contentsinsql}
@@ -433,8 +435,8 @@ class provider implements
                     'user' => static::you_or_somebody_else($content->contentsuserid, $user),
                     'name' => format_string($content->name, true),
                     'contenttype' => get_string('privacy:contenttype:' . $content->contenttype, 'mod_openstudio'),
-                    'content' => format_text($content->content, $content->textformat, $context),
-                    'description' => format_text($content->description, $content->textformat, $context),
+                    'content' => format_text($content->content, $content->textformat, ['context' => $context->id]),
+                    'description' => format_text($content->description, $content->textformat, ['context' => $context->id]),
                     'visibility' => static::get_visibility_string($content->visibility),
                     'deletedtime' => $deletedtime,
                     'deletedby' => $deletedby,
@@ -443,7 +445,8 @@ class provider implements
                     'lockedby' => $lockedby,
                     'timeflagged' => transform::datetime($content->timeflagged),
                     'lockprocessed' => transform::datetime($content->lockprocessed),
-                    'retainimagemetadata' => transform::yesno($retainimagemetadata)
+                    'retainimagemetadata' => transform::yesno($retainimagemetadata),
+                    'enteralt' => format_string($content->enteralt),
             ];
 
             writer::with_context($context)->export_data($contentpath, $resultcontent);

@@ -445,6 +445,7 @@ $string['contentdeledialogueteheader'] = 'Delete post?';
 $string['contentparticipationlow'] = 'Low participation - change me to a smiley by commenting and rating other people\'s work.';
 $string['contentparticipationhigh'] = 'High participation - well done for keeping busy!';
 
+$string['presentationoraltrequired'] = 'An image must have a description, unless it is marked as decorative only.';
 $string['profileswork'] = '{$a->name}\'s work';
 $string['profilespinboard'] = '{$a->name}\'s pinboard';
 $string['profilebaruserswork'] = 'View {$a->name}\'s work';
@@ -509,6 +510,7 @@ $string['contentformvisibility'] = 'Share content with';
 $string['contentformheadermetadata'] = 'Optional information';
 $string['contentformdescription'] = 'Description';
 $string['folderformdescription'] = 'Folder description';
+$string['contenformenteralt'] = 'Describe this image for someone who cannot see it';
 $string['folderformtags'] = 'Folder tags';
 $string['contentformtags'] = 'Tags';
 $string['contentformownershipmyownwork'] = 'All my own work';
