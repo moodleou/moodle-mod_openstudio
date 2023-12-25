@@ -73,6 +73,11 @@ class group {
             return $ismember;
         }
 
+        // Restrict users who are not in the same group as the content owner.
+        if ($groupid == content::VISIBILITY_ALLGROUPS) {
+            return self::has_same_memberships($groupingid, $userid, $useridtocheck, true);
+        }
+
         return false;
     }
 

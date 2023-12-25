@@ -48,6 +48,7 @@ class updated_group_moving_content_test extends advanced_testcase {
     private $generator;
     private $studios;
     private $task;
+    private $contents;
 
     protected function setUp(): void {
         $this->generator = $this->getDataGenerator()->get_plugin_generator('mod_openstudio');

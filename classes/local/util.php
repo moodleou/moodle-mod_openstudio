@@ -453,7 +453,8 @@ class util {
     public static function can_read_content($studio, $permissions, $content, $folderid = 0) {
         global $DB;
         // If the slot is shared with the group, check permissions.
-        if (($content->visibility == content::VISIBILITY_GROUP && $permissions->groupmode != NOGROUPS) || ($content->visibility < 0)) {
+        if (($content->visibility == content::VISIBILITY_GROUP && $permissions->groupmode != NOGROUPS) || ($content->visibility < 0)
+                || ($content->visibility == content::VISIBILITY_ALLGROUPS)) {
             if (!$permissions->accessallgroups) {
                 $ismember = api\group::is_content_group_member(
                         $permissions->groupmode,
@@ -548,7 +549,8 @@ EOF;
                     $permissions->activecid,
                     $content->userid,
                     $permissions->activeuserid) || $permissions->ignoreenrolment;
-        } else if (($content->visibility == content::VISIBILITY_GROUP) || ($content->visibility < 0)) {
+        } else if (($content->visibility == content::VISIBILITY_GROUP) || ($content->visibility < 0) ||
+                ($content->visibility == content::VISIBILITY_ALLGROUPS)) {
             if ($permissions->accessallgroups) {
                 return true;
             }

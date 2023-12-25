@@ -104,6 +104,10 @@ class mod_openstudio_content_form extends moodleform {
                                 $options[$tutorgroupid] = get_string('viewgroupname', 'openstudio',
                                         array('name' => $tutorgroup->name));
                             }
+                            if (has_capability('mod/openstudio:managecontent', $context)) {
+                                $options[content::VISIBILITY_ALLGROUPS] = get_string('allmytutorgroups',
+                                        'openstudio');
+                            }
                         }
                         if ($this->_customdata['defaultvisibility'] == content::VISIBILITY_GROUP) {
                             if ($firsttutorgroupid !== false) {
@@ -152,6 +156,7 @@ class mod_openstudio_content_form extends moodleform {
                         break;
 
                     case content::VISIBILITY_GROUP:
+                    case content::VISIBILITY_ALLGROUPS:
                         $contenticon = $OUTPUT->image_url('share_with_my_group_rgb_32px', 'openstudio');
                         break;
 

@@ -102,12 +102,16 @@ class stream {
 EOF;
         }
         // Check the content is shared with a group the author is a member of, all groups, or module.
+        $params[] = content::VISIBILITY_GROUP;
+        $params[] = content::VISIBILITY_MODULE;
+        $params[] = content::VISIBILITY_ALLGROUPS;
         $sql .= <<<EOF
                     AND (EXISTS (SELECT 1
                                    FROM {groups_members} gmocheck
                                   WHERE gmocheck.groupid = (0 - s.visibility) AND gmocheck.userid = s.userid)
-                             OR s.visibility = 2
-                             OR s.visibility = 3)
+                             OR s.visibility = ?
+                             OR s.visibility = ?
+                             OR s.visibility = ?)
 
 EOF;
 
@@ -266,6 +270,7 @@ EOF;
                     $params[] = content::TYPE_NONE;
                     $params[] = content::VISIBILITY_MODULE;
                     $params[] = content::VISIBILITY_GROUP;
+                    $params[] = content::VISIBILITY_ALLGROUPS;
                     $params[] = $groupid;
                     $params[] = $groupingid;
                     $params[] = $groupid;
@@ -284,6 +289,7 @@ EOF;
                             (
                                 (
                                     s.visibility = ?
+                                    OR s.visibility = ?
                                     OR s.visibility = ?
                                     OR (
                                         s.visibility < 0
@@ -311,6 +317,7 @@ EOF;
                     $params[] = content::TYPE_NONE;
                     $params[] = content::VISIBILITY_MODULE;
                     $params[] = content::VISIBILITY_GROUP;
+                    $params[] = content::VISIBILITY_ALLGROUPS;
                     $params[] = $groupingid;
 
                     list($grouppermissionchecksql, $grouparams) = self::visible_group_permission_sql(
@@ -331,6 +338,7 @@ EOF;
                                     s.visibility = ?
                                     OR s.visibility = ?
                                     OR s.visibility < 0
+                                    OR s.visibility = ?
                                 )
                                 AND EXISTS (
                                     SELECT 1
@@ -353,6 +361,7 @@ EOF;
                     $params[] = content::TYPE_NONE;
                     $params[] = content::VISIBILITY_MODULE;
                     $params[] = content::VISIBILITY_GROUP;
+                    $params[] = content::VISIBILITY_ALLGROUPS;
                     $params[] = $groupingid;
                     $params[] = $userid;
                     $params[] = $groupid;
@@ -392,6 +401,7 @@ EOF;
                                     (
                                         s.visibility = ?
                                         OR s.visibility = ?
+                                        OR s.visibility = ?
                                     )
                                     AND EXISTS (
                                         SELECT 1
@@ -422,6 +432,7 @@ EOF;
                     $params[] = content::TYPE_NONE;
                     $params[] = content::VISIBILITY_MODULE;
                     $params[] = content::VISIBILITY_GROUP;
+                    $params[] = content::VISIBILITY_ALLGROUPS;
                     $params[] = $groupingid;
                     $params[] = $userid;
                     $params[] = content::VISIBILITY_MODULE;
@@ -457,6 +468,7 @@ EOF;
                                 (
                                     (
                                         s.visibility = ?
+                                        OR s.visibility = ?
                                         OR s.visibility = ?
                                     )
                                     AND EXISTS (
@@ -562,7 +574,7 @@ EOF;
 EOF;
                         $permissionsql .= <<<EOF
                         AND s.contenttype <> ?
-                        AND (   (           (2 = ? AND s.visibility = ?)
+                        AND (   (           (2 = ? AND (s.visibility = ? OR s.visibility = ?))
                                  AND EXISTS (SELECT 1
                                                FROM {groups_members} gm1
                                                JOIN {groupings_groups} gg1 ON gg1.groupid = gm1.groupid AND gg1.groupingid = ?
@@ -585,6 +597,7 @@ EOF;
                         $params[] = content::TYPE_NONE;
                         $params[] = $groupmode;
                         $params[] = content::VISIBILITY_GROUP;
+                        $params[] = content::VISIBILITY_ALLGROUPS;
                         $params[] = $groupingid;
                         $params[] = $groupingid;
                         $params[] = $userid;

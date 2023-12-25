@@ -544,4 +544,105 @@ class comments_test extends \advanced_testcase {
                 '/mod_openstudio/commenttext/' . $comment->id .'/'. $filename . '" alt="image" /></p>';
         $this->assertStringContainsString($expectstring, $commentstring);
     }
+
+    /**
+     * Test student permission when reading content shared with all groups.
+     */
+    public function test_filter_comment_in_share_with_all_groups_post(): void {
+        global $DB;
+        $this->resetAfterTest(true);
+        // Create course groups.
+        $groups = new \stdClass();
+        $groupings = new \stdClass();
+        $groupings->a  = $this->getDataGenerator()->create_grouping(
+                ['name' => 'Grouping A', 'courseid' => $this->course->id]);
+        $groups->one = $this->getDataGenerator()->create_group([
+                'courseid' => $this->course->id, 'name' => 'Group 1']);
+        $groups->two = $this->getDataGenerator()->create_group([
+                'courseid' => $this->course->id, 'name' => 'Group 2']);
+        $groups->three = $this->getDataGenerator()->create_group([
+                'courseid' => $this->course->id, 'name' => 'Group 3']);
+
+        // Add groups to our groupings.
+        $insert = new \stdClass();
+        $insert->groupingid = $groupings->a->id;
+        $insert->groupid = $groups->one->id;
+        $DB->insert_record('groupings_groups', $insert);
+        $insert->groupingid = $groupings->a->id;
+        $insert->groupid = $groups->two->id;
+        $DB->insert_record('groupings_groups', $insert);
+        $insert->groupingid = $groupings->a->id;
+        $insert->groupid = $groups->three->id;
+        $DB->insert_record('groupings_groups', $insert);
+
+        // Add student one and teacher one in group one.
+        $this->generator->add_users_to_groups([
+                $groups->one->id => [
+                        $this->users->students->one->id,
+                        $this->users->students->two->id,
+                        $this->users->teachers->one->id,
+                ],
+        ]);
+        // Add student two and teacher one in group two.
+        $this->generator->add_users_to_groups([
+                $groups->two->id => [
+                        $this->users->students->two->id,
+                        $this->users->teachers->one->id,
+                ],
+        ]);
+        // Add only student three group three.
+        $this->generator->add_users_to_groups([
+                $groups->three->id => [
+                        $this->users->students->three->id,
+                ],
+        ]);
+
+        // Create generic studios.
+        $studio = $this->generator->create_instance([
+                'course' => $this->course->id,
+                'idnumber' => 'OS20',
+                'groupingid' => $groupings->a->id,
+                'groupmode' => \mod_openstudio\local\api\content::VISIBILITY_GROUP,
+                'allowedvisibility' => implode(',', [
+                        \mod_openstudio\local\api\content::VISIBILITY_GROUP,
+                ]),
+        ]);
+
+        // Teacher create content with visibility share with all group.
+        $contentdata = [
+                'openstudio' => 'OS20',
+                'userid' => $this->users->teachers->one->id,
+                'name' => random_string(),
+                'description' => random_string(),
+                'visibility' => \mod_openstudio\local\api\content::VISIBILITY_ALLGROUPS,
+        ];
+        $contentid = $this->generator->create_contents($contentdata);
+
+        // Student 1 create 2 comments
+        comments::create($contentid, $this->users->students->one->id, 'Fire and Blood');
+        comments::create($contentid, $this->users->students->one->id, 'Fire and Blood');
+
+        // Student 2 create 2 comments
+        comments::create($contentid, $this->users->students->two->id, 'Fire and Blood');
+        comments::create($contentid, $this->users->students->two->id, 'Fire and Blood');
+
+        // Student 3 create 1 comments
+        comments::create($contentid, $this->users->students->three->id, 'Fire and Blood');
+        comments::create($contentid, $this->users->students->three->id, 'Fire and Blood');
+
+        // Check that getting all comments for this content gets the correct number.
+        $this->assertEquals(6, iterator_count(\mod_openstudio\local\api\comments::get_for_content($contentid)));
+
+        // Check that getting comments for this content gets the correct number for student 1.
+        // Student 1 and Student 2 are in group 1 - Expected: 4 comments.
+        $this->assertEquals(4,
+                iterator_count(\mod_openstudio\local\api\comments::get_for_content($contentid, $this->users->students->one->id, 0,
+                        false, $groupings->a->id, $contentdata['visibility'], false)));
+
+        // Check that getting comments for this content gets the correct number for student 3.
+        // Student 3 is in only group 3 - Expected: 2 comments.
+        $this->assertEquals(2,
+                iterator_count(\mod_openstudio\local\api\comments::get_for_content($contentid, $this->users->students->three->id, 0,
+                        false, $groupings->a->id, $contentdata['visibility'], false)));
+    }
 }

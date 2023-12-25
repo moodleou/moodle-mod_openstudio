@@ -113,7 +113,7 @@ class renderer_utils_test extends \advanced_testcase {
     /**
      * Test get content visibility name when using group visibility.
      *
-     * @depends test_get_real_visibility
+     * @depends test_get_content_visibility
      * @depends test_get_content_visibility_name
      */
     public function test_get_content_visibility_name_with_group(): void {

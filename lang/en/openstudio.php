@@ -1012,6 +1012,7 @@ $string['newcontentposition'] = 'Position';
 $string['savechanges'] = 'Save Changes';
 
 $string['allgroups'] = 'All Groups';
+$string['allmytutorgroups'] = 'All My Tutor Groups';
 
 $string['requiredfortma'] = 'Required (TMA)';
 $string['typeisfolder'] = 'Is folder?';
@@ -1310,6 +1311,7 @@ $string['filterallgroup'] = 'All Group';
 $string['addnewcontent'] = 'Add new content';
 $string['updatecontent'] = 'Upload content';
 $string['createnewfolder'] = 'Create new folder';
+$string['contentitemsharewithallmytutorgroups'] = 'Shared with all my tutor groups';
 $string['contentitemsharewithgroup'] = 'Shared with Group - {$a}';
 $string['contentitemsharewithmymodule'] = 'Shared with My Module';
 $string['contentitemsharewithonlyme'] = 'Only Me';
