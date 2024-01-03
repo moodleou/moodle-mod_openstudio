@@ -110,8 +110,8 @@ I need to navigate to content pages
   Scenario: Add new content and check content details with img exif
     When I am on the "Test Open Studio name 1" "openstudio activity" page
     And the following open studio "contents" exist:
-      | openstudio | user     | name                 | description             | file                                           | visibility | retainimagemetadata |
-      | OS1        | teacher1 | TestContentDetails 1 | Test slot 1 description | mod/openstudio/tests/importfiles/geotagged.jpg | module     | 1                   |
+      | openstudio | user     | name                 | description             | file                                           | visibility | retainimagemetadata | enteralt          |
+      | OS1        | teacher1 | TestContentDetails 1 | Test slot 1 description | mod/openstudio/tests/importfiles/geotagged.jpg | module     | 1                   | This is image alt |
 
         # Redirect to content detail
     And I follow "People" in the openstudio navigation
@@ -666,8 +666,8 @@ I need to navigate to content pages
   Scenario: Add new content and check content details with abitily to remove image exif.
     When I am on the "Test Open Studio name 1" "openstudio activity" page
     And the following open studio "contents" exist:
-      | openstudio | user     | name                 | description             | file                                           | visibility | retainimagemetadata | showimagedata | showgps |
-      | OS1        | teacher1 | TestContentDetails 1 | Test slot 1 description | mod/openstudio/tests/importfiles/geotagged.jpg | module     | 0                   | 0             | 0       |
+      | openstudio | user     | name                 | description             | file                                           | visibility | retainimagemetadata | showimagedata | showgps | enteralt          |
+      | OS1        | teacher1 | TestContentDetails 1 | Test slot 1 description | mod/openstudio/tests/importfiles/geotagged.jpg | module     | 0                   | 0             | 0       | This is image alt |
     # Redirect to content detail
     And I follow "People" in the openstudio navigation
     And I follow "Shared content > My Module" in the openstudio navigation

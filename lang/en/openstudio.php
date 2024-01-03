@@ -1449,6 +1449,7 @@ $string['privacy:metadata:openstudio_contents:description'] = 'Optional content 
 $string['privacy:metadata:openstudio_contents:visibility'] = 'Content permission';
 $string['privacy:metadata:openstudio_contents:deletedby'] = 'Soft delete marker';
 $string['privacy:metadata:openstudio_contents:deletedtime'] = 'Soft delete marker, time (in seconds since epoch).';
+$string['privacy:metadata:openstudio_contents:enteralt'] = 'Describe this image for someone who cannot see it';
 $string['privacy:metadata:openstudio_contents:timemodified'] = 'Time (in seconds since epoch).';
 $string['privacy:metadata:openstudio_contents:timeflagged'] = 'Time (in seconds since epoch).';
 $string['privacy:metadata:openstudio_contents:lockedby'] = 'Lock applied by user for instance';

@@ -90,6 +90,7 @@ Feature: Open Studio pinboard stream
       | Title       | My Module Title                                 |
       | Description | My Module Description                           |
       | Files       | mod/openstudio/tests/importfiles/Winterfell.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "Shared content > My Module" in the openstudio navigation
 

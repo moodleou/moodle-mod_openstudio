@@ -92,6 +92,7 @@ Feature: Open Studio group stream
       | Title          | Test My Group Board View 3                 |
       | Description    | My Group Board View Description 3          |
       | Files          | mod/openstudio/tests/importfiles/test3.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "Shared content > My Group" in the openstudio navigation
     Then I should see "Test My Group Board View 3"
@@ -111,6 +112,7 @@ Feature: Open Studio group stream
       | Title          | Test My Group Board View 2                 |
       | Description    | My Group Board View Description 2          |
       | Files          | mod/openstudio/tests/importfiles/test2.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "Shared content > My Group" in the openstudio navigation
     Then I should see "Test My Group Board View 2"
