@@ -813,11 +813,14 @@ $string['subscribeupdatemodule'] = 'Update module subscription';
 $string['subscribeupdategroup'] = 'Update group subscription';
 $string['subscribeupdatecontent'] = 'Update content subscription';
 $string['unsubscribe'] = 'Unsubscribe';
+$string['unsubscribealready'] = 'You are already unsubscribed.';
+$string['unsubscribeconfirm'] = 'You have been unsubscribed.';
 $string['subscriptionemailsubject'] = 'OpenStudio: {$a} - Latest activity';
 $string['subscriptionhello'] = 'Hi {$a}';
 $string['subscriptionintro'] = 'You have {$a} new notifications in your OpenStudio:';
 $string['errorsubscribe'] = 'Subscription create error!';
 $string['errorunsubscribe'] = 'Subscription delete error!';
+$string['errorunsubsribeparams'] = 'Parameters incorrect';
 
 $string['subemailgreeting'] = 'Dear {$a->firstname} {$a->lastname},';
 $string['subemailintrostreamgroup'] = 'Here is a summary of the activity has been happening with the contents in the group stream that you subscribed to.';
