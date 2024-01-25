@@ -69,7 +69,7 @@
             {{#contentcommentlikeenabled}}
                 <div class="openstudio-comment-flag">
                     {{#flagcount}}
-                        <span class="openstudio-comment-flag-status flagged">
+                        <span class="openstudio-comment-flag-status flagged {{^userhasflagged}}openstudio-hidden{{/userhasflagged}}">
                             {{#pix}}
                                 participation_btn_like, openstudio, {{#str}} contentcommentliked, openstudio {{/str}}
                             {{/pix}}
@@ -91,10 +91,11 @@
                             {{/donotexport}}
                         </span>
                         {{#donotexport}}
-                            <span class="openstudio-comment-flag-status unflagged openstudio-hidden">
+                            <span class="openstudio-comment-flag-status unflagged {{#userhasflagged}}openstudio-hidden{{/userhasflagged}}">
                                 {{#pix}}
-                                    participation_btn_like, openstudio, {{#str}}
-                                    contentcommentnotliked, openstudio {{/str}}
+                                    participation_btn_not_like, openstudio, {{#flagcount}}{{#str}}
+                                     contentcommentliked, openstudio
+                                     {{/str}}{{/flagcount}}
                                 {{/pix}}
                                 <sup class="openstudio-comment-flag-count
                                 {{#flagcount}}
@@ -108,8 +109,7 @@
                         {{#donotexport}}
                             <span class="openstudio-comment-flag-status flagged openstudio-hidden">
                                 {{#pix}}
-                                    participation_btn_like, openstudio, {{#str}}
-                                    contentcommentliked, openstudio {{/str}}
+                                    participation_btn_like, openstudio, {{#str}} contentcommentliked, openstudio {{/str}}
                                 {{/pix}}
                                 <sup class="openstudio-comment-flag-count
                                 {{#flagcount}}
@@ -119,7 +119,7 @@
                             </span>
                             <span class="openstudio-comment-flag-status unflagged">
                             {{#pix}}
-                                participation_btn_like, openstudio, {{#str}} contentcommentnotliked, openstudio {{/str}}
+                                participation_btn_not_like, openstudio, {{#str}} contentcommentnotliked, openstudio {{/str}}
                             {{/pix}}
                                 <sup class="openstudio-comment-flag-count
                             {{#flagcount}}

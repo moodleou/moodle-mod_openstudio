@@ -1547,7 +1547,11 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) .openstudio-comm
     display: inline-block;
 }
 
-.openstudio-comment-flag-count.flagged {
+.openstudio-comment-flag-status.unflagged .openstudio-comment-flag-count {
+    color: #676463;
+}
+
+.openstudio-comment-flag-status.flagged .openstudio-comment-flag-count {
     color: #0b55a8;
 }
 

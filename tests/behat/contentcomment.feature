@@ -55,7 +55,7 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
 
     # Unflag comment
     And I follow "Unlike comment"
-    Then I should see "0" in the ".openstudio-comment-flag-count" "css_element"
+    Then I should see "0" in the ".openstudio-comment-flag-status.unflagged .openstudio-comment-flag-count" "css_element"
     Then I should not see "Unlike comment"
     And I should see "Like comment"
 
