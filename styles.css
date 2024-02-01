@@ -3514,6 +3514,10 @@ span.openstudio-content-view-title {
     height: auto;
 }
 
+.openstudio-content-view-description .filter_transcript_outer img {
+    width: auto;
+}
+
 .openstudio-content-view-tags {
     width: 55%;
     float: left;
