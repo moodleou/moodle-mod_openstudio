@@ -1583,8 +1583,8 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) .openstudio-comm
     display: none;
 }
 
-.openstudio-comment-flag-link .openstudio-comment-like-short-link,
-.openstudio-comment-flag-link .openstudio-comment-unlike-short-link,
+.openstudio-content-view-primary .openstudio-comment-flag-link .openstudio-comment-like-short-link,
+.openstudio-content-view-primary .openstudio-comment-flag-link .openstudio-comment-unlike-short-link,
 .openstudio-comment-delete-link .openstudio-comment-delete-short-link,
 .openstudio-comment-report-link .openstudio-comment-report-short-link {
     display: none;
@@ -1702,8 +1702,6 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) .openstudio-comm
     display: none;
 }
 
-.openstudio-folder-view-comments .openstudio-comment-flag-link .openstudio-comment-like-short-link,
-.openstudio-folder-view-comments .openstudio-comment-flag-link .openstudio-comment-unlike-short-link,
 .openstudio-folder-view-comments .openstudio-comment-delete-link .openstudio-comment-delete-short-link,
 .openstudio-folder-view-comments .openstudio-comment-report-link .openstudio-comment-report-short-link {
     display: inline;
