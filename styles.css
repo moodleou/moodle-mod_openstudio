@@ -8708,6 +8708,18 @@ a.openstudio-add-new-content-link:hover  {
     margin-left: 0;
 }
 
+.path-mod-openstudio .openstudio-content-view-description video{
+    max-width: 550px;
+    height: auto;
+}
+
+@media (max-width: 768px){
+    .path-mod-openstudio .openstudio-content-view-description video{
+        max-width: 275px;
+        height: auto;
+    }
+}
+
 /* High contrast mode */
 
 /* For firefox */
