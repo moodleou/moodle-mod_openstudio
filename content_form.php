@@ -181,13 +181,13 @@ class mod_openstudio_content_form extends moodleform {
                         ['class' => 'openstudio-content-form-select-visibility']);
             }
             $mform->addGroup($visibilityarray, 'visibilityarray', $visibilitytitle, [' '], false);
-            $mform->addRule('visibilityarray', get_string('required'), 'required',  null, 'client');
+            $mform->addRule('visibilityarray', null, 'required',  null, 'client');
             $mform->addElement('html', html_writer::end_tag('div'));
         }
 
         $mform->addElement('text', 'name', $contenttitle);
         $mform->setType('name', PARAM_TEXT);
-        $mform->addRule('name', get_string('required'), 'required',  null, 'client');
+        $mform->addRule('name', null, 'required',  null, 'client');
 
         $editoroptions = [
             'maxfiles' => EDITOR_UNLIMITED_FILES,
