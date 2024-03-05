@@ -191,7 +191,7 @@ I should not see list of file types on Add File form
       | Description | My Group Board View Description 1          |
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
     And I set the field with xpath "//textarea[@id='id_enteralt']" to "This is image alt"
-    And I click on the "Image" button for the "Description" TinyMCE editor
+    And I click on the "Insert > Image" menu item for the "Description" TinyMCE editor
     And I click on "Browse repositories..." "button"
     # Because of two file pickers we have to do very specific css selectors.
     And I click on "Private files" "link" in the ".moodle-dialogue.filepicker:not(.moodle-dialogue-hidden) .fp-repo-area" "css_element"
