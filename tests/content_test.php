@@ -40,6 +40,10 @@ class content_test extends \advanced_testcase {
     protected $pinboardslots;
     protected $singleentrydata;
     protected $contentdata;
+    protected $groups;
+    protected $groupings;
+    protected $studio1, $studio2, $studio3, $studio4, $studio5, $studio6, $studio7, $studio8, $studio9, $studio10, $studio11,
+            $studio12, $studio13, $studio14, $studio15, $studio16, $studio17, $studio18, $studio19, $studio20;
 
     /**
      * Sets up our fixtures.
@@ -59,13 +63,15 @@ class content_test extends \advanced_testcase {
         $this->users = new \stdClass();
         $this->users->students = new \stdClass();
         $this->users->students->one = $this->getDataGenerator()->create_user(
-                array('email' => 'student1@ouunittest.com', 'username' => 'student1'));
+                ['email' => 'student1@ouunittest.com', 'username' => 'student1']);
         $this->users->students->two = $this->getDataGenerator()->create_user(
-                array('email' => 'student2@ouunittest.com', 'username' => 'student2'));
+                ['email' => 'student2@ouunittest.com', 'username' => 'student2']);
+        $this->users->students->three = $this->getDataGenerator()->create_user(
+                ['email' => 'student3@ouunittest.com', 'username' => 'student3']);
 
         $this->users->teachers = new \stdClass();
         $this->users->teachers->one = $this->getDataGenerator()->create_user(
-                array('email' => 'teacher1@ouunittest.com', 'username' => 'teacher1'));
+                ['email' => 'teacher1@ouunittest.com', 'username' => 'teacher1']);
 
         // Studio generator.
         $this->generator = $this->getDataGenerator()->get_plugin_generator('mod_openstudio');
@@ -75,11 +81,13 @@ class content_test extends \advanced_testcase {
                 $studentroleid, 'manual');
         $this->getDataGenerator()->enrol_user($this->users->students->two->id, $this->course->id,
                 $studentroleid, 'manual');
+        $this->getDataGenerator()->enrol_user($this->users->students->three->id, $this->course->id,
+                $studentroleid, 'manual');
         $this->getDataGenerator()->enrol_user(
                 $this->users->teachers->one->id, $this->course->id, $teacherroleid, 'manual');
 
         // Create generic studios.
-        $this->studiolevels = $this->generator->create_instance(array('course' => $this->course->id, 'idnumber' => 'OS1'));
+        $this->studiolevels = $this->generator->create_instance(['course' => $this->course->id, 'idnumber' => 'OS1']);
         $this->studiolevels->leveldata = $this->generator->create_mock_levels($this->studiolevels->id);
     }
 
@@ -1126,5 +1134,107 @@ class content_test extends \advanced_testcase {
         // Check new width/height after resize.
         $this->assertEquals($thumbnailinfo['width'], $thumbnailwidth);
         $this->assertEquals($thumbnailinfo['height'], $thumbnailwidth);
+    }
+
+    /**
+     * Test student permission when reading content shared with all groups.
+     */
+    public function test_content_share_all_group(): void {
+        global $DB;
+        // Create course groups.
+        $this->groups = new \stdClass();
+        $this->groupings = new \stdClass();
+        $this->groupings->a  = $this->getDataGenerator()->create_grouping(
+                ['name' => 'Grouping A', 'courseid' => $this->course->id]);
+        $this->groups->one = $this->getDataGenerator()->create_group([
+                'courseid' => $this->course->id, 'name' => 'Group 1']);
+        $this->groups->two = $this->getDataGenerator()->create_group([
+                'courseid' => $this->course->id, 'name' => 'Group 2']);
+        $this->groups->three = $this->getDataGenerator()->create_group([
+                'courseid' => $this->course->id, 'name' => 'Group 3']);
+
+        // Add groups to our groupings.
+        $insert = new \stdClass();
+        $insert->groupingid = $this->groupings->a->id;
+        $insert->groupid = $this->groups->one->id;
+        $DB->insert_record('groupings_groups', $insert);
+        $insert->groupingid = $this->groupings->a->id;
+        $insert->groupid = $this->groups->two->id;
+        $DB->insert_record('groupings_groups', $insert);
+        $insert->groupingid = $this->groupings->a->id;
+        $insert->groupid = $this->groups->three->id;
+        $DB->insert_record('groupings_groups', $insert);
+
+        // Add student one and teacher one in group one.
+        $this->generator->add_users_to_groups([
+            $this->groups->one->id => [
+                $this->users->students->one->id,
+                $this->users->teachers->one->id,
+            ],
+        ]);
+        // Add student two and teacher one in group two.
+        $this->generator->add_users_to_groups([
+            $this->groups->two->id => [
+                $this->users->students->two->id,
+                $this->users->teachers->one->id,
+            ],
+        ]);
+        // Add only student three group three.
+        $this->generator->add_users_to_groups([
+            $this->groups->three->id => [
+                $this->users->students->three->id,
+            ],
+        ]);
+
+        // Create generic studios.
+        $this->studio20 = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS20',
+            'groupingid' => $this->groupings->a->id,
+            'groupmode' => content::VISIBILITY_GROUP,
+            'allowedvisibility' => implode(',', [
+                    content::VISIBILITY_GROUP,
+            ]),
+        ]);
+
+        // Teacher create content with visibility share with all group.
+        $contentdata = [
+            'openstudio' => 'OS20',
+            'userid' => $this->users->teachers->one->id,
+            'name' => random_string(),
+            'description' => random_string(),
+            'visibility' => \mod_openstudio\local\api\content::VISIBILITY_ALLGROUPS,
+        ];
+        $contentid = $this->generator->create_contents($contentdata);
+        $cm = get_coursemodule_from_instance('openstudio', $this->studio20->id);
+        $cminstance = $DB->get_record('openstudio', ['id' => $cm->instance], '*', MUST_EXIST);
+        $content = \mod_openstudio\local\api\content::get($contentid);
+
+        // Check that both student one and student two have access to the content as they belong to the same group as the teacher.
+        $this->setUser($this->users->students->one->id);
+        $permissions1 = \mod_openstudio\local\util::check_permission($cm, $cminstance, $this->course);
+        $this->assertTrue(\mod_openstudio\local\util::can_read_content($cminstance, $permissions1, $content));
+
+        $this->setUser($this->users->students->two->id);
+        $permissions2 = \mod_openstudio\local\util::check_permission($cm, $cminstance, $this->course);
+        $this->assertTrue(\mod_openstudio\local\util::can_read_content($cminstance, $permissions2, $content));
+
+        // Check that student three does not have access to the content.
+        $this->setUser($this->users->students->three->id);
+        $permissions3 = \mod_openstudio\local\util::check_permission($cm, $cminstance, $this->course);
+        $this->assertFalse(\mod_openstudio\local\util::can_read_content($cminstance, $permissions3, $content));
+
+        // Change group of teacher from group one to group three.
+        groups_remove_member($this->groups->one->id, $this->users->teachers->one->id);
+        groups_add_member($this->groups->three->id, $this->users->teachers->one->id, 'mod_openstudio');
+
+        // Now student three can access the content, and vice versa for student one.
+        $this->setUser($this->users->students->three->id);
+        $permissions3 = \mod_openstudio\local\util::check_permission($cm, $cminstance, $this->course);
+        $this->assertTrue(\mod_openstudio\local\util::can_read_content($cminstance, $permissions3, $content));
+
+        $this->setUser($this->users->students->one->id);
+        $permissions1 = \mod_openstudio\local\util::check_permission($cm, $cminstance, $this->course);
+        $this->assertFalse(\mod_openstudio\local\util::can_read_content($cminstance, $permissions1, $content));
     }
 }

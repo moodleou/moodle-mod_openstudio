@@ -64,7 +64,7 @@ class import {
                 'wav', 'mp3', 'text', 'txt', 'word', 'docx', 'doc', 'rtf', 'fdf', 'nbk',
                 'pdf', 'odt', 'odm', 'writer', 'powerpoint', 'pptx', 'ppt',
                 'ppsx', 'odp', 'impress', 'excel', 'xlsx', 'xls', 'csv',
-                'ods', 'avi', 'mpg', 'mov', 'flv', 'm4v', 'mp4', 'm4a'];
+                'ods', 'avi', 'mpg', 'mov', 'flv', 'm4v', 'mp4', 'm4a', 'webm'];
         foreach ($files['files'] as $key => $file) {
             if ($file->pathname == 'contents.txt') {
                 unset($files['files'][$key]);

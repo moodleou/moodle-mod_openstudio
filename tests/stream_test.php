@@ -75,6 +75,8 @@ class stream_test extends \advanced_testcase {
                 array('courseid' => $this->course->id, 'name' => 'The Lannisters'));
         $this->groups->three = $this->getDataGenerator()->create_group(
             ['courseid' => $this->course->id, 'name' => 'The Targaryens']);
+        $this->groups->four = $this->getDataGenerator()->create_group(
+            ['courseid' => $this->course->id, 'name' => 'The Baratheons']);
 
         // Add groups to our groupings.
         $insert = new \stdClass();
@@ -90,6 +92,10 @@ class stream_test extends \advanced_testcase {
             'groupingid' => $this->groupings->b->id,
             'groupid' => $this->groups->three->id,
         ]);
+
+        $insert->groupingid = $this->groupings->a->id;
+        $insert->groupid = $this->groups->four->id;
+        $DB->insert_record('groupings_groups', $insert);
 
         // Create Users.
         $this->users = new \stdClass();
@@ -171,6 +177,9 @@ class stream_test extends \advanced_testcase {
                         ),
                 $this->groups->three->id => [
                     $this->users->students->eleven->id,
+                ],
+                $this->groups->four->id => [
+                    $this->users->students->six->id,
                 ],
         ));
 
@@ -258,7 +267,6 @@ class stream_test extends \advanced_testcase {
         $this->studiolevels = '';
         $this->totalcontents = '';
         $this->pinboardcontents = '';
-        $this->workspace = '';
     }
     /**
      * Test to key internal functions which are used to clean URL and URL query parameters
@@ -1060,5 +1068,58 @@ class stream_test extends \advanced_testcase {
             }
         }
         return false;
+    }
+
+    /**
+     * Content is created by the tutor and shared with the whole group,
+     * so students in the same group as the tutor will be able to see the content.
+     *
+     */
+    public function test_get_contents_share_with_all_groups() {
+        $this->resetAfterTest(true);
+
+        $studio = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'groupingid' => $this->groupings->a->id,
+            'groupmode' => VISIBLEGROUPS,
+            'allowedvisibility' => implode(',', [
+                \mod_openstudio\local\api\content::VISIBILITY_GROUP,
+            ]),
+            'idnumber' => 'OSF1',
+        ]);
+
+        // Create content.
+        $tutorcontentid = $this->generator->create_contents([
+            'openstudio' => 'OSF1',
+            'userid' => $this->users->teachers->one->id,
+            'name' => 'Test Slot',
+            'description' => 'Test Slot',
+            'visibility' => \mod_openstudio\local\api\content::VISIBILITY_ALLGROUPS,
+        ]);
+
+        // There should be one content for student one.
+        $result = \mod_openstudio\local\api\stream::get_contents($studio->id, $this->groupings->a->id,
+                $this->users->students->one->id,
+                $this->users->students->one->id,
+                \mod_openstudio\local\api\content::VISIBILITY_GROUP);
+
+        $this->assertEquals(1, iterator_count($result));
+
+        // Student 6 is not in the same group as the tutor, so cannot see the content.
+        $result = \mod_openstudio\local\api\stream::get_contents($studio->id, $this->groupings->a->id,
+                $this->users->students->six->id,
+                $this->users->students->six->id,
+                \mod_openstudio\local\api\content::VISIBILITY_GROUP);
+
+        $this->assertFalse($result);
+
+        // Student 1 view workspace of teacher 1.
+        $result = \mod_openstudio\local\api\stream::get_contents($studio->id, $this->groupings->a->id,
+                $this->users->students->one->id,
+                $this->users->teachers->one->id,
+                \mod_openstudio\local\api\content::VISIBILITY_WORKSPACE, null, null, null, null, null, null,
+                ['id' => \mod_openstudio\local\api\stream::SORT_BY_DATE, 'asc' => 0], 0, 0, false,
+                false, false, 0, 2);
+        $this->assertEquals(1, iterator_count($result));
     }
 }

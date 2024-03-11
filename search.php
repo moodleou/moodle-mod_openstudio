@@ -198,7 +198,7 @@ if (trim($searchtext) == '') {
 
     if (!empty($contentids)) {
         // Gather content social data.
-        $contentsocialdata = notifications::get_activities($permissions->activeuserid, $contentids);
+        $contentsocialdata = notifications::get_activities($permissions->activeuserid, $contentids, $permissions->groupingid, $permissions->managecontent);
         if ($contentsocialdata) {
             foreach ($contentsocialdata as $key => $socialitem) {
                 $socialdatatotal = 0;
@@ -273,6 +273,11 @@ if (trim($searchtext) == '') {
                         $contenticon = $OUTPUT->image_url('share_with_my_group_rgb_32px', 'openstudio');
                         $itemsharewith = get_string('contentitemsharewithgroup', 'openstudio',
                                 group::get_name(abs($visibilityid)));
+                        break;
+
+                    case content::VISIBILITY_ALLGROUPS:
+                        $contenticon = $OUTPUT->image_url('share_with_my_group_rgb_32px', 'openstudio');
+                        $itemsharewith = get_string('contentitemsharewithallmytutorgroups', 'openstudio');
                         break;
 
                     case content::VISIBILITY_WORKSPACE:

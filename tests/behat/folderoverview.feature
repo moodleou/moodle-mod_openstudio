@@ -122,6 +122,7 @@ I need to create a content and upload a file
       | Title       | Test My Folder Overview                    |
       | Description | My Folder Overview Description             |
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
 
     # Redirect to content detail
@@ -161,6 +162,7 @@ I need to create a content and upload a file
       | Title       | Test My Folder Overview                    |
       | Description | My Folder Overview Description             |
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
 
     # Redirect to content detail
@@ -347,6 +349,7 @@ I need to create a content and upload a file
       | Title       | Test My Folder Overview                    |
       | Description | My Folder Overview Description             |
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "Shared content > My Module" in the openstudio navigation
     And I follow "Test Folder Overview"
@@ -385,6 +388,7 @@ I need to create a content and upload a file
       | Title       | Test My Folder Overview 1                  |
       | Description | My Folder Overview Description 1           |
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "My Content > My Activities" in the openstudio navigation
     And I click on "a.openstudio-profile-mypaticipation" "css_element"
@@ -395,6 +399,7 @@ I need to create a content and upload a file
       | Title       | Test My Folder Overview 2                  |
       | Description | My Folder Overview Description 2           |
       | Files       | mod/openstudio/tests/importfiles/test2.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "My Content > My Activities" in the openstudio navigation
     And I click on "a.openstudio-profile-mypaticipation" "css_element"
@@ -408,6 +413,7 @@ I need to create a content and upload a file
       | Title       | Test My Folder Overview 3                  |
       | Description | My Folder Overview Description 3           |
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "My Content > My Activities" in the openstudio navigation
     And I click on "a.openstudio-profile-mypaticipation" "css_element"
@@ -434,6 +440,7 @@ I need to create a content and upload a file
       | Title       | Test My Folder Overview 4                  |
       | Description | My Folder Overview Description 4           |
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "My Content > My Activities" in the openstudio navigation
     And I click on "a.openstudio-profile-mypaticipation" "css_element"
@@ -522,6 +529,7 @@ I need to create a content and upload a file
       | Title       | Content 4                                  |
       | Description | My Folder Overview Description             |
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "My Content > My Activities" in the openstudio navigation
     And I click on "a.openstudio-profile-mypaticipation" "css_element"

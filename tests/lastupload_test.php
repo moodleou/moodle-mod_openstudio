@@ -37,6 +37,8 @@ class lastupload_test extends \advanced_testcase {
     private $studiolevels; // Generic studio instance with no levels or slots.
     private $totalcontents;
     private $pinboardcontents;
+    private $contentid;
+    private $contentdata;
 
     protected function setUp(): void {
         $this->resetAfterTest(true);

@@ -406,7 +406,9 @@ class renderer_utils {
                 // A post with visibility is Only me, thmbnail doesn't load although folder shared.
                 $contentfileurl = self::make_plugin_file($context->id, $contentarea, $contentdata->id,
                         $contentdata->content, $folderid);
-
+                if ($contentdatatitle == '' && !empty($contentdata->enteralt)) {
+                    $contentdatatitle = $contentdata->enteralt;
+                }
                 break;
 
             case content::TYPE_VIDEO:
@@ -694,6 +696,7 @@ class renderer_utils {
                 $contentvisibilityicon = $OUTPUT->image_url('mymodule_rgb_32px', 'openstudio');
                 break;
             case content::VISIBILITY_GROUP:
+            case content::VISIBILITY_ALLGROUPS:
                 $contentvisibilityicon = $OUTPUT->image_url('share_with_my_group_rgb_32px', 'openstudio');
                 break;
             case content::VISIBILITY_WORKSPACE:
@@ -745,6 +748,8 @@ class renderer_utils {
             case content::VISIBILITY_GROUP:
                 return get_string('contentitemsharewithgroup', 'openstudio',
                     group::get_name(abs($contentdata->visibility)));
+            case content::VISIBILITY_ALLGROUPS:
+                return get_string('contentitemsharewithallmytutorgroups', 'openstudio');
             case content::VISIBILITY_WORKSPACE:
             case content::VISIBILITY_PRIVATE:
             case content::VISIBILITY_PRIVATE_PINBOARD:
@@ -1684,7 +1689,8 @@ class renderer_utils {
             $contentdata->commentform = $commentform->render();
 
             // Get content comments in order.
-            $commenttemp = comments::get_for_content($contentdata->id, $USER->id);
+            $commenttemp = comments::get_for_content($contentdata->id, $USER->id, 0, false,
+                    $permissions->groupingid, $contentdata->visibility, $permissions->managecontent);
             $comments = [];
             $commentthreads = [];
             $contentdata->comments = [];

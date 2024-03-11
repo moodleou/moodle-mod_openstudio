@@ -43,7 +43,7 @@ class import_testcase extends \advanced_testcase {
         $this->student = $this->getDataGenerator()->create_user(['email' => 'student1@ouunittest.com', 'username' => 'student1']);
         $this->getDataGenerator()->enrol_user($this->student->id, $course->id, 5, 'manual');
         $this->generator = $this->getDataGenerator()->get_plugin_generator('mod_openstudio');
-        $this->studio = $this->generator->create_instance(['course' => $course->id, 'idnumber' => 'OS1', 'pinboard' => 7]);
+        $this->studio = $this->generator->create_instance(['course' => $course->id, 'idnumber' => 'OS1', 'pinboard' => 8]);
 
         $this->tempdir = make_temp_directory('openstudio/importtest');
     }
@@ -86,8 +86,8 @@ class import_testcase extends \advanced_testcase {
         $importfile = $this->create_storedfile_from_fixture('importtest.zip');
         $files = \mod_openstudio\local\api\import::get_archive_contents($importfile);
 
-        $this->assertCount(7, $files['files']); // Zip contains 6 files, but 1 is not permitted.
-        $fixturefiles = ['test.pdf', 'test.odt', 'test.ods', 'test.pptx', 'test.txt' , 'test.m4a', 'test.m4v'];
+        $this->assertCount(8, $files['files']); // Zip contains 9 files, but 1 is not permitted.
+        $fixturefiles = ['test.pdf', 'test.odt', 'test.ods', 'test.pptx', 'test.txt' , 'test.m4a', 'test.m4v', 'test.webm'];
         foreach ($files['files'] as $file) {
             $this->assertTrue(in_array($file->pathname, $fixturefiles));
             unset($fixturefiles[array_search($file->pathname, $fixturefiles)]);
@@ -102,7 +102,7 @@ class import_testcase extends \advanced_testcase {
     public function test_check_import_limit() {
         $underarray = [1, 2, 3, 4];
         $exactarray = [1, 2, 3, 4, 5];
-        $overarray = [1, 2, 3, 4, 5, 6, 7, 8];
+        $overarray = [1, 2, 3, 4, 5, 6, 7, 8, 9];
         $this->assertTrue(\mod_openstudio\local\api\import::check_import_limit($this->studio->id, $this->student->id, $underarray));
         $this->assertTrue(\mod_openstudio\local\api\import::check_import_limit($this->studio->id, $this->student->id, $exactarray));
         $this->assertFalse(\mod_openstudio\local\api\import::check_import_limit($this->studio->id, $this->student->id, $overarray));
@@ -123,7 +123,7 @@ class import_testcase extends \advanced_testcase {
         // We now have 1 post already, so are allowed 1 less.
         $underarray = [1, 2, 3];
         $exactarray = [1, 2, 3, 4];
-        $overarray = [1, 2, 3, 4, 5, 6, 7, 8];
+        $overarray = [1, 2, 3, 4, 5, 6, 7, 8, 9];
         $this->assertTrue(\mod_openstudio\local\api\import::check_import_limit($this->studio->id, $this->student->id, $underarray));
         $this->assertTrue(\mod_openstudio\local\api\import::check_import_limit($this->studio->id, $this->student->id, $exactarray));
         $this->assertFalse(\mod_openstudio\local\api\import::check_import_limit($this->studio->id, $this->student->id, $overarray));
@@ -142,8 +142,8 @@ class import_testcase extends \advanced_testcase {
         \mod_openstudio\local\api\import::import_files($files, $cm, $this->student->id);
 
         $contents = $DB->get_records('openstudio_contents', ['openstudioid' => $this->studio->id, 'userid' => $this->student->id]);
-        $this->assertCount(7, $contents);
-        $fixturefiles = ['test.pdf', 'test.odt', 'test.ods', 'test.pptx', 'test.txt', 'test.m4a', 'test.m4v'];
+        $this->assertCount(8, $contents);
+        $fixturefiles = ['test.pdf', 'test.odt', 'test.ods', 'test.pptx', 'test.txt', 'test.m4a', 'test.m4v', 'test.webm'];
         foreach ($contents as $content) {
             $this->assertTrue(in_array($content->name, $fixturefiles));
             unset($fixturefiles[array_search($content->name, $fixturefiles)]);

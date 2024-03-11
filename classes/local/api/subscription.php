@@ -26,6 +26,7 @@ namespace mod_openstudio\local\api;
 use mod_openstudio\output\subscription_email;
 use mod_openstudio\output\email_renderer;
 use mod_openstudio\local\util;
+use mod_openstudio\local\api\rss;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -272,14 +273,19 @@ EOF;
                     // Get the course data we need for the first time and cache it.
                     // Get Course ID from studio record.
                     $courseid = $DB->get_field("openstudio", 'course', array("id" => $subscription->openstudioid));
+                    $studioname = $DB->get_field('openstudio', 'name', ["id" => $subscription->openstudioid]);
 
                     // Get Course Code to add to subject line.
                     $coursecode = $DB->get_field('course', 'shortname', array('id' => $courseid));
                     util::cache_put('subscription_coursecode_for_' . $subscription->openstudioid, $coursecode);
                     util::cache_put('subscription_processed_studioid_' . $subscription->openstudioid, true);
+                    util::cache_put('subscription_studioname_for_' . $subscription->openstudioid, $studioname);
+                    util::cache_put('subscription_courseid_for_' . $subscription->openstudioid, $courseid);
                 } else {
                     // If it is cached, just get the coursecode value.
                     $coursecode = util::cache_get('subscription_coursecode_for_' . $subscription->openstudioid);
+                    $studioname = util::cache_get('subscription_studioname_for_' . $subscription->openstudioid);
+                    $courseid = util::cache_get('subscription_courseid_for_' . $subscription->openstudioid);
                 }
 
                 // Initialise processing count if necessary.
@@ -339,11 +345,34 @@ EOF;
                                 $subscription->userid, $subscription->timeprocessed);
 
                         if (count($notifications) > 0) {
+                            $linkhelp = new \moodle_url('/mod/openstudio/view.php', ['id' => $context->instanceid]);
+                            $link = new \moodle_url('/mod/openstudio/oneclickunsubscribe.php', [
+                                'id' => $context->instanceid,
+                                'user' => $userdetails->id,
+                                'subscriptionid' => $subscription->id,
+                                'key' => rss::generate_key($userdetails->id, rss::UNSUBSCRIBE),
+                            ]);
+                            $headers = [
+                                'List-Id: "' . str_replace('"', "'", strip_tags($studioname)) .
+                                '" ' . generate_email_messageid('openstudio' . $subscription->openstudioid),
+                                'List-Help: ' . $linkhelp->out(false),
+                                'Message-ID: ' . generate_email_messageid('openstudio' . $subscription->openstudioid),
+                                'X-Course-Id: ' . $courseid,
+                                'X-Course-Name: '. format_string($coursecode, true),
+                                 // Headers to help prevent auto-responders.
+                                'Precedence: Bulk',
+                                'X-Auto-Response-Suppress: All',
+                                'Auto-Submitted: auto-generated',
+                                'List-Unsubscribe: <' . $link->out(false) . '>',
+                                'List-Unsubscribe-Post: List-Unsubscribe=One-Click',
+                            ];
+                            $from = \core_user::get_noreply_user();
+                            $from->customheaders = $headers;
                             $emailsubject = get_string('subscriptionemailsubject', 'openstudio', $coursecode);
-                            $email = new subscription_email($userdetails, $notifications, $subscription->format);
+                            $email = new subscription_email($userdetails, $notifications, $subscription->format, $link->out(false));
                             $emailbody = $renderer->render($email);
                             // OK, We have everything, let's generate and send the email.
-                            email_to_user($userdetails, $CFG->noreplyaddress,
+                            email_to_user($userdetails, $from,
                                 $emailsubject, $emailbody['plain'], $emailbody['html']);
 
                             // Update the subscription entry.

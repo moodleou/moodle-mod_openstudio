@@ -79,6 +79,7 @@ class content {
     const VISIBILITY_INFOLDERONLY = 6;
     const VISIBILITY_TUTOR = 7;
     const VISIBILITY_PEOPLE = 8;
+    const VISIBILITY_ALLGROUPS = 9;
 
     const UPDATEMODE_UPDATED = 1;
     const UPDATEMODE_CREATED = 2;
@@ -338,6 +339,9 @@ EOF;
         }
         if (array_key_exists('visibility', $data)) {
             $insertdata['visibility'] = $data['visibility'];
+        }
+        if (array_key_exists('enteralt', $data)) {
+            $insertdata['enteralt'] = $data['enteralt'];
         }
 
         $insertdata['userid'] = $userid;
@@ -641,6 +645,7 @@ EOF;
             array_key_exists('ownership', $data) ? ($contentdata->ownership = $data['ownership']) : null;
             array_key_exists('ownershipdetail', $data) ? ($contentdata->ownershipdetail = $data['ownershipdetail']) : null;
             array_key_exists('visibility', $data) ? ($contentdata->visibility = $data['visibility']) : null;
+            array_key_exists('enteralt', $data) ? ($contentdata->enteralt = $data['enteralt']) : null;
             $contentdata->timemodified = time();
 
             $result = $DB->update_record('openstudio_contents', $contentdata);
@@ -862,6 +867,7 @@ EOF;
             $contentdata->description = '';
             $contentdata->ownership = 0;
             $contentdata->ownershipdetail = '';
+            $contentdata->enteralt = '';
             $contentdata->deletedby = null;
             $contentdata->deletedtime = null;
             $contentdata->timemodified = time();
@@ -1426,7 +1432,7 @@ EOF;
                     $fileextension = $file['mimetype']['extension'];
                     if (in_array($fileextension, array('jpg', 'jpe', 'jpeg', 'gif', 'png'))) {
                         $contenttype = self::TYPE_IMAGE;
-                    } else if (in_array($fileextension, array('avi', 'mpg', 'mpeg', 'mov', 'mp4', 'm4v', 'flv', 'gif'))) {
+                    } else if (in_array($fileextension, array('avi', 'mpg', 'mpeg', 'mov', 'mp4', 'm4v', 'flv', 'gif', 'webm'))) {
                         $contenttype = self::TYPE_VIDEO;
                     } else if (in_array($fileextension, array('aiff', 'wav', 'mp3', 'm4a'))) {
                         $contenttype = self::TYPE_AUDIO;

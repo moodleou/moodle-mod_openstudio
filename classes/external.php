@@ -228,6 +228,7 @@ class mod_openstudio_external extends external_api {
                         break;
 
                     case content::VISIBILITY_GROUP:
+                    case content::VISIBILITY_ALLGROUPS:
                         $contenticon = $OUTPUT->image_url('share_with_my_group_rgb_32px', 'openstudio');
                         $contentlocation = group::get_name(abs($content->visibility));
                         break;
@@ -947,7 +948,7 @@ class mod_openstudio_external extends external_api {
         ));
         $listofcomment = [];
         if ($permissions) {
-            $listofcomment = comments::get_comments_by_contentid($cmid, $contentid);
+            $listofcomment = comments::get_comments_by_contentid($cmid, $contentid, $permissions);
         }
         return [
             'comments' => $listofcomment

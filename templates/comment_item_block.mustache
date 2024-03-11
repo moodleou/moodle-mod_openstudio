@@ -55,23 +55,23 @@
     </div>
     <div class="openstudio-comment-metadata">
         {{#donotexport}}
-        <div class="openstudio-comment-leftcolumn">
-            <input name="replycommentbutton"  type="button" data-comment-parent="
+            <div class="openstudio-comment-leftcolumn">
+                <input name="replycommentbutton" type="button" data-comment-parent="
                 {{#inreplyto}} {{inreplyto}} {{/inreplyto}}
-                {{^inreplyto}} {{id}} {{/inreplyto}}"
-                value="{{#str}} contentcommentsreply, mod_openstudio {{/str}}"
-                class="openstudio-content-actions osep-smallbutton btn btn-secondary
+                    {{^inreplyto}} {{id}} {{/inreplyto}}"
+                       value="{{#str}} contentcommentsreply, mod_openstudio {{/str}}"
+                       class="openstudio-content-actions osep-smallbutton btn btn-secondary
                     {{#contentcommentlocked}} locked {{/contentcommentlocked}}"
-            >
-        </div>
+                >
+            </div>
         {{/donotexport}}
         <div class="openstudio-comment-rightcolumn">
             {{#contentcommentlikeenabled}}
                 <div class="openstudio-comment-flag">
                     {{#flagcount}}
-                        <span class="openstudio-comment-flag-status flagged">
+                        <span class="openstudio-comment-flag-status flagged {{^userhasflagged}}openstudio-hidden{{/userhasflagged}}">
                             {{#pix}}
-                                participation_rgb_32px, openstudio, {{#str}} contentcommentliked, openstudio {{/str}}
+                                participation_btn_like, openstudio, {{#str}} contentcommentliked, openstudio {{/str}}
                             {{/pix}}
                             {{#donotexport}}
                                 <sup class="openstudio-comment-flag-count
@@ -91,9 +91,11 @@
                             {{/donotexport}}
                         </span>
                         {{#donotexport}}
-                            <span class="openstudio-comment-flag-status unflagged openstudio-hidden">
+                            <span class="openstudio-comment-flag-status unflagged {{#userhasflagged}}openstudio-hidden{{/userhasflagged}}">
                                 {{#pix}}
-                                    participation_grey_rgb_32px, openstudio, {{#str}} contentcommentnotliked, openstudio {{/str}}
+                                    participation_btn_not_like, openstudio, {{#flagcount}}{{#str}}
+                                     contentcommentliked, openstudio
+                                     {{/str}}{{/flagcount}}
                                 {{/pix}}
                                 <sup class="openstudio-comment-flag-count
                                 {{#flagcount}}
@@ -107,7 +109,7 @@
                         {{#donotexport}}
                             <span class="openstudio-comment-flag-status flagged openstudio-hidden">
                                 {{#pix}}
-                                    participation_rgb_32px, openstudio, {{#str}} contentcommentliked, openstudio {{/str}}
+                                    participation_btn_like, openstudio, {{#str}} contentcommentliked, openstudio {{/str}}
                                 {{/pix}}
                                 <sup class="openstudio-comment-flag-count
                                 {{#flagcount}}
@@ -115,11 +117,11 @@
                                 {{/flagcount}}
                                 ">{{flagcount}}</sup>
                             </span>
-                        <span class="openstudio-comment-flag-status unflagged">
+                            <span class="openstudio-comment-flag-status unflagged">
                             {{#pix}}
-                                participation_grey_rgb_32px, openstudio, {{#str}} contentcommentnotliked, openstudio {{/str}}
+                                participation_btn_not_like, openstudio, {{#str}} contentcommentnotliked, openstudio {{/str}}
                             {{/pix}}
-                            <sup class="openstudio-comment-flag-count
+                                <sup class="openstudio-comment-flag-count
                             {{#flagcount}}
                             flagged
                             {{/flagcount}}
@@ -127,20 +129,24 @@
                         </span>
                         {{/donotexport}}
                     {{/flagcount}}
-                    {{^userhasflagged}}
-                        {{#donotexport}}
+                    {{#donotexport}}
                         <a class="openstudio-comment-flag-link openstudio-content-actions
-                            {{#contentcommentlocked}} locked {{/contentcommentlocked}}"
-                            href="" data-comment-id="{{id}}">
-                            <span class="openstudio-comment-like-long-link">
-                                {{#str}} contentcommentlike, mod_openstudio {{/str}}
-                            </span>
-                            <span class="openstudio-comment-like-short-link">
+                                {{#contentcommentlocked}} locked {{/contentcommentlocked}}"
+                           href="" data-comment-id="{{id}}">
+                                <span class="openstudio-comment-like-long-link {{#userhasflagged}}openstudio-hidden{{/userhasflagged}}">
+                                    {{#str}} contentcommentlike, mod_openstudio {{/str}}
+                                </span>
+                            <span class="openstudio-comment-like-short-link {{#userhasflagged}}openstudio-hidden{{/userhasflagged}}">
                                 {{#str}} contentcommentlikeshort, mod_openstudio {{/str}}
                             </span>
+                            <span class="openstudio-comment-unlike-long-link {{^userhasflagged}}openstudio-hidden{{/userhasflagged}}">
+                                {{#str}} contentcommentunlike, mod_openstudio {{/str}}
+                            </span>
+                            <span class="openstudio-comment-unlike-short-link {{^userhasflagged}}openstudio-hidden{{/userhasflagged}}">
+                                {{#str}} contentcommentunlikeshort, mod_openstudio {{/str}}
+                            </span>
                         </a>
-                        {{/donotexport}}
-                    {{/userhasflagged}}
+                    {{/donotexport}}
                 </div>
             {{/contentcommentlikeenabled}}
 
@@ -149,7 +155,7 @@
                     <div class="openstudio-comment-action">
                         <a class="openstudio-comment-delete-link openstudio-content-actions
                             {{#contentcommentlocked}} locked {{/contentcommentlocked}}"
-                            href="" data-comment-id="{{id}}">
+                           href="" data-comment-id="{{id}}">
                             <span class="openstudio-comment-delete-long-link">
                                 {{#str}} contentcommentsdelete, mod_openstudio {{/str}}
                             </span>

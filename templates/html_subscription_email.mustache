@@ -45,10 +45,17 @@
                 "timecreated" => "2 hours ago",
                 "isread" => false
             }
-        ]
+        ],
+        "unsubscribeurl": "http://example.com/mod/openstudio/oneclickunsubscribe.php?id=1054&user=3&subscriptionid=2&key=df54aef3eff36a04b40dcd2fb2ae6e6523a05e4c",
     }
 
 }}
 <p>{{#str}} subscriptionhello, openstudio, {{name}}{{/str}}</p>
 <p>{{#str}} subscriptionintro, openstudio, {{total}}{{/str}}</p>
 {{>mod_openstudio/notificationlist}}
+{{#unsubscribeurl}}
+    <hr size='1' noshade='noshade' />
+    <div class='openstudio-email-unsubscribe'>
+        <a href='{{unsubscribeurl}}'>{{#str}}subemailunsubscribestream, mod_openstudio{{/str}}</a>
+    </div>
+{{/unsubscribeurl}}

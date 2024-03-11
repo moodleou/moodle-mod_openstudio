@@ -37,5 +37,6 @@ I need to import contents by zip file
     Then I should see "test.txt"
     Then I should see "test.m4v"
     Then I should see "test.m4a"
+    Then I should see "test.webm"
     And I follow "test.ods"
     Then following "Download file attachment" should download between "2000" and "3000" bytes

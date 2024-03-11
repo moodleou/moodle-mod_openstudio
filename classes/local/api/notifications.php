@@ -45,21 +45,74 @@ class notifications {
      *
      * @param int $userid The user to get social data for.
      * @param array $contents List of content ids to get social data from.
-     * @return array Return array of social data for list of contents.
+     * @param int $groupingid The ID of the grouping configured for the studio.
+     * @param bool $canmanagecontent User has permission manage content.
+     * @return false|array Return array of social data for list of contents.
      */
-    public static function get_activities($userid, $contents) {
+    public static function get_activities(int $userid, array $contents, int $groupingid = 0, bool $canmanagecontent = true): false|array {
 
         // If there are no contents provided, exit now.
         if (empty($contents)) {
             return false;
         }
 
+        $results = self::prepare_data_get_activites($userid, $contents,$groupingid, $canmanagecontent);
+        if (!$results) {
+            return false;
+        }
+        [$contentdata, $optionals] = self::process_data_get_activities($results);
+        if (empty($contentdata)) {
+            return false;
+        }
+
+        if (!empty($optionals['contentsharewithallgroups'])) {
+            $contentsharewithallgroups = array_unique($optionals['contentsharewithallgroups']);
+            $newresults = self::prepare_data_get_activites($userid, $contentsharewithallgroups, $groupingid, $canmanagecontent, true);
+            if (!$newresults) {
+                return false;
+            }
+            [$newcontentdata] = self::process_data_get_activities($newresults);
+            if (!empty($newcontentdata)) {
+                foreach ($newcontentdata as $key => $content) {
+                    if (!array_key_exists($key, $contentdata)) {
+                       continue;
+                    }
+                    $contentdata[$key] = $content;
+                }
+            }
+        }
+
+        return $contentdata;
+    }
+
+    /**
+     * Prepare data for get activities.
+     *
+     * @param int $userid The user to get social data for.
+     * @param array $contents List of content ids to get social data from.
+     * @param int $groupingid The ID of the grouping configured for the studio.
+     * @param bool $canmanagecontent User has permission manage content.
+     * @param boolean $checkgroup Set true if filtering comments based on group.
+     * @return false|\moodle_recordset
+     */
+    private static function prepare_data_get_activites(int $userid, array $contents, int $groupingid = 0,
+            bool $canmanagecontent = true, $checkgroup = false): false|\moodle_recordset {
         global $DB;
 
+        $filtergroup = $groupingid > 0 && !$canmanagecontent && $checkgroup;
+        $groupquery = $filtergroup ? "JOIN {groups_members} gm1 on gm1.userid = %s.userid
+                  JOIN {groupings_groups} gg ON gg.groupid = gm1.groupid AND gg.groupingid = {$groupingid}
+                  JOIN {groups_members} gm2 ON gm2.groupid = gm1.groupid AND gm2.userid = ?" : '';
+
+        $groupquery1 = $filtergroup ? sprintf($groupquery, 'sc1') : '';
+        $groupquery2 = $filtergroup ? sprintf($groupquery, 'sc2') : '';
+        $groupquery3 = $filtergroup ? sprintf($groupquery, 'sc3') : '';
+
         $sql = <<<EOF
-SELECT sf.contentid AS contentid, sf.folderid,
+SELECT sf.contentid AS contentid, sf.folderid, s.visibility,
        (        SELECT count(sc1.id)
                   FROM {openstudio_comments} sc1
+                  $groupquery1
                  WHERE sc1.contentid = sf.contentid
                    AND sc1.deletedtime IS NULL
                    AND sc1.userid != ?
@@ -70,6 +123,7 @@ SELECT sf.contentid AS contentid, sf.folderid,
                            AND sc1f.userid = ?)) AS commentsnewcontent,
        (    SELECT count(sc2.id)
               FROM {openstudio_comments} sc2
+              $groupquery2
              WHERE sc2.contentid = sf.contentid
                AND sc2.deletedtime IS NULL
                AND sc2.userid != ?
@@ -81,6 +135,7 @@ SELECT sf.contentid AS contentid, sf.folderid,
                        AND sc2.timemodified > sc2f.timemodified)) AS commentsnew,
        (    SELECT count(sc3.id)
               FROM {openstudio_comments} sc3
+              $groupquery3
              WHERE sc3.contentid = sf.contentid
                AND sc3.deletedtime IS NULL
         AND (EXISTS (SELECT 1
@@ -183,11 +238,13 @@ SELECT sf.contentid AS contentid, sf.folderid,
                        AND sf5_3f.userid = ?
                        AND sf5_3.timemodified <= sf5_3f.timemodified) OR sf5_3.userid = ?)) AS favouriteold
   FROM {openstudio_flags} sf
-
+  JOIN {openstudio_contents} s ON s.id = sf.contentid
 EOF;
-
-        $sqlparams = array();
-        for ($counter = 0; $counter < 24; $counter++) {
+        $sqlparams = [];
+        // Mass-assigned parameter for only userid in the query above.
+        $totaluseridparams = 24;
+        $totaluseridparam = $filtergroup ? $totaluseridparams + 3 : $totaluseridparams;
+        for ($counter = 0; $counter < $totaluseridparam; $counter++) {
             $sqlparams[] = $userid;
         }
 
@@ -197,15 +254,29 @@ EOF;
             $sqlparams = array_merge($sqlparams, $filtercontentdataparams);
             $sql .= " WHERE (sf.contentid {$filtercontentdatasql}) OR (sf.folderid {$filtercontentdatasql}) ";
         }
-        $sql .= " GROUP BY sf.contentid, sf.folderid ";
+        $sql .= ' GROUP BY sf.contentid, sf.folderid, s.visibility';
 
         $results = $DB->get_recordset_sql($sql, $sqlparams);
         if (!$results->valid()) {
             return false;
         }
 
-        $contentdata = array();
-        $folderdata = array();
+        return $results;
+    }
+
+    /**
+     * Process data retrieved from database query.
+     *
+     * @param object $results Results retrieved from database query.
+     * @return array A list containing and array of content data processed and an array optional.
+     */
+    private static function process_data_get_activities(object $results): array {
+        if (empty($results)) {
+            return false;
+        }
+        $contentdata = [];
+        $folderdata = [];
+        $optionals = [];
         foreach ($results as $content) {
             $contentdata[$content->contentid] = $content;
             $contentdata[$content->contentid]->totalcomments = $content->commentsold + $content->commentsnew;
@@ -233,23 +304,29 @@ EOF;
                     $folderdata[$content->folderid] = $folderupdate;
                 } else {
                     $folderdata[$content->folderid] = (object) [
-                        'contentid' => $content->contentid,
-                        'folderid' => $content->folderid,
-                        'contents' => 1,
-                        'commentsnewcontent' => $content->commentsnewcontent,
-                        'commentsnew' => $content->commentsnew,
-                        'commentsold' => $content->commentsold,
-                        'inspirednewcontent' => $content->inspirednewcontent,
-                        'inspirednew' => $content->inspirednew,
-                        'inspiredold' => $content->inspiredold,
-                        'mademelaughnewcontent' => $content->mademelaughnewcontent,
-                        'mademelaughnew' => $content->mademelaughnew,
-                        'mademelaughold' => $content->mademelaughold,
-                        'favouritenewcontent' => $content->favouritenewcontent,
-                        'favouritenew' => $content->favouritenew,
-                        'favouriteold' => $content->favouriteold
+                            'contentid' => $content->contentid,
+                            'folderid' => $content->folderid,
+                            'contents' => 1,
+                            'commentsnewcontent' => $content->commentsnewcontent,
+                            'commentsnew' => $content->commentsnew,
+                            'commentsold' => $content->commentsold,
+                            'inspirednewcontent' => $content->inspirednewcontent,
+                            'inspirednew' => $content->inspirednew,
+                            'inspiredold' => $content->inspiredold,
+                            'mademelaughnewcontent' => $content->mademelaughnewcontent,
+                            'mademelaughnew' => $content->mademelaughnew,
+                            'mademelaughold' => $content->mademelaughold,
+                            'favouritenewcontent' => $content->favouritenewcontent,
+                            'favouritenew' => $content->favouritenew,
+                            'favouriteold' => $content->favouriteold,
                     ];
                 }
+            }
+
+            // Add content to list need to recalculate.
+            // For content shared with all groups, we need to recalculate social data.
+            if (property_exists($content, 'visibility') && $content->visibility == content::VISIBILITY_ALLGROUPS) {
+                $optionals['contentsharewithallgroups'][] = $content->contentid;
             }
         }
 
@@ -259,7 +336,7 @@ EOF;
             }
         }
 
-        return $contentdata;
+        return [$contentdata, $optionals];
     }
 
     /**

@@ -38,18 +38,22 @@ class subscription_email implements \renderable, \templatable {
     private $name;
     /** @var \mod_openstudio\local\notifications\notification $notifications The notifications to be sent */
     private $notifications;
+    /** @var string $unsubscribeurl Unsubscribe link. */
+    private $unsubscribeurl;
 
     /**
      * Store the recipient's name, the list of notifications and the email format.
      *
-     * @param object $user
+     * @param \stdClass $user
      * @param notification[] $notifications
      * @param int $format
+     * @param string $unsubscribeurl
      */
-    public function __construct($user, $notifications, $format) {
+    public function __construct(\stdClass $user, array $notifications, int $format, string $unsubscribeurl) {
         $this->name = fullname($user);
         $this->notifications = $notifications;
         $this->format = $format;
+        $this->unsubscribeurl = $unsubscribeurl;
     }
 
     public function include_html() {
@@ -60,7 +64,8 @@ class subscription_email implements \renderable, \templatable {
         $context = (object) [
             'name' => $this->name,
             'total' => count($this->notifications),
-            'notifications' => []
+            'notifications' => [],
+            'unsubscribeurl' => $this->unsubscribeurl,
         ];
         $sequence = 1;
         foreach ($this->notifications as $notification) {

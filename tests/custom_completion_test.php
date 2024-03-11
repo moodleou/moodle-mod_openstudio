@@ -83,7 +83,6 @@ class custom_completion_test extends advanced_testcase {
         global $CFG;
         $this->course = '';
         $this->generator = '';
-        $this->studiolevels = '';
         $CFG->enablecompletion = false;
     }
 

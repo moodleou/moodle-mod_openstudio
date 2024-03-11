@@ -22,10 +22,12 @@
 
 namespace mod_openstudio;
 
+use mod_openstudio\local\api\rss;
+
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
-class subscription_testcase extends \advanced_testcase {
+class subscription_test extends \advanced_testcase {
 
     protected $users;
     protected $course;
@@ -271,4 +273,42 @@ class subscription_testcase extends \advanced_testcase {
         $this->assertEquals(true, $emails);
     }
 
+    /**
+     * Check email headers when subscribed to studio.
+     */
+    public function test_email_process_headers(): void {
+        $this->resetAfterTest(true);
+        $content = $this->generator->create_contents([
+            'openstudio' => 'OS1',
+            'userid' => $this->users->students->one->id,
+            'name' => 'Test',
+            'description' => 'Test',
+            'visibility' => \mod_openstudio\local\api\content::VISIBILITY_MODULE,
+            'contenttype' => \mod_openstudio\local\api\content::TYPE_TEXT,
+        ]);
+
+        \mod_openstudio\local\api\subscription::create(\mod_openstudio\local\api\subscription::MODULE,
+                $this->users->students->one->id, $this->studiolevels->id, \mod_openstudio\local\api\subscription::FORMAT_HTML);
+
+        $this->generator->create_notification([
+            'userid' => $this->users->students->one->id,
+            'userfrom' => $this->users->students->two->id,
+            'contentid' => $content,
+        ]);
+
+        unset_config('noemailever');
+        $sink = $this->redirectEmails();
+        \mod_openstudio\local\api\subscription::process($this->studiolevels->id);
+        $messages = $sink->get_messages();
+
+        // Check 1 email sent.
+        $this->assertEquals(1, count($messages));
+        $this->assertEquals(\core_user::get_noreply_user()->email, $messages[0]->from);
+        // Check headers.
+        $this->assertStringContainsString('List-Unsubscribe-Post:', $messages[0]->header);
+        $this->assertStringContainsString('user=' . $this->users->students->one->id, $messages[0]->header);
+        $this->assertStringContainsString('&key=' . rss::generate_key($this->users->students->one->id, rss::UNSUBSCRIBE)
+                , $messages[0]->header);
+        $this->assertStringContainsString('Unsubscribe from this stream', $messages[0]->body);
+    }
 }

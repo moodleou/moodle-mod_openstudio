@@ -366,13 +366,41 @@ define([
 
             promises[0]
                 .done(function(res) {
+                    let likeicon = likebtn.siblings(t.CSS.FLAG_STATUS + '.flagged');
+                    let notlikeicon = likebtn.siblings(t.CSS.FLAG_STATUS + '.unflagged');
                     likebtn
-                        .hide()
                         // Update flag count.
-                        .siblings(t.CSS.FLAG_STATUS + '.flagged').children(t.CSS.FLAG_COUNT).addClass('flagged').text(res.count)
+                        .siblings(t.CSS.FLAG_STATUS).children(t.CSS.FLAG_COUNT).text(res.count)
                         // Update flag status.
                         .parent().removeClass('openstudio-hidden')
-                        .siblings(t.CSS.FLAG_STATUS + '.unflagged').addClass('openstudio-hidden');
+                        .siblings(t.CSS.FLAG_STATUS).addClass('openstudio-hidden');
+                    if (res.count === 0) {
+                        let imageElement = likebtn.siblings(t.CSS.FLAG_STATUS).children('img')
+                        if (imageElement) {
+                            Str.get_string('contentcommentnotliked', 'mod_openstudio').then((value) => {
+                                imageElement[1].alt = value;
+                                imageElement[1].title = value;
+                            });
+                        }
+                    }
+                    // Show/hide opposite like/unlike links.
+                    likebtn.children().each(function() {
+                        var elem = $(this);
+                        if (elem.hasClass('openstudio-comment-like-long-link') ||
+                            elem.hasClass('openstudio-comment-like-short-link') ||
+                            elem.hasClass('openstudio-comment-unlike-long-link') ||
+                            elem.hasClass('openstudio-comment-unlike-short-link')) {
+                            if (elem.hasClass('openstudio-hidden')) {
+                                elem.removeClass('openstudio-hidden');
+                                likeicon.removeClass('openstudio-hidden');
+                                notlikeicon.addClass('openstudio-hidden');
+                            } else {
+                                elem.addClass('openstudio-hidden');
+                                likeicon.addClass('openstudio-hidden');
+                                notlikeicon.removeClass('openstudio-hidden');
+                            }
+                        }
+                    }, this);
                 })
                 .always(function() {
                     M.util.js_complete('openstudioLikeComment');

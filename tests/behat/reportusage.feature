@@ -65,6 +65,7 @@ I view report usage
       | Title       | Test My Activities View 2                  |
       | Description | My Activities Description 2                |
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "My Content > My Activities" in the openstudio navigation
     And I click on "a.openstudio-profile-mypaticipation" "css_element"

@@ -290,12 +290,16 @@ EOF;
      * Request can be paginated from a given comment id up to limit number.
      *
      * @param int $contentid Slot to get comments from.
-     * @param int $userid If specified, also return a flag indicating if this user has liked the comment.
+     * @param int|null $userid If specified, also return a flag indicating if this user has liked the comment.
      * @param int $limitnum Limit to this number of results.
      * @param bool $withdeleted If true, include deleted comments.
+     * @param int $groupingid If there's a grouping ID, filter the comments by group.
+     * @param int $visibility content::VISIBILITY_* constant respresenting the stream we are viewing.
+     * @param bool $canmanagecontent User has permission manage content.
      * @return \Traversable|bool Return recordsert of comment record data with user details added.
      */
-    static public function get_for_content($contentid, $userid = null, $limitnum = 0, $withdeleted = false) {
+    public static function get_for_content(int $contentid, ?int $userid = null, int $limitnum = 0,
+            bool $withdeleted = false, int $groupingid = 0, int $visibility = 0, $canmanagecontent = true): \Traversable|bool {
         global $DB;
 
         $params = array();
@@ -323,6 +327,19 @@ EOF;
             $subquery2 = '';
         }
 
+        // Filter comments if the active user does not have content management permissions
+        // and belongs to a different group than the comment creator within the same grouping.
+        $groupquery = '';
+        if ($userid && $groupingid > 0) {
+            if ($visibility == content::VISIBILITY_ALLGROUPS) {
+                if (!$canmanagecontent) {
+                    $groupquery = self::get_sql_check_same_group('c');
+                    $params[] = $groupingid;
+                    $params[] = $userid;
+                }
+            }
+        }
+
         $params[] = $contentid;
 
         $additionconditions = '';
@@ -339,8 +356,8 @@ EOF;
      FROM {openstudio_comments} c
      JOIN {user} u ON u.id = c.userid
 LEFT JOIN {user} du ON du.id = c.deletedby
+     {$groupquery}
     WHERE c.contentid = ?
-
          {$additionconditions}
 ORDER BY timemodified ASC
 
@@ -382,11 +399,12 @@ EOF;
      *
      * @param int $cmdid course module ID
      * @param int $contentid content ID
+     * @param object $permissions The permission object for the given user/view.
      * @return array
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public static function get_comments_by_contentid(int $cmid, int $contentid): array {
+    public static function get_comments_by_contentid(int $cmid, int $contentid, object $permissions): array {
         global $DB, $USER, $PAGE;
         $context = \context_module::instance($cmid);
         $userfields = \core_user\fields::get_picture_fields();
@@ -395,13 +413,27 @@ EOF;
             $arrayuserfield[] = "u.{$userfield}";
         }
         $sqluser = implode(', ', $arrayuserfield);
+        $params = [];
+        $groupquery = '';
+        // Filter comments if the active user does not have content management permissions
+        // and belongs to a different group than the comment creator within the same grouping.
+        if ($permissions->groupingid > 0 && !$permissions->managecontent) {
+            $content = $DB->get_record('openstudio_contents', ['id' => $contentid]);
+            if ($content->visibility == content::VISIBILITY_ALLGROUPS) {
+                $groupquery = self::get_sql_check_same_group('oc');
+                $params[] = $permissions->groupingid;
+                $params[] = $permissions->activeuserid;
+            }
+        }
+        $params[] = $contentid;
         $sql = "SELECT oc.id as commentid, oc.commenttext, oc.contentid, oc.userid, oc.timemodified, " . $sqluser .
                 " FROM {openstudio_comments} oc
             INNER JOIN {user} u ON oc.userid = u.id
+                {$groupquery}
                  WHERE oc.deletedby IS NULL
-                   AND oc.contentid = :contentid
+                       AND oc.contentid = ?
               ORDER BY oc.timemodified DESC";
-        $comments = $DB->get_records_sql($sql, ['contentid' => $contentid]);
+        $comments = $DB->get_records_sql($sql, $params);
         $result = [];
         if ($comments && count($comments) > 0) {
             $lastestcomment = util::get_lastest_comment_by_contentid($USER->id, $contentid);
@@ -504,7 +536,7 @@ EOF;
             \context_module $context, bool $isstriplink = false): string {
         $commenttext = file_rewrite_pluginfile_urls($commenttext, 'pluginfile.php', $context->id,
                 'mod_openstudio', self::COMMENT_TEXT_AREA, $commentid);
-        $commenttext = format_text($commenttext, FORMAT_HTML, $context);
+        $commenttext = format_text($commenttext, FORMAT_HTML, ['context' => $context->id]);
         if ($isstriplink) {
             $commenttext = format_string($commenttext, true);
         }
@@ -585,5 +617,20 @@ EOF;
         }
 
         return $result;
+    }
+
+    /**
+     * Function return JOIN sql to check same group.
+     *
+     * @param string $alias
+     * @return string
+     */
+    private static function get_sql_check_same_group(string $alias): string {
+        $sql = <<<EOF
+                JOIN {groups_members} gm1 on gm1.userid = %s.userid
+                JOIN {groupings_groups} gg ON gg.groupid = gm1.groupid AND gg.groupingid = ?
+                JOIN {groups_members} gm2 ON gm2.groupid = gm1.groupid AND gm2.userid = ?
+EOF;
+        return sprintf($sql, $alias) ;
     }
 }

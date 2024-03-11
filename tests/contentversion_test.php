@@ -32,6 +32,7 @@ class contentversion_testcase extends \advanced_testcase {
     private $generator;
     private $content;
     private $versions;
+    private $course;
 
     public function setUp(): void {
         $this->resetAfterTest(true);

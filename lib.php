@@ -84,6 +84,9 @@ function openstudio_supports($feature) {
         case FEATURE_BACKUP_MOODLE2:
             return true;
 
+        case FEATURE_SHOW_DESCRIPTION:
+            return true;
+
         default:
             return null;
     }
@@ -1297,6 +1300,10 @@ function openstudio_get_coursemodule_info($coursemodule) {
     $info = new cached_cm_info();
     $info->customdata = (object) [];
     $info->customdata->customcompletionrules = [];
+    if ($coursemodule->showdescription) {
+        // Convert intro to html. Do not filter cached version, filters run at display time.
+        $info->content = format_module_intro('openstudio', $openstudio, $coursemodule->id, false);
+    }
 
     // Populate the custom completion rules as key => value pairs, but only if the completion mode is 'automatic'.
     if ($coursemodule->completion == COMPLETION_TRACKING_AUTOMATIC) {

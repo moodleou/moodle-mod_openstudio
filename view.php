@@ -674,6 +674,11 @@ if ($finalviewpermissioncheck) {
                             group::get_name(abs($content->visibility)));
                     break;
 
+                case content::VISIBILITY_ALLGROUPS:
+                    $contenticon = $OUTPUT->image_url('share_with_my_group_rgb_32px', 'openstudio');
+                    $itemsharewith = get_string('contentitemsharewithallmytutorgroups', 'openstudio');
+                    break;
+
                 case content::VISIBILITY_WORKSPACE:
                 case content::VISIBILITY_PRIVATE:
                     $contenticon = $OUTPUT->image_url('onlyme_rgb_32px', 'openstudio');
@@ -795,7 +800,8 @@ if ($finalviewpermissioncheck) {
 
         // Gather content social data.
         $socialdatatotal = 0;
-        $contentsocialdata = notifications::get_activities($permissions->activeuserid, $contentslist);
+        $contentsocialdata = notifications::get_activities($permissions->activeuserid, $contentslist, $permissions->groupingid,
+                $permissions->managecontent);
         // List of user commented.
         $lsofusercommented = util::get_list_comment_of_user_by_contentid($contentslist);
         // List of flag content of user.

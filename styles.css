@@ -1547,7 +1547,11 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) .openstudio-comm
     display: inline-block;
 }
 
-.openstudio-comment-flag-count.flagged {
+.openstudio-comment-flag-status.unflagged .openstudio-comment-flag-count {
+    color: #676463;
+}
+
+.openstudio-comment-flag-status.flagged .openstudio-comment-flag-count {
     color: #0b55a8;
 }
 
@@ -1568,12 +1572,19 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) .openstudio-comm
 }
 
 .openstudio-comment-flag-link .openstudio-comment-like-long-link,
+.openstudio-comment-flag-link .openstudio-comment-unlike-long-link,
 .openstudio-comment-delete-link .openstudio-comment-delete-long-link,
 .openstudio-comment-report-link .openstudio-comment-report-long-link {
     display: inline;
 }
 
-.openstudio-comment-flag-link .openstudio-comment-like-short-link,
+.openstudio-comment-flag-link .openstudio-comment-like-long-link.openstudio-hidden,
+.openstudio-comment-flag-link .openstudio-comment-unlike-long-link.openstudio-hidden {
+    display: none;
+}
+
+.openstudio-content-view-primary .openstudio-comment-flag-link .openstudio-comment-like-short-link,
+.openstudio-content-view-primary .openstudio-comment-flag-link .openstudio-comment-unlike-short-link,
 .openstudio-comment-delete-link .openstudio-comment-delete-short-link,
 .openstudio-comment-report-link .openstudio-comment-report-short-link {
     display: none;
@@ -1685,12 +1696,12 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) .openstudio-comm
 }
 
 .openstudio-folder-view-comments .openstudio-comment-flag-link .openstudio-comment-like-long-link,
+.openstudio-folder-view-comments .openstudio-comment-flag-link .openstudio-comment-unlike-long-link,
 .openstudio-folder-view-comments .openstudio-comment-delete-link .openstudio-comment-delete-long-link,
 .openstudio-folder-view-comments .openstudio-comment-report-link .openstudio-comment-report-long-link {
     display: none;
 }
 
-.openstudio-folder-view-comments .openstudio-comment-flag-link .openstudio-comment-like-short-link,
 .openstudio-folder-view-comments .openstudio-comment-delete-link .openstudio-comment-delete-short-link,
 .openstudio-folder-view-comments .openstudio-comment-report-link .openstudio-comment-report-short-link {
     display: inline;
@@ -3503,6 +3514,10 @@ span.openstudio-content-view-title {
     height: auto;
 }
 
+.openstudio-content-view-description .filter_transcript_outer img {
+    width: auto;
+}
+
 .openstudio-content-view-tags {
     width: 55%;
     float: left;
@@ -5104,15 +5119,22 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-comment-flag-link .openstudio-comment-like-long-link,
+    .openstudio-comment-flag-link .openstudio-comment-unlike-long-link,
     .openstudio-comment-delete-link .openstudio-comment-delete-long-link,
     .openstudio-comment-report-link .openstudio-comment-report-long-link {
         display: none;
     }
 
     .openstudio-comment-flag-link .openstudio-comment-like-short-link,
+    .openstudio-comment-flag-link .openstudio-comment-unlike-short-link,
     .openstudio-comment-delete-link .openstudio-comment-delete-short-link,
     .openstudio-comment-report-link .openstudio-comment-report-short-link {
         display: inline;
+    }
+
+    .openstudio-comment-flag-link .openstudio-comment-like-short-link.openstudio-hidden,
+    .openstudio-comment-flag-link .openstudio-comment-unlike-short-link.openstudio-hidden {
+        display: none;
     }
 
     .openstudio-comment-form .openstudio-expand-image .icon,
@@ -6269,7 +6291,7 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-header {
         margin-top: 12px;
     }
-    #region-main > div[role="main"] h2.openstudio-nav-logo.osep-moduleheading {
+    #region-main > div[role="main"] h1.openstudio-nav-logo.osep-moduleheading {
         min-height: unset;
         padding-top: 0;
         margin-bottom: 9px;
@@ -8684,6 +8706,18 @@ a.openstudio-add-new-content-link:hover  {
     text-align: left;
     float: none;
     margin-left: 0;
+}
+
+.path-mod-openstudio .openstudio-content-view-description video{
+    max-width: 550px;
+    height: auto;
+}
+
+@media (max-width: 768px){
+    .path-mod-openstudio .openstudio-content-view-description video{
+        max-width: 275px;
+        height: auto;
+    }
 }
 
 /* High contrast mode */

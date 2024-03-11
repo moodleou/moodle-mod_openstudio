@@ -92,6 +92,7 @@ Feature: Delete my Open Studio content/other contents
       | Title       | Student content 3                          |
       | Description | Student content 3 description              |
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I press "Delete"
     And I click on "Delete" "button" in the "Delete post?" "dialogue"
@@ -114,6 +115,7 @@ Feature: Delete my Open Studio content/other contents
       | Title       | Student content 4                          |
       | Description | Student content 4 description              |
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I press "Delete"
     And I click on "Delete" "button" in the "Delete post?" "dialogue"

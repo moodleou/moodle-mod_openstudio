@@ -40,6 +40,7 @@ class rss {
     const GROUP = 2;
     const MODULE = 3;
     const CONTENT = 4;
+    const UNSUBSCRIBE = 5;
 
     /**
      * Gerenate SHA1 key from userid and feedtype.

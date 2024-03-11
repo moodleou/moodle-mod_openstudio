@@ -69,6 +69,7 @@ Feature: Open Studio pinboard stream
       | Title       | Test My Pinboard View                      |
       | Description | My Pinboard View Description               |
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "My Content > My Pinboard" in the openstudio navigation
     Then I should see "Test My Pinboard View"
@@ -89,6 +90,7 @@ Feature: Open Studio pinboard stream
       | Title       | My Module Title                                 |
       | Description | My Module Description                           |
       | Files       | mod/openstudio/tests/importfiles/Winterfell.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I follow "Shared content > My Module" in the openstudio navigation
 

@@ -158,6 +158,7 @@ I need to see other people's work
       | Title       | Test My Pinboard View 1                    |
       | Description | My Pinboard View Description 1             |
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     And I press "Save"
     And I click on "a.openstudio-profile-mypaticipation" "css_element"
     And I click on "#profile_percent div:nth-child(2) a.openstudio-profile-progress-step" "css_element"
