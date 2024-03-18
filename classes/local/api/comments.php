@@ -294,12 +294,12 @@ EOF;
      * @param int $limitnum Limit to this number of results.
      * @param bool $withdeleted If true, include deleted comments.
      * @param int $groupingid If there's a grouping ID, filter the comments by group.
-     * @param int $visibility content::VISIBILITY_* constant respresenting the stream we are viewing.
+     * @param int|null $visibility content::VISIBILITY_* constant respresenting the stream we are viewing.
      * @param bool $canmanagecontent User has permission manage content.
      * @return \Traversable|bool Return recordsert of comment record data with user details added.
      */
     public static function get_for_content(int $contentid, ?int $userid = null, int $limitnum = 0,
-            bool $withdeleted = false, int $groupingid = 0, int $visibility = 0, $canmanagecontent = true): \Traversable|bool {
+            bool $withdeleted = false, int $groupingid = 0, ?int $visibility = null, $canmanagecontent = true): \Traversable|bool {
         global $DB;
 
         $params = array();

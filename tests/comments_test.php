@@ -644,5 +644,10 @@ class comments_test extends \advanced_testcase {
         $this->assertEquals(2,
                 iterator_count(\mod_openstudio\local\api\comments::get_for_content($contentid, $this->users->students->three->id, 0,
                         false, $groupings->a->id, $contentdata['visibility'], false)));
+
+        // Check that getting all comments for this content when the 'visibility' field is null.
+        $this->assertEquals(6,
+                iterator_count(\mod_openstudio\local\api\comments::get_for_content($contentid, $this->users->students->three->id, 0,
+                        false, $groupings->a->id, null, false)));
     }
 }
