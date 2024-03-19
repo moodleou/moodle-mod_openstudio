@@ -71,7 +71,7 @@ class manageblocks_form extends \moodleform {
                 }
                 $blockname[] = $mform->createElement('image', 'reinstatebutton[' . $block->id . ']',
                     $OUTPUT->image_url('undo', 'openstudio'), array('title' => get_string('undeletelevel', 'openstudio')));
-                $mform->addGroup($blockname, null, $counter . '. ', ' ', null, true);
+                $mform->addGroup($blockname, null, $counter . '. ', ' ', false);
             }
         }
 
@@ -132,7 +132,7 @@ class manageblocks_form extends \moodleform {
                 $blockname[] = $mform->createElement('image', 'deletebutton[' . $block->id . ']',
                     $OUTPUT->image_url('t/delete'), array('title' => get_string('deletelevel', 'openstudio')));
             }
-            $mform->addGroup($blockname, null, $counter . '. ', ' ', null, true);
+            $mform->addGroup($blockname, null, $counter . '. ', ' ', false);
         }
 
         $mform->addElement('hidden', 'numberofblocks', $total);

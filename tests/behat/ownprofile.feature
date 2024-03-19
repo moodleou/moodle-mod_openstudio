@@ -114,7 +114,7 @@ I need to create a content and upload a file
   Scenario: Check existing of View My Own Profile in My Activities/My Pinboard view
     When I am on the "Test Open Studio name 1" "openstudio activity" page
     And I navigate to "Settings" in current page administration
-    And I follow "Expand all"
+    And I click on "Expand all" "link" in the "region-main" "region"
     And I set the following fields to these values:
       | Show Participation smiley | 1 |
     And I press "Save and display"
@@ -206,7 +206,7 @@ I need to create a content and upload a file
   Scenario: Check own profile in case of empty content
     When I am on the "Test Open Studio name 2" "openstudio activity" page
     And I navigate to "Settings" in current page administration
-    And I follow "Expand all"
+    And I click on "Expand all" "link" in the "region-main" "region"
     And I set the following fields to these values:
       | Show Participation smiley | 1 |
     And I press "Save and display"

@@ -49,7 +49,7 @@ Feature: Edit Open Studio settings
     When I am on the "Course 1" "Course" page
     And I turn editing mode on
     And I add a "OpenStudio 2" to section "1"
-    And I follow "Expand all"
+    And I click on "Expand all" "link" in the "region-main" "region"
     Then I should see "Your word for 'My Module'"
     And I should see "Your word for 'My Group'"
     And I should see "Your word for 'My Activities'"
@@ -315,7 +315,7 @@ Feature: Edit Open Studio settings
       | OS1        | student1 | Test content B | Test content 2 description | module     |
     And I am on the "Test Open Studio name 1" "openstudio activity" page
     And I navigate to "Settings" in current page administration
-    And I follow "Expand all"
+    And I click on "Expand all" "link" in the "region-main" "region"
     # disabled pinboard
     And I set the field "Enable pinboard" to "0"
     And I press "Save and display"
@@ -338,7 +338,7 @@ Feature: Edit Open Studio settings
     And all users have accepted the plagarism statement for "OS1" openstudio
     And I am on the "Test Open Studio name 1" "openstudio activity" page
     And I navigate to "Settings" in current page administration
-    And I follow "Expand all"
+    And I click on "Expand all" "link" in the "region-main" "region"
     And I set the following fields to these values:
       | Enable 'My Module'   | 0       |
       | Sharing level        | 1,7,2,3 |

@@ -82,7 +82,7 @@ class managecontents_form extends \moodleform {
                 }
                 $contentname[] = $mform->createElement('image', 'reinstatebutton[' . $content->id . ']',
                     $OUTPUT->image_url('undo', 'openstudio'), array('title' => get_string('undeletelevel', 'openstudio')));
-                $mform->addGroup($contentname, null, $counter . '. ', ' ', null, true);
+                $mform->addGroup($contentname, null, $counter . '. ', ' ', false);
             }
         }
 
@@ -180,7 +180,7 @@ class managecontents_form extends \moodleform {
                 $contentname[] = $mform->createElement('image', 'deletebutton[' . $content->id . ']',
                     $OUTPUT->image_url('t/delete'), array('title' => get_string('deletelevel', 'openstudio')));
             }
-            $mform->addGroup($contentname, null, $counter . '. ', ' ', null, true);
+            $mform->addGroup($contentname, null, $counter . '. ', ' ', false);
 
             if (isset($this->_customdata['editcontent']) && $this->_customdata['editcontent'] == $content->id) {
                 $defaulttime = time();

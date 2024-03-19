@@ -220,7 +220,7 @@ I need to create a content and upload a file
     # Enable Add any contents to folders
     And I am on the "Test Open Studio name 1" "openstudio activity" page
     And I navigate to "Settings" in current page administration
-    And I follow "Expand all"
+    And I click on "Expand all" "link" in the "region-main" "region"
     And I set the following fields to these values:
       | Add any contents to folders | 1 |
       | id_tutorrolesgroup_1        | 1 |

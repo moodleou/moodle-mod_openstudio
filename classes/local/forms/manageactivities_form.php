@@ -81,7 +81,7 @@ class manageactivities_form extends \moodleform {
                 $activityname[] = $mform->createElement('image', 'reinstatebutton[' . $activity->id . ']',
                         $OUTPUT->image_url('undo', 'openstudio'),
                         array('title' => get_string('undeletelevel', 'openstudio')));
-                $mform->addGroup($activityname, null, $counter . '. ', ' ', null, true);
+                $mform->addGroup($activityname, null, $counter . '. ', ' ', false);
             }
         }
 
@@ -156,7 +156,7 @@ class manageactivities_form extends \moodleform {
                         $OUTPUT->image_url('t/delete'), array('title' => get_string('deletelevel', 'openstudio')));
             }
 
-            $mform->addGroup($activityname, null, $counter . '. ', ' ', null, true);
+            $mform->addGroup($activityname, null, $counter . '. ', ' ', false);
 
         }
         $mform->addElement('hidden', 'numberofactivities', $total);

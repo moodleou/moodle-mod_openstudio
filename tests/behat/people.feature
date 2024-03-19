@@ -239,7 +239,7 @@ Feature: Open Studio people view
     #  Should only show My Module option in case Group Mode is not configured
     And I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "teacher1"
     And I navigate to "Settings" in current page administration
-    And I follow "Expand all"
+    And I click on "Expand all" "link" in the "region-main" "region"
     And I set the field "Grouping" to "None"
     And I press "Save and display"
     And I follow "People" in the openstudio navigation

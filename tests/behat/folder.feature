@@ -66,7 +66,7 @@ I need to create a folder
     And I should not see "Upload content"
     And I should not see "Create new folder"
     And I navigate to "Settings" in current page administration
-    And I follow "Expand all"
+    And I click on "Expand all" "link" in the "region-main" "region"
     And I should see "Request feedback (own content only)"
     And I set the field "Enable folders" to "1"
     And I press "Save and display"
@@ -79,7 +79,7 @@ I need to create a folder
     And I should not see "Upload content"
     And I should not see "Create new folder"
     And I navigate to "Settings" in current page administration
-    And I follow "Expand all"
+    And I click on "Expand all" "link" in the "region-main" "region"
     And I set the field "Enable folders" to "1"
     And I press "Save and display"
     And I should see "Upload content"
@@ -136,7 +136,7 @@ I need to create a folder
   Scenario: Create Folder in other view
     Given I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "teacher1"
     And I navigate to "Settings" in current page administration
-    And I follow "Expand all"
+    And I click on "Expand all" "link" in the "region-main" "region"
     And I set the field "Enable folders" to "1"
     And I press "Save and display"
 
@@ -177,7 +177,7 @@ I need to create a folder
   Scenario: Edit Folder in other view
     Given I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "teacher1"
     And I navigate to "Settings" in current page administration
-    And I follow "Expand all"
+    And I click on "Expand all" "link" in the "region-main" "region"
     And I set the field "Enable folders" to "1"
     And I press "Save and display"
 
@@ -203,7 +203,7 @@ I need to create a folder
   Scenario: Breadcrumb navigation for Folder and Content of folder
     Given I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "teacher1"
     And I navigate to "Settings" in current page administration
-    And I follow "Expand all"
+    And I click on "Expand all" "link" in the "region-main" "region"
     And I set the field "Enable folders" to "1"
     And I press "Save and display"
 
@@ -236,7 +236,7 @@ I need to create a folder
   Scenario: Add tags to folder
     Given I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "teacher1"
     And I navigate to "Settings" in current page administration
-    And I follow "Expand all"
+    And I click on "Expand all" "link" in the "region-main" "region"
     And I set the field "Enable folders" to "1"
     And I press "Save and display"
 

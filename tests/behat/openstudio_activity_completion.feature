@@ -51,8 +51,8 @@ Feature: View activity completion information in the openstudio activity
     And all users have accepted the plagarism statement for "OS1" openstudio
     And I am on the "Test Open Studio name 1" "openstudio activity editing" page logged in as teacher1
     And I set the following fields to these values:
-      | Completion tracking  | Students can manually mark the activity as completed |
-      | id_tutorrolesgroup_1 | 1                                                    |
+      | Students must manually mark the activity as done | 1 |
+      | id_tutorrolesgroup_1                             | 1 |
     And I press "Save and display"
     And I am on the "Test Open Studio name 1" "openstudio activity" page
     # Teacher view.
