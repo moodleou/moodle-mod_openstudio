@@ -1103,6 +1103,126 @@ class content_test extends \advanced_testcase {
 
     }
 
+    public function test_get_visibility_by_studio_object(): void {
+        global $DB;
+        // Create course.
+        $this->course = $this->getDataGenerator()->create_course();
+
+        // Create course groups.
+        $this->groups = new \stdClass();
+        $this->groupings = new \stdClass();
+        $this->groupings->a  = $this->getDataGenerator()->create_grouping(
+                ['name' => 'Grouping A', 'courseid' => $this->course->id]);
+        $this->groups->one = $this->getDataGenerator()->create_group([
+                'courseid' => $this->course->id, 'name' => 'Group 1']);
+        $this->groups->two = $this->getDataGenerator()->create_group([
+                'courseid' => $this->course->id, 'name' => 'Group 2']);
+
+        // Add groups to our groupings.
+        $insert = new \stdClass();
+        $DB->insert_record('groupings_groups', (object)[
+                'groupingid' => $this->groupings->a->id,
+                'groupid' => $this->groups->one->id,
+        ]);
+        $insert->groupingid = $this->groupings->a->id;
+        $insert->groupid = $this->groups->two->id;
+
+        // Add user one to group one and group two.
+        $this->generator->add_users_to_groups([
+                $this->groups->one->id => [
+                        $this->users->students->one->id,
+                ],
+        ]);
+        $this->generator->add_users_to_groups([
+                $this->groups->two->id => [
+                        $this->users->students->one->id,
+                ],
+        ]);
+
+        $studio = new \stdClass();
+
+        // Check for values that do not match.
+        $visibility = util::get_visibility($studio, $this->users->students->one->id);
+        $this->assertEquals(content::VISIBILITY_PRIVATE, $visibility);
+
+        $studio->enabledvisibility = [
+                content::VISIBILITY_PRIVATE,
+                content::VISIBILITY_TUTOR,
+                content::VISIBILITY_GROUP,
+                content::VISIBILITY_MODULE,
+        ];
+        $studio->groupmode = content::VISIBILITY_GROUP;
+        $studio->groupingid = $this->groupings->a->id;
+        $studio->course = $this->course->id;
+
+        // Private is the lowest sharing level.
+        $visibility = util::get_visibility($studio, $this->users->students->one->id);
+        $this->assertEquals(content::VISIBILITY_PRIVATE, $visibility);
+
+        $studio->enabledvisibility = [
+                content::VISIBILITY_TUTOR,
+                content::VISIBILITY_GROUP,
+        ];
+        // Tutor is the lowest sharing level.
+        $visibility = util::get_visibility($studio, $this->users->students->one->id);
+        $this->assertEquals(content::VISIBILITY_TUTOR, $visibility);
+
+        $studio->enabledvisibility = [
+                content::VISIBILITY_GROUP,
+                content::VISIBILITY_MODULE,
+        ];
+
+        // Content is shared to the first group when user has many groups.
+        // The groupid should be the first group.
+        $visibility = util::get_visibility($studio, $this->users->students->one->id);
+        $this->assertEquals(-$this->groups->one->id, $visibility);
+
+        $studio->enabledvisibility = [
+                content::VISIBILITY_MODULE,
+        ];
+        // Module is the lowest sharing level.
+        $visibility = util::get_visibility($studio, $this->users->students->one->id);
+        $this->assertEquals(content::VISIBILITY_MODULE, $visibility);
+
+        $studio->enabledvisibility = [
+                content::VISIBILITY_GROUP,
+                content::VISIBILITY_MODULE,
+        ];
+        // Group is the lowest sharing level but user two isn't added to any group.
+        $visibility = util::get_visibility($studio, $this->users->students->two->id);
+        $this->assertEquals(content::VISIBILITY_MODULE, $visibility);
+
+
+        $studio->enabledvisibility = [
+                content::VISIBILITY_GROUP,
+        ];
+        // Group is the only sharing level but user two isn't added to any group.
+        $visibility = util::get_visibility($studio, $this->users->students->two->id);
+        $this->assertEquals(content::VISIBILITY_PRIVATE, $visibility);
+
+        $studio->enabledvisibility = [
+                content::VISIBILITY_TUTOR,
+                content::VISIBILITY_GROUP,
+                content::VISIBILITY_MODULE,
+        ];
+        // Tutor is the lowest sharing level but user two isn't added to any group.
+        $visibility = util::get_visibility($studio, $this->users->students->two->id);
+        $this->assertEquals(content::VISIBILITY_TUTOR, $visibility);
+
+        $studio->enabledvisibility = [
+                content::VISIBILITY_TUTOR,
+                content::VISIBILITY_GROUP,
+        ];
+        // Tutor is the lowest sharing level but user two isn't added to any group.
+        $visibility = util::get_visibility($studio, $this->users->students->two->id);
+        $this->assertEquals(content::VISIBILITY_TUTOR, $visibility);
+
+        $studio->groupmode = NOGROUPS;
+        // Studio setting No group.
+        $visibility = util::get_visibility($studio, $this->users->students->one->id);
+        $this->assertEquals(content::VISIBILITY_PRIVATE, $visibility);
+    }
+
     public function test_resize_image_using_imagick(): void {
         global $CFG;
         if (!extension_loaded('imagick') || !class_exists('Imagick')) {

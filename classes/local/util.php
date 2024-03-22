@@ -75,7 +75,7 @@ class util {
      * @return object Return a collection of data about the current page request.
      */
     public static function render_page_init($id, $requiredcapabilities = array()) {
-        global $DB;
+        global $DB, $USER;
 
         if (! ($cm = get_coursemodule_from_id('openstudio', $id))) {
             throw new \moodle_exception('invalidcoursemodule');
@@ -97,6 +97,10 @@ class util {
 
         // Get module instance.
         $instance = $DB->get_record('openstudio', array('id' => $cm->instance), '*', MUST_EXIST);
+
+        if (empty($instance->defaultvisibility)) {
+            $instance->defaultvisibility = util::get_visibility($cm->instance, $USER->id);
+        }
 
         // Get couse context.
         $permissions = self::check_permission($cm, $instance, $course);
@@ -1841,22 +1845,32 @@ EOF;
     /**
      * Get folder visibility.
      *
-     * @param int $openstudioid
+     * @param int|object $studioorid
      * @param int $userid
      * @return int
      */
-    public static function get_visibility(int $openstudioid, int $userid): int {
+    public static function get_visibility(int|object $studioorid, int $userid): int {
         global $DB;
 
         // Get sharing level.
-        $sharinglevel = $DB->get_record('openstudio', ['id' => $openstudioid], 'allowedvisibility');
-        $sharinglevelarray = explode(',', $sharinglevel->allowedvisibility);
+        if (!is_object($studioorid)) {
+            $sharinglevel = $DB->get_record('openstudio', ['id' => $studioorid], 'allowedvisibility');
+            $sharinglevelarray = explode(',', $sharinglevel->allowedvisibility);
+            $cm = self::get_coursemodule_from_studioid($studioorid);
+            $groupmode = $cm->groupmode;
+            $groupingid = $cm->groupingid;
+            $course = $cm->course;
+        } else {
+            $sharinglevelarray = $studioorid->enabledvisibility ?? [];
+            $groupmode = $studioorid->groupmode ?? 0;
+            $groupingid = $studioorid->groupingid ?? 0;
+            $course = $studioorid->course ?? 0;
+        }
+
         $lowestlevel = self::get_lowest_mode($sharinglevelarray);
 
-        $cm = self::get_coursemodule_from_studioid($openstudioid);
-
-        if ($cm->groupmode > NOGROUPS && $cm->groupingid > 0) {
-            $grouplist = group::group_list($cm->course, $cm->groupingid, $userid);
+        if ($groupmode > NOGROUPS && $groupingid > 0) {
+            $grouplist = group::group_list($course, $groupingid, $userid);
             if ($grouplist) {
                 if ($lowestlevel == content::VISIBILITY_GROUP) {
                     // Share the content(s) to the first group when user has many groups.

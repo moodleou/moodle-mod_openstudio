@@ -105,13 +105,15 @@ function openstudio_supports($feature) {
  * @return int The id of the newly inserted openstudio record
  */
 function openstudio_add_instance(stdClass $studio, mod_openstudio_mod_form $mform = null) {
-    global $DB;
+    global $DB, $USER;
 
     $studio->timemodified = time();
 
     if (isset($studio->enabledvisibility) && is_array($studio->enabledvisibility)) {
         $studio->allowedvisibility = implode(",", $studio->enabledvisibility);
     }
+
+    $studio->defaultvisibility = util::get_visibility($studio, $USER->id);
 
     if (isset($studio->enabledflags) && is_array($studio->enabledflags)) {
         $studio->flags = implode(",", $studio->enabledflags);
@@ -145,7 +147,7 @@ function openstudio_add_instance(stdClass $studio, mod_openstudio_mod_form $mfor
  * @return boolean Success/Fail
  */
 function openstudio_update_instance(stdClass $studio, mod_openstudio_mod_form $mform = null) {
-    global $DB;
+    global $DB, $USER;
 
     $studio->timemodified = time();
     $studio->id = $studio->instance;
@@ -153,6 +155,8 @@ function openstudio_update_instance(stdClass $studio, mod_openstudio_mod_form $m
     if (isset($studio->enabledvisibility) && is_array($studio->enabledvisibility)) {
         $studio->allowedvisibility = implode(",", $studio->enabledvisibility);
     }
+
+    $studio->defaultvisibility = util::get_visibility($studio, $USER->id);
 
     if (isset($studio->enabledflags) && is_array($studio->enabledflags)) {
         $studio->flags = implode(",", $studio->enabledflags);

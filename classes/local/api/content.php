@@ -846,7 +846,7 @@ EOF;
                 if ($cm != null) {
                     // Get module instance.
                     $cminstance = $DB->get_record('openstudio', array('id' => $cm->instance), '*', MUST_EXIST);
-                    $contentdata->visibility = $cminstance->defaultvisibility;
+                    $contentdata->visibility = $cminstance->defaultvisibility ?? util::get_visibility($cm->instance, $userid);
                 } else {
                     $contentdata->visibility = 0;
                 }
