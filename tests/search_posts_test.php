@@ -247,6 +247,8 @@ class search_posts_test extends \advanced_testcase {
         $resultdata->set('content', $postsdata[0]->content);
         $resultdata->set('modified', $postsdata[0]->timemodified);
         $resultdata->set_extra('coursefullname', $this->course->fullname);
+        $resultdata->set_doc_url(new \moodle_url('/mod/openstudio/content.php', ['sid' => $postsdata[0]->id]));
+        $resultdata->set_context_url(new \moodle_url('/mod/openstudio/content.php', ['sid' => $postsdata[0]->id]));
 
         $fakedata->results[] = $resultdata;
 

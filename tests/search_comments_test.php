@@ -352,6 +352,7 @@ class search_comments_test extends \advanced_testcase {
         $commentsdata->set_extra('coursefullname', $this->course->fullname);
         $commentsdata->set_extra('userfullname', fullname($this->user));
         $commentsdata->set_doc_url(new \moodle_url('/mod/openstudio/content.php', ['sid' => $this->urlcontent]));
+        $commentsdata->set_context_url(new \moodle_url('/mod/openstudio/content.php', ['sid' => $this->urlcontent]));
 
         $fakedata->results[] = $commentsdata;
 

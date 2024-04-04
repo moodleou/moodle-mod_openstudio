@@ -234,6 +234,8 @@ class search_folders_test extends \advanced_testcase {
         $resultdata->set('content', $folderdata[0]->content);
         $resultdata->set('modified', $folderdata[0]->timemodified);
         $resultdata->set_extra('coursefullname', $this->course->fullname);
+        $resultdata->set_doc_url(new \moodle_url('/mod/openstudio/folder.php', ['sid' => $folderdata[0]->id]));
+        $resultdata->set_context_url(new \moodle_url('/mod/openstudio/folder.php', ['sid' => $folderdata[0]->id]));
 
         $fakedata->results[] = $resultdata;
 
