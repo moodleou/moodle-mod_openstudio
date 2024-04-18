@@ -199,11 +199,6 @@ function openstudio_delete_instance($id) {
 
     $cm = get_coursemodule_from_id('openstudio', $id);
     if ($cm) {
-        // Delete search indexes.
-        if (util::search_installed()) {
-            local_ousearch_document::delete_module_instance_data($cm);
-        }
-
         // Delete content files from moodle file system.
         $modulecontext = context_module::instance($cm->id);
         if ($modulecontext) {
@@ -552,83 +547,6 @@ EOF;
 }
 
 /**
- * Obtains a search document given the ousearch parameters.
- *
- * @param object $document Object containing fields from the ousearch documents table
- * @return mixed False if object can't be found, otherwise object containing the following
- *   fields: ->content, ->title, ->url, ->activityname, ->activityurl,
- *   and optionally ->extrastrings array and ->data
- */
-function openstudio_ousearch_get_document($document) {
-    global $CFG, $USER;
-
-    $slotid = $document->intref1;
-    $slot = content::get_record($USER->id, $slotid);
-    if ($slot == false) {
-        return false;
-    }
-
-    // Note: for quoted search term to work, the content fed to the indexered
-    // must be the same when the search engine calls this function.  So the below
-    // construction of title and name is the same as found in the search->update()
-    // function call.
-    //
-    // This is becase when quoted search term is used, the search index is not enough
-    // and so it calls upon the original text string below to match the quoted text term order.
-    //
-    // Various slot metadata is concatenated into the search document content field
-    // so it can be found in a search text query.
-
-    // Set search document title.
-    $title = stripslashes($slot->name);
-
-    $content  = $slot->l1name . ' . ';
-    $content .= $slot->l2name . ' . ';
-    $content .= $slot->l3name . ' . ';
-    $content .= $slot->name . ' . ';
-    $content .= $slot->description . ' . ';
-    $content .= $slot->firstname . ' . ';
-    $content .= $slot->lastname . ' . ';
-    $content .= $slot->username . ' . ';
-    $content .= $slot->urltitle . ' . ';
-    $content .= $slot->imagealt . ' . ';
-    $content .= $slot->thumbnail . ' . ';
-    $content .= $slot->mimetype . ' . ';
-    $content .= $slot->content . ' . ';
-
-    // Add in tags data.
-    foreach ($slot->tagsraw as $slottag) {
-        // Store tag as is, so it can be found.
-        $content .= $slottag->name . ' . ';
-
-        // Store tag with prefix as is, so it can be found exactly if required.
-        $content .= 'tag:' . str_replace(' ', '', $slottag->name) . ' . ';
-    }
-
-    // Add in comments.
-    // To prevenr performance issue, we will only index the latest 25 comments.
-    $commentsdata = comments::get_for_content($slot->id, null, 25);
-    if ($commentsdata != false) {
-        $content .= ' . ';
-        foreach ($commentsdata as $comment) {
-            $content .= ' . ' . $comment->commenttext;
-        }
-    }
-
-    $content = stripslashes($content);
-
-    $result = new stdClass();
-    $result->title = $title;
-    $result->content = $content;
-    $result->url  = (new moodle_url('/mod/openstudio/content.php',
-                    array('id' => $document->coursemoduleid, 'sid' => $slot->id))) . '';
-    $result->activityname = $result->title;
-    $result->activityurl = $result->url;
-
-    return $result;
-}
-
-/**
  * This is a helper function to call studio_ousearch_filter_permission() exlictly
  * requesting slots in sets to be included in search result.
  *
@@ -926,89 +844,6 @@ function openstudio_oualerts_custom_info($itemtype, $itemid) {
     }
 
     return $itemtitle;
-}
-
-/**
- * Update all documents for ousearch.
- *
- * @param bool $feedback If true, prints feedback as HTML list items
- * @param int $courseid If specified, restricts to particular courseid
- */
-function openstudio_ousearch_update_all($feedback = true, $courseid = 0) {
-    global $DB;
-    if (get_config('local_ousearch', 'ousearchindexingdisabled')) {
-        // Do nothing if the OU Search system is turned off.
-        return;
-    }
-    raise_memory_limit(MEMORY_EXTRA);
-
-    if ($courseid > 0) {
-        $sql = <<<EOF
-SELECT cm.*
-  FROM {modules} m
-  JOIN {course_modules} cm ON cm.module = m.id
- WHERE m.name = 'openstudio'
-   AND cm.course = ?
-
-EOF;
-
-        $cms = $DB->get_records_sql($sql, array($courseid));
-        if (empty($cms)) {
-            return false;
-        }
-        foreach ($cms as $cm) {
-            $slots = content::get_all_records($cm->instance);
-            if ($slots != false) {
-                $counter = 0;
-                foreach ($slots as $slotdata) {
-                    $counter++;
-                    if ($slotdata->contenttype == content::TYPE_NONE) {
-                        search::delete($cm, $slotdata, true);
-                    } else {
-                        search::update($cm, $slotdata);
-                    }
-                }
-
-                if ($feedback) {
-                    print '<li>Studio instance: ' . $cm->instance
-                        . '. No. of slots: ' . $counter . '</li>';
-                }
-            }
-        }
-    } else {
-        $sql = <<<EOF
-SELECT cm.*
-  FROM {modules} m
-  JOIN {course_modules} cm ON cm.module = m.id
- WHERE m.name = 'openstudio'
-
-EOF;
-
-        $cms = $DB->get_recordset_sql($sql, array($courseid));
-        if (!$cms->valid()) {
-            return false;
-        }
-
-        foreach ($cms as $cm) {
-            $slots = content::get_all_records($cm->instance);
-            if ($slots != false) {
-                $counter = 0;
-                foreach ($slots as $slotdata) {
-                    $counter++;
-                    if ($slotdata->contenttype == content::TYPE_NONE) {
-                        search::delete($cm, $slotdata, true);
-                    } else {
-                        search::update($cm, $slotdata);
-                    }
-                }
-
-                if ($feedback) {
-                    print '<li>Studio instance: ' . $cm->instance
-                            . '. No. of slots: ' . $counter . '</li>';
-                }
-            }
-        }
-    }
 }
 
 /**

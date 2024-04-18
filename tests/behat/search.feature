@@ -46,10 +46,7 @@ Feature: Open Studio search content
       | openstudio | user     | name              | description           | weblink                                     | visibility | level3 | levelcontainer |
       | OS1        | student1 | Student content 5 | Content Description 5 | https://www.youtube.com/watch?v=ktAnpf_nu5c | module     | S1     | module         |
     And the following config values are set as admin:
-      | enableglobalsearch | 1 |                          |
-      | modulesitesearch   | 2 | local_moodleglobalsearch |
-      | activitysearch     | 2 | local_moodleglobalsearch |
-      | nonosepsitesearch  | 1 | local_moodleglobalsearch |
+      | enableglobalsearch | 1 |
     And Open Studio levels are configured for "Sharing Studio"
     And all users have accepted the plagarism statement for "OS1" openstudio
 

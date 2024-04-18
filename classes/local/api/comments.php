@@ -89,12 +89,6 @@ class comments {
                 self::clear_draft_area($file['id']);
             }
 
-            // Index new comments for search.
-            if ($cm != null) {
-                $newcontentdata = content::get_record($userid, $contentid);
-                search::update($cm, $newcontentdata);
-            }
-
             // Update slot flag.
             flags::toggle($contentid, flags::COMMENT, 'on', $userid, $folderid);
             flags::comment_toggle($contentid, $commentid, $userid, 'on', false, flags::FOLLOW_CONTENT);

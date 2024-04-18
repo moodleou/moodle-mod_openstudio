@@ -225,11 +225,6 @@ class search_posts_test extends \advanced_testcase {
      * Test check search posts with global search.
      */
     public function test_check_global_search() {
-        // Use global search system for default.
-        set_config('modulesitesearch', 2, 'local_moodleglobalsearch');
-        set_config('activitysearch', 2, 'local_moodleglobalsearch');
-        set_config('nonosepsitesearch', 1, 'local_moodleglobalsearch');
-
         // Create new post.
         $posts = new posts();
         $postsdata = self::recordset_to_array($posts->get_recordset_by_timestamp());

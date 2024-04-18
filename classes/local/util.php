@@ -920,23 +920,6 @@ EOF;
     }
 
     /**
-     * Call to check if search plugin exists.  If so, includes
-     * the library suppport, otherwise return false.
-     *
-     * @return bool True if OU search extension is installed.
-     */
-    public static function search_installed() {
-        global $CFG;
-
-        if (file_exists("{$CFG->dirroot}/local/ousearch/searchlib.php")) {
-            @include_once("{$CFG->dirroot}/local/ousearch/searchlib.php");
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Call to check if moodle global search plugin exists.
      *
      * @return bool True if OU moodle global search extension is installed.
@@ -959,11 +942,6 @@ EOF;
         if(util::moodle_global_search_installed()) {
             $cminfo = \cm_info::create($cm);
             return \local_moodleglobalsearch\util::is_activity_search_enabled($cminfo);
-        }
-
-        // If OU Search is installed, use that instead of global search
-        if(util::search_installed()){
-            return false;
         }
 
         // If neither moodle global search nor OU search are installed then use core global search if enabled

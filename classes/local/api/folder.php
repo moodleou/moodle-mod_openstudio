@@ -829,12 +829,6 @@ EOF;
 
         $insertdata->id = $DB->insert_record('openstudio_contents', $insertdata);
 
-        // Index new content for search.
-        if ($cm != null) {
-            $newcontentdata = content::get_record($userid, $insertdata->id);
-            search::update($cm, $newcontentdata);
-        }
-
         // Log the contenthash for the new slot.
         item::log($insertdata->id);
 

@@ -369,12 +369,6 @@ EOF;
                         $contentid, tracking::UPDATE_CONTENT_VISIBILITY_TUTOR, $userid, $data['folderid']);
             }
 
-            // Update search index for slot.
-            $slotdata = self::get_record($userid, $contentid);
-            if (($cm != null) && ($slotdata != false)) {
-                search::update($cm, $slotdata);
-            }
-
             // Log content hash for slot.
             item::log($contentid);
 
@@ -691,17 +685,7 @@ EOF;
 
             $transaction->allow_commit();
 
-            // Update search index for content.
-            if (($provenanceupdate == null) || ($provenanceupdate->provenancestatus < folder::PROVENANCE_UNLINKED)) {
-                // Delete search index for old record.
-                if (($cm != null) && ($contentdataold != false)) {
-                    search::delete($cm, $contentdataold);
-                }
-            }
             $contentdata = self::get_record($userid, $contentdata->id);
-            if (($cm != null) && ($contentdata != false)) {
-                search::update($cm, $contentdata);
-            }
 
             $success = $contentdata->id;
         } catch (\Exception $e) {
@@ -792,11 +776,6 @@ EOF;
 
             // Prepare for custom completion.
             $userinvolved = comments::get_all_users_from_content_id($contentdata->id, COMPLETION_UNKNOWN);
-
-            // Delete search index for old record.
-            if (($cm != null) && ($contentdata != false)) {
-                search::delete($cm, $contentdata);
-            }
 
             // We version the current content, so that existing data is preserved.
             if ($contentdata->contenttype != self::TYPE_NONE) {
@@ -981,11 +960,7 @@ EOF;
                 }
                 tracking::log_action($contentdata->id, tracking::UPDATE_CONTENT, $userid);
 
-                // Update search index for content.
                 $contentdata = self::get_record($userid, $contentversiondata->contentid);
-                if (($cm != null) && ($contentdata != false)) {
-                    search::update($cm, $contentdata);
-                }
 
                 return $contentdata;
             }
@@ -1687,11 +1662,7 @@ EOF;
             }
             tracking::log_action($contentdata->id, tracking::UPDATE_CONTENT, $userid);
 
-            // Update search index for content.
             $contentdata = self::get_record($userid, $contentversiondata->contentid);
-            if (($cm != null) && ($contentdata != false)) {
-                search::update($cm, $contentdata);
-            }
 
             return $contentdata;
         } catch (\moodle_exception $e) {

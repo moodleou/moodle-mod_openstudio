@@ -39,10 +39,6 @@ I need to create a content and upload a file
     And the following open studio "instances" exist:
       | course | name                    | description                  | pinboard | idnumber | groupmode | grouping | pinboard | enablefolders | reportingemail   |
       | C1     | Test Open Studio name 1 | Test Open Studio description | 99       | OS1      | 2         | GI1      | 99       | 1             | teacher1@asd.com |
-    # Use Legacy system for default.
-    Given the following config values are set as admin:
-      | modulesitesearch | 2 | local_moodleglobalsearch |
-      | activitysearch   | 1 | local_moodleglobalsearch |
     And I am on the "Course 1" "Course" page logged in as "teacher1"
     And all users have accepted the plagarism statement for "OS1" openstudio
     And I change viewport size to "large"
@@ -200,9 +196,6 @@ I need to create a content and upload a file
       | OS1        | student3 | TestContentFolders 4 | Test content 4 description | mod/openstudio/tests/importfiles/test4.jpg | module     | 4     | folder  |
     And the following config values are set as admin:
       | enableglobalsearch | 1 |                          |
-      | modulesitesearch   | 2 | local_moodleglobalsearch |
-      | activitysearch     | 2 | local_moodleglobalsearch |
-      | nonosepsitesearch  | 1 | local_moodleglobalsearch |
 
     # Go to folder overview
     And I am on the "Test Open Studio name 1" "openstudio activity" page
