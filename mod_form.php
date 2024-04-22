@@ -385,21 +385,21 @@ class mod_openstudio_mod_form extends moodleform_mod {
         // Set up the completion checkboxes which aren't part of standard data.
         // We also make the default value (if you turn on the checkbox) for those
         // numbers to be 1, this will not apply unless checkbox is ticked.
-        $defaultvalues[custom_completion::COMPLETION_POSTS_ENABLED] =
-                !empty($defaultvalues[custom_completion::COMPLETION_POSTS]) ? 1 : 0;
-        if (empty($defaultvalues[custom_completion::COMPLETION_POSTS])) {
-            $defaultvalues[custom_completion::COMPLETION_POSTS] = 1;
+        $defaultvalues[$this->get_suffixed_name(custom_completion::COMPLETION_POSTS_ENABLED)] =
+                !empty($defaultvalues[$this->get_suffixed_name(custom_completion::COMPLETION_POSTS)]) ? 1 : 0;
+        if (empty($defaultvalues[$this->get_suffixed_name(custom_completion::COMPLETION_POSTS)])) {
+            $defaultvalues[$this->get_suffixed_name(custom_completion::COMPLETION_POSTS)] = 1;
         }
-        $defaultvalues[custom_completion::COMPLETION_COMMENTS_ENABLED] =
-                !empty($defaultvalues[custom_completion::COMPLETION_COMMENTS]) ? 1 : 0;
-        if (empty($defaultvalues[custom_completion::COMPLETION_COMMENTS])) {
-            $defaultvalues[custom_completion::COMPLETION_COMMENTS] = 1;
+        $defaultvalues[$this->get_suffixed_name(custom_completion::COMPLETION_COMMENTS_ENABLED)] =
+                !empty($defaultvalues[$this->get_suffixed_name(custom_completion::COMPLETION_COMMENTS)]) ? 1 : 0;
+        if (empty($defaultvalues[$this->get_suffixed_name(custom_completion::COMPLETION_COMMENTS)])) {
+            $defaultvalues[$this->get_suffixed_name(custom_completion::COMPLETION_COMMENTS)] = 1;
         }
 
-        $defaultvalues[custom_completion::COMPLETION_POSTS_COMMENTS_ENABLED] =
-                !empty($defaultvalues[custom_completion::COMPLETION_POSTS_COMMENTS]) ? 1 : 0;
-        if (empty($defaultvalues[custom_completion::COMPLETION_POSTS_COMMENTS])) {
-            $defaultvalues[custom_completion::COMPLETION_POSTS_COMMENTS] = 1;
+        $defaultvalues[$this->get_suffixed_name(custom_completion::COMPLETION_POSTS_COMMENTS_ENABLED)] =
+                !empty($defaultvalues[$this->get_suffixed_name(custom_completion::COMPLETION_POSTS_COMMENTS)]) ? 1 : 0;
+        if (empty($defaultvalues[$this->get_suffixed_name(custom_completion::COMPLETION_POSTS_COMMENTS)])) {
+            $defaultvalues[$this->get_suffixed_name(custom_completion::COMPLETION_POSTS_COMMENTS)] = 1;
         }
     }
 
@@ -433,30 +433,30 @@ class mod_openstudio_mod_form extends moodleform_mod {
 
         foreach (custom_completion::get_defined_custom_rules() as $name) {
             $groupname = $name . 'group';
-            $checkboxname = $name . 'enabled';
+            $checkboxname = $this->get_suffixed_name($name . 'enabled');
             $group = [];
             $group[] =& $mform->createElement('checkbox', $checkboxname, '',
                     get_string($name, 'openstudio'));
-            $group[] =& $mform->createElement('text', $name, '', ['size' => 3]);
-            $mform->setType($name, PARAM_INT);
-            $mform->addGroup($group, $groupname,
+            $group[] =& $mform->createElement('text', $this->get_suffixed_name($name), '', ['size' => 3]);
+            $mform->setType($this->get_suffixed_name($name), PARAM_INT);
+            $mform->addGroup($group, $this->get_suffixed_name($groupname),
                     get_string($groupname, 'openstudio'), [' '], false);
-            $mform->addHelpButton($groupname, $groupname, 'openstudio');
+            $mform->addHelpButton($this->get_suffixed_name($groupname), $groupname, 'openstudio');
             $mform->disabledIf($name, $checkboxname, 'notchecked');
 
-            $rules[] = $name . 'group';
+            $rules[] = $this->get_suffixed_name($groupname);
         }
 
         return $rules;
     }
 
     public function completion_rule_enabled($data): bool {
-        return (!empty($data[custom_completion::COMPLETION_POSTS_ENABLED])
-                        && $data[custom_completion::COMPLETION_POSTS] != 0)
-                || (!empty($data[custom_completion::COMPLETION_COMMENTS_ENABLED])
-                        && $data[custom_completion::COMPLETION_COMMENTS] != 0)
-                || (!empty($data[custom_completion::COMPLETION_POSTS_COMMENTS_ENABLED])
-                        && $data[custom_completion::COMPLETION_POSTS_COMMENTS] != 0);
+        return (!empty($data[$this->get_suffixed_name(custom_completion::COMPLETION_POSTS_ENABLED)])
+                        && $data[$this->get_suffixed_name(custom_completion::COMPLETION_POSTS)] != 0)
+                || (!empty($data[$this->get_suffixed_name(custom_completion::COMPLETION_COMMENTS_ENABLED)])
+                        && $data[$this->get_suffixed_name(custom_completion::COMPLETION_COMMENTS)] != 0)
+                || (!empty($data[$this->get_suffixed_name(custom_completion::COMPLETION_POSTS_COMMENTS_ENABLED)])
+                        && $data[$this->get_suffixed_name(custom_completion::COMPLETION_POSTS_COMMENTS)] != 0);
     }
 
     public function get_data() {
@@ -467,19 +467,32 @@ class mod_openstudio_mod_form extends moodleform_mod {
 
         // Turn off completion settings if the checkboxes aren't ticked.
         if (!empty($data->completionunlocked)) {
-            $autocompletion = !empty($data->completion) &&
-                    $data->completion == COMPLETION_TRACKING_AUTOMATIC;
-            if (empty($data->{custom_completion::COMPLETION_POSTS_ENABLED}) || !$autocompletion) {
-                $data->{custom_completion::COMPLETION_POSTS} = 0;
+            $autocompletion = !empty($data->{$this->get_suffixed_name('completion')}) &&
+                    $data->{$this->get_suffixed_name('completion')} == COMPLETION_TRACKING_AUTOMATIC;
+            if (empty($data->{$this->get_suffixed_name(custom_completion::COMPLETION_POSTS_ENABLED)}) ||
+                    !$autocompletion) {
+                $data->{$this->get_suffixed_name(custom_completion::COMPLETION_POSTS)} = 0;
             }
-            if (empty($data->{custom_completion::COMPLETION_COMMENTS_ENABLED}) || !$autocompletion) {
-                $data->{custom_completion::COMPLETION_COMMENTS} = 0;
+            if (empty($data->{$this->get_suffixed_name(custom_completion::COMPLETION_COMMENTS_ENABLED)}) ||
+                    !$autocompletion) {
+                $data->{$this->get_suffixed_name(custom_completion::COMPLETION_COMMENTS)} = 0;
             }
-            if (empty($data->{custom_completion::COMPLETION_POSTS_COMMENTS_ENABLED}) || !$autocompletion) {
-                $data->{custom_completion::COMPLETION_POSTS_COMMENTS} = 0;
+            if (empty($data->{$this->get_suffixed_name(custom_completion::COMPLETION_POSTS_COMMENTS_ENABLED)}) ||
+                    !$autocompletion) {
+                $data->{$this->get_suffixed_name(custom_completion::COMPLETION_POSTS_COMMENTS)} = 0;
             }
         }
 
         return $data;
+    }
+
+    /**
+     * Get the suffix of name.
+     *
+     * @param string $fieldname The field name of the completion element.
+     * @return string The suffixed name.
+     */
+    protected function get_suffixed_name(string $fieldname): string {
+        return $fieldname . $this->get_suffix();
     }
 }
