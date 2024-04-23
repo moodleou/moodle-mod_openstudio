@@ -65,7 +65,7 @@ class hook_callbacks {
                     $strname = 'settingsthemehomesettingspinboard';
                     break;
             }
-            $placeholdertext = $DB->get_field('mod_openstudio', $fieldname,
+            $placeholdertext = $DB->get_field('openstudio', $fieldname,
                 ['id' => $hook->get_cm()->instance], MUST_EXIST);
             if (!$placeholdertext) {
                 $placeholdertext = get_string($strname, 'openstudio');
