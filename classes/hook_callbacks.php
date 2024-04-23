@@ -70,7 +70,7 @@ class hook_callbacks {
             if (!$placeholdertext) {
                 $placeholdertext = get_string($strname, 'openstudio');
             }
-            $hook->enable_search($placeholdertext);
+            $hook->enable_search(get_string('navsearchlabel', 'openstudio') . ' ' . $placeholdertext);
 
             // OpenStudio uses a custom search page.
             $hook->set_form('/mod/openstudio/search.php');
