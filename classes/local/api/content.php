@@ -1692,8 +1692,22 @@ EOF;
         $tmproot = make_temp_directory('tempimage');
         $tmpfilepath = $tmproot . '/' . $realfile->get_contenthash();
         $realfile->copy_content_to($tmpfilepath);
+        $exif = @exif_read_data($tmpfilepath);
         try {
             $img = new \Imagick($tmpfilepath);
+            if (isset($exif['Orientation'])) {
+                switch ($exif['Orientation']) {
+                    case 8:
+                        $img->rotateImage('white', -90);
+                        break;
+                    case 3:
+                        $img->rotateImage('white', 180);
+                        break;
+                    case 6:
+                        $img->rotateImage('white', 90);
+                        break;
+                }
+            }
             $profiles = $img->getImageProfiles('icc', true);
             $img->stripImage();
             if (!empty($profiles)) {
