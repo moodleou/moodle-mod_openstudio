@@ -8709,15 +8709,8 @@ a.openstudio-add-new-content-link:hover  {
 }
 
 .path-mod-openstudio .openstudio-content-view-description video{
-    max-width: 550px;
+    max-width: 100%;
     height: auto;
-}
-
-@media (max-width: 768px){
-    .path-mod-openstudio .openstudio-content-view-description video{
-        max-width: 275px;
-        height: auto;
-    }
 }
 
 /* High contrast mode */
