@@ -1229,6 +1229,9 @@ EOF;
                     $sortordering = self::SORT_DESC;
                 }
 
+                // In the My Content page, keep the order of active slots if no sorting is applied.
+                $sortby = array_key_exists('sortby', $sortorder) ? $sortorder['sortby'] : null;
+
                 $sortorderid = $sortorder['id'];
                 switch ($sortorderid) {
                     case self::SORT_BY_USERNAME:
@@ -1241,6 +1244,10 @@ EOF;
                     case self::SORT_BY_ACTIVITYTITLE:
                         switch ($streamviewid) {
                             case content::VISIBILITY_PRIVATE:
+                                if (is_null($sortby)) {
+                                    $sortordersql = 'ORDER BY l1sortorder, l2sortorder, l3sortorder ASC ';
+                                    break;
+                                }
                                 $sortordersql = 'ORDER BY l1sortorder, l2sortorder, l3.name DESC ';
                                 if ($sortordering == self::SORT_ASC) {
                                     $sortordersql = 'ORDER BY l1sortorder, l2sortorder, l3.name ASC ';
@@ -1258,6 +1265,10 @@ EOF;
                     default:
                         switch ($streamviewid) {
                             case content::VISIBILITY_PRIVATE:
+                                if (is_null($sortby)) {
+                                    $sortordersql = 'ORDER BY l1sortorder, l2sortorder, l3sortorder ASC';
+                                    break;
+                                }
                                 $datecasewhen = '
                                     ORDER BY
                                         l1sortorder, l2sortorder,

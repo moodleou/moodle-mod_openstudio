@@ -183,16 +183,17 @@ I need to create a content and upload a file
     And I follow "Block 1"
     And I follow "Activity 1"
     And I press "Add another Content"
-    And I set the field "Content Name" to "Content 1.2"
+    And I set the field "Content Name" to "F-Content 1.2"
     And I press "Add another Content"
-    And I set the field "Content Name" to "Content 1.3"
+    And I set the field "Content Name" to "A-Content 1.3"
     And I press "Save Changes"
     And I am on the "Test Open Studio name 1" "openstudio activity" page
     And I follow "My Content > My Activities" in the openstudio navigation
     Then I should see "Activity 1" in the "h2.openstudio-activity-title:nth-of-type(1)" "css_element"
+    # Check order displayed should be the same as the order set in Manage Levels.
     And "//div[contains(@class, 'openstudio-grid')][1]//div[contains(@class, 'openstudio-grid-item')][1]//a[contains(., 'Content 1.1 Required')]" "xpath_element" should exist
-    And "//div[contains(@class, 'openstudio-grid')][1]//div[contains(@class, 'openstudio-grid-item')][2]//a[contains(., 'Content 1.2')]" "xpath_element" should exist
-    And "//div[contains(@class, 'openstudio-grid')][1]//div[contains(@class, 'openstudio-grid-item')][3]//a[contains(., 'Content 1.3')]" "xpath_element" should exist
+    And "//div[contains(@class, 'openstudio-grid')][1]//div[contains(@class, 'openstudio-grid-item')][2]//a[contains(., 'F-Content 1.2')]" "xpath_element" should exist
+    And "//div[contains(@class, 'openstudio-grid')][1]//div[contains(@class, 'openstudio-grid-item')][3]//a[contains(., 'A-Content 1.3')]" "xpath_element" should exist
     And I should see "Activity 3" in the "h2.openstudio-activity-title:nth-of-type(2)" "css_element"
     And "//div[contains(@class, 'openstudio-grid')][2]//div[contains(@class, 'openstudio-grid-item')][1]//a[contains(., 'Content 3.1')]" "xpath_element" should exist
     # Add new Block 2.
@@ -222,8 +223,8 @@ I need to create a content and upload a file
     And "//div[contains(@class, 'openstudio-grid')][1]//div[contains(@class, 'openstudio-grid-item')][1]//a[contains(., 'Content 1.1 - Block 2')]" "xpath_element" should exist
     And I should see "Activity 1" in the "h2.openstudio-activity-title:nth-of-type(2)" "css_element"
     And "//div[contains(@class, 'openstudio-grid')][2]//div[contains(@class, 'openstudio-grid-item')][1]//a[contains(., 'Content 1.1 Required')]" "xpath_element" should exist
-    And "//div[contains(@class, 'openstudio-grid')][2]//div[contains(@class, 'openstudio-grid-item')][2]//a[contains(., 'Content 1.2')]" "xpath_element" should exist
-    And "//div[contains(@class, 'openstudio-grid')][2]//div[contains(@class, 'openstudio-grid-item')][3]//a[contains(., 'Content 1.3')]" "xpath_element" should exist
+    And "//div[contains(@class, 'openstudio-grid')][2]//div[contains(@class, 'openstudio-grid-item')][2]//a[contains(., 'F-Content 1.2')]" "xpath_element" should exist
+    And "//div[contains(@class, 'openstudio-grid')][2]//div[contains(@class, 'openstudio-grid-item')][3]//a[contains(., 'A-Content 1.3')]" "xpath_element" should exist
     And I should see "Activity 3" in the "h2.openstudio-activity-title:nth-of-type(3)" "css_element"
     And "//div[contains(@class, 'openstudio-grid')][3]//div[contains(@class, 'openstudio-grid-item')][1]//a[contains(., 'Content 3.1')]" "xpath_element" should exist
 

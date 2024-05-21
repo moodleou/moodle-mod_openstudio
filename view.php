@@ -214,7 +214,12 @@ if ($sortbyparams === null) {
     $fsort = $sortbyparams['fsort'];
     $osort = $sortbyparams['osort'];
 }
-$sortflag = array('id' => $fsort, 'asc' => $osort);
+
+$sortflag = [
+    'id' => $fsort,
+    'asc' => $osort,
+    'sortby' => $sortby,
+];
 
 
 // If group mode is not on, then redirect request to module workspace.
