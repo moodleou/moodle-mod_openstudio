@@ -53,6 +53,7 @@ $string['openstudio:viewdeleted'] = 'View deleted';
 $string['openstudio:viewdeletedposts'] = 'View deleted posts';
 $string['openstudio:viewothers'] = 'View others';
 $string['openstudio:viewparticipation'] = 'View user progress';
+$string['openstudio:viewprivate'] = 'View private posts in personal openstudio';
 $string['lastmodified'] = 'Last upload: {$a}';
 $string['strftimerecent'] = '%d %B %y, %H:%M';
 

@@ -224,4 +224,13 @@ $capabilities = array(
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => array()
     ),
+
+    'mod/openstudio:viewprivate' => [
+        'riskbitmask' => RISK_PERSONAL,
+
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_MODULE,
+        'legacy' => [],
+        'archetypes' => [],
+    ],
 );

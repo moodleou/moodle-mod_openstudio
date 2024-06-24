@@ -420,7 +420,8 @@ EOF;
             }
 
             // If the content is folder to private, then user cant see it.
-            if ($visibility == content::VISIBILITY_PRIVATE) {
+            if ($visibility == content::VISIBILITY_PRIVATE &&
+                    !has_capability('mod/openstudio:viewprivate', $modulecontext)) {
                 return false;
             }
 
@@ -491,6 +492,9 @@ EOF;
                 }
             }
         }
+    } else if ($visibility == content::VISIBILITY_PRIVATE &&
+            !($contentdata->userid == $USER->id || has_capability('mod/openstudio:viewprivate', $modulecontext))) {
+        return false;
     }
 
     if (in_array($filearea, ['contentcomment', comments::COMMENT_TEXT_AREA, 'description', 'descriptionversion'])) {
