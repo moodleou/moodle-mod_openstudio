@@ -110,7 +110,7 @@
     }
 }}
 
-<div class="openstudio-container">
+<div class="openstudio-container" data-cmid="{{cmid}}">
     <div class="openstudio-module-title">
         <h2>{{{placeholdertext}}}</h2>
         {{#sharetoview}}
@@ -155,9 +155,13 @@
         </div>
     {{/filterdisable}}
     {{#myactivities}}
+        {{> mod_openstudio/expand_all_buttons }}
         {{#activityitems}}
-            <h2 class="openstudio-activity-title">{{{activityname}}}</h2>
-            <div class="openstudio-grid openstudio-activity-grid" id="openstudio_grid_{{activityid}}">
+            <div class="openstudio-activity-title-wrapper">
+                <h2 class="openstudio-activity-title" data-id="{{activityid}}">{{{activityname}}}</h2>
+                {{> mod_openstudio/content_expand_links }}
+            </div>
+            <div class="openstudio-grid openstudio-activity-grid {{#isexpanded}}openstudio-expanded{{/isexpanded}}" id="openstudio_grid_{{activityid}}">
                 {{#activities}}
                     <div class="openstudio-grid-item
                         {{#contentempty}}

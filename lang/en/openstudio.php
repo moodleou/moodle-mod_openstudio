@@ -75,6 +75,11 @@ $string['completiondetail:postscomments'] = 'Make contents and comments: {$a}';
 
 $string['contentthumbnailalt'] = 'Add content for {$a}';
 
+$string['collapseall'] = 'Collapse all';
+$string['collapseactivity'] = 'Collapse {$a}';
+$string['expandall'] = 'Expand all';
+$string['expandactivity'] = 'Expand {$a}';
+
 $string['event:contentviewed'] = 'View content';
 $string['event:folderviewed'] = 'View folder';
 $string['event:contenthistoryviewed'] = 'View content history';
@@ -1497,6 +1502,7 @@ $string['privacy:metadata:openstudio_notifications:flagid'] = 'The flag that tri
 $string['privacy:metadata:openstudio_notifications:message'] = 'The notification message.';
 $string['privacy:metadata:openstudio_notifications:timecreated'] = 'Time (in seconds since epoch).';
 $string['privacy:metadata:openstudio_notifications:timeread'] = 'Time (in seconds since epoch).';
+$string['privacy:metadata:preference:mod_openstudio_expanded'] = 'Save which activity is expanded belong to one openstudio.';
 $string['privacy:tracking:1'] = 'Create Content';
 $string['privacy:tracking:2'] = 'Read content';
 $string['privacy:tracking:3'] = 'Read Content Version';

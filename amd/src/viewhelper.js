@@ -106,7 +106,7 @@ define(['jquery', 'js/isotope.pkgd.min.js'], function($, Isotope) {
         handleIsotope: function() {
             var container = $('.openstudio-grid');
             container.each(function() {
-                t.isotope.push(new Isotope('#' + this.id, {
+                t.isotope[this.id] = new Isotope('#' + this.id, {
                     layoutMode: 'masonry',
                     itemSelector: '.openstudio-grid-item',
                     masonry: {
@@ -114,8 +114,10 @@ define(['jquery', 'js/isotope.pkgd.min.js'], function($, Isotope) {
                         gutter: 20,
                         horizontalOrder: true
                     }
-                }));
+                });
             });
+            // Publish isotope for other functions to use.
+            window.isotope = t.isotope;
 
             // Once all images loaded, try to re-arrange all items.
             $(window).on('load', function() {

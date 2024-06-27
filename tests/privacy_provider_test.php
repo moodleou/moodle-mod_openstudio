@@ -1294,4 +1294,33 @@ class privacy_provider_test extends provider_testcase {
         $this->assertEquals(get_string('deletedbyrequest', 'mod_openstudio'), $deletedcomment->commenttext);
     }
 
+    /**
+     * Test get user's preferences.
+     *
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
+    public function test_get_user_preference() {
+        // Set key for first user in both courses.
+        $key1 = 'mod_openstudio_expanded_' . $this->studio->cmid;
+        $key2 = 'mod_openstudio_expanded_' . $this->studio2->cmid;
+        set_user_preference($key1, '{"1":true, "2":true}', $this->users->students->one->id);
+        set_user_preference($key2, '{"3":false, "4":false}', $this->users->students->one->id);
+        $description = get_string('privacy:metadata:preference:mod_openstudio_expanded', 'mod_openstudio');
+
+        provider::export_user_preferences($this->users->students->one->id);
+        $contextuser = \context_user::instance($this->users->students->one->id);
+        $result = writer::with_context($contextuser)->get_user_preferences('mod_openstudio');
+
+        $this->assertCount(2, (array) $result);
+
+        $this->assertEquals((object) [
+            'value' => '{"1":true, "2":true}',
+            'description' => $description,
+        ], $result->$key1);
+        $this->assertEquals((object) [
+            'value' => '{"3":false, "4":false}',
+            'description' => $description,
+        ], $result->$key2);
+    }
 }

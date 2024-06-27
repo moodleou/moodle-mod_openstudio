@@ -453,6 +453,7 @@ class mod_openstudio_renderer extends plugin_renderer_base {
 
                 if (!$issearch) {
                     $myactivities = true;
+                    $this->page->requires->js_call_amd('mod_openstudio/expand_collapse_handler', 'init');
                 }
                 $blocksdata = levels::get_records(1, $permissions->activecminstanceid);
                 $contentdata->ismyactivity = true;

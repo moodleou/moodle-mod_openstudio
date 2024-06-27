@@ -626,6 +626,8 @@ if ($finalviewpermissioncheck) {
         $contentdata->total = $contentdatatemp->total;
         $activityitems = [];
         $normalshareditems = []; // Just have items if a user view another user's work.
+        $storedexpand = get_user_preferences('mod_openstudio_expanded_' . $id);
+        $storedexpand = $storedexpand ? json_decode($storedexpand, true) : null;
         foreach ($contentdatatemp->contents as $content) {
             // Process content locking.
             if (($content->levelcontainer > 0) && ($content->userid == $permissions->activeuserid)) {
@@ -786,6 +788,12 @@ if ($finalviewpermissioncheck) {
                         ];
 
                         $activityitems[$activityid] = $activityitem;
+                    }
+                    if ($storedexpand && array_key_exists($activityid, $storedexpand)) {
+                        $activityitems[$activityid]->isexpanded = $storedexpand[$activityid];
+                    } else {
+                        // Default is true.
+                        $activityitems[$activityid]->isexpanded = true;
                     }
                 } else {
                     $normalshareditems[] = $content;

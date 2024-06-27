@@ -1174,3 +1174,21 @@ function mod_openstudio_output_fragment_commentform(array $args): string {
     ]);
     return $mform->render();
 }
+
+/**
+ * Return a list of all the user preferences used by mod_openstudio.
+ *
+ * @uses core_user::is_current_user
+ *
+ * @return array[]
+ */
+function mod_openstudio_user_preferences(): array {
+    $preferences = [];
+    $preferences['~^mod_openstudio_expanded_(\d)+$~'] = [
+        'isregex' => true,
+        'null' => NULL_NOT_ALLOWED,
+        'default' => '',
+        'permissioncallback' => [core_user::class, 'is_current_user'],
+    ];
+    return $preferences;
+}
