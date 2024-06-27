@@ -419,20 +419,27 @@ class mod_openstudio_content_form extends moodleform {
         global $PAGE;
         $mform = $this->_form;
         $contenttype = (int)$this->_customdata['contenttype'];
-        if (!in_array($contenttype, [content::TYPE_FOLDER_CONTENT, content::TYPE_FOLDER])
-        && $this->_customdata['feature_contentusesfileupload']) {
+        if ($contenttype !== content::TYPE_FOLDER && $this->_customdata['feature_contentusesfileupload']) {
+            $shouldshowaddfile = false;
             // Check attachments field for errors.
-            $element =& $mform->getElement('attachments');
-            // Check alt field for errors.
-            $elementalt =& $mform->getElement('enteralt');
-            if ($element || $elementalt) {
+            if ($mform->elementExists('attachments')) {
                 $value = $mform->getSubmitValue('attachments');
-                $valuealt = $mform->getSubmitValue('enteralt');
+                $element =& $mform->getElement('attachments');
                 $result = $element->validateSubmitValue($value);
-                if (!empty($result) && is_string($result) || $valuealt === "") {
-                    // Show Add File so that the error is visible.
-                    $PAGE->requires->js_call_amd('mod_openstudio/contentedit', 'showAddFile', [true]);
+                if (!empty($result) && is_string($result)) {
+                    $shouldshowaddfile = true;
                 }
+            }
+            // Check alt field for errors.
+            if ($mform->elementExists('attachments')) {
+                $valuealt = $mform->getSubmitValue('enteralt');
+                if ($valuealt === "") {
+                    // Show Add File so that the error is visible.
+                    $shouldshowaddfile = true;
+                }
+            }
+            if ($shouldshowaddfile) {
+                $PAGE->requires->js_call_amd('mod_openstudio/contentedit', 'showAddFile', [true]);
             }
         }
     }

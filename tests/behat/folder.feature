@@ -269,3 +269,45 @@ I need to create a folder
     And I press "Folder tags"
     And I should not see "createdtag"
     And I should not see "editedtag"
+
+  Scenario: Add file form should be remained after save content without alt text
+    Given I am on the "Test Open Studio name 1" "openstudio activity" page
+    And I navigate to "Settings" in current page administration
+    And I click on "Expand all" "link" in the "region-main" "region"
+    And I set the field "Enable folders" to "1"
+    And I press "Save and display"
+    And the following open studio "folders" exist:
+      | openstudio | user     | name                 | description                      | visibility | contenttype    | tags    |
+      | OS1        | teacher1 | Test Folder Overview | My Folder Overview Description 1 | module     | folder_content | testtag |
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
+    And I follow "Test Folder Overview"
+    And I follow "Upload content to folder"
+    And I press "Add file"
+    And I set the following fields to these values:
+      | Title | Test My Group Board View 2                 |
+      | Files | mod/openstudio/tests/importfiles/test2.jpg |
+    And I press "Save"
+    And I should see "An image must have a description, unless it is marked as decorative only."
+    When I press "Save"
+    Then I should see "An image must have a description, unless it is marked as decorative only."
+
+  Scenario: Add file form should be remained after save content with unsupported file
+    Given I am on the "Test Open Studio name 1" "openstudio activity" page
+    And I navigate to "Settings" in current page administration
+    And I click on "Expand all" "link" in the "region-main" "region"
+    And I set the field "Enable folders" to "1"
+    And I press "Save and display"
+    And the following open studio "folders" exist:
+      | openstudio | user     | name                 | description                      | visibility | contenttype    | tags    |
+      | OS1        | teacher1 | Test Folder Overview | My Folder Overview Description 1 | module     | folder_content | testtag |
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
+    And I follow "Test Folder Overview"
+    And I follow "Upload content to folder"
+    And I press "Add file"
+    And I set the following fields to these values:
+      | Title | Test My Group Board View 2                        |
+      | Files | mod/openstudio/tests/importfiles/test.unsupported |
+    And I press "Save"
+    And I should see "Some files (test.unsupported) cannot be uploaded"
+    When I press "Save"
+    Then I should see "Some files (test.unsupported) cannot be uploaded"
