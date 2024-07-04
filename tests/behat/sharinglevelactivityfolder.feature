@@ -215,3 +215,29 @@ Feature: Sharing level setting in activity folder
     And I follow "My Content > My Activities" in the openstudio navigation
     And I click on "Content1.1" "link" in the ".openstudio-grid-item" "css_element"
     And the "src" attribute of ".openstudio-folder-view-title-background > .openstudio-folder-view-title-icon > img" "css_element" should contain "onlyme"
+
+  Scenario: Test when user Single sharing option should default to being selected.
+    Given I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "admin"
+    And I navigate to "Settings" in current page administration
+    And I set the following fields to these values:
+      | Enable 'My Module' | 0 |
+      | Sharing level      | 2 |
+      | Enable 'My Module' | 1 |
+    And I press "Save and display"
+    When I click on "Upload content" "text"
+    Then the field "Only Me" matches value "1"
+    And I set the following fields to these values:
+      | Title       | Test My Group Board View 1        |
+      | Description | My Group Board View Description 1 |
+    And I press "Save"
+    And I navigate to "Settings" in current page administration
+    And I set the following fields to these values:
+      | Enable 'My Module' | 0         |
+      | Sharing level      | 1,7,2,3   |
+      | Group mode         | No groups |
+      | Enable 'My Module' | 1         |
+    And I press "Save and display"
+    And I click on "Upload content" "text"
+    And the field "My Module" matches value "0"
+    And the field "My Tutor" matches value "0"
+    And the field "Only Me" matches value "0"

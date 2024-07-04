@@ -180,6 +180,11 @@ class mod_openstudio_content_form extends moodleform {
                 $visibilityarray[] = $mform->createElement('radio', 'visibility', '', $optionlabel, $option,
                         ['class' => 'openstudio-content-form-select-visibility']);
             }
+            // Single sharing option should default to being selected.
+            if (count($options) === 1) {
+                $mform->setDefault('visibility', array_key_first($options));
+            }
+
             $mform->addGroup($visibilityarray, 'visibilityarray', $visibilitytitle, [' '], false);
             $mform->addRule('visibilityarray', null, 'required',  null, 'client');
             $mform->addElement('html', html_writer::end_tag('div'));
