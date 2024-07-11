@@ -509,6 +509,7 @@ EOF;
                     $insertdata['name'] = $contentdata->name;
                     $insertdata['description'] = $contentdata->description;
                     $insertdata['timemodified'] = time();
+                    $insertdata['enteralt'] = $contentdata->enteralt;
 
                     switch ($contentdata->contenttype) {
                         case self::TYPE_IMAGE:
@@ -790,6 +791,7 @@ EOF;
                 $insertdata['name'] = $contentdata->name;
                 $insertdata['description'] = $contentdata->description;
                 $insertdata['timemodified'] = time();
+                $insertdata['enteralt'] = $contentdata->enteralt;
 
                 switch ($contentdata->contenttype) {
                     case self::TYPE_IMAGE:
@@ -947,6 +949,7 @@ EOF;
                 $contentdata->deletedby = null;
                 $contentdata->deletedtime = null;
                 $contentdata->timemodified = time();
+                $contentdata->enteralt = $contentversiondata->enteralt;
 
                 $result = $DB->update_record('openstudio_contents', $contentdata);
                 if ($result === false) {
@@ -1256,6 +1259,7 @@ EOF;
             $insertdata['name'] = $contentdata->name;
             $insertdata['description'] = $contentdata->description;
             $insertdata['timemodified'] = time();
+            $insertdata['enteralt'] = $contentdata->enteralt;
 
             switch ($contentdata->contenttype) {
                 case self::TYPE_IMAGE:
@@ -1648,6 +1652,7 @@ EOF;
             $contentdata->deletedby = null;
             $contentdata->deletedtime = null;
             $contentdata->timemodified = time();
+            $contentdata->enteralt = $contentversiondata->enteralt;
 
             // Restore content from content version choose.
             $result = $DB->update_record('openstudio_contents', $contentdata);

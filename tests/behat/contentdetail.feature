@@ -535,7 +535,7 @@ I need to navigate to content pages
       | Description | Test My Content Details View Archive 1     |
       | Files       | mod/openstudio/tests/importfiles/test2.jpg |
       | Tags        | Tests Add New Tags                         |
-    And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt 1"
     And I press "Save"
     And I should see "Post archive"
     And I press "Post archive"
@@ -575,6 +575,16 @@ I need to navigate to content pages
     And I click on "viewversionbutton" "button"
     And I press "Restore this version"
     And I should see "Test My Content Details View Archive 1"
+
+    # Verify that the image alt text is retained after archiving and restoring.
+    And "//img[contains(@src, '/test2.jpg') and @alt='This is image alt 1']" "xpath_element" should exist
+    And I press "Edit"
+    Then the following fields match these values:
+      | Describe this image for someone who cannot see it | This is image alt 1 |
+    And I set the field "Describe this image for someone who cannot see it" to "This is image alt 2"
+    And I press "Save"
+    And "//img[contains(@src, '/test2.jpg') and @alt='This is image alt 2']" "xpath_element" should exist
+
     And I follow "People" in the openstudio navigation
     And I follow "Shared content > My Module" in the openstudio navigation
     And I should see "Test My Content Details View Archive 1"
