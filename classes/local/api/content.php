@@ -80,6 +80,7 @@ class content {
     const VISIBILITY_TUTOR = 7;
     const VISIBILITY_PEOPLE = 8;
     const VISIBILITY_ALLGROUPS = 9;
+    const VISIBILITY_BROWSEPOSTS = 10;
 
     const UPDATEMODE_UPDATED = 1;
     const UPDATEMODE_CREATED = 2;

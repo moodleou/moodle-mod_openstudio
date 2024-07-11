@@ -240,8 +240,9 @@ EOF;
         switch ($visibility) {
             case content::VISIBILITY_PRIVATE:
             case content::VISIBILITY_PRIVATE_PINBOARD:
+            case content::VISIBILITY_BROWSEPOSTS:
                 // Find all content that belong to the $userid.
-                if ($pinboardonly) {
+                if ($pinboardonly || ($visibility === content::VISIBILITY_BROWSEPOSTS)) {
                     $permissionsql .= <<<EOF
                     AND (s.id IS NULL OR s.userid = ?)
                     AND (s.deletedby IS NULL AND s.deletedtime IS NULL)
@@ -953,7 +954,8 @@ EOF;
         $sql = '';
         $params = [];
 
-        if (in_array($visibility, [null, content::VISIBILITY_MODULE, content::VISIBILITY_GROUP, content::VISIBILITY_WORKSPACE])) {
+        if (in_array($visibility, [null, content::VISIBILITY_MODULE, content::VISIBILITY_GROUP, content::VISIBILITY_WORKSPACE,
+                content::VISIBILITY_BROWSEPOSTS])) {
             $sql = <<<EOF
     AND EXISTS (SELECT 1
                   FROM {openstudio_contents} rac
@@ -1108,7 +1110,8 @@ EOF;
 
             $wheresql = 'AND s.levelcontainer = 0 ';
 
-        } else if (in_array($visibility, [content::VISIBILITY_GROUP, content::VISIBILITY_MODULE, content::VISIBILITY_WORKSPACE])) {
+        } else if (in_array($visibility, [content::VISIBILITY_GROUP, content::VISIBILITY_MODULE, content::VISIBILITY_WORKSPACE,
+                content::VISIBILITY_BROWSEPOSTS])) {
             $selectsql = self::LEVELFIELDS;
 
             $fromsql = <<<EOF
