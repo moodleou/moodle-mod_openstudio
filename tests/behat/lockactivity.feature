@@ -39,12 +39,12 @@ Feature: Locking activity contents
     And I am on the "Sharing Studio" "openstudio activity" page logged in as "student1"
     And I follow "My Content > My Activities" in the openstudio navigation
     Then I should see "This activity is locked" in the ".openstudio-grid-item:nth-child(1)" "css_element"
-    And I should see "This activity is locked" in the ".openstudio-grid-item:nth-child(3)" "css_element"
-    And I should not see "This activity is locked" in the ".openstudio-grid-item:nth-child(2)" "css_element"
+    And I should see "This activity is locked" in the ".openstudio-grid-item:nth-child(2)" "css_element"
+    And I should not see "This activity is locked" in the ".openstudio-grid-item:nth-child(3)" "css_element"
     And I should not see "This activity is locked" in the ".openstudio-grid-item:nth-child(4)" "css_element"
     And ".openstudio-upload-container" "css_element" should not exist in the ".openstudio-grid-item:nth-child(1)" "css_element"
-    And ".openstudio-upload-container" "css_element" should not exist in the ".openstudio-grid-item:nth-child(3)" "css_element"
-    And ".openstudio-upload-container" "css_element" should exist in the ".openstudio-grid-item:nth-child(2)" "css_element"
+    And ".openstudio-upload-container" "css_element" should not exist in the ".openstudio-grid-item:nth-child(2)" "css_element"
+    And ".openstudio-upload-container" "css_element" should exist in the ".openstudio-grid-item:nth-child(3)" "css_element"
     And ".openstudio-upload-container" "css_element" should exist in the ".openstudio-grid-item:nth-child(4)" "css_element"
 
     # late submissions allowed
@@ -57,8 +57,8 @@ Feature: Locking activity contents
     And I am on the "Sharing Studio 2" "openstudio activity" page
     And I follow "My Content > My Activities" in the openstudio navigation
     Then I should see "late message" in the ".openstudio-grid-item:nth-child(1)" "css_element"
-    And I should see "late message" in the ".openstudio-grid-item:nth-child(3)" "css_element"
-    And I should not see "late message" in the ".openstudio-grid-item:nth-child(2)" "css_element"
+    And I should see "late message" in the ".openstudio-grid-item:nth-child(2)" "css_element"
+    And I should not see "late message" in the ".openstudio-grid-item:nth-child(3)" "css_element"
     And I should not see "late message" in the ".openstudio-grid-item:nth-child(4)" "css_element"
     And ".openstudio-upload-container" "css_element" should exist in the ".openstudio-grid-item:nth-child(1)" "css_element"
     And ".openstudio-upload-container" "css_element" should exist in the ".openstudio-grid-item:nth-child(3)" "css_element"
