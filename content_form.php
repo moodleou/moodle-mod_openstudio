@@ -586,7 +586,7 @@ class mod_openstudio_content_form extends moodleform {
                     } else {
                         $errors['attachments'] = get_string('errorcontentinvalidnotebook', 'openstudio');
                     }
-                } else if (preg_match('|^image/|', $mimetype)) {
+                } else if ($mimetype && preg_match('|^image/|', $mimetype)) {
                     if (empty($data['enteralt'])) {
                         $errors['enteralt'] = get_string('presentationoraltrequired', 'openstudio');
                     }
