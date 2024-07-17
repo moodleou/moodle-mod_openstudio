@@ -21,13 +21,20 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-/*global google: true*/
-
 /**
  * @module mod_oucontent/contentpage
  */
-define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/modal_events', 'core/templates', 'core/config', 'require'],
-    function($, Ajax, Str, Modal, ModalEvents, Templates, Config, require) {
+define(['jquery',
+        'core/ajax',
+        'core/str',
+        'core/modal',
+        'core/modal_events',
+        'core/templates',
+        'core/config',
+        'require',
+        'mod_openstudio/leaflet'
+    ],
+    function($, Ajax, Str, Modal, ModalEvents, Templates, Config, require, Leaflet) {
         var t;
 
         t = {
@@ -162,16 +169,25 @@ define(['jquery', 'core/ajax', 'core/str', 'core/modal', 'core/modal_events', 'c
 
             if (gpslat && gpslng) {
                 var myLatLng = {lat: parseFloat(gpslat), lng: parseFloat(gpslng)};
-                if (typeof google !== 'undefined' && typeof google.maps !== 'undefined') {
-                    var map = new google.maps.Map(document.getElementById('openstudio_content_view_map_canvas'), {
-                        center: myLatLng,
-                        zoom: 14
+
+                if (typeof Leaflet !== 'undefined' && typeof Leaflet.map !== 'undefined') {
+                    // Initialize the map
+                    var map = Leaflet.map('openstudio_content_view_map_canvas').setView(myLatLng, 14);
+
+                    Str.get_string('leafletcoppyright', 'openstudio').done(function(string) {
+                        // Set up the OSM layer.
+                        Leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: string
+                        }).addTo(map);
                     });
 
-                    new google.maps.Marker({
-                        position: myLatLng,
-                        map: map
-                    });
+                    // Add a marker.
+                    Leaflet.marker(myLatLng, {
+                        icon: Leaflet.icon({
+                            iconUrl: 'pix/marker.png',
+                            iconSize: [25, 41],
+                        })
+                    }).addTo(map);
                 }
             }
         },

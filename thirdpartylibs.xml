@@ -42,4 +42,12 @@
         <version>?</version>
         <licenseversion></licenseversion>
     </library>
+    <library>
+        <location>js/leaflet.min.js</location>
+        <name>Leaflet</name>
+        <license>BSD 2-Clause</license>
+        <version>1.9.4</version>
+        <repository>https://github.com/Leaflet/Leaflet</repository>
+        <licenseversion></licenseversion>
+    </library>
 </libraries>

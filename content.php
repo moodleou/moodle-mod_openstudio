@@ -303,20 +303,22 @@ $crumbarray[$contentdataname] = $pageurl;
 util::add_breadcrumb($PAGE, $cm->id, navigation_node::TYPE_ACTIVITY, $crumbarray);
 $config = [
         'paths' => [
-                'ansi_up' => (new moodle_url('/mod/openstudio/js/ansi_up.min'))->out(false),
-                'marked' => (new moodle_url('/mod/openstudio/js/marked.min'))->out(false),
-                'es5-shim' => (new moodle_url('/mod/openstudio/js/es5-shim.min'))->out(false),
-                'notebook' => (new moodle_url('/mod/openstudio/js/notebook.min'))->out(false),
-                'prism' => (new moodle_url('/mod/openstudio/js/prism.min'))->out(false),
+            'ansi_up' => (new moodle_url('/mod/openstudio/js/ansi_up.min'))->out(false),
+            'marked' => (new moodle_url('/mod/openstudio/js/marked.min'))->out(false),
+            'es5-shim' => (new moodle_url('/mod/openstudio/js/es5-shim.min'))->out(false),
+            'notebook' => (new moodle_url('/mod/openstudio/js/notebook.min'))->out(false),
+            'prism' => (new moodle_url('/mod/openstudio/js/prism.min'))->out(false),
+            'leaflet' => (new moodle_url('/mod/openstudio/js/leaflet.min'))->out(false),
         ],
         'shim' => [
-                'ansi_up' => ['exports' => 'ansi_up'],
-                'marked' => ['exports' => 'marked'],
-                'es5-shim' => ['exports' => 'es5-shim'],
-                'notebook' => [
-                        'deps' => ['marked'], 'exports' => 'notebook',
-                ],
-                'prism' => ['exports' => 'Prism'],
+            'ansi_up' => ['exports' => 'ansi_up'],
+            'marked' => ['exports' => 'marked'],
+            'es5-shim' => ['exports' => 'es5-shim'],
+            'notebook' => [
+                    'deps' => ['marked'], 'exports' => 'notebook',
+            ],
+            'prism' => ['exports' => 'Prism'],
+            'leaflet' => ['exports' => 'leaflet'],
         ],
 ];
 $requirejs = 'require.config(' . json_encode($config) . ')';
@@ -326,6 +328,10 @@ $PAGE->requires->strings_for_js(
         'modulejsdialogcontentarchiveconfirm', 'deletearchiveversionheader', 'deletearchiveversionheaderconfirm'),
     'mod_openstudio');
 $PAGE->requires->js_call_amd('mod_openstudio/previewipynb', 'init');
+
+if ($contentdata->showextradata & content::INFO_GPSDATA) {
+    $PAGE->requires->css('/mod/openstudio/css/leaflet.css');
+}
 
 // Update flag and tracking.
 $tracking = tracking::READ_CONTENT;

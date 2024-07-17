@@ -1214,6 +1214,7 @@ $string['reportvisibilityname6'] = 'In folder only';
 $string['reportvisibilityname7'] = 'Tutor';
 $string['reportvisibilitynamegroup'] = 'Specific Tutor Group';
 
+$string['leafletcoppyright'] = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 $string['locktype'] = 'Lock type for content';
 $string['lockdate'] = 'Lock content from:';
 $string['unlockdate'] = 'UnLock content on:';
