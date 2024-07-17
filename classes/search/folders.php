@@ -106,7 +106,11 @@ class folders extends \core_search\base_mod {
         $doc = \core_search\document_factory::instance($record->id, $this->componentname, $this->areaname);
         $doc->set('type', \core_search\manager::TYPE_TEXT);
         $doc->set('title', content_to_text($record->name, false));
-        $doc->set('content', content_to_text($record->description, false));
+
+        $content = content_to_text($record->description, false);
+        $content = file_rewrite_pluginfile_urls($content, 'pluginfile.php', $context->id, 'mod_openstudio',
+                'description', $record->id);
+        $doc->set('content', $content);
         $doc->set('contextid', $context->id);
         $doc->set('courseid', $record->course);
         $doc->set('itemid', $record->id);
