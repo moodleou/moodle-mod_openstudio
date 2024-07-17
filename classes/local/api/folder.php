@@ -315,7 +315,7 @@ EOF;
      * @return array The content records with additional fields from the folder content records, sorted by contentorder, keyed by ID
      */
     public static function get_contents($folderid) {
-        global $DB;
+        global $DB, $USER;
 
         $sql = <<<EOF
     SELECT c.*, fc.id AS fcid, fc.folderid, fc.name AS fcname,
@@ -325,11 +325,13 @@ EOF;
       FROM {openstudio_contents} c
       JOIN {openstudio_folder_contents} fc ON c.id = fc.contentid
      WHERE fc.folderid = :folderid
-       AND fc.status != :status
+           AND fc.status != :status
+           AND (c.userid = :userid OR (c.userid != :userid2 AND c.visibility != :visibility))
   ORDER BY fc.contentorder ASC
 EOF;
 
-        $slots = $DB->get_records_sql($sql, ['folderid' => $folderid, 'status' => levels::SOFT_DELETED]);
+        $slots = $DB->get_records_sql($sql, ['folderid' => $folderid, 'status' => levels::SOFT_DELETED,
+                'userid' => $USER->id, 'userid2' => $USER->id, 'visibility' => content::VISIBILITY_PRIVATE]);
         foreach ($slots as $slot) {
             if (!empty($slot->provenanceid) && $slot->provenancestatus == self::PROVENANCE_EDITED) {
                 if (!empty($slot->fcname)) {
@@ -876,5 +878,53 @@ EOF;
         return array_filter($contents, function($content) {
             return !isset($content->template);
         });
+    }
+
+    /**
+     * Update the visibility of all content in folders when the folder's sharing level is changed.
+     *
+     * @param int $studioid Openstudio id
+     * @param int $sharinglevelid Folder sharing level id
+     * @return bool
+     */
+    public static function update_folder_content_visibility(int $studioid, int $sharinglevelid): bool {
+        global $DB, $USER;
+
+        // Only update when the folder sharing level changes from Slot/Item to the top-level folder.
+        if ($sharinglevelid) {
+            return true;
+        }
+        try {
+            $sql = "UPDATE {openstudio_contents}
+                       SET visibility = :visibility
+                     WHERE id IN (
+                        SELECT fc.contentid
+                          FROM {openstudio_folder_contents} fc
+                          JOIN {openstudio_contents} c on c.id = fc.contentid
+                         WHERE fc.folderid IN (
+                                SELECT c1.id
+                                  FROM {openstudio_contents} c1
+                                 WHERE c1.openstudioid = :id
+                                       AND c1.contenttype = :contenttypefolder
+                                       AND c1.deletedby IS NULL
+                                       AND c1.deletedtime IS NULL
+                                       AND c1.name IS NOT NULL)
+                               AND c.deletedby IS NULL
+                               AND c.deletedtime IS NULL
+                               AND c.contenttype != :contenttypenone)";
+            $params = [
+                'id' => $studioid,
+                'visibility' => content::VISIBILITY_INFOLDERONLY,
+                'contenttypefolder' => content::TYPE_FOLDER,
+                'contenttypenone' => content::TYPE_NONE,
+            ];
+
+            $DB->execute($sql, $params);
+        } catch (\Exception $e) {
+            return false;
+        }
+        // Update tracking.
+        tracking::log_action($studioid, tracking::UPDATE_CONTENT, $USER->id);
+        return true;
     }
 }

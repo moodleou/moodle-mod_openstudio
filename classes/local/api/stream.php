@@ -1222,6 +1222,20 @@ EOF;
             $params[] = $studioid;
         }
 
+        $excludesharecontentinprivatefolder = '';
+        // When setting the slot/item level for folder sharing, the share module content that belongs to a private folder
+        // in the My Module page needs to be hidden.
+        if ($visibility == content::VISIBILITY_MODULE) {
+            $excludesharecontentinprivatefolder = ' AND NOT EXISTS (
+                SELECT 1
+                  FROM {openstudio_folder_contents} fc
+                  JOIN {openstudio_contents} sc1 ON fc.folderid = sc1.id
+                 WHERE fc.contentid = s.id
+                       AND sc1.visibility = ?
+            ) ';
+            $params[] = content::VISIBILITY_PRIVATE;
+        }
+
         // Apply sort ordering.
         $sortordersql = '';
         if (is_array($sortorder)) {
@@ -1338,6 +1352,8 @@ EOF;
 {$ownersql}
 
 {$excludeautogeneratefolder}
+
+{$excludesharecontentinprivatefolder}
 
 AND (s.visibility IS NULL OR s.visibility != ?)
 

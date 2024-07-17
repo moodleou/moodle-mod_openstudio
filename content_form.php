@@ -65,7 +65,8 @@ class mod_openstudio_content_form extends moodleform {
         $mform->setType('vid', PARAM_INT);
         $mform->setDefault('vid', $this->_customdata['vid']);
 
-        if ($this->_customdata['isfoldercontent'] == true && $this->_customdata['iscreatefolder'] == false) {
+        if ($this->_customdata['isfoldercontent'] == true && $this->_customdata['iscreatefolder'] == false &&
+                $this->_customdata['feature_foldersharingtoplevel']) {
             $mform->addElement('hidden', 'visibility');
             $mform->setType('visibility', PARAM_INT);
             $mform->setDefault('visibility', content::VISIBILITY_INFOLDERONLY);

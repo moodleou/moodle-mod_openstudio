@@ -311,3 +311,41 @@ I need to create a folder
     And I should see "Some files (test.unsupported) cannot be uploaded"
     When I press "Save"
     Then I should see "Some files (test.unsupported) cannot be uploaded"
+
+  Scenario: Enable folder sharing options
+    Given I am on the "Test Open Studio name 1" "openstudio activity" page
+    And I navigate to "Settings" in current page administration
+    And I click on "Expand all" "link" in the "region-main" "region"
+    And I set the field "Enable folders" to "1"
+    And I should see "Folder sharing level"
+    # Keep the default value for the Folder Sharing Level field as Folder Top Level.
+    And I should see "Folder top level"
+    And I press "Save and display"
+    # Add new folder share with My Module.
+    And the following open studio "folders" exist:
+      | openstudio | user     | name                 | description                      | visibility | contenttype    |
+      | OS1        | teacher1 | Test Folder Overview | My Folder Overview Description 1 | module     | folder_content |
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
+    And I follow "Shared Content > Module 1" in the openstudio navigation
+    And I follow "Test Folder Overview"
+    And I follow "Upload content to folder"
+    And I should not see "Share content with"
+    And I set the following fields to these values:
+      | Title | Test folder sharing option 1 |
+    And I press "Save"
+    # Content viewed in Top Folder Level mode will always display the visibility icon based on Folder settings.
+    And the "alt" attribute of ".openstudio-content-view-title-icon > img" "css_element" should contain "Shared with My Module"
+    And I navigate to "Settings" in current page administration
+    And I click on "Expand all" "link" in the "region-main" "region"
+    # Change Folder sharing level as "Slot/item level".
+    When I set the field "Folder sharing level" to "Slot/item level"
+    And I press "Save and display"
+    And I follow "Test Folder Overview"
+    And I follow "Upload content to folder"
+    And I should see "Share content with"
+    And I set the following fields to these values:
+      | Only Me | 1                            |
+      | Title   | Test folder sharing option 1 |
+    And I press "Save"
+    # Content viewed in Slot/Item Level mode will display the visibility icon based on content's visibility field.
+    Then the "alt" attribute of ".openstudio-content-view-title-icon > img" "css_element" should contain "Only Me"

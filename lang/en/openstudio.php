@@ -886,6 +886,14 @@ $string['foldermovecontentup'] = 'Move content {$a->name} up to position {$a->po
 $string['foldermovecontentdown'] = 'Move content {$a->name} down to position {$a->position}.';
 $string['foldersaveorder'] = 'Save order';
 $string['foldermovetopostnumber'] = 'Move to post number';
+$string['foldersharinglevel'] = 'Folder sharing level';
+$string['foldersharinglevel_help'] = "Folder top level:<br>
+Sharing options can only be set the folder level, and will apply to all items in the folder<br><br>
+Slot/item level:<br>
+Sharing items can be set per item added to the folder.
+";
+$string['folderslotlevel'] = 'Slot/item level';
+$string['foldertoplevel'] = 'Folder top level';
 
 $string['errorinvalidrequest'] = 'Invalid request.';
 $string['errorinvalidcontent'] = 'Content cannot be found.';

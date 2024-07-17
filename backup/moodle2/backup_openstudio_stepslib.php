@@ -49,7 +49,7 @@ class backup_openstudio_activity_structure_step extends backup_activity_structur
                 'pinboardname', 'level1name', 'level2name', 'level3name',
                 'thememodulename', 'themegroupname', 'themestudioname', 'themepinboardname',
                 'themefeatures', 'themehomedefault', 'themehelplink', 'themehelpname',
-                'locking', 'pinboardsetlimit', 'tutorroles', 'timemodified', 'latesubmissionmessage',
+                'locking', 'pinboardsetlimit', 'tutorroles', 'timemodified', 'latesubmissionmessage', 'foldersharinglevel',
         ];
         $studiofields = array_merge($studiofields, \mod_openstudio\completion\custom_completion::get_defined_custom_rules());
         $studio = new backup_nested_element('openstudio', ['id'], $studiofields);

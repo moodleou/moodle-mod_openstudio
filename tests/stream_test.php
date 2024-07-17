@@ -1172,4 +1172,75 @@ class stream_test extends \advanced_testcase {
             $this->assertEquals($this->users->students->five->id, $content->userid);
         }
     }
+
+    /**
+     * Feature test for stream APIs for showing content in Share Module.
+     * When add private content in share Folder it should be hidden in Share Module.
+     */
+    public function test_stream_api_does_not_show_private_content_in_folder(): void {
+        $this->resetAfterTest(true);
+
+        $this->setUser($this->users->students->one);
+
+        $studio = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OSF1',
+        ]);
+
+        $folderdata = [
+            'openstudio' => 'OSF1',
+            'name' => 'Folder 1',
+            'description' => 'foo',
+            'levelid' => 0,
+            'levelcontainer' => 0,
+            'userid' => $this->users->students->one->id,
+            'visibility' => \mod_openstudio\local\api\content::VISIBILITY_MODULE,
+        ];
+
+        $this->generator->create_folders($folderdata);
+
+        $privatecontentdata = [
+            'openstudio' => 'OSF1',
+            'visibility' => \mod_openstudio\local\api\content::VISIBILITY_PRIVATE,
+            'userid' => $folderdata['userid'],
+            'name' => 'folder_content_1',
+            'contenttype' => \mod_openstudio\local\api\content::TYPE_TEXT,
+            'description' => random_string(),
+        ];
+        $privatecontentid = $this->generator->create_contents($privatecontentdata);
+        $privatecontent = \mod_openstudio\local\api\content::get($privatecontentid);
+        $this->generator->create_folder_contents([
+            'openstudio' => 'OSF1',
+            'folder' => $folderdata['name'],
+            'content' => $privatecontent->name,
+            'userid' => $this->users->students->one->id,
+        ]);
+
+        $sharecontentdata = [
+            'openstudio' => 'OSF1',
+            'visibility' => \mod_openstudio\local\api\content::VISIBILITY_MODULE,
+            'userid' => $folderdata['userid'],
+            'name' => 'folder_content_2',
+            'contenttype' => \mod_openstudio\local\api\content::TYPE_TEXT,
+            'description' => random_string(),
+        ];
+        $sharecontentid = $this->generator->create_contents($sharecontentdata);
+        $sharecontent = \mod_openstudio\local\api\content::get($sharecontentid);
+        $this->generator->create_folder_contents([
+            'openstudio' => 'OSF1',
+            'folder' => $folderdata['name'],
+            'content' => $sharecontent->name,
+            'userid' => $this->users->students->one->id,
+        ]);
+
+        $results = \mod_openstudio\local\api\stream::get_contents(
+                $studio->id, 0,
+                $this->users->students->one->id,
+                $this->users->students->one->id,
+                \mod_openstudio\local\api\content::VISIBILITY_MODULE);
+
+        $this->assertNotFalse($results);
+        // Only show Folder 1 and folder_content_2 in Share Module.
+        $this->assertEquals(2, iterator_count($results));
+    }
 }

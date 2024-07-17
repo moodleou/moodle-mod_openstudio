@@ -265,6 +265,8 @@ class util {
         $permissions->feature_enablelock = self::has_feature($cminstance, util\feature::ENABLELOCK);
         $permissions->feature_allowlatesubmissions = self::has_feature($cminstance, util\feature::LATESUBMISSIONS);
         $permissions->feature_enableuniquecommentcount = self::has_feature($cminstance, util\feature::UNIQUECOMMENTCOUNT);
+        $permissions->feature_foldersharingtoplevel = isset($cminstance->foldersharinglevel) &&
+                $cminstance->foldersharinglevel == content::FOLDER_TOP_LEVEL ? true : false;
         if ($permissions->managecontent) {
             $permissions->feature_contentreciprocalaccess = false;
         }

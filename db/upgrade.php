@@ -192,6 +192,17 @@ function xmldb_openstudio_upgrade($oldversion=0) {
         upgrade_mod_savepoint(true, 2024071000, 'openstudio');
     }
 
+    if ($oldversion < 2024082300) {
+        $table = new xmldb_table('openstudio');
+        $field = new xmldb_field('foldersharinglevel', XMLDB_TYPE_INTEGER, '4', null, XMLDB_NOTNULL, null, 0);
+
+        // Conditionally launch add field.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        upgrade_mod_savepoint(true, 2024082300, 'openstudio');
+    }
+
     // Must always return true from these functions.
     return $result;
 }

@@ -88,6 +88,9 @@ class content {
     const UPDATEMODE_NEWCONTENT = 4;
     const UPDATEMODE_FOLDER = 5;
 
+    const FOLDER_TOP_LEVEL = 0;
+    const SLOT_ITEM_LEVEL = 1;
+
 
     /**
      * Gets the total number of content items allowed on the user's studio work, and the number they have created.

@@ -655,8 +655,10 @@ class renderer_utils {
         $contentdata->contentweblinktext = $contentweblinktext;
 
         if (property_exists($contentdata, 'isfoldercontent') && $contentdata->isfoldercontent) {
-            $folder = folder::get($contentdata->folderid);
-            $contentdata->visibility = $folder->visibility;
+            if ($contentdata->visibility == content::VISIBILITY_INFOLDERONLY) {
+                $folder = folder::get($contentdata->folderid);
+                $contentdata->visibility = $folder->visibility;
+            }
         }
         $contentdata->contentvisibilityicon = self::content_visibility_icon($contentdata);
         $contentdata->itemsharewith = self::get_content_visibility_name($contentdata);

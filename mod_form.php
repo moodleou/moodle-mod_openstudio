@@ -227,6 +227,16 @@ class mod_openstudio_mod_form extends moodleform_mod {
                 get_string('settingsenablefolders', 'openstudio'),
                 get_string('settingsenablefolders', 'openstudio'));
 
+        $foldersharinglevelarray = [
+            content::FOLDER_TOP_LEVEL => get_string('foldertoplevel', 'openstudio'),
+            content::SLOT_ITEM_LEVEL => get_string('folderslotlevel', 'openstudio'),
+        ];
+
+        $mform->addElement('select', 'foldersharinglevel', get_string('foldersharinglevel', 'openstudio'),
+                $foldersharinglevelarray);
+        $mform->addHelpButton('foldersharinglevel', 'foldersharinglevel', 'openstudio');
+        $mform->setDefault('foldersharinglevel', content::FOLDER_TOP_LEVEL);
+
         $mform->addElement('advcheckbox', 'enablefoldersanycontent',
                 get_string('settingsenablefoldersanycontent', 'openstudio'),
                 get_string('settingsenablefoldersanycontentdescription', 'openstudio'),

@@ -1793,4 +1793,53 @@ class folder_test extends \advanced_testcase {
         // Verify folder's name is level3's name.
         $this->assertEquals($leveldata->name, $getupdatedfolder->name);
     }
+
+    /**
+     * This test function verifies the behavior of updating content visibility
+     * when an emulator changes the folder's sharing level in settings to Folder Top Level.
+     *
+     */
+    public function test_update_folder_content_visibility(): void {
+        $this->resetAfterTest(true);
+        $userid = $this->users->students->one->id;
+        $studio = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'enablefolders' => 1,
+            'idnumber' => 'OS2',
+        ]);
+
+        $folderdata = [
+            'openstudio' => 'OS2',
+            'name' => 'Folder sharing level',
+            'levelid' => 0,
+            'levelcontainer' => 0,
+            'visibility' => \mod_openstudio\local\api\content::VISIBILITY_MODULE,
+            'userid' => $userid,
+        ];
+        $folderid = $this->generator->create_folders($folderdata);
+
+        // Student 1 create 2 private content in folder.
+        for ($i = 1; $i <= 2; $i++) {
+            $contentdata = [
+                'openstudio' => 'OS2',
+                'visibility' => \mod_openstudio\local\api\content::VISIBILITY_PRIVATE,
+                'userid' => $folderdata['userid'],
+                'name' => 'folder_content_' . $i,
+                'contenttype' => \mod_openstudio\local\api\content::TYPE_TEXT,
+                'description' => random_string(),
+            ];
+            $contentid = $this->generator->create_contents($contentdata);
+            $content = \mod_openstudio\local\api\content::get($contentid);
+            $this->generator->create_folder_contents([
+                'openstudio' => 'OS2',
+                'folder' => $folderdata['name'],
+                'content' => $content->name,
+                'userid' => $userid
+            ]);
+        }
+
+        $this->assertTrue((bool) \mod_openstudio\local\api\folder::update_folder_content_visibility($studio->id, 0));
+        $foldercontent = \mod_openstudio\local\api\folder::get_content($folderid, $content->id);
+        $this->assertEquals($foldercontent->visibility, \mod_openstudio\local\api\content::VISIBILITY_INFOLDERONLY);
+    }
 }

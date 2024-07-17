@@ -510,6 +510,7 @@ $options = array(
         'feature_contentusesweblink' => $permissions->feature_contentusesweblink,
         'feature_contentusesembedcode' => $permissions->feature_contentusesembedcode,
         'feature_contentallownotebooks' => $permissions->feature_contentallownotebooks,
+        'feature_foldersharingtoplevel' => $permissions->feature_foldersharingtoplevel,
         'defaultvisibility' => $visibilityid,
         'allowedvisibility' => $allowedvisibility,
         'allowedfiletypes' => explode(",", $cminstance->filetypes),

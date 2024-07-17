@@ -37,6 +37,7 @@ use mod_openstudio\local\util\defaults;
 use mod_openstudio\local\api\comments;
 use mod_openstudio\local\api\levels;
 use mod_openstudio\local\api\search;
+use mod_openstudio\local\api\folder;
 use mod_openstudio\local\forms\comment_form;
 
 defined('MOODLE_INTERNAL') || die();
@@ -149,6 +150,9 @@ function openstudio_add_instance(stdClass $studio, mod_openstudio_mod_form $mfor
 function openstudio_update_instance(stdClass $studio, mod_openstudio_mod_form $mform = null) {
     global $DB, $USER;
 
+    // Get the current value, so we can see what changed.
+    $oldstudio = $DB->get_record('openstudio', ['id' => $studio->instance]);
+
     $studio->timemodified = time();
     $studio->id = $studio->instance;
 
@@ -175,7 +179,14 @@ function openstudio_update_instance(stdClass $studio, mod_openstudio_mod_form $m
 
     $studio->themefeatures = openstudio_feature_settings($studio);
 
-    return $DB->update_record('openstudio', $studio);
+    $DB->update_record('openstudio', $studio);
+
+    // Update content visibility in folder.
+    if ($studio->foldersharinglevel !== $oldstudio->foldersharinglevel) {
+        folder::update_folder_content_visibility($studio->id, $studio->foldersharinglevel);
+    }
+
+    return true;
 }
 
 /**
