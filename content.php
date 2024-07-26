@@ -329,7 +329,7 @@ $PAGE->requires->strings_for_js(
     'mod_openstudio');
 $PAGE->requires->js_call_amd('mod_openstudio/previewipynb', 'init');
 
-if ($contentdata->showextradata & content::INFO_GPSDATA) {
+if (isset($contentdata->showextradata) && $contentdata->showextradata & content::INFO_GPSDATA) {
     $PAGE->requires->css('/mod/openstudio/css/leaflet.css');
 }
 
