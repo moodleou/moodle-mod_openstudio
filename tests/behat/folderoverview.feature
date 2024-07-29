@@ -94,7 +94,7 @@ I need to create a content and upload a file
     And I follow "Test Folder Overview"
     And I should see "Folder Overview"
     And I am on the "Test Open Studio name 1" "openstudio activity" page
-    And I click on "//*[@class='openstudio-grid-item'][1]//img[contains(@src, 'comments_grey_rgb_32px')]" "xpath_element"
+    And I click on "//*[@class='openstudio-grid-item'][1]//img[contains(@src, 'comments_default_rgb_32px')]" "xpath_element"
     And I click on "Add comment" "link"
     And "Folder comments" "link" should be visible
     And "Comment" "field" should exist

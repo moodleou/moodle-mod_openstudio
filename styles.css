@@ -3062,6 +3062,14 @@ body .openstudio-grid-item-content-title a:focus {
     text-align: center;
     position: relative;
     cursor: pointer;
+    padding-top: 2px;
+}
+
+.openstudio-grid-item-content-detail-info-box a[id^="openstudio_navigation_notification_"]:focus,
+.openstudio-grid-item-content-detail-info-group span[id^="content_view_icon_"]:focus,
+.openstudio-interactive-icons .openstudio-content-view-icon-active-image:focus,
+.openstudio-interactive-icons .openstudio-content-view-icon-inactive-image:focus {
+    outline-color: #1c3c71;
 }
 
 .openstudio-grid-item-content-detail-info-icon {
@@ -3080,26 +3088,39 @@ body .openstudio-grid-item-content-title a:focus {
     margin-bottom: -17px;
     text-align: left;
     display: block;
-    height: 19px;
+    height: 17px;
 }
 
-.openstudio-grid-item-content-detail-info-text {
-    color: #0b55a8;
-    width: 22px;
+.openstudio-grid-item-content-detail-info-group .openstudio-grid-item-content-detail-info-box .openstudio-grid-item-content-detail-info-text {
+    position: absolute;
 }
 
+.openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-text.has-value,
 .openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-text-new {
-    background: #b52a1e none repeat scroll 0 0;
+    border: 1px solid #ffffff;
     border-radius: 50%;
     bottom: 23px;
-    color: #fff;
     font-weight: 700;
     min-width: 17px;
     height: 17px;
     position: absolute;
-    margin-left: 26px;
+    margin-left: 28px;
     text-align: center;
     z-index: 1;
+}
+
+.openstudio-grid-item-content-detail-info .inspired .openstudio-grid-item-content-detail-info-text.has-value {
+    margin-left: 26px;
+}
+
+.openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-text.has-value {
+    background: #bfe2ef;
+    color: #0b55a8;
+}
+
+.openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-text-new {
+    background: #b52a1e;
+    color: #ffffff;
 }
 
 .openstudio-grid-item-content-detail-info .notifications .openstudio-tooltip .openstudio-tooltiptext {
@@ -3569,15 +3590,23 @@ span.openstudio-content-view-title {
 .openstudio-content-view-animation-icons-left {
     float: left;
     width: 100%;
+    position: relative;
+}
+
+.openstudio-interactive-icons {
+    display: inline;
+    position: absolute;
+    top: 6px;
 }
 
 .openstudio-content-view-animation-icons-right {
     float: right;
+    margin-right: 15px;
 }
 
 .openstudio-folder-view-container .openstudio-content-view-animation-icons-right {
     display: inline-block;
-    float: none;
+    float: right;
     padding-left: 17px;
 }
 
@@ -3585,18 +3614,22 @@ span.openstudio-content-view-title {
     background-color: transparent;
     font-size: 1em;
     display: inline-block;
-    height: 40px;
+    height: 26px;
     width: auto;
     border: none;
     cursor: pointer;
 }
 
-.openstudio-content-view-icon-inspiration {
-    margin-left: 8px;
+.openstudio-content-view-animation-icons-right .openstudio-content-view-flag-icon {
+    color: #000000;
 }
 
-.openstudio-folder-view-container .openstudio-content-view-icon-inspiration {
-    margin-right: calc(20% - 3px);
+.openstudio-content-view-icon-inspiration {
+    margin: 0 19px 0 15px;
+}
+
+.openstudio-content-view-icon-participation {
+    margin-right: 15px;
 }
 
 .openstudio-content-view-flag-icon span {
@@ -3605,6 +3638,13 @@ span.openstudio-content-view-title {
 }
 
 .openstudio-content-view-flag-icon span img {
+    height: 24px;
+    width: 24px;
+    display: block;
+    margin: 0 auto 8px;
+}
+
+.openstudio-content-view-flag-icon span.view-icon img {
     height: 40px;
     width: 40px;
     margin: 0 auto;
@@ -3621,6 +3661,31 @@ body:not(.ios):not(.android) .openstudio-content-view-flag-icon.has-hover:hover 
 body:not(.ios):not(.android) .openstudio-content-view-flag-icon.has-hover:hover .openstudio-content-view-icon-inactive-image,
 .openstudio-content-view-flag-icon.openstudio-content-view-icon-active span.openstudio-content-view-icon-inactive-image {
     display: none;
+}
+
+.openstudio-interactive-icons .openstudio-content-view-flag-icon span.openstudio-content-view-icon-active-image,
+.openstudio-interactive-icons .openstudio-content-view-flag-icon span.openstudio-content-view-icon-inactive-image {
+    width: 49px;
+    margin: auto;
+    height: 27px;
+    padding-top: 2px;
+}
+
+/* Default state: hide the active icon */
+.openstudio-tooltip .openstudio-grid-item-content-detail-info-icon-active {
+    display: none;
+}
+
+/* On hover: hide the default icon and show the active icon */
+.openstudio-tooltip:hover .openstudio-grid-item-content-detail-info-icon {
+    display: none;
+}
+
+.openstudio-tooltip:hover .openstudio-grid-item-content-detail-info-icon-active {
+    display: inline;
+    width: 14px;
+    height: 14px;
+    margin: 0 auto;
 }
 
 .openstudio-content-view-icon-copies {
@@ -4744,11 +4809,6 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     padding: 8px 20px 40px 20px;
     position: relative;
     border-radius: 4px;
-}
-
-.openstudio-folder-view-container .openstudio-content-view-animation-icons {
-    padding-left: 15px;
-    padding-right: 15px;
 }
 
 .path-mod-openstudio .openstudio-folder-view-container .openstudio-request-feedback-button {
@@ -6625,6 +6685,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-text {
+        position: absolute;
         font-size: 1.28571em;
         margin-bottom: -9px;
         width: 31px;

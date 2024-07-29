@@ -88,11 +88,21 @@ define(['jquery',
                     t.deleteContentDialogue.show();
                 });
 
+                const $spanInactive = $('.openstudio-content-view-icon-inactive-image');
+                const $spanActive = $('.openstudio-content-view-icon-active-image');
                 $(".openstudio-content-view-flag-icon").bind('click', function() {
                     t.doFlagContent($(this));
+                    $(this).children().focus();
                 });
                 $(".openstudio-content-view-icon-active-image").bind('mouseover', function() {
                     t.doHoverFlagIcon($(this));
+                });
+                // Handle keydown event to detect Enter key.
+                $spanInactive.add($spanActive).on('keydown', function(event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        t.doFlagContent($(this).parent());
+                    }
                 });
 
                 $(".openstudio-request-feedback-button").bind('click', function() {

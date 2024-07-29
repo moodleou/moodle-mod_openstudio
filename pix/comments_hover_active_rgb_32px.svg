@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_159" data-name="Rectangle 159" width="32" height="31.821" fill="none"/>
+    </clipPath>
+    <clipPath id="clip-comments_hover_active_rgb_32px">
+      <rect width="32" height="32"/>
+    </clipPath>
+  </defs>
+  <g id="comments_hover_active_rgb_32px" clip-path="url(#clip-comments_hover_active_rgb_32px)">
+    <g id="Group_178" data-name="Group 178" transform="translate(0 0.09)">
+      <g id="Group_177" data-name="Group 177" transform="translate(0 0)" clip-path="url(#clip-path)">
+        <path id="Path_763" data-name="Path 763" d="M27.325,3.741c-6.233-4.986-16.309-4.99-22.546,0C.713,7.021-1.279,12.37.888,17.315c1.985,4.525,6.621,7.3,11.307,8.273a14.5,14.5,0,0,1-2.133,3.078c-.6.681-1.8,1.5-1.174,2.533a1.27,1.27,0,0,0,1.4.6,12.43,12.43,0,0,0,9.12-6.012c4.788-.918,9.549-3.712,11.63-8.284,2.258-4.961.338-10.387-3.714-13.763-3.005-2.405,3.007,2.505,0,0" transform="translate(0 0.001)" fill="#0b55a8"/>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -526,14 +526,14 @@ class mod_openstudio_renderer extends plugin_renderer_base {
         $contentdata->blocksdata = property_exists($contentdata,
             'openstudio_view_filters') ? $contentdata->openstudio_view_filters->fblockdataarray : array();
         $contentdata->viewedicon = $OUTPUT->image_url('viewed_rgb_32px', 'openstudio');
-        $contentdata->commentsicon = $OUTPUT->image_url('comments_rgb_32px', 'openstudio');
-        $contentdata->inspirationicon = $OUTPUT->image_url('inspiration_rgb_32px', 'openstudio');
-        $contentdata->participationicon = $OUTPUT->image_url('participation_rgb_32px', 'openstudio');
-        $contentdata->favouriteicon = $OUTPUT->image_url('favourite_rgb_32px', 'openstudio');
-        $contentdata->commentsgreyicon = $OUTPUT->image_url('comments_grey_rgb_32px', 'openstudio');
-        $contentdata->inspirationgreyicon = $OUTPUT->image_url('inspiration_grey_rgb_32px', 'openstudio');
-        $contentdata->participationgreyicon = $OUTPUT->image_url('participation_grey_rgb_32px', 'openstudio');
-        $contentdata->favouritegreyicon = $OUTPUT->image_url('favourite_grey_rgb_32px', 'openstudio');
+        $contentdata->commentsicon = $OUTPUT->image_url('comments_hover_active_rgb_32px', 'openstudio');
+        $contentdata->inspirationicon = $OUTPUT->image_url('inspiration_hover_active_rgb_32px', 'openstudio');
+        $contentdata->participationicon = $OUTPUT->image_url('participation_hover_active_smiles_rgb_32px', 'openstudio');
+        $contentdata->favouriteicon = $OUTPUT->image_url('favourite_hover_active_rgb_32px', 'openstudio');
+        $contentdata->commentsdefaulticon = $OUTPUT->image_url('comments_default_rgb_32px', 'openstudio');
+        $contentdata->inspirationdefaulticon = $OUTPUT->image_url('inspiration_default_rgb_32px', 'openstudio');
+        $contentdata->participationdefaulticon = $OUTPUT->image_url('participation_smiles_default_rgb_32px', 'openstudio');
+        $contentdata->favouritedefaulticon = $OUTPUT->image_url('favourite_default_rgb_32px', 'openstudio');
         $contentdata->vid = $viewmode;
         $contentdata->lockicon = $OUTPUT->image_url('lock_grey_rgb_32px', 'openstudio');
         $contentdata->requestfeedbackicon = $OUTPUT->image_url('request_feedback_white_rgb_32px', 'openstudio');

@@ -71,7 +71,7 @@ I need to create content to share with groups where I am a member.
     And I follow "Shared content > My Group" in the openstudio navigation
     # User three can view content thumbnails but can not interact.
     And I should see "Test My Group Board View 1"
-    Then "//*[@class='openstudio-grid-item'][1]//img[contains(@src, 'comments_grey_rgb_32px')]" "xpath_element" should not exist
+    Then "//*[@class='openstudio-grid-item'][1]//img[contains(@src, 'comments_default_rgb_32px')]" "xpath_element" should not exist
 
   Scenario: View comments in content share with all groups.
     When I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "teacher1"

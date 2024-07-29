@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="clip-favourite_hover_active_rgb_32px">
+      <rect width="32" height="32"/>
+    </clipPath>
+  </defs>
+  <g id="favourite_hover_active_rgb_32px" clip-path="url(#clip-favourite_hover_active_rgb_32px)">
+    <g id="favourite_rgb_32px" transform="translate(-0.061 0.011)">
+      <path id="Path_762" data-name="Path 762" d="M15.988,30.384l-.83-.7C10.1,25.449,3.611,22,.983,15.58-1.183,10.284.377,3.213,6.6,1.809A9.414,9.414,0,0,1,15.989,5.3C19.568.672,27.049.222,30.458,5.284c3.928,5.834-.06,12.965-4.483,17.123C23.123,25.088,19.812,27.181,15.988,30.384Z" fill="#0b55a8"/>
+    </g>
+  </g>
+</svg>
