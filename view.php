@@ -803,9 +803,23 @@ if ($finalviewpermissioncheck) {
 
         // Returns all the values from the array and indexes the array numerically.
         // We need this because mustache requires it.
+        $contentdata->hasactivityitems = !empty($activityitems) || !empty($normalshareditems);
         $contentdata->activityitems = array_values($activityitems);
         $contentdata->normalshareditems = array_values($normalshareditems);
         $contentdata->hasnormalshareditems = !empty($normalshareditems);
+
+        if ($contentdata->hasnormalshareditems) {
+            // Add some attributes to use the expand/collapse template with the same structure as My Activity.
+            $sharecontentid = 'shared_content';
+            $contentdata->activityid = $sharecontentid;
+            $contentdata->activityname = get_string('menusharedcontent', 'mod_openstudio');
+            if ($storedexpand && array_key_exists($sharecontentid, $storedexpand)) {
+                $contentdata->isexpanded = $storedexpand[$sharecontentid];
+            } else {
+                // Default is true.
+                $contentdata->isexpanded = true;
+            }
+        }
 
         $contentdata->pagestart = $pagestart;
         $contentdata->streamdatapagesize = $streamdatapagesize;
