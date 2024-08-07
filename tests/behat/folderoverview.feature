@@ -556,21 +556,26 @@ I need to create a content and upload a file
     And I follow "My Content"
     And I follow "Test Folder Overview"
     And I press "Select existing post to add to folder"
+    And I should see "Found 3 posts."
     And I should see "TestRemove 1"
     And I should see "TestRemove 2"
     And I should see "TestRemove 3"
     # Add 1st Item
     And I select the existing openstudio post "TestRemove 1"
     And I should not see "TestRemove 1"
+    And I should see "Found 2 posts."
     # Add 2nd Item
     And I select the existing openstudio post "TestRemove 2"
     And I should not see "TestRemove 2"
+    And I should see "Found 1 posts."
     # Add 3rd Item
     And I select the existing openstudio post "TestRemove 3"
     And I should not see "TestRemove 3"
+    And I should see "Found 0 posts."
     # Observe the result
     And I click on "Remove last selection" "button" in the "Browse posts" "dialogue"
     And I should see "TestRemove 3"
+    And I should see "Found 1 posts."
     And I should not see "TestRemove 2"
     And I should not see "TestRemove 1"
 

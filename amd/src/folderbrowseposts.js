@@ -239,6 +239,7 @@ define([
                 .render('mod_openstudio/folder_browse_selected_post',
                     {buttonid: buttonid, postid: postid, image: postimage, closeicon: closeicon, title: itemTitle})
                 .done(function(html) {
+                    t.doBrowsePosts();
                     $(t.CSS.BROWSEPOSTSSELECTEDITEMS).append(html);
 
                     // Click event on deselect button.
@@ -290,6 +291,7 @@ define([
                 $(t.CSS.BROWSEPOSTSSELECTED).hide();
             }
 
+            t.doBrowsePosts();
             t.hideSaveButtons();
 
             // Show hide select button
