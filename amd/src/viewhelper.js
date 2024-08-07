@@ -132,9 +132,11 @@ define(['jquery', 'js/isotope.pkgd.min.js'], function($, Isotope) {
          */
         reArrangeItems: function() {
             setTimeout(function() {
-                $.each(t.isotope, function(i, grid) {
-                    grid.layout();
-                });
+                for (var key in t.isotope) {
+                    if (t.isotope.hasOwnProperty(key)) {
+                        t.isotope[key].layout();
+                    }
+                }
             }, 1000);
         },
 
