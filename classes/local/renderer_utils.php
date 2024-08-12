@@ -246,7 +246,7 @@ class renderer_utils {
         $contentdata->viewuserworkurl = new \moodle_url('/mod/openstudio/view.php',
                     array('id' => $openstudioid, 'vuid' => $contentowner->id, 'vid' => content::VISIBILITY_PRIVATE));
         $contentdata->viewedicon = $OUTPUT->image_url('viewed_rgb_32px', 'openstudio');
-        $contentdata->commentsicon = $OUTPUT->image_url('comments_rgb_32px', 'openstudio');
+        $contentdata->pcommentsicon = $OUTPUT->image_url('comments_rgb_32px', 'openstudio');
         $contentdata->participationenable = $permissions->feature_participationsmiley;
         $contentdata->participationlow = isset($userprogressdata['participationstatus'])
                 && ($userprogressdata['participationstatus'] == 'low');

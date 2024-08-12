@@ -3589,24 +3589,34 @@ span.openstudio-content-view-title {
 .openstudio-content-view-animation-icons-left {
     float: left;
     width: 100%;
-    position: relative;
+}
+
+.openstudio-folder-view-container .openstudio-interactive-icons {
+    margin-right: calc(15% - 14px);
+}
+
+.openstudio-folder-view-container .openstudio-interactive-icons,
+.openstudio-folder-view-container .openstudio-content-view-animation-icons-right {
+    vertical-align: middle;
+}
+
+.openstudio-folder-view-container .openstudio-interactive-icons {
+    margin-top: 0;
 }
 
 .openstudio-interactive-icons {
-    display: inline;
-    position: absolute;
-    top: 6px;
+    margin-top: 6px;
+    display: inline-block;
 }
 
 .openstudio-content-view-animation-icons-right {
     float: right;
-    margin-right: 15px;
 }
 
 .openstudio-folder-view-container .openstudio-content-view-animation-icons-right {
     display: inline-block;
-    float: right;
-    padding-left: 17px;
+    float: none;
+    padding-left: 15px;
 }
 
 .openstudio-content-view-flag-icon {
@@ -5181,6 +5191,19 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-profile-bar .openstudio-profile-progress-content {
        margin-right: 14px;
     }
+
+    .openstudio-folder-view-container .openstudio-content-view-animation-icons-right,
+    .openstudio-folder-view-container .openstudio-interactive-icons {
+        display: inline;
+    }
+
+    .openstudio-folder-view-container .openstudio-content-view-icon-favourite {
+        margin-left: 8px;
+    }
+
+    .openstudio-folder-view-container .openstudio-interactive-icons {
+        margin-right: 0;
+    }
 }
 
 @media only screen and (max-width: 1023px) and (min-width: 769px) {
@@ -5403,11 +5426,6 @@ a.openstudio-add-new-content-link:hover  {
         float: right;
     }
 
-    .openstudio-folder-view-container .openstudio-content-view-animation-icons-right {
-        padding-left: 0px;
-        float: none;
-    }
-
     .openstudio-profile-work-progress {
         margin-left: -8px;
         margin-right: 0px;
@@ -5498,11 +5516,6 @@ a.openstudio-add-new-content-link:hover  {
 
     .openstudio-folder-view-container .openstudio-content-view-secondary {
         width: calc(41% - 1px);
-    }
-
-    .openstudio-folder-view-container .openstudio-content-view-icon-inspiration {
-        margin-left: 0px;
-        margin-right: 19px;
     }
 
     .openstudio-folder-view-buttons {
@@ -5771,7 +5784,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-folder-view-container .openstudio-content-view-animation-icons-right {
-        padding-left: 17px;
+        padding-left: 15px;
         margin-top: 10px;
     }
 
@@ -6672,7 +6685,8 @@ a.openstudio-add-new-content-link:hover  {
         max-width: 250px;
     }
 
-    .openstudio-grid-item-content-detail-info-icon {
+    .openstudio-grid-item-content-detail-info-icon,
+    .openstudio-tooltip:hover .openstudio-grid-item-content-detail-info-icon-active {
         width: 24px;
         height: 24px;
     }
@@ -6685,11 +6699,23 @@ a.openstudio-add-new-content-link:hover  {
         height: 28px;
     }
 
-    .openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-text {
-        position: absolute;
+    .openstudio-grid-item-content-detail-info-group .openstudio-grid-item-content-detail-info-box .openstudio-grid-item-content-detail-info-text {
+        position: unset;
+        margin-bottom: -4px;
+    }
+
+    .openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-text.has-value {
+        position: relative;
         font-size: 1.28571em;
-        margin-bottom: -9px;
-        width: 31px;
+        width: 32px;
+        height: 28px;
+        top: 0;
+        margin-left: 17px;
+        margin-bottom: -17px;
+    }
+
+    .openstudio-grid-item-content-detail-info .inspired .openstudio-grid-item-content-detail-info-text.has-value {
+        margin-left: 17px;
     }
 
     .openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-box {
@@ -7205,7 +7231,7 @@ a.openstudio-add-new-content-link:hover  {
         padding-left: 15px;
     }
     .openstudio-folder-view-container .openstudio-content-view-icon-inspiration {
-        margin-left: 13px;
+        margin-left: 15px;
     }
 
     .openstudio-content-view-block {
