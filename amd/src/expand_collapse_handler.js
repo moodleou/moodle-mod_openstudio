@@ -189,10 +189,12 @@ const updateExpandCollapseLink = (link, preventFocus, preventToggle) => {
 const updateExpandCollapseAll = () => {
     const links = document.querySelectorAll('div.openstudio-expandcollapse.expanded');
     const expandall = document.querySelector('div.openstudio-expandall');
-    if (links.length === 0) {
-        expandall.classList.remove('expanded');
-    } else {
-        expandall.classList.add('expanded');
+    if (expandall) {
+        if (links.length === 0) {
+            expandall.classList.remove('expanded');
+        } else {
+            expandall.classList.add('expanded');
+        }
     }
 };
 
