@@ -233,6 +233,10 @@ class mod_openstudio_mod_form extends moodleform_mod {
                 array('group' => 1), array(0, 1));
         $mform->disabledIf('enablefoldersanycontent', 'enablefolders', 'neq', 1);
 
+        $mform->addElement('advcheckbox', 'enableuniquecommentcount',
+                get_string('enableuniquecommentcount', 'openstudio'),
+                get_string('enableuniquecommentcountdes', 'openstudio'));
+
         $mform->addElement('text', 'reportingemail',
                 get_string('settingsadditionalreportingemail', 'openstudio'),
                 array('size' => '64'));
@@ -367,6 +371,7 @@ class mod_openstudio_mod_form extends moodleform_mod {
             $defaultvalues['enablecontentallownotebooks'] = $themefeatures & feature::CONTENTALLOWNOTEBOOKS ? 1 : 0;
             $defaultvalues['enablecontentreciprocalaccess'] = $themefeatures & feature::CONTENTRECIPROCALACCESS ? 1 : 0;
             $defaultvalues['enableparticipationsmiley'] = $themefeatures & feature::PARTICIPATIONSMILEY ? 1 : 0;
+            $defaultvalues['enableuniquecommentcount'] = $themefeatures & feature::UNIQUECOMMENTCOUNT ? 1 : 0;
             $defaultvalues['allowlatesubmissions'] = $themefeatures & feature::LATESUBMISSIONS ? 1 : 0;
 
         } else {
@@ -379,6 +384,7 @@ class mod_openstudio_mod_form extends moodleform_mod {
             $defaultvalues['enablecontentallownotebooks'] = 0;
             $defaultvalues['enablecontentreciprocalaccess'] = 0;
             $defaultvalues['enableparticipationsmiley'] = 0;
+            $defaultvalues['enableuniquecommentcount'] = 0;
             $defaultvalues['allowlatesubmissions'] = 0;
         }
 

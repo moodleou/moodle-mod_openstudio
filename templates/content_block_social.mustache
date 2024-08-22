@@ -48,8 +48,14 @@
                         <a id="openstudio_navigation_notification_{{contentid}}" href="#" class="show-popup-comment" data-toggle="dropdown" data-boundary="viewport" role="button"
                               aria-haspopup="true" aria-expanded="false" data-cmid="{{cmid}}" data-contentid="{{contentid}}" tabindex="0">
                             <span class="openstudio-grid-item-content-detail-info-text{{#commentsnew}}-new{{/commentsnew}} {{#isdoubledigitcomments}}double-digit{{/isdoubledigitcomments}}">
-                                {{#comments}}{{comments}}{{/comments}}
-                                {{^comments}}{{totalcomments}}{{/comments}}
+                                {{#isuniquecommentcount}}
+                                    {{#commentsnew}}{{comments}}{{/commentsnew}}
+                                    {{^commentsnew}}{{totalcommentunique}}{{/commentsnew}}
+                                {{/isuniquecommentcount}}
+                                {{^isuniquecommentcount}}
+                                    {{#comments}}{{comments}}{{/comments}}
+                                    {{^comments}}{{totalcomments}}{{/comments}}
+                                {{/isuniquecommentcount}}
                             </span>
                             <span class="openstudio-tooltip">
                                 <img src="{{#iscurrentusercomment}}{{commentsicon}}{{/iscurrentusercomment}}

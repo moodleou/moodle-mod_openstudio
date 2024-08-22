@@ -198,7 +198,8 @@ if (trim($searchtext) == '') {
 
     if (!empty($contentids)) {
         // Gather content social data.
-        $contentsocialdata = notifications::get_activities($permissions->activeuserid, $contentids, $permissions->groupingid, $permissions->managecontent);
+        $contentsocialdata = notifications::get_activities($permissions->activeuserid, $contentids, $permissions->groupingid,
+                $permissions->managecontent, $permissions->feature_enableuniquecommentcount);
         if ($contentsocialdata) {
             foreach ($contentsocialdata as $key => $socialitem) {
                 $socialdatatotal = 0;
@@ -218,6 +219,10 @@ if (trim($searchtext) == '') {
                     $socialitem->mademelaugh = $socialitem->mademelaughold;
                     $socialitem->favourite = $socialitem->favouriteold;
                 }
+
+                $socialitem->totalcommentunique = isset($socialitem->commentunique) && $socialitem->commentunique ?
+                        $socialitem->commentunique : "";
+                $socialitem->isuniquecommentcount = $permissions->feature_enableuniquecommentcount;
 
                 // Check if social item is double digit.
                 $socialitem = util::check_item_double_digit($socialitem);

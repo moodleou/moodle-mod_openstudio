@@ -47,16 +47,19 @@ class notifications {
      * @param array $contents List of content ids to get social data from.
      * @param int $groupingid The ID of the grouping configured for the studio.
      * @param bool $canmanagecontent User has permission manage content.
+     * @param boolean $uniquecomment Set to true if only unique comments should be counted.
      * @return false|array Return array of social data for list of contents.
      */
-    public static function get_activities(int $userid, array $contents, int $groupingid = 0, bool $canmanagecontent = true): false|array {
+    public static function get_activities(int $userid, array $contents, int $groupingid = 0, bool $canmanagecontent = true,
+            bool $uniquecomment = false): false|array {
 
         // If there are no contents provided, exit now.
         if (empty($contents)) {
             return false;
         }
 
-        $results = self::prepare_data_get_activites($userid, $contents,$groupingid, $canmanagecontent);
+        $results = self::prepare_data_get_activites($userid, $contents, $groupingid, $canmanagecontent,
+                false, $uniquecomment);
         if (!$results) {
             return false;
         }
@@ -67,7 +70,8 @@ class notifications {
 
         if (!empty($optionals['contentsharewithallgroups'])) {
             $contentsharewithallgroups = array_unique($optionals['contentsharewithallgroups']);
-            $newresults = self::prepare_data_get_activites($userid, $contentsharewithallgroups, $groupingid, $canmanagecontent, true);
+            $newresults = self::prepare_data_get_activites($userid, $contentsharewithallgroups, $groupingid, $canmanagecontent,
+                    true, $uniquecomment);
             if (!$newresults) {
                 return false;
             }
@@ -75,7 +79,7 @@ class notifications {
             if (!empty($newcontentdata)) {
                 foreach ($newcontentdata as $key => $content) {
                     if (!array_key_exists($key, $contentdata)) {
-                       continue;
+                        continue;
                     }
                     $contentdata[$key] = $content;
                 }
@@ -93,10 +97,11 @@ class notifications {
      * @param int $groupingid The ID of the grouping configured for the studio.
      * @param bool $canmanagecontent User has permission manage content.
      * @param boolean $checkgroup Set true if filtering comments based on group.
+     * @param boolean $uniquecomment Set to true if only unique comments should be counted.
      * @return false|\moodle_recordset
      */
     private static function prepare_data_get_activites(int $userid, array $contents, int $groupingid = 0,
-            bool $canmanagecontent = true, $checkgroup = false): false|\moodle_recordset {
+            bool $canmanagecontent = true, $checkgroup = false, bool $uniquecomment = false): false|\moodle_recordset {
         global $DB;
 
         $filtergroup = $groupingid > 0 && !$canmanagecontent && $checkgroup;
@@ -104,15 +109,29 @@ class notifications {
                   JOIN {groupings_groups} gg ON gg.groupid = gm1.groupid AND gg.groupingid = {$groupingid}
                   JOIN {groups_members} gm2 ON gm2.groupid = gm1.groupid AND gm2.userid = ?" : '';
 
-        $groupquery1 = $filtergroup ? sprintf($groupquery, 'sc1') : '';
-        $groupquery2 = $filtergroup ? sprintf($groupquery, 'sc2') : '';
-        $groupquery3 = $filtergroup ? sprintf($groupquery, 'sc3') : '';
+        // Generate group query strings for different cases.
+        $groupqueries = array_map(function($alias) use ($groupquery) {
+            return $groupquery ? sprintf($groupquery, $alias) : '';
+        }, ['sc1', 'sc2', 'sc3', 'sc4']);
+
+        // SQL fragment for counting unique comments.
+        $uniquecommentcountsql = $uniquecomment
+                ? "(
+                     SELECT COUNT(DISTINCT sc4.userid)
+                       FROM {openstudio_comments} sc4
+                       JOIN {openstudio_contents} s1 ON s1.id = sf.contentid
+                            {$groupqueries[3]}
+                      WHERE sc4.contentid = sf.contentid
+                            AND sc4.userid != s1.userid
+                            AND sc4.deletedtime IS NULL
+                   ) AS commentunique,"
+                : '';
 
         $sql = <<<EOF
 SELECT sf.contentid AS contentid, sf.folderid, s.visibility,
        (        SELECT count(sc1.id)
                   FROM {openstudio_comments} sc1
-                  $groupquery1
+                  {$groupqueries[0]}
                  WHERE sc1.contentid = sf.contentid
                    AND sc1.deletedtime IS NULL
                    AND sc1.userid != ?
@@ -123,7 +142,7 @@ SELECT sf.contentid AS contentid, sf.folderid, s.visibility,
                            AND sc1f.userid = ?)) AS commentsnewcontent,
        (    SELECT count(sc2.id)
               FROM {openstudio_comments} sc2
-              $groupquery2
+              {$groupqueries[1]}
              WHERE sc2.contentid = sf.contentid
                AND sc2.deletedtime IS NULL
                AND sc2.userid != ?
@@ -135,7 +154,7 @@ SELECT sf.contentid AS contentid, sf.folderid, s.visibility,
                        AND sc2.timemodified > sc2f.timemodified)) AS commentsnew,
        (    SELECT count(sc3.id)
               FROM {openstudio_comments} sc3
-              $groupquery3
+              {$groupqueries[2]}
              WHERE sc3.contentid = sf.contentid
                AND sc3.deletedtime IS NULL
         AND (EXISTS (SELECT 1
@@ -144,6 +163,7 @@ SELECT sf.contentid AS contentid, sf.folderid, s.visibility,
                        AND sc3f.flagid = 6
                        AND sc3f.userid = ?
                        AND sc3.timemodified <= sc3f.timemodified) OR sc3.userid = ?)) AS commentsold,
+       {$uniquecommentcountsql}
        (         SELECT count(sf5_1.id)
                    FROM {openstudio_flags} sf5_1
                   WHERE sf5_1.contentid = sf.contentid
@@ -240,12 +260,14 @@ SELECT sf.contentid AS contentid, sf.folderid, s.visibility,
   FROM {openstudio_flags} sf
   JOIN {openstudio_contents} s ON s.id = sf.contentid
 EOF;
-        $sqlparams = [];
+        $sqlparams = array_fill(0, 24, $userid);
+
         // Mass-assigned parameter for only userid in the query above.
-        $totaluseridparams = 24;
-        $totaluseridparam = $filtergroup ? $totaluseridparams + 3 : $totaluseridparams;
-        for ($counter = 0; $counter < $totaluseridparam; $counter++) {
-            $sqlparams[] = $userid;
+        if ($filtergroup) {
+            $sqlparams = array_merge($sqlparams, array_fill(0, 3, $userid));
+            if ($uniquecomment) {
+                $sqlparams[] = $userid;
+            }
         }
 
         if (!empty($contents)) {

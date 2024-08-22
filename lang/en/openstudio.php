@@ -312,6 +312,8 @@ $string['settingsallowlatesubmissionsdescription'] = 'Allow contents to be added
 $string['settingslatesubmissionmessage'] = 'Warning message for late submissions';
 $string['settingslatesubmissionmessage_help'] = 'This is the message that will display on a content slot when the submission date has passed. The placeholder %%DATE%% will be replaced by the submission date.';
 $string['settingsdefaultlatesubmissionmessage'] = 'Please note that the submission deadline of %%DATE%% for this activity has passed.';
+$string['enableuniquecommentcount'] = 'Unique comment count';
+$string['enableuniquecommentcountdes'] = 'Only count unique and non-original poster comments forwards comment count.';
 
 $string['pinboard'] = 'Pinboard';
 $string['pinboard_help'] = 'Specify the number of pinboard contents that users can create or enter 0 to disable.';

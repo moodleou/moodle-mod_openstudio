@@ -213,3 +213,51 @@ Feature: Open Studio notifications
     And I am on the "Demo Open Studio" "openstudio activity" page
     And I click on "//*[@class='openstudio-grid-item-content-detail-info-icon'][1]" "xpath_element"
     Then I should see "test.mp4"
+
+  Scenario: Check unique comment count.
+    Given I am on the "Demo Open Studio" "openstudio activity" page logged in as "student1"
+    # Add 2 comments to post by Student1.
+    And I click on "Module post 1" "link"
+    And I press "Add new comment"
+    And I set the field "Comment" to "Very iconic, also has an amazing interior."
+    And I press "Post comment"
+    And I wait until the page is ready
+    And I press "Add new comment"
+    And I set the field "Comment" to "Beautifully designed building"
+    And I press "Post comment"
+    And I wait until the page is ready
+    And I am on the "Demo Open Studio" "openstudio activity" page
+    # Student 1 should see 2 of their comments when the unique comment count is not enabled.
+    And I should see "2" in the "#openstudio_grid .openstudio-grid-item:nth-child(2) .content-block-social-group > span:first-child span.has-value" "css_element"
+    And I am on the "Demo Open Studio" "openstudio activity" page logged in as "teacher1"
+    And I navigate to "Settings" in current page administration
+    And I click on "Expand all" "link" in the "region-main" "region"
+    When I set the following fields to these values:
+      | Enable folders       | 1 |
+      | Unique comment count | 1 |
+    And I press "Save and display"
+    And I click on "Module post 1" "link"
+    And I press "Add new comment"
+    And I set the field "Comment" to "Very iconic, also has an amazing interior."
+    And I wait until the page is ready
+    And I press "Post comment"
+    And I wait until the page is ready
+    And I press "Add new comment"
+    And I set the field "Comment" to "Beautifully designed building"
+    And I press "Post comment"
+    And I wait until the page is ready
+    And I am on the "Demo Open Studio" "openstudio activity" page
+    # Teacher1 commented on this post so the number of comments returned is 1.
+    And I should see "1" in the "#openstudio_grid .openstudio-grid-item:nth-child(2) .content-block-social-group > span:first-child span.has-value" "css_element"
+    And I am on the "Demo Open Studio" "openstudio activity" page logged in as "student1"
+    # Student 1 will still see 2 new comments count from Teacher 1 when the unique comment count is enabled.
+    And I should see "2" in the "#openstudio_grid .openstudio-grid-item:nth-child(2) .content-block-social-group  > span:first-child span.openstudio-grid-item-content-detail-info-text-new" "css_element"
+    And I click on "#openstudio_grid .openstudio-grid-item:nth-child(2) .content-block-social-group  > span:first-child " "css_element"
+    And I should see "Teacher 1 commented on this post."
+    And I click on "Add comment" "link"
+    And I wait until the page is ready
+    And I set the field "Comment" to "Architectural masterpiece"
+    And I press "Post comment"
+    And I am on the "Demo Open Studio" "openstudio activity" page
+     # Student 1 sees only 1 comment when the unique comment count is enabled because comments from the post owner are not counted.
+    Then I should see "1" in the "#openstudio_grid .openstudio-grid-item:nth-child(2) .content-block-social-group > span:first-child span.has-value" "css_element"

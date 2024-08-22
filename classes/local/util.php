@@ -264,6 +264,7 @@ class util {
         $permissions->feature_participationsmiley = self::has_feature($cminstance, util\feature::PARTICIPATIONSMILEY);
         $permissions->feature_enablelock = self::has_feature($cminstance, util\feature::ENABLELOCK);
         $permissions->feature_allowlatesubmissions = self::has_feature($cminstance, util\feature::LATESUBMISSIONS);
+        $permissions->feature_enableuniquecommentcount = self::has_feature($cminstance, util\feature::UNIQUECOMMENTCOUNT);
         if ($permissions->managecontent) {
             $permissions->feature_contentreciprocalaccess = false;
         }
@@ -1693,7 +1694,15 @@ EOF;
      * @return Object $socialitem
      */
     public static function check_item_double_digit($socialitem) {
-        $socialitem->isdoubledigitcomments = $socialitem->comments > 9;
+        if ($socialitem->isuniquecommentcount) {
+            if ($socialitem->commentsnew > 0) {
+                $socialitem->isdoubledigitcomments = $socialitem->comments > 9;
+            } else {
+                $socialitem->isdoubledigitcomments = $socialitem->totalcommentunique > 9;
+            }
+        } else {
+            $socialitem->isdoubledigitcomments = $socialitem->comments > 9;
+        }
         $socialitem->isdoubledigitinspired = $socialitem->inspired > 9;
         $socialitem->isdoubledigitmademelaugh = $socialitem->mademelaugh > 9;
         $socialitem->isdoubledigitfavourite = $socialitem->favourite > 9;

@@ -828,7 +828,7 @@ if ($finalviewpermissioncheck) {
         // Gather content social data.
         $socialdatatotal = 0;
         $contentsocialdata = notifications::get_activities($permissions->activeuserid, $contentslist, $permissions->groupingid,
-                $permissions->managecontent);
+                $permissions->managecontent, $permissions->feature_enableuniquecommentcount);
         // List of user commented.
         $lsofusercommented = util::get_list_comment_of_user_by_contentid($contentslist);
         // List of flag content of user.
@@ -857,6 +857,9 @@ if ($finalviewpermissioncheck) {
                     $socialitem->totalinspired = $socialitem->totalinspired > 0 ? $socialitem->totalinspired : "";
                     $socialitem->totalmademelaugh = $socialitem->totalmademelaugh > 0 ? $socialitem->totalmademelaugh : "";
                     $socialitem->totalfavourite = $socialitem->totalfavourite > 0 ? $socialitem->totalfavourite : "";
+                    $socialitem->totalcommentunique = isset($socialitem->commentunique) && $socialitem->commentunique ?
+                            $socialitem->commentunique : "";
+                    $socialitem->isuniquecommentcount = $permissions->feature_enableuniquecommentcount;
 
                     // Check permission to allow user react emoticons in content block social.
                     $isreactemoticon = true;

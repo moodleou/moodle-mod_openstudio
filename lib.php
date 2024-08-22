@@ -895,6 +895,7 @@ function openstudio_feature_settings($studioorid, $updatedb = false) {
         $studio->enableparticipationsmiley = $studio->themefeatures & feature::PARTICIPATIONSMILEY;
         $studio->enablelocking = $studio->themefeatures & feature::ENABLELOCK;
         $studio->allowlatesubmissions = $studio->themefeatures & feature::LATESUBMISSIONS;
+        $studio->enableuniquecommentcount = $studio->themefeatures & feature::UNIQUECOMMENTCOUNT;
     }
 
     $featuremodule = ($studio->enablemodule > 0) ? feature::MODULE : 0;
@@ -946,6 +947,10 @@ function openstudio_feature_settings($studioorid, $updatedb = false) {
     if ($studio->allowlatesubmissions) {
         $featurelatesubmissions = feature::LATESUBMISSIONS;
     }
+    $featureuniquecommentcount = 0;
+    if ($studio->enableuniquecommentcount) {
+        $featureuniquecommentcount = feature::UNIQUECOMMENTCOUNT;
+    }
 
     $themefeatures = $featuremodule + $featuregroup + $featurestudio + $featurepinboard;
     $themefeatures += $featurecontenttextuseshtml + $featurecontentcommentuseshtml;
@@ -954,6 +959,7 @@ function openstudio_feature_settings($studioorid, $updatedb = false) {
     $themefeatures += $featurecontentreciprocalaccess + $featureenablefoldersanycontent;
     $themefeatures += $featureparticipationsmiley;
     $themefeatures += $featurelatesubmissions;
+    $themefeatures += $featureuniquecommentcount;
 
     if (isset($studio->id) && $updatedb) {
         $DB->set_field('openstudio', 'themefeatures', $themefeatures, array('id' => $studio->id));
