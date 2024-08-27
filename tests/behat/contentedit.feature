@@ -192,14 +192,13 @@ I should not see list of file types on Add File form
       | Files       | mod/openstudio/tests/importfiles/test1.jpg |
     And I set the field with xpath "//textarea[@id='id_enteralt']" to "This is image alt"
     And I click on the "Insert > Image" menu item for the "Description" TinyMCE editor
-    And I click on "Browse repositories..." "button"
+    And I click on "Browse repositories" "button"
     # Because of two file pickers we have to do very specific css selectors.
     And I click on "Private files" "link" in the ".moodle-dialogue.filepicker:not(.moodle-dialogue-hidden) .fp-repo-area" "css_element"
     And I click on "test2.jpg" "link"
-    And I click on ".moodle-dialogue:not(.moodle-dialogue-hidden) .file-picker.fp-select .fp-select-confirm.btn-primary" "css_element"
-    And I set the field with xpath "//textarea[@id='id_description_tiny_image_altentry']" to "An image"
-    And I wait "3" seconds
-    And I press "Save image"
+    And I click on "Select this file" "button" in the "Select test2.jpg" "dialogue"
+    And I set the field "How would you describe this image to someone who can't see it?" to "An image"
+    And I click on "Save" "button" in the "Image details" "dialogue"
     And I press "Save"
     Then "//img[contains(@src, 'pluginfile.php') and contains(@src, '/test2.jpg') and @alt='An image']" "xpath_element" should exist
     And "//img[contains(@src, '/test2.jpg') and @alt='This is image alt']" "xpath_element" should not exist

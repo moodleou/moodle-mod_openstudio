@@ -48,7 +48,7 @@ I need to create a folder
       | student4 | G3    |
     And I am on the "Course 1" "Course" page logged in as "teacher1"
     And I turn editing mode on
-    And I add a "OpenStudio 2" to section "0" and I fill the form with:
+    And I add a openstudio activity to course "Course 1" section "0" and I fill the form with:
       | Name                         | Test Open Studio name 1      |
       | Description                  | Test Open Studio description |
       | Your word for 'My Module'    | Module 1                     |
@@ -214,24 +214,24 @@ I need to create a folder
     And I am on the "Test Open Studio name 1" "openstudio activity" page
     And I follow "Shared Content > Module 1" in the openstudio navigation
     And I follow "Test Folder Overview"
-    And the openstudio breadcrumbs should be "C1 > Test Open Studio name 1 > My Pinboard > Test Folder Overview"
+    And the openstudio breadcrumbs should be "C1 > General > Test Open Studio name 1 > My Pinboard > Test Folder Overview"
 
     # Add new content of folder
     And I follow "Add new content"
-    And the openstudio breadcrumbs should be "C1 > Test Open Studio name 1 > My Pinboard > Test Folder Overview > Create"
+    And the openstudio breadcrumbs should be "C1 > General > Test Open Studio name 1 > My Pinboard > Test Folder Overview > Create"
     And I set the following fields to these values:
       | Title       | Test Content Folder Overview   |
       | Description | My Folder Overview Description |
     And I press "Save"
-    And the openstudio breadcrumbs should be "C1 > Test Open Studio name 1 > My Pinboard > Test Folder Overview > Test Content Folder Overview"
+    And the openstudio breadcrumbs should be "C1 > General > Test Open Studio name 1 > My Pinboard > Test Folder Overview > Test Content Folder Overview"
 
     # switch to student1
     And I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "student1"
     And I follow "Shared content > Module 1" in the openstudio navigation
     And I follow "Test Folder Overview"
-    And the openstudio breadcrumbs should be "C1 > Test Open Studio name 1 > My Module > Teacher's work > Test Folder Overview"
+    And the openstudio breadcrumbs should be "C1 > General > Test Open Studio name 1 > My Module > Teacher's work > Test Folder Overview"
     And I follow "Test Content Folder Overview"
-    Then the openstudio breadcrumbs should be "C1 > Test Open Studio name 1 > My Module > Teacher's work > Test Folder Overview > Test Content Folder Overview"
+    Then the openstudio breadcrumbs should be "C1 > General > Test Open Studio name 1 > My Module > Teacher's work > Test Folder Overview > Test Content Folder Overview"
 
   Scenario: Add tags to folder
     Given I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "teacher1"

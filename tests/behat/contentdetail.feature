@@ -50,7 +50,7 @@ I need to navigate to content pages
     And I am on the "Course 1" "Course" page logged in as "teacher1"
     And I turn editing mode on
     And I wait until the page is ready
-    And I add a "OpenStudio 2" to section "1" and I fill the form with:
+    And I add a openstudio activity to course "Course 1" section "1" and I fill the form with:
       | Name                         | Test Open Studio name 1      |
       | Description                  | Test Open Studio description |
       | Group mode                   | Separate groups              |
@@ -632,19 +632,19 @@ I need to navigate to content pages
     And I follow "People" in the openstudio navigation
     And I follow "Shared content > My Module" in the openstudio navigation
     And I follow "Test My Content Details View"
-    And the openstudio breadcrumbs should be "C1 > Test Open Studio name 1 > My Pinboard > Test My Content Details View"
+    And the openstudio breadcrumbs should be "C1 > New section > Test Open Studio name 1 > My Pinboard > Test My Content Details View"
 
     # Breadcrumb add content
     And I follow "Shared content > My Module" in the openstudio navigation
     And I follow "Upload content"
-    And the openstudio breadcrumbs should be "C1 > Test Open Studio name 1 > My Pinboard > Pinboard content > Create"
+    And the openstudio breadcrumbs should be "C1 > New section > Test Open Studio name 1 > My Pinboard > Pinboard content > Create"
 
     # switch to student1
     And I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "student1"
     And I follow "People" in the openstudio navigation
     And I follow "Shared content > My Module" in the openstudio navigation
     And I follow "Test My Content Details View"
-    Then the openstudio breadcrumbs should be "C1 > Test Open Studio name 1 > My Module > Teacher's work > Test My Content Details View"
+    Then the openstudio breadcrumbs should be "C1 > New section > Test Open Studio name 1 > My Module > Teacher's work > Test My Content Details View"
 
   Scenario: Check flags setting applied
     And I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "admin"

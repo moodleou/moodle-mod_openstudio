@@ -20,7 +20,7 @@ Feature: Open Studio share to view setting is enable
       | student2 | C1     | student        |
     And I am on the "Course 1" "Course" page logged in as "teacher1"
     And I turn editing mode on
-    And I add a "OpenStudio 2" to section "1" and I fill the form with:
+    And I add a openstudio activity to course "Course 1" section "1" and I fill the form with:
       | Name                 | Test Open Studio name 1      |
       | Description          | Test Open Studio description |
       | ID number            | OS1                          |

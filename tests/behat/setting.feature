@@ -48,7 +48,7 @@ Feature: Edit Open Studio settings
   Scenario: Check default settings
     When I am on the "Course 1" "Course" page
     And I turn editing mode on
-    And I add a "OpenStudio 2" to section "1"
+    And I add a openstudio activity to course "Course 1" section "1"
     And I click on "Expand all" "link" in the "region-main" "region"
     Then I should see "Your word for 'My Module'"
     And I should see "Your word for 'My Group'"
@@ -61,7 +61,7 @@ Feature: Edit Open Studio settings
   Scenario: Behavior handling for People Tab
     When I am on the "Course 1" "Course" page
     And I turn editing mode on
-    And I add a "OpenStudio 2" to section "1" and I fill the form with:
+    And I add a openstudio activity to course "Course 1" section "1" and I fill the form with:
       | Name                         | Test Open Studio name 1      |
       | Description                  | Test Open Studio description |
       | Enable 'My Module'           | 0                            |
@@ -70,7 +70,7 @@ Feature: Edit Open Studio settings
       | ID number                    | OS1                          |
       | id_tutorrolesgroup_1         | 1                            |
 
-    And I add a "OpenStudio 2" to section "1" and I fill the form with:
+    And I add a openstudio activity to course "Course 1" section "1" and I fill the form with:
       | Name                          | Test Open Studio name 2        |
       | Description                   | Test Open Studio description 2 |
       | Your word for 'My Module'     | My Module                      |
@@ -96,7 +96,7 @@ Feature: Edit Open Studio settings
     Given I am on the "Course 1" "Course" page
     And I turn editing mode on
 
-    And I add a "OpenStudio 2" to section "1" and I fill the form with:
+    And I add a openstudio activity to course "Course 1" section "1" and I fill the form with:
       | Name                          | Test Open Studio name 1        |
       | Description                   | Test Open Studio description 1 |
       | Your word for 'My Module'     | My Module                      |
@@ -112,14 +112,14 @@ Feature: Edit Open Studio settings
       | ID number                     | OS1                            |
       | id_tutorrolesgroup_1          | 1                              |
 
-    And I add a "OpenStudio 2" to section "1" and I fill the form with:
+    And I add a openstudio activity to course "Course 1" section "1" and I fill the form with:
       | Name                         | Test Open Studio name 2      |
       | Description                  | Test Open Studio description |
       | Abuse reports are emailed to | teacher1@asd.com             |
       | ID number                    | OS2                          |
       | id_tutorrolesgroup_1         | 1                            |
 
-    And I add a "OpenStudio 2" to section "1" and I fill the form with:
+    And I add a openstudio activity to course "Course 1" section "1" and I fill the form with:
       | Name                          | Test Open Studio name 3        |
       | Description                   | Test Open Studio description 3 |
       | Your word for 'My Module'     | My Module                      |
@@ -162,7 +162,7 @@ Feature: Edit Open Studio settings
     When I am on the "Course 1" "Course" page
     And I turn editing mode on
     And I wait until the page is ready
-    And I add a "OpenStudio 2" to section "1" and I fill the form with:
+    And I add a openstudio activity to course "Course 1" section "1" and I fill the form with:
       | Name                         | Test Open Studio name 1      |
       | Description                  | Test Open Studio description |
       | Group mode                   | Visible groups               |
@@ -195,7 +195,7 @@ Feature: Edit Open Studio settings
     When I am on the "Course 1" "Course" page
     And I turn editing mode on
     And I wait until the page is ready
-    And I add a "OpenStudio 2" to section "1" and I fill the form with:
+    And I add a openstudio activity to course "Course 1" section "1" and I fill the form with:
       | Name                         | Test Open Studio name 1      |
       | Description                  | Test Open Studio description |
       | Group mode                   | Visible groups               |
@@ -214,7 +214,7 @@ Feature: Edit Open Studio settings
     When I am on the "Course 1" "Course" page
     And I turn editing mode on
     And I wait until the page is ready
-    And I add a "OpenStudio 2" to section "1" and I fill the form with:
+    And I add a openstudio activity to course "Course 1" section "1" and I fill the form with:
       | Name                          | Test Open Studio name 1      |
       | Description                   | Test Open Studio description |
       | Your word for 'My Module'     | Module 1                     |
@@ -277,7 +277,7 @@ Feature: Edit Open Studio settings
   Scenario: Behavior handling upload icon when pinboard disabled:
     When I am on the "Course 1" "Course" page
     And I turn editing mode on
-    And I add a "OpenStudio 2" to section "1" and I fill the form with:
+    And I add a openstudio activity to course "Course 1" section "1" and I fill the form with:
       | Name                         | Test Open Studio name 1      |
       | Description                  | Test Open Studio description |
       | Group mode                   | Visible groups               |
@@ -298,7 +298,7 @@ Feature: Edit Open Studio settings
   Scenario: Behavior handling content view when pinboard disabled:
     When I am on the "Course 1" "Course" page
     And I turn editing mode on
-    And I add a "OpenStudio 2" to section "1" and I fill the form with:
+    And I add a openstudio activity to course "Course 1" section "1" and I fill the form with:
       | Name                         | Test Open Studio name 1      |
       | Description                  | Test Open Studio description |
       | Group mode                   | Visible groups               |
@@ -327,7 +327,7 @@ Feature: Edit Open Studio settings
   Scenario: Behavior handling mandatory fields
     When I am on the "Course 1" "Course" page
     And I turn editing mode on
-    And I add a "OpenStudio 2" to section "1" and I fill the form with:
+    And I add a openstudio activity to course "Course 1" section "1" and I fill the form with:
       | Name                         | Test Open Studio name 1      |
       | Description                  | Test Open Studio description |
       | Enable 'My Module'           | 0                            |

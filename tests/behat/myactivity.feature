@@ -28,7 +28,7 @@ I need to create a content and upload a file
       | teacher1 | G1    |
     And I am on the "Course 1" "Course" page logged in as "teacher1"
     And I turn editing mode on
-    And I add a "OpenStudio 2" to section "1" and I fill the form with:
+    And I add a openstudio activity to course "Course 1" section "1" and I fill the form with:
       | Name                         | Test Open Studio name 1      |
       | Description                  | Test Open Studio description |
       | Group mode                   | Visible groups               |
@@ -216,7 +216,7 @@ I need to create a content and upload a file
     Then I should see "Content 1.1 - Block 2"
     # Move Block 2 up on Block 1 and check the order of appearance.
     When I follow "Manage levels"
-    And I click on "//div[contains(@class, 'fcontainer')]//div[position()=1]//div[contains(@class, 'form-inline')]//input[contains(@title, 'Move Down')]" "xpath_element"
+    And I click on "//div[contains(@class, 'fcontainer')]//div[position()=1]//div[contains(@class, 'felement')]//input[contains(@title, 'Move Down')]" "xpath_element"
     And I am on the "Test Open Studio name 1" "openstudio activity" page
     And I follow "My Content > My Activities" in the openstudio navigation
     Then I should see "Activity 1 - Block 2" in the "//div[contains(@class, 'openstudio-activity-title-wrapper')][1]/h2" "xpath_element"

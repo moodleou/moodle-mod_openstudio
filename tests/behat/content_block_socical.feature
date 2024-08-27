@@ -178,12 +178,12 @@ Feature: Open Studio notifications
     # Upload an image.
     And I expand all toolbars for the "Comment" TinyMCE editor
     And I click on the "Image" button for the "Comment" TinyMCE editor
-    And I click on "Browse repositories..." "button"
+    And I click on "Browse repositories" "button"
     And I click on "Private files" "link" in the ".fp-repo-area" "css_element"
     And I click on "test2.jpg" "link"
     And I click on "Select this file" "button"
-    And I set the field "Describe this image for someone who cannot see it" to "An image"
-    And I click on "Save image" "button"
+    And I set the field "How would you describe this image to someone who can't see it?" to "An image"
+    And I click on "Save" "button" in the "Image details" "dialogue"
     # Post comment.
     And I press "Post comment"
     And I am on the "Demo Open Studio" "openstudio activity" page

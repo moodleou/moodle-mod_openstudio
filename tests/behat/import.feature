@@ -17,7 +17,7 @@ I need to import contents by zip file
 
     And I am on the "Course 1" "Course" page logged in as "admin"
     And I turn editing mode on
-    And I add a "OpenStudio 2" to section "0" and I fill the form with:
+    And I add a openstudio activity to course "Course 1" section "0" and I fill the form with:
       | Name                 | Test Open Studio name 1      |
       | Description          | Test Open Studio description |
       | ID number            | OS1                          |

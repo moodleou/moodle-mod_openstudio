@@ -42,7 +42,7 @@ I need to create a content and upload a file
       | student3 | G3    |
     And I am on the "Course 1" "Course" page logged in as "teacher1"
     And I turn editing mode on
-    And I add a "OpenStudio 2" to section "1" and I fill the form with:
+    And I add a openstudio activity to course "Course 1" section "1" and I fill the form with:
       | Name                         | Test Open Studio name 1      |
       | Description                  | Test Open Studio description |
       | Group mode                   | Visible groups               |
@@ -52,7 +52,7 @@ I need to create a content and upload a file
       | Abuse reports are emailed to | teacher1@asd.com             |
       | ID number                    | OS1                          |
       | id_tutorrolesgroup_1         | 1                            |
-    And I add a "OpenStudio 2" to section "1" and I fill the form with:
+    And I add a openstudio activity to course "Course 1" section "1" and I fill the form with:
       | Name                         | Test Open Studio name 2      |
       | Description                  | Test Open Studio description |
       | Group mode                   | Visible groups               |

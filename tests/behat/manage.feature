@@ -29,7 +29,7 @@ Feature: Manage open studio folders
       | teacher1 | G1    |
     And I am on the "Course 1" "Course" page logged in as "teacher1"
     And I turn editing mode on
-    And I add a "OpenStudio 2" to section "1" and I fill the form with:
+    And I add a openstudio activity to course "Course 1" section "1" and I fill the form with:
       | Name                         | Test Open Studio name 1      |
       | Description                  | Test Open Studio description |
       | Group mode                   | Visible groups               |
@@ -97,7 +97,7 @@ Feature: Manage open studio folders
       | Number of additional contents allowed | 2                          |
 
     When I press "Add another Content"
-    Then I should see "Content 1" in the "div.col-md-9.form-inline.felement > div.form-control-static > h3" "css_element"
+    Then I should see "Content 1" in the "div.col-md-9.felement > div.form-control-static > h3" "css_element"
     And "Name" "field" should exist
     And "Folder guidance text" "field" should exist
     And "Prevent re-ordering?" "field" should exist

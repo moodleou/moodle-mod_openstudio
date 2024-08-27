@@ -53,7 +53,7 @@ I need to see other people's work
 
     And I am on the "Course 1" "Course" page logged in as "teacher1"
     And I turn editing mode on
-    And I add a "OpenStudio 2" to section "1" and I fill the form with:
+    And I add a openstudio activity to course "Course 1" section "1" and I fill the form with:
       | Name                         | Test Open Studio name 1      |
       | Description                  | Test Open Studio description |
       | Group mode                   | Visible groups               |
@@ -121,7 +121,7 @@ I need to see other people's work
   Scenario: Students should not see activity slot links when don't have permission to view.
     Given I am on the "Course 1" "Course" page logged in as "admin"
     And I turn editing mode on
-    And I add a "OpenStudio 2" to section "1" and I fill the form with:
+    And I add a openstudio activity to course "Course 1" section "1" and I fill the form with:
       | Name                          | Test Open Studio name 2        |
       | Description                   | Test Open Studio description 2 |
       | Your word for 'My Module'     | My Module                      |
