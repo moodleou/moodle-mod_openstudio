@@ -186,7 +186,7 @@ Feature: Pagination Open Studio stream views
     Then I should see "Test content N"
 
     # Mobile view
-    When I change viewport size to "320x768"
+    When I change viewport size to "320x768" without runtime scaling
     And I reload the page
     And "Next" "link" should exist
     And I should not see "1" in the ".paging" "css_element"
@@ -652,7 +652,7 @@ Feature: Pagination Open Studio stream views
     And I should not see "8" in the ".openstudio-desktop-paging" "css_element"
 
     # Check pagination in mobile
-    When I change viewport size to "320x768"
+    When I change viewport size to "320x768" without runtime scaling
     And I reload the page
     # In page 1, show next button
     And I should see "Next" in the ".openstudio-mobile-paging-next" "css_element"
@@ -1075,7 +1075,7 @@ Feature: Pagination Open Studio stream views
     And I should see "1" in the ".openstudio-desktop-paging .current-page" "css_element"
     And I should see "2" in the ".openstudio-desktop-paging" "css_element"
     # Check pagination in mobile
-    When I change viewport size to "320x768"
+    When I change viewport size to "320x768" without runtime scaling
     And I reload the page
     # In page 1, show next button
     And I should see "Next" in the ".openstudio-mobile-paging-next" "css_element"

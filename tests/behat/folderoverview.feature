@@ -41,7 +41,7 @@ I need to create a content and upload a file
       | C1     | Test Open Studio name 1 | Test Open Studio description | 99       | OS1      | 2         | GI1      | 99       | 1             | teacher1@asd.com |
     And I am on the "Course 1" "Course" page logged in as "teacher1"
     And all users have accepted the plagarism statement for "OS1" openstudio
-    And I change viewport size to "large"
+    And I change viewport size to "large" without runtime scaling
 
   Scenario: Check Item Folder Overview
     Given the following open studio "folders" exist:
