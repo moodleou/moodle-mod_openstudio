@@ -422,7 +422,7 @@ class comments_test extends \advanced_testcase {
                 'contentid' => $this->contentdata->id,
                 'userid' => $this->users->students->one->id,
                 'comment' => random_string(),
-                'filepath' => 'mod/studio/tests/importfiles/test.mp3',
+                'filepath' => 'mod/openstudio/tests/importfiles/test.mp3',
                 'filecontext' => \context_module::instance($this->studiolevels->cmid),
         ];
         $comment1->id = $this->generator->create_comment($comment1);

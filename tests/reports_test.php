@@ -117,7 +117,7 @@ class reports_test extends \advanced_testcase {
                 'comment' => $commenttext,
                 'filecontext' => $this->studiolevelscontext,
                 'commenttextitemid' => $itemid,
-                'filepath' => 'mod/studio/tests/importfiles/test.mp3',
+                'filepath' => 'mod/openstudio/tests/importfiles/test.mp3',
         ]);
 
         $commentfiledata = $DB->get_record('files', [

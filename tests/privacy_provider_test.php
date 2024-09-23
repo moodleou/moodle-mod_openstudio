@@ -220,7 +220,7 @@ class privacy_provider_test extends provider_testcase {
                 'contentid' => $this->posts->one,
                 'userid' => $this->users->students->one->id,
                 'comment' => $commenttext,
-                'filepath' => 'mod/studio/tests/importfiles/test.mp3',
+                'filepath' => 'mod/openstudio/tests/importfiles/test.mp3',
                 'filecontext' => $this->contextstudio,
                 'commenttextitemid' => $itemid,
         ]);
@@ -282,7 +282,7 @@ class privacy_provider_test extends provider_testcase {
                 'contentid' => $this->posts->two,
                 'userid' => $this->users->students->two->id,
                 'comment' => random_string(),
-                'filepath' => 'mod/studio/tests/importfiles/test.mp3',
+                'filepath' => 'mod/openstudio/tests/importfiles/test.mp3',
                 'filecontext' => $this->contextstudio2
         ]);
         // Comment post2 by user one.
@@ -1049,7 +1049,7 @@ class privacy_provider_test extends provider_testcase {
                 'contentid' => $contentid,
                 'userid' => $user1->id,
                 'comment' => random_string(),
-                'filepath' => 'mod/studio/tests/importfiles/test.mp3',
+                'filepath' => 'mod/openstudio/tests/importfiles/test.mp3',
                 'filecontext' => $openstudio->cmid
         ]);
 
@@ -1058,7 +1058,7 @@ class privacy_provider_test extends provider_testcase {
                 'contentid' => $contentid,
                 'userid' => $user2->id,
                 'comment' => random_string(),
-                'filepath' => 'mod/studio/tests/importfiles/test.mp3',
+                'filepath' => 'mod/openstudio/tests/importfiles/test.mp3',
                 'filecontext' => $openstudio->cmid
         ]);
 
@@ -1067,7 +1067,7 @@ class privacy_provider_test extends provider_testcase {
                 'contentid' => $contentid,
                 'userid' => $user3->id,
                 'comment' => random_string(),
-                'filepath' => 'mod/studio/tests/importfiles/test.mp3',
+                'filepath' => 'mod/openstudio/tests/importfiles/test.mp3',
                 'filecontext' => $openstudio->cmid
         ]);
 

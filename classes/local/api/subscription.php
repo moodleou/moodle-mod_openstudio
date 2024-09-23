@@ -330,7 +330,7 @@ EOF;
                 }
 
                 // Check if user has permissions for this to process.
-                if (has_capability('mod/studio:viewothers', $context, $subscription->userid)) {
+                if (has_capability('mod/openstudio:viewothers', $context, $subscription->userid)) {
                     // Set up unqiue studios to write log.
                     $uniquestudios[$subscription->openstudioid] = $subscription->openstudioid;
 
