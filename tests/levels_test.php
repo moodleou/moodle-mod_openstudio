@@ -732,7 +732,7 @@ class levels_testcase extends \advanced_testcase {
 
         $block1 = $blocks[0];
         $this->assertEquals($level1id, $block1->id);
-        $this->assertObjectHasAttribute('activities', $block1);
+        $this->assertObjectHasProperty('activities', $block1);
         $this->assertCount(2, $block1->activities);
     }
 }

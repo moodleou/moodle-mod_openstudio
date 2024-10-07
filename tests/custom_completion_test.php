@@ -142,7 +142,7 @@ class custom_completion_test extends advanced_testcase {
         // User 1 will create content 1.
         $content1 = $this->generator->generate_content_data($openstudio, $studentid,
                 $this->generator->generate_single_data_array());
-        $this->assertObjectHasAttribute('id', $content1);
+        $this->assertObjectHasProperty('id', $content1);
         $this->assertEquals(COMPLETION_COMPLETE, $customcompletion->get_state($key));
 
         // Test we do not count deleted contents.
@@ -156,7 +156,7 @@ class custom_completion_test extends advanced_testcase {
         // User 1 will create content 2.
         $content2 = $this->generator->generate_content_data($openstudio, $studentid,
                 $this->generator->generate_single_data_array());
-        $this->assertObjectHasAttribute('id', $content2);
+        $this->assertObjectHasProperty('id', $content2);
         $this->assertEquals(COMPLETION_COMPLETE, $customcompletion->get_state($key));
 
         // Try to test with API.
@@ -207,7 +207,7 @@ class custom_completion_test extends advanced_testcase {
         // User 1 will create content 1.
         $content1 = $this->generator->generate_content_data($openstudio, $studentid,
                 $this->generator->generate_single_data_array());
-        $this->assertObjectHasAttribute('id', $content1);
+        $this->assertObjectHasProperty('id', $content1);
         $this->assertEquals(COMPLETION_INCOMPLETE, $customcompletion->get_state($key));
 
         // Now create content in folder.
@@ -267,7 +267,7 @@ class custom_completion_test extends advanced_testcase {
         // User 1 will create content 1.
         $content1 = $this->generator->generate_content_data($openstudio, $studentid,
                 $this->generator->generate_single_data_array());
-        $this->assertObjectHasAttribute('id', $content1);
+        $this->assertObjectHasProperty('id', $content1);
 
         $comment1id = $this->generator->create_comment((object) [
                 'contentid' => $content1->id,
@@ -280,7 +280,7 @@ class custom_completion_test extends advanced_testcase {
         // User 2 will create content 2.
         $content2 = $this->generator->generate_content_data($openstudio, $student2id,
                 $this->generator->generate_single_data_array());
-        $this->assertObjectHasAttribute('id', $content2);
+        $this->assertObjectHasProperty('id', $content2);
         // User 1 will comment on content 2 of user 2.
         $comment2id = $this->generator->create_comment((object) [
                 'contentid' => $content2->id,
@@ -393,7 +393,7 @@ class custom_completion_test extends advanced_testcase {
         // User 1 will create content 1.
         $content1 = $this->generator->generate_content_data($openstudio, $studentid,
                 $this->generator->generate_single_data_array());
-        $this->assertObjectHasAttribute('id', $content1);
+        $this->assertObjectHasProperty('id', $content1);
 
         // User 1 will create a comment.
         $comment1id = $this->generator->create_comment((object) [
@@ -474,7 +474,7 @@ class custom_completion_test extends advanced_testcase {
         // User 1 will create content 1.
         $content1 = $this->generator->generate_content_data($openstudio, $studentid,
                 $this->generator->generate_single_data_array());
-        $this->assertObjectHasAttribute('id', $content1);
+        $this->assertObjectHasProperty('id', $content1);
         $this->assertEquals(COMPLETION_INCOMPLETE, $customcompletion->get_overall_completion_state());
 
         // Check comments state.
@@ -540,7 +540,7 @@ class custom_completion_test extends advanced_testcase {
         // User 1 will create content 1.
         $content1 = $this->generator->generate_content_data($openstudio, $student2id,
                 $this->generator->generate_single_data_array());
-        $this->assertObjectHasAttribute('id', $content1);
+        $this->assertObjectHasProperty('id', $content1);
 
         // User 2 will create a comment.
         $comment1id = $this->generator->create_comment((object) [

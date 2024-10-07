@@ -550,7 +550,7 @@ class folder_test extends \advanced_testcase {
 
         $foldercontent = \mod_openstudio\local\api\folder::get_content($folder->id, $content->id);
         $this->assertEquals($content->id, $foldercontent->id);
-        $this->assertObjectHasAttribute('fcid', $foldercontent);
+        $this->assertObjectHasProperty('fcid', $foldercontent);
         $this->assertEquals($fc->id, $foldercontent->fcid);
     }
 

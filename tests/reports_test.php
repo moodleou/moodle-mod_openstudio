@@ -146,10 +146,10 @@ class reports_test extends \advanced_testcase {
 
         $storage = reports::get_total_storage($this->studiolevels->id);
 
-        $this->assertObjectHasAttribute('storagebyslot', $storage);
-        $this->assertObjectHasAttribute('storagebyslotversion', $storage);
-        $this->assertObjectHasAttribute('storagebythumbnail', $storage);
-        $this->assertObjectHasAttribute('storagebycomment', $storage);
+        $this->assertObjectHasProperty('storagebyslot', $storage);
+        $this->assertObjectHasProperty('storagebyslotversion', $storage);
+        $this->assertObjectHasProperty('storagebythumbnail', $storage);
+        $this->assertObjectHasProperty('storagebycomment', $storage);
 
         $expectedtotalstorage = $commentfiledata->filesize
                 + $commentfiledata2->filesize
