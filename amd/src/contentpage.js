@@ -162,9 +162,6 @@ define(['jquery',
                     });
                 });
             }
-
-            // Lock page scroll.
-            $('body').toggleClass('openstudio-lockscroll');
         },
 
         /**

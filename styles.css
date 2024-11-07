@@ -1873,10 +1873,6 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) .openstudio-comm
     padding-top: 12px;
 }
 
-.openstudio-lockscroll {
-    overflow-y: hidden;
-}
-
 .openstudio-modal-content-title span {
     font-size: 1.28571em;
     font-weight: bold;
