@@ -132,7 +132,8 @@ Feature: Open Studio search content
     And I follow "Student content 3"
     And I press "Edit"
     And I press "Add file"
-    And I set the field with xpath "//input[@placeholder='Enter tags...']" to "tag1"
+    And I set the field "Tags" to "tag1"
+    And I wait until ".form-autocomplete-selection span[data-value='tag1']" "css_element" exists
     And I press "Save"
     And I wait until the page is ready
     When I follow "tag1"
