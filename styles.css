@@ -60,7 +60,7 @@
 .openstudio-container {
     margin-top: 20px;
     margin-bottom: 18px;
-    padding-bottom: 8px;
+    padding-bottom: 2px;
 }
 
 .path-mod-openstudio .dropdown-menu > li > a.menuitem-active {
@@ -3062,6 +3062,14 @@ body .openstudio-grid-item-content-title a:focus {
     text-align: center;
     position: relative;
     cursor: pointer;
+    padding-top: 2px;
+}
+
+.openstudio-grid-item-content-detail-info-box a[id^="openstudio_navigation_notification_"]:focus,
+.openstudio-grid-item-content-detail-info-group span[id^="content_view_icon_"]:focus,
+.openstudio-interactive-icons .openstudio-content-view-icon-active-image:focus,
+.openstudio-interactive-icons .openstudio-content-view-icon-inactive-image:focus {
+    outline-color: #1c3c71;
 }
 
 .openstudio-grid-item-content-detail-info-icon {
@@ -3080,26 +3088,39 @@ body .openstudio-grid-item-content-title a:focus {
     margin-bottom: -17px;
     text-align: left;
     display: block;
-    height: 19px;
+    height: 17px;
 }
 
-.openstudio-grid-item-content-detail-info-text {
-    color: #0b55a8;
-    width: 22px;
+.openstudio-grid-item-content-detail-info-group .openstudio-grid-item-content-detail-info-box .openstudio-grid-item-content-detail-info-text {
+    position: absolute;
 }
 
+.openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-text.has-value,
 .openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-text-new {
-    background: #b52a1e none repeat scroll 0 0;
+    border: 1px solid #ffffff;
     border-radius: 50%;
     bottom: 23px;
-    color: #fff;
     font-weight: 700;
     min-width: 17px;
     height: 17px;
     position: absolute;
-    margin-left: 26px;
+    margin-left: 28px;
     text-align: center;
     z-index: 1;
+}
+
+.openstudio-grid-item-content-detail-info .inspired .openstudio-grid-item-content-detail-info-text.has-value {
+    margin-left: 26px;
+}
+
+.openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-text.has-value {
+    background: #bfe2ef;
+    color: #0b55a8;
+}
+
+.openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-text-new {
+    background: #b52a1e;
+    color: #ffffff;
 }
 
 .openstudio-grid-item-content-detail-info .notifications .openstudio-tooltip .openstudio-tooltiptext {
@@ -3259,13 +3280,7 @@ iframe.openstudio-content-view-iframe {
 }
 
 /* Activity. */
-
-.openstudio-activity-grid {
-    padding-bottom: 52px;
-}
-
 .openstudio-grid.openstudio-activity-cutting-edge {
-    border-top: 1px solid #dfdfdf;
     padding-top: 20px;
     margin-top: 0px;
 }
@@ -3274,7 +3289,6 @@ iframe.openstudio-content-view-iframe {
     font-size: 1.28571em;
     font-weight: bold;
     line-height: 18px;
-    margin: 0 26px 15px 24px;
 }
 
 .openstudio-profile-progress-content-description .openstudio-profile-progress-step.activity-locked {
@@ -3283,9 +3297,18 @@ iframe.openstudio-content-view-iframe {
     cursor: pointer;
 }
 
-.openstudio-activity-title:nth-child(n+5) {
+.openstudio-activity-title-wrapper {
+    margin: 0 24px 0 24px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.openstudio-activity-title-wrapper:nth-child(n+5) {
     border-top: 1px solid #dfdfdf;
-    padding-top: 20px;
+    padding-top: 10px;
+    margin-bottom: 11px;
 }
 
 .openstudio-actvity-title {
@@ -3566,15 +3589,23 @@ span.openstudio-content-view-title {
 .openstudio-content-view-animation-icons-left {
     float: left;
     width: 100%;
+    position: relative;
+}
+
+.openstudio-interactive-icons {
+    display: inline;
+    position: absolute;
+    top: 6px;
 }
 
 .openstudio-content-view-animation-icons-right {
     float: right;
+    margin-right: 15px;
 }
 
 .openstudio-folder-view-container .openstudio-content-view-animation-icons-right {
     display: inline-block;
-    float: none;
+    float: right;
     padding-left: 17px;
 }
 
@@ -3582,18 +3613,22 @@ span.openstudio-content-view-title {
     background-color: transparent;
     font-size: 1em;
     display: inline-block;
-    height: 40px;
+    height: 26px;
     width: auto;
     border: none;
     cursor: pointer;
 }
 
-.openstudio-content-view-icon-inspiration {
-    margin-left: 8px;
+.openstudio-content-view-animation-icons-right .openstudio-content-view-flag-icon {
+    color: #000000;
 }
 
-.openstudio-folder-view-container .openstudio-content-view-icon-inspiration {
-    margin-right: calc(20% - 3px);
+.openstudio-content-view-icon-inspiration {
+    margin: 0 19px 0 15px;
+}
+
+.openstudio-content-view-icon-participation {
+    margin-right: 15px;
 }
 
 .openstudio-content-view-flag-icon span {
@@ -3602,6 +3637,13 @@ span.openstudio-content-view-title {
 }
 
 .openstudio-content-view-flag-icon span img {
+    height: 24px;
+    width: 24px;
+    display: block;
+    margin: 0 auto 8px;
+}
+
+.openstudio-content-view-flag-icon span.view-icon img {
     height: 40px;
     width: 40px;
     margin: 0 auto;
@@ -3618,6 +3660,31 @@ body:not(.ios):not(.android) .openstudio-content-view-flag-icon.has-hover:hover 
 body:not(.ios):not(.android) .openstudio-content-view-flag-icon.has-hover:hover .openstudio-content-view-icon-inactive-image,
 .openstudio-content-view-flag-icon.openstudio-content-view-icon-active span.openstudio-content-view-icon-inactive-image {
     display: none;
+}
+
+.openstudio-interactive-icons .openstudio-content-view-flag-icon span.openstudio-content-view-icon-active-image,
+.openstudio-interactive-icons .openstudio-content-view-flag-icon span.openstudio-content-view-icon-inactive-image {
+    width: 49px;
+    margin: auto;
+    height: 27px;
+    padding-top: 2px;
+}
+
+/* Default state: hide the active icon */
+.openstudio-tooltip .openstudio-grid-item-content-detail-info-icon-active {
+    display: none;
+}
+
+/* On hover: hide the default icon and show the active icon */
+.openstudio-tooltip:hover .openstudio-grid-item-content-detail-info-icon {
+    display: none;
+}
+
+.openstudio-tooltip:hover .openstudio-grid-item-content-detail-info-icon-active {
+    display: inline;
+    width: 14px;
+    height: 14px;
+    margin: 0 auto;
 }
 
 .openstudio-content-view-icon-copies {
@@ -4743,11 +4810,6 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
     border-radius: 4px;
 }
 
-.openstudio-folder-view-container .openstudio-content-view-animation-icons {
-    padding-left: 15px;
-    padding-right: 15px;
-}
-
 .path-mod-openstudio .openstudio-folder-view-container .openstudio-request-feedback-button {
     margin-left: 0px;
 }
@@ -5024,6 +5086,63 @@ a.openstudio-add-new-content-link:hover  {
 .openstudio-people-page .openstudio-profile-details .openstudio-profile-work-title {
     display: inline-block;
     vertical-align: super;
+}
+
+.openstudio-expandall {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 24px;
+}
+
+.openstudio-expandall img {
+    margin: 0;
+}
+
+#openstudio-expandall,
+#openstudio-collapseall {
+    border:1px solid #4775af;
+    border-radius: 0;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    margin: 0;
+    background: #4775af;
+    padding: 2px 9px;
+    color: #ffffff;
+    text-shadow: none;
+    text-transform: uppercase;
+}
+
+#openstudio-expandall:focus,
+#openstudio-collapseall:focus {
+    outline-offset: -5px;
+    outline: none;
+}
+
+#openstudio-expandall:focus-visible,
+#openstudio-collapseall:focus-visible {
+    outline-offset: -5px;
+    outline: 2px solid #fdf289;
+}
+
+.openstudio-expandcollapse.expanded a.openstudio-expand,
+.openstudio-expandcollapse:not(.expanded) a.openstudio-collapse,
+.openstudio-expandall.expanded #openstudio-expandall,
+.openstudio-expandall:not(.expanded) #openstudio-collapseall,
+.openstudio-grid.openstudio-activity-grid:not(.openstudio-expanded),
+.openstudio-grid.openstudio-activity-cutting-edge:not(.openstudio-expanded) {
+    display: none;
+}
+
+.openstudio-expandcollapse img,
+.openstudio-expandcollapse i {
+    width: 22px;
+    height: 22px;
+    margin: 0;
+}
+
+.openstudio-grid.openstudio-activity-grid,
+.openstudio-grid.openstudio-activity-cutting-edge {
+    transition: opacity 0.5s linear, height 0.5s ease-in-out;
 }
 
 @media only screen and (max-width: 1279px) and (min-width: 1025px) {
@@ -6567,6 +6686,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 
     .openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-text {
+        position: absolute;
         font-size: 1.28571em;
         margin-bottom: -9px;
         width: 31px;
@@ -7489,12 +7609,8 @@ a.openstudio-add-new-content-link:hover  {
     /**
      * Actitity
      */
-    .openstudio-activity-title {
-        margin-left: 20px;
-    }
 
-    .openstudio-activity-title:nth-child(n+5) {
-        padding-top: 18px;
+    .openstudio-activity-title-wrapper:nth-child(n+5) {
         margin-bottom: -4px;
     }
 

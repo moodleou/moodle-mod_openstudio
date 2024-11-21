@@ -31,11 +31,15 @@ class tool_datamasking implements \tool_datamasking\plugin {
 
     public function build_plan(\tool_datamasking\plan $plan): void {
         $plan->table('files')->add(
-                new \tool_datamasking\files_mask('mod_openstudio', 'content'));
+                new files_mask('mod_openstudio', 'content'));
+        $plan->table('files')->add(
+                new \tool_datamasking\files_mask('mod_openstudio', 'description', 'openstudio_contents', 'description'));
+        $plan->table('files')->add(
+                new \tool_datamasking\files_mask('mod_openstudio', 'descriptionversion', 'openstudio_content_versions', 'description'));
         $plan->table('files')->add(
                 new \tool_datamasking\files_mask('mod_openstudio', 'contentcomment'));
         $plan->table('files')->add(
-                new \tool_datamasking\files_mask('mod_openstudio', comments::COMMENT_TEXT_AREA));
+                new \tool_datamasking\files_mask('mod_openstudio', comments::COMMENT_TEXT_AREA, 'openstudio_comments', 'commenttext'));
         $plan->table('files')->add(
                 new \tool_datamasking\files_mask('mod_openstudio', 'contenttemp'));
         $plan->table('files')->add(

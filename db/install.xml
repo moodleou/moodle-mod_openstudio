@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="mod/openstudio/db" VERSION="20231221" COMMENT="OpenStudio plugin tables"
+<XMLDB PATH="mod/openstudio/db" VERSION="20240710" COMMENT="OpenStudio plugin tables"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -180,6 +180,7 @@
         <FIELD NAME="deletedby" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Soft delete marker"/>
         <FIELD NAME="deletedtime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Soft delete marker, time (in seconds since epoch)."/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Time (in seconds since epoch)."/>
+        <FIELD NAME="enteralt" TYPE="char" LENGTH="125" NOTNULL="false" SEQUENCE="false" COMMENT="Describe the image for someone who cannot see it"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

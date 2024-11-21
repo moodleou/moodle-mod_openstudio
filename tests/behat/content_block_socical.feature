@@ -119,11 +119,11 @@ Feature: Open Studio notifications
     And I wait until the page is ready
     # The emoticons should be the gray icon when user doesn't react it.
     Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'inspired')]//span[contains(., '')]" "xpath_element" should exist
-    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'inspired')]//img[contains(@src, 'inspiration_grey_rgb_32px')]" "xpath_element" should exist
+    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'inspired')]//img[contains(@src, 'inspiration_default_rgb_32px')]" "xpath_element" should exist
     Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'smiles')]//span[contains(., '')]" "xpath_element" should exist
-    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'smiles')]//img[contains(@src, 'participation_grey_rgb_32px')]" "xpath_element" should exist
+    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'smiles')]//img[contains(@src, 'participation_smiles_default_rgb_32px')]" "xpath_element" should exist
     Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'favourites')]//span[contains(., '')]" "xpath_element" should exist
-    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'favourites')]//img[contains(@src, 'favourite_grey_rgb_32px')]" "xpath_element" should exist
+    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'favourites')]//img[contains(@src, 'favourite_default_rgb_32px')]" "xpath_element" should exist
     Then I click on "Module post 1" "link"
     And I wait until the page is ready
     And I click on "0 Favourites" "link"
@@ -133,11 +133,11 @@ Feature: Open Studio notifications
     And I am on the "Demo Open Studio" "openstudio activity" page
     # The emoticons should be the blue icon when user reacts it.
     Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'inspired')]//span[contains(., '1')]" "xpath_element" should exist
-    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'inspired')]//img[contains(@src, 'inspiration_rgb_32px')]" "xpath_element" should exist
+    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'inspired')]//img[contains(@src, 'inspiration_hover_active_rgb_32px')]" "xpath_element" should exist
     Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'smiles')]//span[contains(., '1')]" "xpath_element" should exist
-    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'smiles')]//img[contains(@src, 'participation_rgb_32px')]" "xpath_element" should exist
+    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'smiles')]//img[contains(@src, 'participation_hover_active_smiles_rgb_32px')]" "xpath_element" should exist
     Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'favourites')]//span[contains(., '1')]" "xpath_element" should exist
-    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'favourites')]//img[contains(@src, 'favourite_rgb_32px')]" "xpath_element" should exist
+    Then "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'favourites')]//img[contains(@src, 'favourite_hover_active_rgb_32px')]" "xpath_element" should exist
     Then I am on the "Demo Open Studio" "openstudio activity" page logged in as "student1"
     And I click on "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'inspired')]//span[contains(., '1')]" "xpath_element"
     And I click on "//div[@class='openstudio-grid-item'][1]//span[contains(@class, 'smiles')]//span[contains(., '1')]" "xpath_element"
@@ -156,8 +156,8 @@ Feature: Open Studio notifications
   Scenario: Add comment individual upload from My module page
     When I am on the "Demo Open Studio" "openstudio activity" page logged in as "teacher1"
     And I wait until the page is ready
-    Then "//*[@class='openstudio-grid-item'][1]//img[contains(@src, 'comments_grey_rgb_32px')]" "xpath_element" should exist
-    And I click on "//*[@class='openstudio-grid-item'][1]//img[contains(@src, 'comments_grey_rgb_32px')]" "xpath_element"
+    Then "//*[@class='openstudio-grid-item'][1]//img[contains(@src, 'comments_default_rgb_32px')]" "xpath_element" should exist
+    And I click on "//*[@class='openstudio-grid-item'][1]//img[contains(@src, 'comments_default_rgb_32px')]" "xpath_element"
     And I click on "Add comment" "link"
     And "Comment" "field" should exist
     And I should not see "Add new comment"

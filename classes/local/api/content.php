@@ -80,6 +80,7 @@ class content {
     const VISIBILITY_TUTOR = 7;
     const VISIBILITY_PEOPLE = 8;
     const VISIBILITY_ALLGROUPS = 9;
+    const VISIBILITY_BROWSEPOSTS = 10;
 
     const UPDATEMODE_UPDATED = 1;
     const UPDATEMODE_CREATED = 2;
@@ -509,6 +510,7 @@ EOF;
                     $insertdata['name'] = $contentdata->name;
                     $insertdata['description'] = $contentdata->description;
                     $insertdata['timemodified'] = time();
+                    $insertdata['enteralt'] = $contentdata->enteralt;
 
                     switch ($contentdata->contenttype) {
                         case self::TYPE_IMAGE:
@@ -790,6 +792,7 @@ EOF;
                 $insertdata['name'] = $contentdata->name;
                 $insertdata['description'] = $contentdata->description;
                 $insertdata['timemodified'] = time();
+                $insertdata['enteralt'] = $contentdata->enteralt;
 
                 switch ($contentdata->contenttype) {
                     case self::TYPE_IMAGE:
@@ -947,6 +950,7 @@ EOF;
                 $contentdata->deletedby = null;
                 $contentdata->deletedtime = null;
                 $contentdata->timemodified = time();
+                $contentdata->enteralt = $contentversiondata->enteralt;
 
                 $result = $DB->update_record('openstudio_contents', $contentdata);
                 if ($result === false) {
@@ -1256,6 +1260,7 @@ EOF;
             $insertdata['name'] = $contentdata->name;
             $insertdata['description'] = $contentdata->description;
             $insertdata['timemodified'] = time();
+            $insertdata['enteralt'] = $contentdata->enteralt;
 
             switch ($contentdata->contenttype) {
                 case self::TYPE_IMAGE:
@@ -1648,6 +1653,7 @@ EOF;
             $contentdata->deletedby = null;
             $contentdata->deletedtime = null;
             $contentdata->timemodified = time();
+            $contentdata->enteralt = $contentversiondata->enteralt;
 
             // Restore content from content version choose.
             $result = $DB->update_record('openstudio_contents', $contentdata);

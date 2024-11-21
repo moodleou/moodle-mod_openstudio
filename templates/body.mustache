@@ -31,6 +31,7 @@
         "placeholdertext" : "My module",
         "adddisable": false,
         "filterdisable": false,
+        "hasactivityitems" false,
         "hasnormalshareditems": false,
         "sharetoview": false;
         "contents": [
@@ -110,7 +111,7 @@
     }
 }}
 
-<div class="openstudio-container">
+<div class="openstudio-container" data-cmid="{{cmid}}">
     <div class="openstudio-module-title">
         <h2>{{{placeholdertext}}}</h2>
         {{#sharetoview}}
@@ -155,9 +156,15 @@
         </div>
     {{/filterdisable}}
     {{#myactivities}}
+        {{#hasactivityitems}}
+            {{> mod_openstudio/expand_all_buttons }}
+        {{/hasactivityitems}}
         {{#activityitems}}
-            <h2 class="openstudio-activity-title">{{{activityname}}}</h2>
-            <div class="openstudio-grid openstudio-activity-grid" id="openstudio_grid_{{activityid}}">
+            <div class="openstudio-activity-title-wrapper">
+                <h2 class="openstudio-activity-title" data-id="{{activityid}}">{{{activityname}}}</h2>
+                {{> mod_openstudio/content_expand_links }}
+            </div>
+            <div class="openstudio-grid openstudio-activity-grid {{#isexpanded}}openstudio-expanded{{/isexpanded}}" id="openstudio_grid_{{activityid}}">
                 {{#activities}}
                     <div class="openstudio-grid-item
                         {{#contentempty}}
@@ -172,7 +179,11 @@
             </div>
         {{/activityitems}}
         {{#hasnormalshareditems}}
-            <div class="openstudio-grid openstudio-activity-cutting-edge" id="openstudio_grid">
+            <div class="openstudio-activity-title-wrapper">
+                <h2 class="openstudio-activity-title" data-id="{{activityid}}">{{{activityname}}}</h2>
+                {{> mod_openstudio/content_expand_links }}
+            </div>
+            <div class="openstudio-grid openstudio-activity-cutting-edge {{#isexpanded}}openstudio-expanded{{/isexpanded}}" id="openstudio_grid_{{activityid}}">
                 {{#normalshareditems}}
                     <div class="openstudio-grid-item">{{>mod_openstudio/content_block}}</div>
                 {{/normalshareditems}}

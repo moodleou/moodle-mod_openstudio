@@ -177,7 +177,16 @@ if (!empty($folderdata->levelid)) {
         $folderdata->showaddsection = false;
     }
 }
-
+$config = [
+    'paths' => [
+        'leaflet' => (new moodle_url('/mod/openstudio/js/leaflet.min'))->out(false),
+    ],
+    'shim' => [
+        'leaflet' => ['exports' => 'leaflet'],
+    ],
+];
+$requirejs = 'require.config(' . json_encode($config) . ')';
+$PAGE->requires->js_amd_inline($requirejs);
 $PAGE->requires->js_call_amd('mod_openstudio/folderhelper', 'init');
 
 // Require strings for folder browse posts.

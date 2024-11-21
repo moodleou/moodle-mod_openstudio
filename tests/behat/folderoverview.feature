@@ -94,7 +94,7 @@ I need to create a content and upload a file
     And I follow "Test Folder Overview"
     And I should see "Folder Overview"
     And I am on the "Test Open Studio name 1" "openstudio activity" page
-    And I click on "//*[@class='openstudio-grid-item'][1]//img[contains(@src, 'comments_grey_rgb_32px')]" "xpath_element"
+    And I click on "//*[@class='openstudio-grid-item'][1]//img[contains(@src, 'comments_default_rgb_32px')]" "xpath_element"
     And I click on "Add comment" "link"
     And "Folder comments" "link" should be visible
     And "Comment" "field" should exist
@@ -556,21 +556,26 @@ I need to create a content and upload a file
     And I follow "My Content"
     And I follow "Test Folder Overview"
     And I press "Select existing post to add to folder"
+    And I should see "Found 3 posts."
     And I should see "TestRemove 1"
     And I should see "TestRemove 2"
     And I should see "TestRemove 3"
     # Add 1st Item
     And I select the existing openstudio post "TestRemove 1"
     And I should not see "TestRemove 1"
+    And I should see "Found 2 posts."
     # Add 2nd Item
     And I select the existing openstudio post "TestRemove 2"
     And I should not see "TestRemove 2"
+    And I should see "Found 1 posts."
     # Add 3rd Item
     And I select the existing openstudio post "TestRemove 3"
     And I should not see "TestRemove 3"
+    And I should see "Found 0 posts."
     # Observe the result
     And I click on "Remove last selection" "button" in the "Browse posts" "dialogue"
     And I should see "TestRemove 3"
+    And I should see "Found 1 posts."
     And I should not see "TestRemove 2"
     And I should not see "TestRemove 1"
 
@@ -629,3 +634,36 @@ I need to create a content and upload a file
     And I click on "Save changes" "button" in the "Browse posts" "dialogue"
     And I should see "TestContentFolders 1"
     And I should see "TestContentFolders 2"
+
+  Scenario: Check slot activity visible in Folder Overview
+    Given the following open studio "folders" exist:
+      | openstudio | user     | name                 | description                      | visibility | contenttype    |
+      | OS1        | teacher1 | Test Folder Overview | My Folder Overview Description 1 | module     | folder_content |
+    And the following open studio "contents" exist:
+      | openstudio | user     | name                 | description                | file                                       | visibility | index | keyword |
+      | OS1        | teacher1 | TestContentFolders 1 | Test content 1 description | mod/openstudio/tests/importfiles/test1.jpg | private    | 1     | folder  |
+      | OS1        | student1 | TestContentFolders 2 | Test content 2 description | mod/openstudio/tests/importfiles/test2.jpg | module     | 2     | folder  |
+      | OS1        | student2 | TestContentFolders 3 | Test content 3 description | mod/openstudio/tests/importfiles/test3.jpg | module     | 3     | folder  |
+    And the following open studio "level1s" exist:
+      | openstudio | name   | sortorder |
+      | OS1        | Block1 | 1         |
+    And the following open studio "level2s" exist:
+      | level1 | name      | sortorder |
+      | Block1 | Activity1 | 1         |
+      | Block1 | Activity2 | 2         |
+    And the following open studio "level3s" exist:
+      | level2    | name       | sortorder |
+      | Activity1 | Content1.1 | 1         |
+      | Activity2 | Content2.1 | 2         |
+    And the following open studio "level3contents" exist:
+      | openstudio | user     | name                       | description                  | visibility | level3     | levelcontainer |
+      | OS1        | teacher1 | Test My Preferences View 1 | My Preferences Description 1 | module     | Content1.1 | module         |
+      | OS1        | teacher1 | Test My Preferences View 2 | My Preferences Description 2 | private    | Content2.1 | module         |
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
+    When I follow "Test Folder Overview"
+    And I press "Select existing post to add to folder"
+    And I should see "TestContentFolders 1"
+    Then I should see "Test My Preferences View 1"
+    And I should see "Test My Preferences View 2"
+    And I should not see "TestContentFolders 2"
+    And I should not see "TestContentFolders 3"

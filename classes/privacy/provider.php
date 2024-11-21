@@ -136,6 +136,9 @@ class provider implements
         $collection->link_subsystem('core_files', 'privacy:metadata:core_files');
         $collection->link_subsystem('core_tag', 'privacy:metadata:core_tag');
 
+        $collection->add_user_preference('mod_openstudio_expanded',
+                'privacy:metadata:preference:mod_openstudio_expanded');
+
         return $collection;
     }
 
@@ -1730,5 +1733,35 @@ class provider implements
         } else {
             return get_string('privacy:visibility:' . $visibility, 'mod_openstudio');
         }
+    }
+
+    /**
+     * Export all user preferences for the plugin.
+     *
+     * @param int $userid The userid of the user whose data is to be exported
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
+    public static function export_user_preferences(int $userid) {
+        global $DB;
+
+        // This user's preferred name is dynamic, depend on the course module, so we'll
+        // query the database to get it.
+        $sql = 'SELECT *
+                  FROM {user_preferences}
+                 WHERE name LIKE \'mod_openstudio_expanded_%\'
+                       AND userid = :userid';
+
+        $params = [
+            'userid' => $userid,
+        ];
+
+        $description = get_string('privacy:metadata:preference:mod_openstudio_expanded', 'mod_openstudio');
+
+        $records = $DB->get_recordset_sql($sql, $params);
+        foreach ($records as $record) {
+            writer::export_user_preference('mod_openstudio', $record->name, $record->value, $description);
+        }
+        $records->close();
     }
 }

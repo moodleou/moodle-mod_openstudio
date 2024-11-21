@@ -53,6 +53,7 @@ $string['openstudio:viewdeleted'] = 'View deleted';
 $string['openstudio:viewdeletedposts'] = 'View deleted posts';
 $string['openstudio:viewothers'] = 'View others';
 $string['openstudio:viewparticipation'] = 'View user progress';
+$string['openstudio:viewprivate'] = 'View private posts in personal openstudio';
 $string['lastmodified'] = 'Last upload: {$a}';
 $string['strftimerecent'] = '%d %B %y, %H:%M';
 
@@ -73,6 +74,11 @@ $string['completiondetail:comments'] = 'Make comments: {$a}';
 $string['completiondetail:postscomments'] = 'Make contents and comments: {$a}';
 
 $string['contentthumbnailalt'] = 'Add content for {$a}';
+
+$string['collapseall'] = 'Collapse all';
+$string['collapseactivity'] = 'Collapse {$a}';
+$string['expandall'] = 'Expand all';
+$string['expandactivity'] = 'Expand {$a}';
 
 $string['event:contentviewed'] = 'View content';
 $string['event:folderviewed'] = 'View folder';
@@ -1208,6 +1214,7 @@ $string['reportvisibilityname6'] = 'In folder only';
 $string['reportvisibilityname7'] = 'Tutor';
 $string['reportvisibilitynamegroup'] = 'Specific Tutor Group';
 
+$string['leafletcoppyright'] = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 $string['locktype'] = 'Lock type for content';
 $string['lockdate'] = 'Lock content from:';
 $string['unlockdate'] = 'UnLock content on:';
@@ -1496,6 +1503,7 @@ $string['privacy:metadata:openstudio_notifications:flagid'] = 'The flag that tri
 $string['privacy:metadata:openstudio_notifications:message'] = 'The notification message.';
 $string['privacy:metadata:openstudio_notifications:timecreated'] = 'Time (in seconds since epoch).';
 $string['privacy:metadata:openstudio_notifications:timeread'] = 'Time (in seconds since epoch).';
+$string['privacy:metadata:preference:mod_openstudio_expanded'] = 'Save which activity is expanded belong to one openstudio.';
 $string['privacy:tracking:1'] = 'Create Content';
 $string['privacy:tracking:2'] = 'Read content';
 $string['privacy:tracking:3'] = 'Read Content Version';

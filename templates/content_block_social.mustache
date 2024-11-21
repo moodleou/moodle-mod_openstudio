@@ -53,8 +53,11 @@
                             </span>
                             <span class="openstudio-tooltip">
                                 <img src="{{#iscurrentusercomment}}{{commentsicon}}{{/iscurrentusercomment}}
-                                          {{^iscurrentusercomment}}{{commentsgreyicon}}{{/iscurrentusercomment}}"
+                                          {{^iscurrentusercomment}}{{commentsdefaulticon}}{{/iscurrentusercomment}}"
                                     class="openstudio-grid-item-content-detail-info-icon" alt="{{#str}} commentslabel, openstudio {{/str}}"/>
+                                <img src="{{#iscurrentusercomment}}{{commentsicon}}{{/iscurrentusercomment}}
+                                    {{^iscurrentusercomment}}{{commentsicon}}{{/iscurrentusercomment}}"
+                                     class="openstudio-grid-item-content-detail-info-icon-active" alt="{{#str}} commentslabel, openstudio {{/str}}"/>
                                 <span class="openstudio-tooltiptext interaction-icon">{{#str}} commentslabel, openstudio {{/str}}</span>
                             </span>
                         </a>
@@ -73,8 +76,11 @@
                     </span>
                     <span class="openstudio-tooltip">
                         <img src="{{#contentflaginspireactive}}{{inspirationicon}}{{/contentflaginspireactive}}
-                            {{^contentflaginspireactive}}{{inspirationgreyicon}}{{/contentflaginspireactive}}"
+                            {{^contentflaginspireactive}}{{inspirationdefaulticon}}{{/contentflaginspireactive}}"
                              class="openstudio-grid-item-content-detail-info-icon" alt="{{#str}} inspiredlabel, openstudio {{/str}}" />
+                        <img src="{{#contentflaginspireactive}}{{inspirationicon}}{{/contentflaginspireactive}}
+                            {{^contentflaginspireactive}}{{inspirationicon}}{{/contentflaginspireactive}}"
+                             class="openstudio-grid-item-content-detail-info-icon-active" alt="{{#str}} inspiredlabel, openstudio {{/str}}" />
                         <span class="openstudio-tooltiptext interaction-icon">{{#str}} inspiredlabel, openstudio {{/str}}</span>
                     </span>
                 </span>
@@ -89,8 +95,11 @@
                     </span>
                     <span class="openstudio-tooltip">
                         <img src="{{#contentflagsmileactive}}{{participationicon}}{{/contentflagsmileactive}}
-                            {{^contentflagsmileactive}}{{participationgreyicon}}{{/contentflagsmileactive}}"
+                            {{^contentflagsmileactive}}{{participationdefaulticon}}{{/contentflagsmileactive}}"
                              class="openstudio-grid-item-content-detail-info-icon" alt="{{#str}} smilelabel, openstudio {{/str}}" />
+                        <img src="{{#contentflagsmileactive}}{{participationicon}}{{/contentflagsmileactive}}
+                            {{^contentflagsmileactive}}{{participationicon}}{{/contentflagsmileactive}}"
+                             class="openstudio-grid-item-content-detail-info-icon-active" alt="{{#str}} smilelabel, openstudio {{/str}}" />
                         <span class="openstudio-tooltiptext interaction-icon">{{#str}} smilelabel, openstudio {{/str}}</span>
                     </span>
                 </span>
@@ -105,8 +114,10 @@
                     </span>
                     <span class="openstudio-tooltip">
                         <img src="{{#contentflagfavouriteactive}}{{favouriteicon}}{{/contentflagfavouriteactive}}
-                            {{^contentflagfavouriteactive}}{{favouritegreyicon}}{{/contentflagfavouriteactive}}"
+                            {{^contentflagfavouriteactive}}{{favouritedefaulticon}}{{/contentflagfavouriteactive}}"
                              class="openstudio-grid-item-content-detail-info-icon" alt="{{#str}} favouritelabel, openstudio {{/str}}" />
+                        <img src="{{favouriteicon}}"
+                             class="openstudio-grid-item-content-detail-info-icon-active" alt="{{#str}} favouritelabel, openstudio {{/str}}" />
                         <span class="openstudio-tooltiptext interaction-icon">{{#str}} favouritelabel, openstudio {{/str}}</span>
                     </span>
                 </span>

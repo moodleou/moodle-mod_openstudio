@@ -171,6 +171,7 @@ class util {
                 'expertcommenter' => has_capability('mod/openstudio:expertcommenter', $modulecontext, $userid),
                 'viewparticipation' => has_capability('mod/openstudio:viewparticipation', $modulecontext, $userid),
                 'view' => has_capability('mod/openstudio:view', $modulecontext, $userid),
+                'viewprivate' => has_capability('mod/openstudio:viewprivate', $modulecontext, $userid),
                 'viewothers' => has_capability('mod/openstudio:viewothers', $modulecontext, $userid),
                 'addcontent' => has_capability('mod/openstudio:addcontent', $modulecontext, $userid),
                 'addcomment' => has_capability('mod/openstudio:addcomment', $modulecontext, $userid),
@@ -284,7 +285,10 @@ class util {
             $permissions->feature_module = true;
             $permissions->allow_visibilty_modes[] = content::VISIBILITY_MODULE;
         }
-
+        // If a user has viewprivate but not managecontent, they cannot lock the content or folder.
+        if ($permissions->viewprivate && !$permissions->managecontent) {
+            $permissions->canlockothers = false;
+        }
         return $permissions;
     }
 
@@ -471,6 +475,11 @@ class util {
             }
         }
 
+        if ($content->visibility == content::VISIBILITY_PRIVATE &&
+                !($content->userid == $permissions->activeuserid || $permissions->viewprivate)) {
+            return false;
+        }
+
         // If I have managecontent capability, then I can read any slot.
         if ($permissions->managecontent) {
             return true;
@@ -569,6 +578,8 @@ EOF;
                     $content->userid, $permissions->activeuserid);
         } else if ($content->visibility == content::VISIBILITY_TUTOR) {
             return api\content::user_is_tutor($content->id, $permissions->activeuserid, $permissions->tutorroles);
+        } else if ($content->visibility == content::VISIBILITY_PRIVATE && $permissions->viewprivate) {
+            return true;
         }
 
         return false;

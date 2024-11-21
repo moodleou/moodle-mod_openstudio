@@ -44,7 +44,7 @@ define([
             FLAG_CONTENT_BLOCK: '.flag_content_block',
             FLAG_CONTENT_TEXT: '.openstudio-grid-item-content-detail-info-text',
             FLAG_CONTENT_TEXT_NEW: '.openstudio-grid-item-content-detail-info-text-new',
-            FLAG_CONTENT_ICON_IMAGE: 'img',
+            FLAG_CONTENT_ICON_IMAGE: 'img.openstudio-grid-item-content-detail-info-icon',
             FLAG_CONTENT_ICON: '.openstudio-grid-item-content-detail-info-box'
         },
 
@@ -67,6 +67,7 @@ define([
                     t.userOnPressFlagContent($(this));
                 }
             });
+            t.updateFlagContentStyles();
         },
 
         /**
@@ -128,6 +129,11 @@ define([
                         if (flagelement) {
                             flagelement.text(res.flagvalue || "");
                         }
+                        if (flagelement.text().trim() !== '') {
+                            flagelement.addClass('has-value');
+                        } else {
+                            flagelement.removeClass('has-value');
+                        }
                         $(e).find(t.CSS.FLAG_CONTENT_ICON_IMAGE).attr('src', res.flagiconimage);
                     }
                 })
@@ -148,7 +154,22 @@ define([
             if (cid && cmid && fid && mode) {
                 t.flagContent(e);
             }
-        }
+        },
+
+        /**
+         * Update flag content styles based on value.
+         *
+         * @method updateFlagContentStyles
+         */
+        updateFlagContentStyles: function() {
+            $(t.CSS.FLAG_CONTENT_TEXT).each(function() {
+                if ($(this).text().trim() !== '') {
+                    $(this).addClass('has-value');
+                } else {
+                    $(this).removeClass('has-value');
+                }
+            });
+        },
     };
 
     return t;

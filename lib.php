@@ -420,7 +420,8 @@ EOF;
             }
 
             // If the content is folder to private, then user cant see it.
-            if ($visibility == content::VISIBILITY_PRIVATE) {
+            if ($visibility == content::VISIBILITY_PRIVATE &&
+                    !has_capability('mod/openstudio:viewprivate', $modulecontext)) {
                 return false;
             }
 
@@ -491,6 +492,9 @@ EOF;
                 }
             }
         }
+    } else if ($visibility == content::VISIBILITY_PRIVATE &&
+            !($contentdata->userid == $USER->id || has_capability('mod/openstudio:viewprivate', $modulecontext))) {
+        return false;
     }
 
     if (in_array($filearea, ['contentcomment', comments::COMMENT_TEXT_AREA, 'description', 'descriptionversion'])) {
@@ -1169,4 +1173,22 @@ function mod_openstudio_output_fragment_commentform(array $args): string {
             'replyid' => $args['replyid'] ?? '',
     ]);
     return $mform->render();
+}
+
+/**
+ * Return a list of all the user preferences used by mod_openstudio.
+ *
+ * @uses core_user::is_current_user
+ *
+ * @return array[]
+ */
+function mod_openstudio_user_preferences(): array {
+    $preferences = [];
+    $preferences['~^mod_openstudio_expanded_(\d)+$~'] = [
+        'isregex' => true,
+        'null' => NULL_NOT_ALLOWED,
+        'default' => '',
+        'permissioncallback' => [core_user::class, 'is_current_user'],
+    ];
+    return $preferences;
 }

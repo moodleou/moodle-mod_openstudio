@@ -1197,7 +1197,7 @@ class renderer_utils {
         $userflags[] = (object)[
             'checked' => in_array(stream::FILTER_COMMENTS, $filters->fflagarray),
             'value' => stream::FILTER_COMMENTS,
-            'icon' => $OUTPUT->image_url('comments_filters_rgb_32px', 'openstudio'),
+            'icon' => $OUTPUT->image_url('comments_default_rgb_32px', 'openstudio'),
             'label' => get_string('filterflagcomments', 'openstudio')
         ];
 

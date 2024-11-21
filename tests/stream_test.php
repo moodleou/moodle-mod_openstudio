@@ -1122,4 +1122,54 @@ class stream_test extends \advanced_testcase {
                 false, false, 0, 2);
         $this->assertEquals(1, iterator_count($result));
     }
+
+    /**
+     * Check all browse posts streams.
+     */
+    public function test_stream_api_browse_posts() {
+        $this->resetAfterTest(true);
+
+        // Set Active User to student5.
+        $this->setUser($this->users->students->five);
+
+        // Filter types for browse post (exclude folder type).
+        $filtertypes = [\mod_openstudio\local\api\content::TYPE_NONE, \mod_openstudio\local\api\content::TYPE_TEXT,
+                \mod_openstudio\local\api\content::TYPE_IMAGE, \mod_openstudio\local\api\content::TYPE_IMAGE_EMBED,
+                \mod_openstudio\local\api\content::TYPE_VIDEO, \mod_openstudio\local\api\content::TYPE_VIDEO_EMBED,
+                \mod_openstudio\local\api\content::TYPE_AUDIO, \mod_openstudio\local\api\content::TYPE_AUDIO_EMBED,
+                \mod_openstudio\local\api\content::TYPE_DOCUMENT, \mod_openstudio\local\api\content::TYPE_DOCUMENT_EMBED,
+                \mod_openstudio\local\api\content::TYPE_PRESENTATION, \mod_openstudio\local\api\content::TYPE_PRESENTATION_EMBED,
+                \mod_openstudio\local\api\content::TYPE_SPREADSHEET, \mod_openstudio\local\api\content::TYPE_SPREADSHEET_EMBED,
+                \mod_openstudio\local\api\content::TYPE_URL, \mod_openstudio\local\api\content::TYPE_URL_IMAGE,
+                \mod_openstudio\local\api\content::TYPE_URL_VIDEO, \mod_openstudio\local\api\content::TYPE_URL_AUDIO,
+                \mod_openstudio\local\api\content::TYPE_URL_DOCUMENT, \mod_openstudio\local\api\content::TYPE_URL_DOCUMENT_PDF,
+                \mod_openstudio\local\api\content::TYPE_URL_DOCUMENT_DOC, \mod_openstudio\local\api\content::TYPE_URL_PRESENTATION,
+                \mod_openstudio\local\api\content::TYPE_URL_PRESENTATION_PPT,
+                \mod_openstudio\local\api\content::TYPE_URL_SPREADSHEET,
+                \mod_openstudio\local\api\content::TYPE_URL_SPREADSHEET_XLS,
+                \mod_openstudio\local\api\content::TYPE_CAD, \mod_openstudio\local\api\content::TYPE_ZIP];
+
+        // Now let's check if student5 can access his/her own contents.
+        // So userid and contentownerid should be the same.
+        $result = \mod_openstudio\local\api\stream::get_contents(
+            $this->studiomodule->id, $this->groupings->a->id,
+            $this->users->students->five->id, $this->users->students->five->id,
+            \mod_openstudio\local\api\content::VISIBILITY_BROWSEPOSTS, null,
+            implode(',', $filtertypes), null, null, null, null,
+            ['id' => \mod_openstudio\local\api\stream::SORT_BY_DATE, 'desc' => \mod_openstudio\local\api\stream::SORT_DESC],
+            null, \mod_openstudio\local\util\defaults::FOLDERBROWSEPOSTPAGESIZE, false,
+            true);
+
+        $this->assertNotEquals(false, $result);
+
+        // We must check to ensure that the expected 15 contents are given including the activity contents and pinboard.
+        if (isset($result->contents)) {
+            $this->assertEquals(15, iterator_count($result->contents));
+        }
+
+        foreach ($result->contents as $content) {
+            // Check only have content owner by student five
+            $this->assertEquals($this->users->students->five->id, $content->userid);
+        }
+    }
 }

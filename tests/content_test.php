@@ -1357,4 +1357,92 @@ class content_test extends \advanced_testcase {
         $permissions1 = \mod_openstudio\local\util::check_permission($cm, $cminstance, $this->course);
         $this->assertFalse(\mod_openstudio\local\util::can_read_content($cminstance, $permissions1, $content));
     }
+
+    public function test_view_private_capability(): void {
+        global $DB;
+        // Create course groups.
+        $this->groups = new \stdClass();
+        $this->groupings = new \stdClass();
+        $this->groupings->a  = $this->getDataGenerator()->create_grouping(
+                ['name' => 'Grouping A', 'courseid' => $this->course->id]);
+        $this->groups->one = $this->getDataGenerator()->create_group([
+                'courseid' => $this->course->id, 'name' => 'Group 1']);
+        $this->groups->two = $this->getDataGenerator()->create_group([
+                'courseid' => $this->course->id, 'name' => 'Group 2']);
+        $this->groups->three = $this->getDataGenerator()->create_group([
+                'courseid' => $this->course->id, 'name' => 'Group 3']);
+
+        // Add groups to our groupings.
+        $insert = new \stdClass();
+        $insert->groupingid = $this->groupings->a->id;
+        $insert->groupid = $this->groups->one->id;
+        $DB->insert_record('groupings_groups', $insert);
+        $insert->groupingid = $this->groupings->a->id;
+        $insert->groupid = $this->groups->two->id;
+        $DB->insert_record('groupings_groups', $insert);
+        $insert->groupingid = $this->groupings->a->id;
+        $insert->groupid = $this->groups->three->id;
+        $DB->insert_record('groupings_groups', $insert);
+
+        // Add student one and teacher one in group one.
+        $this->generator->add_users_to_groups([
+                $this->groups->one->id => [
+                        $this->users->students->one->id,
+                        $this->users->teachers->one->id,
+                ],
+        ]);
+        // Add student two and teacher one in group two.
+        $this->generator->add_users_to_groups([
+                $this->groups->two->id => [
+                        $this->users->students->two->id,
+                        $this->users->teachers->one->id,
+                ],
+        ]);
+
+        // Create generic studios.
+        $this->studio20 = $this->generator->create_instance([
+                'course' => $this->course->id,
+                'idnumber' => 'OS20',
+                'groupingid' => $this->groupings->a->id,
+                'groupmode' => content::VISIBILITY_GROUP,
+                'allowedvisibility' => implode(',', [
+                        content::VISIBILITY_PRIVATE,
+                        content::VISIBILITY_TUTOR,
+                        content::VISIBILITY_GROUP,
+                        content::VISIBILITY_MODULE,
+                ]),
+        ]);
+
+        // Student one creates content with visibility private.
+        $contentdata = [
+                'openstudio' => 'OS20',
+                'userid' => $this->users->students->one->id,
+                'name' => random_string(),
+                'description' => random_string(),
+                'visibility' => \mod_openstudio\local\api\content::VISIBILITY_PRIVATE,
+        ];
+        $contentid = $this->generator->create_contents($contentdata);
+        $cm = get_coursemodule_from_instance('openstudio', $this->studio20->id);
+        $cminstance = $DB->get_record('openstudio', ['id' => $cm->instance], '*', MUST_EXIST);
+        $content = \mod_openstudio\local\api\content::get($contentid);
+
+        // Check that both student one and student two have access to the content as they belong to the same group as the teacher.
+        $this->setUser($this->users->teachers->one->id);
+        $permissions1 = \mod_openstudio\local\util::check_permission($cm, $cminstance, $this->course);
+        // Case permission of manage content only.
+        $this->assertFalse(\mod_openstudio\local\util::can_read_content($cminstance, $permissions1, $content));
+
+        // Case permission of viewprivate content only.
+        $permissions1->managecontent = false;
+        $permissions1->viewprivate = true;
+        $this->assertTrue(\mod_openstudio\local\util::can_read_content($cminstance, $permissions1, $content));
+        // Case permission of viewprivate and manage content.
+        $permissions1->managecontent = true;
+        $permissions1->viewprivate = true;
+        $this->assertTrue(\mod_openstudio\local\util::can_read_content($cminstance, $permissions1, $content));
+        // Check that student one can access their own post.
+        $this->setUser($this->users->students->one->id);
+        $permissions2 = \mod_openstudio\local\util::check_permission($cm, $cminstance, $this->course);
+        $this->assertTrue(\mod_openstudio\local\util::can_read_content($cminstance, $permissions2, $content));
+    }
 }

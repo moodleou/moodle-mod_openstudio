@@ -172,13 +172,11 @@ class mod_openstudio_external extends external_api {
             }
         } else {
             $contentdatatemp = stream::get_contents(
-                    $cminstance->id, $permissions->groupingid, $userid, $userid, content::VISIBILITY_PRIVATE_PINBOARD,
-                    null, implode(',', $filtertypes), null, null, null, null,
-                    array('id' => stream::SORT_BY_DATE, 'desc' => stream::SORT_DESC), null, $pagesize, true, true,
-                    $permissions->managecontent, 0, $permissions->groupmode,
-                    false,
-                    $permissions->accessallgroups,
-                    false,
+                    $cminstance->id, $permissions->groupingid, $userid, $userid, content::VISIBILITY_BROWSEPOSTS,
+                    null, implode(',', $filtertypes), null, null, null,
+                    null, ['id' => stream::SORT_BY_DATE, 'desc' => stream::SORT_DESC], null, $pagesize,
+                    false, true, $permissions->managecontent, 0, $permissions->groupmode,
+                    false, $permissions->accessallgroups, false,
                     $permissions->feature_contentreciprocalaccess, $permissions->tutorroles);
 
             if (isset($contentdatatemp->contents)) {
@@ -651,11 +649,11 @@ class mod_openstudio_external extends external_api {
                             array('number' => $total));
                     switch ($mode) {
                         case 'on':
-                            $flagiconimage = $OUTPUT->image_url('favourite_rgb_32px', 'openstudio')->out(false);
+                            $flagiconimage = $OUTPUT->image_url('favourite_hover_active_rgb_32px', 'openstudio')->out(false);
                             $flagaccessiblemessage = get_string('contentclicktounfavourite', 'openstudio');
                         break;
                         case 'off':
-                            $flagiconimage = $OUTPUT->image_url('favourite_grey_rgb_32px', 'openstudio')->out(false);
+                            $flagiconimage = $OUTPUT->image_url('favourite_default_rgb_32px', 'openstudio')->out(false);
                             $flagaccessiblemessage = get_string('contentclicktofavourite', 'openstudio');
                             break;
                     }
@@ -665,11 +663,11 @@ class mod_openstudio_external extends external_api {
                             array('number' => $total));
                     switch ($mode) {
                         case 'on':
-                            $flagiconimage = $OUTPUT->image_url('participation_rgb_32px', 'openstudio')->out(false);
+                            $flagiconimage = $OUTPUT->image_url('participation_hover_active_smiles_rgb_32px', 'openstudio')->out(false);
                             $flagaccessiblemessage = get_string('contentclicktounsmile', 'openstudio');
                             break;
                         case 'off':
-                            $flagiconimage = $OUTPUT->image_url('participation_grey_rgb_32px', 'openstudio')->out(false);
+                            $flagiconimage = $OUTPUT->image_url('participation_smiles_default_rgb_32px', 'openstudio')->out(false);
                             $flagaccessiblemessage = get_string('contentclicktosmile', 'openstudio');
                             break;
                     }
@@ -679,11 +677,11 @@ class mod_openstudio_external extends external_api {
                             array('number' => $total));
                     switch ($mode) {
                         case 'on':
-                            $flagiconimage = $OUTPUT->image_url('inspiration_rgb_32px', 'openstudio')->out(false);
+                            $flagiconimage = $OUTPUT->image_url('inspiration_hover_active_rgb_32px', 'openstudio')->out(false);
                             $flagaccessiblemessage = get_string('contentclicktouninspire', 'openstudio');
                             break;
                         case 'off':
-                            $flagiconimage = $OUTPUT->image_url('inspiration_grey_rgb_32px', 'openstudio')->out(false);
+                            $flagiconimage = $OUTPUT->image_url('inspiration_default_rgb_32px', 'openstudio')->out(false);
                             $flagaccessiblemessage = get_string('contentclicktoinspire', 'openstudio');
                             break;
                     }
