@@ -1873,10 +1873,6 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) .openstudio-comm
     padding-top: 12px;
 }
 
-.openstudio-lockscroll {
-    overflow-y: hidden;
-}
-
 .openstudio-modal-content-title span {
     font-size: 1.28571em;
     font-weight: bold;
@@ -1914,13 +1910,18 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) .openstudio-comm
     height: 0;
 }
 .openstudio-modal-content-body-iframe #openstudio-content-previewipynb,
-.openstudio-modal-content-body-iframe iframe {
+.openstudio-modal-content-body-iframe iframe,
+.openstudio-modal-content-body-iframe iframe.openstudio-content-view-iframe {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     border: none;
+}
+
+.openstudio-modal-content .openstudio-modal-content-body .openstudio-content-weblink-text {
+    display: none;
 }
 
 .openstudio-modal-content-body-iframe #openstudio-content-previewipynb {

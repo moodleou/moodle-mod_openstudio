@@ -251,7 +251,7 @@ if ($vid == content::VISIBILITY_WORKSPACE) {
 }
 
 // Currently,  we respect view page size on preference bar and ignore settings.
-$streamdatapagesize = defaults::STREAMPAGESIZE;
+$streamdatapagesize = defaults::DEFAULTVIEWSIZE;
 if (isset($SESSION->openstudio_view_filters)) {
     if (isset($SESSION->openstudio_view_filters[$vid]->pagesize)) {
         $streamdatapagesize = $SESSION->openstudio_view_filters[$vid]->pagesize;
@@ -957,10 +957,12 @@ if ($exportenable) {
 
 $contentdata->selectedgroupid = $groupid;
 
-$viewsizes[0] = (object) ['size' => 50, 'selected' => false];
-$viewsizes[1] = (object) ['size' => 100, 'selected' => false];
-$viewsizes[2] = (object) ['size' => 150, 'selected' => false];
-$viewsizes[3] = (object) ['size' => 250, 'selected' => false];
+$viewsizes[0] = (object) ['size' => 10, 'selected' => false];
+$viewsizes[1] = (object) ['size' => 30, 'selected' => false];
+$viewsizes[2] = (object) ['size' => 50, 'selected' => false];
+$viewsizes[3] = (object) ['size' => 100, 'selected' => false];
+$viewsizes[4] = (object) ['size' => 150, 'selected' => false];
+$viewsizes[5] = (object) ['size' => 250, 'selected' => false];
 
 foreach ($viewsizes as $key => $value) {
     if ($value->size == $streamdatapagesize) {

@@ -38,7 +38,7 @@ require_once(dirname(__FILE__).'/lib.php');
 
 $id = optional_param('id', 0, PARAM_INT); // Course_module ID.
 $groupid = optional_param('groupid', 0, PARAM_INT); // Group id to filter against.
-$pagesize = mod_openstudio\local\util\defaults::STREAMPAGESIZE;
+$pagesize = mod_openstudio\local\util\defaults::DEFAULTVIEWSIZE;
 $pagedefault = 0;
 $pagesize = optional_param('pagesize', $pagesize, PARAM_INT);
 $pagestart = optional_param('page', $pagedefault, PARAM_INT);
@@ -163,10 +163,12 @@ $sortactionurl = $sortactionurl->out(false);
 $peopledata->sortactionurl = $sortactionurl;
 $peopledata->vid = $vid;
 
-$viewsizes[0] = (object) ['size' => 50, 'selected' => false];
-$viewsizes[1] = (object) ['size' => 100, 'selected' => false];
-$viewsizes[2] = (object) ['size' => 150, 'selected' => false];
-$viewsizes[3] = (object) ['size' => 250, 'selected' => false];
+$viewsizes[0] = (object) ['size' => 10, 'selected' => false];
+$viewsizes[1] = (object) ['size' => 30, 'selected' => false];
+$viewsizes[2] = (object) ['size' => 50, 'selected' => false];
+$viewsizes[3] = (object) ['size' => 100, 'selected' => false];
+$viewsizes[4] = (object) ['size' => 150, 'selected' => false];
+$viewsizes[5] = (object) ['size' => 250, 'selected' => false];
 
 foreach ($viewsizes as $key => $value) {
     if ($value->size == $pagesize) {

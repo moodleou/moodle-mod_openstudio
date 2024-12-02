@@ -176,6 +176,7 @@ Feature: Pagination Open Studio stream views
     When I reload the page
     And I follow "People" in the openstudio navigation
     And I follow "Shared content > My Module" in the openstudio navigation
+    And I set the field "View:" to "50"
     Then I should see "Test content N"
     And I should see "2"
     When I click on ".openstudio-desktop-paging .next" "css_element"
@@ -607,6 +608,7 @@ Feature: Pagination Open Studio stream views
     When I reload the page
     And I follow "People" in the openstudio navigation
     And I follow "Shared content > My Module" in the openstudio navigation
+    And I set the field "View:" to "50"
 
     # At the 1 begining page, see from 1 to 6 and last page 9
     And I should see "1" in the ".openstudio-desktop-paging .current-page" "css_element"
@@ -666,7 +668,7 @@ Feature: Pagination Open Studio stream views
     Then I should see "Page 3" in the ".openstudio-mobile-paging-current" "css_element"
     And ".openstudio-mobile-paging-first" "css_element" should exist
 
-  Scenario: Test Pagination numbers in with 7 page.
+  Scenario: Test Pagination.
     When I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "teacher1"
     And I wait "2" seconds
     And the following open studio "contents" exist:
@@ -997,6 +999,21 @@ Feature: Pagination Open Studio stream views
     And I follow "People" in the openstudio navigation
     And I follow "Shared content > My Module" in the openstudio navigation
 
+    # At the 1 begining page, see from 1 2 3 and last page 33.
+    And I should see "1" in the ".openstudio-desktop-paging .current-page" "css_element"
+    And I should see "2" in the ".openstudio-desktop-paging" "css_element"
+    And I should see "3" in the ".openstudio-desktop-paging" "css_element"
+    And I should see "33" in the ".openstudio-desktop-paging" "css_element"
+    # Click page 33, still see first page 1, last page 33.
+    And I click on "33" "link"
+    And I should see "33" in the ".openstudio-desktop-paging .current-page" "css_element"
+    And I should see "28" in the ".openstudio-desktop-paging" "css_element"
+    And I should see "29" in the ".openstudio-desktop-paging" "css_element"
+    And I should see "30" in the ".openstudio-desktop-paging" "css_element"
+    And I should see "31" in the ".openstudio-desktop-paging" "css_element"
+    And I should see "32" in the ".openstudio-desktop-paging" "css_element"
+
+    And I set the field "View:" to "50"
     # At the 1 begining page, see from 1 2 3 and last page 7
     And I should see "1" in the ".openstudio-desktop-paging .current-page" "css_element"
     And I should see "2" in the ".openstudio-desktop-paging" "css_element"
@@ -1082,3 +1099,19 @@ Feature: Pagination Open Studio stream views
     And I click on ".openstudio-mobile-paging-next" "css_element"
     Then I should see "Page 2" in the ".openstudio-mobile-paging-current" "css_element"
     And ".openstudio-mobile-paging-previous" "css_element" should exist
+
+  Scenario: Check "View" on page filter options.
+    Given I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "admin"
+    And I navigate to "Settings" in current page administration
+    And I set the following fields to these values:
+      | Flags | Favourite, Made me laugh |
+    And I press "Save and display"
+    And the following open studio "contents" exist:
+      | openstudio | user     | name         | description                | visibility |
+      | OS1        | teacher1 | TestContent1 | Test content 1 description | module     |
+    When I follow "Shared content > My Module" in the openstudio navigation
+    Then "#filter_pagesize option[value='10']" "css_element" should exist
+    And "#filter_pagesize option[value='30']" "css_element" should exist
+    And I follow "People" in the openstudio navigation
+    And "#filter_pagesize option[value='10']" "css_element" should exist
+    And "#filter_pagesize option[value='30']" "css_element" should exist
