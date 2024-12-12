@@ -594,15 +594,11 @@ $contentdata = (object) array('contents' => array(), 'total' => 0);
 $contentdata->openstudio_view_filters = $SESSION->openstudio_view_filters[$vid];
 
 if ($finalviewpermissioncheck) {
-    // When view My Ativity or
-    // In My Module/Group view, if block filter is on and set to one block only,
-    // then pagination behaves differently.  In this state, we display all the activity/content rather limiting
-    // it to the default stream page size.  To  achieve this, we remove the pagination limit
+    // When view My Activity we display all the activity/content rather limiting
+    // it to the default stream page size. To  achieve this, we remove the pagination limit
     // by setting it to 0.
 
-    if ((($vid == content::VISIBILITY_MODULE || $vid == content::VISIBILITY_GROUP)
-        && ($fblock > 0) && ($fblockarray !== null) && (count($fblockarray) == 1))
-            || $vid == content::VISIBILITY_PRIVATE) {
+    if ($vid == content::VISIBILITY_PRIVATE) {
         $streamdatapagesize = 0;
     }
 
