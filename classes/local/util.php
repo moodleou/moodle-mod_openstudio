@@ -363,12 +363,12 @@ class util {
         }
 
         if ($longformat) {
-            $dateformat = 'strftimedaydatetime';
+            $dateformat = get_string('strftimedaydatetime', 'langconfig');
         } else {
-            $dateformat = 'strftimedatetime';
+            $dateformat = get_string('formattimedatetime', 'openstudio');
         }
 
-        return userdate($date, get_string($dateformat, 'langconfig'));
+        return userdate($date, $dateformat);
     }
 
     /**

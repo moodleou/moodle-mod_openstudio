@@ -129,8 +129,7 @@ if (!empty($peopledatatemp)) {
     foreach ($personarray as $personid => $person) {
         $person->userpicturehtml = util::render_user_avatar($renderer, $person);
         $person->userprogressdata = $usersactivitydata[$person->id];
-        $person->userprogressdata['lastactivedate'] = userdate($person->userprogressdata['lastactivedate'],
-                get_string('formattimedatetime', 'openstudio'));
+        $person->userprogressdata['lastactivedate'] = util::format_date($person->userprogressdata['lastactivedate']);
         $person->viewuserworkurl = new moodle_url('/mod/openstudio/view.php',
                     array('id' => $id, 'vuid' => $person->id, 'vid' => content::VISIBILITY_PRIVATE));
 
