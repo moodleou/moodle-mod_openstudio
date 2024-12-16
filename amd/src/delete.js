@@ -29,8 +29,8 @@ define([
     'core/ajax',
     'core/str',
     'core/config',
-    'require'
-], function($, Ajax, Str, SiteConfig, require) {
+    'mod_openstudio/osdialogue',
+], function($, Ajax, Str, SiteConfig, osDialogue) {
     var t;
     t = {
 
@@ -48,6 +48,11 @@ define([
         mconfig: null,
 
         /**
+         * Delete dialogue instance.
+         */
+        dialogue: null,
+
+        /**
          * List out all of css selector used in this module.
          */
         CSS: {
@@ -62,16 +67,12 @@ define([
          * @method init
          * @param {JSON} options  The settings for this feature.
          */
-        init: function(options) {
+        init: async function(options) {
 
             t.mconfig = options;
 
             // Create delete dialog.
-            Y.use('moodle-core-notification-dialogue', function() {
-                require(['mod_openstudio/osdialogue'], function(osDialogue){
-                    t.dialogue = t.createDeleteDialogue(osDialogue);
-                });
-            });
+            t.dialogue = await t.createDeleteDialogue();
 
             // Click event on delete button.
             $(t.CSS.DELETEBUTTON).on('click', function() {
@@ -79,72 +80,73 @@ define([
                     t.dialogue.show();
                 }
             });
-
-            // Responsive.
-            $(window).resize(t.resize.bind(t));
         },
 
         /**
          * Create delete dialogue and some events on it.
          *
-         * @param {object} osDialogue object
-         * @return {object} OSDialogue instance
          * @method createDeleteDialogue
+         * @returns {Promise<Modal>}
          */
-        createDeleteDialogue: function(osDialogue) {
+        createDeleteDialogue: async function() {
             /**
-             * Set header for dialog
+             * Set header for dialog.
+             *
+             * @param {Object} dialogue
              * @method setHeader
              */
-            function setHeader() {
-                var langstring = (t.mconfig.isfolder) ? 'folderdeletedfolder' : 'contentdeledialogueteheader';
+            function setHeader(dialogue) {
+                const langString = (t.mconfig.isfolder) ? 'folderdeletedfolder' : 'contentdeledialogueteheader';
                 Str
-                    .get_string(langstring, 'mod_openstudio')
+                    .get_string(langString, 'mod_openstudio')
                     .done(function(s) {
-                        dialogue.set('headerContent',
-                            '<span class="' + t.CSS.DIALOGHEADER.replace('.', '') +
+                        dialogue.setTitle('<span class="' + t.CSS.DIALOGHEADER.replace('.', '') +
                             '">' + s + '</span>');
                     });
             }
 
             /**
-             * Set body for dialog
+             * Set body for dialog.
+             *
+             * @param {Object} dialogue
              * @method setBody
              */
-            function setBody() {
-                var langstring = (t.mconfig.isfolder) ? 'deleteconfirmfolder' : 'deleteconfirmcontent';
+            function setBody(dialogue) {
+                const langString = (t.mconfig.isfolder) ? 'deleteconfirmfolder' : 'deleteconfirmcontent';
                 Str
-                    .get_string(langstring, 'mod_openstudio')
+                    .get_string(langString, 'mod_openstudio')
                     .done(function(s) {
-                        dialogue.set('bodyContent', s);
+                        dialogue.setBody(s);
                     });
             }
 
             /**
-             * Set body for dialog
+             * Set body for dialog.
+             *
+             * @param {Object} dialogue
              * @method setBody
              */
-            function setFooter() {
-                // Button [Cancel]
-                var cancelBtnProperty = {
+            function setFooter(dialogue) {
+                // Button [Cancel].
+                const cancelBtnProperty = {
                     name: 'cancel',
                     classNames: 'openstudio-delete-cancel-btn',
-                    action: 'hide'
+                    action: 'hide',
                 };
 
-                // Button [Delete]
-                var deleteBtnProperty = {
+                // Button [Delete].
+                const deleteBtnProperty = {
                     name: 'delete',
                     classNames: 'openstudio-delete-ok-btn',
                     events: {
-                        click: t.deleteContent.bind(t)
-                    }
+                        click: t.deleteContent.bind(t),
+                    },
                 };
 
                 Str
                     .get_strings([
                         {key: 'modulejsdialogcancel', component: 'mod_openstudio'},
-                        {key: 'deletelevel', component: 'mod_openstudio'}
+                        {key: 'deletelevel', component: 'mod_openstudio'},
                     ])
                     .done(function(s) {
                         cancelBtnProperty.label = s[0];
@@ -153,27 +155,23 @@ define([
                         dialogue.addButton(cancelBtnProperty, ['footer']);
                     });
             }
-            var hasFolderClass = '';
+            let hasFolderClass = '';
             if (t.mconfig.isfolder) {
                 hasFolderClass = 'openstudio-folder';
             } else if(t.mconfig.folderid) {
                 hasFolderClass = 'openstudio-is-belong-to-folder';
             }
-            var dialogue = new osDialogue({
-                closeButton: true,
-                visible: false,
-                centered: true,
-                modal: true,
-                responsive: true,
-                width: 640,
-                responsiveWidth: 767,
-                focusOnPreviousTargetAfterHide: true,
-                extraClasses: [t.CSS.DELETEDIALOGUECONTAINER.replace('.', ''), hasFolderClass]
+
+            const dialogue = await osDialogue.create({
+                isVerticallyCentered: true,
+                templateContext: {
+                    extraClasses: t.CSS.DELETEDIALOGUECONTAINER.replace('.', '') + ' ' + hasFolderClass
+                },
             });
 
-            setHeader();
-            setBody();
-            setFooter();
+            setHeader(dialogue);
+            setBody(dialogue);
+            setFooter(dialogue);
 
             return dialogue;
         },
@@ -220,24 +218,6 @@ define([
                     window.console.error('Log request failed ' + ex.message);
                 });
         },
-
-        /**
-         * Resize and update dialogue position.
-         * @method resize
-         */
-        resize: function() {
-            if (!t.dialogue) {
-                return;
-            }
-
-            if (t.dialogue.get('visible')) {
-                if (Y.one('body').get('winWidth') <= t.dialogue.get('responsiveWidth')) {
-                    t.dialogue.makeResponsive();
-                } else {
-                    t.dialogue.centerDialogue();
-                }
-            }
-        }
     };
 
     return t;

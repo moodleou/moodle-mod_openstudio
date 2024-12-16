@@ -29,12 +29,14 @@ define([
     'core/ajax',
     'core/str',
     'mod_openstudio/scrollto',
-    'require',
     'core/notification',
     'core_form/changechecker',
     'core/fragment',
     'core/templates',
-], function($, Ajax, Str, Scrollto, require, Notification, FormChangeChecker, Fragment, Templates) {
+    'mod_openstudio/osdialogue',
+    'core/modal_events',
+], function($, Ajax, Str, Scrollto, Notification, FormChangeChecker,
+            Fragment, Templates, osDialogue, ModalEvents) {
     var t;
     t = {
 
@@ -46,6 +48,11 @@ define([
          * }
          */
         mconfig: null,
+
+        /**
+         * Delete comment dialogue instance.
+         */
+        dialogue: null,
 
         /**
          * Height from DOMElement to top browser.
@@ -96,16 +103,11 @@ define([
          * @method init
          * @param {JSON} options  The settings for this feature.
          */
-        init: function(options) {
+        init: async function(options) {
 
             t.mconfig = options;
 
-            // Create delete dialog.
-            Y.use('moodle-core-notification-dialogue', function() {
-                require(['mod_openstudio/osdialogue'], function(osDialogue) {
-                    t.dialogue = t.createDeleteCommentDialogue(osDialogue);
-                });
-            });
+            t.dialogue = await t.createDeleteCommentDialogue();
 
             // Click event on buttons.
             // Add new button.
@@ -123,9 +125,6 @@ define([
 
             // Form submit event.
             $(t.CSS.COMMENT_FORM).find('form').on('submit', t.postComment);
-
-            // Resize event.
-            $(window).resize(t.resize);
         },
 
         /**
@@ -322,8 +321,6 @@ define([
                         Scrollto.scrollToEl($('[data-thread-items="' + res.commentid + '"]'), t.HEIGHT_TO_TOP);
                     }
 
-                    t.resize();
-
                     $(t.CSS.COMMENT_THREAD).show();
 
                     // Set focus on comment form.
@@ -375,7 +372,7 @@ define([
                         .parent().removeClass('openstudio-hidden')
                         .siblings(t.CSS.FLAG_STATUS).addClass('openstudio-hidden');
                     if (res.count === 0) {
-                        let imageElement = likebtn.siblings(t.CSS.FLAG_STATUS).children('img')
+                        let imageElement = likebtn.siblings(t.CSS.FLAG_STATUS).children('img');
                         if (imageElement) {
                             Str.get_string('contentcommentnotliked', 'mod_openstudio').then((value) => {
                                 imageElement[1].alt = value;
@@ -446,13 +443,13 @@ define([
                         $(t.CSS.COMMENT_THREAD).hide();
                     }
 
+                    // Set focus on comment form.
+                    t.dialogue.getRoot().on(ModalEvents.hidden, () =>  {
+                        $('#openstudio_comment_form').focus();
+                    });
+
                     // Hide delete dialogue.
                     t.dialogue.hide();
-
-                    // Set focus on comment form.
-                    t.dialogue.after('visibleChange', function() {
-                        $('#openstudio_comment_form').focus();
-                    }, t.dialogue);
                 })
                 .always(function() {
                     M.util.js_complete('openstudioDeleteComment');
@@ -465,53 +462,46 @@ define([
         /**
          * Create delete comment dialogue and some events on it.
          *
-         * @param {object} osDialogue object
-         * @return {object} OSDialogue instance
          * @method createDeleteCommentDialogue
+         * @returns {Promise<Modal>}
          */
-        createDeleteCommentDialogue: function(osDialogue) {
-            var folderClass = '';
+        createDeleteCommentDialogue: async function() {
+            let folderClass = '';
             if (t.mconfig.folder) {
                 folderClass = 'openstudio-folder';
             }
-            var dialogue = new osDialogue({
-                closeButton: true,
-                visible: false,
-                centered: true,
-                responsive: true,
-                responsiveWidth: 767,
-                modal: true,
-                focusOnPreviousTargetAfterHide: true,
-                width: 521,
-                extraClasses: [t.CSS.BOUNDING_BOX.replace('.', ''), folderClass]
+            const dialogue = await osDialogue.create({
+                isVerticallyCentered: true,
+                templateContext: {
+                    extraClasses: t.CSS.BOUNDING_BOX.replace('.', '') + ' ' + folderClass,
+                },
             });
 
-            // Button [Cancel]
-            var cancelBtnProperty = {
+            // Button [Cancel].
+            const cancelBtnProperty = {
                 name: 'cancel',
                 classNames: 'openstudio-cancel-btn',
-                action: 'hide'
+                action: 'hide',
             };
-            // Button [Delete]
-            var deleteBtnProperty = {
+            // Button [Delete].
+            const deleteBtnProperty = {
                 name: 'delete',
-                classNames: t.CSS.DELETE_CONFIRM_BUTTON.replace('.', '')
+                classNames: t.CSS.DELETE_CONFIRM_BUTTON.replace('.', ''),
             };
             Str
                 .get_strings([
                     {key: 'contentcommentsdelete', component: 'mod_openstudio'},
                     {key: 'modulejsdialogcommentdeleteconfirm', component: 'mod_openstudio'},
                     {key: 'modulejsdialogcancel', component: 'mod_openstudio'},
-                    {key: 'modulejsdialogdelete', component: 'mod_openstudio'}
+                    {key: 'modulejsdialogdelete', component: 'mod_openstudio'},
                 ])
                 .done(function(s) {
                     cancelBtnProperty.label = s[2];
                     deleteBtnProperty.label = s[3];
 
-                    dialogue.set('headerContent',
-                        '<span class="openstudio-dialogue-common-header ' + t.CSS.DIALOG_HEADER.replace('.', '') +
+                    dialogue.setTitle('<span class="openstudio-dialogue-common-header ' + t.CSS.DIALOG_HEADER.replace('.', '') +
                         '">' + s[0] + '</span>');
-                    dialogue.set('bodyContent', s[1]);
+                    dialogue.setBody(s[1]);
                     dialogue.addButton(deleteBtnProperty, ['footer']);
                     dialogue.addButton(cancelBtnProperty, ['footer']);
                 });
@@ -528,30 +518,12 @@ define([
         deleteConfirm: function(e) {
             e.preventDefault();
             if (t.dialogue) {
-                // Update comment id for delete button.
-                $(t.CSS.DELETE_CONFIRM_BUTTON).attr('data-comment-id', $(this).data('comment-id'));
                 // Show delete dialogue.
                 t.dialogue.show();
+                // Update comment id for delete button.
+                $(t.CSS.DELETE_CONFIRM_BUTTON).attr('data-comment-id', $(this).data('comment-id'));
             }
         },
-
-        /**
-         * Resize and update dialogue position.
-         * @method resize
-         */
-        resize: function() {
-            if (!t.dialogue) {
-                return;
-            }
-
-            if (t.dialogue.get('visible')) {
-                if (Y.one('body').get('winWidth') <= t.dialogue.get('responsiveWidth')) {
-                    t.dialogue.makeResponsive();
-                } else {
-                    t.dialogue.centerDialogue();
-                }
-            }
-        }
     };
 
     return t;

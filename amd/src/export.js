@@ -26,16 +26,15 @@
  */
 define([
     'jquery',
-    'core/yui',
     'core/str',
     'core/config',
     'mod_openstudio/osdialogue'
-], function($, Y, Str, SiteConfig) {
+], function($, Str, SiteConfig, osDialogue) {
     var t;
     t = {
 
         /**
-         * M.core.dialog instance
+         * Export dialogue instance.
          */
         dialogue: null,
 
@@ -64,14 +63,10 @@ define([
          * @param {JSON} options  The settings for module
          * @method init
          */
-        init: function(options) {
+        init: async function(options) {
             t.mconfig = options;
 
-            Y.use('moodle-core-notification-dialogue', function() {
-                require(['mod_openstudio/osdialogue'], function(osDialogue){
-                    t.dialogue = t.createExportDialogue(osDialogue);
-                });
-            });
+            t.dialogue = await t.createExportDialogue();
 
             // Click event on export bottom button.
             $(t.CSS.EXPORTBUTTON).on('click', function(e) {
@@ -83,67 +78,69 @@ define([
             $(t.CSS.SELECTNONE).on('click', t.selectNone.bind(t));
             $(t.CSS.EXPORTSELECTED).on('click', t.exportSelected.bind(t));
             $(t.CSS.CHECKBOXS).on('click', t.selectPost.bind(t));
-
-            $(window).resize(t.resize.bind(t));
         },
 
         /**
          * Create export dialogue and some events on it.
          *
          * @method createExportDialogue
-         * @param {Element} osDialogue
-         * @return M.core.dialogue
+         * @returns {Promise<Modal>}
          */
-        createExportDialogue: function(osDialogue) {
+        createExportDialogue: async function() {
             /**
-             * Set header for dialog
+             * Set header for dialog.
+             *
+             * @param {Object} dialogue
              * @method setHeader
              */
-            function setHeader() {
-                var headerstring;
+            function setHeader(dialogue) {
+                let headerString;
                 Str
                     .get_string('exportdialogheader', 'mod_openstudio')
                     .done(function(s) {
-                        headerstring = s;
+                        headerString = s;
                     })
                     .always(function() {
-                        dialogue.set('headerContent',
-                            '<span class="' + t.CSS.DIALOGHEADER.replace('.', '') +
-                            '">' + headerstring + '</span>');
+                        dialogue.setTitle('<span class="' + t.CSS.DIALOGHEADER.replace('.', '') +
+                            '">' + headerString + '</span>');
                     });
             }
 
             /**
-             * Set body for dialog
+             * Set body for dialog.
+             *
+             * @param {Object} dialogue
              * @method setBody
              */
-            function setBody() {
-                var bodystring;
-                var message;
+            function setBody(dialogue) {
+                let bodyString;
+                let message;
                 Str
                     .get_strings([
                         {key: 'exportdialogcontent', component: 'mod_openstudio'},
                         {key: 'export:emptycontent', component: 'mod_openstudio'}
                     ])
                     .done(function(s) {
-                        bodystring = s[0];
+                        bodyString = s[0];
                         message = s[1];
                     })
                     .always(function() {
-                        bodystring += '<div class="' + t.CSS.EXPORTMESSAGE.replace('.', '') + '"></div>';
-                        dialogue.set('bodyContent', bodystring);
+                        bodyString += '<div class="' + t.CSS.EXPORTMESSAGE.replace('.', '') + '"></div>';
+                        dialogue.setBody(bodyString);
 
                         $(t.CSS.EXPORTMESSAGE).text(message);
                     });
             }
 
             /**
-             * Set body for dialog
+             * Set body for dialog.
+             *
+             * @param {Object} dialogue
              * @method setBody
              */
-            function setFooter() {
-                // Button [All content shown]
-                var exportAllBtnProperty = {
+            function setFooter(dialogue) {
+                // Button [All content shown].
+                const exportAllBtnProperty = {
                     name: 'exportall',
                     classNames: 'openstudio-exportall-btn',
                     events: {
@@ -151,20 +148,20 @@ define([
                     }
                 };
 
-                // Button [Selected posted]
-                var exportSelectedBtnProperty = {
+                // Button [Selected posted].
+                const exportSelectedBtnProperty = {
                     name: 'exportselected',
                     classNames: 'openstudio-exportselected-btn',
                     events: {
                         click: function() {
-                            var contentids = t.mconfig.contentids.join();
-                            if (contentids) {
+                            const contentIds = t.mconfig.contentids.join();
+                            if (contentIds) {
                                 t.redirectPostRequest({
                                     url: SiteConfig.wwwroot + '/mod/openstudio/exportposts.php',
                                     data: {
                                         id: t.mconfig.id,
                                         vid: t.mconfig.vid,
-                                        contentids: contentids
+                                        contentids: contentIds
                                     }
                                 });
                             } else {
@@ -175,7 +172,7 @@ define([
                 };
 
                 // Button [Cancel]
-                var cancelBtnProperty = {
+                const cancelBtnProperty = {
                     name: 'cancel',
                     classNames: 'openstudio-cancelexport-btn',
                     action: 'hide'
@@ -185,7 +182,7 @@ define([
                     .get_strings([
                         {key: 'exportall', component: 'mod_openstudio'},
                         {key: 'exportselectedpost', component: 'mod_openstudio'},
-                        {key: 'modulejsdialogcancel', component: 'mod_openstudio'}
+                        {key: 'modulejsdialogcancel', component: 'mod_openstudio'},
                     ])
                     .done(function(s) {
                         exportAllBtnProperty.label = s[0];
@@ -199,21 +196,16 @@ define([
                     });
             }
 
-            var dialogue = new osDialogue({
-                closeButton: true,
-                visible: false,
-                centered: true,
-                responsive: true,
-                responsiveWidth: 767,
-                modal: true,
-                focusOnPreviousTargetAfterHide: true,
-                width: 521,
-                extraClasses: [t.CSS.BOUNDINGBOX.replace('.', '')]
+            const dialogue = await osDialogue.create({
+                isVerticallyCentered: true,
+                templateContext: {
+                    extraClasses: t.CSS.BOUNDINGBOX.replace('.', ''),
+                },
             });
 
-            setHeader();
-            setBody();
-            setFooter();
+            setHeader(dialogue);
+            setBody(dialogue);
+            setFooter(dialogue);
 
             return dialogue;
         },
@@ -257,20 +249,6 @@ define([
                         contentids: contentids.join()
                     }
                 });
-            }
-        },
-
-        /**
-         * Resize and update dialogue position.
-         * @method resize
-         */
-        resize: function() {
-            if (t.dialogue.get('visible')) {
-                if (Y.one('body').get('winWidth') <= 767) {
-                    t.dialogue.makeResponsive();
-                } else {
-                    t.dialogue.centerDialogue();
-                }
             }
         },
 

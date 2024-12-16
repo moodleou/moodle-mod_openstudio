@@ -29,8 +29,9 @@ define([
     'jquery',
     'core/str',
     'core/templates',
-    'core/ajax'
-], function($, Str, Templates, Ajax) {
+    'core/ajax',
+    'mod_openstudio/osdialogue',
+], function($, Str, Templates, Ajax, osDialogue) {
     var t;
 
     t = {
@@ -64,7 +65,7 @@ define([
          * @method init
          * @param {JSON} options  The settings for this feature.
          */
-        init: function(options) {
+        init: async function(options) {
 
             /**
              * Module config options. Passed from server side.
@@ -76,12 +77,7 @@ define([
             t.mconfig = options;
 
             // Create browse posts dialog.
-            Y.use('moodle-core-notification-dialogue', function() {
-                require(['mod_openstudio/osdialogue'], function(OSDialogue) {
-                    t.dialogue = t.createBrowseDialogue(OSDialogue);
-
-                });
-            });
+            t.dialogue = await t.createBrowseDialogue();
 
             // Click event on select existing post link.
             $(t.CSS.BROWSEPOSTLINK).on('click', function() {
@@ -90,10 +86,7 @@ define([
                     .render('mod_openstudio/folder_browse_posts_header', {})
                     .done(function(html) {
                         t.selectedposts = [];
-                        t.dialogue.set('bodyContent', html);
-                        setTimeout(function() {
-                            t.resize();
-                        }, 200);
+                        t.dialogue.setBody(html);
                         // Enter key in a search input field
                         $('#openstudio_search_post').keypress(function(e) {
                             var key = e.which;
@@ -120,9 +113,6 @@ define([
                         return false;
                     });
             });
-
-            // Responsive.
-            $(window).resize(t.resize.bind(t));
 
             // Toggle box comment
             $(document).ready(this.toggleBoxComment);
@@ -168,7 +158,6 @@ define([
                     t.hideSaveButtons();
 
                     t.showHideSelectButton();
-                    t.resize();
 
                     // Update odd/even background row.
                     t.updateBackgroundRow();
@@ -181,42 +170,37 @@ define([
         /**
          * Create browse posts dialogue and some events on it.
          *
-         * @param {object} OSDialogue object
-         * @return {object} OSDialogue instance
+         * @returns {Promise<Modal>}
          * @method createBrowseDialogue
          */
-        createBrowseDialogue: function(OSDialogue) {
+        createBrowseDialogue: async function() {
             /**
-             * Set header for dialog
+             * Set header for dialog.
+             *
+             * @param {Object} dialogue
              * @method setHeader
              */
-            function setHeader() {
-                var langstring = 'folderbrowseposts';
+            function setHeader(dialogue) {
+                var langString = 'folderbrowseposts';
                 Str
-                    .get_string(langstring, 'mod_openstudio')
+                    .get_string(langString, 'mod_openstudio')
                     .done(function(s) {
-                        dialogue.set('headerContent',
-                            '<span class="' + t.CSS.DIALOGHEADER.replace('.', '') +
+                        dialogue.setTitle('<span class="' + t.CSS.DIALOGHEADER.replace('.', '') +
                             '">' + s + '</span>');
                     });
             }
 
-            var dialogue = new OSDialogue({
-                closeButton: true,
-                visible: false,
-                centered: true,
-                modal: true,
-                responsive: true,
-                width: 640,
-                responsiveWidth: 767,
-                focusOnPreviousTargetAfterHide: true,
-                extraClasses: [
-                    t.CSS.BROWSEPOSTDIALOGUECONTAINER.replace('.', ''),
-                    'openstudio-browseposts-dialogue'
-                ]
+            const dialogue = await osDialogue.create({
+                isVerticallyCentered: true,
+                large: true,
+                scrollable: false,
+                templateContext: {
+                    extraClasses: t.CSS.BROWSEPOSTDIALOGUECONTAINER.replace('.', '') + ' openstudio-browseposts-dialogue',
+                },
             });
 
-            setHeader();
+
+            setHeader(dialogue);
 
             return dialogue;
         },
@@ -334,31 +318,6 @@ define([
         showSaveButtons: function() {
             $('.openstudio-folder-browse-posts-header-result-buttons').show();
             $('.openstudio-folder-browse-posts-header-result-buttons-bottom').show();
-        },
-
-        /**
-         * Resize and update dialogue position.
-         * @method resize
-         */
-        resize: function() {
-            if (!t.dialogue) {
-                return;
-            }
-
-            if (t.dialogue.get('visible')) {
-                if (Y.one('body').get('winWidth') < t.dialogue.get('responsiveWidth')) {
-                    t.dialogue.makeResponsive();
-                    $(t.CSS.SAVE_ORDER_BUTTON).removeClass('osep-smallbutton');
-                } else {
-                    $(t.CSS.SAVE_ORDER_BUTTON).addClass('osep-smallbutton');
-                    if (Y.one('body').get('winWidth') >= 767) {
-                        t.dialogue.set('width', 640);
-                    } else {
-                        t.dialogue.set('width', 500);
-                    }
-                    t.dialogue.centerDialogue();
-                }
-            }
         },
 
         /**

@@ -26,17 +26,16 @@
  */
 define([
     'jquery',
-    'core/yui',
     'core/templates',
     'core/str',
     'core/ajax',
-    'require'
-], function($, Y, Templates, Str, ajax, require) {
+    'mod_openstudio/osdialogue',
+], function($, Templates, Str, ajax, osDialogue) {
     var t;
     t = {
 
         /**
-         * M.core.dialog instance
+         * Subscription dialogue instance.
          */
         dialogue: null,
 
@@ -61,15 +60,11 @@ define([
          * @param {JSON} options  The settings for subscription feature.
          * @method init
          */
-        init: function(options) {
+        init: async function(options) {
             t.mconfig = options;
 
             // Create subscription dialogue.
-            Y.use('moodle-core-notification-dialogue', function() {
-                require(['mod_openstudio/osdialogue'], function(osDialogue){
-                    t.dialogue = t.createSubscriptionDialogue(osDialogue, t.CSS.BOUNDINGBOX);
-                });
-            });
+            t.dialogue = await t.createSubscriptionDialogue();
 
             // Click event on subscription button.
             $(t.CSS.SUBSCRIBEBUTTON).on('click', function() {
@@ -77,93 +72,91 @@ define([
                     t.unsubscribe();
                 } else {
                     t.dialogue.show();
-                    t.resize();
                 }
             });
-
-            $(window).resize(t.resize.bind(t));
         },
 
         /**
          * Create subscription dialogue and some events on it.
          *
-         * @param {object} osDialogue OSDialogue object
-         * @param {string} boundingBoxClass The class wrapping the subscription dialog
-         * @return {object} OSDialogue instance
+         * @returns {Promise<Modal>}
          * @method createSubscriptionDialogue
          */
-        createSubscriptionDialogue: function(osDialogue, boundingBoxClass) {
+        createSubscriptionDialogue: async function() {
             /**
-             * Set header for dialog
+             * Set header for dialog.
+             *
+             * @param {Object} dialogue
              * @method setHeader
              */
-            function setHeader() {
+            function setHeader(dialogue) {
                 Str
                     .get_string('subscriptiondialogheader', 'mod_openstudio')
                     .done(function(s) {
-                        dialogue.set('headerContent',
-                            '<span class="' + t.CSS.DIALOGHEADER.replace('.', '') +
+                        dialogue.setTitle('<span class="' + t.CSS.DIALOGHEADER.replace('.', '') +
                             '">' + s + '</span>');
                     });
             }
 
             /**
-             * Set body for dialog
+             * Set body for dialog.
+             *
+             * @param {Object} dialogue
              * @method setBody
              */
-            function setBody() {
+            function setBody(dialogue) {
                 Templates
                     .render('mod_openstudio/subscribe_dialog', t.mconfig.constants)
                     .done(function(html) {
-                        dialogue.set('bodyContent', html);
+                        dialogue.setBody(html);
                     });
             }
 
             /**
-             * Set body for dialog
-             * @method setBody
+             * Set footer for dialog.
+             *
+             * @param {Object} dialogue
+             * @method setFooter
              */
-            function setFooter() {
+            function setFooter(dialogue) {
                 Str
                     .get_strings([
                         {key: 'subscriptiondialogcancel', component: 'mod_openstudio'},
-                        {key: 'subscribe', component: 'mod_openstudio'}
+                        {key: 'subscribe', component: 'mod_openstudio'},
                     ])
                     .done(function(s) {
-                        // Button [Cancel]
-                        var cancelBtnProperty = {
+                        // Button [Cancel].
+                        const cancelBtnProperty = {
                             name: 'cancel',
                             label: s[0],
                             classNames: 'openstudio-cancel-btn',
-                            action: 'hide'
+                            action: 'hide',
                         };
                         dialogue.addButton(cancelBtnProperty, ['footer']);
 
-                        // Button [Subscribe]
-                        var subscribeBtnProperty = {
+                        // Button [Subscribe].
+                        const subscribeBtnProperty = {
                             name: 'subscribe',
                             label: s[1],
                             classNames: 'openstudio-subscript-btn',
                             events: {
-                                click: t.subscribe.bind(t)
-                            }
+                                click: t.subscribe.bind(t),
+                            },
                         };
                         dialogue.addButton(subscribeBtnProperty, ['footer']);
                     });
             }
 
-            var dialogue = new osDialogue({
-                closeButton: true,
-                visible: false,
-                centered: false,
-                responsive: true,
-                focusOnPreviousTargetAfterHide: true,
-                extraClasses: [boundingBoxClass.replace('.', '')],
+            const dialogue = await osDialogue.create({
+                isVerticallyCentered: true,
+                templateContext: {
+                    extraClasses: t.CSS.BOUNDINGBOX.replace('.', ''),
+                },
             });
 
-            setHeader();
-            setBody();
-            setFooter();
+            setHeader(dialogue);
+            setBody(dialogue);
+            setFooter(dialogue);
 
             return dialogue;
         },
@@ -285,62 +278,6 @@ define([
         issubscribed: function() {
             return ($(t.CSS.SUBSCRIBEBUTTON)[0].hasAttribute('subscriptionid'));
         },
-
-        /**
-         * Resize and update dialogue position.
-         * @method resize
-         */
-        resize: function() {
-            var visible = t.dialogue.get('visible');
-
-            // Is mobile view.
-            if (Y.one('body').get('winWidth') > 767) {
-                var dialoguetop = $(t.CSS.SUBSCRIBESETTING).offset().top + 3;
-                var dialogueleft = $(t.CSS.SUBSCRIBESETTING).offset().left - 330;
-                t.dialogue
-                    .get('boundingBox')
-                    .setStyles({
-                       top: dialoguetop,
-                       left: dialogueleft,
-                       width: 316
-                    });
-
-                if (t.sizing == 'large') {
-                    return;
-                }
-
-                // Update dialog sizing.
-                t.dialogue.hide();
-                t.sizing = 'large';
-
-                if (visible) {
-                    t.dialogue.show();
-                }
-
-                t.dialogue
-                    .get('boundingBox')
-                    .setStyles({
-                       top: dialoguetop,
-                       left: dialogueleft,
-                       width: 316
-                    });
-            } else {
-                if (t.sizing == 'small') {
-                    return;
-                }
-
-                // Update dialog sizing.
-                t.sizing = 'small';
-
-                t.dialogue.hide();
-
-                if (visible) {
-                    t.dialogue.show();
-                }
-
-                $(t.CSS.BOUNDINGBOX).parent().appendTo($('body'));
-            }
-        }
     };
 
     return t;

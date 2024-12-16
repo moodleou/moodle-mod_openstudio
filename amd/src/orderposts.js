@@ -28,9 +28,8 @@ define([
     'jquery',
     'core/ajax',
     'core/str',
-    'core/templates',
-    'require'
-], function($, Ajax, Str, Templates, require) {
+    'mod_openstudio/osdialogue',
+], function($, Ajax, Str, osDialogue) {
     var t;
     t = {
 
@@ -50,6 +49,11 @@ define([
          * }
          */
         mconfig: null,
+
+        /**
+         * Order posts dialogue instance.
+         */
+        dialogue: null,
 
         /**
          * List out all of css selector used in this module.
@@ -78,16 +82,12 @@ define([
          * @method init
          * @param {JSON} options  The settings for this feature.
          */
-        init: function(options) {
+        init: async function(options) {
 
             t.mconfig = options;
 
             // Create order posts dialogue.
-            Y.use('moodle-core-notification-dialogue', function() {
-                require(['mod_openstudio/osdialogue'], function(osDialogue) {
-                    t.dialogue = t.createOrderPostsDialogue(osDialogue);
-                });
-            });
+            t.dialogue = await t.createOrderPostsDialogue();
             // Register events.
             $(t.CSS.ORDER_POSTS_BUTTON).on('click', function() {
                 if (t.dialogue) {
@@ -100,9 +100,6 @@ define([
                         sortedlistorderpost[index] = value[0];
                     });
                     t.mconfig.listorder = sortedlistorderpost.join(',');
-                    setTimeout(function() {
-                        t.resize();
-                    }, 200);
                 }
             });
 
@@ -112,78 +109,68 @@ define([
                 .delegate(t.CSS.MOVE_DOWN_BUTTON, 'click', t.moveDown)
                 .delegate(t.CSS.ORDER_NUMBER_INPUT, 'keyup', t.handleNumberInputEnter)
                 .delegate(t.CSS.ORDER_NUMBER_INPUT, 'blur', t.handleNumberInputBlur);
-
-            // Responsive.
-            $(window).resize(t.resize.bind(t));
         },
 
         /**
          * Create order posts dialogue and some events on it.
          *
-         * @param {object} osDialogue object
-         * @return {object} OSDialogue instance
-         * @method createDeleteDialogue
+         * @returns {Promise<Modal>}
+         * @method createOrderPostsDialogue
          */
-        createOrderPostsDialogue: function(osDialogue) {
+        createOrderPostsDialogue: async function() {
             /**
-             * Set header for dialog
+             * Set header for dialog.
+             *
+             * @param {Object} dialogue
              * @method setHeader
              */
-            function setHeader() {
+            function setHeader(dialogue) {
                 Str
                     .get_string('folderorderpost', 'mod_openstudio')
                     .done(function(s) {
-                        dialogue.set('headerContent', '<span>' + s + '</span>');
+                        dialogue.setTitle('<span>' + s + '</span>');
                     });
             }
 
-            var dialogue = new osDialogue({
-                closeButton: true,
-                visible: false,
-                centered: true,
-                modal: true,
-                responsive: true,
-                width: 640,
-                responsiveWidth: 767,
-                focusOnPreviousTargetAfterHide: true,
-                extraClasses: [
-                    t.CSS.ORDER_POSTS_DIALOGUE_CONTAINER.replace('.', ''),
-                    'openstudio-folder-posts-dialogue'
-                ]
+            const dialogue = await osDialogue.create({
+                isVerticallyCentered: true,
+                templateContext: {
+                    extraClasses: t.CSS.ORDER_POSTS_DIALOGUE_CONTAINER.replace('.', '') + ' openstudio-folder-posts-dialogue',
+                },
             });
 
-            setHeader();
+            setHeader(dialogue);
             t.setBody(dialogue);
 
             return dialogue;
         },
 
         /**
-         * Set body for dialog
+         * Set body for dialog.
+         *
          * @param {object} dialogue object
          * @method setBody
          */
         setBody: function(dialogue) {
 
             M.util.js_pending('openstudioGetOrderPostsFolderContent');
-            var promises = Ajax.call([{
+            const promises = Ajax.call([{
                 methodname: 'mod_openstudio_external_get_order_posts',
                 args: {
                     cmid: t.mconfig.cmid,
-                    folderid: t.mconfig.folderid
+                    folderid: t.mconfig.folderid,
                 }
             }]);
 
             promises[0]
                 .done(function(res) {
-                   dialogue.set('bodyContent', res.html);
+                   dialogue.setBody(res.html);
                     // Disable first move up button and last move down button.
                     t.disableFirstLastButton();
                     $(document).ready(t.disableContentButton);
                     t.checkReorder();
                     t.inputPosition();
                     $(t.CSS.SAVE_ORDER_BUTTON).attr("disabled", "disabled");
-                    t.resize();
                 })
                 .always(function() {
                     M.util.js_complete('openstudioGetOrderPostsFolderContent');
@@ -407,31 +394,6 @@ define([
             t.checkReorder();
             t.disableContentButton();
             t.disableFirstLastButton();
-        },
-
-        /**
-         * Resize and update dialogue position.
-         * @method resize
-         */
-        resize: function() {
-            if (!t.dialogue) {
-                return;
-            }
-
-            if (t.dialogue.get('visible')) {
-                if (Y.one('body').get('winWidth') < t.dialogue.get('responsiveWidth')) {
-                    t.dialogue.makeResponsive();
-                    $(t.CSS.SAVE_ORDER_BUTTON).removeClass('osep-smallbutton');
-                } else {
-                    $(t.CSS.SAVE_ORDER_BUTTON).addClass('osep-smallbutton');
-                    if (Y.one('body').get('winWidth') >= 767) {
-                        t.dialogue.set('width', 640);
-                    } else {
-                        t.dialogue.set('width', 500);
-                    }
-                    t.dialogue.centerDialogue();
-                }
-            }
         },
 
         /**

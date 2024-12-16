@@ -27,8 +27,9 @@
 define([
     'jquery',
     'core/ajax',
-    'core/str'
-], function($, Ajax, Str) {
+    'core/str',
+    'mod_openstudio/osdialogue',
+], function($, Ajax, Str, osDialogue) {
     var t;
     t = {
 
@@ -48,21 +49,22 @@ define([
         },
 
         /**
+         * Unlock activity dialogue instance.
+         */
+        dialogue: null,
+
+        /**
          * Initialize module.
          *
          * @method init
          * @param {JSON} options  The settings for lock feature.
          */
-        init: function(options) {
+        init: async function(options) {
 
             t.mconfig = options;
 
             // Create unlock activity dialog.
-            Y.use('moodle-core-notification-dialogue', function() {
-                require(['mod_openstudio/osdialogue'], function(osDialogue) {
-                    t.dialogue = t.createUnlockActivityDialogue(osDialogue);
-                });
-            });
+            t.dialogue = await t.createUnlockActivityDialogue();
 
             // Activity lock button.
             $(t.CSS.ACTIVITY_UNLOCK_ICON).on('click', function() {
@@ -75,9 +77,6 @@ define([
             });
 
             $('body').delegate(t.CSS.ACTIVITY_UNLOCK_BUTTON, 'click', t.unlockActivityContent);
-
-            // Responsive.
-            $(window).resize(t.resize.bind(t));
         },
 
         /**
@@ -114,56 +113,61 @@ define([
         /**
          * Create unlock activity dialogue and some events on it.
          *
-         * @param {object} osDialogue object
-         * @return {object} OSDialogue instance
+         * @returns {Promise<Modal>}
          * @method createUnlockActivityDialogue
          */
-        createUnlockActivityDialogue: function(osDialogue) {
+        createUnlockActivityDialogue: async function() {
             /**
-             * Set header for dialog
+             * Set header for dialog.
+             *
+             * @param {Object} dialogue
              * @method setHeader
              */
-            function setHeader() {
+            function setHeader(dialogue) {
                 Str
                     .get_string('contentactionunlockname', 'mod_openstudio')
                     .done(function(s) {
-                        dialogue.set('headerContent', '<span>' + s + '</span>');
+                        dialogue.setTitle('<span>' + s + '</span>');
                     });
             }
 
             /**
-             * Set body for dialog
+             * Set body for dialog.
+             *
+             * @param {Object} dialogue
              * @method setBody
              */
-            function setBody() {
+            function setBody(dialogue) {
                 Str
                     .get_string('modulejsdialogcontentunlock', 'mod_openstudio')
                     .done(function(s) {
-                        dialogue.set('bodyContent', s);
+                        dialogue.setBody(s);
                     });
             }
 
             /**
-             * Set body for dialog
-             * @method setBody
+             * Set footer for dialog.
+             *
+             * @param {Object} dialogue
+             * @method setFooter
              */
-            function setFooter() {
-                // Button [Cancel]
-                var cancelBtnProperty = {
+            function setFooter(dialogue) {
+                // Button [Cancel].
+                const cancelBtnProperty = {
                     name: 'cancel',
-                    action: 'hide'
+                    action: 'hide',
                 };
 
-                // Button [Unlock]
-                var unlockBtnProperty = {
+                // Button [Unlock].
+                const unlockBtnProperty = {
                     name: 'lock',
-                    classNames: t.CSS.ACTIVITY_UNLOCK_BUTTON.replace('.', '')
+                    classNames: t.CSS.ACTIVITY_UNLOCK_BUTTON.replace('.', ''),
                 };
 
                 Str
                     .get_strings([
                         {key: 'modulejsdialogcancel', component: 'mod_openstudio'},
-                        {key: 'contentactionunlockname', component: 'mod_openstudio'}
+                        {key: 'contentactionunlockname', component: 'mod_openstudio'},
                     ])
                     .done(function(s) {
                         cancelBtnProperty.label = s[0];
@@ -173,41 +177,16 @@ define([
                     });
             }
 
-            var dialogue = new osDialogue({
-                closeButton: true,
-                visible: false,
-                centered: true,
-                modal: true,
-                responsive: true,
-                width: 640,
-                responsiveWidth: 767,
-                focusOnPreviousTargetAfterHide: true
+            const dialogue = await osDialogue.create({
+                isVerticallyCentered: true,
             });
 
-            setHeader();
-            setBody();
-            setFooter();
+            setHeader(dialogue);
+            setBody(dialogue);
+            setFooter(dialogue);
 
             return dialogue;
         },
-
-        /**
-         * Resize and update dialogue position.
-         * @method resize
-         */
-        resize: function() {
-            if (!t.dialogue) {
-                return;
-            }
-
-            if (t.dialogue.get('visible')) {
-                if (Y.one('body').get('winWidth') <= t.dialogue.get('responsiveWidth')) {
-                    t.dialogue.makeResponsive();
-                } else {
-                    t.dialogue.centerDialogue();
-                }
-            }
-        }
     };
 
     return t;
