@@ -67,21 +67,22 @@
             <a href="{{{folderlink}}}" class="clearfix">
                 <div class="openstudio-folder-content">
                     {{>mod_openstudio/content_block_banner_status}}
-                    <img class="openstudio-folder-tab" src="{{{folderdefaultthumbnail}}}" alt="{{{name}}}">
+                    <img class="openstudio-folder-tab" src="{{{folderdefaultthumbnail}}}" alt="{{{name}}}" loading="lazy">
                     <div class="openstudio-folder-background">
                         {{#hascontent}}
                             {{#thumbnailimg}}
-                                <img class="openstudio-content-folder-img" src="{{{folderthumbnail}}}" alt="{{{name}}}">
+                                <img class="openstudio-content-folder-img" src="{{{folderthumbnail}}}" alt="{{{name}}}" loading="lazy">
                             {{/thumbnailimg}}
                             {{^thumbnailimg}}
                                 <div class="openstudio-default-folder-background hascontent">
-                                    <img class="openstudio-default-folder-img" src="{{{folderthumbnail}}}" alt="{{{name}}}">
+                                    <img class="openstudio-default-folder-img" src="{{{folderthumbnail}}}" alt="{{{name}}}" loading="lazy">
                                 </div>
                             {{/thumbnailimg}}
                         {{/hascontent}}
                         {{^hascontent}}
                             <div class="openstudio-default-folder-background">
-                                <img class="openstudio-default-folder-img openstudio-default-folder-empty-img" src="{{{defaultfolderimg}}}" alt="{{{contentthumbnailalt}}}">
+                                <img class="openstudio-default-folder-img openstudio-default-folder-empty-img" src="{{{defaultfolderimg}}}"
+                                     alt="{{{contentthumbnailalt}}}" loading="lazy">
                             </div>
                         {{/hascontent}}
                     </div>
@@ -92,7 +93,7 @@
                 {{>mod_openstudio/content_block_banner_status}}
                 <a href="{{{contentlink}}}" class="clearfix">
                     <div class="openstudio-grid-item-content-preview{{#contenttypedefaultimage}}-default{{/contenttypedefaultimage}}">
-                        <img class="openstudio-grid-item-thumbnail" src="{{{contentthumbnailurl}}}" alt="{{{name}}}">
+                        <img class="openstudio-grid-item-thumbnail" src="{{{contentthumbnailurl}}}" alt="{{{name}}}" loading="lazy">
                     </div>
                 </a>
         {{/isfolder}}

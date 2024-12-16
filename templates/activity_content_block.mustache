@@ -71,17 +71,18 @@
                 <div class="openstudio-folder-background">
                     {{#hascontent}}
                         {{#thumbnailimg}}
-                            <img class="openstudio-content-folder-img" src="{{{folderthumbnail}}}" alt="{{{name}}}">
+                            <img class="openstudio-content-folder-img" src="{{{folderthumbnail}}}" alt="{{{name}}}" loading="lazy">
                         {{/thumbnailimg}}
                         {{^thumbnailimg}}
                             <div class="openstudio-default-folder-background hascontent">
-                                <img class="openstudio-default-folder-img" src="{{{folderthumbnail}}}" alt="{{{name}}}">
+                                <img class="openstudio-default-folder-img" src="{{{folderthumbnail}}}" alt="{{{name}}}" loading="lazy">
                             </div>
                         {{/thumbnailimg}}
                     {{/hascontent}}
                     {{^hascontent}}
                         <div class="openstudio-default-folder-background">
-                            <img class="openstudio-default-folder-img openstudio-default-folder-empty-img" src="{{{defaultfolderimg}}}" alt="{{{contentthumbnailalt}}}">
+                            <img class="openstudio-default-folder-img openstudio-default-folder-empty-img" src="{{{defaultfolderimg}}}"
+                                 alt="{{{contentthumbnailalt}}}" loading="lazy">
                         </div>
                     {{/hascontent}}
                 </div>
@@ -96,11 +97,11 @@
             <a href="{{{contentlink}}}">
                 {{#activitycontentempty}}
                     <div class="openstudio-upload-container">
-                        <img src="{{{createcontentthumbnail}}}" alt="{{{contentthumbnailalt}}}">
+                        <img src="{{{createcontentthumbnail}}}" alt="{{{contentthumbnailalt}}}" loading="lazy">
                     </div>
                 {{/activitycontentempty}}
                 {{^activitycontentempty}}
-                    <img class="openstudio-grid-item-thumbnail" src="{{{contentthumbnailurl}}}" alt="{{{name}}}">
+                    <img class="openstudio-grid-item-thumbnail" src="{{{contentthumbnailurl}}}" alt="{{{name}}}" loading="lazy">
                 {{/activitycontentempty}}
             </a>
         </div>
