@@ -453,7 +453,7 @@ $string['contentdeledialogueteheader'] = 'Delete post?';
 $string['contentparticipationlow'] = 'Low participation - change me to a smiley by commenting and rating other people\'s work.';
 $string['contentparticipationhigh'] = 'High participation - well done for keeping busy!';
 
-$string['presentationoraltrequired'] = 'An image must have a description, unless it is marked as decorative only.';
+$string['presentationoraltrequired'] = 'An uploaded image must include an image description for accessibility purposes';
 $string['profileswork'] = '{$a->name}\'s work';
 $string['profilespinboard'] = '{$a->name}\'s pinboard';
 $string['profilebaruserswork'] = 'View {$a->name}\'s work';

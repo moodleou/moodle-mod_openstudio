@@ -287,9 +287,9 @@ I need to create a folder
       | Title | Test My Group Board View 2                 |
       | Files | mod/openstudio/tests/importfiles/test2.jpg |
     And I press "Save"
-    And I should see "An image must have a description, unless it is marked as decorative only."
+    And I should see "An uploaded image must include an image description for accessibility purposes"
     When I press "Save"
-    Then I should see "An image must have a description, unless it is marked as decorative only."
+    Then I should see "An uploaded image must include an image description for accessibility purposes"
 
   Scenario: Add file form should be remained after save content with unsupported file
     Given I am on the "Test Open Studio name 1" "openstudio activity" page

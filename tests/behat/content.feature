@@ -446,7 +446,7 @@ I need to create a content and upload a file
       | Description | My Group Board View Description 2          |
       | Files       | mod/openstudio/tests/importfiles/test2.jpg |
     And I press "Save"
-    And I should see "An image must have a description, unless it is marked as decorative only."
+    And I should see "An uploaded image must include an image description for accessibility purposes"
     And I set the field "Describe this image for someone who cannot see it" to "This is image alt"
     When I press "Save"
     Then "//img[contains(@src, '/test2.jpg') and @alt='This is image alt']" "xpath_element" should exist
