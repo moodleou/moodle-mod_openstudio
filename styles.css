@@ -3073,6 +3073,12 @@ body .openstudio-grid-item-content-title a:focus {
     padding: 0;
 }
 
+.openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-group.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-text.has-value.double-digit {
     min-width: 22px;
 }

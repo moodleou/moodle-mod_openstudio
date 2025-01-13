@@ -86,3 +86,15 @@ Feature: Lock/Unlock my Open Studio content
     And I press "Unlock"
     And "Cancel feedback request" "button" should exist
     And I should see "Feedback requested" in the "div#openstudio_item_request_feedback" "css_element"
+
+  @javascript
+  Scenario: Test interaction icons disable when the post is blog.
+    Given I am on the "Sharing Studio" "openstudio activity" page logged in as "student1"
+    And I follow "Student slot 1"
+    When I press "Lock"
+    And I follow "My Content"
+    Then ".disabled" "css_element" should exist in the ".openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-group" "css_element"
+    And I follow "Student slot 1"
+    And I press "Unlock"
+    And I follow "My Content"
+    And ".disabled" "css_element" should not exist in the ".openstudio-grid-item-content-detail-info .openstudio-grid-item-content-detail-info-group" "css_element"
