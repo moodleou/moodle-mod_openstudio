@@ -25,7 +25,7 @@
  * @module mod_openstudio/viewhelper
  */
 
-define(['jquery', 'js/isotope.pkgd.min.js'], function($, Isotope) {
+define(['jquery', 'js/isotope.pkgd.min.js', 'core/utils'], function($, Isotope, Utils) {
     var t;
 
     t = {
@@ -123,6 +123,10 @@ define(['jquery', 'js/isotope.pkgd.min.js'], function($, Isotope) {
             $(window).on('load', function() {
                 t.reArrangeItems();
             });
+
+            // Add the scroll event listener with debounce.
+            // Using debounce to trigger rearrange of items only after scrolling ends.
+            window.addEventListener('scroll', Utils.debounce(t.reArrangeItems, 200));
         },
 
         /**
