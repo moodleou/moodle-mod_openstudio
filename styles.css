@@ -71,6 +71,10 @@
     text-decoration: none;
 }
 
+#search-filter-pagesize {
+    display: none;
+}
+
 .path-mod-openstudio .nav-tabs > li, .nav-pills > li {
     padding-top: 8px;
     display: inline-block;

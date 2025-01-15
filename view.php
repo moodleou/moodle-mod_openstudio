@@ -207,19 +207,6 @@ $fsortdefault = defaults::OPENSTUDIO_SORT_FLAG_DATE;
 $osortdefault = defaults::OPENSTUDIO_SORT_DESC;
 $fsort = optional_param('fsort', $fsortdefault, PARAM_INT);
 $osort = optional_param('osort', $osortdefault, PARAM_INT);
-$sortbyparams = filter::get_sort_by_params($sortby);
-if ($sortbyparams === null) {
-    $sortby = null;
-} else {
-    $fsort = $sortbyparams['fsort'];
-    $osort = $sortbyparams['osort'];
-}
-
-$sortflag = [
-    'id' => $fsort,
-    'asc' => $osort,
-    'sortby' => $sortby,
-];
 
 
 // If group mode is not on, then redirect request to module workspace.
@@ -292,33 +279,10 @@ if ($quickselect === null) {
         }
     }
 }
-if ($quickselect !== null) {
-    $quickselectparams = filter::get_quick_select_params($quickselect);
-    // If not having quick select params, fallback as default.
-    if ($quickselectparams === null) {
-        $quickselect = null;
-        $quickselectparams = [];
-    }
-    if (array_key_exists('ftypearray', $quickselectparams)) {
-        $ftypearray = $quickselectparams['ftypearray'];
-    }
-    if (array_key_exists('fflagarray', $quickselectparams)) {
-        $fflagarray = $quickselectparams['fflagarray'];
-    }
-    if (array_key_exists('fstatus', $quickselectparams)) {
-        $fstatus = $quickselectparams['fstatus'];
-    }
-    if (array_key_exists('fscope', $quickselectparams)) {
-        $fscope = $quickselectparams['fscope'];
-    }
-    if (array_key_exists('fownerscope', $quickselectparams)) {
-        $fownerscope = $quickselectparams['fownerscope'];
-    }
-}
 
 if ($filteractive && $farea == stream::FILTER_AREA_ALL && isset($fflagarray[0]) && $fflagarray[0] == 0 &&
-        isset($ftypearray[0]) && $ftypearray[0] == 0 && $fstatus == stream::FILTER_STATUS_ALL_POST &&
-        $fscope == stream::SCOPE_EVERYONE) {
+    isset($ftypearray[0]) && $ftypearray[0] == 0 && $fstatus == stream::FILTER_STATUS_ALL_POST &&
+    $fscope == stream::SCOPE_EVERYONE) {
     $resetfilter = true;
 }
 
@@ -373,78 +337,9 @@ if ($factivityarray === null) {
 }
 $pinboardonly = false;
 
-// Stream get contents need to pass block array if existed.
-switch ($fblock) {
-    case stream::FILTER_AREA_ALL:
-    case stream::FILTER_AREA_PINBOARD:
-        $fblockarray = null;
-        $factivityarray = null;
-        break;
-    case stream::FILTER_AREA_ACTIVITY:
-        // Get parent blocks from activities.
-        // In this case, we won't implode $fblock, keep it as stream::FILTER_AREA_ACTIVITY.
-        [$tempblocks, ] = openstudio_extract_blocks_activities($factivityarray);
-        $fblockarray = $tempblocks;
-        break;
-    default:
-        if (empty($fblockarray)) {
-            $fblockarray = explode(",", $fblock);
-            $fblock = implode(",", $fblockarray);
-        } else {
-            $fblock = implode(",", $fblockarray);
-        }
-        break;
-}
-
 if (trim($fblock) == '') {
     // If fblock is not set, then set it to default.
     $fblock = stream::FILTER_AREA_ALL;
-}
-
-$fblockdataarray = levels::get_all_activities($cminstance->id);
-if ($fblockdataarray === false) {
-    $fblockdataarray = array();
-} else {
-    $blockslotcount = levels::l1s_count_l3s($cminstance->id);
-    $factivityids = !empty($factivityarray) ? array_flip($factivityarray) : [];
-
-    foreach ($fblockdataarray as $key => $blockdata) {
-        // Dont show the level 1 block if it has no level slots associated with it.
-        if (!array_key_exists($blockdata->id, $blockslotcount) || ($blockslotcount[$blockdata->id] <= 0)) {
-            unset($fblockdataarray[$key]);
-            continue;
-        }
-
-        // Check if the block being checked as been selected by the user for filtering.
-        if ((is_array($fblockarray) && ($fblockarray !== null) && in_array((int) $blockdata->id, $fblockarray))) {
-            $fblockdataarray[$key]->checked = true;
-        } else {
-            $fblockdataarray[$key]->checked = false;
-        }
-
-        if (property_exists($blockdata, 'activities') && !empty($blockdata->activities)) {
-
-            $allcheck = true;
-
-            foreach ($blockdata->activities as $activity) {
-                $key = $blockdata->id . '_' . $activity->id;
-                // If we select "Activities", and we don't have $_GET for activities then all should be checked by default.
-                // Or else it will be checked if ids contains in $_GET.
-                $activity->checked = $fblock == stream::FILTER_AREA_ACTIVITY
-                        && ($factivityarray === null || isset($factivityids[$key]));
-                $activity->checkedworkfilter = $fblock == stream::FILTER_AREA_ALL || $activity->checked;
-
-                if (!$activity->checked) {
-                    if ($allcheck) {
-                        $allcheck = false;
-                    }
-                }
-            }
-
-            // If any activity is not checked, uncheck this block.
-            $blockdata->checked = $allcheck;
-        }
-    }
 }
 
 // Filter by content type.
@@ -464,26 +359,6 @@ if (isset($SESSION->openstudio_view_filters)) {
 }
 
 $ftypearray = optional_param_array('ftypearray', $ftypearraydefault, PARAM_INT);
-if (!is_array($ftypearray) || empty($ftypearray)) {
-    $ftype = $ftypedefault;
-} else {
-    foreach ($ftypearray as $ftypearrayitem) {
-        if ($ftypearrayitem == 0) {
-            $ftype = 0;
-            break;
-        }
-        if (in_array($ftypearrayitem, array(content::TYPE_IMAGE,
-                content::TYPE_VIDEO,
-                content::TYPE_AUDIO,
-                content::TYPE_DOCUMENT,
-                content::TYPE_PRESENTATION,
-                content::TYPE_SPREADSHEET,
-                content::TYPE_URL,
-                content::TYPE_FOLDER))) {
-            $ftype .= "{$ftypearrayitem},";
-        }
-    }
-}
 
 // Filter by status.
 $fstatusdefault = stream::FILTER_STATUS_ALL_POST;
@@ -494,12 +369,6 @@ if (isset($SESSION->openstudio_view_filters)) {
 }
 
 $fstatus = optional_param('fstatus', $fstatusdefault, PARAM_INT);
-if (! in_array($fstatus, array(stream::FILTER_LOCKED,
-        stream::FILTER_EMPTYCONTENT,
-        stream::FILTER_NOTREAD,
-        stream::FILTER_READ))) {
-    $fstatus = $fstatusdefault;
-}
 
 // Filter by scope.
 $fscopedefault = stream::SCOPE_EVERYONE;
@@ -510,11 +379,6 @@ if (isset($SESSION->openstudio_view_filters)) {
 }
 
 $fscope = optional_param('fscope', $fscopedefault, PARAM_INT);
-if (! in_array($fscope, array(stream::SCOPE_EVERYONE,
-        stream::SCOPE_MY,
-        stream::SCOPE_THEIRS))) {
-    $fscope = stream::SCOPE_MY;
-}
 
 // Filter by tags.
 $ftagsdefault = '';
@@ -538,24 +402,6 @@ if (isset($SESSION->openstudio_view_filters)) {
     }
 }
 $fflagarray = optional_param_array('fflagarray', $fflagarraydefault, PARAM_INT);
-if (!is_array($fflagarray) || empty($fflagarray)) {
-    $fflag = $fflagdefault;
-} else {
-    foreach ($fflagarray as $fflagarrayitem) {
-        if ($fflagarrayitem == 0) {
-            $fflag = $fflagdefault;
-            break;
-        }
-        if (in_array($fflagarrayitem, array(stream::FILTER_FAVOURITES,
-                stream::FILTER_HELPME,
-                stream::FILTER_MOSTSMILES,
-                stream::FILTER_MOSTINSPIRATION,
-                stream::FILTER_COMMENTS,
-                stream::FILTER_TUTOR))) {
-            $fflag .= "{$fflagarrayitem},";
-        }
-    }
-}
 
 // Store the filter settings in session memory.
 $SESSION->openstudio_view_vid = $vid;
@@ -565,6 +411,42 @@ if (!isset($SESSION->openstudio_view_filters)) {
 if (!isset($SESSION->openstudio_view_filters[$vid])) {
     $SESSION->openstudio_view_filters[$vid] = new stdClass();
 }
+
+$filter_params = util::handle_filter_params(
+    $cminstance->id,
+    $sortby,
+    $fblockarray,
+    $fblock,
+    $quickselect,
+    $filteractive,
+    $farea,
+    $factivityarray,
+    $ftypearray,
+    $fflagarray,
+    $fscope,
+    $fstatus,
+    $fsort,
+    $osort,
+    $resetfilter
+);
+
+$fblock = $filter_params->fblock;
+$fblockarray = $filter_params->fblockarray;
+$factivityarray = $filter_params->factivityarray;
+$ftype = $filter_params->ftype;
+$ftypearray = $filter_params->ftypearray;
+$fscope = $filter_params->fscope;
+$fstatus = $filter_params->fstatus;
+$fflag = $filter_params->fflag;
+$fflagarray = $filter_params->fflagarray;
+$fsort = $filter_params->fsort;
+$osort = $filter_params->osort;
+$filteractive = $filter_params->filteractive;
+$fblockdataarray = $filter_params->fblockdataarray;
+$sortby = $filter_params->sortby;
+$quickselect = $filter_params->quickselect;
+$sortflag = $filter_params->sortflag;
+$fownerscope = $filter_params->fownerscope;
 
 $ftags = null;
 $SESSION->openstudio_view_filters[$vid]->fblock = $fblock;

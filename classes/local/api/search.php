@@ -96,7 +96,18 @@ class search {
             }
 
             // Get global search results.
-            $results = $search->paged_search($data, $pagestart);
+            $searchlimit = 0;
+            if (defined('BEHAT_SITE_RUNNING')) {
+                // Mock the limit in behat test.
+                $searchlimit = 1000;
+            }
+            $docs = $search->search($data, $searchlimit);
+            $out = new \stdClass();
+            $resultcount = count($docs);
+            $out->totalcount = $resultcount;
+            $out->actualpage = 0;
+            $out->results = array_slice($docs, 0, $resultcount + 1, true);
+            $results = $out;
 
             $searchresults->dbstart = 1;
             $searchresults->results = [];
@@ -133,7 +144,7 @@ class search {
 
         return (object) array('result' => $result,
                 'next' => $pagenext, 'previous' => $pageprevious, 'nextstart' => $nextsearchresults,
-                'total' => $searchresults->dbrows, 'isglobal' => $globalsearch);
+                'total' => count($searchresults->results), 'isglobal' => $globalsearch);
     }
 
     /**

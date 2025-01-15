@@ -27,10 +27,12 @@ namespace mod_openstudio\local;
 use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\contentversion;
 use mod_openstudio\local\api\comments;
+use mod_openstudio\local\api\filter;
 use mod_openstudio\local\api\folder;
 use mod_openstudio\local\api\group;
 use mod_openstudio\local\api\item;
 use mod_openstudio\local\api\levels;
+use mod_openstudio\local\api\stream;
 use mod_openstudio\local\api\tags;
 use mod_openstudio\local\util\defaults;
 
@@ -304,6 +306,233 @@ class util {
      */
     public static function has_feature($studio, $feature) {
         return (bool) ($studio->themefeatures & $feature);
+    }
+
+    /**
+     * Returns the search params after handle.
+     *
+     * @param int $studioid
+     * @param mixed $sortby
+     * @param array $fblockarray
+     * @param int $fblock
+     * @param int $quickselect
+     * @param int $filteractive
+     * @param int $farea
+     * @param array $factivityarray
+     * @param array $ftypearray
+     * @param array $fflagarray
+     * @param array $fscope
+     * @param array $fstatus
+     * @param array $fsort
+     * @param array $osort
+     * @param array $resetfilter
+     * @return object Object with full search params.
+     */
+    public static function handle_filter_params(
+        $studioid, $sortby, $fblockarray, $fblock, $quickselect,
+        $filteractive, $farea, $factivityarray, $ftypearray,
+        $fflagarray, $fscope, $fstatus, $fsort, $osort, $resetfilter
+    ) {
+        $sortbyparams = filter::get_sort_by_params($sortby);
+        if ($sortbyparams === null) {
+            $sortby = null;
+        } else {
+            $fsort = $sortbyparams['fsort'];
+            $osort = $sortbyparams['osort'];
+        }
+
+        $sortflag = [
+            'id' => $fsort,
+            'asc' => $osort,
+            'sortby' => $sortby,
+        ];
+
+        $fblockdataarray = levels::get_all_activities($studioid);
+        if ($fblockdataarray === false) {
+            $fblockdataarray = [];
+        } else {
+            $blockslotcount = levels::l1s_count_l3s($studioid);
+            $factivityids = !empty($factivityarray) ? array_flip($factivityarray) : [];
+
+            foreach ($fblockdataarray as $key => $blockdata) {
+                // Do not show the level 1 block if it has no level slots associated with it.
+                if (!array_key_exists($blockdata->id, $blockslotcount) || ($blockslotcount[$blockdata->id] <= 0)) {
+                    unset($fblockdataarray[$key]);
+                    continue;
+                }
+
+                // Check if the block being checked as been selected by the user for filtering.
+                if ((is_array($fblockarray) && in_array((int) $blockdata->id, $fblockarray))) {
+                    $fblockdataarray[$key]->checked = true;
+                } else {
+                    $fblockdataarray[$key]->checked = false;
+                }
+
+                if (property_exists($blockdata, 'activities') && !empty($blockdata->activities)) {
+
+                    $allcheck = true;
+
+                    foreach ($blockdata->activities as $activity) {
+                        $key = $blockdata->id . '_' . $activity->id;
+                        // If we select "Activities", and we don't have $_GET for activities then all should be checked by default.
+                        // Or else it will be checked if ids contains in $_GET.
+                        $activity->checked = $fblock == stream::FILTER_AREA_ACTIVITY
+                                && ($factivityarray === null || isset($factivityids[$key]));
+                        $activity->checkedworkfilter = $fblock == stream::FILTER_AREA_ALL || $activity->checked;
+
+                        if (!$activity->checked) {
+                            if ($allcheck) {
+                                $allcheck = false;
+                            }
+                        }
+                    }
+
+                    // If any activity is not checked, uncheck this block.
+                    $blockdata->checked = $allcheck;
+                }
+            }
+        }
+
+        // Quick Select.
+        $fownerscope = null;
+        if ($quickselect !== null) {
+            $quickselectparams = filter::get_quick_select_params($quickselect);
+            // If not having quick select params, fallback as default.
+            if ($quickselectparams === null) {
+                $quickselect = null;
+                $quickselectparams = [];
+            }
+            if (array_key_exists('ftypearray', $quickselectparams)) {
+                $ftypearray = $quickselectparams['ftypearray'];
+            }
+            if (array_key_exists('fflagarray', $quickselectparams)) {
+                $fflagarray = $quickselectparams['fflagarray'];
+            }
+            if (array_key_exists('fstatus', $quickselectparams)) {
+                $fstatus = $quickselectparams['fstatus'];
+            }
+            if (array_key_exists('fscope', $quickselectparams)) {
+                $fscope = $quickselectparams['fscope'];
+            }
+            if (array_key_exists('fownerscope', $quickselectparams)) {
+                $fownerscope = $quickselectparams['fownerscope'];
+            }
+        }
+
+        if ($filteractive && $farea == stream::FILTER_AREA_ALL && isset($fflagarray[0]) && $fflagarray[0] == 0 &&
+                isset($ftypearray[0]) && $ftypearray[0] == 0 && $fstatus == stream::FILTER_STATUS_ALL_POST &&
+                $fscope == stream::SCOPE_EVERYONE) {
+            $resetfilter = true;
+        }
+
+        if (!in_array($fscope, [
+                stream::SCOPE_EVERYONE,
+                stream::SCOPE_MY,
+                stream::SCOPE_THEIRS])) {
+            $fscope = stream::SCOPE_MY;
+        }
+
+        // Filter by content type.
+        $ftype = '';
+        $ftypedefault = 0;
+
+        if (!is_array($ftypearray) || empty($ftypearray)) {
+            $ftype = $ftypedefault;
+        } else {
+            foreach ($ftypearray as $ftypearrayitem) {
+                if ($ftypearrayitem == 0) {
+                    $ftype = 0;
+                    break;
+                }
+                if (in_array($ftypearrayitem, [content::TYPE_IMAGE,
+                        content::TYPE_VIDEO,
+                        content::TYPE_AUDIO,
+                        content::TYPE_DOCUMENT,
+                        content::TYPE_PRESENTATION,
+                        content::TYPE_SPREADSHEET,
+                        content::TYPE_URL,
+                        content::TYPE_FOLDER])) {
+                    $ftype .= "{$ftypearrayitem},";
+                }
+            }
+        }
+
+        // Filter by participation flag.
+        $fflag = '';
+        $fflagdefault = 0;
+        if (!is_array($fflagarray) || empty($fflagarray)) {
+            $fflag = $fflagdefault;
+        } else {
+            foreach ($fflagarray as $fflagarrayitem) {
+                if ($fflagarrayitem == 0) {
+                    $fflag = $fflagdefault;
+                    break;
+                }
+                if (in_array($fflagarrayitem, [stream::FILTER_FAVOURITES,
+                        stream::FILTER_HELPME,
+                        stream::FILTER_MOSTSMILES,
+                        stream::FILTER_MOSTINSPIRATION,
+                        stream::FILTER_COMMENTS,
+                        stream::FILTER_TUTOR])) {
+                    $fflag .= "{$fflagarrayitem},";
+                }
+            }
+        }
+
+        // Filter by status.
+        $fstatusdefault = stream::FILTER_STATUS_ALL_POST;
+
+        if (!in_array($fstatus, [stream::FILTER_LOCKED,
+                stream::FILTER_EMPTYCONTENT,
+                stream::FILTER_NOTREAD,
+                stream::FILTER_READ])) {
+            $fstatus = $fstatusdefault;
+        }
+
+        // Stream get contents need to pass block array if existed.
+        switch ($fblock) {
+            case stream::FILTER_AREA_ALL:
+            case stream::FILTER_AREA_PINBOARD:
+                $fblockarray = null;
+                $factivityarray = null;
+                break;
+            case stream::FILTER_AREA_ACTIVITY:
+                // Get parent blocks from activities.
+                // In this case, we won't implode $fblock, keep it as stream::FILTER_AREA_ACTIVITY.
+                [$tempblocks,] = openstudio_extract_blocks_activities($factivityarray);
+                $fblockarray = $tempblocks;
+                break;
+            default:
+                if (empty($fblockarray)) {
+                    $fblockarray = explode(",", $fblock);
+                    $fblock = implode(",", $fblockarray);
+                } else {
+                    $fblock = implode(",", $fblockarray);
+                }
+                break;
+        }
+
+        return (object) [
+                'fblock' => $fblock,
+                'fblockarray' => $fblockarray,
+                'factivityarray' => $factivityarray,
+                'ftype' => $ftype,
+                'ftypearray' => $ftypearray,
+                'fscope' => $fscope,
+                'fstatus' => $fstatus,
+                'fflag' => $fflag,
+                'fflagarray' => $fflagarray,
+                'fsort' => $fsort,
+                'ftags' => null,
+                'osort' => $osort,
+                'filteractive' => $filteractive,
+                'fblockdataarray' => $fblockdataarray,
+                'sortby' => $sortby,
+                'quickselect' => $quickselect,
+                'sortflag' => $sortflag,
+                'fownerscope' => $fownerscope,
+                'resetfilter' => $resetfilter,
+        ];
     }
 
     /**

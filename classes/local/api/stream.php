@@ -1461,5 +1461,190 @@ EOF;
 
     }
 
-}
+    /**
+     * Gets list of contents by given ids with filters.
+     *
+     * @param int $studioid
+     * @param int $groupingid
+     * @param int $userid
+     * @param array $contentids
+     * @param int $visibility
+     * @param bool $reciprocalaccess Restrict studio work slot so user only sees slots that they also created.
+     * @param array $filterblocks
+     * @param int $filtertype
+     * @param int $filterscope
+     * @param int $filterparticipation
+     * @param int $filterstatus
+     * @param string $filtertags
+     * @param array $sortorder
+     * @param array $filteractivities
+     * @param null|int $ownerscope
+     * @param int $pagestart
+     * @param int $pagesize
+     * @param int $groupid
+     * @param int $groupmode
+     * @param bool $canaccessallgroup
+     * @param array $tutorroles Role IDs of roles considered to be "tutors"
+     * @return object|false Return contents data.
+     */
+    public static function get_contents_by_ids_with_filters(
+        $studioid, int $groupingid, $userid, $contentids, $visibility, $reciprocalaccess = false,
+        $filterblocks = null, $filtertype = null, $filterscope = null,
+        $filterparticipation = null, $filterstatus = null, $filtertags = null,
+        $sortorder = ['id' => self::SORT_BY_DATE, 'asc' => self::SORT_DESC],
+        $filteractivities = [], $ownerscope = null,
+        $pagestart = 0, $pagesize = 0, int $groupid = 0, int $groupmode = 0,
+        bool $canaccessallgroup = false, array $tutorroles = []
+    ): object|false {
+        global $DB, $USER;
 
+        $params = [];
+
+        $fields = self::LEVELFIELDS . ', ' . self::CONTENTFIELDS;
+
+        $limitfrom = 0;
+        $limitnum = 0;
+        if (($pagestart >= 0) && ($pagesize > 0)) {
+            $limitfrom = $pagestart * $pagesize;
+            $limitnum = $pagesize;
+        }
+
+        // Apply sort ordering.
+        $sortordersql = '';
+        if (is_array($sortorder)) {
+            if (array_key_exists('id', $sortorder)) {
+                if (array_key_exists('asc', $sortorder) && ($sortorder['asc'] == self::SORT_ASC)) {
+                    $sortordering = self::SORT_ASC;
+                } else {
+                    $sortordering = self::SORT_DESC;
+                }
+
+                $sortorderid = $sortorder['id'];
+                switch ($sortorderid) {
+                    case self::SORT_BY_USERNAME:
+                        $sortordersql = 'ORDER BY s.userid DESC ';
+                        if ($sortordering == self::SORT_ASC) {
+                            $sortordersql = 'ORDER BY s.userid ASC ';
+                        }
+                        break;
+
+                    case self::SORT_BY_ACTIVITYTITLE:
+                        $sortordersql = 'ORDER BY s.name DESC ';
+                        if ($sortordering == self::SORT_ASC) {
+                            $sortordersql = 'ORDER BY s.name ASC ';
+                        }
+                        break;
+
+                    case self::SORT_BY_DATE: // Fall through as sorting by date is the default.
+                    default:
+                        $sortordersql = 'ORDER BY s.timemodified DESC ';
+                        if ($sortordering == self::SORT_ASC) {
+                            $sortordersql = 'ORDER BY s.timemodified ASC ';
+                        }
+                }
+            }
+        }
+
+        [$alterblocks, $activities] = openstudio_extract_blocks_activities($filteractivities);
+        $filteractivitiessql = '';
+        $activityparams = [];
+        if (!empty($activities)) {
+            $filterblocks = array_unique(array_merge($filterblocks, $alterblocks));
+            list($filteractivitiessql, $activityparams) = self::activity_filter_sql($activities);
+        }
+
+        // Get filter SQL and params.
+        $filterbyids = '';
+        list($filterinsql, $filterinparams) = $DB->get_in_or_equal($contentids);
+        if (!is_null($contentids)) {
+            $filterbyids = <<<EOF
+    WHERE s.id {$filterinsql}
+EOF;
+        }
+        $permissiongroupsql = '';
+        $permissiongroupparams = [];
+        if ($visibility == content::VISIBILITY_GROUP) {
+            $permissiongroupresult = self::get_permission_sql($studioid, $groupingid, $userid, $USER, content::VISIBILITY_GROUP,
+                    false, false, $groupid, $groupmode, $canaccessallgroup, $tutorroles);
+            $permissiongroupsql = $permissiongroupresult->sql;
+            $permissiongroupparams = $permissiongroupresult->params;
+        }
+
+        list($filterblockssql, $blockparams) = self::block_filter_sql($filterblocks);
+        list($filtertypesql, $typeparams) = self::type_filter_sql($filtertype);
+        list($filtertagsql, $tagparams) = self::tag_filter_sql($filtertags);
+        list($filterflagsql, $flagparams) = self::participation_filter_sql($filterparticipation, $userid, $filterscope);
+        list($filterstatussql, $statusparams) = self::status_filter_sql($filterstatus, $userid, $filterscope);
+
+        $params = array_merge(
+            $params,
+            $filterinparams,
+            $permissiongroupparams,
+            $blockparams,
+            $activityparams,
+            $typeparams,
+            $tagparams,
+            $flagparams,
+            $statusparams,
+        );
+
+        $ownersql = '';
+        if ($ownerscope === self::SCOPE_MY) {
+            $ownersql .= ' AND s.userid = ? ';
+            $params[] = $userid;
+        } else if ($ownerscope === self::SCOPE_THEIRS) {
+            $ownersql .= ' AND s.userid <> ? ';
+            $params[] = $userid;
+        }
+
+        $mainsql = <<<EOF
+           FROM {openstudio_contents} s
+LEFT OUTER JOIN {openstudio_level3} l3 ON l3.id = s.levelid
+LEFT OUTER JOIN {openstudio_level2} l2 ON l2.id = l3.level2id
+LEFT OUTER JOIN {openstudio_level1} l1 ON l1.id = l2.level1id AND l1.openstudioid = s.openstudioid
+     INNER JOIN {user} u ON u.id = s.userid
+    
+{$filterbyids}
+
+{$permissiongroupsql}
+         
+{$filterblockssql}
+
+{$filteractivitiessql}
+
+{$filtertypesql}
+
+{$filtertagsql}
+
+{$filterflagsql}
+
+{$filterstatussql}
+         
+{$ownersql}
+
+EOF;
+        $sql = "SELECT {$fields} {$mainsql} {$sortordersql}";
+
+        if ($reciprocalaccess) {
+            list($reciprocalsql, $reciprocalparams) = self::reciprocal_access_sql(null, $userid);
+            $sql .= $reciprocalsql;
+            $params = array_merge($params, $reciprocalparams);
+        }
+
+        try {
+            // Count SQL for pagination.
+            $countsql = "SELECT COUNT(1) {$mainsql}";
+            $resultcount = $DB->count_records_sql($countsql, $params);
+
+
+            $result = $DB->get_recordset_sql($sql, $params, $limitfrom, $limitnum);
+            if (!$result->valid()) {
+                return false;
+            }
+
+            return (object) array('contents' => $result, 'total' => $resultcount);
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+}
