@@ -8729,6 +8729,13 @@ a.openstudio-add-new-content-link:hover  {
     }
 }
 
+@media only screen and (max-width: 767px),
+(max-width: 1024px) and (orientation: landscape) and (pointer: coarse) {
+    #page-mod-openstudio-contentedit #fitem_id_description .btn.btn-link[data-content*="help-popover-container"] {
+        display: none;
+    }
+}
+
 @media (max-width: 1199px) {
     body#page-mod-openstudio-contentedit .openstudio-content-edit-form #fgroup_id_visibilityarray .col-md-3 p[id*="_label"] {
         float: left;
