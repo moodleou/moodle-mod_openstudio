@@ -50,6 +50,9 @@ $mcontext = $coursedata->mcontext;
 $permissions = $coursedata->permissions;
 $theme = $coursedata->theme;
 
+// Not setting page URL caused a debug warning.
+$PAGE->set_url(new \moodle_url($FULLME));
+
 require_login($course, true, $cm);
 
 require_capability('mod/openstudio:view', $mcontext);
