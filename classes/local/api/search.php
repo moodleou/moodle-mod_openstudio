@@ -156,10 +156,9 @@ class search {
     public static function global_search_result(\core_search\document $doc) {
         global $CFG, $PAGE;
 
-        $docdata = $doc->export_for_template($PAGE->get_renderer('core'));
         $result = new \stdClass();
         // Get sid & folderid.
-        $relativeurl = new \moodle_url($docdata['docurl']);
+        $relativeurl = $doc->get_doc_url();
         $sid = $relativeurl->param('sid');
         $folderid = $relativeurl->param('folderid');
 

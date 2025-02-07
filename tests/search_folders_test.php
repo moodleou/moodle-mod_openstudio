@@ -226,7 +226,7 @@ class search_folders_test extends \advanced_testcase {
         $resultdata->set('contextid', \context_module::instance($this->cm->id)->id);
         $resultdata->set('courseid', $folderdata[0]->course);
         $resultdata->set('title', $folderdata[0]->urltitle);
-        $resultdata->set('content', $folderdata[0]->content);
+        $resultdata->set('content', $folderdata[0]->content ?? '');
         $resultdata->set('modified', $folderdata[0]->timemodified);
         $resultdata->set_extra('coursefullname', $this->course->fullname);
         $resultdata->set_doc_url(new \moodle_url('/mod/openstudio/folder.php', ['sid' => $folderdata[0]->id]));
