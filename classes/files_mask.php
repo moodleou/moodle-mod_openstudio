@@ -33,12 +33,18 @@ class files_mask extends \tool_datamasking\files_mask {
             $sql = "UPDATE {openstudio_contents}
                        SET content = REPLACE(content, ?, ?)
                      WHERE fileid = ?";
-            $DB->execute($sql, [rawurlencode($rec->filename), rawurlencode($newfilename), $rec->itemid]);
+            if ($rec->filename != rawurlencode($rec->filename)) {
+                $DB->execute($sql, [rawurlencode($rec->filename), rawurlencode($newfilename), $rec->itemid]);
+            }
+            $DB->execute($sql, [$rec->filename, $newfilename, $rec->itemid]);
             // Update versions.
             $sql = "UPDATE {openstudio_content_versions}
                        SET content = REPLACE(content, ?, ?)
                      WHERE fileid = ?";
-            $DB->execute($sql, [rawurlencode($rec->filename), rawurlencode($newfilename), $rec->itemid]);
+            if ($rec->filename != rawurlencode($rec->filename)) {
+                $DB->execute($sql, [rawurlencode($rec->filename), rawurlencode($newfilename), $rec->itemid]);
+            }
+            $DB->execute($sql, [$rec->filename, $newfilename, $rec->itemid]);
         }
     }
 }
