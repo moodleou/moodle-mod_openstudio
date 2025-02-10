@@ -402,10 +402,12 @@ if (trim($searchtext) == '') {
 
                 $contentdata->contents[] = $content;
             }
+            $contentdata->total = $resultingcontents->total;
+            $contentdata->allresults = $resultingcontents->total;
+        } else {
+            $contentdata->total = 0;
+            $contentdata->allresults = 0;
         }
-
-        $contentdata->total = $resultingcontents->total;
-        $contentdata->allresults = $resultingcontents->total;
     }
 }
 
