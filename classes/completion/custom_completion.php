@@ -65,6 +65,16 @@ class custom_completion extends activity_custom_completion {
     public const COMPLETION_POSTS_COMMENTS_ENABLED = 'completionpostscommentsenabled';
 
     /**
+     * @var string Completion word count min.
+     */
+    public const COMPLETION_WORD_COUNT_MIN = 'completionwordcountmin';
+
+    /**
+     * @var string Completion word count max.
+     */
+    public const COMPLETION_WORD_COUNT_MAX = 'completionwordcountmax';
+
+    /**
      * @param string $rule
      * @return int
      */
@@ -84,6 +94,8 @@ class custom_completion extends activity_custom_completion {
                 self::COMPLETION_POSTS,
                 self::COMPLETION_COMMENTS,
                 self::COMPLETION_POSTS_COMMENTS,
+                self::COMPLETION_WORD_COUNT_MIN,
+                self::COMPLETION_WORD_COUNT_MAX,
         ];
     }
 
@@ -96,12 +108,18 @@ class custom_completion extends activity_custom_completion {
         $completionposts = $this->cm->customdata->customcompletionrules[self::COMPLETION_POSTS] ?? 0;
         $completioncomments = $this->cm->customdata->customcompletionrules[self::COMPLETION_COMMENTS] ?? 0;
         $completionpostscomments = $this->cm->customdata->customcompletionrules[self::COMPLETION_POSTS_COMMENTS] ?? 0;
+        $completionwordcountmin = $this->cm->customdata->customcompletionrules[self::COMPLETION_WORD_COUNT_MIN] ?? 0;
+        $completionwordcountmax = $this->cm->customdata->customcompletionrules[self::COMPLETION_WORD_COUNT_MAX] ?? 0;
 
         return [
                 self::COMPLETION_POSTS => get_string('completiondetail:posts', 'openstudio', $completionposts),
                 self::COMPLETION_COMMENTS => get_string('completiondetail:comments', 'openstudio', $completioncomments),
                 self::COMPLETION_POSTS_COMMENTS => get_string('completiondetail:postscomments',
                         'openstudio', $completionpostscomments),
+                self::COMPLETION_WORD_COUNT_MIN => get_string('completiondetail:wordcountmin', 'openstudio',
+                        $completionwordcountmin),
+                self::COMPLETION_WORD_COUNT_MAX => get_string('completiondetail:wordcountmax', 'openstudio',
+                        $completionwordcountmax),
         ];
     }
 
@@ -135,6 +153,9 @@ class custom_completion extends activity_custom_completion {
         $openstudio = $DB->get_record('openstudio', ['id' => $cm->instance],
                 $fields, MUST_EXIST);
 
+        $min = (int) $openstudio->completionwordcountmin ?? 0;
+        $max = (int) $openstudio->completionwordcountmax ?? 0;
+
         if ($openstudio->completionposts || $openstudio->completionpostscomments) {
             $excludecontents = [
                     content::TYPE_FOLDER,
@@ -142,7 +163,7 @@ class custom_completion extends activity_custom_completion {
             ];
             [$insql, $inparams] = $DB->get_in_or_equal($excludecontents, SQL_PARAMS_QM, 'param', false);
             $countpostssql = "
-        SELECT COUNT(1)
+        SELECT oc.id, oc.description, oc.userid, oc.deletedby, oc.deletedtime, oc.contenttype
           FROM {openstudio_contents} oc
           JOIN {openstudio} os ON oc.openstudioid = os.id AND os.id = ?
          WHERE oc.userid = ?
@@ -155,7 +176,8 @@ class custom_completion extends activity_custom_completion {
                     $userid,
             ];
             $postsparams = array_merge($postsparams, $inparams);
-            $totalposts = $DB->get_field_sql($countpostssql, $postsparams);
+            $posts = self::get_posts_meet_conditions($min, $max, $countpostssql, $postsparams, 'description');
+            $totalposts = count($posts);
             $value = $openstudio->completionposts <= $totalposts;
             if ($openstudio->completionposts) {
                 if ($type == COMPLETION_AND) {
@@ -172,7 +194,7 @@ class custom_completion extends activity_custom_completion {
             ];
             [$commentinsql, $commentinparams] = $DB->get_in_or_equal($commentexcludecontents, SQL_PARAMS_QM, 'param', false);
             $countcommentssql = "
-            SELECT COUNT(1)
+            SELECT oco.id, oco.contentid, oco.deletedby, oco.deletedtime, oco.userid, oco.commenttext
               FROM {openstudio_comments} oco
               JOIN {openstudio_contents} oc ON oco.contentid = oc.id
                    AND oc.deletedby IS NULL AND oc.deletedtime IS NULL
@@ -182,7 +204,8 @@ class custom_completion extends activity_custom_completion {
                    AND oco.deletedby IS NULL AND oco.deletedtime IS NULL";
             $countcommentsparams = [$openstudio->id, $userid, $userid];
             $countcommentsparams = array_merge($commentinparams, $countcommentsparams);
-            $totalcomments = $DB->get_field_sql($countcommentssql, $countcommentsparams);
+            $posts = self::get_posts_meet_conditions($min, $max, $countcommentssql, $countcommentsparams, 'commenttext');
+            $totalcomments = count($posts);
             $value = $openstudio->completioncomments <= $totalcomments;
             if ($openstudio->completioncomments) {
                 if ($type == COMPLETION_AND) {
@@ -204,6 +227,46 @@ class custom_completion extends activity_custom_completion {
         }
 
         return $result;
+    }
+
+    /**
+     * Get list openstudio posts that meet wordcount conditions.
+     *
+     * @param int $min min completion word count.
+     * @param int $max max completion word count.
+     * @param string $sql SQL query for getting the post.
+     * @param array|null $params Query parameters.
+     * @param string $fieldname Query field for word count.
+     * @return array Array of openstudio post objects.
+     */
+    private static function get_posts_meet_conditions(int $min = 0,
+                                                      int $max = 0,
+                                                      string $sql = '',
+                                                      ?array $params = null,
+                                                      string $fieldname = '',
+    ): array {
+        global $DB;
+
+        $posts = [];
+
+        if (!$records = $DB->get_records_sql($sql, $params)) {
+            return [];
+        }
+
+        // If no word count constraints, return all records immediately.
+        if ($min === 0 && $max === 0) {
+            return $records;
+        }
+
+        foreach ($records as $key => $value) {
+            $wordcount = count_words($value->$fieldname);
+
+            if (($min === 0 || $wordcount >= $min) && ($max === 0 || $wordcount <= $max)) {
+                $posts[$key] = $value;
+            }
+        }
+
+        return $posts;
     }
 
     /**

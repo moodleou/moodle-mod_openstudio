@@ -417,6 +417,15 @@ class mod_openstudio_mod_form extends moodleform_mod {
         if (empty($defaultvalues[$this->get_suffixed_name(custom_completion::COMPLETION_POSTS_COMMENTS)])) {
             $defaultvalues[$this->get_suffixed_name(custom_completion::COMPLETION_POSTS_COMMENTS)] = 1;
         }
+
+        $defaultvalues['completionwordcountminenabled'] = !empty($defaultvalues['completionwordcountmin']) ? 1 : 0;
+        if (empty($defaultvalues['completionwordcountmin'])) {
+            $defaultvalues['completionwordcountmin'] = 1;
+        }
+        $defaultvalues['completionwordcountmaxenabled'] = !empty($defaultvalues['completionwordcountmax']) ? 1 : 0;
+        if (empty($defaultvalues['completionwordcountmax'])) {
+            $defaultvalues['completionwordcountmax'] = 1;
+        }
     }
 
     /**
@@ -439,29 +448,84 @@ class mod_openstudio_mod_form extends moodleform_mod {
                 }
             }
         }
+        // If completion wordcount is enabled.
+        if (!empty($data['completionwordcountminenabled'])) {
+            // Validate min value.
+            if (!is_numeric($data['completionwordcountmin'])) {
+                $errors['completionwordcountmingroup'] = get_string('minwordcountmustbenumeric', 'openstudio');
+            } else if ($data['completionwordcountmin'] < 0) {
+                $errors['completionwordcountmingroup'] = get_string('wordcountcompletionmustnegative', 'openstudio');
+            }
+        }
+
+        if (!empty($data['completionwordcountmaxenabled'])) {
+            // Validate max value.
+            if (!is_numeric($data['completionwordcountmax'])) {
+                $errors['completionwordcountmaxgroup'] = get_string('maxwordcountmustbenumeric', 'openstudio');
+            } else if ($data['completionwordcountmax'] < 0) {
+                $errors['completionwordcountmaxgroup'] = get_string('wordcountcompletionmustnegative', 'openstudio');
+            }
+        }
+
+        // Validate min/max relationship (only if both are valid numbers).
+        if (
+            !empty($data['completionwordcountmaxenabled']) &&
+            !empty($data['completionwordcountminenabled']) &&
+            is_numeric($data['completionwordcountmin']) &&
+            is_numeric($data['completionwordcountmax']) &&
+            $data['completionwordcountmin'] >= 0 &&
+            $data['completionwordcountmax'] >= 0 &&
+            $data['completionwordcountmin'] > $data['completionwordcountmax']
+        ) {
+            $errors['completionwordcountmingroup'] = get_string('mincannotlargethanmaxcompletion', 'openstudio');
+            $errors['completionwordcountmaxgroup'] = get_string('maxcannotlessthanmincompletion', 'openstudio');
+        }
+
         return $errors;
     }
 
     public function add_completion_rules(): array {
         $mform = $this->_form;
+        global $PAGE;
 
         $rules = [];
 
         foreach (custom_completion::get_defined_custom_rules() as $name) {
-            $groupname = $name . 'group';
-            $checkboxname = $this->get_suffixed_name($name . 'enabled');
-            $group = [];
-            $group[] =& $mform->createElement('checkbox', $checkboxname, '',
-                    get_string($name, 'openstudio'));
-            $group[] =& $mform->createElement('text', $this->get_suffixed_name($name), '', ['size' => 3]);
-            $mform->setType($this->get_suffixed_name($name), PARAM_INT);
-            $mform->addGroup($group, $this->get_suffixed_name($groupname),
+            if ($name != custom_completion::COMPLETION_WORD_COUNT_MAX && $name != custom_completion::COMPLETION_WORD_COUNT_MIN) {
+                $groupname = $name . 'group';
+                $checkboxname = $this->get_suffixed_name($name . 'enabled');
+                $group = [];
+                $group[] =& $mform->createElement('checkbox', $checkboxname, '',
+                    get_string($name, 'openstudio'),  ['class' => 'openstudio-completion-require']);
+                $group[] =& $mform->createElement('text', $this->get_suffixed_name($name), '', ['size' => 3]);
+                $mform->setType($this->get_suffixed_name($name), PARAM_INT);
+                $mform->addGroup($group, $this->get_suffixed_name($groupname),
                     get_string($groupname, 'openstudio'), [' '], false);
-            $mform->addHelpButton($this->get_suffixed_name($groupname), $groupname, 'openstudio');
-            $mform->disabledIf($name, $checkboxname, 'notchecked');
+                $mform->addHelpButton($this->get_suffixed_name($groupname), $groupname, 'openstudio');
+                $mform->disabledIf($name, $checkboxname, 'notchecked');
 
-            $rules[] = $this->get_suffixed_name($groupname);
+                $rules[] = $this->get_suffixed_name($groupname);
+            }
         }
+
+        $group = [];
+        $group[] =& $mform->createElement('checkbox', 'completionwordcountminenabled', '',
+            get_string('completionwordcountmin', 'openstudio'));
+        $group[] =& $mform->createElement('text', 'completionwordcountmin', '', ['size' => 3]);
+        $mform->disabledIf('completionwordcountmin', 'completionwordcountminenabled', 'notchecked');
+        $mform->addGroup($group, 'completionwordcountmingroup',
+            get_string('completionwordcountgroup', 'openstudio'), [' '], false);
+        $mform->addHelpButton('completionwordcountmingroup', 'completionwordcountgroup', 'openstudio');
+        $rules[] = 'completionwordcountmingroup';
+
+        $group = [];
+        $group[] =& $mform->createElement('checkbox', 'completionwordcountmaxenabled', '',
+            get_string('completionwordcountmax', 'openstudio'));
+        $group[] =& $mform->createElement('text', 'completionwordcountmax', '', ['size' => 3]);
+        $mform->disabledIf('completionwordcountmax', 'completionwordcountmaxenabled', 'notchecked');
+        $mform->addGroup($group, 'completionwordcountmaxgroup', '', [' '], false);
+        $rules[] = 'completionwordcountmaxenabled';
+        $PAGE->requires->js_call_amd('mod_openstudio/mod_form', 'init', [$mform->getAttribute('id')]);
 
         return $rules;
     }
@@ -496,6 +560,12 @@ class mod_openstudio_mod_form extends moodleform_mod {
             if (empty($data->{$this->get_suffixed_name(custom_completion::COMPLETION_POSTS_COMMENTS_ENABLED)}) ||
                     !$autocompletion) {
                 $data->{$this->get_suffixed_name(custom_completion::COMPLETION_POSTS_COMMENTS)} = 0;
+            }
+            if (empty($data->completionwordcountminenabled) || !$autocompletion) {
+                $data->completionwordcountmin = 0;
+            }
+            if (empty($data->completionwordcountmaxenabled) || !$autocompletion) {
+                $data->completionwordcountmax = 0;
             }
         }
 

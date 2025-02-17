@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="mod/openstudio/db" VERSION="20240717" COMMENT="OpenStudio plugin tables"
+<XMLDB PATH="mod/openstudio/db" VERSION="20250226" COMMENT="OpenStudio plugin tables"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -42,6 +42,8 @@
         <FIELD NAME="completioncomments" TYPE="int" LENGTH="9" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Nonzero if a certain number of comments are required to mark this openstudio complete for a user."/>
         <FIELD NAME="completionpostscomments" TYPE="int" LENGTH="9" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Nonzero if a certain number of contents or comments (total) are required to mark this openstudio complete for a user."/>
         <FIELD NAME="foldersharinglevel" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Folder sharing level"/>
+        <FIELD NAME="completionwordcountmin" TYPE="int" LENGTH="9" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Nonzero if a certain minimum word count per discussion or reply are required to mark this openstudio complete for a user."/>
+        <FIELD NAME="completionwordcountmax" TYPE="int" LENGTH="9" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Nonzero if a certain minimum word count per discussion or reply are required to mark this openstudio complete for a user."/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

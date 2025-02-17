@@ -71,6 +71,10 @@ class custom_completion_test extends advanced_testcase {
                 'email' => 'student2@ouunittest.com',
                 'username' => 'student2',
         ]);
+        $this->users->students->three = $this->getDataGenerator()->create_user([
+            'email' => 'student3@ouunittest.com',
+            'username' => 'student3',
+        ]);
 
         // Enroll our students in the course.
         $this->getDataGenerator()->enrol_user($this->users->students->one->id, $this->course->id, $this->studentroleid);
@@ -93,9 +97,9 @@ class custom_completion_test extends advanced_testcase {
      */
     public function test_get_defined_custom_rules(): void {
         $rules = custom_completion::get_defined_custom_rules();
-        $this->assertCount(3, $rules);
+        $this->assertCount(5, $rules);
         $this->assertEquals(
-                ['completionposts', 'completioncomments', 'completionpostscomments'],
+                ['completionposts', 'completioncomments', 'completionpostscomments', 'completionwordcountmin', 'completionwordcountmax'],
                 $rules
         );
     }
@@ -598,5 +602,232 @@ class custom_completion_test extends advanced_testcase {
         ]);
         $cm = cm_info::create(get_coursemodule_from_id('openstudio', $openstudio->cmid));
         $this->assertFalse(custom_completion::update_completion($cm, $studentid, COMPLETION_UNKNOWN));
+    }
+
+    /**
+     * Test completion state when select both completion word count and posts
+     *
+     * @covers \mod_openstudio\completion\custom_completion::get_state
+     */
+    public function test_completion_word_count_with_completion_posts(): void {
+        $this->resetAfterTest(true);
+
+        $expectedposts = 1;
+        $expectwordcountmin = 5;
+        $expectwordcountmax = 10;
+        $keycompletionpost = custom_completion::COMPLETION_POSTS;
+        $keycompletionwordcountmin = custom_completion::COMPLETION_WORD_COUNT_MIN;
+        $keycompletionwordcountmax = custom_completion::COMPLETION_WORD_COUNT_MAX;
+        $studentid = $this->users->students->one->id;
+        $student2id = $this->users->students->two->id;
+        $student3id = $this->users->students->three->id;
+
+        // Create generic studios.
+        $openstudio = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS1',
+            'completion' => COMPLETION_TRACKING_AUTOMATIC,
+            $keycompletionpost => $expectedposts,
+            $keycompletionwordcountmin => $expectwordcountmin,
+            $keycompletionwordcountmax => $expectwordcountmax,
+        ]);
+        $openstudio->leveldata = $this->generator->create_mock_levels($openstudio->id);
+
+        $this->assertEquals($expectedposts, $openstudio->{$keycompletionpost});
+        $this->assertEquals($expectwordcountmin, $openstudio->{$keycompletionwordcountmin});
+        $this->assertEquals($expectwordcountmax, $openstudio->{$keycompletionwordcountmax});
+
+        $cm = cm_info::create(get_coursemodule_from_id('openstudio', $openstudio->cmid));
+        $this->assertArrayHasKey($keycompletionpost, $cm->customdata->customcompletionrules);
+        $this->assertArrayHasKey($keycompletionwordcountmin, $cm->customdata->customcompletionrules);
+
+        $completioninfo = new \completion_info($cm->get_course());
+        $customcompletion = new custom_completion($cm, $studentid, $completioninfo->get_core_completion_state($cm, $studentid));
+        $customcompletionstudent2 = new custom_completion($cm, $student2id,
+                $completioninfo->get_core_completion_state($cm, $student2id));
+        $customcompletionstudent3 = new custom_completion($cm, $student3id,
+                $completioninfo->get_core_completion_state($cm, $student3id));
+        $this->assertEquals(COMPLETION_INCOMPLETE, $customcompletion->get_state($keycompletionpost));
+        $this->assertEquals(COMPLETION_INCOMPLETE, $customcompletionstudent2->get_state($keycompletionpost));
+        $this->assertEquals(COMPLETION_INCOMPLETE, $customcompletionstudent3->get_state($keycompletionpost));
+
+        // User 1 will create content with description not meet min word count.
+        $content1 = $this->generator->generate_content_data($openstudio, $studentid,
+            [
+                'name' => 'Test Not Meet Min Word Count',
+                'weblink' => 'http://www.open.ac.uk/',
+                'urltitle' => 'Vesica Timeline',
+                'visibility' => content::VISIBILITY_MODULE,
+                'description' => 'The Best YouTube',
+                'tags' => ['Stark', 'Lannister', 'Targereyen'],
+                'ownership' => 0,
+                'sid' => 0,
+            ]);
+        $this->assertObjectHasProperty('id', $content1);
+        $this->assertEquals(COMPLETION_INCOMPLETE, $customcompletion->get_state($keycompletionpost));
+
+        // User 2 will create content with description meet min word count.
+        $content2 = $this->generator->generate_content_data($openstudio, $student2id,
+            [
+                'name' => 'Test Meet Min Word Count',
+                'weblink' => 'http://www.open.ac.uk/',
+                'urltitle' => 'Vesica Timeline',
+                'visibility' => content::VISIBILITY_MODULE,
+                'description' => 'The Best YouTube For Me You',
+                'tags' => ['Stark', 'Lannister', 'Targereyen'],
+                'ownership' => 0,
+                'sid' => 0,
+            ]);
+        $this->assertObjectHasProperty('id', $content2);
+        $this->assertEquals(COMPLETION_COMPLETE, $customcompletionstudent2->get_state($keycompletionwordcountmin));
+
+        // User 3 will create content with description not met max word count.
+        $content3 = $this->generator->generate_content_data($openstudio, $student3id,
+            [
+                'name' => 'Test Meet Min Word Count',
+                'attachments' => '',
+                'embedcode' => '',
+                'weblink' => 'http://www.open.ac.uk/',
+                'urltitle' => 'Vesica Timeline',
+                'visibility' => content::VISIBILITY_MODULE,
+                'description' => 'The Best YouTube For Me You be My Girl Girl Girl',
+                'tags' => ['Stark', 'Lannister', 'Targereyen'],
+                'ownership' => 0,
+                'sid' => 0,
+            ]);
+        $this->assertObjectHasProperty('id', $content3);
+        $this->assertEquals(COMPLETION_INCOMPLETE, $customcompletionstudent3->get_state($keycompletionwordcountmax));
+    }
+
+    /**
+     * Test completion state when select both completion word count and comments.
+     *
+     * @covers \mod_openstudio\completion\custom_completion::get_state
+     */
+    public function test_completion_word_count_min_with_completion_comments(): void {
+        $this->resetAfterTest(true);
+
+        $expectcomments = 1;
+        $expectwordcountmin = 5;
+        $expectwordcountmax = 10;
+        $keycompletioncomments = custom_completion::COMPLETION_COMMENTS;
+        $keycompletionwordcountmin = custom_completion::COMPLETION_WORD_COUNT_MIN;
+        $keycompletionwordcountmax = custom_completion::COMPLETION_WORD_COUNT_MAX;
+        $studentid = $this->users->students->one->id;
+
+        // Create generic studios.
+        $openstudio = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS1',
+            'completion' => COMPLETION_TRACKING_AUTOMATIC,
+            $keycompletioncomments => $expectcomments,
+            $keycompletionwordcountmin => $expectwordcountmin,
+            $keycompletionwordcountmax => $expectwordcountmax,
+        ]);
+        $openstudio->leveldata = $this->generator->create_mock_levels($openstudio->id);
+
+        $cm = cm_info::create(get_coursemodule_from_id('openstudio', $openstudio->cmid));
+        $completioninfo = new \completion_info($cm->get_course());
+        $customcompletion = new custom_completion($cm, $studentid, $completioninfo->get_core_completion_state($cm, $studentid));
+        $this->assertEquals(COMPLETION_INCOMPLETE, $customcompletion->get_state($keycompletioncomments));
+
+        // User 1 will create content.
+        $content1 = $this->generator->generate_content_data($openstudio, $studentid,
+            $this->generator->generate_single_data_array());
+        $this->assertObjectHasProperty('id', $content1);
+
+        // User 1 have the comment but so sort => incomplete.
+        $comment1id = $this->generator->create_comment((object) [
+            'contentid' => $content1->id,
+            'userid' => $studentid,
+            'comment' => "This is the",
+        ]);
+        $this->assertIsInt($comment1id);
+        $this->assertEquals(COMPLETION_INCOMPLETE, $customcompletion->get_state($keycompletioncomments));
+
+        // User 1 have the comment but so long => incomplete.
+        $comment2id = $this->generator->create_comment((object) [
+            'contentid' => $content1->id,
+            'userid' => $studentid,
+            'comment' => "This is the comment that not meet word count completion because so long",
+        ]);
+        $this->assertIsInt($comment2id);
+        $this->assertEquals(COMPLETION_INCOMPLETE, $customcompletion->get_state($keycompletioncomments));
+
+        // User 1 have the comment that meet condition word count min/max.
+        $comment3id = $this->generator->create_comment((object) [
+            'contentid' => $content1->id,
+            'userid' => $studentid,
+            'comment' => "This is the comment that meet word count",
+        ]);
+        $this->assertIsInt($comment3id);
+        $this->assertEquals(COMPLETION_COMPLETE, $customcompletion->get_state($keycompletioncomments));
+    }
+
+    /**
+     * Test completion state when select both completion word count and comments.
+     *
+     * @covers \mod_openstudio\completion\custom_completion::get_state
+     */
+    public function test_completion_word_count_min_with_completion_posts_and_comments(): void {
+        $this->resetAfterTest(true);
+
+        $expectcomments = 2;
+        $expectposts = 1;
+        $expecttotal = $expectcomments + $expectposts;
+        $expectwordcountmin = 5;
+        $expectwordcountmax = 10;
+        $keycompletiontotal = custom_completion::COMPLETION_POSTS_COMMENTS;
+        $keycompletionwordcountmin = custom_completion::COMPLETION_WORD_COUNT_MIN;
+        $keycompletionwordcountmax = custom_completion::COMPLETION_WORD_COUNT_MAX;
+        $studentid = $this->users->students->one->id;
+
+        // Create generic studios.
+        $openstudio = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS1',
+            'completion' => COMPLETION_TRACKING_AUTOMATIC,
+            $keycompletiontotal => $expecttotal,
+            $keycompletionwordcountmin => $expectwordcountmin,
+            $keycompletionwordcountmax => $expectwordcountmax,
+        ]);
+        $openstudio->leveldata = $this->generator->create_mock_levels($openstudio->id);
+
+        $cm = cm_info::create(get_coursemodule_from_id('openstudio', $openstudio->cmid));
+        $completioninfo = new \completion_info($cm->get_course());
+        $customcompletion = new custom_completion($cm, $studentid, $completioninfo->get_core_completion_state($cm, $studentid));
+        $this->assertEquals(COMPLETION_INCOMPLETE, $customcompletion->get_state($keycompletiontotal));
+
+        // User 1 will create content pass description word count completion,
+        // user 1 need 2 comment or 2 post pass word count for complete.
+        $content1 = $this->generator->generate_content_data($openstudio, $studentid,
+            $this->generator->generate_single_data_array());
+        $this->assertObjectHasProperty('id', $content1);
+
+        // User 1 create comment not pass word count.
+        $comment1id = $this->generator->create_comment((object) [
+            'contentid' => $content1->id,
+            'userid' => $studentid,
+            'comment' => "This is the",
+        ]);
+        $this->assertIsInt($comment1id);
+        $this->assertEquals(COMPLETION_INCOMPLETE, $customcompletion->get_state($keycompletiontotal));
+
+        // User 1 create comment pass word count.
+        $comment2id = $this->generator->create_comment((object) [
+            'contentid' => $content1->id,
+            'userid' => $studentid,
+            'comment' => "This is the comment that meet word count",
+        ]);
+        $this->assertIsInt($comment2id);
+        $this->assertEquals(COMPLETION_INCOMPLETE, $customcompletion->get_state($keycompletiontotal));
+
+        $comment3id = $this->generator->create_comment((object) [
+            'contentid' => $content1->id,
+            'userid' => $studentid,
+            'comment' => "This is the second comment that meet word count",
+        ]);
+        $this->assertIsInt($comment3id);
+        $this->assertEquals(COMPLETION_COMPLETE, $customcompletion->get_state($keycompletiontotal));
     }
 }

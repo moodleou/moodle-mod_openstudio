@@ -203,6 +203,28 @@ function xmldb_openstudio_upgrade($oldversion=0) {
         upgrade_mod_savepoint(true, 2024082300, 'openstudio');
     }
 
+    if ($oldversion < 2025022600) {
+
+        // Define field completionwordcountmin to be added to openstudio.
+        $table = new xmldb_table('openstudio');
+        $field = new xmldb_field('completionwordcountmin', XMLDB_TYPE_INTEGER, '9', null,
+            XMLDB_NOTNULL, null, 0, 'foldersharinglevel');
+        // Conditionally launch add field.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $field = new xmldb_field('completionwordcountmax', XMLDB_TYPE_INTEGER, '9', null,
+            XMLDB_NOTNULL, null, 0, 'completionwordcountmin');
+        // Conditionally launch add field.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Openstudio savepoint reached.
+        upgrade_mod_savepoint(true, 2025022600, 'openstudio');
+    }
+
     // Must always return true from these functions.
     return $result;
 }

@@ -73,6 +73,22 @@ $string['completiondetail:posts'] = 'Make contents: {$a}';
 $string['completiondetail:comments'] = 'Make comments: {$a}';
 $string['completiondetail:postscomments'] = 'Make contents and comments: {$a}';
 
+$string['completiondetail:wordcountmax'] = 'Make posts or comments with maximum word count: {$a}';
+$string['completiondetail:wordcountmin'] = 'Make posts or comments with minimum word count: {$a}';
+$string['completionwordcountgroup'] = 'Require Word count (min/max)';
+$string['completionwordcountgroup'] = 'Require Word count (min/max)';
+$string['completionwordcountgroup_help'] = 'If <b>Require posts, require comments,</b> or <b>Require both posts and comments</b> is selected,
+you can add the additional requirement of a mininum word count, a maximum word count, or both.
+
+Only posts/comments which meet these parameters will be counted towards activity completion.';
+$string['completionwordcountmax'] = 'Max word count per posts or comments:';
+$string['completionwordcountmin'] = 'Min word count per posts or comments:';
+$string['maxcannotlessthanmincompletion'] = 'The maximum word count must be equal to or greater than the minimum word count.';
+$string['maxwordcountmustbenumeric'] = 'Invalid input. Please enter a valid number for the maximum word count.';
+$string['mincannotlargethanmaxcompletion'] = 'The minimum word count cannot be greater than the maximum word count.';
+$string['minwordcountmustbenumeric'] = 'Invalid input. Please enter a valid number for the minimum word count.';
+$string['wordcountcompletionmustnegative'] = 'Word count values cannot be negative. Please enter positive numbers or set them to 0.';
+
 $string['contentthumbnailalt'] = 'Add content for {$a}';
 
 $string['collapseall'] = 'Collapse all';

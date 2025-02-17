@@ -234,3 +234,136 @@ Feature: View activity completion information in the openstudio activity
     # Check student has completed completion.
     And I am on the "Test Open Studio name 1" "openstudio activity" page logged in as student1
     And the "Make contents and comments: 3" completion condition of "Test Open Studio name 1" is displayed as "done"
+
+  Scenario: Openstudio custom completion completionposts with completionwordcountmin and completionwordcountmax.
+    Given the following open studio "instances" exist:
+      | course | name                    | description                  | pinboard | idnumber | groupmode | grouping | pinboard | reportingemail   | completion | completionposts | completionwordcountmin | completionwordcountmax |
+      | C1     | Test Open Studio name 1 | Test Open Studio description | 99       | OS1      | 2         | GI1      | 99       | teacher1@asd.com | 2          | 1               | 5                      | 10                     |
+    And all users have accepted the plagarism statement for "OS1" openstudio
+    And I am on the "Test Open Studio name 1" "openstudio activity" page logged in as teacher1
+    And "Test Open Studio name 1" should have the "Make posts or comments with minimum word count: 5" completion condition
+    And "Test Open Studio name 1" should have the "Make posts or comments with maximum word count: 10" completion condition
+    And "Test Open Studio name 1" should have the "Make contents: 1" completion condition
+    # Student view.
+    When I am on the "Test Open Studio name 1" "openstudio activity" page logged in as student1
+    And "Test Open Studio name 1" should have the "Make posts or comments with minimum word count: 5" completion condition
+    And "Test Open Studio name 1" should have the "Make posts or comments with maximum word count: 10" completion condition
+    And "Test Open Studio name 1" should have the "Make contents: 1" completion condition
+    And I follow "Add new content"
+    And I set the following fields to these values:
+      | My Module   | 1                                 |
+      | Title       | Test My Group Board View 1        |
+      | Description | Description 1                     |
+    And I press "Save"
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
+    And the "Make posts or comments with minimum word count: 5" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And the "Make posts or comments with maximum word count: 10" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And the "Make contents: 1" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And I follow "Add new content"
+    And I set the following fields to these values:
+      | My Module   | 1                                 |
+      | Title       | Test My Group Board View 2        |
+      | Description | Description 1 2 3 4 5 6 7 8 9 0   |
+    And I press "Save"
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
+    And the "Make posts or comments with minimum word count: 5" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And the "Make posts or comments with maximum word count: 10" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And the "Make contents: 1" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And I follow "Add new content"
+    And I set the following fields to these values:
+      | My Module   | 1                                 |
+      | Title       | Test My Group Board View 3        |
+      | Description | Description 1 2 3 4 5             |
+    And I press "Save"
+    Then I am on the "Test Open Studio name 1" "openstudio activity" page
+    And the "Make posts or comments with minimum word count: 5" completion condition of "Test Open Studio name 1" is displayed as "done"
+    And the "Make posts or comments with maximum word count: 10" completion condition of "Test Open Studio name 1" is displayed as "done"
+    And the "Make contents: 1" completion condition of "Test Open Studio name 1" is displayed as "done"
+
+  Scenario: Openstudio custom completion completioncomments with completionwordcountmin and completionwordcountmax.
+    Given the following open studio "instances" exist:
+      | course | name                    | description                  | pinboard | idnumber | groupmode | grouping | pinboard | reportingemail   | completion | completioncomments | completionwordcountmin | completionwordcountmax |
+      | C1     | Test Open Studio name 1 | Test Open Studio description | 99       | OS1      | 2         | GI1      | 99       | teacher1@asd.com | 2          | 1                  | 5                      | 10                     |
+    And all users have accepted the plagarism statement for "OS1" openstudio
+    And I am on the "Test Open Studio name 1" "openstudio activity" page logged in as teacher1
+    And "Test Open Studio name 1" should have the "Make posts or comments with minimum word count: 5" completion condition
+    And "Test Open Studio name 1" should have the "Make posts or comments with maximum word count: 10" completion condition
+    And "Test Open Studio name 1" should have the "Make comments: 1" completion condition
+    # Student view.
+    When I am on the "Test Open Studio name 1" "openstudio activity" page logged in as student1
+    And "Test Open Studio name 1" should have the "Make posts or comments with minimum word count: 5" completion condition
+    And "Test Open Studio name 1" should have the "Make posts or comments with maximum word count: 10" completion condition
+    And "Test Open Studio name 1" should have the "Make comments: 1" completion condition
+    And I follow "Add new content"
+    And I set the following fields to these values:
+      | My Module   | 1                                 |
+      | Title       | Test My Group Board View 1        |
+      | Description | My Group Board View Description 1 |
+    And I press "Save"
+    And I press "Add new comment"
+    And I set the field "Comment" to "Test comment 2"
+    And I press "Post comment"
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
+    And the "Make posts or comments with minimum word count: 5" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And the "Make posts or comments with maximum word count: 10" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And the "Make comments: 1" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And I follow "Test My Group Board View 1"
+    And I press "Add new comment"
+    And I set the field "Comment" to "Test comment 1 2 3 4 5 6 7 8 9 0"
+    And I press "Post comment"
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
+    And the "Make posts or comments with minimum word count: 5" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And the "Make posts or comments with maximum word count: 10" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And the "Make comments: 1" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And I follow "Test My Group Board View 1"
+    And I press "Add new comment"
+    And I set the field "Comment" to "Test comment 1 2 3 4"
+    And I press "Post comment"
+    Then I am on the "Test Open Studio name 1" "openstudio activity" page
+    And the "Make posts or comments with minimum word count: 5" completion condition of "Test Open Studio name 1" is displayed as "done"
+    And the "Make posts or comments with maximum word count: 10" completion condition of "Test Open Studio name 1" is displayed as "done"
+    And the "Make comments: 1" completion condition of "Test Open Studio name 1" is displayed as "done"
+
+  Scenario: Openstudio custom completion completionpostscomments with completionwordcountmin and completionwordcountmax.
+    Given the following open studio "instances" exist:
+      | course | name                    | description                  | pinboard | idnumber | groupmode | grouping | pinboard | reportingemail   | completion | completionpostscomments | completionwordcountmin | completionwordcountmax |
+      | C1     | Test Open Studio name 1 | Test Open Studio description | 99       | OS1      | 2         | GI1      | 99       | teacher1@asd.com | 2          | 2                       | 5                      | 10                     |
+    And all users have accepted the plagarism statement for "OS1" openstudio
+    And I am on the "Test Open Studio name 1" "openstudio activity" page logged in as teacher1
+    And "Test Open Studio name 1" should have the "Make posts or comments with minimum word count: 5" completion condition
+    And "Test Open Studio name 1" should have the "Make posts or comments with maximum word count: 10" completion condition
+    And "Test Open Studio name 1" should have the "Make contents and comments: 2" completion condition
+    # Student view.
+    When I am on the "Test Open Studio name 1" "openstudio activity" page logged in as student1
+    And "Test Open Studio name 1" should have the "Make posts or comments with minimum word count: 5" completion condition
+    And "Test Open Studio name 1" should have the "Make posts or comments with maximum word count: 10" completion condition
+    And "Test Open Studio name 1" should have the "Make contents and comments: 2" completion condition
+    And I follow "Add new content"
+    And I set the following fields to these values:
+      | My Module   | 1                                 |
+      | Title       | Test My Group Board View 1        |
+      | Description | My Group Board View Description 1 |
+    And I press "Save"
+    And I press "Add new comment"
+    And I set the field "Comment" to "Test comment 2"
+    And I press "Post comment"
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
+    And the "Make posts or comments with minimum word count: 5" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And the "Make posts or comments with maximum word count: 10" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And the "Make contents and comments: 2" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And I follow "Test My Group Board View 1"
+    And I press "Add new comment"
+    And I set the field "Comment" to "Test comment 1 2 3 4 5 6 7 8 9 0"
+    And I press "Post comment"
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
+    And the "Make posts or comments with minimum word count: 5" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And the "Make posts or comments with maximum word count: 10" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And the "Make contents and comments: 2" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And I follow "Test My Group Board View 1"
+    And I press "Add new comment"
+    And I set the field "Comment" to "Test comment 1 2 3 4"
+    And I press "Post comment"
+    Then I am on the "Test Open Studio name 1" "openstudio activity" page
+    And the "Make posts or comments with minimum word count: 5" completion condition of "Test Open Studio name 1" is displayed as "done"
+    And the "Make posts or comments with maximum word count: 10" completion condition of "Test Open Studio name 1" is displayed as "done"
+    And the "Make contents and comments: 2" completion condition of "Test Open Studio name 1" is displayed as "done"
