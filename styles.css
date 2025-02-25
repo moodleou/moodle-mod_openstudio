@@ -3154,7 +3154,6 @@ iframe.openstudio-content-view-iframe {
 }
 
 #page-mod-openstudio-content.chrome .openstudio-content-weblink-text,
-#page-mod-openstudio-content.ie .openstudio-content-weblink-text,
 #page-mod-openstudio-content .openstudio-content-weblink-text img {
     margin-left: 1px;
 }
@@ -4406,14 +4405,6 @@ div.openstudio-profile-details div.openstudio-profile-row:last-of-type {
 
 .openstudio-work-progress-container {
     width: 290px;
-    position: relative;
-}
-
-/**
-* Fix issue on IE
-*/
-.ie .openstudio-work-progress-container {
-    width: 287px;
     position: relative;
 }
 
@@ -8006,10 +7997,6 @@ a.openstudio-add-new-content-link:hover  {
         margin-top: 0px;
         margin-left: 2px;
         width: 24px;
-    }
-    body.ie .openstudio-navigation-notification-number {
-        margin-top: 0;
-        margin-left: -35px;
     }
 
     .openstudio-folder-content .openstudio-item-request-feedback,
