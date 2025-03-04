@@ -68,6 +68,8 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     # Reply other user's comment
     And I am on the "Sharing Studio" "openstudio activity" page logged in as "student2"
     And I follow "Student slot 1"
+    And ".openstudio-comment-detail-owner-view .openstudio-comment-owner-name" "css_element" should exist
+    And "Student 1" "link" should exist
     Then I should see "Report comment"
     Then I should not see "Delete comment"
     And I reload the page

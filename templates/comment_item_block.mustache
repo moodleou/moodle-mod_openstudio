@@ -46,7 +46,14 @@
     <div class="openstudio-comment-leftcolumn openstudio-comment-owner">
         {{{userpicturehtml}}}
         <div class="openstudio-comment-info">
-            <span class="openstudio-comment-owner-name">{{fullname}}</span>
+            {{#myworkview}}
+                <a class="openstudio-comment-detail-owner-view" href="{{{viewuserworkurl}}}">
+                    <span class="openstudio-comment-owner-name">{{fullname}}</span>
+                </a>
+            {{/myworkview}}
+            {{^myworkview}}
+                <span class="openstudio-comment-owner-name">{{fullname}}</span>
+            {{/myworkview}}
             <span class="openstudio-comment-time">{{timemodified}}</span>
         </div>
     </div>

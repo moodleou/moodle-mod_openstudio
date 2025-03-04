@@ -1713,6 +1713,14 @@ class renderer_utils {
                     $user = user::get_user_by_id($comment->userid);
                     $comment->fullname = fullname($user);
 
+                    if ($comment->userid != $USER->id) {
+                        $comment->myworkview = true;
+                    } else {
+                        $comment->myworkview = false;
+                    }
+                    $comment->viewuserworkurl = new \moodle_url('/mod/openstudio/view.php',
+                            ['id' => $cmid, 'vuid' => $comment->userid, 'vid' => content::VISIBILITY_PRIVATE]);
+
                     // User picture.
                     $renderer = util::get_renderer();
                     $comment->userpicturehtml = util::render_user_avatar($renderer, $user);
