@@ -205,6 +205,7 @@ const updateExpandCollapseAll = () => {
  * @param {number|null} activityID Activity id or null to expand all
  */
 const storeExpanded = (expand, activityID) => {
+    const pendingPromise = new Pending("mod_openstudio/storeexpanded");
     const all = (activityID === null);
     if (all) {
         activitiesID.forEach(id => {
@@ -214,4 +215,5 @@ const storeExpanded = (expand, activityID) => {
         expanded[cmid][activityID] = expand;
     }
     Repository.setUserPreference(userPreference, JSON.stringify(expanded[cmid]));
+    pendingPromise.resolve();
 };

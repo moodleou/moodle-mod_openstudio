@@ -216,10 +216,6 @@ class renderer_utils {
         }
 
         $userprogressdata = api\user::get_activity_status($openstudioid, $contentowner->id);
-        $activedate = null;
-        if ($userprogressdata['lastactivedate'] > 0) {
-            $activedate = userdate($userprogressdata['lastactivedate'], get_string('formattimedatetime', 'openstudio'));
-        }
 
         $flagsdata = flags::count_by_user($openstudioid, $contentowner->id);
 
@@ -240,7 +236,7 @@ class renderer_utils {
         $contentdata->userprofileid = $contentowner->id;
         $contentdata->ismyprofile = $ismyprofile;
         $contentdata->fullusername = $contentowner->firstname.' '.$contentowner->lastname;
-        $contentdata->activedate = $activedate;
+        $contentdata->activedate = util::format_date($userprogressdata['lastactivedate']);
         $contentdata->flagscontentread = $flagscontentread;
         $contentdata->totalpostedcomments = $userprogressdata['totalpostedcomments'];
         $contentdata->viewuserworkurl = new \moodle_url('/mod/openstudio/view.php',

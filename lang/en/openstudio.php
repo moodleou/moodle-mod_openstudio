@@ -453,7 +453,7 @@ $string['contentdeledialogueteheader'] = 'Delete post?';
 $string['contentparticipationlow'] = 'Low participation - change me to a smiley by commenting and rating other people\'s work.';
 $string['contentparticipationhigh'] = 'High participation - well done for keeping busy!';
 
-$string['presentationoraltrequired'] = 'An image must have a description, unless it is marked as decorative only.';
+$string['presentationoraltrequired'] = 'An uploaded image must include an image description for accessibility purposes';
 $string['profileswork'] = '{$a->name}\'s work';
 $string['profilespinboard'] = '{$a->name}\'s pinboard';
 $string['profilebaruserswork'] = 'View {$a->name}\'s work';
@@ -808,6 +808,11 @@ $string['export:selectall'] = 'Select all';
 $string['export:selectnone'] = 'Select none';
 $string['export:exportselected'] = 'Export selected posts';
 $string['export:emptycontent'] = 'No post for exporting';
+$string['description'] = 'Keyboard shortcuts';
+$string['description_help'] = '
+Access buttons in the menu bar using Alt + F9 (Windows) or ⌥ + F9 (Mac). <br />
+Access the toolbar using Alt + F10 (Windows) or ⌥ + F10 (Mac) including the help menu which contains a full list of keyboard shortcuts.
+';
 
 $string['subscribestreamtitle'] = 'Subscribe to activity stream';
 $string['subscribestreammessage'] = 'You have no email subscription from this page. ';

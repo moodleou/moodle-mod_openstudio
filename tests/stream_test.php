@@ -1243,4 +1243,64 @@ class stream_test extends \advanced_testcase {
         // Only show Folder 1 and folder_content_2 in Share Module.
         $this->assertEquals(2, iterator_count($results));
     }
+
+    /**
+     * Feature test for stream APIs for get contents by ids with filters
+     *
+     */
+    public function test_get_contents_by_ids_with_filters() {
+        $this->resetAfterTest(true);
+
+        $studio = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OSF2',
+        ]);
+
+        // Create content.
+        $tutorcontentid = $this->generator->create_contents([
+            'openstudio' => 'OSF2',
+            'userid' => $this->users->teachers->one->id,
+            'name' => 'Test Slot',
+            'description' => 'Test Slot',
+            'visibility' => \mod_openstudio\local\api\content::VISIBILITY_MODULE,
+        ]);
+
+        $student1contentid = $this->generator->create_contents([
+            'openstudio' => 'OSF2',
+            'userid' => $this->users->students->one->id,
+            'name' => 'Test Slot',
+            'description' => 'Test Slot',
+            'visibility' => \mod_openstudio\local\api\content::VISIBILITY_MODULE,
+        ]);
+
+        // Student 1 comment in the post of teacher1.
+        $this->generator->create_comment([
+            'contentid' => $tutorcontentid,
+            'userid' => $this->users->students->one->id,
+            'comment' => random_string(),
+        ]);
+
+        $student2contentid = $this->generator->create_contents([
+            'openstudio' => 'OSF2',
+            'userid' => $this->users->students->two->id,
+            'name' => 'Test Slot',
+            'description' => 'Test Slot',
+            'visibility' => \mod_openstudio\local\api\content::VISIBILITY_MODULE,
+        ]);
+
+        // All content matches the filter.
+        $result = \mod_openstudio\local\api\stream::get_contents_by_ids_with_filters($studio->id, $this->groupings->a->id,
+            $this->users->teachers->one->id, [$tutorcontentid, $student1contentid, $student2contentid],
+            \mod_openstudio\local\api\content::VISIBILITY_MODULE);
+
+        $this->assertEquals(3, $result->total);
+
+        $result = \mod_openstudio\local\api\stream::get_contents_by_ids_with_filters($studio->id, $this->groupings->a->id,
+            $this->users->teachers->one->id, [$tutorcontentid, $student1contentid, $student2contentid],
+            \mod_openstudio\local\api\content::VISIBILITY_MODULE, false, null, null,
+            \mod_openstudio\local\api\stream::SCOPE_THEIRS,\mod_openstudio\local\api\stream::FILTER_COMMENTS);
+
+        // Only one post by the teacher has a comment from student 1.
+        $this->assertEquals(1, $result->total);
+    }
 }

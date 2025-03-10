@@ -28,8 +28,8 @@ define([
     'jquery',
     'core/ajax',
     'core/str',
-    'require'
-], function($, Ajax, Str, require) {
+    'mod_openstudio/osdialogue',
+], function($, Ajax, Str, osDialogue) {
     var t;
     t = {
 
@@ -41,6 +41,11 @@ define([
          * }
          */
         mconfig: null,
+
+        /**
+         * Deleted posts dialogue instance.
+         */
+        dialogue: null,
 
         /**
          * List out all of css selector used in this module.
@@ -57,71 +62,66 @@ define([
          * @method init
          * @param {JSON} options  The settings for this feature.
          */
-        init: function(options) {
+        init: async function(options) {
 
             t.mconfig = options;
 
             // Create delete dialog.
-            Y.use('moodle-core-notification-dialogue', function() {
-                require(['mod_openstudio/osdialogue'], function(osDialogue) {
-                    t.dialogue = t.createDeletedPostDialogue(osDialogue);
-                });
-            });
+            t.dialogue = await t.createDeletedPostDialogue();
 
             // Click event on delete button.
             $(t.CSS.VIEW_DELETED_BUTTON).on('click', function() {
                 if (t.dialogue) {
                     t.dialogue.show();
-                    t.resize();
                 }
             });
 
             $('body')
                 .delegate(t.CSS.RESTORE_BUTTON, 'click', t.restoreContent);
-
-            // Responsive.
-            $(window).resize(t.resize.bind(t));
         },
 
         /**
          * Create delete dialogue and some events on it.
          *
-         * @param {object} osDialogue object
-         * @return {object} OSDialogue instance
+         * @returns {Promise<Modal>}
          * @method createDeletedPostDialogue
          */
-        createDeletedPostDialogue: function(osDialogue) {
+        createDeletedPostDialogue: async function() {
             /**
-             * Set header for dialog
+             * Set header for dialog.
+             *
+             * @param {Object} dialogue
              * @method setHeader
              */
-            function setHeader() {
+            function setHeader(dialogue) {
                 Str
                     .get_string('folderdeletedposts', 'mod_openstudio')
                     .done(function(s) {
-                        dialogue.set('headerContent', '<span>' + s + '</span>');
+                        dialogue.setTitle('<span>' + s + '</span>');
                     });
             }
 
             /**
-             * Set body for dialog
+             * Set body for dialog.
+             *
+             * @param {Object} dialogue
              * @method setBody
              */
-            function setBody() {
+            function setBody(dialogue) {
 
                 M.util.js_pending('openstudioFetchDeletedContent');
 
-                var promises = Ajax.call([{
+                const promises = Ajax.call([{
                     methodname: 'mod_openstudio_external_fetch_deleted_posts_in_folder',
                     args: {
                         cmid: t.mconfig.cmid,
-                        folderid: t.mconfig.folderid
-                    }
+                        folderid: t.mconfig.folderid,
+                    },
                 }]);
 
                 promises[0]
                     .done(function(html) {
-                        dialogue.set('bodyContent', html);
+                        dialogue.setBody(html);
                     })
                     .always(function() {
                         M.util.js_complete('openstudioFetchDeletedContent');
@@ -130,21 +130,15 @@ define([
                         window.console.error('Log request failed ' + ex.message);
                     });
             }
-
-            var dialogue = new osDialogue({
-                closeButton: true,
-                visible: false,
-                centered: true,
-                modal: true,
-                responsive: true,
-                width: 640,
-                responsiveWidth: 767,
-                focusOnPreviousTargetAfterHide: true,
-                extraClasses: [t.CSS.BOUNDINGCLASS.replace('.', ''), 'openstudio-folder-posts-dialogue']
+            const dialogue = await osDialogue.create({
+                isVerticallyCentered: true,
+                templateContext: {
+                    extraClasses: t.CSS.BOUNDINGCLASS.replace('.', '') + ' openstudio-folder-posts-dialogue',
+                },
             });
 
-            setHeader();
-            setBody();
+            setHeader(dialogue);
+            setBody(dialogue);
 
             return dialogue;
         },
@@ -179,31 +173,6 @@ define([
                     window.console.error('Log request failed ' + ex.message);
                 });
         },
-
-        /**
-         * Resize and update dialogue position.
-         * @method resize
-         */
-        resize: function() {
-            if (!t.dialogue) {
-                return;
-            }
-
-            if (t.dialogue.get('visible')) {
-                if (Y.one('body').get('winWidth') < t.dialogue.get('responsiveWidth')) {
-                    t.dialogue.makeResponsive();
-                    $(t.CSS.RESTORE_BUTTON).removeClass('osep-smallbutton');
-                } else {
-                    $(t.CSS.RESTORE_BUTTON).addClass('osep-smallbutton');
-                    if (Y.one('body').get('winWidth') >= 1000) {
-                        t.dialogue.set('width', 640);
-                    } else {
-                        t.dialogue.set('width', 500);
-                    }
-                    t.dialogue.centerDialogue();
-                }
-            }
-        }
     };
 
     return t;

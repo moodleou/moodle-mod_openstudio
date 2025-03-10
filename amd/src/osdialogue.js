@@ -16,71 +16,67 @@
 /**
  * Extend Moodle dialogue.
  *
- * @package
+ * @module mod_openstudio/osdialogue
  * @copyright 2017 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-/**
- * @module mod_openstudio/osdialogue
- */
-define([
-    'jquery',
-    'core/yui'
-], function($, Y) {
-    var OSDIALOGUE_NAME = 'Open Studio dialogue',
-        DIALOGUE_PREFIX = 'moodle-dialogue';
-    var t = function() {
-        // Set bouding class for Open Studio dialogue to be distinguishable with other Moodle dialogues.
-        arguments[0].extraClasses = arguments[0].extraClasses || [];
-        arguments[0].extraClasses.push('openstudio-dialogue');
+import Modal from 'core/modal';
+import ModalEvents from 'core/modal_events';
+import * as FocusLockManager from 'core/local/aria/focuslock';
 
-        t.superclass.constructor.apply(this, arguments);
-    };
+export default class osDialogue extends Modal {
+    static TYPE = 'mod_openstudio/osdialogue';
+    static TEMPLATE = 'mod_openstudio/osdialogue';
+    registerEventListeners() {
+        // Call the parent registration.
+        super.registerEventListeners();
 
-    Y.use('moodle-core-notification-dialogue', function() {
-        Y.extend(t, M.core.dialogue, {
-            /**
-             * Override addButton function of super class.
-             * @param {object} property
-             * @param {array} sections
-             */
-            addButton: function (property, sections) {
-                var self = this;
-                var button = '<button class="' + property.classNames + ' btn">' + property.label + '</button>';
-                var sectionNode;
-
-                $.each(sections, function (key, value) {
-                    switch (value) {
-                        case 'footer':
-                            sectionNode = self.footerNode;
-                            break;
-                        default:
-                            return;
-                            break;
-                    }
-
-                    sectionNode.append(button);
-
-                    var buttonNode = sectionNode.all('.' + property.classNames);
-                    if (property.action == 'hide') {
-                        buttonNode.on('click', self.hide.bind(self));
-                    }
-
-                    if (property.events) {
-                        $.each(property.events, function (key, value) {
-                            buttonNode.on(key, function () {
-                                value.apply(self, arguments);
-                            });
-                        });
-                    }
-                });
-            }
-        }, {
-            NAME: OSDIALOGUE_NAME,
-            CSS_PREFIX: DIALOGUE_PREFIX
+        // Lock tab control inside modal.
+        this.getRoot().on(ModalEvents.shown, () => {
+            FocusLockManager.trapFocus(document.querySelector('.modal-dialog.openstudio-dialogue'));
         });
-    });
 
-    return t;
-});
+        this.getRoot().on(ModalEvents.hidden, () => {
+            FocusLockManager.untrapFocus();
+        });
+
+        // Register to close on save/cancel.
+        this.registerCloseOnCancel();
+    }
+
+    configure(modalConfig) {
+        super.configure(modalConfig);
+    }
+
+    addButton(property, sections) {
+        const self = this;
+        let footer = self.getFooter()[0];
+        sections.forEach(function(section) {
+            if (section === 'footer') {
+                // Create a button element using native JS.
+                const button = document.createElement('button');
+                button.className = property.classNames;
+                button.textContent = property.label;
+
+                // Add event listeners for 'action' or custom events.
+                if (property.action === 'hide') {
+                    button.setAttribute('data-action', 'cancel');
+                }
+
+                if (property.events) {
+                    Object.keys(property.events).forEach(eventType => {
+                        button.addEventListener(eventType, function(event) {
+                            property.events[eventType].apply(self, [event]);
+                        });
+                    });
+                }
+
+                // Collect the button for footer replacement.
+                footer.appendChild(button);
+            }
+        });
+    }
+}
+
+osDialogue.registerModalType();

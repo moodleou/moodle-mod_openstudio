@@ -60,7 +60,7 @@ class testable_openstudio_search extends \core_search\manager {
     /**
      * Returns the mock result stored in mod_openstudio/mocksearch config
      */
-    public function paged_search(\stdClass $formdata, $pagenum) {
-        return self::$fakeresult;
+    public function search(\stdClass $formdata, $limit = 0) {
+        return self::$fakeresult->results;
     }
 }

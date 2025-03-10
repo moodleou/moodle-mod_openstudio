@@ -31,11 +31,14 @@ use mod_openstudio\local\renderer_utils;
 use mod_openstudio\local\api\notifications;
 use mod_openstudio\local\util;
 use mod_openstudio\local\util\defaults;
-use mod_openstudio\local\api\folder;
+use mod_openstudio\local\api\filter;
+use mod_openstudio\local\api\levels;
+
+require_once(dirname(__FILE__) . '/lib.php');
 
 $id = optional_param('id', 0, PARAM_INT); // Course module id.
 
-// For OSEP search form, we need use input name=query
+// For OSEP search form, we need use input name=query.
 $searchtext = optional_param('query', '', PARAM_TEXT); // Search text.
 if ($searchtext == '') {
     // Keep searchtext to do not break unit tests.
@@ -43,11 +46,41 @@ if ($searchtext == '') {
 }
 $groupid = optional_param('groupid', 0, PARAM_INT); // Group ID.
 $vid = optional_param('vid', content::VISIBILITY_MODULE, PARAM_INT); // Visibility ID.
-$pagestart = optional_param('page', 0, PARAM_INT);
 $nextstart = optional_param('nextstart', 0, PARAM_INT);
+$filteropen = optional_param('filteropen', 0, PARAM_INT);
+$filteractive = optional_param('filteractive', 0, PARAM_INT);
+$contextid = optional_param('context_id', 0, PARAM_INT);
+$searchquery = optional_param('q', '', PARAM_TEXT);
 
-// Page inita and security checks.
-$coursedata = util::render_page_init($id, array('mod/openstudio:view'));
+// Check if filter reset request given, if so, then clear all the filters by redirecting the browser.
+$resetfilter = optional_param('reset', 0, PARAM_INT);
+
+$farea = optional_param('fblock', 0, PARAM_INT);
+$fflagarray = optional_param_array('fflagarray', [], PARAM_INT);
+$ftypearray = optional_param_array('ftypearray', [], PARAM_INT);
+$fstatus = optional_param('fstatus', 0, PARAM_INT);
+$fscope = optional_param('fscope', stream::SCOPE_EVERYONE, PARAM_INT);
+$fblock = optional_param('fblock', 0, PARAM_TEXT);
+$pagestart = optional_param('page', 0, PARAM_INT);
+$sortby = optional_param('sortby', null, PARAM_INT);
+$streamdatapagesize = optional_param('pagesize', defaults::STREAMPAGESIZE, PARAM_INT);
+// Get user id that we need to show stream for.
+$vuid = optional_param('vuid', $USER->id, PARAM_INT);
+// Sort options.
+// Sort by is a combination of fsort + osort. If sort by is invalid, it will return null.
+$fsortdefault = defaults::OPENSTUDIO_SORT_FLAG_DATE;
+$osortdefault = defaults::OPENSTUDIO_SORT_DESC;
+$fsort = optional_param('fsort', $fsortdefault, PARAM_INT);
+$osort = optional_param('osort', $osortdefault, PARAM_INT);
+
+$fblockarraydefault = [0];
+
+$fblockarray = optional_param_array('fblockarray', $fblockarraydefault, PARAM_INT);
+$factivityarray = optional_param_array('factivityarray', null, PARAM_TEXT);
+$quickselect = optional_param('quickselect', null, PARAM_INT);
+
+// Page init and security checks.
+$coursedata = util::render_page_init($id, ['mod/openstudio:view']);
 $cm = $coursedata->cm;
 $cminstance = $coursedata->cminstance;
 $course = $coursedata->course;
@@ -90,25 +123,25 @@ switch ($vid) {
 
 // Render page header and crumb trail.
 $pagetitle = $pageheading = get_string('pageheader', 'openstudio',
-        array('cname' => $course->shortname, 'cmname' => $cm->name,
-            'title' => $placeholdertext2)) . ': ' . get_string('navsearch', 'openstudio');
+        ['cname' => $course->shortname, 'cmname' => $cm->name,
+            'title' => $placeholdertext2]) . ': ' . get_string('navsearch', 'openstudio');
 
-$vidcrumbarray = array();
+$vidcrumbarray = [];
 $vidcrumbarray[$placeholdertext1] = new moodle_url('/mod/openstudio/view.php',
-    array('id' => $cm->id, 'vid' => $vid));
+    ['id' => $cm->id, 'vid' => $vid]);
 $vidcrumbarray[$placeholdertext2] = new moodle_url('/mod/openstudio/search.php',
-    array('id' => $cm->id, 'vid' => $vid));
+    ['id' => $cm->id, 'vid' => $vid]);
 
 util::page_setup($PAGE, $pagetitle, $pageheading, $strpageurl, $course, $cm);
 util::add_breadcrumb($PAGE, $cm->id, navigation_node::TYPE_ACTIVITY, $vidcrumbarray);
 $renderer = $PAGE->get_renderer('mod_openstudio');
 // Set view mode.
-if (! in_array($vid, array(
-        content::VISIBILITY_PRIVATE,
-        content::VISIBILITY_PRIVATE_PINBOARD,
-        content::VISIBILITY_GROUP,
-        content::VISIBILITY_MODULE,
-        content::VISIBILITY_WORKSPACE))) {
+if (!in_array($vid, [
+    content::VISIBILITY_PRIVATE,
+    content::VISIBILITY_PRIVATE_PINBOARD,
+    content::VISIBILITY_GROUP,
+    content::VISIBILITY_MODULE,
+    content::VISIBILITY_WORKSPACE])) {
     $vid = content::VISIBILITY_MODULE;
 }
 
@@ -129,62 +162,69 @@ util::cache_put('search_view_groupmode', $permissions->groupmode);
 
 // Cache the view capability which will be used by the search engine query.
 util::cache_put('search_viewothers_capability',
-        ($permissions->viewothers || $permissions->managecontent));
-
-// Set stream listing page size.
-$streamdatapagesize = defaults::STREAMPAGESIZE;
-if (isset(get_config('openstudio')->streampagesize)) {
-    if (get_config('openstudio')->streampagesize > 0) {
-        $streamdatapagesize = get_config('openstudio')->streampagesize;
-    }
-}
+    ($permissions->viewothers || $permissions->managecontent));
 
 // Pagination settings.
 if ($pagestart < 0) {
     $pagestart = 0;
 }
 
+$filter_params = util::handle_filter_params(
+    $cminstance->id,
+    $sortby,
+    $fblockarray,
+    $fblock,
+    $quickselect,
+    $filteractive,
+    $farea,
+    $factivityarray,
+    $ftypearray,
+    $fflagarray,
+    $fscope,
+    $fstatus,
+    $fsort,
+    $osort,
+    $resetfilter
+);
+
 if (trim($searchtext) == '') {
     // No search term given, so return to main stream view.
     $moduleurl = new moodle_url('/mod/openstudio/view.php',
-            array('id' => $cm->id, 'vid' => content::VISIBILITY_MODULE));
+        ['id' => $cm->id, 'vid' => content::VISIBILITY_MODULE]);
     redirect($moduleurl->out(false));
     exit();
 } else {
     // Query the search engine.
     $searchresultdata = search::query(
-            $cm, $searchtext, $pagestart, $streamdatapagesize, $nextstart, $vid);
+        $cm, $searchtext, $pagestart, $streamdatapagesize, $nextstart, $vid);
 
     // Define object.
     // TODO: This object should be refactored to a templatable object.
-    $contentdata = (object)array(
-            'contents' => array(),
-            'total' => 0,
-            'previouspage' => '',
-            'nextpage' => '',
-            'nextstart' => '',
-            'streamdatapagesize' => 0,
-            'pagestart' => 0,
-            'pageurl' => '');
+    $contentdata = (object)[
+        'contents' => [],
+        'total' => 0,
+        'previouspage' => '',
+        'nextpage' => '',
+        'nextstart' => '',
+        'streamdatapagesize' => 0,
+        'pagestart' => 0,
+        'pageurl' => ''];
 
     // Enrich the search result with additional content information.
     if (isset($searchresultdata->result)) {
-        if ($searchresultdata->isglobal) {
-            $streamdatapagesize = \core_search\manager::DISPLAY_RESULTS_PER_PAGE;
-        }
-        $contentdata = (object)array(
-                'contents' => array(),
-                'total' => count($searchresultdata->result),
-                'previouspage' => $searchresultdata->previous,
-                'nextpage' => $searchresultdata->next,
-                'nextstart' => $searchresultdata->nextstart,
-                'allresults' => $searchresultdata->total,
-                'streamdatapagesize' => $streamdatapagesize,
-                'pagestart' => $pagestart,
-                'pageurl' => $strpageurl);
-        $contentids = array();
-        $contentidsfolder = array();
-        $contentidsanchor = array();
+        $contentdata = (object)[
+            'contents' => [],
+            'total' => count($searchresultdata->result),
+            'previouspage' => $searchresultdata->previous,
+            'nextpage' => $searchresultdata->next,
+            'nextstart' => $searchresultdata->nextstart,
+            'allresults' => $searchresultdata->total,
+            'streamdatapagesize' => $streamdatapagesize,
+            'pagestart' => $pagestart,
+            'pageurl' => $strpageurl];
+        $contentids = [];
+        $contentidsfolder = [];
+        $contentidsanchor = [];
         foreach ($searchresultdata->result as $searchresult) {
             $contentids[] = $searchresult->intref1;
             if (!empty($searchresult->anchor)) {
@@ -199,7 +239,7 @@ if (trim($searchtext) == '') {
     if (!empty($contentids)) {
         // Gather content social data.
         $contentsocialdata = notifications::get_activities($permissions->activeuserid, $contentids, $permissions->groupingid,
-                $permissions->managecontent, $permissions->feature_enableuniquecommentcount);
+            $permissions->managecontent, $permissions->feature_enableuniquecommentcount);
         if ($contentsocialdata) {
             foreach ($contentsocialdata as $key => $socialitem) {
                 $socialdatatotal = 0;
@@ -221,25 +261,39 @@ if (trim($searchtext) == '') {
                 }
 
                 $socialitem->totalcommentunique = isset($socialitem->commentunique) && $socialitem->commentunique ?
-                        $socialitem->commentunique : "";
+                    $socialitem->commentunique : "";
                 $socialitem->isuniquecommentcount = $permissions->feature_enableuniquecommentcount;
 
                 // Check if social item is double digit.
                 $socialitem = util::check_item_double_digit($socialitem);
 
                 $socialdatatotal = $socialitem->comments + $socialitem->inspired +
-                        $socialitem->mademelaugh + $socialitem->favourite;
+                    $socialitem->mademelaugh + $socialitem->favourite;
 
                 $contentsocialdata[$key]->socialdatatotal = $socialdatatotal;
                 $contentsocialdata[$key]->socialdata = $socialitem;
             }
         }
+        if (is_null($filter_params->fownerscope) && $filter_params->fscope != stream::SCOPE_EVERYONE) {
+            $filter_params->fownerscope = $fscope;
+        }
 
-        // Process content data.
-        $resultingcontents = stream::get_contents_by_ids(
-                $USER->id, $contentids, $permissions->feature_contentreciprocalaccess);
+        // Check if search in pinboard.
+        if ($vid == content::VISIBILITY_PRIVATE_PINBOARD) {
+            $fblock = -1;
+        }
+
+        $resultingcontents = stream::get_contents_by_ids_with_filters($cminstance->id, $permissions->groupingid,
+                $USER->id, $contentids, $vid, $permissions->feature_contentreciprocalaccess,
+                $filter_params->fblockarray, $filter_params->ftype, $filter_params->fscope,
+                $filter_params->fflag, $filter_params->fstatus, null,
+                $filter_params->sortflag, $filter_params->factivityarray, $filter_params->fownerscope,
+                $pagestart, $streamdatapagesize, $groupid, $permissions->groupmode, $permissions->accessallgroups,
+                $permissions->tutorroles
+        );
+
         if ($resultingcontents !== false) {
-            foreach ($resultingcontents as $content) {
+            foreach ($resultingcontents->contents as $content) {
 
                 // Process content locking.
                 if (($content->levelcontainer > 0) && ($content->userid == $permissions->activeuserid)) {
@@ -277,7 +331,7 @@ if (trim($searchtext) == '') {
                     case content::VISIBILITY_GROUP:
                         $contenticon = $OUTPUT->image_url('share_with_my_group_rgb_32px', 'openstudio');
                         $itemsharewith = get_string('contentitemsharewithgroup', 'openstudio',
-                                group::get_name(abs($visibilityid)));
+                            group::get_name(abs($visibilityid)));
                         break;
 
                     case content::VISIBILITY_ALLGROUPS:
@@ -319,19 +373,20 @@ if (trim($searchtext) == '') {
                 }
                 $content = renderer_utils::get_folder_data($id, $content, $vid);
                 $content->viewuserworkurl = new moodle_url('/mod/openstudio/view.php',
-                        array('id' => $id, 'vuid' => $content->userid, 'vid' => content::VISIBILITY_PRIVATE));
+                    ['id' => $id, 'vuid' => $content->userid, 'vid' => content::VISIBILITY_PRIVATE]);
 
                 $content->contenticon = $contenticon;
                 $content->itemsharewith = $itemsharewith;
                 $content->contentthumbnailurl = $contentthumbnailfileurl;
                 $content->contentthumbnailalt = get_string('contentthumbnailalt', 'mod_openstudio',
                     renderer_utils::get_content_thumbnail_alt($content, $vid));
-                $content->datetimeupdated = $content->timemodified ? userdate($content->timemodified, get_string('formattimedatetime', 'openstudio')) : null;
+                $content->datetimeupdated = $content->timemodified ? userdate($content->timemodified,
+                    get_string('formattimedatetime', 'openstudio')) : null;
 
                 $urlarray = ['id' => $id, 'sid' => $content->id, 'vuid' => $content->userid];
                 if (!empty($contentidsfolder[$content->id])) {
                     $urlarray = ['id' => $id, 'sid' => $content->id, 'vuid' => $content->userid,
-                            'folderid' => $contentidsfolder[$content->id]];
+                        'folderid' => $contentidsfolder[$content->id]];
                 }
                 if (!empty($contentidsanchor[$content->id])) {
                     $content->contentlink = new moodle_url('/mod/openstudio/content.php',
@@ -347,6 +402,11 @@ if (trim($searchtext) == '') {
 
                 $contentdata->contents[] = $content;
             }
+            $contentdata->total = $resultingcontents->total;
+            $contentdata->allresults = $resultingcontents->total;
+        } else {
+            $contentdata->total = 0;
+            $contentdata->allresults = 0;
         }
     }
 }
@@ -355,44 +415,63 @@ $contentdata->selectedgroupid = $groupid;
 
 // Disable uneccessary functionalities.
 $contentdata->adddisable = true;
-$contentdata->filterdisable = true;
+$contentdata->filterdisable = false;
 $contentdata->blockid = 0;
 
+$contentdata->sortlist = filter::build_sort_by_filter(filter::PAGE_VIEW, $sortby);
+// Set params used for preferences filter.
+$contentdata->sortby = $sortby;
+
+// Initialize the filters object.
+
+$filter_params->page = $pagestart;
+$filter_params->pagesize = $streamdatapagesize;
+$filter_params->filteropen = $filteropen;
+
+$contentdata->openstudio_view_filters = $filter_params;
+
+$defaultparams = [
+    'id' => $id,
+    'fblock' => $filter_params->fblock,
+    'fstatus' => $filter_params->fstatus,
+    'fscope' => $filter_params->fscope,
+];
+
+if (!empty($filter_params->fflagarray)) {
+    foreach ($filter_params->fflagarray as $kfflag => $fflagvalue) {
+        $defaultparams["fflagarray[$kfflag]"] = $fflagvalue;
+    }
+}
+
+if (!empty($filter_params->ftypearray)) {
+    foreach ($filter_params->ftypearray as $k => $ftypevalue) {
+        $defaultparams["ftypearray[$k]"] = $ftypevalue;
+    }
+}
+
+$contentdata->quickselectlist = filter::build_quick_select_filter($vid, $filter_params->quickselect);
+// Set params used for preferences filter.
+$contentdata->quickselect = $filter_params->quickselect;
+$contentdata->filteropen = $filter_params->filteropen;
 $contentdata->searchmessage = $searchtext;
 
 if ($contentdata->total == 0) {
     $contentdata->searchmessage .= get_string('searchresultsummarynorcord', 'openstudio',
-            array('name' => $placeholdertext2));
+        ['name' => $placeholdertext2]);
 } else {
     if (($pagestart < $contentdata->nextpage) || ($pagestart > 0)) {
         // Need to paginate.
         if ($searchresultdata->isglobal) {
             $contentdata->searchmessage .= get_string('searchresultsummarycount', 'openstudio',
-                    array('total' => $contentdata->allresults));
+                ['total' => $contentdata->allresults]);
         } else {
             $contentdata->searchmessage .= get_string('searchresultsummarycount2', 'openstudio',
-                    array('total' => $streamdatapagesize));
-        }
-
-        if ($pagestart > 0) {
-            // Has previous page.
-            $contentdata->prevurl = $CFG->wwwroot . '/mod/openstudio/';
-            $contentdata->prevurl .= util::get_page_name_and_substitute_params(array(
-                    'page' => ($pagestart - 1),
-                    'nextstart' => 0));
-        }
-
-        if ($pagestart < $contentdata->nextpage) {
-            // Has next page.
-            $contentdata->nexturl = $CFG->wwwroot . '/mod/openstudio/';
-            $contentdata->nexturl .= util::get_page_name_and_substitute_params(array(
-                    'page' => ($pagestart + 1),
-                    'nextstart' => $contentdata->nextstart));
+                ['total' => $streamdatapagesize]);
         }
     } else {
         // No need to paginate.
         $contentdata->searchmessage .= get_string('searchresultsummarycount', 'openstudio',
-                array('total' => $contentdata->total));
+            ['total' => $contentdata->total]);
     }
 }
 
@@ -401,16 +480,15 @@ $PAGE->set_button($renderer->searchform($theme, $vid, $id, $groupid));
 
 // Output stream html with wrapper for theme header and footer.
 echo $renderer->header(); // Header.
-
 echo $renderer->siteheader($coursedata, $permissions, $theme, $cm->name, '', $vid);
 
 echo $renderer->body($cm->id, $cminstance, $theme, $vid, $permissions, $contentdata, $issearch = true); // Body.
 $PAGE->requires->js_call_amd('mod_openstudio/viewhelper', 'init', [[
-        'searchtext' => $searchtext]]);
+    'searchtext' => $searchtext]]);
 
 echo $renderer->footer(); // Footer.
 
 // Log page action.
 util::trigger_event($cm->id, 'search_viewed', '',
-        util::get_page_name_and_params(),
-        util::format_log_info($searchtext));
+    util::get_page_name_and_params(),
+    util::format_log_info($searchtext));

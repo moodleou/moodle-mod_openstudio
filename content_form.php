@@ -201,6 +201,9 @@ class mod_openstudio_content_form extends moodleform {
         ];
         $mform->addElement('editor', 'description', $contentdescription, null, $editoroptions);
         $mform->setType('description', PARAM_RAW);
+        if (editors_get_preferred_editor() instanceof \editor_tiny\editor) {
+            $mform->addHelpButton('description', 'description', 'openstudio');
+        }
 
         $defaultcontentuploadtype = '';
         if (in_array((int) $this->_customdata['contenttype'],

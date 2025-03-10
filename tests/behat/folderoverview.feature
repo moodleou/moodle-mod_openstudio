@@ -335,7 +335,7 @@ I need to create a content and upload a file
     And the "Move Up" "button" should be disabled
     And the "Move Down" "button" should be disabled
     And I wait until the page is ready
-    And I click on "//button[contains(@class,'closebutton')]" "xpath_element" in the "Order posts" "dialogue"
+    And I click on "//button[contains(@class,'close')]" "xpath_element" in the "Order posts" "dialogue"
     And I follow "Add new content"
     And I press "Add file"
     And I set the following fields to these values:

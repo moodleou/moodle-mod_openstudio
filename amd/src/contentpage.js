@@ -30,11 +30,10 @@ define(['jquery',
         'core/modal',
         'core/modal_events',
         'core/templates',
-        'core/config',
-        'require',
-        'mod_openstudio/leaflet'
+        'mod_openstudio/leaflet',
+        'mod_openstudio/osdialogue',
     ],
-    function($, Ajax, Str, Modal, ModalEvents, Templates, Config, require, Leaflet) {
+    function($, Ajax, Str, Modal, ModalEvents, Templates, Leaflet, osDialogue) {
         var t;
 
         t = {
@@ -47,21 +46,27 @@ define(['jquery',
             delete_item: null,
 
             /**
+             * Archive dialogue instance.
+             */
+            archiveDialogue: null,
+
+            /**
+             * Delete content dialogue instance.
+             */
+            deleteContentDialogue: null,
+
+            /**
              * Module config. Passed from server side.
              */
             mconfig: null,
 
-            init: function(options) {
+            init: async function(options) {
                 $.fx.off = true;
 
                 t.mconfig = options;
 
-                Y.use('moodle-core-notification-dialogue', function() {
-                    require(['mod_openstudio/osdialogue'], function(osDialogue){
-                        t.archiveDialogue = t.createArchiveDialogue(osDialogue);
-                        t.deleteContentDialogue = t.createDeleteContentDialogue(osDialogue);
-                    });
-                });
+                t.archiveDialogue = await t.createArchiveDialogue();
+                t.deleteContentDialogue = await t.createDeleteContentDialogue();
 
                 // Maximize feature.
                 t.createMaximizeModal();
@@ -263,8 +268,7 @@ define(['jquery',
             Str
                 .get_string(label, 'mod_openstudio')
                 .done(function(s) {
-                    dialogue.set('headerContent',
-                        '<span class="openstudio-dialogue-common-header">' + s + '</span>');
+                    dialogue.setTitle('<span class="openstudio-dialogue-common-header">' + s + '</span>');
                 });
         },
 
@@ -279,8 +283,7 @@ define(['jquery',
             Str
                 .get_string(label, 'mod_openstudio')
                 .done(function(s) {
-                    dialogue.set('bodyContent',
-                        '<span>' + s + '</span>');
+                    dialogue.setBody('<span>' + s + '</span>');
                 });
         },
 
@@ -288,27 +291,18 @@ define(['jquery',
          * Create archive dialogue and some events on it.
          *
          * @method createArchiveDialogue
-         * @param {Element} osDialogue
-         * @return M.core.dialogue
+         * @returns {Promise<Modal>}
          */
-        createArchiveDialogue: function(osDialogue) {
-            var dialogue = new osDialogue({
-                closeButton: true,
-                visible: false,
-                centered: true,
-                responsive: true,
-                responsiveWidth: 767,
-                modal: true,
-                focusOnPreviousTargetAfterHide: true,
-                width: 521
+        createArchiveDialogue: async function() {
+            const dialogue = await osDialogue.create({
+                isVerticallyCentered: true,
             });
-
 
             t.setHeader(dialogue, 'archivedialogheader');
             t.setBody(dialogue, 'modulejsdialogcontentarchiveconfirm');
 
-            // Button [Archive]
-            var archiveBtnProperty = {
+            // Button [Archive].
+            const archiveBtnProperty = {
                 name: 'archive',
                 classNames: 'openstudio-archive-yes-btn',
                 events: {
@@ -319,21 +313,21 @@ define(['jquery',
                                 archiveversion: 1,
                             }
                         });
-                    }
-                }
+                    },
+                },
             };
 
-            // Button [cancel]
-            var cancelBtnProperty = {
+            // Button [cancel].
+            const cancelBtnProperty = {
                 name: 'cancel',
                 classNames: 'openstudio-archive-no-btn',
-                action: 'hide'
+                action: 'hide',
             };
 
             Str
                 .get_strings([
                     {key: 'contentactionarchivepost', component: 'mod_openstudio'},
-                    {key: 'modulejsdialogcancel', component: 'mod_openstudio'}
+                    {key: 'modulejsdialogcancel', component: 'mod_openstudio'},
                 ])
                 .done(function(s) {
                     archiveBtnProperty.label = s[0];
@@ -350,26 +344,18 @@ define(['jquery',
          * Create delete content dialogue and some events on it.
          *
          * @method createDeleteContentDialogue
-         * @param {Element} osDialogue
-         * @return M.core.dialogue
+         * @returns {Promise<Modal>}
          */
-        createDeleteContentDialogue: function(osDialogue) {
-            var dialogue = new osDialogue({
-                closeButton: true,
-                visible: false,
-                centered: true,
-                responsive: true,
-                responsiveWidth: 767,
-                modal: true,
-                focusOnPreviousTargetAfterHide: true,
-                width: 521
+        createDeleteContentDialogue: async function() {
+            const dialogue = await osDialogue.create({
+                isVerticallyCentered: true,
             });
 
             t.setHeader(dialogue, 'deletearchiveversionheader');
             t.setBody(dialogue, 'deletearchiveversionheaderconfirm');
 
             // Button [delete]
-            var deleteBtnProperty = {
+            const deleteBtnProperty = {
                 name: 'delete',
                 classNames: 'openstudio-delete-btn',
                 events: {
@@ -380,7 +366,7 @@ define(['jquery',
                             args: {
                                 cmid: delete_item.attr('data-cmid'),
                                 cid: delete_item.attr('data-cid'),
-                                cvid: delete_item.attr('data-cvid')
+                                cvid: delete_item.attr('data-cvid'),
                             }
                         }]);
 
@@ -409,16 +395,16 @@ define(['jquery',
             };
 
             // Button [cancel]
-            var cancelBtnProperty = {
+            const cancelBtnProperty = {
                 name: 'cancel',
                 classNames: 'openstudio-cancel-btn',
-                action: 'hide'
+                action: 'hide',
             };
 
             Str
                 .get_strings([
                     {key: 'modulejsdialogdelete', component: 'mod_openstudio'},
-                    {key: 'modulejsdialogcancel', component: 'mod_openstudio'}
+                    {key: 'modulejsdialogcancel', component: 'mod_openstudio'},
                 ])
                 .done(function(s) {
                     deleteBtnProperty.label = s[0];

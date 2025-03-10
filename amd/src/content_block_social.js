@@ -68,6 +68,26 @@ define([
                 }
             });
             t.updateFlagContentStyles();
+            t.checkLockedPost();
+        },
+
+        /**
+         * Disables interactive icons of locked posts.
+         *
+         * @returns {void}
+         */
+        checkLockedPost: function() {
+            document.querySelectorAll('.openstudio-grid-item-content').forEach((container) => {
+                const detailsGroup = container.querySelector('.openstudio-grid-item-content-detail-info-group');
+                const isLocked = container.querySelector('.openstudio-item-lock') !== null;
+
+                if (detailsGroup) {
+                    detailsGroup.classList.toggle('disabled', isLocked);
+                    detailsGroup.querySelectorAll('*').forEach((child) => {
+                        child.setAttribute('tabindex', isLocked ? -1 : '');
+                    });
+                }
+            });
         },
 
         /**

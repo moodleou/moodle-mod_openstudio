@@ -96,6 +96,17 @@ define(['jquery', 'js/isotope.pkgd.min.js', 'core/utils'], function($, Isotope, 
             if (t.mconfig.hasOwnProperty('hasselectfrom') && t.mconfig.hasselectfrom === true) {
                 t.handleSelectFrom(t.SELECTOR.SELECT_FROM);
             }
+            const currentUrl = window.location.href;
+            if (currentUrl.includes('search.php')) {
+                // Select the #filter_pagesize element.
+                const filterPageSize = $('#filter_pagesize');
+
+                // Check if the element exists.
+                if (filterPageSize.length) {
+                    // Add ID to its parent element (for disable parent - viewsize dropdowm).
+                    filterPageSize.parent().attr('id', 'search-filter-pagesize');
+                }
+            }
         },
 
         /**
@@ -152,7 +163,21 @@ define(['jquery', 'js/isotope.pkgd.min.js', 'core/utils'], function($, Isotope, 
         handleGroupSwitcher: function() {
             // This should work for mobile also.
             $(document).on('change', '#filter_groupid', function() {
-                t.redirectURL();
+                let selectedValue = $(this).val();
+                let currentUrl = window.location.href;
+
+                if (currentUrl.includes('search.php')) {
+                    if (currentUrl.includes('groupid=')) {
+                        currentUrl = currentUrl.replace(/groupid=\d+/, `groupid=${selectedValue}`);
+                    } else {
+                        // Append "groupid" parameter if it doesn't exist.
+                        currentUrl += `&groupid=${selectedValue}`;
+                    }
+
+                    window.location.href = currentUrl;
+                } else {
+                    t.redirectURL();
+                }
             });
         },
 
@@ -334,7 +359,28 @@ define(['jquery', 'js/isotope.pkgd.min.js', 'core/utils'], function($, Isotope, 
             $('#reset_filter_btn').on('click', function() {
                 $('#reset_filter').val(1);
                 $('#filteractive').val(0);
-                $(t.SELECTOR.FILTER_FORM).submit();
+                const currentUrl = window.location.href;
+                const searchParamsToKeep = ['vid', 'id', 'groupid', 'contextid', 'q'];
+
+                if (currentUrl.includes('search.php')) {
+                    const url = new URL(currentUrl);
+                    const params = new URLSearchParams(url.search);
+
+                    // Filter the search parameters.
+                    for (const param of [...params.keys()]) {
+                        if (!searchParamsToKeep.includes(param)) {
+                            params.delete(param);
+                        }
+                    }
+
+                    params.set('reset', '1');
+
+                    // Update the URL without reloading the page.
+                    window.location.href = `${url.origin}${url.pathname}?${params.toString()}`;
+                } else {
+                    $(t.SELECTOR.FILTER_FORM).submit();
+                }
+
             });
 
             // Set Blocks option selected when a block checked.
@@ -383,6 +429,138 @@ define(['jquery', 'js/isotope.pkgd.min.js', 'core/utils'], function($, Isotope, 
                 var hasCheck = $(t.SELECTOR.ACTIVITY_ITEM + ':checked').length;
                 if (hasCheck === 0) {
                     t.checkAreaInput(t.SELECTOR.AREA_ALL, true);
+                }
+            });
+
+            $(t.SELECTOR.FILTER_FORM).on('submit', function (event) {
+                const currentUrl = window.location.href;
+                let fblock = '0';
+                let filteractive = '0';
+                let fscope = '1';
+                let fstatus = '0';
+                let ftypearray = [];
+                let fflagarray = [];
+                let fblockarray = [];
+                let factivityarray = [];
+                let quickselect = '0';
+
+                /**
+                 * Updates the URL search parameters for a specified array,
+                 * replacing existing values with the new ones if they differ from the default.
+                 *
+                 * @param {URLSearchParams} searchParams - The URLSearchParams object to modify.
+                 * @param {string} paramName - The name of the parameter to update in the URL.
+                 * @param {Array} currentArray - The current array of values to be set in the URL.
+                 * @param {Array} defaultArray - The default array of values used for comparison.
+                 */
+                function updateArrayParams(searchParams, paramName, currentArray, defaultArray) {
+                    if (JSON.stringify(currentArray) !== JSON.stringify(defaultArray)) {
+                        searchParams.delete(`${paramName}[]`);
+                        currentArray.forEach(value => searchParams.append(`${paramName}[]`, value));
+                    } else {
+                        searchParams.delete(`${paramName}[]`);
+                    }
+                }
+
+                /**
+                 * Retrieves the values of all elements matching a specific class or selector.
+                 *
+                 * @param {string} className - The class or selector to select elements (e.g., '.openstudio-filter-block').
+                 * @returns {Array} An array of values retrieved from the matching elements.
+                 */
+                function getValuesFromHTMLElement(className) {
+                    const result = [];
+                    $(className).each(function () {
+                        result.push($(this).val());
+                    });
+                    return result;
+                }
+
+                if (currentUrl.includes('search.php')) {
+                    const url = new URL(currentUrl);
+                    const searchParams = new URLSearchParams(url.search);
+                    const filterAreaValue = $('.openstudio-filter-area-input:checked').val();
+
+                    switch (filterAreaValue) {
+                        case '1':
+                            fblock = '1';
+                            filteractive = '1';
+                            break;
+                        case '2':
+                            fblock = '2';
+                            filteractive = '1';
+                            fblockarray = getValuesFromHTMLElement(".openstudio-filter-block:checked");
+                            factivityarray = getValuesFromHTMLElement(".openstudio-filter-block-activity:checked");
+                            break;
+                    }
+
+                    ftypearray = getValuesFromHTMLElement(".openstudio-filter-types-checkbox:checked");
+                    fflagarray = getValuesFromHTMLElement(".openstudio-filter-user-flags-checkbox:checked");
+                    fscope = $('.openstudio-filter-scope:checked').val() || '1';
+                    fstatus = $('.openstudio-filter-status:checked').val() || '0';
+
+                    const quickSelectVal = $('#openstudio-filter-form input[name="quickselect"]').val();
+                    if (quickSelectVal) {
+                        quickselect = quickSelectVal;
+                    } else {
+                        searchParams.delete('quickselect');
+                    }
+
+                    searchParams.delete('reset');
+
+                    // Update or add parameters.
+                    if (quickselect !== '0') {
+                        searchParams.set('quickselect', quickselect);
+                    } else {
+                        searchParams.delete('quickselect');
+                    }
+
+                    if (fblock !== '0') {
+                        searchParams.set('fblock', fblock);
+                    } else {
+                        searchParams.delete('fblock');
+                    }
+
+                    if (filteractive !== '0') {
+                        searchParams.set('filteractive', filteractive);
+                    } else {
+                        searchParams.delete('filteractive');
+                    }
+
+                    if (fscope !== '1') {
+                        searchParams.set('fscope', fscope);
+                    } else {
+                        searchParams.delete('fscope');
+                    }
+
+                    if (fstatus !== '0') {
+                        searchParams.set('fstatus', fstatus);
+                    } else {
+                        searchParams.delete('fstatus');
+                    }
+
+                    updateArrayParams(searchParams, 'ftypearray', ftypearray, ['0']);
+                    updateArrayParams(searchParams, 'fflagarray', fflagarray, ['0']);
+                    updateArrayParams(searchParams, 'fblockarray', fblockarray, []);
+                    updateArrayParams(searchParams, 'factivityarray', factivityarray, []);
+
+                    // Set 'filteropen' if applicable.
+                    if (JSON.stringify(ftypearray) !== JSON.stringify([])
+                        || JSON.stringify(fflagarray) !== JSON.stringify([])
+                        || fstatus !== '0'
+                        || fscope !== '1') {
+                        searchParams.set('filteropen', '1');
+                    } else {
+                        searchParams.delete('filteropen');
+                    }
+
+                    // Update the URL without reloading the page.
+                    const newUrl = `${url.origin}${url.pathname}?${searchParams.toString()}`;
+                    window.location.href = newUrl;
+
+                    event.preventDefault();
+                } else {
+                    window.location.href = '/view.php#filter';
                 }
             });
 
@@ -547,7 +725,27 @@ define(['jquery', 'js/isotope.pkgd.min.js', 'core/utils'], function($, Isotope, 
          */
         handleSortBy: function() {
             $(t.SELECTOR.FILTER_SORT_BY).on('change', function() {
-                t.redirectURL();
+                let selectedValue = $(this).val();
+                let currentUrl = window.location.href;
+                let url = new URL(currentUrl);
+                let params = new URLSearchParams(url.search);
+
+                if (!selectedValue) {
+                    params.delete('sortby');
+                    url.search = params.toString();
+                    window.location.href = url.toString();
+                    return;
+                }
+
+                if (url.pathname.includes('search.php')) {
+                    // Update or add "sortby" parameter.
+                    params.set('sortby', selectedValue);
+                    url.search = params.toString();
+                    window.location.href = url.toString();
+                } else {
+                    // Redirect using t.redirectURL() for other paths.
+                    t.redirectURL();
+                }
             });
         },
 
