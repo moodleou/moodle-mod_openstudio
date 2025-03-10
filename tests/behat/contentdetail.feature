@@ -47,6 +47,8 @@ I need to navigate to content pages
       | student3 | G2    |
       | student3 | G3    |
       | teacher2 | G1    |
+    And the following config values are set as admin:
+      | file_redactor_exifremoverenabled | 0 |
     And I am on the "Course 1" "Course" page logged in as "teacher1"
     And I turn editing mode on
     And I wait until the page is ready
