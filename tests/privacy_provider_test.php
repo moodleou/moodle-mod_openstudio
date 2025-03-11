@@ -47,7 +47,7 @@ require_once($CFG->dirroot . '/mod/openstudio/tests/test_utils.php');
 /**
  * Data provider testcase class.
  *
- * @package mod_bookingsystem
+ * @package mod_openstudio
  * @copyright The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
