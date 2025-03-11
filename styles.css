@@ -5104,11 +5104,13 @@ a.openstudio-add-new-content-link:hover  {
     }
 }
 
+/* Not a standard theme breakpoint. */
 @media only screen and (max-width: 768px) and (min-width: 768px) {
     .openstudio-profile-bar .openstudio-profile-progress-content {
         margin-right: 3px;
     }
 }
+/* Not a standard theme breakpoint. */
 @media only screen and (max-width: 1024px) and (min-width: 1024px) {
     body.android .openstudio-profile-bar .openstudio-profile-progress-content,
     body.ios .openstudio-profile-bar .openstudio-profile-progress-content {
@@ -5116,6 +5118,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 }
 
+/* Not a standard theme breakpoint. */
 @media only screen and (max-width: 1024px) and (min-width: 768px) {
     .openstudio-profile-bar .openstudio-profile-progress-content {
        margin-right: 14px;
@@ -5183,6 +5186,7 @@ a.openstudio-add-new-content-link:hover  {
     margin-top: 25px;
 }
 
+/* Not a standard theme breakpoint. */
 @media (max-width: 1024px) {
     .openstudio-profile-work-progress.openstudio-poeple-profile-work-progress {
         width: 32%;
@@ -5237,6 +5241,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 }
 
+/* Not a standard theme breakpoint. */
 @media (max-width: 1033px) and (min-width: 1024px) {
     .openstudio-people-page .openstudio-profile-info {
         width: 30%;
@@ -5896,6 +5901,7 @@ a.openstudio-add-new-content-link:hover  {
         margin-bottom: -4px;
     }
 }
+/* Not a standard theme breakpoint. */
 @media (max-width: 768px) {
     body.path-mod-openstudio .openstudio-profile-bar .openstudio-profile-progress-content {
         margin-top: 4px;
@@ -8726,6 +8732,7 @@ a.openstudio-add-new-content-link:hover  {
     }
 }
 
+/* Not a standard theme breakpoint. */
 @media only screen and (max-width: 767px),
 (max-width: 1024px) and (orientation: landscape) and (pointer: coarse) {
     #page-mod-openstudio-contentedit #fitem_id_description .btn.btn-link[data-content*="help-popover-container"] {
