@@ -76,7 +76,6 @@ $string['completiondetail:postscomments'] = 'Make contents and comments: {$a}';
 $string['completiondetail:wordcountmax'] = 'Make posts or comments with maximum word count: {$a}';
 $string['completiondetail:wordcountmin'] = 'Make posts or comments with minimum word count: {$a}';
 $string['completionwordcountgroup'] = 'Require Word count (min/max)';
-$string['completionwordcountgroup'] = 'Require Word count (min/max)';
 $string['completionwordcountgroup_help'] = 'If <b>Require posts, require comments,</b> or <b>Require both posts and comments</b> is selected,
 you can add the additional requirement of a mininum word count, a maximum word count, or both.
 
