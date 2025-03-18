@@ -418,13 +418,13 @@ class mod_openstudio_mod_form extends moodleform_mod {
             $defaultvalues[$this->get_suffixed_name(custom_completion::COMPLETION_POSTS_COMMENTS)] = 1;
         }
 
-        $defaultvalues['completionwordcountminenabled'] = !empty($defaultvalues['completionwordcountmin']) ? 1 : 0;
-        if (empty($defaultvalues['completionwordcountmin'])) {
-            $defaultvalues['completionwordcountmin'] = 1;
+        $defaultvalues[$this->get_suffixed_name('completionwordcountminenabled')] = !empty($defaultvalues[$this->get_suffixed_name(custom_completion::COMPLETION_WORD_COUNT_MIN)]) ? 1 : 0;
+        if (empty($defaultvalues[$this->get_suffixed_name(custom_completion::COMPLETION_WORD_COUNT_MIN)])) {
+            $defaultvalues[$this->get_suffixed_name(custom_completion::COMPLETION_WORD_COUNT_MIN)] = 1;
         }
-        $defaultvalues['completionwordcountmaxenabled'] = !empty($defaultvalues['completionwordcountmax']) ? 1 : 0;
-        if (empty($defaultvalues['completionwordcountmax'])) {
-            $defaultvalues['completionwordcountmax'] = 1;
+        $defaultvalues[$this->get_suffixed_name('completionwordcountmaxenabled')] = !empty($defaultvalues[$this->get_suffixed_name(custom_completion::COMPLETION_WORD_COUNT_MAX)]) ? 1 : 0;
+        if (empty($defaultvalues[$this->get_suffixed_name(custom_completion::COMPLETION_WORD_COUNT_MAX)])) {
+            $defaultvalues[$this->get_suffixed_name(custom_completion::COMPLETION_WORD_COUNT_MAX)] = 1;
         }
     }
 
@@ -451,18 +451,18 @@ class mod_openstudio_mod_form extends moodleform_mod {
         // If completion wordcount is enabled.
         if (!empty($data['completionwordcountminenabled'])) {
             // Validate min value.
-            if (!is_numeric($data['completionwordcountmin'])) {
+            if (!is_numeric($data[custom_completion::COMPLETION_WORD_COUNT_MIN])) {
                 $errors['completionwordcountmingroup'] = get_string('minwordcountmustbenumeric', 'openstudio');
-            } else if ($data['completionwordcountmin'] < 0) {
+            } else if ($data[custom_completion::COMPLETION_WORD_COUNT_MIN] < 0) {
                 $errors['completionwordcountmingroup'] = get_string('wordcountcompletionmustnegative', 'openstudio');
             }
         }
 
         if (!empty($data['completionwordcountmaxenabled'])) {
             // Validate max value.
-            if (!is_numeric($data['completionwordcountmax'])) {
+            if (!is_numeric($data[custom_completion::COMPLETION_WORD_COUNT_MAX])) {
                 $errors['completionwordcountmaxgroup'] = get_string('maxwordcountmustbenumeric', 'openstudio');
-            } else if ($data['completionwordcountmax'] < 0) {
+            } else if ($data[custom_completion::COMPLETION_WORD_COUNT_MAX] < 0) {
                 $errors['completionwordcountmaxgroup'] = get_string('wordcountcompletionmustnegative', 'openstudio');
             }
         }
@@ -471,11 +471,11 @@ class mod_openstudio_mod_form extends moodleform_mod {
         if (
             !empty($data['completionwordcountmaxenabled']) &&
             !empty($data['completionwordcountminenabled']) &&
-            is_numeric($data['completionwordcountmin']) &&
-            is_numeric($data['completionwordcountmax']) &&
-            $data['completionwordcountmin'] >= 0 &&
-            $data['completionwordcountmax'] >= 0 &&
-            $data['completionwordcountmin'] > $data['completionwordcountmax']
+            is_numeric($data[custom_completion::COMPLETION_WORD_COUNT_MIN]) &&
+            is_numeric($data[custom_completion::COMPLETION_WORD_COUNT_MAX]) &&
+            $data[custom_completion::COMPLETION_WORD_COUNT_MIN] >= 0 &&
+            $data[custom_completion::COMPLETION_WORD_COUNT_MAX] >= 0 &&
+            $data[custom_completion::COMPLETION_WORD_COUNT_MIN] > $data[custom_completion::COMPLETION_WORD_COUNT_MAX]
         ) {
             $errors['completionwordcountmingroup'] = get_string('mincannotlargethanmaxcompletion', 'openstudio');
             $errors['completionwordcountmaxgroup'] = get_string('maxcannotlessthanmincompletion', 'openstudio');
@@ -509,22 +509,24 @@ class mod_openstudio_mod_form extends moodleform_mod {
         }
 
         $group = [];
-        $group[] =& $mform->createElement('checkbox', 'completionwordcountminenabled', '',
-            get_string('completionwordcountmin', 'openstudio'));
-        $group[] =& $mform->createElement('text', 'completionwordcountmin', '', ['size' => 3]);
-        $mform->disabledIf('completionwordcountmin', 'completionwordcountminenabled', 'notchecked');
-        $mform->addGroup($group, 'completionwordcountmingroup',
+        $group[] =& $mform->createElement('checkbox', $this->get_suffixed_name('completionwordcountminenabled'), '',
+            get_string(custom_completion::COMPLETION_WORD_COUNT_MIN, 'openstudio'));
+        $group[] =& $mform->createElement('text', $this->get_suffixed_name(custom_completion::COMPLETION_WORD_COUNT_MIN), '', ['size' => 3]);
+        $mform->setType($this->get_suffixed_name(custom_completion::COMPLETION_WORD_COUNT_MIN), PARAM_INT);
+        $mform->disabledIf($this->get_suffixed_name(custom_completion::COMPLETION_WORD_COUNT_MIN), $this->get_suffixed_name('completionwordcountminenabled'), 'notchecked');
+        $mform->addGroup($group, $this->get_suffixed_name('completionwordcountmingroup'),
             get_string('completionwordcountgroup', 'openstudio'), [' '], false);
-        $mform->addHelpButton('completionwordcountmingroup', 'completionwordcountgroup', 'openstudio');
-        $rules[] = 'completionwordcountmingroup';
+        $mform->addHelpButton($this->get_suffixed_name('completionwordcountmingroup'), 'completionwordcountgroup', 'openstudio');
+        $rules[] = $this->get_suffixed_name('completionwordcountmingroup');
 
         $group = [];
-        $group[] =& $mform->createElement('checkbox', 'completionwordcountmaxenabled', '',
-            get_string('completionwordcountmax', 'openstudio'));
-        $group[] =& $mform->createElement('text', 'completionwordcountmax', '', ['size' => 3]);
-        $mform->disabledIf('completionwordcountmax', 'completionwordcountmaxenabled', 'notchecked');
-        $mform->addGroup($group, 'completionwordcountmaxgroup', '', [' '], false);
-        $rules[] = 'completionwordcountmaxenabled';
+        $group[] =& $mform->createElement('checkbox', $this->get_suffixed_name('completionwordcountmaxenabled'), '',
+            get_string(custom_completion::COMPLETION_WORD_COUNT_MAX, 'openstudio'));
+        $group[] =& $mform->createElement('text', $this->get_suffixed_name(custom_completion::COMPLETION_WORD_COUNT_MAX), '', ['size' => 3]);
+        $mform->setType($this->get_suffixed_name(custom_completion::COMPLETION_WORD_COUNT_MAX), PARAM_INT);
+        $mform->disabledIf($this->get_suffixed_name(custom_completion::COMPLETION_WORD_COUNT_MAX), $this->get_suffixed_name('completionwordcountmaxenabled'), 'notchecked');
+        $mform->addGroup($group, $this->get_suffixed_name('completionwordcountmaxgroup'), '', [' '], false);
+        $rules[] = $this->get_suffixed_name('completionwordcountmaxgroup');
         $PAGE->requires->js_call_amd('mod_openstudio/mod_form', 'init', [$mform->getAttribute('id')]);
 
         return $rules;
@@ -561,11 +563,11 @@ class mod_openstudio_mod_form extends moodleform_mod {
                     !$autocompletion) {
                 $data->{$this->get_suffixed_name(custom_completion::COMPLETION_POSTS_COMMENTS)} = 0;
             }
-            if (empty($data->completionwordcountminenabled) || !$autocompletion) {
-                $data->completionwordcountmin = 0;
+            if (empty($data->{$this->get_suffixed_name('completionwordcountminenabled')}) || !$autocompletion) {
+                $data->{$this->get_suffixed_name(custom_completion::COMPLETION_WORD_COUNT_MIN)} = 0;
             }
-            if (empty($data->completionwordcountmaxenabled) || !$autocompletion) {
-                $data->completionwordcountmax = 0;
+            if (empty($data->{$this->get_suffixed_name('completionwordcountmaxenabled')}) || !$autocompletion) {
+                $data->{$this->get_suffixed_name(custom_completion::COMPLETION_WORD_COUNT_MAX)} = 0;
             }
         }
 

@@ -57,8 +57,10 @@ const completionFormMinMax = (formElement) => {
  * @param {Boolean} status hidden status.
  */
 const toggleHiddenClassWordcount = (status) => {
-    const fgroupWordcountMin = document.querySelector('#fgroup_id_completionwordcountmingroup');
-    const fgroupWordcountMax = document.querySelector('#fgroup_id_completionwordcountmaxgroup');
+    const fgroupWordcountMin = document.querySelector('#fgroup_id_completionwordcountmingroup,' +
+        '#fgroup_id_completionwordcountmingroup_openstudio');
+    const fgroupWordcountMax = document.querySelector('#fgroup_id_completionwordcountmaxgroup,' +
+        '#fgroup_id_completionwordcountmaxgroup_openstudio');
     if (status) {
         fgroupWordcountMin.classList.add('hidden');
         fgroupWordcountMax.classList.add('hidden');
