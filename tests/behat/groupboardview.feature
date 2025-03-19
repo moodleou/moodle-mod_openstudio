@@ -176,7 +176,7 @@ Feature: Open Studio group stream
     And "Add new comment" "button" should exist
 
   @javascript
-  Scenario: Test Open Studio My Groupboard View
+  Scenario: Test Open Studio My Groupboard View all group
     When I add a openstudio activity to course "Course 1" section "1" and I fill the form with:
       | Name                         | Test Open Studio name 2      |
       | Description                  | Test Open Studio description |

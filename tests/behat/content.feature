@@ -332,7 +332,7 @@ I need to create a content and upload a file
     And I follow "My Content > My Activities" in the openstudio navigation
     Then I should see "Content 1.1 Required"
 
-  Scenario: Add new content just a title and description
+  Scenario: Add new content just a title and description and link
     When I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "teacher1"
     And I follow "Add new content"
     And I press "Add web/embed link"
