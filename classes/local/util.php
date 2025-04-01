@@ -1632,8 +1632,7 @@ EOF;
      */
     public static function filter_urltolink($text) {
         global $CFG, $PAGE;
-        require_once($CFG->dirroot . '/filter/urltolink/filter.php');
-        $filterurltolink = new \filter_urltolink($PAGE->context, array());
+        $filterurltolink = new \filter_urltolink\text_filter($PAGE->context, array());
         return $filterurltolink->filter($text, array('originalformat' => 0));
     }
 

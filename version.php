@@ -30,7 +30,7 @@ defined('MOODLE_INTERNAL') || die();
 $plugin->component = 'mod_openstudio';
 $plugin->version = 2025022600;
 $plugin->release = 'v0.1';
-$plugin->requires = 2022041900;
+$plugin->requires = 2024100700;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->cron = 0;
 $plugin->dependencies = array();

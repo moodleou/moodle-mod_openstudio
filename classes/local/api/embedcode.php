@@ -40,7 +40,7 @@ class embedcode {
      */
     public static function is_ouembed_installed() {
         global $CFG;
-        return file_exists("{$CFG->dirroot}/filter/ouembed/filter.php");
+        return file_exists("{$CFG->dirroot}/filter/ouembed/version.php");
     }
 
     /**
