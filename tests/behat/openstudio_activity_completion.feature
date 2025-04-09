@@ -251,9 +251,9 @@ Feature: View activity completion information in the openstudio activity
     And "Test Open Studio name 1" should have the "Make contents: 1" completion condition
     And I follow "Add new content"
     And I set the following fields to these values:
-      | My Module   | 1                                 |
-      | Title       | Test My Group Board View 1        |
-      | Description | Description 1                     |
+      | My Module   | 1                          |
+      | Title       | Test My Group Board View 1 |
+      | Description | Description 1              |
     And I press "Save"
     And I am on the "Test Open Studio name 1" "openstudio activity" page
     And the "Make posts or comments with minimum word count: 5" completion condition of "Test Open Studio name 1" is displayed as "todo"
@@ -261,9 +261,9 @@ Feature: View activity completion information in the openstudio activity
     And the "Make contents: 1" completion condition of "Test Open Studio name 1" is displayed as "todo"
     And I follow "Add new content"
     And I set the following fields to these values:
-      | My Module   | 1                                 |
-      | Title       | Test My Group Board View 2        |
-      | Description | Description 1 2 3 4 5 6 7 8 9 0   |
+      | My Module   | 1                               |
+      | Title       | Test My Group Board View 2      |
+      | Description | Description 1 2 3 4 5 6 7 8 9 0 |
     And I press "Save"
     And I am on the "Test Open Studio name 1" "openstudio activity" page
     And the "Make posts or comments with minimum word count: 5" completion condition of "Test Open Studio name 1" is displayed as "todo"
@@ -271,9 +271,9 @@ Feature: View activity completion information in the openstudio activity
     And the "Make contents: 1" completion condition of "Test Open Studio name 1" is displayed as "todo"
     And I follow "Add new content"
     And I set the following fields to these values:
-      | My Module   | 1                                 |
-      | Title       | Test My Group Board View 3        |
-      | Description | Description 1 2 3 4 5             |
+      | My Module   | 1                          |
+      | Title       | Test My Group Board View 3 |
+      | Description | Description 1 2 3 4 5      |
     And I press "Save"
     Then I am on the "Test Open Studio name 1" "openstudio activity" page
     And the "Make posts or comments with minimum word count: 5" completion condition of "Test Open Studio name 1" is displayed as "done"
@@ -367,3 +367,211 @@ Feature: View activity completion information in the openstudio activity
     And the "Make posts or comments with minimum word count: 5" completion condition of "Test Open Studio name 1" is displayed as "done"
     And the "Make posts or comments with maximum word count: 10" completion condition of "Test Open Studio name 1" is displayed as "done"
     And the "Make contents and comments: 2" completion condition of "Test Open Studio name 1" is displayed as "done"
+
+  Scenario: Openstudio custom completion restrict completion tracking posts in my activities section only.
+    Given I am on the "Course 1" "Course" page logged in as "teacher1"
+    And I turn editing mode on
+    And I add a openstudio activity to course "Course 1" section "1" and I fill the form with:
+      | Name                         | Test Open Studio name 1      |
+      | Description                  | Test Open Studio description |
+      | Group mode                   | Visible groups               |
+      | Grouping                     | grouping1                    |
+      | Enable pinboard              | 99                           |
+      | Enable folders               | 1                            |
+      | Abuse reports are emailed to | teacher1@asd.com             |
+      | ID number                    | OS1                          |
+      | id_tutorrolesgroup_1         | 1                            |
+    And the following open studio "level1s" exist:
+      | openstudio | name   | sortorder |
+      | OS1        | Block1 | 1         |
+    And the following open studio "level2s" exist:
+      | level1 | name      | sortorder |
+      | Block1 | Activity1 | 1         |
+    And the following open studio "level3s" exist:
+      | level2    | name       | sortorder |
+      | Activity1 | Content1.1 | 1         |
+    And the following open studio "level3s" exist:
+      | level2    | name      | sortorder | contenttype |
+      | Activity1 | Folder1.1 | 1         | folder      |
+    And all users have accepted the plagarism statement for "OS1" openstudio
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
+    And I navigate to "Settings" in current page administration
+    And I set the following fields to these values:
+      | Add requirements | 1 |
+    And I should see "Restrict completion tracking to My Activities section only"
+    # Check validation.
+    And I set the following fields to these values:
+      | Restrict completion tracking to My Activities section only | 1 |
+    And I press "Save and display"
+    And I should see "Please select at least one completion condition when \"Restrict completion tracking\" is enabled."
+    And I set the following fields to these values:
+      | Restrict completion tracking to My Activities section only | 1 |
+      | id_completionpostsenabled                                  | 1 |
+      | id_completionposts                                         | 2 |
+    And I press "Save and display"
+
+    # Test we don't count contents in My Pinboard.
+    And I am on the "Test Open Studio name 1" "openstudio activity" page logged in as student1
+    And "Test Open Studio name 1" should have the "Make contents: 2" completion condition
+    And I follow "Upload content"
+    And I set the following fields to these values:
+      | My Module   | 1                         |
+      | Title       | Test My Pinboard 1        |
+      | Description | My Pinboard Description 1 |
+    And I press "Save"
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
+    # Creating a folder.
+    And I follow "Create new folder"
+    And I set the following fields to these values:
+      | My Module          | 1                            |
+      | Folder title       | Test my folder view 1        |
+      | Folder description | My folder view description 1 |
+    And I press "Create folder"
+    And I follow "Upload content to folder"
+    And I set the following fields to these values:
+      | Title       | Test Content Folder My Pinboard 2 |
+      | Description | My Pinboard Description 2         |
+    And I press "Save"
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
+    And the "Make contents: 2" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And the "Make posts or comments in My Activities section only" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    # Test we count contents in My Activities only.
+    And I follow "My Content > My Activities" in the openstudio navigation
+    And I should see "Content1.1"
+    And I should see "Folder1.1"
+    And I click on "Content1.1" "link" in the ".openstudio-grid-item" "css_element"
+    And I set the following fields to these values:
+      | My Module   | 1                             |
+      | Title       | Student content 1             |
+      | Description | Student content 1 description |
+    And I press "Save"
+    And I follow "My Content > My Activities" in the openstudio navigation
+    And I click on "Folder1.1" "link" in the ".openstudio-add-new-folder" "css_element"
+    And I follow "Upload content to folder"
+    And I set the following fields to these values:
+      | Title       | Student content folder 1             |
+      | Description | Student content folder Description 1 |
+    And I press "Save"
+    When I am on the "Test Open Studio name 1" "openstudio activity" page
+    Then the "Make contents: 2" completion condition of "Test Open Studio name 1" is displayed as "done"
+    And the "Make posts or comments in My Activities section only" completion condition of "Test Open Studio name 1" is displayed as "done"
+
+  Scenario: Openstudio custom completion restrict completion tracking comments in my activities section only.
+    Given I am on the "Course 1" "Course" page logged in as "teacher1"
+    And I turn editing mode on
+    And I add a openstudio activity to course "Course 1" section "1" and I fill the form with:
+      | Name                         | Test Open Studio name 1      |
+      | Description                  | Test Open Studio description |
+      | Group mode                   | Visible groups               |
+      | Grouping                     | grouping1                    |
+      | Enable pinboard              | 99                           |
+      | Enable folders               | 1                            |
+      | Abuse reports are emailed to | teacher1@asd.com             |
+      | ID number                    | OS1                          |
+      | id_tutorrolesgroup_1         | 1                            |
+    And the following open studio "level1s" exist:
+      | openstudio | name   | sortorder |
+      | OS1        | Block1 | 1         |
+    And the following open studio "level2s" exist:
+      | level1 | name      | sortorder |
+      | Block1 | Activity1 | 1         |
+    And the following open studio "level3s" exist:
+      | level2    | name       | sortorder |
+      | Activity1 | Content1.1 | 1         |
+    And all users have accepted the plagarism statement for "OS1" openstudio
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
+    And I navigate to "Settings" in current page administration
+    And I set the following fields to these values:
+      | Add requirements                                           | 1 |
+      | Restrict completion tracking to My Activities section only | 1 |
+      | id_completioncommentsenabled                               | 1 |
+    And I press "Save and display"
+      # Test we don't count content in My Module.
+    And I am on the "Test Open Studio name 1" "openstudio activity" page logged in as student1
+    And "Test Open Studio name 1" should have the "Make comments: 1" completion condition
+    And I follow "Upload content"
+    And I set the following fields to these values:
+      | My Module   | 1                                 |
+      | Title       | Test My Group Board View 1        |
+      | Description | My Group Board View Description 1 |
+    And I press "Save"
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
+    And the "Make comments: 1" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And the "Make posts or comments in My Activities section only" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And I follow "My Content > My Activities" in the openstudio navigation
+    And I should see "Content1.1"
+    And I click on "Content1.1" "link" in the ".openstudio-grid-item" "css_element"
+    And I set the following fields to these values:
+      | My Module   | 1                             |
+      | Title       | Student content 1             |
+      | Description | Student content 1 description |
+    And I press "Save"
+    And I press "Add new comment"
+    And I set the field "Comment" to "Test comment 1 2 3 4"
+    And I press "Post comment"
+    When I am on the "Test Open Studio name 1" "openstudio activity" page
+    Then the "Make comments: 1" completion condition of "Test Open Studio name 1" is displayed as "done"
+    And the "Make posts or comments in My Activities section only" completion condition of "Test Open Studio name 1" is displayed as "done"
+
+  Scenario: Openstudio custom completion restrict completion tracking posts and comments in my activities section only.
+    Given I am on the "Course 1" "Course" page logged in as "teacher1"
+    And I turn editing mode on
+    And I add a openstudio activity to course "Course 1" section "1" and I fill the form with:
+      | Name                         | Test Open Studio name 1      |
+      | Description                  | Test Open Studio description |
+      | Group mode                   | Visible groups               |
+      | Grouping                     | grouping1                    |
+      | Enable pinboard              | 99                           |
+      | Enable folders               | 1                            |
+      | Abuse reports are emailed to | teacher1@asd.com             |
+      | ID number                    | OS1                          |
+      | id_tutorrolesgroup_1         | 1                            |
+    And the following open studio "level1s" exist:
+      | openstudio | name   | sortorder |
+      | OS1        | Block1 | 1         |
+    And the following open studio "level2s" exist:
+      | level1 | name      | sortorder |
+      | Block1 | Activity1 | 1         |
+    And the following open studio "level3s" exist:
+      | level2    | name       | sortorder |
+      | Activity1 | Content1.1 | 1         |
+    And all users have accepted the plagarism statement for "OS1" openstudio
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
+    And I navigate to "Settings" in current page administration
+    And I set the following fields to these values:
+      | Add requirements                                           | 1 |
+      | Restrict completion tracking to My Activities section only | 1 |
+      | id_completionpostscommentsenabled                          | 1 |
+      | id_completionpostscomments                                 | 3 |
+    And I press "Save and display"
+      # Test we don't count content in My Module.
+    And I am on the "Test Open Studio name 1" "openstudio activity" page logged in as student1
+    And "Test Open Studio name 1" should have the "Make contents and comments: 3" completion condition
+    And I follow "Upload content"
+    And I set the following fields to these values:
+      | My Module   | 1                                 |
+      | Title       | Test My Group Board View 1        |
+      | Description | My Group Board View Description 1 |
+    And I press "Save"
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
+    And the "Make contents and comments: 3" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And the "Make posts or comments in My Activities section only" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And I follow "My Content > My Activities" in the openstudio navigation
+    And I should see "Content1.1"
+    And I click on "Content1.1" "link" in the ".openstudio-grid-item" "css_element"
+    And I set the following fields to these values:
+      | My Module   | 1                             |
+      | Title       | Student content 1             |
+      | Description | Student content 1 description |
+    And I press "Save"
+    # Create comment 1.
+    And I press "Add new comment"
+    And I set the field "Comment" to "Test comment 1"
+    And I press "Post comment"
+    # Create comment 2.
+    And I press "Add new comment"
+    And I set the field "Comment" to "Test comment 2"
+    And I press "Post comment"
+    When I am on the "Test Open Studio name 1" "openstudio activity" page
+    Then the "Make contents and comments: 3" completion condition of "Test Open Studio name 1" is displayed as "done"
+    And the "Make posts or comments in My Activities section only" completion condition of "Test Open Studio name 1" is displayed as "done"

@@ -25,6 +25,7 @@ namespace mod_openstudio\local\api;
 
 defined('MOODLE_INTERNAL') || die();
 
+use mod_openstudio\completion\custom_completion;
 use mod_openstudio\local\util\defaults;
 use mod_openstudio\local\util\feature;
 
@@ -140,6 +141,15 @@ class folder {
                         tracking::log_action($contentid, tracking::ADD_CONTENT_TO_FOLDER, $userid, $folderid);
                         break;
                 }
+
+                $set = self::get($folderid);
+                if (!$set) {
+                    throw new \coding_exception('Folder does not exist.');
+                }
+                $studio = $DB->get_record('openstudio', ['id' => $set->openstudioid], 'id');
+                $cm = get_coursemodule_from_instance('openstudio', $studio->id);
+
+                custom_completion::update_completion($cm, $userid, COMPLETION_UNKNOWN);
                 return $foldercontentid;
             } else {
                 return false;

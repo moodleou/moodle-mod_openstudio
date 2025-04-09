@@ -225,6 +225,20 @@ function xmldb_openstudio_upgrade($oldversion=0) {
         upgrade_mod_savepoint(true, 2025022600, 'openstudio');
     }
 
+    if ($oldversion < 2025041600) {
+        // Define field completiontrackingrestricted to be added to openstudio.
+        $table = new xmldb_table('openstudio');
+        $field = new xmldb_field('completiontrackingrestricted', XMLDB_TYPE_INTEGER, '9', null,
+                XMLDB_NOTNULL, null, 0, 'completionwordcountmax');
+        // Conditionally launch add field.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Openstudio savepoint reached.
+        upgrade_mod_savepoint(true, 2025041600, 'openstudio');
+    }
+
     // Must always return true from these functions.
     return $result;
 }

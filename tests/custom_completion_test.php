@@ -97,9 +97,9 @@ class custom_completion_test extends advanced_testcase {
      */
     public function test_get_defined_custom_rules(): void {
         $rules = custom_completion::get_defined_custom_rules();
-        $this->assertCount(5, $rules);
+        $this->assertCount(6, $rules);
         $this->assertEquals(
-                ['completionposts', 'completioncomments', 'completionpostscomments', 'completionwordcountmin', 'completionwordcountmax'],
+                ['completiontrackingrestricted', 'completionposts', 'completioncomments', 'completionpostscomments', 'completionwordcountmin', 'completionwordcountmax'],
                 $rules
         );
     }
@@ -829,5 +829,216 @@ class custom_completion_test extends advanced_testcase {
         ]);
         $this->assertIsInt($comment3id);
         $this->assertEquals(COMPLETION_COMPLETE, $customcompletion->get_state($keycompletiontotal));
+    }
+
+    /**
+     * Test completion state when tracking posts in "My Activities" only.
+     *
+     * @covers \mod_openstudio\completion\custom_completion::get_state
+     */
+    public function test_completion_contents_completion_tracking_restricted(): void {
+        $this->resetAfterTest(true);
+
+        $studentid = $this->users->students->one->id;
+        $key = custom_completion::COMPLETION_POSTS;
+        $expectposts = 1;
+        // Create generic studios.
+        $openstudio = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS2',
+            'completion' => COMPLETION_TRACKING_AUTOMATIC,
+            custom_completion::COMPLETION_TRACKING_RESTRICTED => 1,
+            $key => $expectposts,
+        ]);
+        $openstudio->leveldata = $this->generator->create_mock_levels($openstudio->id);
+
+        $level1 = reset($openstudio->leveldata['contentslevels']);
+        $level2 = reset($level1);
+        $level3 = reset($level2);
+
+        $cm = cm_info::create(get_coursemodule_from_id('openstudio', $openstudio->cmid));
+        $this->assertArrayHasKey($key, $cm->customdata->customcompletionrules);
+        $completioninfo = new \completion_info($cm->get_course());
+        $customcompletion = new custom_completion($cm, $studentid, $completioninfo->get_core_completion_state($cm, $studentid));
+        $this->assertEquals(COMPLETION_INCOMPLETE, $customcompletion->get_state(custom_completion::COMPLETION_POSTS));
+
+
+        // Incomplete because user 1 create content not in My activities.
+        $contentdata = [
+            'openstudio' => 'OS2',
+            'userid' => $studentid,
+            'contenttype' => content::TYPE_TEXT,
+            'name' => random_string(),
+            'description' => random_string(),
+        ];
+        $this->generator->create_contents($contentdata);
+        $this->assertEquals(COMPLETION_INCOMPLETE,
+                $customcompletion->get_state(custom_completion::COMPLETION_TRACKING_RESTRICTED));
+
+        // User 1 will create content in My Activities, and it will be counted.
+        $contentdata = [
+            'openstudio' => 'OS2',
+            'userid' => $studentid,
+            'name' => random_string(),
+            'description' => random_string(),
+            'levelcontainer' => 3,
+            'levelid' => $level3,
+        ];
+        $this->generator->create_contents($contentdata);
+        $this->assertEquals(COMPLETION_COMPLETE, $customcompletion->get_state(custom_completion::COMPLETION_POSTS));
+        $this->assertEquals(COMPLETION_COMPLETE, $customcompletion->get_state(custom_completion::COMPLETION_TRACKING_RESTRICTED));
+    }
+
+    /**
+     * Test completion state when tracking comments in "My Activities" only.
+     *
+     * @covers \mod_openstudio\completion\custom_completion::get_state
+     */
+    public function test_completion_comments_completion_tracking_restricted(): void {
+        $this->resetAfterTest(true);
+
+        $studentid = $this->users->students->one->id;
+        $key = custom_completion::COMPLETION_COMMENTS;
+        $expectcomments = 1;
+        // Create generic studios.
+        $openstudio = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS2',
+            'completion' => COMPLETION_TRACKING_AUTOMATIC,
+            custom_completion::COMPLETION_TRACKING_RESTRICTED => 1,
+            $key => $expectcomments,
+        ]);
+        $openstudio->leveldata = $this->generator->create_mock_levels($openstudio->id);
+
+        $level1 = reset($openstudio->leveldata['contentslevels']);
+        $level2 = reset($level1);
+        $level3 = reset($level2);
+
+        $cm = cm_info::create(get_coursemodule_from_id('openstudio', $openstudio->cmid));
+        $this->assertArrayHasKey($key, $cm->customdata->customcompletionrules);
+        $completioninfo = new \completion_info($cm->get_course());
+        $customcompletion = new custom_completion($cm, $studentid, $completioninfo->get_core_completion_state($cm, $studentid));
+        $this->assertEquals(COMPLETION_INCOMPLETE, $customcompletion->get_state(custom_completion::COMPLETION_COMMENTS));
+
+        // Incomplete because user 1 create content not in My activities.
+        $contentdata = [
+            'openstudio' => 'OS2',
+            'userid' => $studentid,
+            'contenttype' => content::TYPE_TEXT,
+            'name' => random_string(),
+            'description' => random_string(),
+        ];
+        $content1 = $this->generator->create_contents($contentdata);
+        // User 1 comments in content1 => incomplete.
+        $this->generator->create_comment((object) [
+            'contentid' => $content1,
+            'userid' => $studentid,
+            'comment' => "This is my comment",
+        ]);
+        $this->assertEquals(COMPLETION_INCOMPLETE,
+                $customcompletion->get_state(custom_completion::COMPLETION_TRACKING_RESTRICTED));
+
+        // User 1 will create content in My Activities, and it will be counted.
+        $contentdata = [
+            'openstudio' => 'OS2',
+            'userid' => $studentid,
+            'name' => random_string(),
+            'description' => random_string(),
+            'levelcontainer' => 3,
+            'levelid' => $level3,
+        ];
+        $content2 = $this->generator->create_contents($contentdata);
+        // User 1 comments in content2 => complete.
+        $comment2id = $this->generator->create_comment((object) [
+            'contentid' => $content2,
+            'userid' => $studentid,
+            'comment' => "This is my comment",
+        ]);
+        $this->assertIsInt($comment2id);
+        $this->assertEquals(COMPLETION_COMPLETE, $customcompletion->get_state(custom_completion::COMPLETION_COMMENTS));
+        $this->assertEquals(COMPLETION_COMPLETE, $customcompletion->get_state(custom_completion::COMPLETION_TRACKING_RESTRICTED));
+    }
+
+    /**
+     * Test completion state when tracking both posts and comments in "My Activities" only.
+     *
+     * @covers \mod_openstudio\completion\custom_completion::get_state
+     */
+    public function test_completion_posts_and_comments_completion_tracking_restricted(): void {
+        $this->resetAfterTest(true);
+
+        $studentid = $this->users->students->one->id;
+        $key = custom_completion::COMPLETION_POSTS_COMMENTS;
+        $expectcomments = 2;
+        $expectposts = 1;
+        $expecttotal = $expectcomments + $expectposts;
+        // Create generic studios.
+        $openstudio = $this->generator->create_instance([
+            'course' => $this->course->id,
+            'idnumber' => 'OS2',
+            'completion' => COMPLETION_TRACKING_AUTOMATIC,
+            custom_completion::COMPLETION_TRACKING_RESTRICTED => 1,
+            $key => $expecttotal,
+        ]);
+        $openstudio->leveldata = $this->generator->create_mock_levels($openstudio->id);
+
+        $level1 = reset($openstudio->leveldata['contentslevels']);
+        $level2 = reset($level1);
+        $level3 = reset($level2);
+
+        $cm = cm_info::create(get_coursemodule_from_id('openstudio', $openstudio->cmid));
+        $this->assertArrayHasKey($key, $cm->customdata->customcompletionrules);
+        $completioninfo = new \completion_info($cm->get_course());
+        $customcompletion = new custom_completion($cm, $studentid, $completioninfo->get_core_completion_state($cm, $studentid));
+        $this->assertEquals(COMPLETION_INCOMPLETE, $customcompletion->get_state($key));
+
+        // Incomplete because user 1 create content not in My activities.
+        $contentdata = [
+            'openstudio' => 'OS2',
+            'userid' => $studentid,
+            'contenttype' => content::TYPE_TEXT,
+            'name' => random_string(),
+            'description' => random_string(),
+        ];
+        $content1 = $this->generator->create_contents($contentdata);
+        // User 1 comments in content1 => incomplete.
+        $this->generator->create_comment((object) [
+            'contentid' => $content1,
+            'userid' => $studentid,
+            'comment' => "This is my comment",
+        ]);
+        $this->assertEquals(COMPLETION_INCOMPLETE,
+                $customcompletion->get_state(custom_completion::COMPLETION_TRACKING_RESTRICTED));
+
+        // User 1 will create content in My Activities, and it will be counted.
+        $contentdata = [
+            'openstudio' => 'OS2',
+            'userid' => $studentid,
+            'name' => random_string(),
+            'description' => random_string(),
+            'levelcontainer' => 3,
+            'levelid' => $level3,
+        ];
+        $content2 = $this->generator->create_contents($contentdata);
+        // The first comment by User 1 is incomplete as it doesn't meet the condition.
+        $comment2id = $this->generator->create_comment((object) [
+            'contentid' => $content2,
+            'userid' => $studentid,
+            'comment' => "This is my first comment",
+        ]);
+        $this->assertIsInt($comment2id);
+        $this->assertEquals(COMPLETION_INCOMPLETE, $customcompletion->get_state($key));
+        $this->assertEquals(COMPLETION_INCOMPLETE,
+                $customcompletion->get_state(custom_completion::COMPLETION_TRACKING_RESTRICTED));
+
+        // The second comment from User 1 meets the condition, so it is marked as complete.
+        $comment3id = $this->generator->create_comment((object) [
+            'contentid' => $content2,
+            'userid' => $studentid,
+            'comment' => "This is my second comment",
+        ]);
+        $this->assertIsInt($comment3id);
+        $this->assertEquals(COMPLETION_COMPLETE, $customcompletion->get_state($key));
+        $this->assertEquals(COMPLETION_COMPLETE, $customcompletion->get_state(custom_completion::COMPLETION_TRACKING_RESTRICTED));
     }
 }

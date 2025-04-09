@@ -35,6 +35,11 @@ use mod_openstudio\local\api\content;
 class custom_completion extends activity_custom_completion {
 
     /**
+     * @var string Completion tracking to My Activities section only.
+     */
+    public const COMPLETION_TRACKING_RESTRICTED = 'completiontrackingrestricted';
+
+    /**
      * @var string Completion posts name.
      */
     public const COMPLETION_POSTS = 'completionposts';
@@ -91,6 +96,7 @@ class custom_completion extends activity_custom_completion {
      */
     public static function get_defined_custom_rules(): array {
         return [
+                self::COMPLETION_TRACKING_RESTRICTED,
                 self::COMPLETION_POSTS,
                 self::COMPLETION_COMMENTS,
                 self::COMPLETION_POSTS_COMMENTS,
@@ -110,6 +116,8 @@ class custom_completion extends activity_custom_completion {
         $completionpostscomments = $this->cm->customdata->customcompletionrules[self::COMPLETION_POSTS_COMMENTS] ?? 0;
         $completionwordcountmin = $this->cm->customdata->customcompletionrules[self::COMPLETION_WORD_COUNT_MIN] ?? 0;
         $completionwordcountmax = $this->cm->customdata->customcompletionrules[self::COMPLETION_WORD_COUNT_MAX] ?? 0;
+        $completiontrackingrestricted =
+                $this->cm->customdata->customcompletionrules[self::COMPLETION_TRACKING_RESTRICTED] ?? 0;
 
         return [
                 self::COMPLETION_POSTS => get_string('completiondetail:posts', 'openstudio', $completionposts),
@@ -120,6 +128,9 @@ class custom_completion extends activity_custom_completion {
                         $completionwordcountmin),
                 self::COMPLETION_WORD_COUNT_MAX => get_string('completiondetail:wordcountmax', 'openstudio',
                         $completionwordcountmax),
+                self::COMPLETION_TRACKING_RESTRICTED =>
+                        get_string('completiondetail:completiontrackingrestricted', 'openstudio',
+                                $completiontrackingrestricted),
         ];
     }
 
@@ -155,6 +166,7 @@ class custom_completion extends activity_custom_completion {
 
         $min = (int) $openstudio->completionwordcountmin ?? 0;
         $max = (int) $openstudio->completionwordcountmax ?? 0;
+        $completiontrackingrestricted = (int) $openstudio->completiontrackingrestricted ?? 0;
 
         if ($openstudio->completionposts || $openstudio->completionpostscomments) {
             $excludecontents = [
@@ -162,20 +174,31 @@ class custom_completion extends activity_custom_completion {
                     content::TYPE_NONE,
             ];
             [$insql, $inparams] = $DB->get_in_or_equal($excludecontents, SQL_PARAMS_QM, 'param', false);
-            $countpostssql = "
-        SELECT oc.id, oc.description, oc.userid, oc.deletedby, oc.deletedtime, oc.contenttype
-          FROM {openstudio_contents} oc
-          JOIN {openstudio} os ON oc.openstudioid = os.id AND os.id = ?
-         WHERE oc.userid = ?
-               AND oc.deletedby IS NULL AND oc.deletedtime IS NULL
-               AND oc.contenttype {$insql}
-             ";
-            // Exclude folders + contents on deleted folders.
-            $postsparams = [
-                    $openstudio->id,
-                    $userid,
-            ];
-            $postsparams = array_merge($postsparams, $inparams);
+
+            // Define base query and conditions that are common to both scenarios.
+            $basequery = "
+                SELECT oc.id, oc.description, oc.userid, oc.deletedby, oc.deletedtime, oc.contenttype
+                  FROM {openstudio_contents} oc
+                  JOIN {openstudio} os ON oc.openstudioid = os.id AND os.id = ?
+            ";
+
+            $conditions = "
+                 WHERE oc.userid = ?
+                       AND oc.deletedby IS NULL AND oc.deletedtime IS NULL
+                       AND oc.contenttype {$insql}
+            ";
+
+            // Build the complete query based on restriction settings.
+            if ($completiontrackingrestricted > 0) {
+                $countpostssql = $basequery . "
+                    LEFT JOIN {openstudio_folder_contents} fc ON oc.id = fc.contentid
+                    LEFT JOIN {openstudio_contents} c1 ON fc.folderid = c1.id"
+                        . $conditions .
+                        "AND (oc.levelid > 0 OR c1.levelid > 0)";
+            } else {
+                $countpostssql = $basequery . $conditions;
+            }
+            $postsparams = array_merge([$openstudio->id, $userid], $inparams);
             $posts = self::get_posts_meet_conditions($min, $max, $countpostssql, $postsparams, 'description');
             $totalposts = count($posts);
             $value = $openstudio->completionposts <= $totalposts;
@@ -193,15 +216,33 @@ class custom_completion extends activity_custom_completion {
                     content::TYPE_NONE,
             ];
             [$commentinsql, $commentinparams] = $DB->get_in_or_equal($commentexcludecontents, SQL_PARAMS_QM, 'param', false);
-            $countcommentssql = "
-            SELECT oco.id, oco.contentid, oco.deletedby, oco.deletedtime, oco.userid, oco.commenttext
-              FROM {openstudio_comments} oco
-              JOIN {openstudio_contents} oc ON oco.contentid = oc.id
-                   AND oc.deletedby IS NULL AND oc.deletedtime IS NULL
-                   AND oc.contenttype {$commentinsql}
-              JOIN {openstudio} os ON oc.openstudioid = os.id AND os.id = ?
-             WHERE oco.userid = ?
-                   AND oco.deletedby IS NULL AND oco.deletedtime IS NULL";
+
+            $basequery = "
+                SELECT oco.id, oco.contentid, oco.deletedby, oco.deletedtime, oco.userid, oco.commenttext
+                  FROM {openstudio_comments} oco
+                  JOIN {openstudio_contents} oc ON oco.contentid = oc.id
+                       AND oc.deletedby IS NULL AND oc.deletedtime IS NULL
+                       AND oc.contenttype {$commentinsql}
+            ";
+
+            $conditions = "
+                 WHERE oco.userid = ?
+                       AND oco.deletedby IS NULL AND oco.deletedtime IS NULL
+            ";
+
+            if ($completiontrackingrestricted > 0) {
+                $countcommentssql = $basequery . "
+                  LEFT JOIN {openstudio_folder_contents} fc ON oc.id = fc.contentid
+                  LEFT JOIN {openstudio_contents} c1 ON fc.folderid = c1.id
+                       JOIN {openstudio} os ON oc.openstudioid = os.id AND os.id = ?
+                " . $conditions . "
+                       AND (oc.levelid > 0 OR c1.levelid > 0)";
+            } else {
+                $countcommentssql = $basequery . "
+                       JOIN {openstudio} os ON oc.openstudioid = os.id AND os.id = ?
+                " . $conditions;
+            }
+
             $countcommentsparams = [$openstudio->id, $userid, $userid];
             $countcommentsparams = array_merge($commentinparams, $countcommentsparams);
             $posts = self::get_posts_meet_conditions($min, $max, $countcommentssql, $countcommentsparams, 'commenttext');

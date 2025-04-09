@@ -69,10 +69,15 @@ $string['completionpostscomments'] = 'User must post content and add comments to
 $string['completionpostscommentsgroup'] = 'Require both posts and comments';
 $string['completionpostscommentsgroup_help'] = 'If ticked, OpenStudio will be marked complete for a student once they have met the total specified here, through any combination of posts and comments (and met any other conditions).';
 
+$string['completiontrackingrestricted'] = 'Restrict completion tracking to My Activities section only';
+$string['completiontrackingrestrictedgroup'] = 'Restrict completion tracking';
+$string['completiontrackingrestrictedgroup_help'] = 'If ticked, only contributions made in the "My Activities" section will count toward activity completion. Posts outside of this section, such as on the Pinboard, will be excluded from completion tracking.';
+$string['errornocompletionselected'] = 'Please select at least one completion condition when "Restrict completion tracking" is enabled.';
 $string['completiondetail:posts'] = 'Make contents: {$a}';
 $string['completiondetail:comments'] = 'Make comments: {$a}';
 $string['completiondetail:postscomments'] = 'Make contents and comments: {$a}';
 
+$string['completiondetail:completiontrackingrestricted'] = 'Make posts or comments in My Activities section only';
 $string['completiondetail:wordcountmax'] = 'Make posts or comments with maximum word count: {$a}';
 $string['completiondetail:wordcountmin'] = 'Make posts or comments with minimum word count: {$a}';
 $string['completionwordcountgroup'] = 'Require Word count (min/max)';

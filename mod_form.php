@@ -426,6 +426,8 @@ class mod_openstudio_mod_form extends moodleform_mod {
         if (empty($defaultvalues[$this->get_suffixed_name(custom_completion::COMPLETION_WORD_COUNT_MAX)])) {
             $defaultvalues[$this->get_suffixed_name(custom_completion::COMPLETION_WORD_COUNT_MAX)] = 1;
         }
+        $defaultvalues[$this->get_suffixed_name(custom_completion::COMPLETION_TRACKING_RESTRICTED)] =
+                !empty($defaultvalues[custom_completion::COMPLETION_TRACKING_RESTRICTED]) ? 1 : 0;
     }
 
     /**
@@ -448,6 +450,27 @@ class mod_openstudio_mod_form extends moodleform_mod {
                 }
             }
         }
+
+        // Check if the "Restrict completion tracking" completion condition is enabled.
+        if (!empty($data[$this->get_suffixed_name(custom_completion::COMPLETION_TRACKING_RESTRICTED)])) {
+            $hascompletioncondition =
+                    (!empty($data[$this->get_suffixed_name(custom_completion::COMPLETION_POSTS_ENABLED)]) &&
+                            !empty($data[$this->get_suffixed_name(custom_completion::COMPLETION_POSTS)])) ||
+                    (!empty($data[$this->get_suffixed_name(custom_completion::COMPLETION_COMMENTS_ENABLED)]) &&
+                            !empty($data[$this->get_suffixed_name(custom_completion::COMPLETION_COMMENTS)])) ||
+                    (!empty($data[$this->get_suffixed_name(custom_completion::COMPLETION_POSTS_COMMENTS_ENABLED)]) &&
+                            !empty($data[$this->get_suffixed_name(custom_completion::COMPLETION_POSTS_COMMENTS)])) ||
+                    (!empty($data[$this->get_suffixed_name('completionwordcountminenabled')]) &&
+                            !empty($data[$this->get_suffixed_name(custom_completion::COMPLETION_WORD_COUNT_MIN)])) ||
+                    (!empty($data[$this->get_suffixed_name('completionwordcountmaxenabled')]) &&
+                            !empty($data[$this->get_suffixed_name(custom_completion::COMPLETION_WORD_COUNT_MAX)]));
+
+            if (!$hascompletioncondition) {
+                $errors[$this->get_suffixed_name(custom_completion::COMPLETION_TRACKING_RESTRICTED) . 'group'] =
+                        get_string('errornocompletionselected', 'openstudio');
+            }
+        }
+
         // If completion wordcount is enabled.
         if (!empty($data['completionwordcountminenabled'])) {
             // Validate min value.
@@ -491,7 +514,20 @@ class mod_openstudio_mod_form extends moodleform_mod {
         $rules = [];
 
         foreach (custom_completion::get_defined_custom_rules() as $name) {
-            if ($name != custom_completion::COMPLETION_WORD_COUNT_MAX && $name != custom_completion::COMPLETION_WORD_COUNT_MIN) {
+            if ($name == custom_completion::COMPLETION_TRACKING_RESTRICTED) {
+                $name = custom_completion::COMPLETION_TRACKING_RESTRICTED;
+                $groupname = $name . 'group';
+
+                $group = [];
+                $group[] =& $mform->createElement('checkbox', $name, '',
+                        get_string($name, 'openstudio'), ['class' => 'openstudio-completion-restrict']);
+
+                $mform->addGroup($group, $groupname,
+                        get_string($groupname, 'openstudio'), [' '], false);
+                $mform->addHelpButton($this->get_suffixed_name($groupname), $groupname, 'openstudio');
+                $rules[] = $this->get_suffixed_name($groupname);
+            } else if ($name != custom_completion::COMPLETION_WORD_COUNT_MAX &&
+                    $name != custom_completion::COMPLETION_WORD_COUNT_MIN) {
                 $groupname = $name . 'group';
                 $checkboxname = $this->get_suffixed_name($name . 'enabled');
                 $group = [];
@@ -568,6 +604,10 @@ class mod_openstudio_mod_form extends moodleform_mod {
             }
             if (empty($data->{$this->get_suffixed_name('completionwordcountmaxenabled')}) || !$autocompletion) {
                 $data->{$this->get_suffixed_name(custom_completion::COMPLETION_WORD_COUNT_MAX)} = 0;
+            }
+            if (empty($data->{$this->get_suffixed_name(custom_completion::COMPLETION_TRACKING_RESTRICTED)}) ||
+                    !$autocompletion) {
+                $data->{$this->get_suffixed_name(custom_completion::COMPLETION_TRACKING_RESTRICTED)} = 0;
             }
         }
 
