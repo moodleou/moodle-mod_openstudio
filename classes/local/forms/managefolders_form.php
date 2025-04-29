@@ -57,19 +57,20 @@ class managefolders_form extends \moodleform {
         // For each content...
         $contentfields = array();
         $contentfieldsoptions = array();
+        $smallicon = ' icon smallicon';
         // Subheading.
         $contentfields[] = $mform->createElement('static', 'contentsubheader', '');
         $contentfieldsoptions['contentsubheader']['default'] = \html_writer::tag('h3',
             get_string('content', 'openstudio') . ' {no}');
         $contentfields[] = $mform->createElement('image', 'contentmovedown',
             $OUTPUT->image_url('t/down'),
-            array('title' => get_string('movedown', 'openstudio'), 'class' => 'movedown'));
+            ['title' => get_string('movedown', 'openstudio'), 'class' => 'movedown' . $smallicon]);
         $contentfields[] = $mform->createElement('image', 'contentmoveup',
             $OUTPUT->image_url('t/up'),
-            array('title' => get_string('moveup', 'openstudio'), 'class' => 'moveup'));
+            ['title' => get_string('moveup', 'openstudio'), 'class' => 'moveup' . $smallicon]);
         $contentfields[] = $mform->createElement('image', 'contentdelete',
             $OUTPUT->image_url('t/delete'),
-            array('title' => get_string('deletelevel', 'openstudio'), 'class' => 'delete'));
+            ['title' => get_string('deletelevel', 'openstudio'), 'class' => 'delete' . $smallicon]);
 
         // Name.
         $contentelement1 = $mform->createElement('text', 'contentname', get_string('contentname', 'openstudio'));

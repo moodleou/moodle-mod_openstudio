@@ -8717,6 +8717,21 @@ a.openstudio-add-new-content-link:hover  {
     height: auto;
 }
 
+#id_contentheadercontainer .movedown {
+    position: relative;
+    z-index: 3;
+}
+
+#id_contentheadercontainer .moveup {
+    position: relative;
+    z-index: 2;
+}
+
+#id_contentheadercontainer .delete {
+    position: relative;
+    z-index: 1;
+}
+
 /* High contrast mode */
 
 /* For firefox */

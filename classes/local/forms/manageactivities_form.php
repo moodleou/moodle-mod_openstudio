@@ -95,6 +95,7 @@ class manageactivities_form extends \moodleform {
             $counter++;
             $activityname = array();
             $contentsinactivity = 0;
+            $smallicon = 'icon smallicon';
 
             // We have to run this here each time as moodle does not support reset()
             // or rewind() for iterators.
@@ -124,20 +125,20 @@ class manageactivities_form extends \moodleform {
             if ($total > 1) {
                 if ($counter == 1) {
                     $activityname[] = $mform->createElement('image', 'movednbutton[' . $activity->id . ']',
-                            $OUTPUT->image_url('t/down'), array('title' => get_string('movedown', 'openstudio')));
+                            $OUTPUT->image_url('t/down'), ['title' => get_string('movedown', 'openstudio'), 'class' => $smallicon]);
                 } else if ($counter == $total) {
                     $activityname[] = $mform->createElement('image', 'moveupbutton[' . $activity->id . ']',
-                            $OUTPUT->image_url('t/up'), array('title' => get_string('moveup', 'openstudio')));
+                            $OUTPUT->image_url('t/up'), ['title' => get_string('moveup', 'openstudio'), 'class' => $smallicon]);
                 } else {
                     $activityname[] = $mform->createElement('image', 'movednbutton[' . $activity->id . ']',
-                            $OUTPUT->image_url('t/down'), array('title' => get_string('movedown', 'openstudio')));
+                            $OUTPUT->image_url('t/down'), ['title' => get_string('movedown', 'openstudio'), 'class' => $smallicon]);
                     $activityname[] = $mform->createElement('image', 'moveupbutton[' . $activity->id . ']',
-                            $OUTPUT->image_url('t/up'), array('title' => get_string('moveup', 'openstudio')));
+                            $OUTPUT->image_url('t/up'), ['title' => get_string('moveup', 'openstudio'), 'class' => $smallicon]);
                 }
             }
 
             $activityname[] = $mform->createElement('image', 'editbutton[' . $activity->id . ']',
-                    $OUTPUT->image_url('t/edit'), array('title' => get_string('editlevel', 'openstudio')));
+                    $OUTPUT->image_url('t/edit'), ['title' => get_string('editlevel', 'openstudio'), 'class' => $smallicon]);
 
             if ($contentsinactivity > 0) {
                 // Get block name to add to url.
@@ -149,11 +150,11 @@ class manageactivities_form extends \moodleform {
                         get_string('viewcontents', 'openstudio') . ")"));
                 if (has_capability('mod/openstudio:deletelevels', $context)) {
                     $activityname[] = $mform->createElement('image', 'deletebutton[' . $activity->id . ']',
-                            $OUTPUT->image_url('t/delete'), array('title' => get_string('deletelevel', 'openstudio')));
+                            $OUTPUT->image_url('t/delete'), array('title' => get_string('deletelevel', 'openstudio'), 'class' => $smallicon));
                 }
             } else {
                 $activityname[] = $mform->createElement('image', 'deletebutton[' . $activity->id . ']',
-                        $OUTPUT->image_url('t/delete'), array('title' => get_string('deletelevel', 'openstudio')));
+                        $OUTPUT->image_url('t/delete'), array('title' => get_string('deletelevel', 'openstudio'), 'class' => $smallicon));
             }
 
             $mform->addGroup($activityname, null, $counter . '. ', ' ', false);
