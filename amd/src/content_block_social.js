@@ -81,10 +81,10 @@ define([
                 const detailsGroup = container.querySelector('.openstudio-grid-item-content-detail-info-group');
                 const isLocked = container.querySelector('.openstudio-item-lock') !== null;
 
-                if (detailsGroup) {
-                    detailsGroup.classList.toggle('disabled', isLocked);
+                if (detailsGroup && isLocked) {
+                    detailsGroup.classList.add('disabled');
                     detailsGroup.querySelectorAll('*').forEach((child) => {
-                        child.setAttribute('tabindex', isLocked ? -1 : '');
+                        child.setAttribute('tabindex', '-1');
                     });
                 }
             });
