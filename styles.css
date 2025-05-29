@@ -3891,7 +3891,7 @@ body:not(.ios):not(.android) .openstudio-content-view-flag-icon.has-hover:hover 
 /* Folder browse posts dialogue. */
 
 .path-mod-openstudio .modal-dialog.openstudio-browseposts-dialogue {
-    width: 635px;
+    width: 660px;
 }
 
 .path-mod-openstudio .openstudio-folder-posts-dialogue .openstudio-folder-browse-posts-header button.browse-search-icon {
@@ -4019,6 +4019,7 @@ div.openstudio-browse-post-item-filename {
 
 .openstudio-browse-post-item-button {
     position: relative;
+    float: right;
     top: 22px;
 }
 
@@ -7235,6 +7236,7 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-browse-post-item-button {
         clear: both;
         position: unset;
+        float: unset;
         padding: 13px 0px 15px 15px;
     }
 
