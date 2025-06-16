@@ -251,6 +251,8 @@ if ($sid > 0) {
     $contentdata->description = file_prepare_draft_area($descriptionitemid,
             $context->id, 'mod_openstudio', 'description', $contentdata->id, ['subdirs' => false],
             $contentdata->description);
+    $contentdata->description = ['text' => $contentdata->description, 'format' => $contentdata->textformat,
+            'itemid' => $descriptionitemid];
 
     // Given the content exists, get the content owner again to prevent user spoofing.
     $userid = $contentdata->userid;
@@ -599,6 +601,7 @@ if ($contentform->is_cancelled()) {
     // Save current form description field data before it gets changed.
     $contentformdatadescription = $contentformdata->description;
     if (is_array($contentformdata->description)) {
+        $contentformdata->textformat = $contentformdata->description['format'];
         $contentformdata->description = $contentformdata->description['text'];
     }
 
@@ -815,10 +818,6 @@ if ($contentform->is_cancelled()) {
     }
 
     if ($contentdata->sid > 0) {
-        // Content always uses rich text editor.
-        $contentdatadescription = array('text' => $contentdata->description, 'format' => 1);
-        $contentdata->description = $contentdatadescription;
-
         if ($folderid && $foldercontentdata) {
             if ($foldercontentdata->provenanceid != null && $foldercontentdata->provenancestatus == folder::PROVENANCE_EDITED) {
                 if (!empty($foldercontentdata->fcname)) {

@@ -325,6 +325,9 @@ EOF;
         if (array_key_exists('description', $data)) {
             $insertdata['description'] = $data['description'];
         }
+        if (array_key_exists('textformat', $data)) {
+            $insertdata['textformat'] = $data['textformat'];
+        }
         $insertdata['showextradata'] = 0;
         if (array_key_exists('showextradata', $data)) {
             $insertdata['showextradata'] = $data['showextradata'];
@@ -512,6 +515,7 @@ EOF;
                     $insertdata['urltitle'] = $contentdata->urltitle;
                     $insertdata['name'] = $contentdata->name;
                     $insertdata['description'] = $contentdata->description;
+                    $insertdata['textformat'] = $contentdata->textformat;
                     $insertdata['timemodified'] = time();
                     $insertdata['enteralt'] = $contentdata->enteralt;
 
@@ -631,6 +635,7 @@ EOF;
                 } else {
                     array_key_exists('name', $data) ? ($contentdata->name = $data['name']) : null;
                     array_key_exists('description', $data) ? ($contentdata->description = $data['description']) : null;
+                    array_key_exists('textformat', $data) ? ($contentdata->textformat = $data['textformat']) : null;
                 }
             }
 
