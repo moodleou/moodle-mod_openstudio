@@ -25,7 +25,7 @@ namespace mod_openstudio;
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
-class levels_testcase extends \advanced_testcase {
+class levels_test extends \advanced_testcase {
 
     private $course;
     private $generator; // Contains mod_openstudio specific data generator functions.
@@ -734,5 +734,134 @@ class levels_testcase extends \advanced_testcase {
         $this->assertEquals($level1id, $block1->id);
         $this->assertObjectHasProperty('activities', $block1);
         $this->assertCount(2, $block1->activities);
+    }
+
+    /**
+     * Tests the \mod_openstudio\local\api\levels::process_sortorder_changes() function.
+     */
+    public function test_process_sortorder_changes_level1() {
+        $this->resetAfterTest(true);
+
+        // Let's first create sample data.
+        \mod_openstudio\local\api\levels::create(1,
+            ['openstudioid' => $this->studiogeneric->id, 'name' => 'block', 'sortorder' => 1]);
+        \mod_openstudio\local\api\levels::create(1,
+            ['openstudioid' => $this->studiogeneric->id, 'name' => 'block a', 'sortorder' => 2]);
+        \mod_openstudio\local\api\levels::create(1,
+            ['openstudioid' => $this->studiogeneric->id, 'name' => 'block b', 'sortorder' => 3]);
+
+        // Simulate form data to create.
+        $formdata = [
+            (object) ['openstudioid' => $this->studiogeneric->id, 'name' => 'block c', 'sortorder' => 4],
+            (object) ['openstudioid' => $this->studiogeneric->id, 'name' => 'block a.1', 'sortorder' => 3],
+        ];
+
+        $currentblocks = \mod_openstudio\local\api\levels::get_records(1, $this->studiogeneric->id);
+        $tmpsortorder = [];
+        foreach ($currentblocks as $block) {
+            $tmpsortorder[$block->sortorder] = clone $block;
+        }
+
+        // Process create new blocks and update existing blocks order.
+        \mod_openstudio\local\api\levels::process_sortorder_changes(1, $formdata, $tmpsortorder, $currentblocks);
+
+        $records = \mod_openstudio\local\api\levels::get_records(1, $this->studiogeneric->id);
+        $values = array_values($records);
+        $keys = range(1, count($values));
+        $records_with_1_index = array_combine($keys, $values);
+
+        $this->assertEquals(5, count($records_with_1_index));
+        // Sort order of block a.1 should be 3 replace for block b.
+        $this->assertEquals('block a.1', $records_with_1_index[3]->name);
+        $this->assertEquals('block b', $records_with_1_index[4]->name);
+        $this->assertEquals('block c', $records_with_1_index[5]->name);
+    }
+
+    /**
+     * Tests the \mod_openstudio\local\api\levels::process_sortorder_changes() function.
+     */
+    public function test_process_sortorder_changes_level2() {
+        $this->resetAfterTest(true);
+
+        // Let's first create sample data.
+        $level1id = \mod_openstudio\local\api\levels::create(1,
+            ['openstudioid' => $this->studiogeneric->id, 'name' => 'block', 'sortorder' => 1]);
+        \mod_openstudio\local\api\levels::create(2,
+            ['parentid' => $level1id, 'name' => 'activity', 'sortorder' => 1]);
+        \mod_openstudio\local\api\levels::create(2,
+            ['parentid' => $level1id, 'name' => 'activity a', 'sortorder' => 2]);
+        \mod_openstudio\local\api\levels::create(2,
+            ['parentid' => $level1id, 'name' => 'activity b', 'sortorder' => 3]);
+
+        // Simulate form data to create.
+        $formdata = [
+            (object) ['parentid' => $level1id, 'name' => 'activity c', 'sortorder' => 4],
+            (object) ['parentid' => $level1id, 'name' => 'activity a.1', 'sortorder' => 3],
+        ];
+
+        $currentblocks = \mod_openstudio\local\api\levels::get_records(2, $level1id);
+        $tmpsortorder = [];
+        foreach ($currentblocks as $block) {
+            $tmpsortorder[$block->sortorder] = clone $block;
+        }
+
+        // Process create new blocks and update existing blocks order.
+        \mod_openstudio\local\api\levels::process_sortorder_changes(2, $formdata, $tmpsortorder, $currentblocks);
+
+        $records = \mod_openstudio\local\api\levels::get_records(2, $level1id);
+        $values = array_values($records);
+        $keys = range(1, count($values));
+        $records_with_1_index = array_combine($keys, $values);
+
+        $this->assertEquals(5, count($records_with_1_index));
+        // Sort order of block a.1 should be 3 replace for block b.
+        $this->assertEquals('activity a.1', $records_with_1_index[3]->name);
+        $this->assertEquals('activity b', $records_with_1_index[4]->name);
+        $this->assertEquals('activity c', $records_with_1_index[5]->name);
+    }
+
+    /**
+     * Tests the \mod_openstudio\local\api\levels::process_sortorder_changes() function.
+     */
+    public function test_process_sortorder_changes_level3() {
+        $this->resetAfterTest(true);
+
+        // Let's first create sample data.
+        $level1id = \mod_openstudio\local\api\levels::create(1,
+            ['openstudioid' => $this->studiogeneric->id, 'name' => 'block', 'sortorder' => 1]);
+        $level2id = \mod_openstudio\local\api\levels::create(2,
+            ['parentid' => $level1id, 'name' => 'activity', 'sortorder' => 1]);
+        \mod_openstudio\local\api\levels::create(3,
+            ['parentid' => $level2id, 'name' => 'slot', 'sortorder' => 1]);
+        \mod_openstudio\local\api\levels::create(3,
+            ['parentid' => $level2id, 'name' => 'slot a', 'sortorder' => 2]);
+        \mod_openstudio\local\api\levels::create(3,
+            ['parentid' => $level2id, 'name' => 'slot b', 'sortorder' => 3]);
+
+        // Simulate form data to create.
+        $formdata = [
+            (object) ['parentid' => $level2id, 'name' => 'slot c', 'sortorder' => 4],
+            (object) ['parentid' => $level2id, 'name' => 'slot a.1', 'sortorder' => 3],
+        ];
+
+        $currentblocks = \mod_openstudio\local\api\levels::get_records(3, $level2id);
+        $tmpsortorder = [];
+        foreach ($currentblocks as $block) {
+            $tmpsortorder[$block->sortorder] = clone $block;
+        }
+
+        // Process create new blocks and update existing blocks order.
+        \mod_openstudio\local\api\levels::process_sortorder_changes(3, $formdata, $tmpsortorder, $currentblocks);
+
+        $records = \mod_openstudio\local\api\levels::get_records(3, $level2id);
+        $values = array_values($records);
+        $keys = range(1, count($values));
+        $records_with_1_index = array_combine($keys, $values);
+
+        $this->assertEquals(5, count($records_with_1_index));
+        // Sort order of block a.1 should be 3 replace for block b.
+        $this->assertEquals('slot a.1', $records_with_1_index[3]->name);
+        $this->assertEquals('slot b', $records_with_1_index[4]->name);
+        $this->assertEquals('slot c', $records_with_1_index[5]->name);
     }
 }
