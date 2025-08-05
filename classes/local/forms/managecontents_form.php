@@ -307,7 +307,7 @@ class managecontents_form extends \moodleform {
             $buttonarray = array();
             $buttonarray[] = $mform->createElement('submit', 'submitbutton',
                 get_string('savechanges', 'openstudio'), array('id' => 'id_submitbutton'));
-            $buttonarray[] = $mform->createElement('cancel', 'cancelbutton',
+            $buttonarray[] = $mform->createElement('cancel', '',
                 '', array('id' => 'id_cancel'));
             $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
             $mform->closeHeaderBefore('buttonar');

@@ -59,7 +59,7 @@ $context = $coursedata->mcontext;
 require_capability('mod/openstudio:managelevels', $context);
 
 // Check if the cancel button was pressed. If so, reset the form.
-if (isset($_POST['cancelbutton'])) {
+if (isset($_POST['cancel'])) {
     $contentsurl = new moodle_url('/mod/openstudio/managecontents.php',
             array('id' => $cm->id, 'l1id' => $l1id, 'l2id' => $l2id));
     return redirect($contentsurl->out(false));

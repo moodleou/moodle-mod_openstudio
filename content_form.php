@@ -416,7 +416,7 @@ class mod_openstudio_content_form extends moodleform {
         $buttonarray[] = $mform->createElement('submit', 'submitbutton', $submitbuttontitle,
                 array('id' => 'id_submitbutton'));
 
-        $buttonarray[] = $mform->createElement('cancel', 'cancelbutton',
+        $buttonarray[] = $mform->createElement('cancel', '',
                 '', array('id' => 'id_cancel'));
         $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
         $mform->closeHeaderBefore('buttonar');
