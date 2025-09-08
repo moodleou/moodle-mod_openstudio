@@ -59,7 +59,7 @@ $context = $coursedata->mcontext;
 require_capability('mod/openstudio:managelevels', $context);
 
 // Check if the cancel button was pressed. If so, reset the form.
-if (isset($_POST['cancelbutton'])) {
+if (isset($_POST['cancel'])) {
     $contentsurl = new moodle_url('/mod/openstudio/managecontents.php',
             array('id' => $cm->id, 'l1id' => $l1id, 'l2id' => $l2id));
     return redirect($contentsurl->out(false));
@@ -279,6 +279,12 @@ if ($studioid > 0) {
         if (($newcontentdata = $mform->get_data()) || $addcontent) {
             if (isset($newcontentdata->submitbutton) || $addcontent) {
                 // Get block to be edited.
+                $currentblocks = levels::get_records(3, $l2id);
+                $tmpsortorder = [];
+                $newblocksdatatemp = [];
+                foreach ($currentblocks as $block) {
+                    $tmpsortorder[$block->sortorder] = clone $block;
+                }
                 foreach ($newcontent as $key => $nbname) {
                     $nbname = trim($nbname);
                     if (!empty($nbname)) {
@@ -314,17 +320,18 @@ if ($studioid > 0) {
                                 $insertdata->contenttype = 0;
                             }
                         }
-                        levels::create(3, $insertdata);
+                        $newblocksdatatemp[] = $insertdata;
                         $islevelupdated = true;
-
-                        // Cleanup sortorder again.
-                        levels::cleanup_sortorder(3, $l2id);
 
                         // Reset the settings.
                         $_POST['odsnewcontentrequired'][0] = 0;
                         $_POST['odsnewcontentiscollection'][0] = 0;
                     }
                 }
+                // Merge, shift, build insert/update.
+                levels::process_sortorder_changes(3, $newblocksdatatemp, $tmpsortorder, $currentblocks);
+                // Cleanup sortorder again.
+                levels::cleanup_sortorder(3, $l2id);
             }
             redirect(new moodle_url($PAGE->url, array('add_content' => $addcontent)));
         }

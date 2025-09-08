@@ -194,6 +194,12 @@ if ($studioid > 0) {
         if (($newactivitydata = $mform->get_data()) || isset($_POST['add_activity'])) {
             if (isset($newactivitydata->submitbutton) || isset($_POST['add_activity'])) {
                 // Get activity to be edited.
+                $currentblocks = levels::get_records(2, $l1id);
+                $tmpsortorder = [];
+                $newblocksdatatemp = [];
+                foreach ($currentblocks as $block) {
+                    $tmpsortorder[$block->sortorder] = clone $block;
+                }
                 foreach ($newactivity as $key => $nbname) {
                     $nbname = trim($nbname);
                     if (!empty($nbname)) {
@@ -219,13 +225,14 @@ if ($studioid > 0) {
                                 $insertdata->hidelevel = 1;
                             }
                         }
-                        levels::create(2, $insertdata);
+                        $newblocksdatatemp[] = $insertdata;
                         $islevelupdated = true;
-
-                        // Cleanup sortorder again.
-                        levels::cleanup_sortorder(2, $l1id);
                     }
                 }
+                // Merge, shift, build insert/update.
+                levels::process_sortorder_changes(2, $newblocksdatatemp, $tmpsortorder, $currentblocks);
+                // Cleanup sortorder again.
+                levels::cleanup_sortorder(2, $l1id);
             }
         }
     }

@@ -127,6 +127,144 @@ class levels {
     }
 
     /**
+     * Updates the sortorder of a level record.
+     *
+     * @param int $level level to create (1, 2, or 3)
+     * @param \stdClass $data level data
+     * @return bool result
+     */
+    public static function update_sortorders($level, $data) {
+        global $DB;
+        $tablename = '';
+
+        if (empty($data)) {
+            return false;
+        }
+
+        if (in_array($level, [1, 2, 3])) {
+            $tablename = 'openstudio_level' . $level;
+        }
+
+        if (($tablename === '')) {
+            return false;
+        }
+
+        $ids = [];
+        $cases = '';
+        foreach ($data as $b) {
+            $id = (int) $b->id;
+            $sortorder = (int) $b->sortorder;
+            $ids[] = $id;
+            $cases .= "WHEN $id THEN $sortorder ";
+        }
+        $idsstr = implode(',', $ids);
+        $sql = "UPDATE {{$tablename}}
+                   SET sortorder = CASE id $cases END
+                 WHERE id IN ($idsstr)";
+        $transaction = $DB->start_delegated_transaction();
+        try {
+            $DB->execute($sql);
+            $transaction->allow_commit();
+            return true;
+        } catch (\Exception $e) {
+            $transaction->rollback($e);
+        }
+        return false;
+    }
+
+    /**
+     * Merge new items into current by sortorder, shift existing as needed, and return temp array.
+     *
+     * @param array $tmpsortorder Map current sortorder => object (clone)
+     * @param array $newitems List new blocks, activities, contents to merge in
+     * @return array
+     */
+    private static function merge_shift_sortorder(array $newitems, array $tmpsortorder = []): array {
+        if (empty($newitems)) {
+            return $tmpsortorder;
+        }
+        foreach ($newitems as $ni) {
+            $desired = $ni->sortorder;
+            if (isset($tmpsortorder[$desired])) {
+                $shiftkeys = array_keys($tmpsortorder);
+                // Sorts the sortorder keys in descending order (highest first).
+                // This way, each shift opens up a space for the next one,
+                // so you never overwrite a block that hasn't been shifted yet.
+                rsort($shiftkeys);
+                foreach ($shiftkeys as $sk) {
+                    if ($sk >= $desired) {
+                        $tmpsortorder[$sk + 1] = clone $tmpsortorder[$sk];
+                        $tmpsortorder[$sk + 1]->sortorder = $sk + 1;
+                        unset($tmpsortorder[$sk]);
+                    }
+                }
+            }
+            $ni->id = null;
+            $tmpsortorder[$desired] = $ni;
+        }
+        return $tmpsortorder;
+    }
+
+    /**
+     * Build insert and update arrays for any entity after sortorder normalization.
+     *
+     * @param array $tmpsortorder List of temp blocks.
+     * @param array $currentblocks List of current blocks from DB
+     * @return array
+     */
+    private static function build_insert_update_arrays(array $tmpsortorder, array $currentblocks): array {
+        if (empty($tmpsortorder)) {
+            return ['insert' => [], 'update' => []];
+        }
+        // Sort the array by its keys in ascending order.
+        // Assign new, sequential sortorders (1, 2, 3, ...) for each block for consistency (no gaps).
+        ksort($tmpsortorder);
+        $final = array_values($tmpsortorder);
+        $toinsert = [];
+        $toupdate = [];
+        foreach ($final as $block) {
+            if ($block->id === null) {
+                $toinsert[] = $block;
+            } else {
+                $old = null;
+                foreach ($currentblocks as $cb) {
+                    if ($cb->id === $block->id) {
+                        $old = $cb;
+                        break;
+                    }
+                }
+                if ($old && $old->sortorder != $block->sortorder) {
+                    $toupdate[] = (object) [
+                        'id' => $block->id,
+                        'sortorder' => $block->sortorder,
+                    ];
+                }
+            }
+        }
+        return ['insert' => $toinsert, 'update' => $toupdate];
+    }
+
+    /**
+     * Batch insert, update, and cleanup for entities with sortorder.
+     *
+     * @param int $level level to create (1, 2, or 3)
+     * @param array $newitems Array of new items (objects with sortorder)
+     * @param array $tmpsortorder Temp sortorder map (sortorder => object)
+     * @param array $currentblocks Array of current DB items
+     * @return void
+     */
+    public static function process_sortorder_changes(int $level, array $newitems, array $tmpsortorder, array $currentblocks) {
+        $tmpsortorder = self::merge_shift_sortorder($newitems, $tmpsortorder);
+        ['insert' => $toinsert, 'update' => $toupdate] = self::build_insert_update_arrays($tmpsortorder, $currentblocks);
+        foreach ($toinsert as $block) {
+            self::create($level, $block);
+        }
+        if (!empty($toupdate)) {
+            self::update_sortorders($level, $toupdate);
+        }
+    }
+
+    /**
      * Returns a single level record.
      *
      * @param int $level level to create (1, 2, or 3)

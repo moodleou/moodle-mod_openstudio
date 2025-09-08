@@ -48,10 +48,20 @@ Feature: Manage open studio folders
     And I press "Add another Block"
     And I set the field "Block Name" to "Block 1"
     And I press "Save Changes"
+    # Add Block 2 and set position to 1 replaces Block 1.
+    And I set the field "Block Name" to "Block 2"
+    And I set the field "Position" to "1"
+    And I press "Save Changes"
+    And "//div[contains(@class, 'fcontainer')]//div[position()=1]//div[contains(@class, 'felement')]//a[contains(., 'Block 2')]" "xpath_element" should exist
     And I follow "Block 1"
     And I press "Add another Activity"
     And I set the field "Activity Name" to "Activity 1"
     And I press "Save Changes"
+    # Add Activity 2 and set position to 1 replaces Activity 1.
+    And I set the field "Activity Name" to "Activity 2"
+    And I set the field "Position" to "1"
+    And I press "Save Changes"
+    And "//div[contains(@class, 'fcontainer')]//div[position()=1]//div[contains(@class, 'felement')]//a[contains(., 'Activity 2')]" "xpath_element" should exist
     And I follow "Activity 1"
 
     When I press "Add another Content"
@@ -63,9 +73,12 @@ Feature: Manage open studio folders
 
     When I set the field "Content Name" to "Content 1"
     And I press "Add another Content"
+    # Add Content 2 and set position to 1 replaces Content 1.
     When I set the field "odsnewcontentname[0]" to "Content 2"
+    And I set the field "Position" to "1"
     When I set the field "Is folder?" to "1"
     And I press "Save Changes"
+    And "//div[contains(@class, 'fcontainer')]//div[position()=1]//div[contains(@class, 'felement')]//a[contains(., 'Content 2')]" "xpath_element" should exist
     Then I should see "Content 1"
     And  I should see "Content 2 (Folder)"
     And "Content 1" "link" should not exist

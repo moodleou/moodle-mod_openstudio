@@ -58,14 +58,6 @@ $strpageurl = new moodle_url('/mod/openstudio/manageblocks.php', array('id' => $
 // Render page header and crumb trail.
 util::page_setup($PAGE, $strpagetitle, $strpageheading, $strpageurl, $course, $cm, 'manage');
 
-// Setup page crumb trail.
-$managelevelsurl = new moodle_url('/mod/openstudio/manageblocks.php', array('id' => $cm->id));
-$manageblocksurl = new moodle_url('/mod/openstudio/manageblocks.php', array('id' => $cm->id));
-$crumbarray[get_string('openstudio:managelevels', 'openstudio')] = $managelevelsurl;
-$crumbarray[get_string('blocks', 'openstudio')] = $manageblocksurl;
-
-util::add_breadcrumb($PAGE, $cm->id, navigation_node::TYPE_ACTIVITY, $crumbarray);
-
 $openstudioid = util::get_studioid_from_coursemodule($cm->id);
 
 $options = array();
@@ -189,6 +181,12 @@ if ($openstudioid > 0) {
         if (($newblocksdata = $mform->get_data()) || isset($_POST['add_block'])) {
             if (isset($newblocksdata->submitbutton) || isset($_POST['add_block'])) {
                 // Get block to be edited.
+                $currentblocks = levels::get_records(1, $openstudioid);
+                $tmpsortorder = [];
+                $newblocksdatatemp = [];
+                foreach ($currentblocks as $block) {
+                    $tmpsortorder[$block->sortorder] = clone $block;
+                }
                 foreach ($newblocks as $key => $nbname) {
                     $nbname = trim($nbname);
                     if (!empty($nbname)) {
@@ -205,14 +203,15 @@ if ($openstudioid > 0) {
                             // Get sortorder.
                             $insertdata->sortorder = levels::get_latest_sortorder(1, $openstudioid);
                         }
-
-                        levels::create(1, $insertdata);
+                        $newblocksdatatemp[] = $insertdata;
                         $islevelupdated = true;
-
-                        // Cleanup sortorder again.
-                        levels::cleanup_sortorder(1, $openstudioid);
                     }
                 }
+
+                // Merge, shift, build insert/update.
+                levels::process_sortorder_changes(1, $newblocksdatatemp, $tmpsortorder, $currentblocks);
+                // Cleanup sortorder again.
+                levels::cleanup_sortorder(1, $openstudioid);
             }
         }
     }
