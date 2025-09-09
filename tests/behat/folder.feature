@@ -248,7 +248,7 @@ I need to create a folder
       | Folder description | My folder view description 1 |
       | Tags               | createdtag                   |
     And I press "Create folder"
-    And I wait until "//div[@data-target='#openstudio_folder_view_folder_tags']" "xpath_element" exists
+    And I wait until "//div[@data-bs-target='#openstudio_folder_view_folder_tags']" "xpath_element" exists
     And I press "Folder tags"
     And I should see "createdtag"
 
@@ -256,7 +256,7 @@ I need to create a folder
     And I follow "Edit folder details and sharing"
     And I set the field "Tags" to "editedtag"
     And I press "Save"
-    And I wait until "//div[@data-target='#openstudio_folder_view_folder_tags']" "xpath_element" exists
+    And I wait until "//div[@data-bs-target='#openstudio_folder_view_folder_tags']" "xpath_element" exists
     And I press "Folder tags"
     And I wait until "#openstudio_folder_view_folder_tags" "css_element" exists
     And I should see "editedtag"
@@ -265,7 +265,7 @@ I need to create a folder
     And I follow "Edit folder details and sharing"
     And I click on "//span[@data-value='editedtag']" "xpath_element"
     And I press "Save"
-    And I wait until "//div[@data-target='#openstudio_folder_view_folder_tags']" "xpath_element" exists
+    And I wait until "//div[@data-bs-target='#openstudio_folder_view_folder_tags']" "xpath_element" exists
     And I press "Folder tags"
     And I should not see "createdtag"
     And I should not see "editedtag"
