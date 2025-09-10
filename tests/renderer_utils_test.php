@@ -45,7 +45,7 @@ class renderer_utils_test extends \advanced_testcase {
      *
      * @return array[]
      */
-    public function get_content_visibility_provider(): array {
+    public static function get_content_visibility_provider(): array {
         return [
             [-1, content::VISIBILITY_GROUP],
             [-20, content::VISIBILITY_GROUP],
@@ -72,7 +72,7 @@ class renderer_utils_test extends \advanced_testcase {
      *
      * @return array[]
      */
-    public function get_content_visibility_name_provider(): array {
+    public static function get_content_visibility_name_provider(): array {
         return [
             [
                 content::VISIBILITY_MODULE,

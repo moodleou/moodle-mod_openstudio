@@ -772,7 +772,7 @@ class content_test extends \advanced_testcase {
     /**
      * @return array[]
      */
-    public function get_lowest_sharing_level_provider(): array {
+    public static function get_lowest_sharing_level_provider(): array {
         return [
             [
                 [content::VISIBILITY_PRIVATE,

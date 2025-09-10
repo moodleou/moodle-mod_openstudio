@@ -444,7 +444,7 @@ class comments_test extends \advanced_testcase {
      *
      * @return array
      */
-    public function comment_text_provider(): array {
+    public static function comment_text_provider(): array {
         return [
                 [
                         '<img src="@@PLUGINFILE@@/6pqtmvdwmcr91.jpg" class="img-fluid atto_image_button_text-bottom">',

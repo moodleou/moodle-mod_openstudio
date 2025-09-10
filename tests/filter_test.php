@@ -50,7 +50,7 @@ class filter_test extends \advanced_testcase {
     /**
      * @return array[]
      */
-    public function get_sort_by_params_provider(): array {
+    public static function get_sort_by_params_provider(): array {
         return [
                 [filter::SORT_BY_DATE_ASCENDING],
                 [filter::SORT_BY_DATE_DESCENDING],
@@ -76,7 +76,7 @@ class filter_test extends \advanced_testcase {
     /**
      * @return array[]
      */
-    public function get_sort_by_dropdown_provider(): array {
+    public static function get_sort_by_dropdown_provider(): array {
         return [
                 [
                         filter::PAGE_VIEW,
@@ -135,7 +135,7 @@ class filter_test extends \advanced_testcase {
     /**
      * @return array[]
      */
-    public function get_quick_select_params_provider(): array {
+    public static function get_quick_select_params_provider(): array {
         return [
                 [filter::FILTER_COMBINATION_MY_POSTS_WITH_MY_COMMENTS],
                 [filter::FILTER_COMBINATION_MY_POSTS_WITH_USERS_COMMENTS],
@@ -163,7 +163,7 @@ class filter_test extends \advanced_testcase {
     /**
      * @return array[]
      */
-    public function get_quick_select_params_stream_view_provider(): array {
+    public static function get_quick_select_params_stream_view_provider(): array {
         return [
                 [
                         content::VISIBILITY_PRIVATE,

@@ -40,7 +40,7 @@ require_once($CFG->dirroot . '/mod/openstudio/lib.php');
  */
 class lib_test extends \advanced_testcase {
 
-    public function openstudio_extract_blocks_activities_provider(): array {
+    public static function openstudio_extract_blocks_activities_provider(): array {
         return [
                 [
                         [],
