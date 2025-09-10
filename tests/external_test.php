@@ -122,7 +122,7 @@ class external_test extends \advanced_testcase {
                 $this->studiolevels, $this->users->students->one->id, $this->singleentrydata);
 
         $this->setUser($this->users->students->one);
-        $this->expectErrorMessage(get_string('errorcommentdeleted', 'openstudio'));
+        $this->expectExceptionMessage(get_string('errorcommentdeleted', 'openstudio'));
         mod_openstudio_external::add_comment($this->studiolevels->cmid, $this->contentdata->id,
                 'Test', 0, -1);
     }
@@ -152,7 +152,7 @@ class external_test extends \advanced_testcase {
 
         // User 2 login and tries to reply to deleted comment of user 1.
         $this->setUser($this->users->students->two);
-        $this->expectErrorMessage(get_string('errorcommentdeleted', 'openstudio'));
+        $this->expectExceptionMessage(get_string('errorcommentdeleted', 'openstudio'));
         mod_openstudio_external::add_comment($this->studiolevels->cmid, $this->contentdata->id,
                 'Test', 0, $comment['commentid']);
     }
