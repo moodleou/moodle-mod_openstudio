@@ -25,7 +25,7 @@ namespace mod_openstudio;
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
-class file_testcase extends \advanced_testcase {
+class file_test extends \advanced_testcase {
 
     protected $course;
     protected $generator; // Contains mod_openstudio specific data generator functions.

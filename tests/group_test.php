@@ -26,7 +26,7 @@ namespace mod_openstudio;
 
 defined('MOODLE_INTERNAL') || die();
 
-class group_testcase extends \advanced_testcase {
+class group_test extends \advanced_testcase {
 
     private $course;
     private $course2;

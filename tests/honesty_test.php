@@ -25,7 +25,7 @@ namespace mod_openstudio;
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
-class honesty_testcase extends \advanced_testcase  {
+class honesty_test extends \advanced_testcase  {
 
     /**
      * Tests the honesty api.

@@ -26,7 +26,7 @@ namespace mod_openstudio;
 
 defined('MOODLE_INTERNAL') || die();
 
-class export_testcase extends \advanced_testcase {
+class export_test extends \advanced_testcase {
     public function test_encode_ids() {
         // Encode a single ID.
         self::assertEquals('bac', \mod_openstudio\local\api\export::encode_ids([102]));

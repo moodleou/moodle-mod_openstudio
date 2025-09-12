@@ -27,7 +27,7 @@ namespace mod_openstudio;
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
-class contents_form_testcase extends \advanced_testcase {
+class contents_form_test extends \advanced_testcase {
 
     /**
      * Test validation of Notebook files uploaded to a content.

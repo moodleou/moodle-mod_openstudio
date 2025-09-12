@@ -30,7 +30,7 @@ use mod_openstudio\local\api\stream;
 global $CFG;
 require_once($CFG->dirroot . '/mod/openstudio/tests/test_utils.php');
 
-class user_testcase extends \advanced_testcase {
+class user_test extends \advanced_testcase {
 
     protected $users;
     protected $file;

@@ -25,7 +25,7 @@ namespace mod_openstudio;
 
 defined('MOODLE_INTERNAL') || die();
 
-class contentversion_testcase extends \advanced_testcase {
+class contentversion_test extends \advanced_testcase {
 
     private $users;
     private $studio;

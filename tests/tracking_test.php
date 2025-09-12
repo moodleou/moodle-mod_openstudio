@@ -27,7 +27,7 @@ use mod_openstudio\local\api\tracking;
 
 defined('MOODLE_INTERNAL') || die();
 
-class tracking_testcase extends \advanced_testcase {
+class tracking_test extends \advanced_testcase {
 
     private $users;
     private $generator;

@@ -26,7 +26,7 @@ namespace mod_openstudio;
 
 defined('MOODLE_INTERNAL') || die();
 
-class filesystem_testcase extends \advanced_testcase {
+class filesystem_test extends \advanced_testcase {
 
     protected $users;
     protected $course;

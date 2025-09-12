@@ -26,7 +26,7 @@ namespace mod_openstudio;
 
 defined('MOODLE_INTERNAL') || die();
 
-class template_testcase extends \advanced_testcase {
+class template_test extends \advanced_testcase {
 
     private $users;
     private $permissions;

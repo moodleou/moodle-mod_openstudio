@@ -25,7 +25,7 @@ namespace mod_openstudio;
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
-class rss_testcase extends \advanced_testcase {
+class rss_test extends \advanced_testcase {
 
     private $course;
     private $users;

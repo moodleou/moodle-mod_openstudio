@@ -26,7 +26,7 @@ namespace mod_openstudio;
 
 defined('MOODLE_INTERNAL') || die();
 
-class import_testcase extends \advanced_testcase {
+class import_test extends \advanced_testcase {
 
     private $tempdir;
     private $studio;

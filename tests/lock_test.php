@@ -25,7 +25,7 @@ namespace mod_openstudio;
 // Make sure this isn't being directly accessed.
 defined('MOODLE_INTERNAL') || die();
 
-class lock_testcase extends \advanced_testcase {
+class lock_test extends \advanced_testcase {
 
     protected $users;
     protected $course;

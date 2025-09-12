@@ -25,7 +25,7 @@ namespace mod_openstudio;
 
 defined('MOODLE_INTERNAL') || die();
 
-class embedcode_testcase extends \advanced_testcase {
+class embedcode_test extends \advanced_testcase {
 
     /**
      * Test the parsing function.
