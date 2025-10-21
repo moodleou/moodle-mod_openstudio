@@ -211,8 +211,8 @@ Feature: Open Studio notifications
     # Post comment.
     And I press "Post comment"
     And I am on the "Demo Open Studio" "openstudio activity" page
-    And I click on "//*[@class='openstudio-grid-item-content-detail-info-icon'][1]" "xpath_element"
-    Then I should see "test.mp4"
+    And I follow "Module post 1"
+    Then "video[title='test']" "css_element" should exist
 
   Scenario: Check unique comment count.
     Given I am on the "Demo Open Studio" "openstudio activity" page logged in as "student1"

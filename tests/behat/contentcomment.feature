@@ -99,7 +99,7 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     And I press "Post comment"
 
     And I follow "Shared Content"
-    When I click on "//*[@class='openstudio-grid-item-content-detail-info-icon'][1]" "xpath_element"
+    When I click on "//a[@class='show-popup-comment' and descendant::img[@class='openstudio-grid-item-content-detail-info-icon' and @alt='Comments']][1]" "xpath_element"
     # Verify the parent comment and its reply are visible in comment box.
     Then I should see "Comments on this post"
     And I should see "Comment text"
@@ -108,7 +108,7 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     And I follow "Delete comment"
     And I click on "Delete" "button" in the "Delete comment" "dialogue"
     And I follow "Shared Content"
-    When I click on "//*[@class='openstudio-grid-item-content-detail-info-icon'][1]" "xpath_element"
+    When I click on "//a[@class='show-popup-comment' and descendant::img[@class='openstudio-grid-item-content-detail-info-icon' and @alt='Comments']][1]" "xpath_element"
     # Verify the parent comment and its reply have been deleted in comment box.
     Then I should see "There are no comments."
 
