@@ -1427,6 +1427,11 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) .openstudio-comm
     width: calc(100% - 128px);
 }
 
+.openstudio-comment-metadata .openstudio-comment-rightcolumn {
+    display: flex;
+    justify-content: space-between;
+}
+
 .openstudio-comment-text {
     min-height: 72px;
     padding-bottom: 5px;
@@ -1530,12 +1535,21 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) .openstudio-comm
 }
 
 .openstudio-comment-action {
-    float: right;
+    margin-left: 8px;
+}
+
+.openstudio-comment-actions-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    justify-content: flex-end;
+    align-items: center;
 }
 
 .openstudio-comment-flag-link,
 .openstudio-comment-delete-link,
-.openstudio-comment-report-link {
+.openstudio-comment-report-link,
+.openstudio-comment-edit-link {
     font-weight: bold;
     cursor: pointer;
     display: inline;
@@ -1544,7 +1558,8 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) .openstudio-comm
 .openstudio-comment-flag-link .openstudio-comment-like-long-link,
 .openstudio-comment-flag-link .openstudio-comment-unlike-long-link,
 .openstudio-comment-delete-link .openstudio-comment-delete-long-link,
-.openstudio-comment-report-link .openstudio-comment-report-long-link {
+.openstudio-comment-report-link .openstudio-comment-report-long-link,
+.openstudio-comment-edit-link .openstudio-comment-edit-long-link {
     display: inline;
 }
 
@@ -1556,7 +1571,8 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) .openstudio-comm
 .openstudio-content-view-primary .openstudio-comment-flag-link .openstudio-comment-like-short-link,
 .openstudio-content-view-primary .openstudio-comment-flag-link .openstudio-comment-unlike-short-link,
 .openstudio-comment-delete-link .openstudio-comment-delete-short-link,
-.openstudio-comment-report-link .openstudio-comment-report-short-link {
+.openstudio-comment-report-link .openstudio-comment-report-short-link,
+.openstudio-comment-edit-link .openstudio-comment-edit-short-link {
     display: none;
 }
 
@@ -1567,7 +1583,8 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) .openstudio-comm
     margin: 5px 0px 0px;
 }
 
-.openstudio-comment-time {
+.openstudio-comment-time,
+.openstudio-comment-editedtime {
     font-size: 0.85714em;
     display: block;
 }
@@ -1651,7 +1668,8 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) .openstudio-comm
     width: calc(100% - 60px);
 }
 
-.openstudio-folder-view-comments .openstudio-comment-time {
+.openstudio-folder-view-comments .openstudio-comment-time,
+.openstudio-folder-view-comments .openstudio-comment-editedtime {
     margin-left: 10px;
     display: block;
     float: left;
@@ -1668,12 +1686,14 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) .openstudio-comm
 .openstudio-folder-view-comments .openstudio-comment-flag-link .openstudio-comment-like-long-link,
 .openstudio-folder-view-comments .openstudio-comment-flag-link .openstudio-comment-unlike-long-link,
 .openstudio-folder-view-comments .openstudio-comment-delete-link .openstudio-comment-delete-long-link,
-.openstudio-folder-view-comments .openstudio-comment-report-link .openstudio-comment-report-long-link {
+.openstudio-folder-view-comments .openstudio-comment-report-link .openstudio-comment-report-long-link,
+.openstudio-folder-view-comments .openstudio-comment-edit-link .openstudio-comment-edit-long-link {
     display: none;
 }
 
 .openstudio-folder-view-comments .openstudio-comment-delete-link .openstudio-comment-delete-short-link,
-.openstudio-folder-view-comments .openstudio-comment-report-link .openstudio-comment-report-short-link {
+.openstudio-folder-view-comments .openstudio-comment-report-link .openstudio-comment-report-short-link,
+.openstudio-folder-view-comments .openstudio-comment-edit-link .openstudio-comment-edit-short-link {
     display: inline;
 }
 
@@ -5208,14 +5228,16 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-comment-flag-link .openstudio-comment-like-long-link,
     .openstudio-comment-flag-link .openstudio-comment-unlike-long-link,
     .openstudio-comment-delete-link .openstudio-comment-delete-long-link,
-    .openstudio-comment-report-link .openstudio-comment-report-long-link {
+    .openstudio-comment-report-link .openstudio-comment-report-long-link,
+    .openstudio-comment-edit-link .openstudio-comment-edit-long-link {
         display: none;
     }
 
     .openstudio-comment-flag-link .openstudio-comment-like-short-link,
     .openstudio-comment-flag-link .openstudio-comment-unlike-short-link,
     .openstudio-comment-delete-link .openstudio-comment-delete-short-link,
-    .openstudio-comment-report-link .openstudio-comment-report-short-link {
+    .openstudio-comment-report-link .openstudio-comment-report-short-link,
+    .openstudio-comment-edit-link .openstudio-comment-edit-short-link {
         display: inline;
     }
 
@@ -5562,7 +5584,8 @@ a.openstudio-add-new-content-link:hover  {
         width: calc(100% - 56px);
     }
 
-    .openstudio-comment-time {
+    .openstudio-comment-time,
+    .openstudio-comment-editedtime {
         font-size: 0.785em;
         margin-left: 10px;
         display: block;
@@ -5610,7 +5633,8 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-comment-flag-link,
     .openstudio-comment-delete-link,
     .openstudio-comment-report-link,
-    .openstudio-comment-flag-count {
+    .openstudio-comment-flag-count,
+    .openstudio-comment-edit-link {
         font-size: 1em;
     }
 
@@ -8291,7 +8315,8 @@ a.openstudio-add-new-content-link:hover  {
         width: calc(100% - 56px);
     }
 
-    .openstudio-comment-time {
+    .openstudio-comment-time,
+    .openstudio-comment-editedtime {
         font-size: 1.142em;
         margin-left: 10px;
         display: block;
@@ -8765,6 +8790,13 @@ a.openstudio-add-new-content-link:hover  {
 (max-width: 1024px) and (orientation: landscape) and (pointer: coarse) {
     #page-mod-openstudio-contentedit #fitem_id_description .btn.btn-link[data-content*="help-popover-container"] {
         display: none;
+    }
+}
+
+/* Not a standard theme breakpoint. */
+@media (min-width: 767px) and (max-width: 950px) {
+    .openstudio-folder-view-comments .openstudio-comment-thread-item .openstudio-comment-metadata .openstudio-comment-rightcolumn {
+        width: 100%;
     }
 }
 

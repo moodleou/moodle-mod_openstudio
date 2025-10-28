@@ -34,8 +34,8 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
 
     And all users have accepted the plagarism statement for "OS1" openstudio
 
-  @javascript
-  Scenario: Add/Reply/Flag/Delete comment
+  @javascript @editor_tiny
+  Scenario: Add/Edit/Reply/Flag/Delete comment
 
     # Add new comment
     And I am on the "Sharing Studio" "openstudio activity" page logged in as "student1"
@@ -46,6 +46,19 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     And I upload "mod/openstudio/tests/importfiles/test.mp3" file to "Attach an audio (MP3 file) as comment" filemanager
     And I press "Post comment"
     Then I should see "Comment text"
+
+    # Edit comment.
+    And I should see "Edit comment"
+    And I follow "Edit comment"
+    And I wait until the page is ready
+    And I switch to the "Comment" TinyMCE editor iframe
+    And I should see "Comment text"
+    And I switch to the main frame
+    And I should see "An attached audio file 'test.mp3' is already in use."
+    And I set the field "Comment" to "Comment text edited"
+    And I press "Save changes"
+    And I should see "Comment text edited"
+    And I should see "Edited by the author on"
 
     # Flag comment
     And I follow "Like comment"
@@ -89,6 +102,7 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     When I log in as "student1"
     And I follow "Private files" in the user menu
     And I upload "mod/openstudio/tests/importfiles/test2.jpg" file to "Files" filemanager
+    And I upload "mod/openstudio/tests/importfiles/test3.jpg" file to "Files" filemanager
     And I click on "Save changes" "button"
     And I am on the "Sharing Studio" "openstudio activity" page
     # Add new comment.
@@ -106,6 +120,39 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     # Post comment.
     And I press "Post comment"
     Then "//img[contains(@src, '/test2.jpg') and @alt='An image']" "xpath_element" should exist
+    # Edit comment.
+    And I should see "Edit comment"
+    And I follow "Edit comment"
+    And I wait until the page is ready
+    And I switch to the "Comment" TinyMCE editor iframe
+    And "//img[contains(@src, 'draftfile.php') and contains(@src, '/test2.jpg') and @alt='An image']" "xpath_element" should exist
+    And I switch to the main frame
+    And I set the field "Comment" to "Comment text edited"
+    And I expand all toolbars for the "Comment" TinyMCE editor
+    And I click on the "Image" button for the "Comment" TinyMCE editor
+    And I click on "Browse repositories" "button"
+    And I click on "test3.jpg" "link" in the "File picker" "dialogue"
+    And I click on "Select this file" "button" in the "Select test3.jpg" "dialogue"
+    And I set the field "How would you describe this image to someone who can't see it?" to "An image edited"
+    And I click on "Save" "button" in the "Image details" "dialogue"
+    And I press "Save changes"
+    And I should see "Comment text edited"
+    And "//img[contains(@src, '/test3.jpg') and @alt='An image edited']" "xpath_element" should exist
+    And I should see "Edited by the author on"
+
+  @javascript
+  Scenario: Only comment owner can see edit option
+    Given I am on the "Sharing Studio" "openstudio activity" page logged in as "student1"
+    And I follow "Student slot 1"
+    And I press "Add new comment"
+    And I set the field "Comment" to "Owner's comment"
+    And I press "Post comment"
+    And I should see "Owner's comment"
+    # Switch to another student.
+    When I am on the "Sharing Studio" "openstudio activity" page logged in as "student2"
+    And I follow "Student slot 1"
+    And I should see "Owner's comment"
+    Then I should not see "Edit comment"
 
   Scenario: Student deletes comment, replies remain visible, moderator sees deleted comment
     Given I am on the "Sharing Studio" "openstudio activity" page logged in as "student1"

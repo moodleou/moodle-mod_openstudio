@@ -89,6 +89,15 @@ $functions = array(
             'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
             'capabilities' => 'mod/openstudio:addcomment'
     ),
+    'mod_openstudio_external_edit_comment' => [
+        'classname' => 'mod_openstudio_external',
+        'methodname' => 'edit_comment',
+        'description' => 'Edit comment',
+        'type' => 'write',
+        'ajax' => true,
+        'services' => [MOODLE_OFFICIAL_MOBILE_SERVICE],
+        'capabilities' => 'mod/openstudio:addcomment',
+    ],
     'mod_openstudio_external_get_comment_by_contentid' => array(
         'classname' => 'mod_openstudio_external',
         'methodname' => 'get_comments_by_contentid',
@@ -209,6 +218,7 @@ $services = [
             'mod_openstudio_external_unsubscribe',
             'mod_openstudio_external_delete_content',
             'mod_openstudio_external_add_comment',
+            'mod_openstudio_external_edit_comment',
             'mod_openstudio_external_get_comment_by_contentid',
             'mod_openstudio_external_flag_comment',
             'mod_openstudio_external_delete_comment',

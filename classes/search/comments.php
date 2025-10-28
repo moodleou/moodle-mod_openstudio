@@ -69,7 +69,8 @@ class comments extends \core_search\base_mod {
         $openstudiofields = 'os.course';
 
         $commentfields = 'sc.id, sc.contentid, sc.userid as commentuser, sc.title,
-                sc.commenttext, sc.timemodified';
+                sc.commenttext, sc.timemodified, sc.editedtime,
+                GREATEST(sc.timemodified, COALESCE(sc.editedtime, 0)) AS lastmodified';
 
         $contentfields = 's.id as contentid, s.name, s.contenttype, s.ownership, s.ownershipdetail,
                 s.userid, s.openstudioid, s.fileid';
@@ -81,11 +82,11 @@ class comments extends \core_search\base_mod {
                   JOIN {openstudio} os ON os.id = s.openstudioid
                   JOIN {openstudio_comments} sc ON s.id = sc.contentid
           $contextjoin
-                 WHERE sc.timemodified >= ?
+                 WHERE GREATEST(sc.timemodified, COALESCE(sc.editedtime, 0)) >= ?
                        AND s.deletedtime IS NULL
                        AND sc.deletedtime IS NULL
                        AND s.contenttype <> ?
-              ORDER BY sc.timemodified ASC";
+              ORDER BY lastmodified ASC";
         return $DB->get_recordset_sql($sql, array_merge($contextparams, [$modifiedfrom, content::TYPE_NONE]));
     }
 
@@ -120,7 +121,7 @@ class comments extends \core_search\base_mod {
         $doc->set('itemid', $record->id);
         $doc->set('userid', $record->commentuser);
         $doc->set('owneruserid', \core_search\manager::NO_OWNER_ID);
-        $doc->set('modified', $record->timemodified);
+        $doc->set('modified', isset($record->lastmodified) ? $record->lastmodified : $record->timemodified);
 
         return $doc;
     }

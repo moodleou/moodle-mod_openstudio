@@ -239,6 +239,19 @@ function xmldb_openstudio_upgrade($oldversion=0) {
         upgrade_mod_savepoint(true, 2025041600, 'openstudio');
     }
 
+    if ($oldversion < 2025111400) {
+        // Define field edited to be added to openstudio_comments.
+        $table = new xmldb_table('openstudio_comments');
+        $field = new xmldb_field('editedtime', XMLDB_TYPE_INTEGER, '10', null,
+                XMLDB_NOTNULL, null, 0, 'deletedtime');
+        // Conditionally launch add field.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        // Openstudio savepoint reached.
+        upgrade_mod_savepoint(true, 2025111400, 'openstudio');
+    }
+
     // Must always return true from these functions.
     return $result;
 }

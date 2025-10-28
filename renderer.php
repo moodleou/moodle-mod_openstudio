@@ -1002,7 +1002,8 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      * @return string The rendered HTML fragment.
      */
     public function content_comment($commentdata) {
-        if ($commentdata->inreplyto && !$commentdata->deletedtime) {
+        // Always force the item block template for the edit case, regardless of whether it’s a parent or a reply.
+        if (($commentdata->inreplyto && !$commentdata->deletedtime) || (isset($commentdata->isediting) && $commentdata->isediting)) {
             // Added comment is to reply to parent comment.
             return $this->render_from_template('mod_openstudio/comment_item_block', $commentdata);
         } elseif ($commentdata->deletedtime) {

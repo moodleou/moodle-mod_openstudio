@@ -1754,6 +1754,15 @@ class renderer_utils {
                     if ($comment->isdeleted) {
                         $comment->deletemessage = self::get_delete_message_content($comment);
                     }
+
+                    // Check edit capability.
+                    $comment->editenable = (!$comment->isdeleted && $permissions->activeuserid == $comment->userid
+                        && $permissions->addcomment);
+
+                    if ($comment->editedtime) {
+                        $comment->editedtime = get_string('contentcommentseditbyself', 'openstudio', userdate($comment->editedtime,
+                            get_string('formattimedatetime', 'openstudio')));
+                    }
                 }
                 // Returns all the values from the array and indexes the array numerically.
                 // We need this because mustache requires it.

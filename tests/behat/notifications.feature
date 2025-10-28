@@ -117,6 +117,29 @@ Feature: Open Studio notifications
     Then I should see "Notification post 1" in the ".openstudio-notifications-list" "css_element"
     Then I should see "replied to a comment" in the ".openstudio-notifications-list" "css_element"
 
+  Scenario: Notify users when their comments are edited.
+    Given the following open studio "contents" exist:
+      | openstudio | user     | name                | description       | visibility |
+      | OS1        | student1 | Notification post 1 | lorem ipsum dolor | module     |
+    And "student1" will recieve notifications for openstudio content "Notification post 1"
+    And the following open studio "comments" exist:
+      | openstudio | user     | content             | comment                |
+      | OS1        | student2 | Notification post 1 | Notification comment 1 |
+    And "student2" will recieve notifications for openstudio comment "Notification comment 1"
+    And I am on the "Notification Studio" "openstudio activity" page logged in as "student2"
+    And I follow "Notification post 1"
+    And I follow "Edit comment"
+    And I set the field "Comment" to "Test comment edited"
+    And I wait until the page is ready
+    And I press "Save changes"
+    And I should see "Test comment edited"
+    And I should see "Edited by the author on"
+    And I am on the "Notification Studio" "openstudio activity" page logged in as "student1"
+    And I should see "1" in the ".openstudio-navigation-notification-number" "css_element"
+    When I click on "Notifications" "button"
+    And I should see "Notification post 1" in the ".openstudio-notifications-list" "css_element"
+    Then I should see "edited a comment on" in the ".openstudio-notifications-list" "css_element"
+
   Scenario: Notify a user when another user flags their comment
     Given the following open studio "contents" exist:
       | openstudio | user     | name                | description       | visibility |

@@ -37,6 +37,7 @@ class comment_form extends \moodleform {
         global $CFG;
         $mform = $this->_form;
         $replyid = $this->_customdata['replyid'] ?? '';
+        $isediting = $this->_customdata['isediting'] ?? false;
         if ($this->_customdata['max_bytes']) {
             $maxbytes = $this->_customdata['max_bytes'];
         } else {
@@ -60,12 +61,12 @@ class comment_form extends \moodleform {
 
         // Comment text.
         $editoroptions = [
-                'maxfiles' => EDITOR_UNLIMITED_FILES,
-                'maxbytes' => $maxbytes,
+            'maxfiles' => EDITOR_UNLIMITED_FILES,
+            'maxbytes' => $maxbytes,
         ];
         $mform->addElement('editor', 'commentext',
-                get_string('contentcommentsformlabelcomment', 'openstudio'),
-                ['id' => 'id_commentext' . $replyid], $editoroptions);
+            get_string('contentcommentsformlabelcomment', 'openstudio'),
+            ['id' => 'id_commentext' . $replyid], $editoroptions);
         $mform->setType('commentext', PARAM_RAW);
 
         // Comment attachment.
@@ -75,13 +76,30 @@ class comment_form extends \moodleform {
             $mform->addElement('static', 'commentheader', null,
                 get_string('contentcommentsformheader2', 'mod_openstudio'));
 
+            if (isset($this->_customdata['commentattachmentexist'])) {
+                $mform->addElement('static', 'commentattachmentexist', get_string('note', 'mod_openstudio'),
+                    get_string('contentcommentsformattachmentfileexists', 'mod_openstudio',
+                    $this->_customdata['commentattachmentexist']));
+            }
+
             $mform->addElement('filepicker', 'commentattachment',
                 get_string('contentcommentsformattachment', 'mod_openstudio'), null,
                 array('maxbytes' => $maxbytes, 'accepted_types' => '.mp3'));
         }
 
         // Submit button.
-        $mform->addElement('submit', 'postcomment', get_string('contentcommentsformpostcomment', 'openstudio'));
+        $buttonarray = [];
+        $submitlabel = $isediting ?
+            get_string('contentcommentsformsavechanges', 'openstudio') :
+            get_string('contentcommentsformpostcomment', 'openstudio');
+        $buttonarray[] = &$mform->createElement('submit', 'postcomment', $submitlabel);
+        if ($isediting) {
+            $buttonarray[] = &$mform->createElement('cancel');
+        }
+
+        $mform->addGroup($buttonarray, 'buttonar', '', [' '], false);
+        $mform->setType('buttonar', PARAM_RAW);
+        $mform->closeHeaderBefore('buttonar');
     }
 
 }

@@ -888,6 +888,7 @@ class mod_openstudio_external extends external_api {
                     $commentdata->commenttext = comments::filter_comment_text($commentdata->commenttext, $commentid, $context);
 
                     $commentdata->deleteenable = true;
+                    $commentdata->editenable = true;
                     $commentdata->reportenable = false;
 
                     // Check comment like setting enabled.
@@ -1864,7 +1865,7 @@ class mod_openstudio_external extends external_api {
             'commenthtml' => new external_value(PARAM_RAW, 'Undeleted comment HTML'),
         ]);
     }
-    
+
     /**
      * Undelete comment.
      *
@@ -1936,5 +1937,161 @@ class mod_openstudio_external extends external_api {
             debugging('Database error undeleting comment: ' . $e->getMessage(), DEBUG_DEVELOPER);
             throw new \moodle_exception('commenterror', 'openstudio', '', $e->getMessage());
         }
+    }
+
+    /**
+     * Returns description of method parameters for edit_comment.
+     *
+     * @return external_function_parameters
+     */
+    public static function edit_comment_parameters(): external_function_parameters {
+        return new external_function_parameters([
+            'cmid' => new external_value(PARAM_INT, 'Course module ID'),
+            'commentid' => new external_value(PARAM_INT, 'Comment ID'),
+            'commenttext' => new external_value(PARAM_RAW, 'Comment text'),
+            'commenttextitemid' => new external_value(PARAM_INT, 'Comment text item ID'),
+            'commentattachment' => new external_value(PARAM_INT, 'Comment attachment'),
+        ]);
+    }
+
+    /**
+     * Edit an existing comment.
+     *
+     * @param int $cmid Course module ID
+     * @param int $commentid Comment ID
+     * @param string $commenttext Comment text
+     * @param int $commenttextitemid Comment text item ID
+     * @param int $commentattachment Comment attachment
+     * @return array [commentid, commenthtml]
+     * @throws moodle_exception
+     */
+    public static function edit_comment(int $cmid, int $commentid, string $commenttext = '',
+            int $commenttextitemid = 0, int $commentattachment = 0): array {
+        global $USER, $PAGE, $CFG, $DB;
+        $userid = $USER->id;
+        // Init and check permission.
+        $coursedata = util::render_page_init($cmid, ['mod/openstudio:addcomment']);
+        $cm = $coursedata->cm;
+        $mcontext = $coursedata->mcontext;
+        $permissions = $coursedata->permissions;
+        // Validate input parameters and context.
+        self::validate_context($mcontext);
+        $params = self::validate_parameters(self::edit_comment_parameters(), [
+            'cmid' => $cmid,
+            'commentid' => $commentid,
+            'commenttext' => $commenttext,
+            'commenttextitemid' => $commenttextitemid,
+            'commentattachment' => $commentattachment,
+        ]);
+
+        // Check user permission to edit comment.
+        $comment = comments::get($params['commentid'], $userid);
+        if (!$comment) {
+            throw new \moodle_exception('commenterror', 'openstudio');
+        }
+        if ($comment->userid != $userid) {
+            throw new \moodle_exception('nocommentpermissions', 'openstudio');
+        }
+
+        $flagsenabled = explode(',', $permissions->flags);
+        $successcreated = false;
+        $transaction = $DB->start_delegated_transaction();
+        try {
+            // Standardize comment text.
+            $commenttext = trim($params['commenttext']);
+
+            // Check if comment content is not empty.
+            $draftareafiles = file_get_drafarea_files($params['commentattachment'], $filepath = '/');
+            if (($commenttext != '') || (is_object($draftareafiles) && !empty($draftareafiles->list))) {
+
+                // Set default comment text if user just upload comment attachment.
+                if ($commenttext == '') {
+                    $commenttext = get_string('contentcommentsaudioattached', 'openstudio');
+                }
+
+                // Do edit comment.
+                $folderid = null;
+                $containingfolder = folder::get_containing_folder($params['commentid']);
+                if ($containingfolder) {
+                    $folderid = $containingfolder->id;
+                }
+                $context = context_module::instance($cm->id);
+                $commentid = comments::update($comment->contentid, $params['commentid'], $userid, $commenttext, $folderid,
+                        ['id' => $params['commentattachment']], $context, $params['commenttextitemid']);
+                util::trigger_event(
+                        $params['cmid'], 'content_comment_edited', $comment->contentid, '', '', null, $commentid);
+
+                // Check if process is success.
+                if (!$commentid) {
+                    throw new \moodle_exception('commenterror', 'openstudio');
+                }
+
+                // Render comment html and send to client.
+                $commentdata = comments::get($commentid, $userid);
+                $commentdata->donotexport = true;
+                $commentdata->timemodified = userdate($commentdata->timemodified,
+                        get_string('formattimedatetime', 'openstudio'));
+                $commentdata->editedtime = get_string('contentcommentseditbyself', 'openstudio', userdate($commentdata->editedtime,
+                        get_string('formattimedatetime', 'openstudio')));
+
+                $user = user::get_user_by_id($commentdata->userid);
+                $commentdata->fullname = fullname($user);
+
+                // User picture.
+                $renderer = util::get_renderer();
+                $commentdata->userpicturehtml = util::render_user_avatar($renderer, $user);
+
+                // Check comment attachment.
+                if ($file = comments::get_attachment($commentdata->id)) {
+                    $commentdata->commenttext .= renderer_utils::get_media_filter_markup($file);
+                }
+
+                // Filter comment text.
+                $commentdata->commenttext = comments::filter_comment_text($commentdata->commenttext, $commentid, $context);
+
+                $commentdata->editenable = true;
+                $commentdata->deleteenable = true;
+                $commentdata->reportenable = false;
+                // Flag used by the content comment renderer to load the correct template.
+                $commentdata->isediting = true;
+
+                // Check comment like setting enabled.
+                $commentdata->contentcommentlikeenabled = in_array(flags::COMMENT_LIKE, $flagsenabled);
+
+                $commenthtml = $renderer->content_comment($commentdata);
+
+                $transaction->allow_commit();
+
+                $successcreated = true;
+            } else {
+                // Comment empty error.
+                $transaction->rollback(new \moodle_exception('emptycomment', 'openstudio'));
+            }
+        } catch (Exception $e) {
+            // Database error.
+            $transaction->rollback($e);
+        }
+
+        // The lib/completionlib.php - internal_set_data used its own transaction.
+        if ($successcreated) {
+            custom_completion::update_completion($cm, $userid, COMPLETION_COMPLETE);
+        }
+
+        return [
+            'commentid' => $commentid,
+            'commenthtml' => $commenthtml,
+        ];
+    }
+
+    /**
+     * Returns description of method result value for edit_comment.
+     *
+     * @return external_single_structure
+     */
+    public static function edit_comment_returns() {
+        return new external_single_structure([
+            'commentid' => new external_value(PARAM_INT, 'Edited comment ID'),
+            'commenthtml' => new external_value(PARAM_RAW, 'Comment content HTML'),
+        ]);
     }
 }

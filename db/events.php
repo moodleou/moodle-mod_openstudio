@@ -28,6 +28,10 @@ $observers = [
         'callback'    => '\mod_openstudio\local\api\notifications::handle_event',
     ],
     [
+        'eventname'   => '\mod_openstudio\event\content_comment_edited',
+        'callback'    => '\mod_openstudio\local\api\notifications::handle_event',
+    ],
+    [
         'eventname'   => '\mod_openstudio\event\content_comment_flagged',
         'callback'    => '\mod_openstudio\local\api\notifications::handle_event',
     ],

@@ -104,6 +104,70 @@ class comments {
     }
 
     /**
+     * Update comment.
+     *
+     * @param int $contentid Content to associate comment with.
+     * @param int $commentid Comment id.
+     * @param int $userid Creator of the comment.
+     * @param string $comment Comment text.
+     * @param int $folderid The ID of the folder the content belongs to.
+     * @param array $file File upload information.
+     * @param object $context Moodle context during slot creation.
+     * @param int $commentitemid Comment text Item ID.
+     * @return int Returns ID of inserted comment record.
+     */
+    public static function update(int $contentid, int $commentid, int $userid, string $comment, int $folderid = null,
+            array $file = null, object $context = null, int $commentitemid = 0): int {
+        global $DB;
+
+        try {
+            if (strlen($comment) > util\defaults::CONTENTCOMMENTLENGTH) {
+                $comment = substr($comment, 0, util\defaults::CONTENTCOMMENTLENGTH)
+                        . get_string('contentcommenttruncatedmessage', 'openstudio');
+            }
+
+            // Populate data.
+            $insertdata = new \stdClass();
+            $insertdata->id = $commentid;
+            $insertdata->commenttext = $comment;
+            $insertdata->editedtime = time();
+
+            $DB->update_record('openstudio_comments', $insertdata);
+
+            // Update comment text.
+            if ($context instanceof \context_module && $commentid && $commentitemid > 0) {
+                self::update_comment_text($commentid, $context->id, $insertdata->commenttext, $commentitemid);
+            }
+
+            $isvalidattachment = is_array($file) && array_key_exists('id', $file) && $file['id'] > 0;
+            if ($isvalidattachment && ($context !== null) && $commentid) {
+                // Check and delete existing attachment before updating comment text/attachment.
+                $existingfile = self::get_attachment($commentid);
+                if ($existingfile) {
+                    $fs = get_file_storage();
+                    $fs->delete_area_files($existingfile->contextid, $existingfile->component, $existingfile->filearea, $commentid);
+                }
+                file_save_draft_area_files($file['id'], $context->id, 'mod_openstudio', 'contentcomment', $commentid);
+                // Issue happened when user requests API, it does not clear the old files.
+                // That issue causes multiple attachments, we only allow 1 audio attachment.
+                self::clear_draft_area($file['id']);
+            }
+
+            // Update slot flag.
+            flags::toggle($contentid, flags::COMMENT, 'on', $userid, $folderid);
+            flags::comment_toggle($contentid, $commentid, $userid, 'on', false, flags::FOLLOW_CONTENT);
+            if ($folderid) {
+                tracking::log_action($folderid, tracking::MODIFY_FOLDER, $userid);
+            }
+
+            return $commentid;
+        } catch (\Exception $e) {
+            return false;
+        }
+
+    }
+
+    /**
      * Delete comment.
      *
      * @param int $commentid Comment to delete.
@@ -473,9 +537,9 @@ EOF;
             return;
         }
         $fileoptions = [
-                'subdirs' => false,
-                'maxbytes' => $CFG->maxbytes ?? defaults::MAXBYTES,
-                'maxfiles' => EDITOR_UNLIMITED_FILES,
+            'subdirs' => false,
+            'maxbytes' => $CFG->maxbytes ?? defaults::MAXBYTES,
+            'maxfiles' => EDITOR_UNLIMITED_FILES,
         ];
         $newtext = file_save_draft_area_files($commentitemid, $contextid, 'mod_openstudio',
                 self::COMMENT_TEXT_AREA, $commentid, $fileoptions, $commenttext);

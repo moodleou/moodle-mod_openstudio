@@ -1528,6 +1528,7 @@ EOF;
             case 'content_inspire_flagged':
             case 'folder_inspire_flagged':
             case 'content_comment_created':
+            case 'content_comment_edited':
             case 'content_commentreply_created':
             case 'content_comment_flagged':
             case 'folder_comment_created':

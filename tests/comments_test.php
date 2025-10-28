@@ -695,4 +695,83 @@ class comments_test extends \advanced_testcase {
         $this->assertEmpty($comment->deletedby);
         $this->assertEmpty($comment->deletedtime);
     }
+
+    /**
+     * Tests the mod_openstudio\local\api\comments::update() function.
+     *
+     * @covers \mod_openstudio\local\api\comments::update
+     */
+    public function test_comments_api_update(): void {
+        $this->resetAfterTest(true);
+        $singleentrydata = $this->generator->generate_single_data_array($this->users->students->one);
+        $contentdata = $this->generator->generate_content_data(
+            $this->studiolevels, $this->users->students->one->id, $singleentrydata
+        );
+        // Create a comment.
+        $commentid = \mod_openstudio\local\api\comments::create(
+            $contentdata->id, $this->users->students->four->id, 'Original comment'
+        );
+        $this->assertIsInt($commentid);
+        // Update the comment.
+        $updatedtext = 'Updated comment text';
+        $result = \mod_openstudio\local\api\comments::update(
+            $contentdata->id, $commentid, $this->users->students->four->id, $updatedtext
+        );
+        $this->assertEquals($commentid, $result);
+        // Assert: Check the comment text is updated.
+        $getcomment = \mod_openstudio\local\api\comments::get($commentid);
+        $this->assertNotEquals(false, $getcomment);
+        $this->assertEquals($updatedtext, $getcomment->commenttext);
+        $this->assertEquals($this->users->students->four->firstname, $getcomment->firstname);
+    }
+
+    /**
+     * Test update comment API with comment text has images.
+     *
+     * @covers \mod_openstudio\local\api\comments::update
+     */
+    public function test_comments_api_update_comment_text_with_images(): void {
+        global $DB;
+        $this->resetAfterTest(true);
+        $singleentrydata = $this->generator->generate_single_data_array($this->users->students->one);
+        $contentdata = $this->generator->generate_content_data(
+                $this->studiolevels, $this->users->students->one->id, $singleentrydata
+        );
+        // Create a comment.
+        $commentid = \mod_openstudio\local\api\comments::create(
+                $contentdata->id, $this->users->students->four->id, 'Original comment'
+        );
+        $this->assertIsInt($commentid);
+
+        // The function file_save_draft_area_files still uses $USER.
+        $this->setUser($this->users->students->four->id);
+        $filename = 'test1.jpg';
+        [$itemid1, $link1] = test_utils::create_draft_file($filename);
+        [$itemid2] = test_utils::create_draft_file($filename);
+        $updatedtext = '<p>Test image link: <img src="' . $link1 .'"  alt="image"/></p>';
+
+        $result = \mod_openstudio\local\api\comments::update($contentdata->id, $commentid, $this->users->students->four->id,
+                $updatedtext, null, ['id' => $itemid2], $this->studiolevelscontext, $itemid1);
+        $this->assertEquals($commentid, $result);
+
+        $getcomment = \mod_openstudio\local\api\comments::get($commentid);
+        $this->assertNotEquals(false, $getcomment);
+        // Verify that comment text is created with files inside.
+        $this->assertStringContainsString('@@PLUGINFILE@@', $getcomment->commenttext);
+        $this->assertEquals($this->users->students->four->firstname, $getcomment->firstname);
+
+        // Verify that comment file and attachment also stored in files table.
+        $this->assertTrue($DB->record_exists('files', [
+            'itemid' => $commentid,
+            'filearea' => comments::COMMENT_TEXT_AREA,
+            'filename' => $filename,
+            'userid' => $this->users->students->four->id,
+        ]));
+        $this->assertTrue($DB->record_exists('files', [
+            'itemid' => $commentid,
+            'filearea' => 'contentcomment',
+            'filename' => $filename,
+            'userid' => $this->users->students->four->id,
+        ]));
+    }
 }

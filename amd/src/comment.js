@@ -74,6 +74,7 @@ define([
             REPLY_BUTTON: 'input[name="replycommentbutton"]',
             LIKE_BUTTON: '.openstudio-comment-flag-link',
             DELETE_BUTTON: '.openstudio-comment-delete-link',
+            EDIT_BUTTON: '.openstudio-comment-edit-link',
             DELETE_CONFIRM_BUTTON: '.openstudio-comment-delete-btn',
             UNDELETE_BUTTON: '.openstudio-comment-undelete-link',
             UNDELETE_CONFIRM_BUTTON: '.openstudio-comment-undelete-btn',
@@ -85,6 +86,7 @@ define([
             COMMENT_ATTACHMENT: '.openstudio-comment-form-content .filepicker-filename > a', // Attachment.
             COMMENT_FORM_BODY: '.openstudio-comment-form-body',
             COMMENT_POST_BUTTON: '#id_postcomment',
+            COMMENT_CANCEL_BUTTON: '#id_cancel',
             COMMENT_LOADING: '.openstudio-comment-loading',
 
             // Stream.
@@ -133,7 +135,9 @@ define([
                 // Undelete button.
                 .delegate(t.CSS.UNDELETE_BUTTON, 'click', t.undeleteConfirm)
                 // Undelete confirm button.
-                .delegate(t.CSS.UNDELETE_CONFIRM_BUTTON, 'click', t.undeleteComment);
+                .delegate(t.CSS.UNDELETE_CONFIRM_BUTTON, 'click', t.undeleteComment)
+                // Edit button.
+                .delegate(t.CSS.EDIT_BUTTON, 'click', t.showReplyForm);
 
             // Form submit event.
             $(t.CSS.COMMENT_FORM).find('form').on('submit', t.postComment);
@@ -168,44 +172,94 @@ define([
         },
 
         /**
-         * Show reply form
+         * Show reply form.
          *
+         * @param {HTMLElement|jQuery|Event} [el] Optional element or event.
          * @method showReplyForm
          */
-        showReplyForm: function() {
+        showReplyForm: function(el) {
+            el.preventDefault();
             // Hide all comment reply forms.
             $(t.CSS.COMMENT_REPLY_FORM).hide();
             $(t.CSS.COMMENT_FORM).find(t.CSS.COMMENT_FORM_CONTENT).hide();
             // Show add new comment button.
             $(t.CSS.ADD_NEW_BUTTON).show();
-            // Append form to reply form wrapper.
-            var commentid = $(this).data('comment-parent').trim();
-            var replyform = $(t.CSS.COMMENT_THREAD)
-                .filter(function() {
-                    return $(this).data('thread-items') == commentid;
-                })
-                .find(t.CSS.COMMENT_REPLY_FORM);
-            replyform.show();
-            if (!replyform.find('form').length) {
-                var loading = $(t.CSS.COMMENT_LOADING).clone().show();
-                replyform.append(loading); // Show loading.
+            // Determine the triggering element.
+            let $trigger;
+            if (el && el.currentTarget) {
+                // Event object
+                $trigger = $(el.currentTarget);
+            } else if (el) {
+                // DOM element or jQuery object.
+                $trigger = $(el);
+            } else {
+                // Fallback to jQuery event context.
+                $trigger = $(this);
+            }
+            let isEditing = false;
+            let commentId = $trigger.data('comment-parent')?.trim();
+            if (!commentId) {
+                commentId = parseInt($trigger.attr('data-comment-id')?.trim());
+                isEditing = true;
+            }
+            if (!commentId || isNaN(commentId)) {
+                window.console.error('Invalid comment ID for reply/edit');
+                return;
+            }
+            let threadItems = $(t.CSS.COMMENT_THREAD).filter(function() {
+                if (isEditing) {
+                    return String($(this).data('thread-items')) === String($trigger.data('comment-parent-id')?.trim());
+                }
+                return String($(this).data('thread-items')) === String(commentId);
+            });
+            let replyForm = threadItems.find(t.CSS.COMMENT_REPLY_FORM).first();
+            replyForm.show();
+            const currentEditId = replyForm.data('editing-comment-id');
+            // Only reload fragment if:
+            // - Not editing, or
+            // - Editing a different comment, or
+            // - Form is missing.
+            if (!isEditing || !replyForm.find('form').length || currentEditId !== commentId) {
+                const loading = $(t.CSS.COMMENT_LOADING).clone().show();
+                // Show loading.
+                replyForm.append(loading);
                 // Load fragment form.
-                M.util.js_pending('openstudioloadfragmentform');
-                var appendselector = replyform.find(t.CSS.COMMENT_FORM_BODY);
-                t.loadFragmentForm(commentid).then(function(html, js) {
-                    Templates.replaceNodeContents(appendselector, html, js);
-                    appendselector.find('form').submit(function(e) {
+                const pendingPromise = new Pending('mod_openstudio/openstudioloadfragmentform');
+                let appendSelector = replyForm.find(t.CSS.COMMENT_FORM_BODY);
+                t.loadFragmentForm(commentId, isEditing).then(function(html, js) {
+                    Templates.replaceNodeContents(appendSelector, html, js);
+                    if (isEditing) {
+                        appendSelector.find('form').data('edit-comment-id', commentId);
+                    }
+                    appendSelector.find('form').submit(function(e) {
                         e.preventDefault();
                     });
-                    appendselector.find('form').on('submit', t.postComment);
+
+                    appendSelector.find(t.CSS.COMMENT_POST_BUTTON).on('click', function(e) {
+                        e.preventDefault();
+                        if (isEditing) {
+                            t.updateComment.call($(this).closest('form'), e);
+                        } else {
+                            t.postComment.call($(this).closest('form'), e);
+                        }
+                    });
+                    appendSelector.find(t.CSS.COMMENT_CANCEL_BUTTON).on('click', function(e) {
+                        e.preventDefault();
+                        // Hide form and show add button (UI only, no sensitive data exposed).
+                        $(t.CSS.ADD_NEW_BUTTON).show();
+                        $(t.CSS.COMMENT_FORM_CONTENT).hide();
+                        $(t.CSS.COMMENT_REPLY_FORM).hide();
+                        replyForm.removeData('editing-comment-id');
+                        t.resetForm();
+                    });
                     // Remove loading.
-                    replyform.find(t.CSS.COMMENT_LOADING).remove();
-                    M.util.js_complete('openstudioloadfragmentform');
+                    replyForm.find(t.CSS.COMMENT_LOADING).remove();
+                    pendingPromise.resolve();
                 }).then(function(){
-                    t.showReplyFormPostProcess(replyform, commentid);
+                    t.showReplyFormPostProcess(replyForm, commentId, isEditing);
                 }.bind(t)).fail(Notification.exception);
             } else {
-                t.showReplyFormPostProcess(replyform, commentid);
+                t.showReplyFormPostProcess(replyForm, commentId, isEditing);
             }
         },
 
@@ -214,13 +268,16 @@ define([
          *
          * @param {object} replyForm
          * @param {string} commentId
+         * @param {boolean} isEditing
          * @method showReplyFormPostProcess
          */
-        showReplyFormPostProcess: function(replyForm, commentId) {
+        showReplyFormPostProcess: function(replyForm, commentId, isEditing = false) {
             // Adjust form state.
             replyForm.find(t.CSS.COMMENT_FORM_CONTENT).show();
             // Reset form.
-            t.resetForm();
+            if (!isEditing) {
+                t.resetForm();
+            }
             // Assign comment id to inreplyto field.
             replyForm.find('form input[name="inreplyto"]').val(parseInt(commentId));
             // Scroll to form.
@@ -230,15 +287,17 @@ define([
         /**
          * Call web services to get the fragment form, append to the DOM then bind event.
          * @param {string} commentId
+         * @param {boolean} isEditing
          * @return {Promise}
          * @method loadFragmentForm
          */
-        loadFragmentForm: function(commentId) {
+        loadFragmentForm: function(commentId, isEditing) {
             var params = [];
             params.id = t.mconfig.cmid;
             params.cid = t.mconfig.cid;
             params.max_bytes = t.mconfig.max_bytes;
             params.attachmentenable = t.mconfig.attachmentenable;
+            params.isediting = isEditing;
             if (commentId) {
                 params.replyid = commentId;
             }
@@ -330,7 +389,9 @@ define([
                         $(t.CSS.COMMENT_THREAD_BODY).append(res.commenthtml);
 
                         // Scroll to added item.
-                        Scrollto.scrollToEl($('[data-thread-items="' + res.commentid + '"]'), t.HEIGHT_TO_TOP);
+                        setTimeout(function() {
+                            Scrollto.scrollToEl($('[data-thread-items="' + res.commentid + '"]'), t.HEIGHT_TO_TOP);
+                        }, 0);
                     }
 
                     $(t.CSS.COMMENT_THREAD).show();
@@ -623,6 +684,7 @@ define([
                     pendingPromise.resolve();
                 });
         },
+
         /**
          * Create undelete comment dialogue and some events on it.
          *
@@ -671,7 +733,68 @@ define([
             }
 
             return dialogue;
-        }
+        },
+
+        /**
+         * Update comment submit handler.
+         *
+         * @param {Object} e DomEvent
+         * @method updateComment
+         */
+        updateComment: function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            let form = $(this);
+            let commentId = form.data('edit-comment-id');
+            if (!commentId || isNaN(commentId)) {
+                window.console.error('Invalid comment ID for update');
+                return;
+            }
+            let formData = {};
+            $.each(form.serializeArray(), function(i, field) {
+                formData[field.name] = field.value;
+            });
+            let hasAttachment = $(t.CSS.COMMENT_ATTACHMENT).length > 0;
+            if (!hasAttachment && (!formData['commentext[text]'] || formData['commentext[text]'].length === 0)) {
+                return;
+            }
+            const pendingPromise = new Pending('mod_openstudio/openstudioUpdateComment');
+            let promises = Ajax.call([{
+                methodname: 'mod_openstudio_external_edit_comment',
+                args: {
+                    cmid: formData.cmid,
+                    commentid: commentId,
+                    commenttext: formData['commentext[text]'],
+                    commenttextitemid: formData['commentext[itemid]'],
+                    commentattachment: hasAttachment ? formData.commentattachment : 0,
+                }
+            }]);
+            promises[0]
+                .done(function(res) {
+                    // Update comment in DOM
+                    let commentItem = $('[data-thread-item="' + res.commentid + '"]');
+                    if (commentItem.length) {
+                        commentItem.replaceWith(res.commenthtml);
+                        // Scroll to added item.
+                        Scrollto.scrollToEl($('[data-thread-item="' + res.commentid + '"]'), t.HEIGHT_TO_TOP);
+                    }
+
+                    // Trigger oumedia plugin to render audio attachment.
+                    if (window.oump) {
+                        window.oump.harvest();
+                    }
+                    // Reset the 'dirty' flag of the comment form.
+                    FormChangeChecker.resetFormDirtyState($(t.CSS.COMMENT_POST_BUTTON)[0]);
+
+                    // Hide form, show add button
+                    $(t.CSS.COMMENT_FORM_CONTENT).hide();
+                    $(t.CSS.COMMENT_REPLY_FORM).hide();
+                })
+                .always(function() {
+                    pendingPromise.resolve();
+                })
+                .fail(Notification.exception);
+        },
     };
 
     return t;

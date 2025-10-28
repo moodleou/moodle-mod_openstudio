@@ -324,6 +324,15 @@ Feature: View activity completion information in the openstudio activity
     And the "Make posts or comments with minimum word count: 5" completion condition of "Test Open Studio name 1" is displayed as "done"
     And the "Make posts or comments with maximum word count: 10" completion condition of "Test Open Studio name 1" is displayed as "done"
     And the "Make comments: 1" completion condition of "Test Open Studio name 1" is displayed as "done"
+    # Edit comment to change word count and check completion goes back to todo.
+    And I follow "Test My Group Board View 1"
+    And I click on "Edit comment" "link" in the ".openstudio-comment-thread:last-child" "css_element"
+    And I set the field "Comment" to "Test comment 1 2 3 4 5 6 7 8 9 0"
+    And I press "Save changes"
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
+    And the "Make posts or comments with minimum word count: 5" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And the "Make posts or comments with maximum word count: 10" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And the "Make comments: 1" completion condition of "Test Open Studio name 1" is displayed as "todo"
 
   Scenario: Openstudio custom completion completionpostscomments with completionwordcountmin and completionwordcountmax.
     Given the following open studio "instances" exist:

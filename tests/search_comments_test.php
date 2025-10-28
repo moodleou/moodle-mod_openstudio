@@ -166,6 +166,40 @@ class search_comments_test extends \advanced_testcase {
     }
 
     /**
+     * Test that edited comments are indexed using editedtime.
+     *
+     * @covers \mod_openstudio\search\comments::get_recordset_by_timestamp
+     */
+    public function test_edited_comment_uses_editedtime_for_indexing(): void {
+        // Update the comment.
+        \mod_openstudio\local\api\comments::update($this->urlcontentprivate, $this->urlcontentprivatecomment, $this->user->id,
+        'Comment belong to URL content private - edited');
+
+        $comments = new comments();
+        $results = self::recordset_to_array($comments->get_recordset_by_timestamp());
+
+        // Check that function return 3 comments, the ordering is changed due to edited time.
+        $this->assertCount(3, $results);
+        $this->assertEquals('Comment belong to URL content', $results[0]->commenttext);
+        $this->assertEquals('Comment belong to folder content', $results[1]->commenttext);
+        $this->assertEquals('Comment belong to URL content private - edited', $results[2]->commenttext);
+
+        // Also check get_document uses lastmodified.
+        $now = time();
+        $doc = $comments->get_document((object)[
+            'id' => $this->urlcontentcomment,
+            'name' => 'Sample name 1',
+            'openstudioid' => $this->cm->instance,
+            'commenttext' => 'Edited comment text',
+            'commentuser' => $this->user->id,
+            'timemodified' => 0,
+            'lastmodified' => $now,
+            'course' => $this->course->id
+        ]);
+        $this->assertEquals($now, $doc->get('modified'));
+    }
+
+    /**
      * Test check get document.
      */
     public function test_check_get_document_function() {

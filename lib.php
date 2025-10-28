@@ -1185,13 +1185,55 @@ function openstudio_get_coursemodule_info($coursemodule) {
  * @return string
  */
 function mod_openstudio_output_fragment_commentform(array $args): string {
-    $mform = new comment_form(null, [
-            'id' => $args['id'],
-            'cid' => $args['cid'],
-            'max_bytes' => $args['max_bytes'],
-            'attachmentenable' => $args['attachmentenable'],
-            'replyid' => $args['replyid'] ?? '',
-    ]);
+    global $USER;
+    $userid = $USER->id;
+    $editmode = false;
+    if (isset($args['isediting']) && $args['isediting']) {
+        $editmode = true;
+    }
+    $commentid = $args['replyid'] ?? '';
+    // Prepare custom data for the form.
+    $customdata = [
+        'id' => $args['id'],
+        'cid' => $args['cid'],
+        'max_bytes' => $args['max_bytes'],
+        'attachmentenable' => $args['attachmentenable'],
+        'replyid' => $commentid,
+        'isediting' => $editmode,
+    ];
+    // Setup data for edit comment.
+    if ($editmode) {
+        $comment = comments::get($commentid);
+        if (!$comment) {
+            throw new \moodle_exception('errorinvalidcomment', 'openstudio');
+        }
+        // Check user capability to edit comment.
+        if ($comment->userid != $userid) {
+            throw new \moodle_exception('nocommentpermissions', 'openstudio');
+        }
+        $coursedata = util::render_page_init($args['id'], ['mod/openstudio:view']);
+        $cm = $coursedata->cm;
+        $context = \context_module::instance($cm->id);
+        $formvalues = new stdClass;
+        $formvalues->commentext['text'] = $comment->commenttext;
+        $editoroptions = [
+            'maxfiles' => EDITOR_UNLIMITED_FILES,
+            'maxbytes' => $args['max_bytes'],
+        ];
+        $commentext = file_get_submitted_draft_itemid('commenttext');
+        $formvalues->commentext['text'] = file_prepare_draft_area($commentext,
+            $context->id, 'mod_openstudio', 'commenttext', $comment->id, $editoroptions,
+            $formvalues->commentext['text']);
+        $formvalues->commentext['itemid'] = $commentext;
+        $existingfile = comments::get_attachment($commentid);
+        if ($existingfile) {
+            $customdata['commentattachmentexist'] = $existingfile->filename;
+        }
+    }
+    $mform = new comment_form(null, $customdata);
+    if (isset($formvalues)) {
+        $mform->set_data($formvalues);
+    }
     return $mform->render();
 }
 
