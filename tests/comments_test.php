@@ -205,9 +205,13 @@ class comments_test extends \advanced_testcase {
         \mod_openstudio\local\api\comments::create(
                 $this->contentdata->id, $this->users->students->one->id, 'Keep calm and carry on');
 
-        $this->assertEquals(false, \mod_openstudio\local\api\comments::delete($comment1, $this->users->students->three->id, true));
-        $this->assertEquals(true, \mod_openstudio\local\api\comments::delete($comment1, $this->users->students->three->id));
-        $this->assertEquals(true, \mod_openstudio\local\api\comments::delete_all(
+        $result = \mod_openstudio\local\api\comments::delete($comment1, $this->users->students->three->id, true);
+        $this->assertFalse($result);
+        $result = \mod_openstudio\local\api\comments::delete($comment1, $this->users->students->three->id);
+        $this->assertIsObject($result);
+        $this->assertObjectHasProperty('deletedby', $result);
+        $this->assertObjectHasProperty('deletedtime', $result);
+        $this->assertTrue(\mod_openstudio\local\api\comments::delete_all(
                 $this->contentdata->id, $this->users->students->three->id));
         $this->assertEquals(0, \mod_openstudio\local\api\comments::total_for_user($this->studiolevels->id,
                 $this->users->students->three->id));
@@ -649,5 +653,46 @@ class comments_test extends \advanced_testcase {
         $this->assertEquals(6,
                 iterator_count(\mod_openstudio\local\api\comments::get_for_content($contentid, $this->users->students->three->id, 0,
                         false, $groupings->a->id, null, false)));
+    }
+
+    /**
+     * Test that replies remain visible after parent comment is deleted.
+     */
+    public function test_replies_remain_visible_after_parent_deletion(): void {
+        $this->setUser($this->users->students->one);
+        $this->getDataGenerator()->create_module('openstudio', ['course' => $this->course->id, 'idnumber' => 'OS1']);
+        $contentid = $this->generator->create_contents([
+            'openstudio' => 'OS1',
+            'userid' => $this->users->students->one->id,
+            'name' => 'Test Content',
+            'description' => 'Test',
+        ]);
+        $parentid = \mod_openstudio\local\api\comments::create($contentid, $this->users->students->one->id, 'Parent comment');
+        $replyid = \mod_openstudio\local\api\comments::create($contentid, $this->users->students->two->id, 'Reply comment', null, null, null, $parentid);
+        \mod_openstudio\local\api\comments::delete($parentid, $this->users->students->one->id);
+        // Reply should still be visible to all users.
+        $this->setUser($this->users->students->three);
+        $reply = \mod_openstudio\local\api\comments::get($replyid, $this->users->students->three->id);
+        $this->assertEquals($replyid, $reply->id);
+    }
+
+    /**
+     * Test undelete comment functionality.
+     */
+    public function test_undelete_comment(): void {
+        $this->setUser($this->users->students->one);
+        $this->getDataGenerator()->create_module('openstudio', ['course' => $this->course->id, 'idnumber' => 'OS1']);
+        $contentid = $this->generator->create_contents([
+            'openstudio' => 'OS1',
+            'userid' => $this->users->students->one->id,
+            'name' => 'Test Content',
+            'description' => 'Test',
+        ]);
+        $commentid = \mod_openstudio\local\api\comments::create($contentid, $this->users->students->one->id, 'Test comment');
+        \mod_openstudio\local\api\comments::delete($commentid, $this->users->students->one->id);
+        \mod_openstudio\local\api\comments::undelete($commentid);
+        $comment = \mod_openstudio\local\api\comments::get($commentid);
+        $this->assertEmpty($comment->deletedby);
+        $this->assertEmpty($comment->deletedtime);
     }
 }

@@ -109,9 +109,9 @@ class comments {
      * @param int $commentid Comment to delete.
      * @param int $userid User deleting the comment.
      * @param bool $checkpermissions If true, check that the user is the author of the comment.
-     * @return bool Return true if delete is successful, false otherwise.
+     * @return object|false Return deleted comment record data with user details.
      */
-    public static function delete($commentid, $userid, $checkpermissions = false) {
+    public static function delete(int $commentid, int $userid, bool $checkpermissions = false): object|false {
         global $DB;
 
         try {
@@ -131,13 +131,8 @@ class comments {
             if ($result === false) {
                 throw new \Exception('Failed to soft delete comment.');
             }
-            // Delete child comments with parent's ID.
-            $DB->execute("UPDATE {openstudio_comments}
-                            SET deletedby = ?, deletedtime = ?
-                          WHERE inreplyto = ?
-                 ", [$userid, time(), $commentid]);
 
-            return true;
+            return $commentdata;
         } catch (\Exception $e) {
             return false;
         }
@@ -626,5 +621,27 @@ EOF;
                 JOIN {groups_members} gm2 ON gm2.groupid = gm1.groupid AND gm2.userid = ?
 EOF;
         return sprintf($sql, $alias) ;
+    }
+
+    /**
+     * Undelete comment.
+     *
+     * @param int $commentid Comment to undelete.
+     * @return bool Return true if undelete successful.
+     */
+    public static function undelete(int $commentid): bool {
+        global $DB;
+
+        try {
+            $sql = "UPDATE {openstudio_comments} 
+                SET deletedby = NULL, deletedtime = NULL 
+                WHERE id = :commentid";
+
+            $DB->execute($sql, ['commentid' => $commentid]);
+            return true;
+        } catch (\dml_exception $e) {
+            debugging('Failed to undelete comment: ' . $e->getMessage(), DEBUG_DEVELOPER);
+            return false;
+        }
     }
 }

@@ -1432,6 +1432,10 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) .openstudio-comm
     padding-bottom: 5px;
 }
 
+.openstudio-deleted-comment .openstudio-comment-text {
+    color: #a5a5a5;
+}
+
 .openstudio-comment-text video {
     max-width: 100%;
 }
@@ -1496,6 +1500,7 @@ body.path-mod-openstudio #region-main .mform:not(.unresponsive) .openstudio-comm
     margin-right: 11px;
 }
 
+.openstudio-comment-metadata .openstudio-hidden,
 .openstudio-comment-flag-status.openstudio-hidden {
     display: none;
 }

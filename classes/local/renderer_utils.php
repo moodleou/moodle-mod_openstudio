@@ -1687,7 +1687,7 @@ class renderer_utils {
             $contentdata->commentform = $commentform->render();
 
             // Get content comments in order.
-            $commenttemp = comments::get_for_content($contentdata->id, $USER->id, 0, false,
+            $commenttemp = comments::get_for_content($contentdata->id, $USER->id, 0, true,
                     $permissions->groupingid, $contentdata->visibility, $permissions->managecontent);
             $comments = [];
             $commentthreads = [];
@@ -1747,6 +1747,12 @@ class renderer_utils {
                             $commentthreads[$parentid] = [];
                         }
                         $commentthreads[$parentid][] = $comment;
+                    }
+
+                    $comment->canundelete = $permissions->managecontent;
+                    $comment->isdeleted = (bool)$comment->deletedtime;
+                    if ($comment->isdeleted) {
+                        $comment->deletemessage = self::get_delete_message_content($comment);
                     }
                 }
                 // Returns all the values from the array and indexes the array numerically.
@@ -1948,5 +1954,31 @@ class renderer_utils {
             }
         }
         return $content->name;
+    }
+
+    /**
+     * Get delete message content.
+     *
+     * @param \stdClass $content Content object containing deletedby and deletedtime
+     * @return string
+     * @throws \coding_exception
+     */
+    public static function get_delete_message_content(\stdClass $content): string {
+        if (empty($content->deletedby) || empty($content->deletedtime)) {
+            throw new \coding_exception('Content object must contain deletedby and deletedtime properties');
+        }
+        $deletedby = $content->deletedby;
+        $deletedtime = $content->deletedtime;
+
+        $user = user::get_user_by_id($deletedby);
+        $a = new \stdClass;
+        $a->date = userdate($deletedtime);
+        $profileurl = new \moodle_url('/user/view.php', [
+            'id' => $deletedby,
+        ]);
+        $userfullname = fullname($user);
+        $a->user = \html_writer::link($profileurl, s($userfullname));
+
+        return get_string('deletedbyuser', 'openstudio', $a);
     }
 }

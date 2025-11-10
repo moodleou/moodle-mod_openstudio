@@ -363,6 +363,34 @@ class search_comments_test extends \advanced_testcase {
     }
 
     /**
+     * Test that deleted comments are not indexed in search, but restored comments and visible replies are indexed.
+     */
+    public function test_search_index_excludes_deleted_comments_and_includes_restored_and_visible_replies() {
+        $this->setAdminUser();
+
+        // Create a parent comment and a reply.
+        $parentcommentid = \mod_openstudio\local\api\comments::create($this->urlcontent, $this->user->id, 'Parent comment for search test');
+        $replycommentid = \mod_openstudio\local\api\comments::create($this->urlcontent, $this->user->id, 'Reply to parent', $parentcommentid);
+
+        // Ddelete the parent comment.
+        \mod_openstudio\local\api\comments::delete($parentcommentid, $this->user->id);
+
+        // Simulate search index: parent should not be indexed, reply should be indexed.
+        $comments = new \mod_openstudio\search\comments();
+        $parentaccess = $comments->check_access($parentcommentid);
+        $replyaccess = $comments->check_access($replycommentid);
+        $this->assertEquals(\core_search\manager::ACCESS_DELETED, $parentaccess, 'Deleted parent comment should not be indexed');
+        $this->assertEquals(\core_search\manager::ACCESS_GRANTED, $replyaccess, 'Visible reply should be indexed');
+
+        // Undelete the parent comment.
+        \mod_openstudio\local\api\comments::undelete($parentcommentid);
+
+        // Simulate search index: parent should be indexed again.
+        $parentaccessrestored = $comments->check_access($parentcommentid);
+        $this->assertEquals(\core_search\manager::ACCESS_GRANTED, $parentaccessrestored, 'Restored parent comment should be indexed');
+    }
+
+    /**
      * Converts recordset to array, indexed numberically (0, 1, 2).
      *
      * @param \moodle_recordset $rs Record set to convert

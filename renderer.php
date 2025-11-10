@@ -1002,10 +1002,14 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      * @return string The rendered HTML fragment.
      */
     public function content_comment($commentdata) {
-        if ($commentdata->inreplyto) {
+        if ($commentdata->inreplyto && !$commentdata->deletedtime) {
             // Added comment is to reply to parent comment.
             return $this->render_from_template('mod_openstudio/comment_item_block', $commentdata);
-        } else {
+        } elseif ($commentdata->deletedtime) {
+            // Added comment is deleted comment or undeleted comment.
+            return $this->render_from_template('mod_openstudio/comment_section', $commentdata);
+        }
+        else {
             // Added comment is to open new comment stream.
             return $this->render_from_template('mod_openstudio/comment_thread_block', $commentdata);
         }

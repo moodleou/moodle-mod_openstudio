@@ -84,34 +84,6 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     And I click on "Delete" "button" in the "Delete comment" "dialogue"
     Then I should not see "Comment text reply 2"
 
-  @javascript
-  Scenario: Reply comment must be delete when the parent comment deleted in comment box
-    And I am on the "Sharing Studio" "openstudio activity" page logged in as "student1"
-    # Add new comment.
-    And I follow "Student slot 1"
-    And I press "Add new comment"
-    And I set the field "Comment" to "Comment text"
-    And I wait until the page is ready
-    And I press "Post comment"
-    # Reply comment.
-    And I press "Reply"
-    And I set the field "Comment" to "Comment text reply"
-    And I press "Post comment"
-
-    And I follow "Shared Content"
-    When I click on "//a[@class='show-popup-comment' and descendant::img[@class='openstudio-grid-item-content-detail-info-icon' and @alt='Comments']][1]" "xpath_element"
-    # Verify the parent comment and its reply are visible in comment box.
-    Then I should see "Comments on this post"
-    And I should see "Comment text"
-    And I should see "Comment text reply"
-    And I follow "Student slot 1"
-    And I follow "Delete comment"
-    And I click on "Delete" "button" in the "Delete comment" "dialogue"
-    And I follow "Shared Content"
-    When I click on "//a[@class='show-popup-comment' and descendant::img[@class='openstudio-grid-item-content-detail-info-icon' and @alt='Comments']][1]" "xpath_element"
-    # Verify the parent comment and its reply have been deleted in comment box.
-    Then I should see "There are no comments."
-
   @_file_upload @javascript @editor_tiny
   Scenario: Comment editor should have browse repositories.
     When I log in as "student1"
@@ -134,3 +106,25 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     # Post comment.
     And I press "Post comment"
     Then "//img[contains(@src, '/test2.jpg') and @alt='An image']" "xpath_element" should exist
+
+  Scenario: Student deletes comment, replies remain visible, moderator sees deleted comment
+    Given I am on the "Sharing Studio" "openstudio activity" page logged in as "student1"
+    And I follow "Student slot 1"
+    And I press "Add new comment"
+    And I set the field "Comment" to "Parent comment to be deleted"
+    And I press "Post comment"
+    And I press "Reply"
+    And I set the field "Comment" to "Reply to parent"
+    And I press "Post comment"
+    And I click on "//span[contains(@class, 'openstudio-comment-delete-long-link')][1]" "xpath_element"
+    When I click on "Delete" "button" in the "Delete comment" "dialogue"
+    Then I should not see "Parent comment to be deleted"
+    And I should not see "Undelete"
+    And I should see "Reply to parent"
+    And I log out
+    And I am on the "Sharing Studio" "openstudio activity" page logged in as "admin"
+    And I follow "Student slot 1"
+    And I should see "This comment was deleted by Student 1"
+    And I should see "Undelete"
+    And I should see "Parent comment to be deleted" in the ".openstudio-deleted-comment" "css_element"
+    And I should see "Reply to parent"

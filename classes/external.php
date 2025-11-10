@@ -892,7 +892,7 @@ class mod_openstudio_external extends external_api {
 
                     // Check comment like setting enabled.
                     $commentdata->contentcommentlikeenabled = in_array(flags::COMMENT_LIKE, $flagsenabled);
-
+                    $commentdata->canundelete = $permissions->managecontent;
                     $commenthtml = $renderer->content_comment($commentdata);
 
                     $transaction->allow_commit();
@@ -1098,7 +1098,7 @@ class mod_openstudio_external extends external_api {
     public static function delete_comment_parameters() {
         return new external_function_parameters(array(
                 'cmid' => new external_value(PARAM_INT, 'Course module ID'),
-                'commentid' => new external_value(PARAM_INT, 'Comment ID'))
+                'commentid' => new external_value(PARAM_INT, 'Comment ID')),
         );
     }
 
@@ -1133,19 +1133,32 @@ class mod_openstudio_external extends external_api {
 
         // Validate locking status.
         self::validate_locking_status($comment->contentid, lock::COMMENT);
-
+        $deletedcommenthtml = '';
         if ($actionallowed) {
             try {
                 if ($comment) {
-                    $allreplyusers = !$comment->inreplyto
-                            ? comments::get_all_users_from_root_comment_id($params['commentid'], COMPLETION_UNKNOWN)
-                            : [];
-                    $success = comments::delete($params['commentid'], $userid);
+                    $deletedcomment = comments::delete($params['commentid'], $userid);
                     notifications::delete_unread_for_comment($params['commentid']);
-                    if (!$success) {
+                    $renderer = util::get_renderer();
+                    $deletedcomment->canundelete = $permissions->managecontent;
+                    $deletedcomment->deletemessage = renderer_utils::get_delete_message_content($deletedcomment);
+                    $deletedcomment->isdeleted = true;
+                    $deletedcommenthtml = $renderer->content_comment($deletedcomment);
+                    if (!$deletedcomment) {
                         throw new \moodle_exception('commenterror', 'openstudio');
                     }
-                    custom_completion::update_completion($cm, $comment->userid, COMPLETION_INCOMPLETE, $allreplyusers);
+                    custom_completion::update_completion($cm, $comment->userid, COMPLETION_INCOMPLETE);
+                    // Log the comment deletion event.
+                    $eventurl = new moodle_url('/mod/openstudio/content.php', ['id' => $params['cmid'], 'sid' => $params['commentid']]);
+                    util::trigger_event(
+                            $params['cmid'],
+                            'content_comment_deleted',
+                            $comment->contentid,
+                            $eventurl,
+                            '',
+                            null,
+                            $params['commentid'],
+                    );
                 } else {
                     throw new \moodle_exception('errorinvalidcomment', 'openstudio');
                 }
@@ -1157,9 +1170,9 @@ class mod_openstudio_external extends external_api {
             // No permision.
             throw new \moodle_exception('nocommentpermissions', 'openstudio');
         }
-
         return [
-            'commentid' => $params['commentid']
+            'commentid' => $params['commentid'],
+            'deletedcommenthtml' => $deletedcommenthtml,
         ];
     }
 
@@ -1169,8 +1182,10 @@ class mod_openstudio_external extends external_api {
      * @return external_description
      */
     public static function delete_comment_returns() {
-        return new external_single_structure(array(
-                'commentid' => new external_value(PARAM_INT, 'Deleted comment ID'))
+        return new external_single_structure([
+                'commentid' => new external_value(PARAM_INT, 'Deleted comment ID'),
+                'deletedcommenthtml' => new external_value(PARAM_RAW, 'Deleted comment content HTML'),
+            ]
         );
     }
     /**
@@ -1824,5 +1839,102 @@ class mod_openstudio_external extends external_api {
      */
     public static function unlock_override_activity_returns() {
         return new external_value(PARAM_BOOL, 'Unlock override successfully');
+    }
+
+    /**
+     * Returns description of method parameters.
+     *
+     * @return external_function_parameters
+     */
+    public static function undelete_comment_parameters(): external_function_parameters {
+        return new external_function_parameters([
+            'cmid' => new external_value(PARAM_INT, 'Course module ID'),
+            'commentid' => new external_value(PARAM_INT, 'Comment ID'),
+        ]);
+    }
+
+    /**
+     * Returns description of method result value.
+     *
+     * @return external_description
+     */
+    public static function undelete_comment_returns(): external_description {
+        return new external_single_structure([
+            'commentid' => new external_value(PARAM_INT, 'Undeleted comment ID'),
+            'commenthtml' => new external_value(PARAM_RAW, 'Undeleted comment HTML'),
+        ]);
+    }
+    
+    /**
+     * Undelete comment.
+     *
+     * @param int $cmid Course module ID
+     * @param int $commentid Comment ID
+     * @return array
+     *  [
+     *      commentid: int,
+     *      commenthtml: string,
+     *  ]
+     * @throws moodle_exception
+     */
+    public static function undelete_comment(int $cmid, int $commentid): array {
+        // Validate input parameters.
+        $params = self::validate_parameters(self::undelete_comment_parameters(), [
+            'cmid' => $cmid,
+            'commentid' => $commentid,
+        ]);
+        // Init and check permission.
+        $coursedata = util::render_page_init($params['cmid'], ['mod/openstudio:managecontent']);
+
+        if (!$coursedata->permissions->managecontent) {
+            throw new \moodle_exception('nocommentpermissions', 'openstudio');
+        }
+
+        // Retrieve and validate comment.
+        $comment = comments::get($params['commentid'], null, true);
+
+        if (!$comment) {
+            throw new \moodle_exception('errorinvalidcomment', 'openstudio');
+        }
+        // Validate locking status.
+        self::validate_locking_status($comment->contentid, lock::COMMENT);
+
+        // Perform undelete operation.
+        try {
+            $success = comments::undelete($params['commentid']);
+
+            if (!$success) {
+                throw new \moodle_exception('commenterror', 'openstudio');
+            }
+
+            // Log the comment undeletion event.
+            $eventurl = new moodle_url('/mod/openstudio/content.php', ['id' => $params['cmid'], 'sid' => $params['commentid']]);
+            util::trigger_event(
+                $params['cmid'],
+                'content_comment_undeleted',
+                $comment->contentid,
+                $eventurl,
+                '',
+                null,
+                $params['commentid'],
+            );
+
+            // Update completion status.
+            custom_completion::update_completion(
+                $coursedata->cm,
+                $comment->userid,
+                COMPLETION_COMPLETE,
+            );
+
+            return [
+                'commentid' => $params['commentid'],
+                'commenthtml' => util::get_renderer()->content_comment($comment),
+            ];
+
+        } catch (\dml_exception $e) {
+            // Log database errors for debugging.
+            debugging('Database error undeleting comment: ' . $e->getMessage(), DEBUG_DEVELOPER);
+            throw new \moodle_exception('commenterror', 'openstudio', '', $e->getMessage());
+        }
     }
 }

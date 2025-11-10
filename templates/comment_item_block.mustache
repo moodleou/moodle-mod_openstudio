@@ -39,7 +39,10 @@
         "userhasflagged": "0",
         "deleteenable": "true",
         "reportenable": "false",
-        "userpicturehtml": "<span class="userinitials size-16">AU</span>"
+        "userpicturehtml": "<span class="userinitials size-16">AU</span>",
+        "isdeleted": false,
+        "canundelete": false,
+        "deletemessage": "",
     }
 }}
 <div class="openstudio-comment-thread-item clearfix" data-thread-item="{{id}}" id="openstudio-comment-{{id}}">
@@ -57,9 +60,7 @@
             <span class="openstudio-comment-time">{{timemodified}}</span>
         </div>
     </div>
-    <div class="openstudio-comment-rightcolumn openstudio-comment-text">
-        {{{commenttext}}}
-    </div>
+    {{>mod_openstudio/comment_section}}
     <div class="openstudio-comment-metadata">
         {{#donotexport}}
             <div class="openstudio-comment-leftcolumn">
@@ -68,7 +69,8 @@
                     {{^inreplyto}} {{id}} {{/inreplyto}}"
                        value="{{#str}} contentcommentsreply, mod_openstudio {{/str}}"
                        class="openstudio-content-actions osep-smallbutton btn btn-secondary
-                    {{#contentcommentlocked}} locked {{/contentcommentlocked}}"
+                    {{#contentcommentlocked}} locked {{/contentcommentlocked}}
+                    {{#isdeleted}} openstudio-hidden {{/isdeleted}}"
                 >
             </div>
         {{/donotexport}}
@@ -138,7 +140,8 @@
                     {{/flagcount}}
                     {{#donotexport}}
                         <a class="openstudio-comment-flag-link openstudio-content-actions
-                                {{#contentcommentlocked}} locked {{/contentcommentlocked}}"
+                                {{#contentcommentlocked}} locked {{/contentcommentlocked}}
+                                {{#isdeleted}} openstudio-hidden {{/isdeleted}}"
                            href="" data-comment-id="{{id}}">
                                 <span class="openstudio-comment-like-long-link {{#userhasflagged}}openstudio-hidden{{/userhasflagged}}">
                                     {{#str}} contentcommentlike, mod_openstudio {{/str}}
@@ -160,8 +163,19 @@
             {{#deleteenable}}
                 {{#donotexport}}
                     <div class="openstudio-comment-action">
+                        {{#canundelete}}
+                            <a class="openstudio-comment-undelete-link openstudio-content-actions
+                                {{#contentcommentlocked}} locked {{/contentcommentlocked}}
+                                {{^isdeleted}} openstudio-hidden {{/isdeleted}}"
+                               href="" data-comment-id="{{id}}">
+                                <span class="openstudio-comment-undelete-comment-link">
+                                    {{#str}} undeletecomment, mod_openstudio {{/str}}
+                                </span>
+                            </a>
+                        {{/canundelete}}
                         <a class="openstudio-comment-delete-link openstudio-content-actions
-                            {{#contentcommentlocked}} locked {{/contentcommentlocked}}"
+                        {{#contentcommentlocked}} locked {{/contentcommentlocked}}
+                        {{#isdeleted}} openstudio-hidden {{/isdeleted}}"
                            href="" data-comment-id="{{id}}">
                             <span class="openstudio-comment-delete-long-link">
                                 {{#str}} contentcommentsdelete, mod_openstudio {{/str}}
@@ -176,7 +190,8 @@
             {{#reportenable}}
                 <div class="openstudio-comment-action">
                     <a class="openstudio-comment-report-link openstudio-content-actions
-                        {{#contentcommentlocked}} locked {{/contentcommentlocked}}"
+                        {{#contentcommentlocked}} locked {{/contentcommentlocked}}
+                        {{#isdeleted}} openstudio-hidden {{/isdeleted}}"
                        href="{{reportabuselink}}">
                         <span class="openstudio-comment-report-long-link">
                             {{#str}} contentcommentsreport, mod_openstudio {{/str}}

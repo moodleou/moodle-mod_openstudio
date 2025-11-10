@@ -1598,6 +1598,15 @@ EOF;
                 $event = \mod_openstudio\event\content_scheduled_unlocked::create($params);
                 break;
 
+            case 'content_comment_undeleted':
+            case 'content_comment_deleted':
+                if (!isset($params['other']['commentid']) && isset($objectid)) {
+                    $params['other']['commentid'] = $objectid;
+                }
+                $event = $eventclass::create($params);
+                break;
+
+
             default:
                 $event = false;
                 break;

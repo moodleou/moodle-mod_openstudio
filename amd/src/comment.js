@@ -35,8 +35,9 @@ define([
     'core/templates',
     'mod_openstudio/osdialogue',
     'core/modal_events',
+    'core/pending',
 ], function($, Ajax, Str, Scrollto, Notification, FormChangeChecker,
-            Fragment, Templates, osDialogue, ModalEvents) {
+            Fragment, Templates, osDialogue, ModalEvents, Pending) {
     var t;
     t = {
 
@@ -55,6 +56,11 @@ define([
         dialogue: null,
 
         /**
+         * Undelete comment dialogue instance.
+         */
+        undeletedialogue: null,
+
+        /**
          * Height from DOMElement to top browser.
          */
         HEIGHT_TO_TOP: 100,
@@ -69,6 +75,8 @@ define([
             LIKE_BUTTON: '.openstudio-comment-flag-link',
             DELETE_BUTTON: '.openstudio-comment-delete-link',
             DELETE_CONFIRM_BUTTON: '.openstudio-comment-delete-btn',
+            UNDELETE_BUTTON: '.openstudio-comment-undelete-link',
+            UNDELETE_CONFIRM_BUTTON: '.openstudio-comment-undelete-btn',
 
             // Forms.
             COMMENT_FORM_CONTENT: '.openstudio-comment-form-content',
@@ -104,10 +112,10 @@ define([
          * @param {JSON} options  The settings for this feature.
          */
         init: async function(options) {
-
             t.mconfig = options;
 
             t.dialogue = await t.createDeleteCommentDialogue();
+            t.undeletedialogue = await t.createUndeleteCommentDialogue();
 
             // Click event on buttons.
             // Add new button.
@@ -121,7 +129,11 @@ define([
                 // Delete button.
                 .delegate(t.CSS.DELETE_BUTTON, 'click', t.deleteConfirm)
                 // Delete confirm button.
-                .delegate(t.CSS.DELETE_CONFIRM_BUTTON, 'click', t.deleteComment);
+                .delegate(t.CSS.DELETE_CONFIRM_BUTTON, 'click', t.deleteComment)
+                // Undelete button.
+                .delegate(t.CSS.UNDELETE_BUTTON, 'click', t.undeleteConfirm)
+                // Undelete confirm button.
+                .delegate(t.CSS.UNDELETE_CONFIRM_BUTTON, 'click', t.undeleteComment);
 
             // Form submit event.
             $(t.CSS.COMMENT_FORM).find('form').on('submit', t.postComment);
@@ -415,48 +427,12 @@ define([
         deleteComment: function() {
             var commentid = parseInt($(this).attr('data-comment-id'));
 
-            M.util.js_pending('openstudioDeleteComment');
-            var promises = Ajax.call([{
-                methodname: 'mod_openstudio_external_delete_comment',
-                args: {
-                    cmid: t.mconfig.cmid,
-                    commentid: commentid
-                }
-            }]);
+            if (!commentid || isNaN(commentid)) {
+                window.console.error('Invalid comment ID for deletion');
+                return;
+            }
 
-            promises[0]
-                .done(function() {
-                    var commenttream = $('[data-thread-items="' + commentid + '"]');
-                    var replyitem = $('[data-thread-item="' + commentid + '"]');
-
-                    if (commenttream.length > 0) {
-                        // Removing comment thread means reply items of it removed also.
-                        commenttream.remove();
-                    } else {
-                        // Remove reply item.
-                        replyitem.remove();
-                    }
-
-                    // Check if there is a comment thread at least.
-                    if ($('div[data-thread-items]').length == 0) {
-                        // If there is no comment thread, then hide comment feature in UI.
-                        $(t.CSS.COMMENT_THREAD).hide();
-                    }
-
-                    // Set focus on comment form.
-                    t.dialogue.getRoot().on(ModalEvents.hidden, () =>  {
-                        $('#openstudio_comment_form').focus();
-                    });
-
-                    // Hide delete dialogue.
-                    t.dialogue.hide();
-                })
-                .always(function() {
-                    M.util.js_complete('openstudioDeleteComment');
-                })
-                .fail(function(ex) {
-                    window.console.error('Log request failed ' + ex.message);
-                });
+            t.handleCommentOperation(commentid, true, t.dialogue);
         },
 
         /**
@@ -524,6 +500,178 @@ define([
                 $(t.CSS.DELETE_CONFIRM_BUTTON).attr('data-comment-id', $(this).data('comment-id'));
             }
         },
+
+        /**
+         * Undelete confirmation.
+         *
+         * @param {Object} e DomEvent
+         * @method undeleteConfirm
+         */
+        undeleteConfirm: function(e) {
+            e.preventDefault();
+            if (t.undeletedialogue) {
+                // Show undelete dialogue.
+                t.undeletedialogue.show();
+                // Update comment id for undelete button.
+                $(t.CSS.UNDELETE_CONFIRM_BUTTON).attr('data-comment-id', $(this).data('comment-id'));
+            }
+        },
+
+        /**
+         * Undelete comment.
+         *
+         * @method undeleteComment
+         */
+        undeleteComment: function () {
+            const commentid = parseInt($(this).attr('data-comment-id'));
+
+            if (!commentid || isNaN(commentid)) {
+                window.console.error('Invalid comment ID for undeletion');
+                return;
+            }
+
+            t.handleCommentOperation(commentid, false, t.undeletedialogue);
+        },
+
+        /**
+         * Update comment button visibility based on deletion state.
+         *
+         * @param {jQuery} $comment The comment element
+         * @param {boolean} isDeleted Whether the comment is deleted
+         * @method updateCommentButtons
+         */
+        updateCommentButtons: function($comment, isDeleted) {
+            const $undeleteBtn = $comment.find(t.CSS.UNDELETE_BUTTON);
+            const $deleteBtn = $comment.find(t.CSS.DELETE_BUTTON);
+            const $replyBtn = $comment.find(t.CSS.REPLY_BUTTON);
+            const $likeBtn = $comment.find(t.CSS.LIKE_BUTTON);
+
+            if (isDeleted) {
+                $undeleteBtn.removeClass('openstudio-hidden');
+                $deleteBtn.add($replyBtn).add($likeBtn).addClass('openstudio-hidden');
+            } else {
+                $undeleteBtn.addClass('openstudio-hidden');
+                $deleteBtn.add($replyBtn).add($likeBtn).removeClass('openstudio-hidden');
+            }
+        },
+
+        /**
+         * Handle comment deletion/undeletion operation.
+         *
+         * @param {number} commentid Comment ID
+         * @param {boolean} isDelete True for delete, false for undelete
+         * @param {Modal} dialogue The modal dialogue to hide after success
+         * @method handleCommentOperation
+         */
+        handleCommentOperation: function(commentid, isDelete, dialogue) {
+            const operation = isDelete ? 'Delete' : 'Undelete';
+            const methodname = 'mod_openstudio_external_' + (isDelete ? 'delete' : 'undelete') + '_comment';
+            const pendingKey = `openstudio${operation}Comment`;
+            const pendingPromise = new Pending(pendingKey);
+
+            Ajax.call([{
+                methodname: methodname,
+                args: {
+                    cmid: t.mconfig.cmid,
+                    commentid: commentid,
+                }
+            }])[0]
+                .done(function(data) {
+                    const $targetComment = $('[data-thread-item="' + commentid + '"]');
+
+                    if (!$targetComment.length) {
+                        window.console.error('Comment element not found: ' + commentid);
+                        return;
+                    }
+
+                    const selector = isDelete ? '.openstudio-comment-text' : '.openstudio-deleted-comment';
+                    const htmlContent = isDelete ? data.deletedcommenthtml : data.commenthtml;
+                    const $commentText = $targetComment.find(selector);
+
+                    if (!$commentText.length) {
+                        window.console.error('Comment text element not found');
+                        return;
+                    }
+
+                    if (!htmlContent) {
+                        window.console.error('Invalid server response: missing HTML content');
+                        return;
+                    }
+
+                    // Update comment content.
+                    Templates.replaceNode($commentText, htmlContent, '');
+
+                    // Update button visibility.
+                    t.updateCommentButtons($targetComment, isDelete);
+
+                    // Set focus on comment form when modal closes.
+                    dialogue.getRoot().one(ModalEvents.hidden, function() {
+                        $('#openstudio_comment_form').focus();
+                    });
+
+                    // Hide dialogue.
+                    dialogue.hide();
+                })
+                .fail(function(ex) {
+                    window.console.error(operation + ' comment request failed: ' + ex.message);
+                    Notification.addNotification({
+                        message: ex.message,
+                        type: 'error'
+                    });
+                })
+                .always(function() {
+                    pendingPromise.resolve();
+                });
+        },
+        /**
+         * Create undelete comment dialogue and some events on it.
+         *
+         * @method createUndeleteCommentDialogue
+         * @returns {Promise<Modal>}
+         */
+        createUndeleteCommentDialogue: async function() {
+            const folderClass = t.mconfig.folder ? 'openstudio-folder' : '';
+
+            const dialogue = await osDialogue.create({
+                isVerticallyCentered: true,
+                templateContext: {
+                    extraClasses: t.CSS.BOUNDING_BOX.replace('.', '') + ' ' + folderClass,
+                },
+            });
+
+            const cancelBtnProperty = {
+                name: 'cancel',
+                classNames: 'openstudio-cancel-btn',
+                action: 'hide',
+            };
+
+            const undeleteBtnProperty = {
+                name: 'undelete',
+                classNames: t.CSS.UNDELETE_CONFIRM_BUTTON.replace('.', ''),
+            };
+
+            try {
+                const strings = await Str.get_strings([
+                    {key: 'contentcommentundelete', component: 'mod_openstudio'},
+                    {key: 'modulejsdialogcommentundeleteconfirm', component: 'mod_openstudio'},
+                    {key: 'modulejsdialogcancel', component: 'mod_openstudio'},
+                    {key: 'undeletecomment', component: 'mod_openstudio'},
+                ]);
+
+                cancelBtnProperty.label = strings[2];
+                undeleteBtnProperty.label = strings[3];
+
+                dialogue.setTitle('<span class="openstudio-dialogue-common-header ' +
+                    t.CSS.DIALOG_HEADER.replace('.', '') + '">' + strings[0] + '</span>');
+                dialogue.setBody(strings[1]);
+                dialogue.addButton(undeleteBtnProperty, ['footer']);
+                dialogue.addButton(cancelBtnProperty, ['footer']);
+            } catch (error) {
+                window.console.error('Failed to load dialogue strings:', error);
+            }
+
+            return dialogue;
+        }
     };
 
     return t;
