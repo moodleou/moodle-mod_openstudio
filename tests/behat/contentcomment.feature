@@ -45,6 +45,7 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     And I wait until the page is ready
     And I upload "mod/openstudio/tests/importfiles/test.mp3" file to "Attach an audio (MP3 file) as comment" filemanager
     And I press "Post comment"
+    And I wait until the page is ready
     Then I should see "Comment text"
 
     # Edit comment.
@@ -76,6 +77,7 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     And I press "Reply"
     And I set the field "Comment" to "Comment text reply"
     And I press "Post comment"
+    And I wait until the page is ready
     Then I should see "Comment text reply"
 
     # Reply other user's comment
@@ -89,6 +91,7 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     And I press "Reply"
     And I set the field "Comment" to "Comment text reply 2"
     And I press "Post comment"
+    And I wait until the page is ready
     Then I should see "Comment text reply 2"
     And I wait until the page is ready
 
