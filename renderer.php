@@ -1288,10 +1288,10 @@ class mod_openstudio_renderer extends plugin_renderer_base {
     /**
      * Adds the import button to a toolbar at bottom of the page.
      *
-     * @param \moodle_url $url URL for button target (null if implemented only in JS)
+     * @param \moodle_url|null $url URL for button target (null if implemented only in JS)
      * @param string $text Optional text label (HTML) if not using default
      */
-    public function add_import_button(\moodle_url $url = null, $text = null) {
+    public function add_import_button(?\moodle_url $url = null, $text = null) {
         // This function is empty and for theme renderers to override.
     }
 

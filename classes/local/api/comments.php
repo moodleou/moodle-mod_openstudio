@@ -110,14 +110,14 @@ class comments {
      * @param int $commentid Comment id.
      * @param int $userid Creator of the comment.
      * @param string $comment Comment text.
-     * @param int $folderid The ID of the folder the content belongs to.
-     * @param array $file File upload information.
-     * @param object $context Moodle context during slot creation.
+     * @param int|null $folderid The ID of the folder the content belongs to.
+     * @param array|null $file File upload information.
+     * @param object|null $context Moodle context during slot creation.
      * @param int $commentitemid Comment text Item ID.
      * @return int Returns ID of inserted comment record.
      */
-    public static function update(int $contentid, int $commentid, int $userid, string $comment, int $folderid = null,
-            array $file = null, object $context = null, int $commentitemid = 0): int {
+    public static function update(int $contentid, int $commentid, int $userid, string $comment, ?int $folderid = null,
+            ?array $file = null, ?object $context = null, int $commentitemid = 0): int {
         global $DB;
 
         try {

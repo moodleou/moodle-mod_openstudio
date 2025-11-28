@@ -105,10 +105,10 @@ function openstudio_supports($feature) {
  * of the new instance.
  *
  * @param stdClass $openstudio Submitted data from the form in mod_form.php
- * @param mod_openstudio_mod_form $mform The form instance itself (if needed)
+ * @param mod_openstudio_mod_form|null $mform The form instance itself (if needed)
  * @return int The id of the newly inserted openstudio record
  */
-function openstudio_add_instance(stdClass $studio, mod_openstudio_mod_form $mform = null) {
+function openstudio_add_instance(stdClass $studio, ?mod_openstudio_mod_form $mform = null) {
     global $DB, $USER;
 
     $studio->timemodified = time();
@@ -146,11 +146,11 @@ function openstudio_add_instance(stdClass $studio, mod_openstudio_mod_form $mfor
  * (defined by the form in mod_form.php) this function
  * will update an existing instance with new data.
  *
- * @param stdClass $openstudio An object from the form in mod_form.php
- * @param mod_openstudio_mod_form $mform The form instance itself (if needed)
+ * @param stdClass $studio An object from the form in mod_form.php
+ * @param mod_openstudio_mod_form|null $mform The form instance itself (if needed)
  * @return boolean Success/Fail
  */
-function openstudio_update_instance(stdClass $studio, mod_openstudio_mod_form $mform = null) {
+function openstudio_update_instance(stdClass $studio, ?mod_openstudio_mod_form $mform = null) {
     global $DB, $USER;
 
     // Get the current value, so we can see what changed.
