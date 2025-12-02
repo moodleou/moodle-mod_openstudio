@@ -38,7 +38,10 @@ class content_comment_undeleted extends \core\event\base {
 
     #[\Override]
     public function get_description(): string {
-        return "The user with id '{$this->userid}' undeleted the comment with id '{$this->objectid}' in OpenStudio.";
+        $description = <<<EOF
+The user with id '{$this->userid}' undeleted a comment on content in course module id '{$this->contextinstanceid}'
+EOF;
+        return $description;
     }
 
     #[\Override]

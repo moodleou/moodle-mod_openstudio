@@ -1754,10 +1754,10 @@ class renderer_utils {
                     if ($comment->isdeleted) {
                         $comment->deletemessage = self::get_delete_message_content($comment);
                     }
+                    $comment->canviewdeleted = (($permissions->activeuserid == $comment->userid) || $comment->canundelete);
 
                     // Check edit capability.
-                    $comment->editenable = (!$comment->isdeleted && $permissions->activeuserid == $comment->userid
-                        && $permissions->addcomment);
+                    $comment->editenable = ($permissions->activeuserid == $comment->userid && $permissions->addcomment);
 
                     if ($comment->editedtime) {
                         $comment->editedtime = get_string('contentcommentseditbyself', 'openstudio', userdate($comment->editedtime,
@@ -1774,6 +1774,19 @@ class renderer_utils {
                 // There is a comment stream for this comment.
                 if (isset($commentthreads[$value->id])) {
                     $contentdata->comments[$key]->replies = $commentthreads[$value->id];
+                    $contentdata->comments[$key]->hasreply = true;
+                    // Find latest reply in a thread that is not deleted.
+                    $lastvisibleindex = null;
+                    foreach ($commentthreads[$value->id] as $index => $reply) {
+                        if (empty($reply->isdeleted)) {
+                            $lastvisibleindex = $index;
+                        }
+                    }
+
+                    if ($lastvisibleindex !== null) {
+                        $contentdata->comments[$key]->replies[$lastvisibleindex]->islastvisiblereply = true;
+                    }
+                    
                 }
             }
 

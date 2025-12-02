@@ -814,14 +814,6 @@ class mod_openstudio_external extends external_api {
         // Validate locking status.
         self::validate_locking_status($params['cid'], lock::COMMENT);
 
-        // Check parent comment is existed.
-        if ($inreplyto) {
-            $parent = $DB->get_record('openstudio_comments', ['id' => $inreplyto], 'id, deletedby');
-            if (!$parent || $parent->deletedby > 0) {
-                throw new \moodle_exception('errorcommentdeleted', 'openstudio');
-            }
-        }
-
         // Check if user has permission to add content.
         $actionallowed = $permissions->addcomment || $permissions->managecontent;
         $flagsenabled = explode(',', $permissions->flags);
@@ -1144,6 +1136,7 @@ class mod_openstudio_external extends external_api {
                     $deletedcomment->canundelete = $permissions->managecontent;
                     $deletedcomment->deletemessage = renderer_utils::get_delete_message_content($deletedcomment);
                     $deletedcomment->isdeleted = true;
+                    $deletedcomment->canviewdeleted = (($permissions->activeuserid == $comment->userid) || $deletedcomment->canundelete);
                     $deletedcommenthtml = $renderer->content_comment($deletedcomment);
                     if (!$deletedcomment) {
                         throw new \moodle_exception('commenterror', 'openstudio');
@@ -2057,7 +2050,8 @@ class mod_openstudio_external extends external_api {
 
                 // Check comment like setting enabled.
                 $commentdata->contentcommentlikeenabled = in_array(flags::COMMENT_LIKE, $flagsenabled);
-
+                // Check permission to undelete comment.
+                $commentdata->canundelete = $permissions->managecontent;
                 $commenthtml = $renderer->content_comment($commentdata);
 
                 $transaction->allow_commit();

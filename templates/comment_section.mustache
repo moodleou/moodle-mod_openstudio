@@ -28,19 +28,19 @@
     Example context (json):
     {
         "isdeleted": false,
-        "canundelete": false,
         "deletemessage": "",
         "commenttext": "This is a comment.",
+        "canviewdeleted": false,
     }
 }}
 {{#isdeleted}}
     <div class="openstudio-comment-rightcolumn openstudio-deleted-comment">
         <strong>{{#str}} deletedcomment, mod_openstudio {{/str}}</strong> {{{deletemessage}}}
-        {{#canundelete}}
+        {{#canviewdeleted}}
             <div class="openstudio-comment-text">
                 {{{commenttext}}}
             </div>
-        {{/canundelete}}
+        {{/canviewdeleted}}
     </div>
 {{/isdeleted}}
 {{^isdeleted}}

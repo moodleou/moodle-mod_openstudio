@@ -96,6 +96,12 @@ define([
             COMMENT_ITEM: '.openstudio-comment-thread-item', // Comment item.
             FLAG_COUNT: '.openstudio-comment-flag-count',
             FLAG_STATUS: '.openstudio-comment-flag-status',
+            DELETED_COMMENT: '.openstudio-deleted-comment',
+            COMMENT_ITEM_ID_PREFIX: '[id^="openstudio-comment"]',
+
+            // Classes for handle visibility.
+            LAST_VISIBLE_REPLY: 'openstudio-last-visible-reply',
+            OPENSTUDIO_HIDDEN: 'openstudio-hidden',
 
             // Dialogue.
             DIALOG_HEADER: '.openstudio-comment-delete-header',
@@ -381,7 +387,9 @@ define([
                             .before(res.commenthtml);
 
                         // Scroll to added item.
-                        Scrollto.scrollToEl($('[data-thread-item="' + res.commentid + '"]'), t.HEIGHT_TO_TOP);
+                        const $addedItem = $(`[data-thread-item="${res.commentid}"]`);
+                        Scrollto.scrollToEl($addedItem, t.HEIGHT_TO_TOP);
+                        t.updateLatestReplyButton($addedItem);
 
                     } else { // New comment added.
 
@@ -603,16 +611,40 @@ define([
          */
         updateCommentButtons: function($comment, isDeleted) {
             const $undeleteBtn = $comment.find(t.CSS.UNDELETE_BUTTON);
-            const $deleteBtn = $comment.find(t.CSS.DELETE_BUTTON);
+            const $standardBtns = $comment.find(`${t.CSS.DELETE_BUTTON}, ${t.CSS.LIKE_BUTTON}, ${t.CSS.EDIT_BUTTON}`);
             const $replyBtn = $comment.find(t.CSS.REPLY_BUTTON);
-            const $likeBtn = $comment.find(t.CSS.LIKE_BUTTON);
+            const isReply = $comment.closest(t.CSS.REPLY_THREAD).length > 0;
 
-            if (isDeleted) {
-                $undeleteBtn.removeClass('openstudio-hidden');
-                $deleteBtn.add($replyBtn).add($likeBtn).addClass('openstudio-hidden');
+            // Handle reply button visibility.
+            if (isReply) {
+                t.updateLatestReplyButton($comment);
             } else {
-                $undeleteBtn.addClass('openstudio-hidden');
-                $deleteBtn.add($replyBtn).add($likeBtn).removeClass('openstudio-hidden');
+                $replyBtn.toggleClass(t.CSS.OPENSTUDIO_HIDDEN, isDeleted);
+            }
+
+            // Toggle button visibility based on deleted state.
+            $undeleteBtn.toggleClass(t.CSS.OPENSTUDIO_HIDDEN, !isDeleted);
+            $standardBtns.toggleClass(t.CSS.OPENSTUDIO_HIDDEN, isDeleted);
+        },
+
+        /**
+         * Update the reply button visibility for the latest non-deleted reply in a thread.
+         *
+         * @param {jQuery} comment The thread element
+         * @method updateLatestReply
+         */
+        updateLatestReplyButton: function(comment) {
+            // Find all replies in the thread.
+            const replies = comment.closest(t.CSS.REPLY_THREAD);
+            // Remove current latest reply highlight.
+            const allReplies = replies.find(t.CSS.COMMENT_ITEM_ID_PREFIX);
+            allReplies.removeClass(t.CSS.LAST_VISIBLE_REPLY);
+            // Find the latest non-deleted reply.
+            const latestVisibleReply = allReplies.not(`:has(${t.CSS.DELETED_COMMENT})`).last();
+            // If found, update its class and show reply button.
+            if (latestVisibleReply.length) {
+                latestVisibleReply.addClass(t.CSS.LAST_VISIBLE_REPLY)
+                    .find(t.CSS.REPLY_BUTTON).removeClass(t.CSS.OPENSTUDIO_HIDDEN);
             }
         },
 
@@ -758,6 +790,8 @@ define([
             if (!hasAttachment && (!formData['commentext[text]'] || formData['commentext[text]'].length === 0)) {
                 return;
             }
+            // Check this is the latest reply in the thread.
+            const isLatestReply = $(`[data-thread-item="${commentId}"]`).hasClass(t.CSS.LAST_VISIBLE_REPLY);
             const pendingPromise = new Pending('mod_openstudio/openstudioUpdateComment');
             let promises = Ajax.call([{
                 methodname: 'mod_openstudio_external_edit_comment',
@@ -775,8 +809,11 @@ define([
                     let commentItem = $('[data-thread-item="' + res.commentid + '"]');
                     if (commentItem.length) {
                         commentItem.replaceWith(res.commenthtml);
+                        const $updatedComment = $(`[data-thread-item="${res.commentid}"]`);
+                        // If this is the latest reply, update the reply button visibility.
+                        $updatedComment.toggleClass(t.CSS.LAST_VISIBLE_REPLY, isLatestReply);
                         // Scroll to added item.
-                        Scrollto.scrollToEl($('[data-thread-item="' + res.commentid + '"]'), t.HEIGHT_TO_TOP);
+                        Scrollto.scrollToEl($updatedComment, t.HEIGHT_TO_TOP);
                     }
 
                     // Trigger oumedia plugin to render audio attachment.
