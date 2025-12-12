@@ -1447,10 +1447,19 @@ EOF;
      * @param    string  $info      Additional description information.
      * @param int $flagid The ID of the flag this event is associated with.
      * @param int $commentid The ID of the comment this event is associated with.
+     * @param array $otherdata Additional data for specific events.
      * @return void
      */
     public static function trigger_event(
-            $cmid, $action, $objectid = null, $url = '', $info = '', $flagid = null, $commentid = null) {
+            $cmid,
+            $action,
+            $objectid = null,
+            $url = '',
+            $info = '',
+            $flagid = null,
+            $commentid = null,
+            $otherdata = []
+        ) {
 
         $modulecontext = \context_module::instance($cmid);
         $coursecontext = $modulecontext->get_course_context();
@@ -1466,18 +1475,20 @@ EOF;
         if ($url && ($url instanceof \moodle_url)) {
             $url = $url->out(false);
         }
-        $params = array(
-                'context' => $modulecontext,
-                'other' => array(
-                        'courseid' => $coursecontext->instanceid,
-                        'module' => 'openstudio',
-                        'action' => $legacyname,
-                        'url' => $url,
-                        'info' => $info,
-                        'flagid' => $flagid,
-                        'commentid' => $commentid
-                )
-        );
+        $params = [
+            'context' => $modulecontext,
+            'other' => array_merge([
+                'courseid' => $coursecontext->instanceid,
+                'module' => 'openstudio',
+                'action' => $legacyname,
+                'url' => $url,
+                'info' => $info,
+                'flagid' => $flagid,
+                'commentid' => $commentid,
+                'cmid' => $cmid,
+            ],
+            $otherdata),
+        ];
         if (isset($objectid)) {
             $params['objectid'] = $objectid;
         }
