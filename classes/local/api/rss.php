@@ -85,7 +85,7 @@ class rss {
      * @return strng Return true if key is valid.
      */
     public static function pinboard(
-            $userid, $studioid, $limitfrom = 0, $limitnum = 25, $time = '', array $flags = null) {
+            $userid, $studioid, $limitfrom = 0, $limitnum = 25, $time = '', ?array $flags = null) {
 
         global $DB;
 
@@ -187,7 +187,7 @@ EOF;
      * @return strng Return true if key is valid.
      */
     public static function activity(
-            $userid, $studioid, $limitfrom = 0, $limitnum = 25, $time = '', array $flags = null) {
+            $userid, $studioid, $limitfrom = 0, $limitnum = 25, $time = '', ?array $flags = null) {
 
         global $DB;
 
@@ -293,7 +293,7 @@ EOF;
      */
     public static function group(
             $userid, $studioid, $ownerid = '', array $tutorroles = array(),
-                $limitfrom = 0, $limitnum = 25, $time = '', array $flags = null) {
+                $limitfrom = 0, $limitnum = 25, $time = '', ?array $flags = null) {
 
         global $DB;
 
@@ -500,7 +500,7 @@ EOF;
      * @return strng Return true if key is valid.
      */
     public static function module(
-            $userid, $studioid, $ownerid = '', $limitfrom = 0, $limitnum = 25, $time = '', array $flags = null) {
+            $userid, $studioid, $ownerid = '', $limitfrom = 0, $limitnum = 25, $time = '', ?array $flags = null) {
 
         global $DB;
 
@@ -617,7 +617,7 @@ EOF;
      * @param array $flags
      * @return strng Return true if key is valid.
      */
-    public static function slot($slotid, $limitfrom = 0, $limitnum = 25, $time = '', array $flags = null) {
+    public static function slot($slotid, $limitfrom = 0, $limitnum = 25, $time = '', ?array $flags = null) {
         global $DB;
 
         if ($time == '') {
