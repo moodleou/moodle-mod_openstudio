@@ -260,10 +260,12 @@ define([
                     });
                     // Remove loading.
                     replyForm.find(t.CSS.COMMENT_LOADING).remove();
-                    pendingPromise.resolve();
-                }).then(function(){
                     t.showReplyFormPostProcess(replyForm, commentId, isEditing);
-                }.bind(t)).fail(Notification.exception);
+                    pendingPromise.resolve();
+                }).fail(function(ex) {
+                    pendingPromise.resolve();
+                    Notification.exception(ex);
+                });
             } else {
                 t.showReplyFormPostProcess(replyForm, commentId, isEditing);
             }
