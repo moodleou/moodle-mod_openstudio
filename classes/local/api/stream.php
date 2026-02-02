@@ -48,6 +48,8 @@ class stream {
     const FILTER_AREA_ALL = 0;
     const FILTER_AREA_PINBOARD = 1;
     const FILTER_AREA_ACTIVITY = 2;
+    const FILTER_READ_OTHERS = 3;
+    const FILTER_NOTREAD_OTHERS = 4;
 
     const SCOPE_EVERYONE = 1;
     const SCOPE_MY = 2;
@@ -909,32 +911,41 @@ EOF;
         $sql = '';
         $params = [];
         switch ($filterstatus) {
+            // Filter "by me".
             case self::FILTER_READ:
             case self::FILTER_NOTREAD:
-                if ($filterstatus === self::FILTER_NOTREAD) {
-                    $not = ' NOT';
-                } else {
-                    $not = '';
-                }
-                $sql .= 'AND' . $not . ' EXISTS (SELECT f.id FROM {openstudio_flags} f WHERE f.contentid = s.id AND f.flagid = ? ';
+            // Filter "by others".
+            case self::FILTER_READ_OTHERS:
+            case self::FILTER_NOTREAD_OTHERS:
+
+                $isnot = in_array($filterstatus, [
+                        self::FILTER_NOTREAD,
+                        self::FILTER_NOTREAD_OTHERS,
+                ], true);
+
+                $not = $isnot ? 'NOT ' : '';
+
+                $sql .= ' AND ' . $not . 'EXISTS (SELECT 1 FROM {openstudio_flags} f WHERE f.contentid = s.id AND f.flagid = ? ';
                 $params[] = flags::READ_CONTENT;
-                if ($scope === self::SCOPE_MY) {
-                    // Find all slots the the user has (not) read.
-                    $sql .= ' AND f.userid = ? ';
-                    $params[] = $userid;
-                } else if ($scope === self::SCOPE_THEIRS) {
+
+                if (in_array($filterstatus, [self::FILTER_READ_OTHERS, self::FILTER_NOTREAD_OTHERS], true)) {
+                    // Others mean any user except the current user.
                     $sql .= ' AND f.userid <> ? ';
+                    $params[] = $userid;
+                } else {
+                    // By me.
+                    $sql .= ' AND f.userid = ? ';
                     $params[] = $userid;
                 }
                 $sql .= ' ) ';
                 break;
 
             case self::FILTER_EMPTYCONTENT:
-                $sql .= 'AND s.id IS NULL ';
+                $sql .= ' AND s.id IS NULL ';
                 break;
 
             case self::FILTER_LOCKED:
-                $sql .= 'AND s.locktype > 0 AND s.lockedby IS NOT NULL ';
+                $sql .= ' AND s.locktype > 0 AND s.lockedby IS NOT NULL ';
                 break;
         }
 

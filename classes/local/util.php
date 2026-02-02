@@ -485,7 +485,9 @@ class util {
         if (!in_array($fstatus, [stream::FILTER_LOCKED,
                 stream::FILTER_EMPTYCONTENT,
                 stream::FILTER_NOTREAD,
-                stream::FILTER_READ])) {
+                stream::FILTER_READ,
+                stream::FILTER_READ_OTHERS,
+                stream::FILTER_NOTREAD_OTHERS])) {
             $fstatus = $fstatusdefault;
         }
 

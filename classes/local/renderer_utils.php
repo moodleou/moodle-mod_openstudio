@@ -1236,6 +1236,22 @@ class renderer_utils {
             'label' => get_string('filterflagnotviewed', 'openstudio')
         ];
 
+        // Viewed by others.
+        $selectstatus[] = (object) [
+            'checked' => $filters->fstatus == stream::FILTER_READ_OTHERS,
+            'value' => stream::FILTER_READ_OTHERS,
+            'icon' => $OUTPUT->image_url('viewed_filters_rgb_32px', 'openstudio'),
+            'label' => get_string('filterflagviewedothers', 'openstudio'),
+        ];
+
+        // Not viewed by others.
+        $selectstatus[] = (object) [
+            'checked' => $filters->fstatus == stream::FILTER_NOTREAD_OTHERS,
+            'value' => stream::FILTER_NOTREAD_OTHERS,
+            'icon' => $OUTPUT->image_url('not_viewed_filters_rgb_32px', 'openstudio'),
+            'label' => get_string('filterflagnotviewedothers', 'openstudio'),
+        ];
+
         $selectstatus[] = (object) [
             'checked' => $filters->fstatus == stream::FILTER_EMPTYCONTENT,
             'value' => stream::FILTER_EMPTYCONTENT,
