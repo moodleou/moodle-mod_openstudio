@@ -69,7 +69,7 @@ EOF;
      * @return string
      */
     public static function get_name() {
-        return get_string('event:setcommentflagged', 'mod_openstudio');
+        return get_string('event:foldercommentflagged', 'mod_openstudio');
     }
 
     /**
