@@ -815,6 +815,7 @@ $string['searchresultsummary'] = 'Search result for terms:';
 $string['searchresultsummarycount'] = ' &#8212; {$a->total} results found';
 $string['searchresultsummarycount2'] = ' &#8212; {$a->total} or more results found';
 $string['searchresultsummarynorcord'] = ' &#8212; No results? Try searching from within {$a->name}';
+$string['searchresultsclear'] = 'Clear results';
 
 $string['userporgresslow'] = 'low.';
 $string['userporgresshigh'] = 'high.';

@@ -68,4 +68,5 @@ class defaults {
     const FOLDER_NORMAL = 0; // Flag (showextradata) when creating/updating normal folder.
     const FOLDER_AUTO_GENERATE = 1;  // Flag (showextradata) when creating auto-generated folder.
     const DEFAULTVIEWSIZE = 10;
+    const FSCOPE = 1;
 }

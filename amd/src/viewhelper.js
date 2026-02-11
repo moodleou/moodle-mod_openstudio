@@ -506,6 +506,7 @@ define(['jquery', 'js/isotope.pkgd.min.js', 'core/utils'], function($, Isotope, 
                         searchParams.delete('quickselect');
                     }
 
+                    searchParams.set('fapply', '1');
                     searchParams.delete('reset');
 
                     // Update or add parameters.

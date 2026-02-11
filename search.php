@@ -51,6 +51,7 @@ $filteropen = optional_param('filteropen', 0, PARAM_INT);
 $filteractive = optional_param('filteractive', 0, PARAM_INT);
 $contextid = optional_param('context_id', 0, PARAM_INT);
 $searchquery = optional_param('q', '', PARAM_TEXT);
+$fapply = optional_param('fapply', 0, PARAM_INT);
 
 // Check if filter reset request given, if so, then clear all the filters by redirecting the browser.
 $resetfilter = optional_param('reset', 0, PARAM_INT);
@@ -169,23 +170,66 @@ if ($pagestart < 0) {
     $pagestart = 0;
 }
 
-$filter_params = util::handle_filter_params(
-    $cminstance->id,
-    $sortby,
-    $fblockarray,
-    $fblock,
-    $quickselect,
-    $filteractive,
-    $farea,
-    $factivityarray,
-    $ftypearray,
-    $fflagarray,
-    $fscope,
-    $fstatus,
-    $fsort,
-    $osort,
-    $resetfilter
-);
+if (!isset($SESSION->openstudio_view_filters)) {
+    $SESSION->openstudio_view_filters = [];
+}
+
+// Handle reset filter.
+if ($resetfilter) {
+    $SESSION->openstudio_view_filters[$vid] = util::get_filter_params_defaults($streamdatapagesize);
+
+    $params = ['id' => $id, 'vid' => $vid, 'page' => 0, 'pagesize' => $streamdatapagesize];
+    if (!empty($searchquery)) {
+        $params['q'] = $searchquery;
+    } else if (!empty($searchtext)) {
+        $params['query'] = $searchtext;
+    }
+    $url = new moodle_url('/mod/openstudio/search.php', $params);
+
+    redirect($url);
+}
+
+// Handle apply filter.
+if ($fapply) {
+    $filter_params = util::handle_filter_params(
+        $cminstance->id,
+        $sortby,
+        $fblockarray,
+        $fblock,
+        $quickselect,
+        $filteractive,
+        $farea,
+        $factivityarray,
+        $ftypearray,
+        $fflagarray,
+        $fscope,
+        $fstatus,
+        $fsort,
+        $osort,
+        $resetfilter
+    );
+    $SESSION->openstudio_view_filters[$vid] = $filter_params;
+} else if (isset($SESSION->openstudio_view_filters[$vid])) {
+    $filter_params = $SESSION->openstudio_view_filters[$vid];
+} else {
+    $filter_params = util::handle_filter_params(
+        $cminstance->id,
+        $sortby,
+        $fblockarray,
+        $fblock,
+        $quickselect,
+        $filteractive,
+        $farea,
+        $factivityarray,
+        $ftypearray,
+        $fflagarray,
+        $fscope,
+        $fstatus,
+        $fsort,
+        $osort,
+        $resetfilter
+    );
+}
 
 if (trim($searchtext) == '') {
     // No search term given, so return to main stream view.
@@ -474,6 +518,10 @@ if ($contentdata->total == 0) {
             ['total' => $contentdata->total]);
     }
 }
+
+// Set up clear button.
+$url = new moodle_url('/mod/openstudio/view.php', ['id' => $id, 'vid' => $vid]);
+$contentdata->searchclearurl = $url;
 
 // Generate stream html.
 $PAGE->set_button($renderer->searchform($theme, $vid, $id, $groupid));

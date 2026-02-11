@@ -125,6 +125,12 @@
                 {{#str}} searchresultsummary, mod_openstudio {{/str}}
                 <strong>{{searchmessage}}</strong>
             </span>
+            {{#searchclearurl}}
+                <form action="{{searchclearurl}}" method="post" id="searchclearform">
+                    <button type="submit" class="btn btn-secondary">
+                        {{#str}} searchresultsclear, mod_openstudio {{/str}}</button>
+                </form>
+            {{/searchclearurl}}
             <div class="openstudio-search-pagination">
                 {{#prevurl}}
                     <a href="{{prevurl}}">

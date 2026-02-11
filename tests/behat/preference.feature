@@ -38,16 +38,9 @@ I need to create a content and upload a file
       | student3 | G1    |
     And I am on the "Course 1" "Course" page logged in as "admin"
     And I turn editing mode on
-    And I add a openstudio activity to course "Course 1" section "1" and I fill the form with:
-      | Name                         | Test Open Studio name 1      |
-      | Description                  | Test Open Studio description |
-      | Group mode                   | Visible groups               |
-      | Grouping                     | grouping1                    |
-      | Enable pinboard              | 99                           |
-      | Enable folders               | 1                            |
-      | Abuse reports are emailed to | teacher1@asd.com             |
-      | ID number                    | OS1                          |
-      | id_tutorrolesgroup_1         | 1                            |
+    And the following open studio "instances" exist:
+      | course | name                    | description                  | pinboard | idnumber | groupmode | grouping | pinboard | reportingemail   | enablefolders | id_tutorrolesgroup_1 |
+      | C1     | Test Open Studio name 1 | Test Open Studio description | 99       | OS1      | 2         | GI1      | 99       | teacher1@asd.com | 1             | 1                    |
     And all users have accepted the plagarism statement for "OS1" openstudio
 
     And the following open studio "level1s" exist:
@@ -162,7 +155,8 @@ I need to create a content and upload a file
 
     # View a post.
     And I follow "Test My Preferences View 2"
-    And I follow "Shared content > My Module" in the openstudio navigation
+    And I am on the "Course 1" course page
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
     And I press "Filter"
     # Filter by Viewed:
     And I set the field "Viewed (by me)" to "1"

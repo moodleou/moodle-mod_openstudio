@@ -161,10 +161,12 @@ Feature: Open Studio search content
     And I set the field "Search My Module" to "keyword"
     When I submit the openstudio search form "#openstudio_searchquery" "css_element"
     And I press "Filter"
+    # By author - Other users.
     And I click on "input#openstudio_filter_from_3" "css_element"
     And I press "Apply"
     And I should not see "Admin Content 1"
     And I should see "My Content 1"
+    # By author - Me.
     And I click on "input#openstudio_filter_from_2" "css_element"
     And I press "Apply"
     And I should see "Admin Content 1"
@@ -173,6 +175,7 @@ Feature: Open Studio search content
     And I press "Apply"
     And I should see "Admin folder 1"
     And I should not see "Student folder 1"
+    # By author - Show all.
     And I click on "input#openstudio_filter_from_1" "css_element"
     And I press "Apply"
     And I should see "Student folder 2"
@@ -182,6 +185,7 @@ Feature: Open Studio search content
     And I press "Apply"
     And I should see "My Content 1"
     And I should see "My Content 2"
+    # By author - Me.
     And I click on "input#openstudio_filter_from_2" "css_element"
     And I press "Apply"
     And I should see "Admin Content 1"
@@ -189,6 +193,21 @@ Feature: Open Studio search content
     And I click on "input#openstudio_filter_user_flags_5" "css_element"
     And I press "Apply"
     And I should see "No results?"
+
+    # Reset filter and check content.
+    Given I am on the "Sharing Studio" "openstudio activity" page
+    When I press "Filter"
+    And I press "Reset"
+    Then I should see "My Content 1"
+    And I should see "My Content 2"
+    And I should see "My Content 3"
+    And I should see "My Content 4"
+    And I should see "My Content 5"
+    And I should see "My Content 6"
+    And I should see "My Content 7"
+    And I should see "My Content 8"
+    And I should see "My Content 9"
+    And I should see "Admin Content 1"
 
   @javascript
   Scenario: Search action is logged
@@ -208,3 +227,47 @@ Feature: Open Studio search content
     And I should see "'content'" in the "table.reportlog" "css_element"
     And I should see "total 0" in the "table.reportlog" "css_element"
 
+  @javascript
+  Scenario: Search and clear results
+    Given I am logged in as "student1"
+
+    And the following open studio "contents" exist:
+      | openstudio | user     | name            | description                       | visibility | index | keyword |
+      | OS1        | student1 | My Content 1    | Test My Content Details View 1    | module     | 1     | keyword |
+      | OS1        | admin    | Admin Content 1 | Test Admin Content Details View 1 | module     | 10    | keyword |
+    And the following open studio "comments" exist:
+      | openstudio | user     | content         | comment                      | index | keyword |
+      | OS1        | student1 | My Content 1    | My Notification comment 1    | 1     | keyword |
+      | OS1        | admin    | Admin Content 1 | Admin Notification comment 1 | 1     | keyword |
+
+    Then I am on the "Sharing Studio" "openstudio activity" page
+    And I set the field "Search My Module" to "keyword"
+    When I submit the openstudio search form "#openstudio_searchquery" "css_element"
+    And I press "Filter"
+    # By user - With comments.
+    And I click on "input#openstudio_filter_user_flags_8" "css_element"
+    # By author - Other users.
+    And I click on "input#openstudio_filter_from_3" "css_element"
+    And I press "Apply"
+    And I should not see "My Content 1"
+    And I should see "Admin Content 1"
+    And I should see "Clear results"
+    # By author - Me.
+    And I click on "input#openstudio_filter_from_2" "css_element"
+    And I press "Apply"
+    And I should see "My Content 1"
+    And I should not see "Admin Content 1"
+    And I should see "Clear results"
+
+    When I click on "Clear results" "button"
+    # It should go to Shared Content and keep Filter options.
+    Then I should see "View all work that’s been shared with the module cohort, including your own."
+    And I should see "My Content 1"
+    And I should not see "Admin Content 1"
+    # Search again.
+    When I set the field "Search My Module" to "keyword"
+    And I submit the openstudio search form "#openstudio_searchquery" "css_element"
+    # It should keep Filter options again.
+    Then I should see "Search result for terms"
+    And I should see "My Content 1"
+    And I should not see "Admin Content 1"

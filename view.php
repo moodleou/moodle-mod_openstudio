@@ -287,29 +287,7 @@ if ($filteractive && $farea == stream::FILTER_AREA_ALL && isset($fflagarray[0]) 
 }
 
 if ($resetfilter) {
-    if (!isset($SESSION->openstudio_view_filters[$vid])) {
-        // Completely reset the filters.
-        $SESSION->openstudio_view_filters[$vid] = new stdClass();
-    }
-
-    // Partial filter reset.
-    $SESSION->openstudio_view_filters[$vid]->fblock = null;
-    $SESSION->openstudio_view_filters[$vid]->fblockarray = null;
-    $SESSION->openstudio_view_filters[$vid]->ftype = null;
-    $SESSION->openstudio_view_filters[$vid]->ftypearray = null;
-    $SESSION->openstudio_view_filters[$vid]->fscope = null;
-    $SESSION->openstudio_view_filters[$vid]->fstatus = null;
-    $SESSION->openstudio_view_filters[$vid]->fflag = null;
-    $SESSION->openstudio_view_filters[$vid]->fflagarray = null;
-    $SESSION->openstudio_view_filters[$vid]->ftags = null;
-    $SESSION->openstudio_view_filters[$vid]->fblockdataarray = null;
-    $SESSION->openstudio_view_filters[$vid]->fsort = defaults::OPENSTUDIO_SORT_FLAG_DATE;
-    $SESSION->openstudio_view_filters[$vid]->osort = defaults::OPENSTUDIO_SORT_DESC;
-    $SESSION->openstudio_view_filters[$vid]->page = $streamdatapagesize;
-    $SESSION->openstudio_view_filters[$vid]->pagesize = defaults::STREAMPAGESIZE;
-    $SESSION->openstudio_view_filters[$vid]->filteractive = 0;
-    $SESSION->openstudio_view_filters[$vid]->sortby = null;
-    $SESSION->openstudio_view_filters[$vid]->quickselect = null;
+    $SESSION->openstudio_view_filters[$vid] = util::get_filter_params_defaults($streamdatapagesize);
 
     $reseturl = new moodle_url('/mod/openstudio/view.php', array(
             'id' => $id, 'vid' => $vid, 'page' => 0, 'pagesize' => $streamdatapagesize));
@@ -406,10 +384,10 @@ $fflagarray = optional_param_array('fflagarray', $fflagarraydefault, PARAM_INT);
 // Store the filter settings in session memory.
 $SESSION->openstudio_view_vid = $vid;
 if (!isset($SESSION->openstudio_view_filters)) {
-    $SESSION->openstudio_view_filters = array();
+    $SESSION->openstudio_view_filters = [];
 }
 if (!isset($SESSION->openstudio_view_filters[$vid])) {
-    $SESSION->openstudio_view_filters[$vid] = new stdClass();
+    $SESSION->openstudio_view_filters[$vid] = util::get_filter_params_defaults($streamdatapagesize);
 }
 
 $filter_params = util::handle_filter_params(

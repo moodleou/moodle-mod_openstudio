@@ -309,6 +309,40 @@ class util {
     }
 
     /**
+     * Returns the default filter params.
+     * *
+     * @param mixed $streamdatapagesize
+     * @return \stdClass
+     */
+    public static function get_filter_params_defaults(mixed $streamdatapagesize): \stdClass {
+        $filter_params = new \stdClass();
+        $filter_params->fblock = null;
+        $filter_params->fblockarray = [];
+        $filter_params->factivityarray = [];
+        $filter_params->ftype = null;
+        $filter_params->ftypearray = [];
+        $filter_params->fscope = defaults::FSCOPE;
+        $filter_params->fstatus = null;
+        $filter_params->fflag = null;
+        $filter_params->fflagarray = [];
+        $filter_params->fsort = defaults::OPENSTUDIO_SORT_FLAG_DATE;
+        $filter_params->ftags = null;
+        $filter_params->osort = defaults::OPENSTUDIO_SORT_DESC;
+        $filter_params->filteractive = 0;
+        $filter_params->fblockdataarray = [];
+        $filter_params->page = $streamdatapagesize;
+        $filter_params->pagesize = defaults::STREAMPAGESIZE;
+        $filter_params->sortby = null;
+        $filter_params->quickselect = null;
+        $filter_params->sortflag = [
+            'id' => $filter_params->fsort, 'asc' => $filter_params->osort
+        ];
+        $filter_params->fownerscope = null;
+        $filter_params->resetfilter = 0;
+        return $filter_params;
+    }
+
+    /**
      * Returns the search params after handle.
      *
      * @param int $studioid
