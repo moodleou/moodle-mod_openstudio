@@ -120,6 +120,7 @@ define([
          * @param {JSON} options  The settings for this feature.
          */
         init: async function(options) {
+            const pendingPromise = new Pending('mod_openstudio/comment:init');
             t.mconfig = options;
 
             t.dialogue = await t.createDeleteCommentDialogue();
@@ -147,6 +148,8 @@ define([
 
             // Form submit event.
             $(t.CSS.COMMENT_FORM).find('form').on('submit', t.postComment);
+
+            pendingPromise.resolve();
         },
 
         /**
@@ -343,6 +346,11 @@ define([
             e.preventDefault();
             e.stopImmediatePropagation();
 
+            // Sync TinyMCE content to the underlying textarea before serializing.
+            if (window.tinyMCE) {
+                window.tinyMCE.triggerSave();
+            }
+
             // Get form data.
             var formdata = {};
             $.each($(this).serializeArray(), function(i, field) {
@@ -390,8 +398,10 @@ define([
 
                         // Scroll to added item.
                         const $addedItem = $(`[data-thread-item="${res.commentid}"]`);
-                        Scrollto.scrollToEl($addedItem, t.HEIGHT_TO_TOP);
-                        t.updateLatestReplyButton($addedItem);
+                        if ($addedItem.length) {
+                            Scrollto.scrollToEl($addedItem, t.HEIGHT_TO_TOP);
+                            t.updateLatestReplyButton($addedItem);
+                        }
 
                     } else { // New comment added.
 
@@ -784,6 +794,10 @@ define([
                 window.console.error('Invalid comment ID for update');
                 return;
             }
+            // Sync TinyMCE content to the underlying textarea before serializing.
+            if (window.tinyMCE) {
+                window.tinyMCE.triggerSave();
+            }
             let formData = {};
             $.each(form.serializeArray(), function(i, field) {
                 formData[field.name] = field.value;
@@ -815,7 +829,9 @@ define([
                         // If this is the latest reply, update the reply button visibility.
                         $updatedComment.toggleClass(t.CSS.LAST_VISIBLE_REPLY, isLatestReply);
                         // Scroll to added item.
-                        Scrollto.scrollToEl($updatedComment, t.HEIGHT_TO_TOP);
+                        if ($updatedComment.length) {
+                            Scrollto.scrollToEl($updatedComment, t.HEIGHT_TO_TOP);
+                        }
                     }
 
                     // Trigger oumedia plugin to render audio attachment.

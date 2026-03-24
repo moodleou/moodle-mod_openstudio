@@ -118,7 +118,7 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     And I click on "Private files" "link" in the ".fp-repo-area" "css_element"
     And I click on "test2.jpg" "link"
     And I click on "Select this file" "button"
-    And I set the field "How would you describe this image to someone who can't see it?" to "An image"
+    And I set the field "How would you describe this image to someone who cannot see it?" to "An image"
     And I click on "Save" "button" in the "Image details" "dialogue"
     # Post comment.
     And I press "Post comment"
@@ -136,7 +136,7 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     And I click on "Browse repositories" "button"
     And I click on "test3.jpg" "link" in the "File picker" "dialogue"
     And I click on "Select this file" "button" in the "Select test3.jpg" "dialogue"
-    And I set the field "How would you describe this image to someone who can't see it?" to "An image edited"
+    And I set the field "How would you describe this image to someone who cannot see it?" to "An image edited"
     And I click on "Save" "button" in the "Image details" "dialogue"
     And I press "Save changes"
     And I should see "Comment text edited"
@@ -222,35 +222,35 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     And I click on ".openstudio-comment-thread-replied-items input[name='replycommentbutton']" "css_element"
     And I set the field "Comment" to "Second reply"
     And I press "Post comment"
-    When "//div[contains(text(),'First reply')]//..//input[@name='replycommentbutton']" "xpath_element" should not be visible
-    Then "//div[contains(text(),'Second reply')]//..//input[@name='replycommentbutton']" "xpath_element" should be visible
+    When "//div[contains(@class,'openstudio-comment-text') and contains(.,'First reply')]//..//input[@name='replycommentbutton']" "xpath_element" should not be visible
+    Then "//div[contains(@class,'openstudio-comment-text') and contains(.,'Second reply')]//..//input[@name='replycommentbutton']" "xpath_element" should be visible
     # Delete latest reply.
-    And I click on "//div[contains(text(),'Second reply')]//..//span[contains(@class, 'openstudio-comment-delete-long-link')]" "xpath_element"
+    And I click on "//div[contains(@class,'openstudio-comment-text') and contains(.,'Second reply')]//..//span[contains(@class, 'openstudio-comment-delete-long-link')]" "xpath_element"
     And I click on "Delete" "button" in the "Delete comment" "dialogue"
     # Reply button of First reply should visible.
-    And "//div[contains(text(),'First reply')]//..//input[@name='replycommentbutton']" "xpath_element" should be visible
+    And "//div[contains(@class,'openstudio-comment-text') and contains(.,'First reply')]//..//input[@name='replycommentbutton']" "xpath_element" should be visible
     # Reply button of Second reply should not visible.
-    And "//div[contains(text(),'Second reply')]//..//input[@name='replycommentbutton']" "xpath_element" should not be visible
+    And "//div[contains(@class,'openstudio-comment-text') and contains(.,'Second reply')]//..//input[@name='replycommentbutton']" "xpath_element" should not be visible
     # Parent comment reply button should visible.
-    And "//div[contains(text(),'Parent comment')]//..//input[@name='replycommentbutton']" "xpath_element" should be visible
+    And "//div[contains(@class,'openstudio-comment-text') and contains(.,'Parent comment')]//..//input[@name='replycommentbutton']" "xpath_element" should be visible
     # Delete first reply.
-    And I click on "//div[contains(text(),'First reply')]//..//span[contains(@class, 'openstudio-comment-delete-long-link')]" "xpath_element"
+    And I click on "//div[contains(@class,'openstudio-comment-text') and contains(.,'First reply')]//..//span[contains(@class, 'openstudio-comment-delete-long-link')]" "xpath_element"
     And I click on "Delete" "button" in the "Delete comment" "dialogue"
     # All replies are deleted, no reply button should be visible except parent comment.
-    And "//div[contains(text(),'Parent comment')]//..//input[@name='replycommentbutton']" "xpath_element" should be visible
-    And "//div[contains(text(),'First reply')]//..//input[@name='replycommentbutton']" "xpath_element" should not be visible
-    And "//div[contains(text(),'Second reply')]//..//input[@name='replycommentbutton']" "xpath_element" should not be visible
+    And "//div[contains(@class,'openstudio-comment-text') and contains(.,'Parent comment')]//..//input[@name='replycommentbutton']" "xpath_element" should be visible
+    And "//div[contains(@class,'openstudio-comment-text') and contains(.,'First reply')]//..//input[@name='replycommentbutton']" "xpath_element" should not be visible
+    And "//div[contains(@class,'openstudio-comment-text') and contains(.,'Second reply')]//..//input[@name='replycommentbutton']" "xpath_element" should not be visible
     # Undelete second reply.
-    And I click on "//div[contains(text(),'Second reply')]//..//..//span[contains(@class, 'openstudio-comment-undelete-comment-link')]" "xpath_element"
+    And I click on "//div[contains(@class,'openstudio-comment-text') and contains(.,'Second reply')]//..//..//span[contains(@class, 'openstudio-comment-undelete-comment-link')]" "xpath_element"
     And I click on "Undelete" "button" in the "Undelete comment" "dialogue"
     # Reply button of Second reply should visible.
-    And "//div[contains(text(),'Second reply')]//..//input[@name='replycommentbutton']" "xpath_element" should be visible
+    And "//div[contains(@class,'openstudio-comment-text') and contains(.,'Second reply')]//..//input[@name='replycommentbutton']" "xpath_element" should be visible
     # Reply button of First reply should not visible.
-    And "//div[contains(text(),'First reply')]//..//input[@name='replycommentbutton']" "xpath_element" should not be visible
+    And "//div[contains(@class,'openstudio-comment-text') and contains(.,'First reply')]//..//input[@name='replycommentbutton']" "xpath_element" should not be visible
     # Other user should see the same.
     And I log out
     And I am on the "Sharing Studio" "openstudio activity" page logged in as "student1"
     And I follow "Student slot 1"
-    And "//div[contains(text(),'Second reply')]//..//input[@name='replycommentbutton']" "xpath_element" should be visible
-    And "//div[contains(text(),'First reply')]//..//input[@name='replycommentbutton']" "xpath_element" should not be visible
-    And "//div[contains(text(),'Parent comment')]//..//input[@name='replycommentbutton']" "xpath_element" should be visible
+    And "//div[contains(@class,'openstudio-comment-text') and contains(.,'Second reply')]//..//input[@name='replycommentbutton']" "xpath_element" should be visible
+    And "//div[contains(@class,'openstudio-comment-text') and contains(.,'First reply')]//..//input[@name='replycommentbutton']" "xpath_element" should not be visible
+    And "//div[contains(@class,'openstudio-comment-text') and contains(.,'Parent comment')]//..//input[@name='replycommentbutton']" "xpath_element" should be visible

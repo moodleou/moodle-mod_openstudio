@@ -63,6 +63,7 @@ class comment_form extends \moodleform {
         $editoroptions = [
             'maxfiles' => EDITOR_UNLIMITED_FILES,
             'maxbytes' => $maxbytes,
+            'context'  => $this->_customdata['context'] ?? null,
         ];
         $mform->addElement('editor', 'commentext',
             get_string('contentcommentsformlabelcomment', 'openstudio'),

@@ -1192,6 +1192,10 @@ function mod_openstudio_output_fragment_commentform(array $args): string {
         $editmode = true;
     }
     $commentid = $args['replyid'] ?? '';
+    // Always set up page context so the editor can configure file pickers (Browse repositories) correctly.
+    $coursedata = util::render_page_init($args['id'], ['mod/openstudio:view']);
+    $cm = $coursedata->cm;
+    $context = \context_module::instance($cm->id);
     // Prepare custom data for the form.
     $customdata = [
         'id' => $args['id'],
@@ -1200,6 +1204,7 @@ function mod_openstudio_output_fragment_commentform(array $args): string {
         'attachmentenable' => $args['attachmentenable'],
         'replyid' => $commentid,
         'isediting' => $editmode,
+        'context' => $context,
     ];
     // Setup data for edit comment.
     if ($editmode) {
@@ -1211,14 +1216,12 @@ function mod_openstudio_output_fragment_commentform(array $args): string {
         if ($comment->userid != $userid) {
             throw new \moodle_exception('nocommentpermissions', 'openstudio');
         }
-        $coursedata = util::render_page_init($args['id'], ['mod/openstudio:view']);
-        $cm = $coursedata->cm;
-        $context = \context_module::instance($cm->id);
         $formvalues = new stdClass;
         $formvalues->commentext['text'] = $comment->commenttext;
         $editoroptions = [
             'maxfiles' => EDITOR_UNLIMITED_FILES,
             'maxbytes' => $args['max_bytes'],
+            'context'  => $context,
         ];
         $commentext = file_get_submitted_draft_itemid('commenttext');
         $formvalues->commentext['text'] = file_prepare_draft_area($commentext,

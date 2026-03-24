@@ -35,7 +35,14 @@ define([], function() {
          * @method scrollToEl
          */
         scrollToEl: function($el, heightTop) {
-            const target = $el.offset().top - heightTop;
+            if (!$el || !$el.length) {
+                return;
+            }
+            const offset = $el.offset();
+            if (!offset) {
+                return;
+            }
+            const target = offset.top - heightTop;
             window.scrollTo({
                 top: target,
                 behavior: 'smooth',

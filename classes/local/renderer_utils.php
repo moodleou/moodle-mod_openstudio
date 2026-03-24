@@ -1699,7 +1699,8 @@ class renderer_utils {
                 'id' => $cmid,
                 'cid' => $contentdata->id,
                 'max_bytes' => $cminstance->contentmaxbytes,
-                'attachmentenable' => $permissions->feature_contentcommentusesaudio));
+                'attachmentenable' => $permissions->feature_contentcommentusesaudio,
+                'context' => context_module::instance($cmid)));
             $contentdata->commentform = $commentform->render();
 
             // Get content comments in order.

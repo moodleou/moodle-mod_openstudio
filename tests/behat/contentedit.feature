@@ -197,7 +197,7 @@ I should not see list of file types on Add File form
     And I click on "Private files" "link" in the ".moodle-dialogue.filepicker:not(.moodle-dialogue-hidden) .fp-repo-area" "css_element"
     And I click on "test2.jpg" "link"
     And I click on "Select this file" "button" in the "Select test2.jpg" "dialogue"
-    And I set the field "How would you describe this image to someone who can't see it?" to "An image"
+    And I set the field "How would you describe this image to someone who cannot see it?" to "An image"
     And I click on "Save" "button" in the "Image details" "dialogue"
     And I press "Save"
     Then "//img[contains(@src, 'pluginfile.php') and contains(@src, '/test2.jpg') and @alt='An image']" "xpath_element" should exist
