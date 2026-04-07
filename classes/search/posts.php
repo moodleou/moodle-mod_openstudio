@@ -165,7 +165,7 @@ class posts extends \core_search\base_mod {
      * @return int
      */
     public function check_access($id) {
-        global $DB;
+        global $DB, $USER;
 
         try {
             $content = $DB->get_record('openstudio_contents', ['id' => $id], '*', IGNORE_MISSING);
@@ -175,16 +175,19 @@ class posts extends \core_search\base_mod {
                     return \core_search\manager::ACCESS_DELETED;
                 }
 
-                $cm = get_coursemodule_from_instance('openstudio', $content->openstudioid);
-
-                // Get course instance.
-                $course = get_course($cm->course);
-
-                // Get module instance.
-                $cminstance = $DB->get_record('openstudio', ['id' => $cm->instance], '*', MUST_EXIST);
-
-                // Get permissions.
-                $permissions = util::check_permission($cm, $cminstance, $course);
+                // Cache permissions per openstudio instance + user to avoid redundant DB queries.
+                static $accesscache = [];
+                $openstudioid = $content->openstudioid;
+                $cachekey = $openstudioid . '_' . $USER->id;
+                if (!array_key_exists($cachekey, $accesscache)) {
+                    $cm = get_coursemodule_from_instance('openstudio', $openstudioid);
+                    $course = get_course($cm->course);
+                    $cminstance = $DB->get_record('openstudio', ['id' => $cm->instance], '*', MUST_EXIST);
+                    $permissions = util::check_permission($cm, $cminstance, $course);
+                    $accesscache[$cachekey] = compact('cminstance', 'permissions');
+                }
+                $cminstance = $accesscache[$cachekey]['cminstance'];
+                $permissions = $accesscache[$cachekey]['permissions'];
 
                 // Determine if a user can view a content.
                 $folderid = 0;

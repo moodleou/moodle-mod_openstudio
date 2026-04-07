@@ -339,6 +339,7 @@ class util {
         ];
         $filter_params->fownerscope = null;
         $filter_params->resetfilter = 0;
+        $filter_params->groupid = 0;
         return $filter_params;
     }
 

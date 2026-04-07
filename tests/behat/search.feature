@@ -271,3 +271,50 @@ Feature: Open Studio search content
     Then I should see "Search result for terms"
     And I should see "My Content 1"
     And I should not see "Admin Content 1"
+
+  @javascript
+  Scenario: Applying a search filter from the Group view and navigating to My Group tab should work correctly
+    Given the following "users" exist:
+      | username | firstname | lastname | email            |
+      | teacher2 | Teacher   | 2        | teacher2@asd.com |
+      | student2 | Student   | 2        | student2@asd.com |
+    And the following "courses" exist:
+      | fullname | shortname | category |
+      | Course 2 | C2        | 0        |
+    And the following "course enrolments" exist:
+      | user     | course | role           |
+      | teacher2 | C2     | editingteacher |
+      | student2 | C2     | student        |
+    And the following "groups" exist:
+      | name   | course | idnumber |
+      | group1 | C2     | G1       |
+    And the following "groupings" exist:
+      | name      | course | idnumber |
+      | grouping1 | C2     | GI1      |
+    And the following "grouping groups" exist:
+      | grouping | group |
+      | GI1      | G1    |
+    And the following "group members" exist:
+      | user     | group |
+      | teacher2 | G1    |
+      | student2 | G1    |
+    And the following open studio "instances" exist:
+      | course | name         | description              | pinboard | idnumber | groupmode | grouping | tutorroles |
+      | C2     | Group Studio | Group Studio description | 99       | GOS1     | 2         | GI1      | manager    |
+    And the following open studio "contents" exist:
+      | openstudio | user     | name            | description             | visibility | index | keyword |
+      | GOS1       | student2 | Group Content 1 | Group Content Details 1 | module     | 1     | groupkw |
+      | GOS1       | student2 | Group Content 2 | Group Content Details 2 | module     | 2     | groupkw |
+    And all users have accepted the plagarism statement for "GOS1" openstudio
+
+    When I am on the "Group Studio" "openstudio activity" page logged in as "student2"
+    And I follow "Shared content > My Group" in the openstudio navigation
+    And I set the field "Search My Group" to "groupkw"
+    And I submit the openstudio search form "#openstudio_searchquery" "css_element"
+    And I should see "Group Content 1"
+    And I press "Filter"
+    And I click on "input#openstudio_filter_from_1" "css_element"
+    And I press "Apply"
+    And I follow "Shared content > My Group" in the openstudio navigation
+    Then I should see "Group Content 1"
+    And I should see "Group Content 2"

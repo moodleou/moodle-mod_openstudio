@@ -25,8 +25,6 @@ use mod_openstudio\local\api\content;
 use mod_openstudio\local\api\stream;
 use mod_openstudio\local\api\search;
 use mod_openstudio\local\api\lock;
-use mod_openstudio\local\api\group;
-use mod_openstudio\local\api\user;
 use mod_openstudio\local\renderer_utils;
 use mod_openstudio\local\api\notifications;
 use mod_openstudio\local\util;
@@ -209,6 +207,7 @@ if ($fapply) {
         $resetfilter
     );
     $SESSION->openstudio_view_filters[$vid] = $filter_params;
+    $SESSION->openstudio_view_filters[$vid]->groupid = $groupid;
 } else if (isset($SESSION->openstudio_view_filters[$vid])) {
     $filter_params = $SESSION->openstudio_view_filters[$vid];
 } else {
@@ -336,10 +335,56 @@ if (trim($searchtext) == '') {
                 $permissions->tutorroles
         );
 
+        // Materialise recordset so we can bulk pre-fetch related data.
+        $contentslist = [];
         if ($resultingcontents !== false) {
-            foreach ($resultingcontents->contents as $content) {
+            foreach ($resultingcontents->contents as $contentrow) {
+                $contentslist[] = $contentrow;
+            }
+            $resultingcontents->contents->close();
+        }
 
-                // Process content locking.
+        // Bulk pre-fetch folder parent records for VISIBILITY_INFOLDERONLY contents.
+        $foldercontentsmap = [];
+        if (!empty($contentidsfolder)) {
+            $foldercontentsmap = $DB->get_records_list(
+                'openstudio_contents',
+                'id',
+                array_unique(array_values($contentidsfolder))
+            );
+        }
+
+        // Bulk pre-fetch group names for group-visible contents.
+        $groupnamesmap = [];
+        $groupidstoload = [];
+        foreach ($contentslist as $c) {
+            if ((int)$c->visibility < 0) {
+                $groupidstoload[] = abs((int)$c->visibility);
+            }
+        }
+        foreach ($foldercontentsmap as $fc) {
+            if ((int)$fc->visibility < 0) {
+                $groupidstoload[] = abs((int)$fc->visibility);
+            }
+        }
+        if (!empty($groupidstoload)) {
+            foreach ($DB->get_records_list('groups', 'id', array_unique($groupidstoload), '', 'id, name') as $g) {
+                $groupnamesmap[$g->id] = $g->name;
+            }
+        }
+
+        // Bulk pre-fetch lock schedules for current user's activity-level content.
+        $lockcontentids = [];
+        foreach ($contentslist as $c) {
+            if (($c->levelcontainer > 0) && ($c->userid == $permissions->activeuserid)) {
+                $lockcontentids[] = $c->id;
+            }
+        }
+        lock::preload_schedule_cache($lockcontentids);
+
+        if ($resultingcontents !== false) {
+            foreach ($contentslist as $content) {
+                // Process content locking using the pre-fetched schedule cache.
                 if (($content->levelcontainer > 0) && ($content->userid == $permissions->activeuserid)) {
                     $content = lock::determine_lock_status($content);
                 }
@@ -357,12 +402,14 @@ if (trim($searchtext) == '') {
 
                 $itemsharewith = '';
                 // Set icon for content.
-                // Get icon content in folder only.
+                // Get icon content in folder only — use pre-fetched map to avoid per-item DB query.
                 if (!empty($contentidsfolder[$content->id]) && $visibility == content::VISIBILITY_INFOLDERONLY) {
-                    $folderdata = content::get($contentidsfolder[$content->id]);
-                    $visibility = $visibilityid = (int)$folderdata->visibility;
-                    if ($visibility < 0) {
-                        $visibility = content::VISIBILITY_GROUP;
+                    $folderdata = $foldercontentsmap[$contentidsfolder[$content->id]] ?? null;
+                    if ($folderdata) {
+                        $visibility = $visibilityid = (int)$folderdata->visibility;
+                        if ($visibility < 0) {
+                            $visibility = content::VISIBILITY_GROUP;
+                        }
                     }
                 }
 
@@ -374,8 +421,9 @@ if (trim($searchtext) == '') {
 
                     case content::VISIBILITY_GROUP:
                         $contenticon = $OUTPUT->image_url('share_with_my_group_rgb_32px', 'openstudio');
+                        // Use pre-fetched group names map to avoid per-item DB query.
                         $itemsharewith = get_string('contentitemsharewithgroup', 'openstudio',
-                            group::get_name(abs($visibilityid)));
+                            $groupnamesmap[abs($visibilityid)] ?? '');
                         break;
 
                     case content::VISIBILITY_ALLGROUPS:
@@ -405,8 +453,21 @@ if (trim($searchtext) == '') {
                         break;
                 }
 
-                // User picture.
-                $user = user::get_user_by_id($content->userid);
+                // User picture — all required fields are already present via the {user} JOIN
+                // in stream::get_contents_by_ids_with_filters(), so no additional DB query is needed.
+                $user = (object)[
+                    'id'                => $content->userid,
+                    'username'          => $content->username,
+                    'firstname'         => $content->firstname,
+                    'lastname'          => $content->lastname,
+                    'email'             => $content->email,
+                    'picture'           => $content->picture,
+                    'imagealt'          => $content->imagealt,
+                    'firstnamephonetic' => $content->firstnamephonetic,
+                    'lastnamephonetic'  => $content->lastnamephonetic,
+                    'middlename'        => $content->middlename,
+                    'alternatename'     => $content->alternatename,
+                ];
                 $content->userpicturehtml = util::render_user_avatar($renderer, $user);
 
                 // View other user's work.

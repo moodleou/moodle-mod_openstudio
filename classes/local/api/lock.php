@@ -43,6 +43,14 @@ class lock {
     const COMMENT_CRUD = 12; // Combination of 2 and 8.
 
     /**
+     * Per-request cache of lock schedule rows keyed by content ID.
+     * Primed via preload_schedule_cache() to avoid N+1 queries.
+     *
+     * @var array
+     */
+    private static $schedulecache = [];
+
+    /**
      * This function locks and unlocks a slot.
      *
      * @param int $userid User who is requesting the lock.
@@ -218,6 +226,34 @@ class lock {
     }
 
     /**
+     * Prime the per-request lock schedule cache for a set of content IDs in one bulk query.
+     * @param array $contentids Array of openstudio_contents IDs to pre-fetch.
+     */
+    public static function preload_schedule_cache(array $contentids): void {
+        global $DB;
+        if (empty($contentids)) {
+            return;
+        }
+        $uncached = array_values(array_filter($contentids, fn($id) => !array_key_exists($id, self::$schedulecache)));
+        if (empty($uncached)) {
+            return;
+        }
+        [$insql, $inparams] = $DB->get_in_or_equal($uncached);
+        $sql = "SELECT ss.id, ss.openstudioid, ss.name, ss.locktype AS contentlocktype, ss.lockedby, ss.lockedtime,
+                       ss.lockprocessed AS contentlockprocessed, l3.id AS l3id, l3.name AS l3name,
+                       l3.locktype, l3.locktime, l3.unlocktime,
+                       l3.lockprocessed
+                  FROM {openstudio_contents} ss
+                  JOIN {openstudio_level3} l3 ON l3.id = ss.levelid
+                  JOIN {openstudio_level2} l2 ON l2.id = l3.level2id
+                  JOIN {openstudio_level1} l1 ON l1.id = l2.level1id
+                 WHERE ss.id {$insql}";
+        foreach ($DB->get_records_sql($sql, $inparams) as $row) {
+            self::$schedulecache[$row->id] = $row;
+        }
+    }
+
+    /**
      * System helper function to process the locks on slots from the schedule.
      * return the updated slot
      */
@@ -238,7 +274,13 @@ SELECT ss.id, ss.openstudioid, ss.name, ss.locktype AS contentlocktype, ss.locke
 EOF;
 
         // For this slot find enabled scheduled times.
-        if ($schedule = $DB->get_record_sql($sql, array($slot->id))) {
+        // Use pre-fetched cache if available (primed by preload_schedule_cache()).
+        if (array_key_exists($slot->id, self::$schedulecache)) {
+            $schedule = self::$schedulecache[$slot->id];
+        } else {
+            $schedule = $DB->get_record_sql($sql, array($slot->id));
+        }
+        if ($schedule) {
             $userid = 0;// System operation so userid = 0.
             // If there are no schedules enabled.
             if (($schedule->locktime == 0) && ($schedule->unlocktime == 0)) {
