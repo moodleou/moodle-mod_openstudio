@@ -522,7 +522,7 @@ class mod_openstudio_mod_form extends moodleform_mod {
                 $group[] =& $mform->createElement('checkbox', $name, '',
                         get_string($name, 'openstudio'), ['class' => 'openstudio-completion-restrict']);
 
-                $mform->addGroup($group, $groupname,
+                $mform->addGroup($group, $this->get_suffixed_name($groupname),
                         get_string($groupname, 'openstudio'), [' '], false);
                 $mform->addHelpButton($this->get_suffixed_name($groupname), $groupname, 'openstudio');
                 $rules[] = $this->get_suffixed_name($groupname);
