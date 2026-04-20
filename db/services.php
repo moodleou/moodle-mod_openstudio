@@ -89,6 +89,15 @@ $functions = array(
             'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
             'capabilities' => 'mod/openstudio:addcomment'
     ),
+    'mod_openstudio_external_edit_comment' => [
+        'classname' => 'mod_openstudio_external',
+        'methodname' => 'edit_comment',
+        'description' => 'Edit comment',
+        'type' => 'write',
+        'ajax' => true,
+        'services' => [MOODLE_OFFICIAL_MOBILE_SERVICE],
+        'capabilities' => 'mod/openstudio:addcomment',
+    ],
     'mod_openstudio_external_get_comment_by_contentid' => array(
         'classname' => 'mod_openstudio_external',
         'methodname' => 'get_comments_by_contentid',
@@ -187,22 +196,33 @@ $functions = array(
             'ajax' => true,
             'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
             'capabilities' => 'mod/openstudio:canlockothers'
-    )
+    ),
+    'mod_openstudio_external_undelete_comment' => [
+        'classname' => 'mod_openstudio_external',
+        'methodname' => 'undelete_comment',
+        'description' => 'Undelete comment',
+        'type' => 'write',
+        'ajax' => true,
+        'services' => [MOODLE_OFFICIAL_MOBILE_SERVICE],
+        'capabilities' => 'mod/openstudio:managecontent',
+    ],
 );
 
 // We define the services to install as pre-build services. A pre-build service is not editable by administrator.
-$services = array(
-    'Open Studio service' => array(
-        'functions' => array(
+$services = [
+    'Open Studio service' => [
+        'functions' => [
             'mod_openstudio_external_flag_content',
             'mod_openstudio_external_browse_posts',
             'mod_openstudio_external_subscribe',
             'mod_openstudio_external_unsubscribe',
             'mod_openstudio_external_delete_content',
             'mod_openstudio_external_add_comment',
+            'mod_openstudio_external_edit_comment',
             'mod_openstudio_external_get_comment_by_contentid',
             'mod_openstudio_external_flag_comment',
             'mod_openstudio_external_delete_comment',
+            'mod_openstudio_external_undelete_comment',
             'mod_openstudio_external_lock',
             'mod_openstudio_external_unlock',
             'mod_openstudio_external_read_notifications',
@@ -213,9 +233,9 @@ $services = array(
             'mod_openstudio_external_order_posts',
             'mod_openstudio_external_get_order_posts',
             'mod_openstudio_external_unlock_override_activity'
-        ),
+        ],
         'restrictedusers' => 0,
         'enabled' => 1,
         'shortname' => 'openstudio_service',
-    )
-);
+    ],
+];

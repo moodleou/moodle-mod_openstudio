@@ -814,14 +814,6 @@ class mod_openstudio_external extends external_api {
         // Validate locking status.
         self::validate_locking_status($params['cid'], lock::COMMENT);
 
-        // Check parent comment is existed.
-        if ($inreplyto) {
-            $parent = $DB->get_record('openstudio_comments', ['id' => $inreplyto], 'id, deletedby');
-            if (!$parent || $parent->deletedby > 0) {
-                throw new \moodle_exception('errorcommentdeleted', 'openstudio');
-            }
-        }
-
         // Check if user has permission to add content.
         $actionallowed = $permissions->addcomment || $permissions->managecontent;
         $flagsenabled = explode(',', $permissions->flags);
@@ -888,11 +880,12 @@ class mod_openstudio_external extends external_api {
                     $commentdata->commenttext = comments::filter_comment_text($commentdata->commenttext, $commentid, $context);
 
                     $commentdata->deleteenable = true;
+                    $commentdata->editenable = true;
                     $commentdata->reportenable = false;
 
                     // Check comment like setting enabled.
                     $commentdata->contentcommentlikeenabled = in_array(flags::COMMENT_LIKE, $flagsenabled);
-
+                    $commentdata->canundelete = $permissions->managecontent;
                     $commenthtml = $renderer->content_comment($commentdata);
 
                     $transaction->allow_commit();
@@ -1098,7 +1091,7 @@ class mod_openstudio_external extends external_api {
     public static function delete_comment_parameters() {
         return new external_function_parameters(array(
                 'cmid' => new external_value(PARAM_INT, 'Course module ID'),
-                'commentid' => new external_value(PARAM_INT, 'Comment ID'))
+                'commentid' => new external_value(PARAM_INT, 'Comment ID')),
         );
     }
 
@@ -1133,19 +1126,33 @@ class mod_openstudio_external extends external_api {
 
         // Validate locking status.
         self::validate_locking_status($comment->contentid, lock::COMMENT);
-
+        $deletedcommenthtml = '';
         if ($actionallowed) {
             try {
                 if ($comment) {
-                    $allreplyusers = !$comment->inreplyto
-                            ? comments::get_all_users_from_root_comment_id($params['commentid'], COMPLETION_UNKNOWN)
-                            : [];
-                    $success = comments::delete($params['commentid'], $userid);
+                    $deletedcomment = comments::delete($params['commentid'], $userid);
                     notifications::delete_unread_for_comment($params['commentid']);
-                    if (!$success) {
+                    $renderer = util::get_renderer();
+                    $deletedcomment->canundelete = $permissions->managecontent;
+                    $deletedcomment->deletemessage = renderer_utils::get_delete_message_content($deletedcomment);
+                    $deletedcomment->isdeleted = true;
+                    $deletedcomment->canviewdeleted = (($permissions->activeuserid == $comment->userid) || $deletedcomment->canundelete);
+                    $deletedcommenthtml = $renderer->content_comment($deletedcomment);
+                    if (!$deletedcomment) {
                         throw new \moodle_exception('commenterror', 'openstudio');
                     }
-                    custom_completion::update_completion($cm, $comment->userid, COMPLETION_INCOMPLETE, $allreplyusers);
+                    custom_completion::update_completion($cm, $comment->userid, COMPLETION_INCOMPLETE);
+                    // Log the comment deletion event.
+                    $eventurl = new moodle_url('/mod/openstudio/content.php', ['id' => $params['cmid'], 'sid' => $params['commentid']]);
+                    util::trigger_event(
+                            $params['cmid'],
+                            'content_comment_deleted',
+                            $comment->contentid,
+                            $eventurl,
+                            '',
+                            null,
+                            $params['commentid'],
+                    );
                 } else {
                     throw new \moodle_exception('errorinvalidcomment', 'openstudio');
                 }
@@ -1157,9 +1164,9 @@ class mod_openstudio_external extends external_api {
             // No permision.
             throw new \moodle_exception('nocommentpermissions', 'openstudio');
         }
-
         return [
-            'commentid' => $params['commentid']
+            'commentid' => $params['commentid'],
+            'deletedcommenthtml' => $deletedcommenthtml,
         ];
     }
 
@@ -1169,8 +1176,10 @@ class mod_openstudio_external extends external_api {
      * @return external_description
      */
     public static function delete_comment_returns() {
-        return new external_single_structure(array(
-                'commentid' => new external_value(PARAM_INT, 'Deleted comment ID'))
+        return new external_single_structure([
+                'commentid' => new external_value(PARAM_INT, 'Deleted comment ID'),
+                'deletedcommenthtml' => new external_value(PARAM_RAW, 'Deleted comment content HTML'),
+            ]
         );
     }
     /**
@@ -1824,5 +1833,259 @@ class mod_openstudio_external extends external_api {
      */
     public static function unlock_override_activity_returns() {
         return new external_value(PARAM_BOOL, 'Unlock override successfully');
+    }
+
+    /**
+     * Returns description of method parameters.
+     *
+     * @return external_function_parameters
+     */
+    public static function undelete_comment_parameters(): external_function_parameters {
+        return new external_function_parameters([
+            'cmid' => new external_value(PARAM_INT, 'Course module ID'),
+            'commentid' => new external_value(PARAM_INT, 'Comment ID'),
+        ]);
+    }
+
+    /**
+     * Returns description of method result value.
+     *
+     * @return external_description
+     */
+    public static function undelete_comment_returns(): external_description {
+        return new external_single_structure([
+            'commentid' => new external_value(PARAM_INT, 'Undeleted comment ID'),
+            'commenthtml' => new external_value(PARAM_RAW, 'Undeleted comment HTML'),
+        ]);
+    }
+
+    /**
+     * Undelete comment.
+     *
+     * @param int $cmid Course module ID
+     * @param int $commentid Comment ID
+     * @return array
+     *  [
+     *      commentid: int,
+     *      commenthtml: string,
+     *  ]
+     * @throws moodle_exception
+     */
+    public static function undelete_comment(int $cmid, int $commentid): array {
+        // Validate input parameters.
+        $params = self::validate_parameters(self::undelete_comment_parameters(), [
+            'cmid' => $cmid,
+            'commentid' => $commentid,
+        ]);
+        // Init and check permission.
+        $coursedata = util::render_page_init($params['cmid'], ['mod/openstudio:managecontent']);
+
+        if (!$coursedata->permissions->managecontent) {
+            throw new \moodle_exception('nocommentpermissions', 'openstudio');
+        }
+
+        // Retrieve and validate comment.
+        $comment = comments::get($params['commentid'], null, true);
+
+        if (!$comment) {
+            throw new \moodle_exception('errorinvalidcomment', 'openstudio');
+        }
+        // Validate locking status.
+        self::validate_locking_status($comment->contentid, lock::COMMENT);
+
+        // Perform undelete operation.
+        try {
+            $success = comments::undelete($params['commentid']);
+
+            if (!$success) {
+                throw new \moodle_exception('commenterror', 'openstudio');
+            }
+
+            // Log the comment undeletion event.
+            $eventurl = new moodle_url('/mod/openstudio/content.php', ['id' => $params['cmid'], 'sid' => $params['commentid']]);
+            util::trigger_event(
+                $params['cmid'],
+                'content_comment_undeleted',
+                $comment->contentid,
+                $eventurl,
+                '',
+                null,
+                $params['commentid'],
+            );
+
+            // Update completion status.
+            custom_completion::update_completion(
+                $coursedata->cm,
+                $comment->userid,
+                COMPLETION_COMPLETE,
+            );
+
+            return [
+                'commentid' => $params['commentid'],
+                'commenthtml' => util::get_renderer()->content_comment($comment),
+            ];
+
+        } catch (\dml_exception $e) {
+            // Log database errors for debugging.
+            debugging('Database error undeleting comment: ' . $e->getMessage(), DEBUG_DEVELOPER);
+            throw new \moodle_exception('commenterror', 'openstudio', '', $e->getMessage());
+        }
+    }
+
+    /**
+     * Returns description of method parameters for edit_comment.
+     *
+     * @return external_function_parameters
+     */
+    public static function edit_comment_parameters(): external_function_parameters {
+        return new external_function_parameters([
+            'cmid' => new external_value(PARAM_INT, 'Course module ID'),
+            'commentid' => new external_value(PARAM_INT, 'Comment ID'),
+            'commenttext' => new external_value(PARAM_RAW, 'Comment text'),
+            'commenttextitemid' => new external_value(PARAM_INT, 'Comment text item ID'),
+            'commentattachment' => new external_value(PARAM_INT, 'Comment attachment'),
+        ]);
+    }
+
+    /**
+     * Edit an existing comment.
+     *
+     * @param int $cmid Course module ID
+     * @param int $commentid Comment ID
+     * @param string $commenttext Comment text
+     * @param int $commenttextitemid Comment text item ID
+     * @param int $commentattachment Comment attachment
+     * @return array [commentid, commenthtml]
+     * @throws moodle_exception
+     */
+    public static function edit_comment(int $cmid, int $commentid, string $commenttext = '',
+            int $commenttextitemid = 0, int $commentattachment = 0): array {
+        global $USER, $PAGE, $CFG, $DB;
+        $userid = $USER->id;
+        // Init and check permission.
+        $coursedata = util::render_page_init($cmid, ['mod/openstudio:addcomment']);
+        $cm = $coursedata->cm;
+        $mcontext = $coursedata->mcontext;
+        $permissions = $coursedata->permissions;
+        // Validate input parameters and context.
+        self::validate_context($mcontext);
+        $params = self::validate_parameters(self::edit_comment_parameters(), [
+            'cmid' => $cmid,
+            'commentid' => $commentid,
+            'commenttext' => $commenttext,
+            'commenttextitemid' => $commenttextitemid,
+            'commentattachment' => $commentattachment,
+        ]);
+
+        // Check user permission to edit comment.
+        $comment = comments::get($params['commentid'], $userid);
+        if (!$comment) {
+            throw new \moodle_exception('commenterror', 'openstudio');
+        }
+        if ($comment->userid != $userid) {
+            throw new \moodle_exception('nocommentpermissions', 'openstudio');
+        }
+
+        $flagsenabled = explode(',', $permissions->flags);
+        $successcreated = false;
+        $transaction = $DB->start_delegated_transaction();
+        try {
+            // Standardize comment text.
+            $commenttext = trim($params['commenttext']);
+
+            // Check if comment content is not empty.
+            $draftareafiles = file_get_drafarea_files($params['commentattachment'], $filepath = '/');
+            if (($commenttext != '') || (is_object($draftareafiles) && !empty($draftareafiles->list))) {
+
+                // Set default comment text if user just upload comment attachment.
+                if ($commenttext == '') {
+                    $commenttext = get_string('contentcommentsaudioattached', 'openstudio');
+                }
+
+                // Do edit comment.
+                $folderid = null;
+                $containingfolder = folder::get_containing_folder($params['commentid']);
+                if ($containingfolder) {
+                    $folderid = $containingfolder->id;
+                }
+                $context = context_module::instance($cm->id);
+                $commentid = comments::update($comment->contentid, $params['commentid'], $userid, $commenttext, $folderid,
+                        ['id' => $params['commentattachment']], $context, $params['commenttextitemid']);
+                util::trigger_event(
+                        $params['cmid'], 'content_comment_edited', $comment->contentid, '', '', null, $commentid);
+
+                // Check if process is success.
+                if (!$commentid) {
+                    throw new \moodle_exception('commenterror', 'openstudio');
+                }
+
+                // Render comment html and send to client.
+                $commentdata = comments::get($commentid, $userid);
+                $commentdata->donotexport = true;
+                $commentdata->timemodified = userdate($commentdata->timemodified,
+                        get_string('formattimedatetime', 'openstudio'));
+                $commentdata->editedtime = get_string('contentcommentseditbyself', 'openstudio', userdate($commentdata->editedtime,
+                        get_string('formattimedatetime', 'openstudio')));
+
+                $user = user::get_user_by_id($commentdata->userid);
+                $commentdata->fullname = fullname($user);
+
+                // User picture.
+                $renderer = util::get_renderer();
+                $commentdata->userpicturehtml = util::render_user_avatar($renderer, $user);
+
+                // Check comment attachment.
+                if ($file = comments::get_attachment($commentdata->id)) {
+                    $commentdata->commenttext .= renderer_utils::get_media_filter_markup($file);
+                }
+
+                // Filter comment text.
+                $commentdata->commenttext = comments::filter_comment_text($commentdata->commenttext, $commentid, $context);
+
+                $commentdata->editenable = true;
+                $commentdata->deleteenable = true;
+                $commentdata->reportenable = false;
+                // Flag used by the content comment renderer to load the correct template.
+                $commentdata->isediting = true;
+
+                // Check comment like setting enabled.
+                $commentdata->contentcommentlikeenabled = in_array(flags::COMMENT_LIKE, $flagsenabled);
+                // Check permission to undelete comment.
+                $commentdata->canundelete = $permissions->managecontent;
+                $commenthtml = $renderer->content_comment($commentdata);
+
+                $transaction->allow_commit();
+
+                $successcreated = true;
+            } else {
+                // Comment empty error.
+                $transaction->rollback(new \moodle_exception('emptycomment', 'openstudio'));
+            }
+        } catch (Exception $e) {
+            // Database error.
+            $transaction->rollback($e);
+        }
+
+        // The lib/completionlib.php - internal_set_data used its own transaction.
+        if ($successcreated) {
+            custom_completion::update_completion($cm, $userid, COMPLETION_COMPLETE);
+        }
+
+        return [
+            'commentid' => $commentid,
+            'commenthtml' => $commenthtml,
+        ];
+    }
+
+    /**
+     * Returns description of method result value for edit_comment.
+     *
+     * @return external_single_structure
+     */
+    public static function edit_comment_returns() {
+        return new external_single_structure([
+            'commentid' => new external_value(PARAM_INT, 'Edited comment ID'),
+            'commenthtml' => new external_value(PARAM_RAW, 'Comment content HTML'),
+        ]);
     }
 }

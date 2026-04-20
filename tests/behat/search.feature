@@ -189,3 +189,22 @@ Feature: Open Studio search content
     And I click on "input#openstudio_filter_user_flags_5" "css_element"
     And I press "Apply"
     And I should see "No results?"
+
+  @javascript
+  Scenario: Search action is logged
+    Given I am logged in as "student1"
+    And I am on the "Sharing Studio" "openstudio activity" page
+    And global search expects the query "content" and will return:
+      | nothing |
+    When I set the field "Search My Module" to "content"
+    And I submit the openstudio search form "#openstudio_searchquery" "css_element"
+    And I log out
+    And I log in as "admin"
+    And I am on the "Course 1" "Course" page
+    And I follow "Sharing Studio"
+    And I navigate to "Logs" in current page administration
+    Then I should see "View search" in the "table.reportlog" "css_element"
+    And I should see "viewed 'content' search results (total 0)" in the "table.reportlog" "css_element"
+    And I should see "'content'" in the "table.reportlog" "css_element"
+    And I should see "total 0" in the "table.reportlog" "css_element"
+

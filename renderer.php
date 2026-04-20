@@ -1002,10 +1002,15 @@ class mod_openstudio_renderer extends plugin_renderer_base {
      * @return string The rendered HTML fragment.
      */
     public function content_comment($commentdata) {
-        if ($commentdata->inreplyto) {
+        // Always force the item block template for the edit case, regardless of whether it’s a parent or a reply.
+        if (($commentdata->inreplyto && !$commentdata->deletedtime) || (isset($commentdata->isediting) && $commentdata->isediting)) {
             // Added comment is to reply to parent comment.
             return $this->render_from_template('mod_openstudio/comment_item_block', $commentdata);
-        } else {
+        } elseif ($commentdata->deletedtime) {
+            // Added comment is deleted comment or undeleted comment.
+            return $this->render_from_template('mod_openstudio/comment_section', $commentdata);
+        }
+        else {
             // Added comment is to open new comment stream.
             return $this->render_from_template('mod_openstudio/comment_thread_block', $commentdata);
         }
@@ -1283,10 +1288,10 @@ class mod_openstudio_renderer extends plugin_renderer_base {
     /**
      * Adds the import button to a toolbar at bottom of the page.
      *
-     * @param \moodle_url $url URL for button target (null if implemented only in JS)
+     * @param \moodle_url|null $url URL for button target (null if implemented only in JS)
      * @param string $text Optional text label (HTML) if not using default
      */
-    public function add_import_button(\moodle_url $url = null, $text = null) {
+    public function add_import_button(?\moodle_url $url = null, $text = null) {
         // This function is empty and for theme renderers to override.
     }
 

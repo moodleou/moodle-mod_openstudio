@@ -153,20 +153,46 @@ I need to create a content and upload a file
 
     # Filter by Not viewed:
     And I set the field "All types" to "1"
-    And I set the field "Not viewed" to "1"
+    And I set the field "Not viewed (by me)" to "1"
     And I press "Apply"
     And I should see "Test My Preferences View 1"
     And I should see "Test My Preferences View 2"
     And I should see "Test My Preferences View 3"
     And I should see "Test My Preferences View 4"
 
+    # View a post.
+    And I follow "Test My Preferences View 2"
+    And I follow "Shared content > My Module" in the openstudio navigation
+    And I press "Filter"
     # Filter by Viewed:
-    And I set the field "Viewed" to "1"
+    And I set the field "Viewed (by me)" to "1"
     And I press "Apply"
+    And I should see "Test My Preferences View 2"
     And I should not see "Test My Preferences View 1"
-    And I should not see "Test My Preferences View 2"
     And I should not see "Test My Preferences View 3"
     And I should not see "Test My Preferences View 4"
+
+    # Filter by Not viewed again:
+    And I set the field "Not viewed (by me)" to "1"
+    And I press "Apply"
+    And I should not see "Test My Preferences View 2"
+    And I should see "Test My Preferences View 1"
+    And I should see "Test My Preferences View 3"
+    And I should see "Test My Preferences View 4"
+    And I log out
+    # Test as student2 to see viewed by others.
+    And I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "student2"
+    And I press "Filter"
+    And I set the field "Viewed (by others)" to "1"
+    And I press "Apply"
+    # This post was viewed by teacher1, so student2 should see it.
+    And I should see "Test My Preferences View 2"
+    And I set the field "Not viewed (by others)" to "1"
+    And I press "Apply"
+    And I should not see "Test My Preferences View 2"
+    And I should see "Test My Preferences View 1"
+    And I should see "Test My Preferences View 3"
+    And I should see "Test My Preferences View 4"
 
     # Quick select: Other users posts with my comments.
     And I set the field "quickselect" to "3"
@@ -320,20 +346,48 @@ I need to create a content and upload a file
 
     # Filter by Not viewed:
     And I set the field "All types" to "1"
-    And I set the field "Not viewed" to "1"
+    And I set the field "Not viewed (by me)" to "1"
     And I press "Apply"
     And I should see "Test My Preferences View 1"
     And I should see "Test My Preferences View 2"
     And I should see "Test My Preferences View 3"
     And I should see "Test My Preferences View 4"
 
+    # View a post.
+    And I follow "Test My Preferences View 2"
+    And I follow "Shared content > My Group" in the openstudio navigation
+    And I press "Filter"
+
     # Filter by Viewed:
-    And I set the field "Viewed" to "1"
+    And I set the field "Viewed (by me)" to "1"
     And I press "Apply"
+    And I should see "Test My Preferences View 2"
     And I should not see "Test My Preferences View 1"
-    And I should not see "Test My Preferences View 2"
     And I should not see "Test My Preferences View 3"
     And I should not see "Test My Preferences View 4"
+    # Filter by Not viewed again:
+    And I set the field "Viewed (by me)" to "0"
+    And I set the field "Not viewed (by me)" to "1"
+    And I press "Apply"
+    And I should not see "Test My Preferences View 2"
+    And I should see "Test My Preferences View 1"
+    And I should see "Test My Preferences View 3"
+    And I should see "Test My Preferences View 4"
+    And I log out
+    # Test as student2 to see viewed by others.
+    And I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "student2"
+    And I follow "Shared content > My Group" in the openstudio navigation
+    And I press "Filter"
+    And I set the field "Viewed (by others)" to "1"
+    And I press "Apply"
+    # This post was viewed by teacher1, so student2 should see it.
+    And I should see "Test My Preferences View 2"
+    And I set the field "Not viewed (by others)" to "1"
+    And I press "Apply"
+    And I should not see "Test My Preferences View 2"
+    And I should see "Test My Preferences View 1"
+    And I should see "Test My Preferences View 3"
+    And I should see "Test My Preferences View 4"
 
     # Quick select: Other users posts with my comments.
     And I set the field "quickselect" to "3"
@@ -476,18 +530,28 @@ I need to create a content and upload a file
 
     # Filter by Not viewed:
     And I set the field "All types" to "1"
-    And I set the field "Not viewed" to "1"
+    And I set the field "Not viewed (by me)" to "1"
     And I press "Apply"
     And I should see "Test My Preferences View 1"
     And I should see "Test My Preferences View 2"
     And I should see "Test My Preferences View 3"
 
+    # View a post.
+    And I follow "Test My Preferences View 2"
+    And I follow "My content > My Pinboard" in the openstudio navigation
+    And I press "Filter"
+
     # Filter by Viewed:
-    And I set the field "Viewed" to "1"
+    And I set the field "Viewed (by me)" to "1"
     And I press "Apply"
+    And I should see "Test My Preferences View 2"
     And I should not see "Test My Preferences View 1"
-    And I should not see "Test My Preferences View 2"
     And I should not see "Test My Preferences View 3"
+    # Filter by Not viewed again:
+    And I set the field "Not viewed (by me)" to "1"
+    And I press "Apply"
+    And I should see "Test My Preferences View 1"
+    And I should see "Test My Preferences View 3"
 
     # Quick select: My posts with my comments.
     And I set the field "quickselect" to "1"
@@ -594,20 +658,47 @@ I need to create a content and upload a file
 
     # Filter by Not viewed:
     And I set the field "All types" to "1"
-    And I set the field "Not viewed" to "1"
+    And I set the field "Not viewed (by me)" to "1"
     And I press "Apply"
     And I should see "Test My Preferences View 1"
     And I should see "Test My Preferences View 2"
     And I should see "Test My Preferences View 3"
     And I should see "Test My Preferences View 4"
 
+    # View a post.
+    And I follow "Test My Preferences View 2"
+    And I follow "Shared content > My Module" in the openstudio navigation
+    And I press "Filter"
     # Filter by Viewed:
-    And I set the field "Viewed" to "1"
+    And I set the field "Viewed (by me)" to "1"
     And I press "Apply"
+    And I should see "Test My Preferences View 2"
     And I should not see "Test My Preferences View 1"
-    And I should not see "Test My Preferences View 2"
     And I should not see "Test My Preferences View 3"
     And I should not see "Test My Preferences View 4"
+
+    # Filter by Not viewed again:
+    And I set the field "Viewed (by me)" to "0"
+    And I set the field "Not viewed (by me)" to "1"
+    And I press "Apply"
+    And I should not see "Test My Preferences View 2"
+    And I should see "Test My Preferences View 1"
+    And I should see "Test My Preferences View 3"
+    And I should see "Test My Preferences View 4"
+    And I log out
+    # Test as student2 to see viewed by others.
+    And I am on the "Test Open Studio name 1" "openstudio activity" page logged in as "student2"
+    And I press "Filter"
+    And I set the field "Viewed (by others)" to "1"
+    And I press "Apply"
+    # This post was viewed by teacher1, so student2 should see it.
+    And I should see "Test My Preferences View 2"
+    And I set the field "Not viewed (by others)" to "1"
+    And I press "Apply"
+    And I should not see "Test My Preferences View 2"
+    And I should see "Test My Preferences View 1"
+    And I should see "Test My Preferences View 3"
+    And I should see "Test My Preferences View 4"
 
     # Quick select: My posts with my comments.
     And I set the field "quickselect" to "1"

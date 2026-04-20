@@ -34,8 +34,8 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
 
     And all users have accepted the plagarism statement for "OS1" openstudio
 
-  @javascript
-  Scenario: Add/Reply/Flag/Delete comment
+  @javascript @editor_tiny
+  Scenario: Add/Edit/Reply/Flag/Delete comment
 
     # Add new comment
     And I am on the "Sharing Studio" "openstudio activity" page logged in as "student1"
@@ -45,7 +45,21 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     And I wait until the page is ready
     And I upload "mod/openstudio/tests/importfiles/test.mp3" file to "Attach an audio (MP3 file) as comment" filemanager
     And I press "Post comment"
+    And I wait until the page is ready
     Then I should see "Comment text"
+
+    # Edit comment.
+    And I should see "Edit comment"
+    And I follow "Edit comment"
+    And I wait until the page is ready
+    And I switch to the "Comment" TinyMCE editor iframe
+    And I should see "Comment text"
+    And I switch to the main frame
+    And I should see "An attached audio file 'test.mp3' is already in use."
+    And I set the field "Comment" to "Comment text edited"
+    And I press "Save changes"
+    And I should see "Comment text edited"
+    And I should see "Edited by the author on"
 
     # Flag comment
     And I follow "Like comment"
@@ -63,6 +77,7 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     And I press "Reply"
     And I set the field "Comment" to "Comment text reply"
     And I press "Post comment"
+    And I wait until the page is ready
     Then I should see "Comment text reply"
 
     # Reply other user's comment
@@ -76,47 +91,21 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     And I press "Reply"
     And I set the field "Comment" to "Comment text reply 2"
     And I press "Post comment"
+    And I wait until the page is ready
     Then I should see "Comment text reply 2"
     And I wait until the page is ready
 
     # Delete comment
     And I follow "Delete comment"
     And I click on "Delete" "button" in the "Delete comment" "dialogue"
-    Then I should not see "Comment text reply 2"
-
-  @javascript
-  Scenario: Reply comment must be delete when the parent comment deleted in comment box
-    And I am on the "Sharing Studio" "openstudio activity" page logged in as "student1"
-    # Add new comment.
-    And I follow "Student slot 1"
-    And I press "Add new comment"
-    And I set the field "Comment" to "Comment text"
-    And I wait until the page is ready
-    And I press "Post comment"
-    # Reply comment.
-    And I press "Reply"
-    And I set the field "Comment" to "Comment text reply"
-    And I press "Post comment"
-
-    And I follow "Shared Content"
-    When I click on "//a[@class='show-popup-comment' and descendant::img[@class='openstudio-grid-item-content-detail-info-icon' and @alt='Comments']][1]" "xpath_element"
-    # Verify the parent comment and its reply are visible in comment box.
-    Then I should see "Comments on this post"
-    And I should see "Comment text"
-    And I should see "Comment text reply"
-    And I follow "Student slot 1"
-    And I follow "Delete comment"
-    And I click on "Delete" "button" in the "Delete comment" "dialogue"
-    And I follow "Shared Content"
-    When I click on "//a[@class='show-popup-comment' and descendant::img[@class='openstudio-grid-item-content-detail-info-icon' and @alt='Comments']][1]" "xpath_element"
-    # Verify the parent comment and its reply have been deleted in comment box.
-    Then I should see "There are no comments."
+    Then I should see "Comment text reply 2" in the ".openstudio-deleted-comment" "css_element"
 
   @_file_upload @javascript @editor_tiny
   Scenario: Comment editor should have browse repositories.
     When I log in as "student1"
     And I follow "Private files" in the user menu
     And I upload "mod/openstudio/tests/importfiles/test2.jpg" file to "Files" filemanager
+    And I upload "mod/openstudio/tests/importfiles/test3.jpg" file to "Files" filemanager
     And I click on "Save changes" "button"
     And I am on the "Sharing Studio" "openstudio activity" page
     # Add new comment.
@@ -134,3 +123,134 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     # Post comment.
     And I press "Post comment"
     Then "//img[contains(@src, '/test2.jpg') and @alt='An image']" "xpath_element" should exist
+    # Edit comment.
+    And I should see "Edit comment"
+    And I follow "Edit comment"
+    And I wait until the page is ready
+    And I switch to the "Comment" TinyMCE editor iframe
+    And "//img[contains(@src, 'draftfile.php') and contains(@src, '/test2.jpg') and @alt='An image']" "xpath_element" should exist
+    And I switch to the main frame
+    And I set the field "Comment" to "Comment text edited"
+    And I expand all toolbars for the "Comment" TinyMCE editor
+    And I click on the "Image" button for the "Comment" TinyMCE editor
+    And I click on "Browse repositories" "button"
+    And I click on "test3.jpg" "link" in the "File picker" "dialogue"
+    And I click on "Select this file" "button" in the "Select test3.jpg" "dialogue"
+    And I set the field "How would you describe this image to someone who can't see it?" to "An image edited"
+    And I click on "Save" "button" in the "Image details" "dialogue"
+    And I press "Save changes"
+    And I should see "Comment text edited"
+    And "//img[contains(@src, '/test3.jpg') and @alt='An image edited']" "xpath_element" should exist
+    And I should see "Edited by the author on"
+
+  @javascript
+  Scenario: Only comment owner can see edit option
+    Given I am on the "Sharing Studio" "openstudio activity" page logged in as "student1"
+    And I follow "Student slot 1"
+    And I press "Add new comment"
+    And I set the field "Comment" to "Owner's comment"
+    And I press "Post comment"
+    And I should see "Owner's comment"
+    # Switch to another student.
+    When I am on the "Sharing Studio" "openstudio activity" page logged in as "student2"
+    And I follow "Student slot 1"
+    And I should see "Owner's comment"
+    Then I should not see "Edit comment"
+
+  Scenario: Student deletes comment, replies remain visible, owner or moderator can see deleted comment
+    Given I am on the "Sharing Studio" "openstudio activity" page logged in as "student1"
+    And I follow "Student slot 1"
+    And I press "Add new comment"
+    And I set the field "Comment" to "Parent comment to be deleted"
+    And I press "Post comment"
+    And I press "Reply"
+    And I set the field "Comment" to "Reply to parent"
+    And I press "Post comment"
+    And I click on "//span[contains(@class, 'openstudio-comment-delete-long-link')][1]" "xpath_element"
+    When I click on "Delete" "button" in the "Delete comment" "dialogue"
+    # Owner can see deleted comment.
+    Then I should see "Parent comment to be deleted" in the ".openstudio-deleted-comment" "css_element"
+    And I should not see "Undelete"
+    And I should see "Reply to parent"
+    And I am on the "Sharing Studio" "openstudio activity" page logged in as "student2"
+    And I follow "Student slot 1"
+    # Other students can see reply but not deleted comment.
+    And I should not see "Parent comment to be deleted"
+    And I should see "Deleted comment. This comment was deleted by Student 1"
+    And I should see "Reply to parent"
+    And I log out
+    And I am on the "Sharing Studio" "openstudio activity" page logged in as "admin"
+    And I follow "Student slot 1"
+    And I should see "This comment was deleted by Student 1"
+    And I should see "Undelete"
+    And I should see "Parent comment to be deleted" in the ".openstudio-deleted-comment" "css_element"
+    And I should see "Reply to parent"
+
+  @javascript
+  Scenario: Root deleted comment is not display if there is no reply unless owner or moderator views it
+    Given I am on the "Sharing Studio" "openstudio activity" page logged in as "student1"
+    And I follow "Student slot 1"
+    And I press "Add new comment"
+    And I set the field "Comment" to "Root comment to be deleted"
+    And I press "Post comment"
+    And I click on "//span[contains(@class, 'openstudio-comment-delete-long-link')][1]" "xpath_element"
+    When I click on "Delete" "button" in the "Delete comment" "dialogue"
+    # Owner can see deleted comment.
+    Then I should see "Root comment to be deleted" in the ".openstudio-deleted-comment" "css_element"
+    And I log out
+    And I am on the "Sharing Studio" "openstudio activity" page logged in as "student2"
+    And I follow "Student slot 1"
+    # Other students cannot see deleted comment.
+    And I should not see "Root comment to be deleted"
+    And I log out
+    And I am on the "Sharing Studio" "openstudio activity" page logged in as "admin"
+    And I follow "Student slot 1"
+    And I should see "This comment was deleted by Student 1"
+    And I should see "Undelete"
+    And I should see "Root comment to be deleted" in the ".openstudio-deleted-comment" "css_element"
+
+  @javascript
+  Scenario: Reply available for latest reply in a thread that is not deleted
+    Given I am on the "Sharing Studio" "openstudio activity" page logged in as "admin"
+    And I follow "Student slot 1"
+    And I press "Add new comment"
+    And I set the field "Comment" to "Parent comment"
+    And I press "Post comment"
+    And I press "Reply"
+    And I set the field "Comment" to "First reply"
+    And I press "Post comment"
+    And I click on ".openstudio-comment-thread-replied-items input[name='replycommentbutton']" "css_element"
+    And I set the field "Comment" to "Second reply"
+    And I press "Post comment"
+    When "//div[contains(text(),'First reply')]//..//input[@name='replycommentbutton']" "xpath_element" should not be visible
+    Then "//div[contains(text(),'Second reply')]//..//input[@name='replycommentbutton']" "xpath_element" should be visible
+    # Delete latest reply.
+    And I click on "//div[contains(text(),'Second reply')]//..//span[contains(@class, 'openstudio-comment-delete-long-link')]" "xpath_element"
+    And I click on "Delete" "button" in the "Delete comment" "dialogue"
+    # Reply button of First reply should visible.
+    And "//div[contains(text(),'First reply')]//..//input[@name='replycommentbutton']" "xpath_element" should be visible
+    # Reply button of Second reply should not visible.
+    And "//div[contains(text(),'Second reply')]//..//input[@name='replycommentbutton']" "xpath_element" should not be visible
+    # Parent comment reply button should visible.
+    And "//div[contains(text(),'Parent comment')]//..//input[@name='replycommentbutton']" "xpath_element" should be visible
+    # Delete first reply.
+    And I click on "//div[contains(text(),'First reply')]//..//span[contains(@class, 'openstudio-comment-delete-long-link')]" "xpath_element"
+    And I click on "Delete" "button" in the "Delete comment" "dialogue"
+    # All replies are deleted, no reply button should be visible except parent comment.
+    And "//div[contains(text(),'Parent comment')]//..//input[@name='replycommentbutton']" "xpath_element" should be visible
+    And "//div[contains(text(),'First reply')]//..//input[@name='replycommentbutton']" "xpath_element" should not be visible
+    And "//div[contains(text(),'Second reply')]//..//input[@name='replycommentbutton']" "xpath_element" should not be visible
+    # Undelete second reply.
+    And I click on "//div[contains(text(),'Second reply')]//..//..//span[contains(@class, 'openstudio-comment-undelete-comment-link')]" "xpath_element"
+    And I click on "Undelete" "button" in the "Undelete comment" "dialogue"
+    # Reply button of Second reply should visible.
+    And "//div[contains(text(),'Second reply')]//..//input[@name='replycommentbutton']" "xpath_element" should be visible
+    # Reply button of First reply should not visible.
+    And "//div[contains(text(),'First reply')]//..//input[@name='replycommentbutton']" "xpath_element" should not be visible
+    # Other user should see the same.
+    And I log out
+    And I am on the "Sharing Studio" "openstudio activity" page logged in as "student1"
+    And I follow "Student slot 1"
+    And "//div[contains(text(),'Second reply')]//..//input[@name='replycommentbutton']" "xpath_element" should be visible
+    And "//div[contains(text(),'First reply')]//..//input[@name='replycommentbutton']" "xpath_element" should not be visible
+    And "//div[contains(text(),'Parent comment')]//..//input[@name='replycommentbutton']" "xpath_element" should be visible

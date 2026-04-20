@@ -255,10 +255,10 @@ class mod_openstudio_generator extends testing_module_generator {
      * Create new studio module instance.
      *
      * @param array|stdClass $record
-     * @param array $options
+     * @param array|null $options
      * @return stdClass activity record with extra cmid field
      */
-    public function create_instance($record = null, array $options = null) {
+    public function create_instance($record = null, ?array $options = null) {
         global $CFG, $DB;
 
         require_once($CFG->dirroot.'/course/modlib.php');

@@ -39,6 +39,8 @@
         "userhasflagged": "0",
         "deleteenable": "true",
         "reportenable": "false",
+        "canviewdeleted": "true",
+        "hasreply": "true",
         "replies": [
             {
                 "id": "31",
@@ -57,12 +59,38 @@
     }
 }}
 <div class="openstudio-comment-thread" data-thread-items="{{id}}">
+    {{!
+        Render the original comment block in a thread, handling deleted and reply logic:
+        - If the comment is not deleted, always show the comment block.
+        - If the comment is deleted:
+            - Show the comment block if the user has permission to view deleted comments.
+            - Otherwise, show the comment block only if there is a reply (to preserve thread context).
+    }}
     <div class="openstudio-comment-thread-original-item">
-        {{>mod_openstudio/comment_item_block}}
+        {{^isdeleted}}
+            {{>mod_openstudio/comment_item_block}}
+        {{/isdeleted}}
+        {{#isdeleted}}
+            {{#canviewdeleted}}
+                {{>mod_openstudio/comment_item_block}}
+            {{/canviewdeleted}}
+            {{^canviewdeleted}}
+                {{#hasreply}}
+                    {{>mod_openstudio/comment_item_block}}
+                {{/hasreply}}
+            {{/canviewdeleted}}
+        {{/isdeleted}}
     </div>
     <div class="openstudio-comment-thread-replied-items">
         {{#replies}}
-            {{>mod_openstudio/comment_item_block}}
+            {{^isdeleted}}
+                {{>mod_openstudio/comment_item_block}}
+            {{/isdeleted}}
+            {{#isdeleted}}
+                {{#canviewdeleted}}
+                    {{>mod_openstudio/comment_item_block}}
+                {{/canviewdeleted}}
+            {{/isdeleted}}
         {{/replies}}
 
         <div class="openstudio-comment-thread-item openstudio-comment-reply-form">

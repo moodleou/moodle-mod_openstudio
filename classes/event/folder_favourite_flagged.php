@@ -69,7 +69,7 @@ EOF;
      * @return string
      */
     public static function get_name() {
-        return get_string('event:setfavouriteflagged', 'mod_openstudio');
+        return get_string('event:folderfavouriteflagged', 'mod_openstudio');
     }
 
     /**

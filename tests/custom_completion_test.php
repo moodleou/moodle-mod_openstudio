@@ -567,7 +567,8 @@ class custom_completion_test extends advanced_testcase {
 
         // Delete root comment of student 2.
         comments::delete($comment1id, $student2id);
-        $this->assertEquals(COMPLETION_INCOMPLETE, $customcompletion->get_state($key));
+        // User 1's reply still exists, so completion should remain COMPLETE.
+        $this->assertEquals(COMPLETION_COMPLETE, $customcompletion->get_state($key));
     }
 
     public function test_update_completion_success(): void {

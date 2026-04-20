@@ -1236,6 +1236,22 @@ class renderer_utils {
             'label' => get_string('filterflagnotviewed', 'openstudio')
         ];
 
+        // Viewed by others.
+        $selectstatus[] = (object) [
+            'checked' => $filters->fstatus == stream::FILTER_READ_OTHERS,
+            'value' => stream::FILTER_READ_OTHERS,
+            'icon' => $OUTPUT->image_url('viewed_filters_rgb_32px', 'openstudio'),
+            'label' => get_string('filterflagviewedothers', 'openstudio'),
+        ];
+
+        // Not viewed by others.
+        $selectstatus[] = (object) [
+            'checked' => $filters->fstatus == stream::FILTER_NOTREAD_OTHERS,
+            'value' => stream::FILTER_NOTREAD_OTHERS,
+            'icon' => $OUTPUT->image_url('not_viewed_filters_rgb_32px', 'openstudio'),
+            'label' => get_string('filterflagnotviewedothers', 'openstudio'),
+        ];
+
         $selectstatus[] = (object) [
             'checked' => $filters->fstatus == stream::FILTER_EMPTYCONTENT,
             'value' => stream::FILTER_EMPTYCONTENT,
@@ -1687,7 +1703,7 @@ class renderer_utils {
             $contentdata->commentform = $commentform->render();
 
             // Get content comments in order.
-            $commenttemp = comments::get_for_content($contentdata->id, $USER->id, 0, false,
+            $commenttemp = comments::get_for_content($contentdata->id, $USER->id, 0, true,
                     $permissions->groupingid, $contentdata->visibility, $permissions->managecontent);
             $comments = [];
             $commentthreads = [];
@@ -1748,6 +1764,21 @@ class renderer_utils {
                         }
                         $commentthreads[$parentid][] = $comment;
                     }
+
+                    $comment->canundelete = $permissions->managecontent;
+                    $comment->isdeleted = (bool)$comment->deletedtime;
+                    if ($comment->isdeleted) {
+                        $comment->deletemessage = self::get_delete_message_content($comment);
+                    }
+                    $comment->canviewdeleted = (($permissions->activeuserid == $comment->userid) || $comment->canundelete);
+
+                    // Check edit capability.
+                    $comment->editenable = ($permissions->activeuserid == $comment->userid && $permissions->addcomment);
+
+                    if ($comment->editedtime) {
+                        $comment->editedtime = get_string('contentcommentseditbyself', 'openstudio', userdate($comment->editedtime,
+                            get_string('formattimedatetime', 'openstudio')));
+                    }
                 }
                 // Returns all the values from the array and indexes the array numerically.
                 // We need this because mustache requires it.
@@ -1759,6 +1790,19 @@ class renderer_utils {
                 // There is a comment stream for this comment.
                 if (isset($commentthreads[$value->id])) {
                     $contentdata->comments[$key]->replies = $commentthreads[$value->id];
+                    $contentdata->comments[$key]->hasreply = true;
+                    // Find latest reply in a thread that is not deleted.
+                    $lastvisibleindex = null;
+                    foreach ($commentthreads[$value->id] as $index => $reply) {
+                        if (empty($reply->isdeleted)) {
+                            $lastvisibleindex = $index;
+                        }
+                    }
+
+                    if ($lastvisibleindex !== null) {
+                        $contentdata->comments[$key]->replies[$lastvisibleindex]->islastvisiblereply = true;
+                    }
+                    
                 }
             }
 
@@ -1948,5 +1992,31 @@ class renderer_utils {
             }
         }
         return $content->name;
+    }
+
+    /**
+     * Get delete message content.
+     *
+     * @param \stdClass $content Content object containing deletedby and deletedtime
+     * @return string
+     * @throws \coding_exception
+     */
+    public static function get_delete_message_content(\stdClass $content): string {
+        if (empty($content->deletedby) || empty($content->deletedtime)) {
+            throw new \coding_exception('Content object must contain deletedby and deletedtime properties');
+        }
+        $deletedby = $content->deletedby;
+        $deletedtime = $content->deletedtime;
+
+        $user = user::get_user_by_id($deletedby);
+        $a = new \stdClass;
+        $a->date = userdate($deletedtime);
+        $profileurl = new \moodle_url('/user/view.php', [
+            'id' => $deletedby,
+        ]);
+        $userfullname = fullname($user);
+        $a->user = \html_writer::link($profileurl, s($userfullname));
+
+        return get_string('deletedbyuser', 'openstudio', $a);
     }
 }

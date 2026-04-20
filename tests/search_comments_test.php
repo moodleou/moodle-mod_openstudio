@@ -166,6 +166,40 @@ class search_comments_test extends \advanced_testcase {
     }
 
     /**
+     * Test that edited comments are indexed using editedtime.
+     *
+     * @covers \mod_openstudio\search\comments::get_recordset_by_timestamp
+     */
+    public function test_edited_comment_uses_editedtime_for_indexing(): void {
+        // Update the comment.
+        \mod_openstudio\local\api\comments::update($this->urlcontentprivate, $this->urlcontentprivatecomment, $this->user->id,
+        'Comment belong to URL content private - edited');
+
+        $comments = new comments();
+        $results = self::recordset_to_array($comments->get_recordset_by_timestamp());
+
+        // Check that function return 3 comments, the ordering is changed due to edited time.
+        $this->assertCount(3, $results);
+        $this->assertEquals('Comment belong to URL content', $results[0]->commenttext);
+        $this->assertEquals('Comment belong to folder content', $results[1]->commenttext);
+        $this->assertEquals('Comment belong to URL content private - edited', $results[2]->commenttext);
+
+        // Also check get_document uses lastmodified.
+        $now = time();
+        $doc = $comments->get_document((object)[
+            'id' => $this->urlcontentcomment,
+            'name' => 'Sample name 1',
+            'openstudioid' => $this->cm->instance,
+            'commenttext' => 'Edited comment text',
+            'commentuser' => $this->user->id,
+            'timemodified' => 0,
+            'lastmodified' => $now,
+            'course' => $this->course->id
+        ]);
+        $this->assertEquals($now, $doc->get('modified'));
+    }
+
+    /**
      * Test check get document.
      */
     public function test_check_get_document_function() {
@@ -360,6 +394,34 @@ class search_comments_test extends \advanced_testcase {
         $comment = array_pop($data->result);
         $this->assertEquals($this->urlcontent, $comment->intref1);
         $this->assertEquals('openstudio-comment-' . $this->urlcontentcomment, $comment->anchor);
+    }
+
+    /**
+     * Test that deleted comments are not indexed in search, but restored comments and visible replies are indexed.
+     */
+    public function test_search_index_excludes_deleted_comments_and_includes_restored_and_visible_replies() {
+        $this->setAdminUser();
+
+        // Create a parent comment and a reply.
+        $parentcommentid = \mod_openstudio\local\api\comments::create($this->urlcontent, $this->user->id, 'Parent comment for search test');
+        $replycommentid = \mod_openstudio\local\api\comments::create($this->urlcontent, $this->user->id, 'Reply to parent', $parentcommentid);
+
+        // Ddelete the parent comment.
+        \mod_openstudio\local\api\comments::delete($parentcommentid, $this->user->id);
+
+        // Simulate search index: parent should not be indexed, reply should be indexed.
+        $comments = new \mod_openstudio\search\comments();
+        $parentaccess = $comments->check_access($parentcommentid);
+        $replyaccess = $comments->check_access($replycommentid);
+        $this->assertEquals(\core_search\manager::ACCESS_DELETED, $parentaccess, 'Deleted parent comment should not be indexed');
+        $this->assertEquals(\core_search\manager::ACCESS_GRANTED, $replyaccess, 'Visible reply should be indexed');
+
+        // Undelete the parent comment.
+        \mod_openstudio\local\api\comments::undelete($parentcommentid);
+
+        // Simulate search index: parent should be indexed again.
+        $parentaccessrestored = $comments->check_access($parentcommentid);
+        $this->assertEquals(\core_search\manager::ACCESS_GRANTED, $parentaccessrestored, 'Restored parent comment should be indexed');
     }
 
     /**

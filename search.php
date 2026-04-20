@@ -491,4 +491,10 @@ echo $renderer->footer(); // Footer.
 // Log page action.
 util::trigger_event($cm->id, 'search_viewed', '',
     util::get_page_name_and_params(),
-    util::format_log_info($searchtext));
+    util::format_log_info($searchtext),
+    null,
+    null,
+    [
+        'searchterm' => $searchtext,
+        'resultcount' => $contentdata->allresults,
+    ]);

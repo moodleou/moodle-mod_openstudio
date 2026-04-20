@@ -485,7 +485,9 @@ class util {
         if (!in_array($fstatus, [stream::FILTER_LOCKED,
                 stream::FILTER_EMPTYCONTENT,
                 stream::FILTER_NOTREAD,
-                stream::FILTER_READ])) {
+                stream::FILTER_READ,
+                stream::FILTER_READ_OTHERS,
+                stream::FILTER_NOTREAD_OTHERS])) {
             $fstatus = $fstatusdefault;
         }
 
@@ -1447,10 +1449,19 @@ EOF;
      * @param    string  $info      Additional description information.
      * @param int $flagid The ID of the flag this event is associated with.
      * @param int $commentid The ID of the comment this event is associated with.
+     * @param array $otherdata Additional data for specific events.
      * @return void
      */
     public static function trigger_event(
-            $cmid, $action, $objectid = null, $url = '', $info = '', $flagid = null, $commentid = null) {
+            $cmid,
+            $action,
+            $objectid = null,
+            $url = '',
+            $info = '',
+            $flagid = null,
+            $commentid = null,
+            $otherdata = []
+        ) {
 
         $modulecontext = \context_module::instance($cmid);
         $coursecontext = $modulecontext->get_course_context();
@@ -1466,18 +1477,20 @@ EOF;
         if ($url && ($url instanceof \moodle_url)) {
             $url = $url->out(false);
         }
-        $params = array(
-                'context' => $modulecontext,
-                'other' => array(
-                        'courseid' => $coursecontext->instanceid,
-                        'module' => 'openstudio',
-                        'action' => $legacyname,
-                        'url' => $url,
-                        'info' => $info,
-                        'flagid' => $flagid,
-                        'commentid' => $commentid
-                )
-        );
+        $params = [
+            'context' => $modulecontext,
+            'other' => array_merge([
+                'courseid' => $coursecontext->instanceid,
+                'module' => 'openstudio',
+                'action' => $legacyname,
+                'url' => $url,
+                'info' => $info,
+                'flagid' => $flagid,
+                'commentid' => $commentid,
+                'cmid' => $cmid,
+            ],
+            $otherdata),
+        ];
         if (isset($objectid)) {
             $params['objectid'] = $objectid;
         }
@@ -1517,6 +1530,7 @@ EOF;
             case 'content_inspire_flagged':
             case 'folder_inspire_flagged':
             case 'content_comment_created':
+            case 'content_comment_edited':
             case 'content_commentreply_created':
             case 'content_comment_flagged':
             case 'folder_comment_created':
@@ -1586,6 +1600,15 @@ EOF;
                 unset($params['objectid']);
                 $event = \mod_openstudio\event\content_scheduled_unlocked::create($params);
                 break;
+
+            case 'content_comment_undeleted':
+            case 'content_comment_deleted':
+                if (!isset($params['other']['commentid']) && isset($objectid)) {
+                    $params['other']['commentid'] = $objectid;
+                }
+                $event = $eventclass::create($params);
+                break;
+
 
             default:
                 $event = false;

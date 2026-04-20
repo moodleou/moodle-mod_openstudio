@@ -104,14 +104,78 @@ class comments {
     }
 
     /**
+     * Update comment.
+     *
+     * @param int $contentid Content to associate comment with.
+     * @param int $commentid Comment id.
+     * @param int $userid Creator of the comment.
+     * @param string $comment Comment text.
+     * @param int|null $folderid The ID of the folder the content belongs to.
+     * @param array|null $file File upload information.
+     * @param object|null $context Moodle context during slot creation.
+     * @param int $commentitemid Comment text Item ID.
+     * @return int Returns ID of inserted comment record.
+     */
+    public static function update(int $contentid, int $commentid, int $userid, string $comment, ?int $folderid = null,
+            ?array $file = null, ?object $context = null, int $commentitemid = 0): int {
+        global $DB;
+
+        try {
+            if (strlen($comment) > util\defaults::CONTENTCOMMENTLENGTH) {
+                $comment = substr($comment, 0, util\defaults::CONTENTCOMMENTLENGTH)
+                        . get_string('contentcommenttruncatedmessage', 'openstudio');
+            }
+
+            // Populate data.
+            $insertdata = new \stdClass();
+            $insertdata->id = $commentid;
+            $insertdata->commenttext = $comment;
+            $insertdata->editedtime = time();
+
+            $DB->update_record('openstudio_comments', $insertdata);
+
+            // Update comment text.
+            if ($context instanceof \context_module && $commentid && $commentitemid > 0) {
+                self::update_comment_text($commentid, $context->id, $insertdata->commenttext, $commentitemid);
+            }
+
+            $isvalidattachment = is_array($file) && array_key_exists('id', $file) && $file['id'] > 0;
+            if ($isvalidattachment && ($context !== null) && $commentid) {
+                // Check and delete existing attachment before updating comment text/attachment.
+                $existingfile = self::get_attachment($commentid);
+                if ($existingfile) {
+                    $fs = get_file_storage();
+                    $fs->delete_area_files($existingfile->contextid, $existingfile->component, $existingfile->filearea, $commentid);
+                }
+                file_save_draft_area_files($file['id'], $context->id, 'mod_openstudio', 'contentcomment', $commentid);
+                // Issue happened when user requests API, it does not clear the old files.
+                // That issue causes multiple attachments, we only allow 1 audio attachment.
+                self::clear_draft_area($file['id']);
+            }
+
+            // Update slot flag.
+            flags::toggle($contentid, flags::COMMENT, 'on', $userid, $folderid);
+            flags::comment_toggle($contentid, $commentid, $userid, 'on', false, flags::FOLLOW_CONTENT);
+            if ($folderid) {
+                tracking::log_action($folderid, tracking::MODIFY_FOLDER, $userid);
+            }
+
+            return $commentid;
+        } catch (\Exception $e) {
+            return false;
+        }
+
+    }
+
+    /**
      * Delete comment.
      *
      * @param int $commentid Comment to delete.
      * @param int $userid User deleting the comment.
      * @param bool $checkpermissions If true, check that the user is the author of the comment.
-     * @return bool Return true if delete is successful, false otherwise.
+     * @return object|false Return deleted comment record data with user details.
      */
-    public static function delete($commentid, $userid, $checkpermissions = false) {
+    public static function delete(int $commentid, int $userid, bool $checkpermissions = false): object|false {
         global $DB;
 
         try {
@@ -131,13 +195,8 @@ class comments {
             if ($result === false) {
                 throw new \Exception('Failed to soft delete comment.');
             }
-            // Delete child comments with parent's ID.
-            $DB->execute("UPDATE {openstudio_comments}
-                            SET deletedby = ?, deletedtime = ?
-                          WHERE inreplyto = ?
-                 ", [$userid, time(), $commentid]);
 
-            return true;
+            return $commentdata;
         } catch (\Exception $e) {
             return false;
         }
@@ -478,9 +537,9 @@ EOF;
             return;
         }
         $fileoptions = [
-                'subdirs' => false,
-                'maxbytes' => $CFG->maxbytes ?? defaults::MAXBYTES,
-                'maxfiles' => EDITOR_UNLIMITED_FILES,
+            'subdirs' => false,
+            'maxbytes' => $CFG->maxbytes ?? defaults::MAXBYTES,
+            'maxfiles' => EDITOR_UNLIMITED_FILES,
         ];
         $newtext = file_save_draft_area_files($commentitemid, $contextid, 'mod_openstudio',
                 self::COMMENT_TEXT_AREA, $commentid, $fileoptions, $commenttext);
@@ -626,5 +685,27 @@ EOF;
                 JOIN {groups_members} gm2 ON gm2.groupid = gm1.groupid AND gm2.userid = ?
 EOF;
         return sprintf($sql, $alias) ;
+    }
+
+    /**
+     * Undelete comment.
+     *
+     * @param int $commentid Comment to undelete.
+     * @return bool Return true if undelete successful.
+     */
+    public static function undelete(int $commentid): bool {
+        global $DB;
+
+        try {
+            $sql = "UPDATE {openstudio_comments} 
+                SET deletedby = NULL, deletedtime = NULL 
+                WHERE id = :commentid";
+
+            $DB->execute($sql, ['commentid' => $commentid]);
+            return true;
+        } catch (\dml_exception $e) {
+            debugging('Failed to undelete comment: ' . $e->getMessage(), DEBUG_DEVELOPER);
+            return false;
+        }
     }
 }

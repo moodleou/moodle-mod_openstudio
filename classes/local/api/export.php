@@ -82,8 +82,8 @@ class export {
      * @param int $limitnum
      * @return recordset
      */
-    public static function get_files($studioid, $userid, array $fileids = null,
-            array $slotids = null, $limitfrom = 0, $limitnum = 250, $returncountonly = false) {
+    public static function get_files($studioid, $userid, ?array $fileids = null,
+            ?array $slotids = null, $limitfrom = 0, $limitnum = 250, $returncountonly = false) {
 
         global $DB;
 

@@ -69,7 +69,7 @@ EOF;
      * @return string
      */
     public static function get_name() {
-        return get_string('event:setedited', 'mod_openstudio');
+        return get_string('event:folderedited', 'mod_openstudio');
     }
 
     /**

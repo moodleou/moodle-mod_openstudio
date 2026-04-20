@@ -35,17 +35,11 @@ define([], function() {
          * @method scrollToEl
          */
         scrollToEl: function($el, heightTop) {
-            var pos = document.documentElement.scrollTop || window.scrollY;
-            if (pos === undefined) {
-                pos = 0;
-            }
-            var int = setInterval(function() {
-                pos += 20;
-                window.scrollTo(0, pos);
-                if (pos >= ($el.offset().top - heightTop)) {
-                    clearInterval(int);
-                }
-            }, 10);
+            const target = $el.offset().top - heightTop;
+            window.scrollTo({
+                top: target,
+                behavior: 'smooth',
+            });
         }
     };
 

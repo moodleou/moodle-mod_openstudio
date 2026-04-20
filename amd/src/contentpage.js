@@ -451,23 +451,28 @@ define(['jquery',
         showCommentBox: function() {
             // Due to the current code still using Bootstrap 4, thus Jquery can work better than Javascript.
             const urlParams = new URLSearchParams(window.location.search);
-            const idAddComment = $('#id_addcomment');
 
             if (urlParams.get('addcomment') == 1) {
-                const folderComment = $('#toggle_folder_view_folder_comments');
-                if (folderComment) {
-                    folderComment.click();
+                setTimeout(() => {
+                    const folderComment = $('#toggle_folder_view_folder_comments');
+                    const idAddComment = $('#id_addcomment');
 
-                }
+                    if (folderComment.length) {
+                        folderComment.click();
+                    }
 
-                idAddComment.click();
-                if (folderComment) {
-                    $('#openstudio_folder_view_folder_comments').on("shown.bs.collapse", function() {
+                    if (idAddComment.length) {
+                        idAddComment.click();
+                    }
+
+                    if (folderComment.length) {
+                        $('#openstudio_folder_view_folder_comments').on("shown.bs.collapse", function() {
+                            t.scrollToEle();
+                        });
+                    } else {
                         t.scrollToEle();
-                    });
-                } else {
-                    t.scrollToEle();
-                }
+                    }
+                }, 100);
             }
         },
 

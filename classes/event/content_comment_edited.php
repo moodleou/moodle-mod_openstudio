@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * The mod_openstudio flag folder comment event.
+ * The mod_openstudio comment edited event.
  *
  * @package    mod_openstudio
- * @copyright  2014 The Open University
+ * @copyright  2025 The Open University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -27,72 +27,55 @@ namespace mod_openstudio\event;
 use mod_openstudio\local\notifications\notifiable;
 use mod_openstudio\local\notifications\notification;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
- * The mod_openstudio folder comment flagged event class.
+ * The mod_openstudio comment edited event class.
  *
  * @package    mod_openstudio
- * @since      Moodle 2.7
- * @copyright  2014 The Open University
+ * @copyright  2025 The Open University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class folder_comment_created extends \core\event\base implements notifiable {
+class content_comment_edited extends \core\event\base implements notifiable {
 
-    /**
-     * Init method.
-     *
-     * @return void
-     */
-    protected function init() {
+    #[\Override]
+    protected function init(): void {
         $this->data['objecttable'] = 'openstudio_comments';
-        $this->data['crud'] = 'r';
+        $this->data['crud'] = 'u';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
 
-    /**
-     * Returns description of what happened.
-     *
-     * @return string
-     */
-    public function get_description() {
+    #[\Override]
+    public function get_description(): string {
         $description = <<<EOF
-The user with id '$this->userid' commented on a set on course module id '$this->contextinstanceid'
+The user with id '{$this->userid}' edited a comment on content in course module id '{$this->contextinstanceid}'
 EOF;
-
         return $description;
     }
 
-    /**
-     * Return localised event name.
-     *
-     * @return string
-     */
-    public static function get_name() {
-        return get_string('event:foldercommentflagged', 'mod_openstudio');
+    #[\Override]
+    public static function get_name(): string {
+        return get_string('event:contentcommentedited', 'mod_openstudio');
     }
 
-    /**
-     * Get URL related to the action
-     *
-     * @return \moodle_url
-     */
-    public function get_url() {
-        return new \moodle_url('/mod/openstudio/' . $this->other['url']);
+    #[\Override]
+    public function get_url(): \moodle_url {
+        return new \moodle_url('/mod/openstudio/content.php',
+            ['id' => $this->other['cmid'], 'sid' => $this->other['commentid']]);
     }
 
-    public function get_notification_type() {
-        return notifiable::CONTENT;
+    #[\Override]
+    public function get_notification_type(): int {
+        return notifiable::COMMENT;
     }
 
-    public function get_notification_data() {
+    #[\Override]
+    public function get_notification_data(): notification {
         return new notification((object) [
             'contentid' => $this->objectid,
             'commentid' => $this->other['commentid'],
             'userfrom' => $this->userid,
             'icon' => 'comments',
-            'message' => get_string('notification_commentcreated', 'openstudio'),
-            'cmid' => $this->context->instanceid
+            'message' => get_string('notification_commentedited', 'openstudio'),
+            'cmid' => $this->other['cmid'],
         ]);
     }
 }

@@ -167,7 +167,7 @@ Feature: View activity completion information in the openstudio activity
     And I am on the "Test Open Studio name 1" "openstudio activity" page logged in as student1
     And "Test Open Studio name 1" should have the "Make comments: 1" completion condition
 
-  Scenario: Openstudio custom completion completioncomments user 1 reply and got deleted by user 2.
+  Scenario: Openstudio custom completion completioncomments user 1 reply and deletion by admin.
     Given the following open studio "instances" exist:
       | course | name                    | description                  | pinboard | idnumber | groupmode | grouping | pinboard | reportingemail   | completion | completioncomments |
       | C1     | Test Open Studio name 1 | Test Open Studio description | 99       | OS1      | 2         | GI1      | 99       | teacher1@asd.com | 2          | 1                  |
@@ -202,10 +202,11 @@ Feature: View activity completion information in the openstudio activity
     And I should see "Comment text reply of student 1"
     And I click on "//span[contains(@class, 'openstudio-comment-delete-long-link')][1]" "xpath_element"
     And I click on "Delete" "button" in the "Delete comment" "dialogue"
-    And I should not see "Test root comment"
-    And I should not see "Comment text reply of student 1"
-    And I am on the "Test Open Studio name 1" "openstudio activity" page logged in as student1
-    Then "Test Open Studio name 1" should have the "Make comments: 1" completion condition
+    And I should see "Test root comment" in the ".openstudio-deleted-comment" "css_element"
+    And I should see "Comment text reply of student 1"
+    When I am on the "Test Open Studio name 1" "openstudio activity" page logged in as student1
+    # Check student1 completion is not effected by deletion of root comment.
+    Then the "Make comments: 1" completion condition of "Test Open Studio name 1" is displayed as "done"
 
   Scenario: Openstudio custom completion completionpostscomments create contents, comment of content.
     Given the following open studio "instances" exist:
@@ -323,6 +324,15 @@ Feature: View activity completion information in the openstudio activity
     And the "Make posts or comments with minimum word count: 5" completion condition of "Test Open Studio name 1" is displayed as "done"
     And the "Make posts or comments with maximum word count: 10" completion condition of "Test Open Studio name 1" is displayed as "done"
     And the "Make comments: 1" completion condition of "Test Open Studio name 1" is displayed as "done"
+    # Edit comment to change word count and check completion goes back to todo.
+    And I follow "Test My Group Board View 1"
+    And I click on "Edit comment" "link" in the ".openstudio-comment-thread:last-child" "css_element"
+    And I set the field "Comment" to "Test comment 1 2 3 4 5 6 7 8 9 0"
+    And I press "Save changes"
+    And I am on the "Test Open Studio name 1" "openstudio activity" page
+    And the "Make posts or comments with minimum word count: 5" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And the "Make posts or comments with maximum word count: 10" completion condition of "Test Open Studio name 1" is displayed as "todo"
+    And the "Make comments: 1" completion condition of "Test Open Studio name 1" is displayed as "todo"
 
   Scenario: Openstudio custom completion completionpostscomments with completionwordcountmin and completionwordcountmax.
     Given the following open studio "instances" exist:

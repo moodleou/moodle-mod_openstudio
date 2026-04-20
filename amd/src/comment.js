@@ -35,8 +35,9 @@ define([
     'core/templates',
     'mod_openstudio/osdialogue',
     'core/modal_events',
+    'core/pending',
 ], function($, Ajax, Str, Scrollto, Notification, FormChangeChecker,
-            Fragment, Templates, osDialogue, ModalEvents) {
+            Fragment, Templates, osDialogue, ModalEvents, Pending) {
     var t;
     t = {
 
@@ -55,6 +56,11 @@ define([
         dialogue: null,
 
         /**
+         * Undelete comment dialogue instance.
+         */
+        undeletedialogue: null,
+
+        /**
          * Height from DOMElement to top browser.
          */
         HEIGHT_TO_TOP: 100,
@@ -68,7 +74,10 @@ define([
             REPLY_BUTTON: 'input[name="replycommentbutton"]',
             LIKE_BUTTON: '.openstudio-comment-flag-link',
             DELETE_BUTTON: '.openstudio-comment-delete-link',
+            EDIT_BUTTON: '.openstudio-comment-edit-link',
             DELETE_CONFIRM_BUTTON: '.openstudio-comment-delete-btn',
+            UNDELETE_BUTTON: '.openstudio-comment-undelete-link',
+            UNDELETE_CONFIRM_BUTTON: '.openstudio-comment-undelete-btn',
 
             // Forms.
             COMMENT_FORM_CONTENT: '.openstudio-comment-form-content',
@@ -77,6 +86,7 @@ define([
             COMMENT_ATTACHMENT: '.openstudio-comment-form-content .filepicker-filename > a', // Attachment.
             COMMENT_FORM_BODY: '.openstudio-comment-form-body',
             COMMENT_POST_BUTTON: '#id_postcomment',
+            COMMENT_CANCEL_BUTTON: '#id_cancel',
             COMMENT_LOADING: '.openstudio-comment-loading',
 
             // Stream.
@@ -86,6 +96,12 @@ define([
             COMMENT_ITEM: '.openstudio-comment-thread-item', // Comment item.
             FLAG_COUNT: '.openstudio-comment-flag-count',
             FLAG_STATUS: '.openstudio-comment-flag-status',
+            DELETED_COMMENT: '.openstudio-deleted-comment',
+            COMMENT_ITEM_ID_PREFIX: '[id^="openstudio-comment"]',
+
+            // Classes for handle visibility.
+            LAST_VISIBLE_REPLY: 'openstudio-last-visible-reply',
+            OPENSTUDIO_HIDDEN: 'openstudio-hidden',
 
             // Dialogue.
             DIALOG_HEADER: '.openstudio-comment-delete-header',
@@ -104,10 +120,10 @@ define([
          * @param {JSON} options  The settings for this feature.
          */
         init: async function(options) {
-
             t.mconfig = options;
 
             t.dialogue = await t.createDeleteCommentDialogue();
+            t.undeletedialogue = await t.createUndeleteCommentDialogue();
 
             // Click event on buttons.
             // Add new button.
@@ -121,7 +137,13 @@ define([
                 // Delete button.
                 .delegate(t.CSS.DELETE_BUTTON, 'click', t.deleteConfirm)
                 // Delete confirm button.
-                .delegate(t.CSS.DELETE_CONFIRM_BUTTON, 'click', t.deleteComment);
+                .delegate(t.CSS.DELETE_CONFIRM_BUTTON, 'click', t.deleteComment)
+                // Undelete button.
+                .delegate(t.CSS.UNDELETE_BUTTON, 'click', t.undeleteConfirm)
+                // Undelete confirm button.
+                .delegate(t.CSS.UNDELETE_CONFIRM_BUTTON, 'click', t.undeleteComment)
+                // Edit button.
+                .delegate(t.CSS.EDIT_BUTTON, 'click', t.showReplyForm);
 
             // Form submit event.
             $(t.CSS.COMMENT_FORM).find('form').on('submit', t.postComment);
@@ -156,44 +178,96 @@ define([
         },
 
         /**
-         * Show reply form
+         * Show reply form.
          *
+         * @param {HTMLElement|jQuery|Event} [el] Optional element or event.
          * @method showReplyForm
          */
-        showReplyForm: function() {
+        showReplyForm: function(el) {
+            el.preventDefault();
             // Hide all comment reply forms.
             $(t.CSS.COMMENT_REPLY_FORM).hide();
             $(t.CSS.COMMENT_FORM).find(t.CSS.COMMENT_FORM_CONTENT).hide();
             // Show add new comment button.
             $(t.CSS.ADD_NEW_BUTTON).show();
-            // Append form to reply form wrapper.
-            var commentid = $(this).data('comment-parent').trim();
-            var replyform = $(t.CSS.COMMENT_THREAD)
-                .filter(function() {
-                    return $(this).data('thread-items') == commentid;
-                })
-                .find(t.CSS.COMMENT_REPLY_FORM);
-            replyform.show();
-            if (!replyform.find('form').length) {
-                var loading = $(t.CSS.COMMENT_LOADING).clone().show();
-                replyform.append(loading); // Show loading.
+            // Determine the triggering element.
+            let $trigger;
+            if (el && el.currentTarget) {
+                // Event object
+                $trigger = $(el.currentTarget);
+            } else if (el) {
+                // DOM element or jQuery object.
+                $trigger = $(el);
+            } else {
+                // Fallback to jQuery event context.
+                $trigger = $(this);
+            }
+            let isEditing = false;
+            let commentId = $trigger.data('comment-parent')?.trim();
+            if (!commentId) {
+                commentId = parseInt($trigger.attr('data-comment-id')?.trim());
+                isEditing = true;
+            }
+            if (!commentId || isNaN(commentId)) {
+                window.console.error('Invalid comment ID for reply/edit');
+                return;
+            }
+            let threadItems = $(t.CSS.COMMENT_THREAD).filter(function() {
+                if (isEditing) {
+                    return String($(this).data('thread-items')) === String($trigger.data('comment-parent-id')?.trim());
+                }
+                return String($(this).data('thread-items')) === String(commentId);
+            });
+            let replyForm = threadItems.find(t.CSS.COMMENT_REPLY_FORM).first();
+            replyForm.show();
+            const currentEditId = replyForm.data('editing-comment-id');
+            // Only reload fragment if:
+            // - Not editing, or
+            // - Editing a different comment, or
+            // - Form is missing.
+            if (!isEditing || !replyForm.find('form').length || currentEditId !== commentId) {
+                const loading = $(t.CSS.COMMENT_LOADING).clone().show();
+                // Show loading.
+                replyForm.append(loading);
                 // Load fragment form.
-                M.util.js_pending('openstudioloadfragmentform');
-                var appendselector = replyform.find(t.CSS.COMMENT_FORM_BODY);
-                t.loadFragmentForm(commentid).then(function(html, js) {
-                    Templates.replaceNodeContents(appendselector, html, js);
-                    appendselector.find('form').submit(function(e) {
+                const pendingPromise = new Pending('mod_openstudio/openstudioloadfragmentform');
+                let appendSelector = replyForm.find(t.CSS.COMMENT_FORM_BODY);
+                t.loadFragmentForm(commentId, isEditing).then(function(html, js) {
+                    Templates.replaceNodeContents(appendSelector, html, js);
+                    if (isEditing) {
+                        appendSelector.find('form').data('edit-comment-id', commentId);
+                    }
+                    appendSelector.find('form').submit(function(e) {
                         e.preventDefault();
                     });
-                    appendselector.find('form').on('submit', t.postComment);
+
+                    appendSelector.find(t.CSS.COMMENT_POST_BUTTON).on('click', function(e) {
+                        e.preventDefault();
+                        if (isEditing) {
+                            t.updateComment.call($(this).closest('form'), e);
+                        } else {
+                            t.postComment.call($(this).closest('form'), e);
+                        }
+                    });
+                    appendSelector.find(t.CSS.COMMENT_CANCEL_BUTTON).on('click', function(e) {
+                        e.preventDefault();
+                        // Hide form and show add button (UI only, no sensitive data exposed).
+                        $(t.CSS.ADD_NEW_BUTTON).show();
+                        $(t.CSS.COMMENT_FORM_CONTENT).hide();
+                        $(t.CSS.COMMENT_REPLY_FORM).hide();
+                        replyForm.removeData('editing-comment-id');
+                        t.resetForm();
+                    });
                     // Remove loading.
-                    replyform.find(t.CSS.COMMENT_LOADING).remove();
-                    M.util.js_complete('openstudioloadfragmentform');
-                }).then(function(){
-                    t.showReplyFormPostProcess(replyform, commentid);
-                }.bind(t)).fail(Notification.exception);
+                    replyForm.find(t.CSS.COMMENT_LOADING).remove();
+                    t.showReplyFormPostProcess(replyForm, commentId, isEditing);
+                    pendingPromise.resolve();
+                }).fail(function(ex) {
+                    pendingPromise.resolve();
+                    Notification.exception(ex);
+                });
             } else {
-                t.showReplyFormPostProcess(replyform, commentid);
+                t.showReplyFormPostProcess(replyForm, commentId, isEditing);
             }
         },
 
@@ -202,13 +276,16 @@ define([
          *
          * @param {object} replyForm
          * @param {string} commentId
+         * @param {boolean} isEditing
          * @method showReplyFormPostProcess
          */
-        showReplyFormPostProcess: function(replyForm, commentId) {
+        showReplyFormPostProcess: function(replyForm, commentId, isEditing = false) {
             // Adjust form state.
             replyForm.find(t.CSS.COMMENT_FORM_CONTENT).show();
             // Reset form.
-            t.resetForm();
+            if (!isEditing) {
+                t.resetForm();
+            }
             // Assign comment id to inreplyto field.
             replyForm.find('form input[name="inreplyto"]').val(parseInt(commentId));
             // Scroll to form.
@@ -218,15 +295,17 @@ define([
         /**
          * Call web services to get the fragment form, append to the DOM then bind event.
          * @param {string} commentId
+         * @param {boolean} isEditing
          * @return {Promise}
          * @method loadFragmentForm
          */
-        loadFragmentForm: function(commentId) {
+        loadFragmentForm: function(commentId, isEditing) {
             var params = [];
             params.id = t.mconfig.cmid;
             params.cid = t.mconfig.cid;
             params.max_bytes = t.mconfig.max_bytes;
             params.attachmentenable = t.mconfig.attachmentenable;
+            params.isediting = isEditing;
             if (commentId) {
                 params.replyid = commentId;
             }
@@ -310,7 +389,9 @@ define([
                             .before(res.commenthtml);
 
                         // Scroll to added item.
-                        Scrollto.scrollToEl($('[data-thread-item="' + res.commentid + '"]'), t.HEIGHT_TO_TOP);
+                        const $addedItem = $(`[data-thread-item="${res.commentid}"]`);
+                        Scrollto.scrollToEl($addedItem, t.HEIGHT_TO_TOP);
+                        t.updateLatestReplyButton($addedItem);
 
                     } else { // New comment added.
 
@@ -318,7 +399,9 @@ define([
                         $(t.CSS.COMMENT_THREAD_BODY).append(res.commenthtml);
 
                         // Scroll to added item.
-                        Scrollto.scrollToEl($('[data-thread-items="' + res.commentid + '"]'), t.HEIGHT_TO_TOP);
+                        setTimeout(function() {
+                            Scrollto.scrollToEl($('[data-thread-items="' + res.commentid + '"]'), t.HEIGHT_TO_TOP);
+                        }, 0);
                     }
 
                     $(t.CSS.COMMENT_THREAD).show();
@@ -415,48 +498,12 @@ define([
         deleteComment: function() {
             var commentid = parseInt($(this).attr('data-comment-id'));
 
-            M.util.js_pending('openstudioDeleteComment');
-            var promises = Ajax.call([{
-                methodname: 'mod_openstudio_external_delete_comment',
-                args: {
-                    cmid: t.mconfig.cmid,
-                    commentid: commentid
-                }
-            }]);
+            if (!commentid || isNaN(commentid)) {
+                window.console.error('Invalid comment ID for deletion');
+                return;
+            }
 
-            promises[0]
-                .done(function() {
-                    var commenttream = $('[data-thread-items="' + commentid + '"]');
-                    var replyitem = $('[data-thread-item="' + commentid + '"]');
-
-                    if (commenttream.length > 0) {
-                        // Removing comment thread means reply items of it removed also.
-                        commenttream.remove();
-                    } else {
-                        // Remove reply item.
-                        replyitem.remove();
-                    }
-
-                    // Check if there is a comment thread at least.
-                    if ($('div[data-thread-items]').length == 0) {
-                        // If there is no comment thread, then hide comment feature in UI.
-                        $(t.CSS.COMMENT_THREAD).hide();
-                    }
-
-                    // Set focus on comment form.
-                    t.dialogue.getRoot().on(ModalEvents.hidden, () =>  {
-                        $('#openstudio_comment_form').focus();
-                    });
-
-                    // Hide delete dialogue.
-                    t.dialogue.hide();
-                })
-                .always(function() {
-                    M.util.js_complete('openstudioDeleteComment');
-                })
-                .fail(function(ex) {
-                    window.console.error('Log request failed ' + ex.message);
-                });
+            t.handleCommentOperation(commentid, true, t.dialogue);
         },
 
         /**
@@ -523,6 +570,269 @@ define([
                 // Update comment id for delete button.
                 $(t.CSS.DELETE_CONFIRM_BUTTON).attr('data-comment-id', $(this).data('comment-id'));
             }
+        },
+
+        /**
+         * Undelete confirmation.
+         *
+         * @param {Object} e DomEvent
+         * @method undeleteConfirm
+         */
+        undeleteConfirm: function(e) {
+            e.preventDefault();
+            if (t.undeletedialogue) {
+                // Show undelete dialogue.
+                t.undeletedialogue.show();
+                // Update comment id for undelete button.
+                $(t.CSS.UNDELETE_CONFIRM_BUTTON).attr('data-comment-id', $(this).data('comment-id'));
+            }
+        },
+
+        /**
+         * Undelete comment.
+         *
+         * @method undeleteComment
+         */
+        undeleteComment: function () {
+            const commentid = parseInt($(this).attr('data-comment-id'));
+
+            if (!commentid || isNaN(commentid)) {
+                window.console.error('Invalid comment ID for undeletion');
+                return;
+            }
+
+            t.handleCommentOperation(commentid, false, t.undeletedialogue);
+        },
+
+        /**
+         * Update comment button visibility based on deletion state.
+         *
+         * @param {jQuery} $comment The comment element
+         * @param {boolean} isDeleted Whether the comment is deleted
+         * @method updateCommentButtons
+         */
+        updateCommentButtons: function($comment, isDeleted) {
+            const $undeleteBtn = $comment.find(t.CSS.UNDELETE_BUTTON);
+            const $standardBtns = $comment.find(`${t.CSS.DELETE_BUTTON}, ${t.CSS.LIKE_BUTTON}, ${t.CSS.EDIT_BUTTON}`);
+            const $replyBtn = $comment.find(t.CSS.REPLY_BUTTON);
+            const isReply = $comment.closest(t.CSS.REPLY_THREAD).length > 0;
+
+            // Handle reply button visibility.
+            if (isReply) {
+                t.updateLatestReplyButton($comment);
+            } else {
+                $replyBtn.toggleClass(t.CSS.OPENSTUDIO_HIDDEN, isDeleted);
+            }
+
+            // Toggle button visibility based on deleted state.
+            $undeleteBtn.toggleClass(t.CSS.OPENSTUDIO_HIDDEN, !isDeleted);
+            $standardBtns.toggleClass(t.CSS.OPENSTUDIO_HIDDEN, isDeleted);
+        },
+
+        /**
+         * Update the reply button visibility for the latest non-deleted reply in a thread.
+         *
+         * @param {jQuery} comment The thread element
+         * @method updateLatestReply
+         */
+        updateLatestReplyButton: function(comment) {
+            // Find all replies in the thread.
+            const replies = comment.closest(t.CSS.REPLY_THREAD);
+            // Remove current latest reply highlight.
+            const allReplies = replies.find(t.CSS.COMMENT_ITEM_ID_PREFIX);
+            allReplies.removeClass(t.CSS.LAST_VISIBLE_REPLY);
+            // Find the latest non-deleted reply.
+            const latestVisibleReply = allReplies.not(`:has(${t.CSS.DELETED_COMMENT})`).last();
+            // If found, update its class and show reply button.
+            if (latestVisibleReply.length) {
+                latestVisibleReply.addClass(t.CSS.LAST_VISIBLE_REPLY)
+                    .find(t.CSS.REPLY_BUTTON).removeClass(t.CSS.OPENSTUDIO_HIDDEN);
+            }
+        },
+
+        /**
+         * Handle comment deletion/undeletion operation.
+         *
+         * @param {number} commentid Comment ID
+         * @param {boolean} isDelete True for delete, false for undelete
+         * @param {Modal} dialogue The modal dialogue to hide after success
+         * @method handleCommentOperation
+         */
+        handleCommentOperation: function(commentid, isDelete, dialogue) {
+            const operation = isDelete ? 'Delete' : 'Undelete';
+            const methodname = 'mod_openstudio_external_' + (isDelete ? 'delete' : 'undelete') + '_comment';
+            const pendingKey = `openstudio${operation}Comment`;
+            const pendingPromise = new Pending(pendingKey);
+
+            Ajax.call([{
+                methodname: methodname,
+                args: {
+                    cmid: t.mconfig.cmid,
+                    commentid: commentid,
+                }
+            }])[0]
+                .done(function(data) {
+                    const $targetComment = $('[data-thread-item="' + commentid + '"]');
+
+                    if (!$targetComment.length) {
+                        window.console.error('Comment element not found: ' + commentid);
+                        return;
+                    }
+
+                    const selector = isDelete ? '.openstudio-comment-text' : '.openstudio-deleted-comment';
+                    const htmlContent = isDelete ? data.deletedcommenthtml : data.commenthtml;
+                    const $commentText = $targetComment.find(selector);
+
+                    if (!$commentText.length) {
+                        window.console.error('Comment text element not found');
+                        return;
+                    }
+
+                    if (!htmlContent) {
+                        window.console.error('Invalid server response: missing HTML content');
+                        return;
+                    }
+
+                    // Update comment content.
+                    Templates.replaceNode($commentText, htmlContent, '');
+
+                    // Update button visibility.
+                    t.updateCommentButtons($targetComment, isDelete);
+
+                    // Set focus on comment form when modal closes.
+                    dialogue.getRoot().one(ModalEvents.hidden, function() {
+                        $('#openstudio_comment_form').focus();
+                    });
+
+                    // Hide dialogue.
+                    dialogue.hide();
+                })
+                .fail(function(ex) {
+                    window.console.error(operation + ' comment request failed: ' + ex.message);
+                    Notification.addNotification({
+                        message: ex.message,
+                        type: 'error'
+                    });
+                })
+                .always(function() {
+                    pendingPromise.resolve();
+                });
+        },
+
+        /**
+         * Create undelete comment dialogue and some events on it.
+         *
+         * @method createUndeleteCommentDialogue
+         * @returns {Promise<Modal>}
+         */
+        createUndeleteCommentDialogue: async function() {
+            const folderClass = t.mconfig.folder ? 'openstudio-folder' : '';
+
+            const dialogue = await osDialogue.create({
+                isVerticallyCentered: true,
+                templateContext: {
+                    extraClasses: t.CSS.BOUNDING_BOX.replace('.', '') + ' ' + folderClass,
+                },
+            });
+
+            const cancelBtnProperty = {
+                name: 'cancel',
+                classNames: 'openstudio-cancel-btn',
+                action: 'hide',
+            };
+
+            const undeleteBtnProperty = {
+                name: 'undelete',
+                classNames: t.CSS.UNDELETE_CONFIRM_BUTTON.replace('.', ''),
+            };
+
+            try {
+                const strings = await Str.get_strings([
+                    {key: 'contentcommentundelete', component: 'mod_openstudio'},
+                    {key: 'modulejsdialogcommentundeleteconfirm', component: 'mod_openstudio'},
+                    {key: 'modulejsdialogcancel', component: 'mod_openstudio'},
+                    {key: 'undeletecomment', component: 'mod_openstudio'},
+                ]);
+
+                cancelBtnProperty.label = strings[2];
+                undeleteBtnProperty.label = strings[3];
+
+                dialogue.setTitle('<span class="openstudio-dialogue-common-header ' +
+                    t.CSS.DIALOG_HEADER.replace('.', '') + '">' + strings[0] + '</span>');
+                dialogue.setBody(strings[1]);
+                dialogue.addButton(undeleteBtnProperty, ['footer']);
+                dialogue.addButton(cancelBtnProperty, ['footer']);
+            } catch (error) {
+                window.console.error('Failed to load dialogue strings:', error);
+            }
+
+            return dialogue;
+        },
+
+        /**
+         * Update comment submit handler.
+         *
+         * @param {Object} e DomEvent
+         * @method updateComment
+         */
+        updateComment: function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            let form = $(this);
+            let commentId = form.data('edit-comment-id');
+            if (!commentId || isNaN(commentId)) {
+                window.console.error('Invalid comment ID for update');
+                return;
+            }
+            let formData = {};
+            $.each(form.serializeArray(), function(i, field) {
+                formData[field.name] = field.value;
+            });
+            let hasAttachment = $(t.CSS.COMMENT_ATTACHMENT).length > 0;
+            if (!hasAttachment && (!formData['commentext[text]'] || formData['commentext[text]'].length === 0)) {
+                return;
+            }
+            // Check this is the latest reply in the thread.
+            const isLatestReply = $(`[data-thread-item="${commentId}"]`).hasClass(t.CSS.LAST_VISIBLE_REPLY);
+            const pendingPromise = new Pending('mod_openstudio/openstudioUpdateComment');
+            let promises = Ajax.call([{
+                methodname: 'mod_openstudio_external_edit_comment',
+                args: {
+                    cmid: formData.cmid,
+                    commentid: commentId,
+                    commenttext: formData['commentext[text]'],
+                    commenttextitemid: formData['commentext[itemid]'],
+                    commentattachment: hasAttachment ? formData.commentattachment : 0,
+                }
+            }]);
+            promises[0]
+                .done(function(res) {
+                    // Update comment in DOM
+                    let commentItem = $('[data-thread-item="' + res.commentid + '"]');
+                    if (commentItem.length) {
+                        commentItem.replaceWith(res.commenthtml);
+                        const $updatedComment = $(`[data-thread-item="${res.commentid}"]`);
+                        // If this is the latest reply, update the reply button visibility.
+                        $updatedComment.toggleClass(t.CSS.LAST_VISIBLE_REPLY, isLatestReply);
+                        // Scroll to added item.
+                        Scrollto.scrollToEl($updatedComment, t.HEIGHT_TO_TOP);
+                    }
+
+                    // Trigger oumedia plugin to render audio attachment.
+                    if (window.oump) {
+                        window.oump.harvest();
+                    }
+                    // Reset the 'dirty' flag of the comment form.
+                    FormChangeChecker.resetFormDirtyState($(t.CSS.COMMENT_POST_BUTTON)[0]);
+
+                    // Hide form, show add button
+                    $(t.CSS.COMMENT_FORM_CONTENT).hide();
+                    $(t.CSS.COMMENT_REPLY_FORM).hide();
+                })
+                .always(function() {
+                    pendingPromise.resolve();
+                })
+                .fail(Notification.exception);
         },
     };
 
