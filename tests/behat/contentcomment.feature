@@ -100,6 +100,35 @@ Feature: Add/Reply/Flag/Delete Open Studio comment
     And I click on "Delete" "button" in the "Delete comment" "dialogue"
     Then I should see "Comment text reply 2" in the ".openstudio-deleted-comment" "css_element"
 
+  @javascript @editor_tiny
+  Scenario: Reply editor should be empty and not inherit parent post content
+    Given I am on the "Sharing Studio" "openstudio activity" page logged in as "student1"
+    And I follow "Student slot 1"
+    # Add a comment.
+    And I press "Add new comment"
+    And I set the field "Comment" to "Original comment text"
+    And I press "Post comment"
+    And I wait until the page is ready
+    Then I should see "Original comment text"
+    # Reply to own comment - editor should be empty.
+    And I press "Reply"
+    And I wait until the page is ready
+    And I switch to the "Comment" TinyMCE editor iframe
+    And I should not see "Original comment text"
+    And I switch to the main frame
+    # Post the reply.
+    And I set the field "Comment" to "Reply text"
+    And I press "Post comment"
+    And I wait until the page is ready
+    Then I should see "Reply text"
+    # Reply again - editor should still be empty, not pre-populated with previous reply.
+    And I click on ".openstudio-comment-thread-replied-items input[name='replycommentbutton']" "css_element"
+    And I wait until the page is ready
+    And I switch to the "Comment" TinyMCE editor iframe
+    And I should not see "Reply text"
+    And I should not see "Original comment text"
+    And I switch to the main frame
+
   @_file_upload @javascript @editor_tiny
   Scenario: Comment editor should have browse repositories.
     When I log in as "student1"

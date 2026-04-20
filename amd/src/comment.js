@@ -36,8 +36,9 @@ define([
     'mod_openstudio/osdialogue',
     'core/modal_events',
     'core/pending',
+    'core_form/events',
 ], function($, Ajax, Str, Scrollto, Notification, FormChangeChecker,
-            Fragment, Templates, osDialogue, ModalEvents, Pending) {
+            Fragment, Templates, osDialogue, ModalEvents, Pending, FormEvents) {
     var t;
     t = {
 
@@ -351,6 +352,8 @@ define([
                 window.tinyMCE.triggerSave();
             }
 
+            let $form = $(this);
+
             // Get form data.
             var formdata = {};
             $.each($(this).serializeArray(), function(i, field) {
@@ -424,6 +427,9 @@ define([
                     if (window.oump) {
                         window.oump.harvest();
                     }
+                    // Notify that the form was submitted by Javascript so that the TinyMCE autosave
+                    // plugin can clean up any previously saved draft records for this editor.
+                    FormEvents.notifyFormSubmittedByJavascript($form[0]);
                     // Reset the 'dirty' flag of the comment form.
                     FormChangeChecker.resetFormDirtyState($(t.CSS.COMMENT_POST_BUTTON)[0]);
                 })
@@ -838,6 +844,9 @@ define([
                     if (window.oump) {
                         window.oump.harvest();
                     }
+                    // Notify that the form was submitted by Javascript so that the TinyMCE autosave
+                    // plugin can clean up any previously saved draft records for this editor.
+                    FormEvents.notifyFormSubmittedByJavascript(form[0]);
                     // Reset the 'dirty' flag of the comment form.
                     FormChangeChecker.resetFormDirtyState($(t.CSS.COMMENT_POST_BUTTON)[0]);
 
