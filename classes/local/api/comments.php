@@ -50,11 +50,6 @@ class comments {
         global $DB;
 
         try {
-            if (strlen($comment) > util\defaults::CONTENTCOMMENTLENGTH) {
-                $comment = substr($comment, 0, util\defaults::CONTENTCOMMENTLENGTH)
-                        . get_string('contentcommenttruncatedmessage', 'openstudio');
-            }
-
             // Populate data.
             $insertdata = array();
             $insertdata['contentid'] = $contentid;
@@ -121,11 +116,6 @@ class comments {
         global $DB;
 
         try {
-            if (strlen($comment) > util\defaults::CONTENTCOMMENTLENGTH) {
-                $comment = substr($comment, 0, util\defaults::CONTENTCOMMENTLENGTH)
-                        . get_string('contentcommenttruncatedmessage', 'openstudio');
-            }
-
             // Populate data.
             $insertdata = new \stdClass();
             $insertdata->id = $commentid;

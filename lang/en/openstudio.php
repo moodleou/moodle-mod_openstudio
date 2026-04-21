@@ -730,7 +730,6 @@ $string['contentcommentsreply'] = 'Reply';
 $string['contentcommentswritereply'] = 'Write a reply...';
 $string['contentcommentswritecomment'] = 'Write a comment...';
 $string['contentcommentsaddedconfirmation'] = 'Comment successfully posted; scroll down to read comments.';
-$string['contentcommenttruncatedmessage'] = '... (truncated)';
 $string['contentcommentlike'] = 'Like comment';
 $string['contentcommentlikeshort'] = 'Like';
 $string['contentcommentunlike'] = 'Unlike comment';
