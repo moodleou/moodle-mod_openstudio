@@ -2486,7 +2486,7 @@ a.openstudio-add-title:hover  {
     margin-left: -4px;
 }
 
-body#page-mod-openstudio-contentedit:not(.osep-layoutnoblocks) form .form-group .col-md-3 p[id*="_label"] {
+body#page-mod-openstudio-contentedit:not(.osep-layoutnoblocks) form .ou-was-form-group .col-md-3 p[id*="_label"] {
     float: none;
 }
 
@@ -2509,7 +2509,7 @@ body#page-mod-openstudio-contentedit:not(.osep-layoutnoblocks) form .form-group 
 }
 
 @media (max-width: 1199px) {
-    .mform #openstudio_upload_content_add_file .form-group .col-form-label {
+    .mform #openstudio_upload_content_add_file .ou-was-form-group .col-form-label {
         float: none;
     }
 
@@ -2661,7 +2661,7 @@ body#page-mod-openstudio-contentedit:not(.osep-layoutnoblocks) form .form-group 
     font-size: 1em;
 }
 
-.path-mod-openstudio .openstudio-content-edit-form .form-group {
+.path-mod-openstudio .openstudio-content-edit-form .ou-was-form-group {
     margin-left: 0px;
     margin-right: 0px;
 }
@@ -6027,7 +6027,7 @@ a.openstudio-add-new-content-link:hover  {
         margin-top: 0;
         margin-bottom: 2px;
     }
-    .path-mod-openstudio .mform .form-group .col-md-9 {
+    .path-mod-openstudio .mform .ou-was-form-group .col-md-9 {
         padding-top: 2px;
     }
     #id_commentattachment_fieldset > p {
@@ -6083,7 +6083,7 @@ a.openstudio-add-new-content-link:hover  {
     .openstudio-content-view-actions {
         padding-top: 11px;
     }
-    #fitem_id_commentattachment.form-group .col-md-9 {
+    #fitem_id_commentattachment.ou-was-form-group .col-md-9 {
         padding-left: 0;
     }
     .openstudio-comment-form-body .mform #fitem_id_commentattachment .col-md-3 #id_commentattachment_label {
