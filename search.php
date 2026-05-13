@@ -238,8 +238,11 @@ if (trim($searchtext) == '') {
     exit();
 } else {
     // Query the search engine.
+    $searchtoken = substr(sha1($USER->id . '-' . $searchtext . '-' . $pagestart . '-' . time()), 0, 10);
+    $querystarttime = microtime(true);
     $searchresultdata = search::query(
         $cm, $searchtext, $pagestart, $streamdatapagesize, $nextstart, $vid);
+    $queryperformance = (int) round((microtime(true) - $querystarttime) * 1000);
 
     // Define object.
     // TODO: This object should be refactored to a templatable object.
@@ -382,6 +385,7 @@ if (trim($searchtext) == '') {
         }
         lock::preload_schedule_cache($lockcontentids);
 
+        $resultposition = $pagestart * $streamdatapagesize;
         if ($resultingcontents !== false) {
             foreach ($contentslist as $content) {
                 // Process content locking using the pre-fetched schedule cache.
@@ -488,17 +492,21 @@ if (trim($searchtext) == '') {
                 $content->datetimeupdated = $content->timemodified ? userdate($content->timemodified,
                     get_string('formattimedatetime', 'openstudio')) : null;
 
+                $resultposition++;
                 $urlarray = ['id' => $id, 'sid' => $content->id, 'vuid' => $content->userid];
                 if (!empty($contentidsfolder[$content->id])) {
                     $urlarray = ['id' => $id, 'sid' => $content->id, 'vuid' => $content->userid,
                         'folderid' => $contentidsfolder[$content->id]];
                 }
-                if (!empty($contentidsanchor[$content->id])) {
-                    $content->contentlink = new moodle_url('/mod/openstudio/content.php',
-                        $urlarray, $contentidsanchor[$content->id]);
-                } else {
-                    $content->contentlink = new moodle_url('/mod/openstudio/content.php', $urlarray);
-                }
+                $destinationurl = !empty($contentidsanchor[$content->id])
+                    ? new moodle_url('/mod/openstudio/content.php', $urlarray, $contentidsanchor[$content->id])
+                    : new moodle_url('/mod/openstudio/content.php', $urlarray);
+                $content->contentlink = new moodle_url('/mod/openstudio/search_result.php', [
+                    'id' => $id,
+                    'searchtoken' => $searchtoken,
+                    'pos' => $resultposition,
+                    'redirect' => $destinationurl->out(false),
+                ]);
 
                 if (isset($contentsocialdata[$content->id])) {
                     $content->socialdata = $contentsocialdata[$content->id]->socialdata;
@@ -603,7 +611,10 @@ util::trigger_event($cm->id, 'search_viewed', '',
     util::format_log_info($searchtext),
     null,
     null,
-    [
-        'searchterm' => $searchtext,
-        'resultcount' => $contentdata->allresults,
+    otherdata: [
+        'q' => $searchtext,
+        'totalcount' => $contentdata->allresults,
+        'page' => $pagestart,
+        'searchtoken' => $searchtoken,
+        'performance' => $queryperformance,
     ]);

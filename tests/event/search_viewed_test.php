@@ -58,8 +58,8 @@ class search_viewed_test extends advanced_testcase {
         $this->resetAfterTest();
 
         $event = $this->create_event([
-            'searchterm' => 'abc',
-            'resultcount' => 10,
+            'q' => 'abc',
+            'totalcount' => 10,
             'cmid' => 5,
         ]);
 
@@ -93,14 +93,34 @@ class search_viewed_test extends advanced_testcase {
     }
 
     /**
+     * Test search event stores page, searchtoken and performance in other data.
+     */
+    public function test_additional_fields_stored_in_other(): void {
+        $this->resetAfterTest();
+
+        $event = $this->create_event([
+            'q' => 'painting',
+            'totalcount' => 5,
+            'page' => 0,
+            'searchtoken' => 'abc1234567',
+            'performance' => 42,
+            'cmid' => 5,
+        ]);
+
+        $this->assertEquals(0, $event->other['page']);
+        $this->assertEquals('abc1234567', $event->other['searchtoken']);
+        $this->assertEquals(42, $event->other['performance']);
+    }
+
+    /**
      * Test search event name should remain stable.
      */
     public function test_event_name(): void {
         $this->resetAfterTest();
 
         $event = $this->create_event([
-            'searchterm'  => 'anything',
-            'resultcount' => 1,
+            'q' => 'anything',
+            'totalcount' => 1,
             'cmid' => 5,
         ]);
 

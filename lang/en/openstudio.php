@@ -135,6 +135,7 @@ $string['event:manageexportviewed'] = 'View manage export';
 $string['event:manageimportviewed'] = 'View manage import';
 $string['event:levelsimported'] = 'Manage levels imported';
 $string['event:reportusageviewed'] = 'View usage report';
+$string['event:searchresultfollowed'] = 'Search result followed';
 $string['event:searchviewed'] = 'View search';
 $string['event:setcontentcreated'] = 'Set content created';
 $string['event:setcreated'] = 'Set created';

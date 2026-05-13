@@ -52,8 +52,8 @@ class search_viewed extends \core\event\base {
      * @return string
      */
     public function get_description() {
-        $searchterm = $this->other['searchterm'] ?? 'unknown';
-        $resultcount = $this->other['resultcount'] ?? 0;
+        $searchterm = $this->other['q'] ?? 'unknown';
+        $resultcount = $this->other['totalcount'] ?? 0;
 
         $description = "The user with id '{$this->userid}' viewed '{$searchterm}' search results "
             . "(total {$resultcount}) on course module id '{$this->contextinstanceid}'";
