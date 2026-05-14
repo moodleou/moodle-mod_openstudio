@@ -580,7 +580,7 @@ class mod_openstudio_external extends external_api {
                 'mode' => $mode));
         $context = context_module::instance($cmid);
         external_api::validate_context($context);
-        require_capability('mod/openstudio:addcontent', $context);
+        require_capability('mod/openstudio:view', $context);
 
         $results = array();
         $warnings = array();
